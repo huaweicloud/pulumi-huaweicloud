@@ -131,7 +131,7 @@ def get_nosql_flavors(availability_zone: Optional[str] = None,
                       vcpus: Optional[int] = None,
                       opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetNosqlFlavorsResult:
     """
-    Use this data source to get available HuaweiCloud GaussDB (for NoSQL) flavors.
+    Use this data source to get available HuaweiCloud GeminiDB flavors.
     This is an alternative to `_gauss_d_bfor_no_sq_l.get_cassandra_flavors`
 
     ## Example Usage
@@ -187,7 +187,7 @@ def get_nosql_flavors_output(availability_zone: Optional[pulumi.Input[Optional[s
                              vcpus: Optional[pulumi.Input[Optional[int]]] = None,
                              opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetNosqlFlavorsResult]:
     """
-    Use this data source to get available HuaweiCloud GaussDB (for NoSQL) flavors.
+    Use this data source to get available HuaweiCloud GeminiDB flavors.
     This is an alternative to `_gauss_d_bfor_no_sq_l.get_cassandra_flavors`
 
     ## Example Usage

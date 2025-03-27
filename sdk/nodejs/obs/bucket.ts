@@ -42,6 +42,8 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const agencyName = config.requireObject("agencyName");
  * const logBucket = new huaweicloud.obs.Bucket("logBucket", {
  *     bucket: "my-tf-log-bucket",
  *     acl: "log-delivery-write",
@@ -52,6 +54,7 @@ import * as utilities from "../utilities";
  *     loggings: [{
  *         targetBucket: logBucket.id,
  *         targetPrefix: "log/",
+ *         agency: agencyName,
  *     }],
  * });
  * ```
@@ -111,6 +114,9 @@ import * as utilities from "../utilities";
  *     bucket: "my-bucket",
  *     lifecycleRules: [
  *         {
+ *             abortIncompleteMultipartUploads: [{
+ *                 days: 360,
+ *             }],
  *             enabled: true,
  *             expirations: [{
  *                 days: 365,
@@ -144,28 +150,44 @@ import * as utilities from "../utilities";
  *                     storageClass: "COLD",
  *                 },
  *             ],
- *             prefix: "tmp/",
  *         },
  *     ],
  *     versioning: true,
  * });
  * ```
+ * ### using encryption
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const bucket = new huaweicloud.Obs.Bucket("bucket", {
+ *     acl: "private",
+ *     bucket: "my-tf-encryption-bucket",
+ *     encryption: true,
+ *     storageClass: "STANDARD",
+ *     tags: {
+ *         foo: "bar",
+ *         key: "value",
+ *     },
+ * });
+ * ```
  *
  * ## Import
  *
- * OBS bucket can be imported using the `bucket`, e.g.
+ * OBS bucket can be imported using the `bucket`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Obs/bucket:Bucket bucket <bucket-name>
  * ```
  *
- *  OBS bucket with S3 foramt bucket policy can be imported using the `bucket` and "s3" by a slash, e.g.
+ *  OBS bucket with S3 format bucket policy can be imported using the `bucket` and "s3" by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Obs/bucket:Bucket bucket_with_s3_policy <bucket-name>/s3
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. resource "huaweicloud_obs_bucket" "bucket" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include `acl` and `force_destroy`. It is generally recommended running `terraform plan` after importing an OBS bucket. Also you can ignore changes as below. hcl resource "huaweicloud_obs_bucket" "bucket" {
  *
  *  ...
  *
@@ -238,7 +260,7 @@ export class Bucket extends pulumi.CustomResource {
      */
     public readonly corsRules!: pulumi.Output<outputs.Obs.BucketCorsRule[] | undefined>;
     /**
-     * Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+     * Whether to enable default server-side encryption of the bucket.
      */
     public readonly encryption!: pulumi.Output<boolean | undefined>;
     /**
@@ -252,12 +274,13 @@ export class Bucket extends pulumi.CustomResource {
      */
     public readonly forceDestroy!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the ID of a KMS key. If omitted, the default master key will be used.
+     * Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+     * field is used only when `sseAlgorithm` value is **kms**.
      */
     public readonly kmsKeyId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the project ID to which the KMS key belongs. If omitted, the ID
-     * of the provider-level project will be used.
+     * Specifies the project ID to which the KMS key belongs. This field is valid
+     * only when `kmsKeyId` is specified.
      */
     public readonly kmsKeyProjectId!: pulumi.Output<string>;
     /**
@@ -291,7 +314,7 @@ export class Bucket extends pulumi.CustomResource {
     public readonly policyFormat!: pulumi.Output<string | undefined>;
     /**
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
      * quota is not limited.
      */
     public readonly quota!: pulumi.Output<number | undefined>;
@@ -300,6 +323,12 @@ export class Bucket extends pulumi.CustomResource {
      * the region by the provider. Changing this will create a new bucket.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the mode of encryption algorithm. The valid values are:
+     * + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+     * + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+     */
+    public readonly sseAlgorithm!: pulumi.Output<string>;
     /**
      * Specifies the storage class of the bucket. OBS provides three storage classes:
      * "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
@@ -314,6 +343,17 @@ export class Bucket extends pulumi.CustomResource {
      * A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the user domain names. The restriction requirements for this field
+     * are as follows:
+     * + Each value must meet the domain name rules.
+     * + The maximum length of a domain name is 256 characters.
+     * + A maximum of 100 custom domain names can be set for a bucket.
+     * + A custom domain name can only be used by one bucket.
+     * + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+     * + The bound user domain names only support access over HTTP now.
+     */
+    public readonly userDomainNames!: pulumi.Output<string[]>;
     /**
      * Whether enable versioning. Once you version-enable a bucket, it can never return to an
      * unversioned state. You can, however, suspend versioning on that bucket.
@@ -355,9 +395,11 @@ export class Bucket extends pulumi.CustomResource {
             resourceInputs["policyFormat"] = state ? state.policyFormat : undefined;
             resourceInputs["quota"] = state ? state.quota : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["sseAlgorithm"] = state ? state.sseAlgorithm : undefined;
             resourceInputs["storageClass"] = state ? state.storageClass : undefined;
             resourceInputs["storageInfos"] = state ? state.storageInfos : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["userDomainNames"] = state ? state.userDomainNames : undefined;
             resourceInputs["versioning"] = state ? state.versioning : undefined;
             resourceInputs["website"] = state ? state.website : undefined;
         } else {
@@ -381,8 +423,10 @@ export class Bucket extends pulumi.CustomResource {
             resourceInputs["policyFormat"] = args ? args.policyFormat : undefined;
             resourceInputs["quota"] = args ? args.quota : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["sseAlgorithm"] = args ? args.sseAlgorithm : undefined;
             resourceInputs["storageClass"] = args ? args.storageClass : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
+            resourceInputs["userDomainNames"] = args ? args.userDomainNames : undefined;
             resourceInputs["versioning"] = args ? args.versioning : undefined;
             resourceInputs["website"] = args ? args.website : undefined;
             resourceInputs["bucketDomainName"] = undefined /*out*/;
@@ -429,7 +473,7 @@ export interface BucketState {
      */
     corsRules?: pulumi.Input<pulumi.Input<inputs.Obs.BucketCorsRule>[]>;
     /**
-     * Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+     * Whether to enable default server-side encryption of the bucket.
      */
     encryption?: pulumi.Input<boolean>;
     /**
@@ -443,12 +487,13 @@ export interface BucketState {
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
-     * Specifies the ID of a KMS key. If omitted, the default master key will be used.
+     * Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+     * field is used only when `sseAlgorithm` value is **kms**.
      */
     kmsKeyId?: pulumi.Input<string>;
     /**
-     * Specifies the project ID to which the KMS key belongs. If omitted, the ID
-     * of the provider-level project will be used.
+     * Specifies the project ID to which the KMS key belongs. This field is valid
+     * only when `kmsKeyId` is specified.
      */
     kmsKeyProjectId?: pulumi.Input<string>;
     /**
@@ -482,7 +527,7 @@ export interface BucketState {
     policyFormat?: pulumi.Input<string>;
     /**
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
      * quota is not limited.
      */
     quota?: pulumi.Input<number>;
@@ -491,6 +536,12 @@ export interface BucketState {
      * the region by the provider. Changing this will create a new bucket.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the mode of encryption algorithm. The valid values are:
+     * + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+     * + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+     */
+    sseAlgorithm?: pulumi.Input<string>;
     /**
      * Specifies the storage class of the bucket. OBS provides three storage classes:
      * "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
@@ -505,6 +556,17 @@ export interface BucketState {
      * A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the user domain names. The restriction requirements for this field
+     * are as follows:
+     * + Each value must meet the domain name rules.
+     * + The maximum length of a domain name is 256 characters.
+     * + A maximum of 100 custom domain names can be set for a bucket.
+     * + A custom domain name can only be used by one bucket.
+     * + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+     * + The bound user domain names only support access over HTTP now.
+     */
+    userDomainNames?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Whether enable versioning. Once you version-enable a bucket, it can never return to an
      * unversioned state. You can, however, suspend versioning on that bucket.
@@ -543,7 +605,7 @@ export interface BucketArgs {
      */
     corsRules?: pulumi.Input<pulumi.Input<inputs.Obs.BucketCorsRule>[]>;
     /**
-     * Whether enable default server-side encryption of the bucket in SSE-KMS mode.
+     * Whether to enable default server-side encryption of the bucket.
      */
     encryption?: pulumi.Input<boolean>;
     /**
@@ -557,12 +619,13 @@ export interface BucketArgs {
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
-     * Specifies the ID of a KMS key. If omitted, the default master key will be used.
+     * Specifies the ID of a KMS key. If omitted, the default master key will be used. This
+     * field is used only when `sseAlgorithm` value is **kms**.
      */
     kmsKeyId?: pulumi.Input<string>;
     /**
-     * Specifies the project ID to which the KMS key belongs. If omitted, the ID
-     * of the provider-level project will be used.
+     * Specifies the project ID to which the KMS key belongs. This field is valid
+     * only when `kmsKeyId` is specified.
      */
     kmsKeyProjectId?: pulumi.Input<string>;
     /**
@@ -596,7 +659,7 @@ export interface BucketArgs {
     policyFormat?: pulumi.Input<string>;
     /**
      * Specifies bucket storage quota. Must be a positive integer in the unit of byte. The maximum
-     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is 0, indicating that the bucket storage
+     * storage quota is 2<sup>63</sup> – 1 bytes. The default bucket storage quota is `0`, indicating that the bucket storage
      * quota is not limited.
      */
     quota?: pulumi.Input<number>;
@@ -606,6 +669,12 @@ export interface BucketArgs {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the mode of encryption algorithm. The valid values are:
+     * + **kms**: Server-side encryption with keys hosted by KMS are used to encrypt your objects.
+     * + **AES256**: Server-side encryption with keys managed by OBS are used to encrypt your objects.
+     */
+    sseAlgorithm?: pulumi.Input<string>;
+    /**
      * Specifies the storage class of the bucket. OBS provides three storage classes:
      * "STANDARD", "WARM" (Infrequent Access) and "COLD" (Archive). Defaults to `STANDARD`.
      */
@@ -614,6 +683,17 @@ export interface BucketArgs {
      * A mapping of tags to assign to the bucket. Each tag is represented by one key-value pair.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the user domain names. The restriction requirements for this field
+     * are as follows:
+     * + Each value must meet the domain name rules.
+     * + The maximum length of a domain name is 256 characters.
+     * + A maximum of 100 custom domain names can be set for a bucket.
+     * + A custom domain name can only be used by one bucket.
+     * + Ensure the domain name has been licensed by the Ministry of Industry and Information Technology.
+     * + The bound user domain names only support access over HTTP now.
+     */
+    userDomainNames?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Whether enable versioning. Once you version-enable a bucket, it can never return to an
      * unversioned state. You can, however, suspend versioning on that bucket.

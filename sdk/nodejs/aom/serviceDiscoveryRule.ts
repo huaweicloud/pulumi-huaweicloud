@@ -47,10 +47,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * AOM service discovery rules can be imported using the `name`, e.g.
+ * AOM service discovery rules can be imported using the `name`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule rule_name
+ *  $ pulumi import huaweicloud:Aom/serviceDiscoveryRule:ServiceDiscoveryRule alarm_rule <name>
  * ```
  */
 export class ServiceDiscoveryRule extends pulumi.CustomResource {
@@ -81,6 +81,14 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
         return obj['__pulumiType'] === ServiceDiscoveryRule.__pulumiType;
     }
 
+    /**
+     * The rule create time.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the rule description.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to enable log collection. The default value is true.
      */
@@ -117,7 +125,7 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
      */
     public readonly logPathRules!: pulumi.Output<outputs.Aom.ServiceDiscoveryRuleLogPathRule[] | undefined>;
     /**
-     * Specifies the rule name, which contains 4 to 63 characters. It must start
+     * Specifies the rule name, which contains `4` to `63` characters. It must start
      * with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
      */
     public readonly name!: pulumi.Output<string>;
@@ -158,6 +166,8 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as ServiceDiscoveryRuleState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["detectLogEnabled"] = state ? state.detectLogEnabled : undefined;
             resourceInputs["discoveryRuleEnabled"] = state ? state.discoveryRuleEnabled : undefined;
             resourceInputs["discoveryRules"] = state ? state.discoveryRules : undefined;
@@ -184,6 +194,7 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
             if ((!args || args.serviceType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'serviceType'");
             }
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["detectLogEnabled"] = args ? args.detectLogEnabled : undefined;
             resourceInputs["discoveryRuleEnabled"] = args ? args.discoveryRuleEnabled : undefined;
             resourceInputs["discoveryRules"] = args ? args.discoveryRules : undefined;
@@ -195,6 +206,7 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
             resourceInputs["priority"] = args ? args.priority : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["serviceType"] = args ? args.serviceType : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["ruleId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -206,6 +218,14 @@ export class ServiceDiscoveryRule extends pulumi.CustomResource {
  * Input properties used for looking up and filtering ServiceDiscoveryRule resources.
  */
 export interface ServiceDiscoveryRuleState {
+    /**
+     * The rule create time.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the rule description.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies whether to enable log collection. The default value is true.
      */
@@ -242,7 +262,7 @@ export interface ServiceDiscoveryRuleState {
      */
     logPathRules?: pulumi.Input<pulumi.Input<inputs.Aom.ServiceDiscoveryRuleLogPathRule>[]>;
     /**
-     * Specifies the rule name, which contains 4 to 63 characters. It must start
+     * Specifies the rule name, which contains `4` to `63` characters. It must start
      * with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
      */
     name?: pulumi.Input<string>;
@@ -275,6 +295,10 @@ export interface ServiceDiscoveryRuleState {
  * The set of arguments for constructing a ServiceDiscoveryRule resource.
  */
 export interface ServiceDiscoveryRuleArgs {
+    /**
+     * Specifies the rule description.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies whether to enable log collection. The default value is true.
      */
@@ -311,7 +335,7 @@ export interface ServiceDiscoveryRuleArgs {
      */
     logPathRules?: pulumi.Input<pulumi.Input<inputs.Aom.ServiceDiscoveryRuleLogPathRule>[]>;
     /**
-     * Specifies the rule name, which contains 4 to 63 characters. It must start
+     * Specifies the rule name, which contains `4` to `63` characters. It must start
      * with a lowercase letter but cannot end with a hyphen (-). Only digits, lowercase letters, and hyphens are allowed.
      */
     name?: pulumi.Input<string>;

@@ -30,6 +30,7 @@ class ServerTemplateArgs:
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the target server is located.
         :param pulumi.Input[int] bandwidth_size: Specifies the bandwidth size in Mbit/s about the public IP address
                that will be used for migration.
+               The valid value is range from `1` to `2,000`.
         :param pulumi.Input[str] flavor: Specifies the flavor ID for the target server.
         :param pulumi.Input[str] name: Specifies the server template name.
         :param pulumi.Input[str] project_id: Specifies the project ID where the target server is located.
@@ -37,12 +38,13 @@ class ServerTemplateArgs:
         :param pulumi.Input[str] region: Specifies the region where the target server is located.
                If omitted, the provider-level region will be used.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group IDs to associate with
-               the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+               the target server.
+               If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet IDs to attach to the target server.
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
-        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               defaults to **SAS**.
+        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server.
+               Available values are: **SAS**, **SSD**, defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         """
@@ -86,6 +88,7 @@ class ServerTemplateArgs:
         """
         Specifies the bandwidth size in Mbit/s about the public IP address
         that will be used for migration.
+        The valid value is range from `1` to `2,000`.
         """
         return pulumi.get(self, "bandwidth_size")
 
@@ -148,7 +151,8 @@ class ServerTemplateArgs:
     def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies an array of one or more security group IDs to associate with
-        the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+        the target server.
+        If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         """
         return pulumi.get(self, "security_group_ids")
 
@@ -185,8 +189,8 @@ class ServerTemplateArgs:
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        defaults to **SAS**.
+        Specifies the disk type of the target server.
+        Available values are: **SAS**, **SSD**, defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 
@@ -228,6 +232,7 @@ class _ServerTemplateState:
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the target server is located.
         :param pulumi.Input[int] bandwidth_size: Specifies the bandwidth size in Mbit/s about the public IP address
                that will be used for migration.
+               The valid value is range from `1` to `2,000`.
         :param pulumi.Input[str] flavor: Specifies the flavor ID for the target server.
         :param pulumi.Input[str] name: Specifies the server template name.
         :param pulumi.Input[str] project_id: Specifies the project ID where the target server is located.
@@ -235,12 +240,13 @@ class _ServerTemplateState:
         :param pulumi.Input[str] region: Specifies the region where the target server is located.
                If omitted, the provider-level region will be used.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group IDs to associate with
-               the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+               the target server.
+               If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet IDs to attach to the target server.
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
-        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               defaults to **SAS**.
+        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server.
+               Available values are: **SAS**, **SSD**, defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         :param pulumi.Input[str] vpc_name: The name of the VPC which the target server belongs to.
@@ -288,6 +294,7 @@ class _ServerTemplateState:
         """
         Specifies the bandwidth size in Mbit/s about the public IP address
         that will be used for migration.
+        The valid value is range from `1` to `2,000`.
         """
         return pulumi.get(self, "bandwidth_size")
 
@@ -350,7 +357,8 @@ class _ServerTemplateState:
     def security_group_ids(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies an array of one or more security group IDs to associate with
-        the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+        the target server.
+        If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         """
         return pulumi.get(self, "security_group_ids")
 
@@ -387,8 +395,8 @@ class _ServerTemplateState:
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        defaults to **SAS**.
+        Specifies the disk type of the target server.
+        Available values are: **SAS**, **SSD**, defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 
@@ -483,6 +491,7 @@ class ServerTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the target server is located.
         :param pulumi.Input[int] bandwidth_size: Specifies the bandwidth size in Mbit/s about the public IP address
                that will be used for migration.
+               The valid value is range from `1` to `2,000`.
         :param pulumi.Input[str] flavor: Specifies the flavor ID for the target server.
         :param pulumi.Input[str] name: Specifies the server template name.
         :param pulumi.Input[str] project_id: Specifies the project ID where the target server is located.
@@ -490,12 +499,13 @@ class ServerTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region where the target server is located.
                If omitted, the provider-level region will be used.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group IDs to associate with
-               the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+               the target server.
+               If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet IDs to attach to the target server.
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
-        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               defaults to **SAS**.
+        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server.
+               Available values are: **SAS**, **SSD**, defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         """
@@ -625,6 +635,7 @@ class ServerTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone where the target server is located.
         :param pulumi.Input[int] bandwidth_size: Specifies the bandwidth size in Mbit/s about the public IP address
                that will be used for migration.
+               The valid value is range from `1` to `2,000`.
         :param pulumi.Input[str] flavor: Specifies the flavor ID for the target server.
         :param pulumi.Input[str] name: Specifies the server template name.
         :param pulumi.Input[str] project_id: Specifies the project ID where the target server is located.
@@ -632,12 +643,13 @@ class ServerTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region where the target server is located.
                If omitted, the provider-level region will be used.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: Specifies an array of one or more security group IDs to associate with
-               the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+               the target server.
+               If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] subnet_ids: Specifies an array of one or more subnet IDs to attach to the target server.
                If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
         :param pulumi.Input[str] target_server_name: Specifies the name of the target server. Defaults to the template name.
-        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-               defaults to **SAS**.
+        :param pulumi.Input[str] volume_type: Specifies the disk type of the target server.
+               Available values are: **SAS**, **SSD**, defaults to **SAS**.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC which the target server belongs to.
                If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
         :param pulumi.Input[str] vpc_name: The name of the VPC which the target server belongs to.
@@ -674,6 +686,7 @@ class ServerTemplate(pulumi.CustomResource):
         """
         Specifies the bandwidth size in Mbit/s about the public IP address
         that will be used for migration.
+        The valid value is range from `1` to `2,000`.
         """
         return pulumi.get(self, "bandwidth_size")
 
@@ -716,7 +729,8 @@ class ServerTemplate(pulumi.CustomResource):
     def security_group_ids(self) -> pulumi.Output[Sequence[str]]:
         """
         Specifies an array of one or more security group IDs to associate with
-        the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+        the target server.
+        If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
         """
         return pulumi.get(self, "security_group_ids")
 
@@ -741,8 +755,8 @@ class ServerTemplate(pulumi.CustomResource):
     @pulumi.getter(name="volumeType")
     def volume_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-        defaults to **SAS**.
+        Specifies the disk type of the target server.
+        Available values are: **SAS**, **SSD**, defaults to **SAS**.
         """
         return pulumi.get(self, "volume_type")
 

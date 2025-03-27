@@ -52,7 +52,7 @@ import (
 //
 // ## Import
 //
-// Server Groups can be imported using the `id`, e.g.
+// Server Groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

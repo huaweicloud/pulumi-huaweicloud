@@ -112,15 +112,18 @@ class ParametergroupArgs:
 class _ParametergroupState:
     def __init__(__self__, *,
                  configuration_parameters: Optional[pulumi.Input[Sequence[pulumi.Input['ParametergroupConfigurationParameterArgs']]]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input['ParametergroupDatastoreArgs']] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  values: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         Input properties used for looking up and filtering Parametergroup resources.
         :param pulumi.Input[Sequence[pulumi.Input['ParametergroupConfigurationParameterArgs']]] configuration_parameters: Indicates the parameter configuration defined by users based on the default parameters
                groups.
+        :param pulumi.Input[str] created_at: The creation time, in UTC format.
         :param pulumi.Input['ParametergroupDatastoreArgs'] datastore: Database object. The database object structure is documented below. Changing
                this creates a new parameter group.
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
@@ -128,11 +131,14 @@ class _ParametergroupState:
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
         :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
                provider-level region will be used. Changing this creates a new parameter group.
+        :param pulumi.Input[str] updated_at: The last update time, in UTC format.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
         if configuration_parameters is not None:
             pulumi.set(__self__, "configuration_parameters", configuration_parameters)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
         if description is not None:
@@ -141,6 +147,8 @@ class _ParametergroupState:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if values is not None:
             pulumi.set(__self__, "values", values)
 
@@ -156,6 +164,18 @@ class _ParametergroupState:
     @configuration_parameters.setter
     def configuration_parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ParametergroupConfigurationParameterArgs']]]]):
         pulumi.set(self, "configuration_parameters", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time, in UTC format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
@@ -209,6 +229,18 @@ class _ParametergroupState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The last update time, in UTC format.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter
     def values(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
@@ -256,7 +288,7 @@ class Parametergroup(pulumi.CustomResource):
 
         ## Import
 
-        Parameter groups can be imported using the `id`, e.g.
+        Parameter groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Rds/parametergroup:Parametergroup pg_1 7117d38e-4c8f-4624-a505-bd96b97d024c
@@ -303,7 +335,7 @@ class Parametergroup(pulumi.CustomResource):
 
         ## Import
 
-        Parameter groups can be imported using the `id`, e.g.
+        Parameter groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Rds/parametergroup:Parametergroup pg_1 7117d38e-4c8f-4624-a505-bd96b97d024c
@@ -346,6 +378,8 @@ class Parametergroup(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["values"] = values
             __props__.__dict__["configuration_parameters"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Parametergroup, __self__).__init__(
             'huaweicloud:Rds/parametergroup:Parametergroup',
             resource_name,
@@ -357,10 +391,12 @@ class Parametergroup(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             configuration_parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ParametergroupConfigurationParameterArgs']]]]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['ParametergroupDatastoreArgs']]] = None,
             description: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             values: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Parametergroup':
         """
         Get an existing Parametergroup resource's state with the given name, id, and optional extra
@@ -371,6 +407,7 @@ class Parametergroup(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ParametergroupConfigurationParameterArgs']]]] configuration_parameters: Indicates the parameter configuration defined by users based on the default parameters
                groups.
+        :param pulumi.Input[str] created_at: The creation time, in UTC format.
         :param pulumi.Input[pulumi.InputType['ParametergroupDatastoreArgs']] datastore: Database object. The database object structure is documented below. Changing
                this creates a new parameter group.
         :param pulumi.Input[str] description: The parameter group description. It contains a maximum of 256 characters and cannot
@@ -378,6 +415,7 @@ class Parametergroup(pulumi.CustomResource):
         :param pulumi.Input[str] name: The parameter group name. It contains a maximum of 64 characters.
         :param pulumi.Input[str] region: The region in which to create the RDS parameter group. If omitted, the
                provider-level region will be used. Changing this creates a new parameter group.
+        :param pulumi.Input[str] updated_at: The last update time, in UTC format.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] values: Parameter group values key/value pairs defined by users based on the default parameter
                groups.
         """
@@ -386,10 +424,12 @@ class Parametergroup(pulumi.CustomResource):
         __props__ = _ParametergroupState.__new__(_ParametergroupState)
 
         __props__.__dict__["configuration_parameters"] = configuration_parameters
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["datastore"] = datastore
         __props__.__dict__["description"] = description
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["values"] = values
         return Parametergroup(resource_name, opts=opts, __props__=__props__)
 
@@ -401,6 +441,14 @@ class Parametergroup(pulumi.CustomResource):
         groups.
         """
         return pulumi.get(self, "configuration_parameters")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The creation time, in UTC format.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
@@ -436,6 +484,14 @@ class Parametergroup(pulumi.CustomResource):
         provider-level region will be used. Changing this creates a new parameter group.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The last update time, in UTC format.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter

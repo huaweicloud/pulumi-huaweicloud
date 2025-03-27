@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an available DCS maintainwindow.
+ * Use this data source to get the ID of an available DCS maintenance windows.
  *
  * ## Example Usage
  *
@@ -51,7 +51,7 @@ export interface GetMaintainwindowArgs {
      */
     end?: string;
     /**
-     * The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
+     * The region in which to obtain the dcs maintenance windows. If omitted, the provider-level
      * region will be used.
      */
     region?: string;
@@ -97,7 +97,7 @@ export interface GetMaintainwindowOutputArgs {
      */
     end?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
+     * The region in which to obtain the dcs maintenance windows. If omitted, the provider-level
      * region will be used.
      */
     region?: pulumi.Input<string>;

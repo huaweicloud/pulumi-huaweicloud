@@ -36,7 +36,7 @@ class DatasetArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[int] type: Specifies Label type for text classification.
                The optional values are as follows:
-        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of 256 characters and
+        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of `256` characters and
                cannot contain special characters `!<>=&"'`.
         :param pulumi.Input[bool] import_labeled_enabled: Specifies whether to import labeled files.
                Default value is `true`. Changing this parameter will create a new resource.
@@ -113,7 +113,7 @@ class DatasetArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of dataset. It contains a maximum of 256 characters and
+        Specifies the description of dataset. It contains a maximum of `256` characters and
         cannot contain special characters `!<>=&"'`.
         """
         return pulumi.get(self, "description")
@@ -224,7 +224,7 @@ class _DatasetState:
         :param pulumi.Input['DatasetDataSourceArgs'] data_source: Specifies the data sources which be used to imported the source data (such
                as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of 256 characters and
+        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of `256` characters and
                cannot contain special characters `!<>=&"'`.
         :param pulumi.Input[bool] import_labeled_enabled: Specifies whether to import labeled files.
                Default value is `true`. Changing this parameter will create a new resource.
@@ -323,7 +323,7 @@ class _DatasetState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of dataset. It contains a maximum of 256 characters and
+        Specifies the description of dataset. It contains a maximum of `256` characters and
         cannot contain special characters `!<>=&"'`.
         """
         return pulumi.get(self, "description")
@@ -501,13 +501,13 @@ class Dataset(pulumi.CustomResource):
 
         ## Import
 
-        The datasets can be imported by `id`.
+        The datasets can be imported by `id`. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/dataset:Dataset test yiROKoTTjtwjvP71yLG
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset" "test" {
 
          ...
 
@@ -528,7 +528,7 @@ class Dataset(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['DatasetDataSourceArgs']] data_source: Specifies the data sources which be used to imported the source data (such
                as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of 256 characters and
+        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of `256` characters and
                cannot contain special characters `!<>=&"'`.
         :param pulumi.Input[bool] import_labeled_enabled: Specifies whether to import labeled files.
                Default value is `true`. Changing this parameter will create a new resource.
@@ -580,13 +580,13 @@ class Dataset(pulumi.CustomResource):
 
         ## Import
 
-        The datasets can be imported by `id`.
+        The datasets can be imported by `id`. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/dataset:Dataset test yiROKoTTjtwjvP71yLG
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset" "test" {
 
          ...
 
@@ -691,7 +691,7 @@ class Dataset(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['DatasetDataSourceArgs']] data_source: Specifies the data sources which be used to imported the source data (such
                as pictures/files/audio, etc.) in this directory and subdirectories to the dataset. Structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of 256 characters and
+        :param pulumi.Input[str] description: Specifies the description of dataset. It contains a maximum of `256` characters and
                cannot contain special characters `!<>=&"'`.
         :param pulumi.Input[bool] import_labeled_enabled: Specifies whether to import labeled files.
                Default value is `true`. Changing this parameter will create a new resource.
@@ -770,7 +770,7 @@ class Dataset(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of dataset. It contains a maximum of 256 characters and
+        Specifies the description of dataset. It contains a maximum of `256` characters and
         cannot contain special characters `!<>=&"'`.
         """
         return pulumi.get(self, "description")

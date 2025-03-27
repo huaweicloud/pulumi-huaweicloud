@@ -29,6 +29,12 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &Eip{}
 	case "huaweicloud:Vpc/eipAssociate:EipAssociate":
 		r = &EipAssociate{}
+	case "huaweicloud:Vpc/flowLog:FlowLog":
+		r = &FlowLog{}
+	case "huaweicloud:Vpc/networkAcl:NetworkAcl":
+		r = &NetworkAcl{}
+	case "huaweicloud:Vpc/networkInterface:NetworkInterface":
+		r = &NetworkInterface{}
 	case "huaweicloud:Vpc/peeringConnection:PeeringConnection":
 		r = &PeeringConnection{}
 	case "huaweicloud:Vpc/peeringConnectionAccepter:PeeringConnectionAccepter":
@@ -43,8 +49,18 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &Secgroup{}
 	case "huaweicloud:Vpc/secgroupRule:SecgroupRule":
 		r = &SecgroupRule{}
+	case "huaweicloud:Vpc/subNetworkInterface:SubNetworkInterface":
+		r = &SubNetworkInterface{}
 	case "huaweicloud:Vpc/subnet:Subnet":
 		r = &Subnet{}
+	case "huaweicloud:Vpc/subnetPrivateIp:SubnetPrivateIp":
+		r = &SubnetPrivateIp{}
+	case "huaweicloud:Vpc/trafficMirrorFilter:TrafficMirrorFilter":
+		r = &TrafficMirrorFilter{}
+	case "huaweicloud:Vpc/trafficMirrorFilterRule:TrafficMirrorFilterRule":
+		r = &TrafficMirrorFilterRule{}
+	case "huaweicloud:Vpc/trafficMirrorSession:TrafficMirrorSession":
+		r = &TrafficMirrorSession{}
 	case "huaweicloud:Vpc/vip:Vip":
 		r = &Vip{}
 	case "huaweicloud:Vpc/vipAssociate:VipAssociate":
@@ -86,6 +102,21 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Vpc/flowLog",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/networkAcl",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/networkInterface",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Vpc/peeringConnection",
 		&module{version},
 	)
@@ -121,7 +152,32 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Vpc/subNetworkInterface",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Vpc/subnet",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/subnetPrivateIp",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/trafficMirrorFilter",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/trafficMirrorFilterRule",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Vpc/trafficMirrorSession",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(

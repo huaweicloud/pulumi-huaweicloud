@@ -48,7 +48,8 @@ export interface GetFlavorsArgs {
      */
     availabilityZone?: string;
     /**
-     * Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+     * Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+     * **MariaDB**.
      */
     dbType: string;
     /**
@@ -76,8 +77,8 @@ export interface GetFlavorsArgs {
      */
     groupType?: string;
     /**
-     * The mode of instance. Value: *ha*(indicates primary/standby instance),
-     * *single*(indicates single instance) and *replica*(indicates read replicas).
+     * The mode of instance. The value can be **ha**(indicates primary/standby
+     * instance), **single**(indicates single instance) and **replica**(indicates read replicas).
      */
     instanceMode?: string;
     /**
@@ -142,7 +143,8 @@ export interface GetFlavorsOutputArgs {
      */
     availabilityZone?: pulumi.Input<string>;
     /**
-     * Specifies the DB engine. Value: MySQL, PostgreSQL, SQLServer.
+     * Specifies the DB engine. The value can be **MySQL**, **PostgreSQL**, **SQLServer**,
+     * **MariaDB**.
      */
     dbType: pulumi.Input<string>;
     /**
@@ -170,8 +172,8 @@ export interface GetFlavorsOutputArgs {
      */
     groupType?: pulumi.Input<string>;
     /**
-     * The mode of instance. Value: *ha*(indicates primary/standby instance),
-     * *single*(indicates single instance) and *replica*(indicates read replicas).
+     * The mode of instance. The value can be **ha**(indicates primary/standby
+     * instance), **single**(indicates single instance) and **replica**(indicates read replicas).
      */
     instanceMode?: pulumi.Input<string>;
     /**

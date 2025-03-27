@@ -183,7 +183,7 @@ class JobConfigArgs:
                + **NONE**: The job will not be deleted after it is executed.
                + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
                massive one-time jobs.
-               + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+               + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
         :param pulumi.Input[bool] scheduler_enabled: Specifies whether to enable a scheduled task.  Default value is `false`.
         :param pulumi.Input[str] scheduler_run_at: Specifies time when a scheduled task is triggered in a cycle. This parameter
                is valid only when `scheduler_cycle_type` is set to `hour`, `week`, or `month`.
@@ -307,7 +307,7 @@ class JobConfigArgs:
         + **NONE**: The job will not be deleted after it is executed.
         + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
         massive one-time jobs.
-        + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+        + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
         """
         return pulumi.get(self, "scheduler_disposable_type")
 

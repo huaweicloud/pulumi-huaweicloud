@@ -36,9 +36,9 @@ class NamespaceArgs:
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-               and must start and end with lowercase letters and digits.
+        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[bool] rbac_enabled: Specifies whether Role-based access control is enabled.
                After the RBAC permission is enabled, the user's use of resources under the namespace will be controlled by the RBAC
@@ -48,7 +48,8 @@ class NamespaceArgs:
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCI namespace resource.
                If omitted, the provider-level region will be used. Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.
+        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.  
+               The valid value is range from `1` to `500`.
                Changing this will create a new CCI namespace resource.
         """
         pulumi.set(__self__, "type", type)
@@ -128,9 +129,9 @@ class NamespaceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the CCI namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-        and must start and end with lowercase letters and digits.
+        Specifies the unique name of the CCI namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "name")
@@ -184,7 +185,8 @@ class NamespaceArgs:
     @pulumi.getter(name="warmupPoolSize")
     def warmup_pool_size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the size of IP pool to warm-up.
+        Specifies the size of IP pool to warm-up.  
+        The valid value is range from `1` to `500`.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "warmup_pool_size")
@@ -219,9 +221,9 @@ class _NamespaceState:
         :param pulumi.Input[str] created_at: The time when the namespace was created, in UTC format, e.g., **2021-09-27T01:30:39Z**.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-               and must start and end with lowercase letters and digits.
+        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[bool] rbac_enabled: Specifies whether Role-based access control is enabled.
                After the RBAC permission is enabled, the user's use of resources under the namespace will be controlled by the RBAC
@@ -235,7 +237,8 @@ class _NamespaceState:
         :param pulumi.Input[str] type: Specifies the CCI namespace type.
                The valid values are **general-computing** and **gpu-accelerated**.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.
+        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.  
+               The valid value is range from `1` to `500`.
                Changing this will create a new CCI namespace resource.
         """
         if auto_expend_enabled is not None:
@@ -318,9 +321,9 @@ class _NamespaceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the CCI namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-        and must start and end with lowercase letters and digits.
+        Specifies the unique name of the CCI namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "name")
@@ -400,7 +403,8 @@ class _NamespaceState:
     @pulumi.getter(name="warmupPoolSize")
     def warmup_pool_size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the size of IP pool to warm-up.
+        Specifies the size of IP pool to warm-up.  
+        The valid value is range from `1` to `500`.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "warmup_pool_size")
@@ -443,7 +447,7 @@ class Namespace(pulumi.CustomResource):
 
         ## Import
 
-        CCI Namespaces can be imported using their `name`, e.g.,
+        CCI Namespaces can be imported using their `name`, e.g., bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/namespace:Namespace test terraform-test
@@ -459,9 +463,9 @@ class Namespace(pulumi.CustomResource):
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-               and must start and end with lowercase letters and digits.
+        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[bool] rbac_enabled: Specifies whether Role-based access control is enabled.
                After the RBAC permission is enabled, the user's use of resources under the namespace will be controlled by the RBAC
@@ -474,7 +478,8 @@ class Namespace(pulumi.CustomResource):
         :param pulumi.Input[str] type: Specifies the CCI namespace type.
                The valid values are **general-computing** and **gpu-accelerated**.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.
+        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.  
+               The valid value is range from `1` to `500`.
                Changing this will create a new CCI namespace resource.
         """
         ...
@@ -501,7 +506,7 @@ class Namespace(pulumi.CustomResource):
 
         ## Import
 
-        CCI Namespaces can be imported using their `name`, e.g.,
+        CCI Namespaces can be imported using their `name`, e.g., bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/namespace:Namespace test terraform-test
@@ -590,9 +595,9 @@ class Namespace(pulumi.CustomResource):
         :param pulumi.Input[str] created_at: The time when the namespace was created, in UTC format, e.g., **2021-09-27T01:30:39Z**.
         :param pulumi.Input[str] enterprise_project_id: Specifies a unique ID in UUID format of enterprise project.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-               and must start and end with lowercase letters and digits.
+        :param pulumi.Input[str] name: Specifies the unique name of the CCI namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
                Changing this will create a new CCI namespace resource.
         :param pulumi.Input[bool] rbac_enabled: Specifies whether Role-based access control is enabled.
                After the RBAC permission is enabled, the user's use of resources under the namespace will be controlled by the RBAC
@@ -606,7 +611,8 @@ class Namespace(pulumi.CustomResource):
         :param pulumi.Input[str] type: Specifies the CCI namespace type.
                The valid values are **general-computing** and **gpu-accelerated**.
                Changing this will create a new CCI namespace resource.
-        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.
+        :param pulumi.Input[int] warmup_pool_size: Specifies the size of IP pool to warm-up.  
+               The valid value is range from `1` to `500`.
                Changing this will create a new CCI namespace resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -667,9 +673,9 @@ class Namespace(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the unique name of the CCI namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-        and must start and end with lowercase letters and digits.
+        Specifies the unique name of the CCI namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "name")
@@ -725,7 +731,8 @@ class Namespace(pulumi.CustomResource):
     @pulumi.getter(name="warmupPoolSize")
     def warmup_pool_size(self) -> pulumi.Output[int]:
         """
-        Specifies the size of IP pool to warm-up.
+        Specifies the size of IP pool to warm-up.  
+        The valid value is range from `1` to `500`.
         Changing this will create a new CCI namespace resource.
         """
         return pulumi.get(self, "warmup_pool_size")

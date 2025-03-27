@@ -5,6 +5,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated, use `huaweicloud.Vpc.NetworkAcl` instead.
+ *
  * Manages a network ACL rule resource within HuaweiCloud.
  *
  * ## Example Usage
@@ -25,7 +27,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * network ACL rules can be imported using the `id`, e.g.
+ * network ACL rules can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:NetworkAcl/aclRule:AclRule rule_1 89a84b28-4cc2-4859-9885-c67e802a46a3
@@ -75,7 +77,7 @@ export class AclRule extends pulumi.CustomResource {
     public readonly destinationIpAddress!: pulumi.Output<string | undefined>;
     /**
      * Specifies the destination port number or port number range. The value ranges
-     * from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+     * from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
      */
     public readonly destinationPort!: pulumi.Output<string | undefined>;
     /**
@@ -181,7 +183,7 @@ export interface AclRuleState {
     destinationIpAddress?: pulumi.Input<string>;
     /**
      * Specifies the destination port number or port number range. The value ranges
-     * from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+     * from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
      */
     destinationPort?: pulumi.Input<string>;
     /**
@@ -239,7 +241,7 @@ export interface AclRuleArgs {
     destinationIpAddress?: pulumi.Input<string>;
     /**
      * Specifies the destination port number or port number range. The value ranges
-     * from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+     * from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
      */
     destinationPort?: pulumi.Input<string>;
     /**

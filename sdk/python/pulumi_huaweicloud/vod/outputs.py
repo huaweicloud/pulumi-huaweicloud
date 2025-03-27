@@ -54,16 +54,16 @@ class MediaAssetThumbnail(dict):
         :param int aspect_ratio: Specifies the screenshot aspect ratio. The value can be:
                + **0**: adaptive (maintain the original aspect ratio).
                + **1**: 16:9.
-        :param int cover_position: Specifies the number of screenshots as the cover. Defaults to: **1**.
+        :param int cover_position: Specifies the number of screenshots as the cover. Defaults to `1`.
                Changing this creates a new resource.
         :param Sequence[int] dots: Specifies an array of time points of screenshot. Required when `type` is **dots**.
                Changing this creates a new resource.
-        :param int format: Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-               Defaults to: **1**. Changing this creates a new resource.
+        :param int format: Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+               Defaults to: `1`. Changing this creates a new resource.
         :param int max_length: Specifies the size of the longest side of the screenshot. Unit: pixel.
                The width dimension is calculated by scaling the dimension proportional to the original video pixels.
                Changing this creates a new resource.
-        :param int time: Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+        :param int time: Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
                Required when `type` is **time**. Changing this creates a new resource.
         """
         pulumi.set(__self__, "type", type)
@@ -103,7 +103,7 @@ class MediaAssetThumbnail(dict):
     @pulumi.getter(name="coverPosition")
     def cover_position(self) -> Optional[int]:
         """
-        Specifies the number of screenshots as the cover. Defaults to: **1**.
+        Specifies the number of screenshots as the cover. Defaults to `1`.
         Changing this creates a new resource.
         """
         return pulumi.get(self, "cover_position")
@@ -121,8 +121,8 @@ class MediaAssetThumbnail(dict):
     @pulumi.getter
     def format(self) -> Optional[int]:
         """
-        Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-        Defaults to: **1**. Changing this creates a new resource.
+        Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+        Defaults to: `1`. Changing this creates a new resource.
         """
         return pulumi.get(self, "format")
 
@@ -140,7 +140,7 @@ class MediaAssetThumbnail(dict):
     @pulumi.getter
     def time(self) -> Optional[int]:
         """
-        Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+        Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
         Required when `type` is **time**. Changing this creates a new resource.
         """
         return pulumi.get(self, "time")
@@ -245,8 +245,8 @@ class TranscodingTemplateGroupQualityInfoAudio(dict):
                + **4**: 44,100 Hz
                + **5**: 48,000 Hz
                + **6**: 96,000 Hz
-        :param int bitrate: Specifies the audio bitrate. The value can be **0** or range from
-               **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+        :param int bitrate: Specifies the audio bitrate. The value can be `0` or range from
+               `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
         """
         pulumi.set(__self__, "channels", channels)
         pulumi.set(__self__, "sample_rate", sample_rate)
@@ -281,8 +281,8 @@ class TranscodingTemplateGroupQualityInfoAudio(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the audio bitrate. The value can be **0** or range from
-        **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+        Specifies the audio bitrate. The value can be `0` or range from
+        `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
         """
         return pulumi.get(self, "bitrate")
 
@@ -315,15 +315,14 @@ class TranscodingTemplateGroupQualityInfoVideo(dict):
         """
         :param str quality: Specifies the video quality.
                The value can be: **4K**, **2K**, **FHD**, **SD**, **LD** and **HD**.
-        :param int bitrate: Specifies the audio bitrate. The value can be **0** or range from
-               **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
-        :param int frame_rate: Specifies the video frame rate. The value ranges from **1** to **75**.
-               Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-               untransocded video.
-        :param int height: Specifies the video height. The value can be **0** or range from **128** to **2160**.
-               Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
-        :param int width: Specifies the video width. The value can be **0** or range from **128** to **3840**.
-               Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+        :param int bitrate: Specifies the audio bitrate. The value can be `0` or range from
+               `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
+        :param int frame_rate: Specifies the video frame rate. The value ranges from `1` to `75`.
+               Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
+        :param int height: Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+               Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
+        :param int width: Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+               Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
         """
         pulumi.set(__self__, "quality", quality)
         if bitrate is not None:
@@ -348,8 +347,8 @@ class TranscodingTemplateGroupQualityInfoVideo(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the audio bitrate. The value can be **0** or range from
-        **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+        Specifies the audio bitrate. The value can be `0` or range from
+        `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
         """
         return pulumi.get(self, "bitrate")
 
@@ -357,9 +356,8 @@ class TranscodingTemplateGroupQualityInfoVideo(dict):
     @pulumi.getter(name="frameRate")
     def frame_rate(self) -> Optional[int]:
         """
-        Specifies the video frame rate. The value ranges from **1** to **75**.
-        Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-        untransocded video.
+        Specifies the video frame rate. The value ranges from `1` to `75`.
+        Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
         """
         return pulumi.get(self, "frame_rate")
 
@@ -367,8 +365,8 @@ class TranscodingTemplateGroupQualityInfoVideo(dict):
     @pulumi.getter
     def height(self) -> Optional[int]:
         """
-        Specifies the video height. The value can be **0** or range from **128** to **2160**.
-        Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
+        Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+        Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
         """
         return pulumi.get(self, "height")
 
@@ -376,8 +374,8 @@ class TranscodingTemplateGroupQualityInfoVideo(dict):
     @pulumi.getter
     def width(self) -> Optional[int]:
         """
-        Specifies the video width. The value can be **0** or range from **128** to **3840**.
-        Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+        Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+        Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
         """
         return pulumi.get(self, "width")
 

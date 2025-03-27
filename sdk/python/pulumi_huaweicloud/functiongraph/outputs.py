@@ -8,10 +8,19 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
 
 __all__ = [
     'FunctionCustomImage',
     'FunctionFuncMount',
+    'FunctionNetworkController',
+    'FunctionNetworkControllerTriggerAccessVpc',
+    'FunctionReservedInstance',
+    'FunctionReservedInstanceTacticsConfig',
+    'FunctionReservedInstanceTacticsConfigCronConfig',
+    'FunctionReservedInstanceTacticsConfigMetricConfig',
+    'FunctionVersion',
+    'FunctionVersionAliases',
     'TriggerApig',
     'TriggerDis',
     'TriggerKafka',
@@ -20,16 +29,62 @@ __all__ = [
     'TriggerSmn',
     'TriggerTimer',
     'GetDependenciesPackageResult',
+    'GetDependenciesPackageVersionResult',
 ]
 
 @pulumi.output_type
 class FunctionCustomImage(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "userGroupId":
+            suggest = "user_group_id"
+        elif key == "userId":
+            suggest = "user_id"
+        elif key == "workingDir":
+            suggest = "working_dir"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionCustomImage. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionCustomImage.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionCustomImage.__key_warning(key)
+        return super().get(key, default)
+
     def __init__(__self__, *,
-                 url: str):
+                 url: str,
+                 args: Optional[str] = None,
+                 command: Optional[str] = None,
+                 user_group_id: Optional[str] = None,
+                 user_id: Optional[str] = None,
+                 working_dir: Optional[str] = None):
         """
         :param str url: Specifies the URL of SWR image, the URL must start with `swr.`.
+        :param str args: Specifies the command line arguments used to start the SWR image.  
+               If multiple arguments are separated by commas (,). e.g. `-args,value`.
+               If this parameter is not specified, the CMD in the image configuration will be used by default.
+        :param str command: Specifies the startup commands of the SWR image.  
+               Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+               If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+        :param str working_dir: Specifies the working directory of the SWR image.  
+               If not specified, the default value is `/`.
+               Currently, the folder path can only be set to `/` and it cannot be created or modified.
         """
         pulumi.set(__self__, "url", url)
+        if args is not None:
+            pulumi.set(__self__, "args", args)
+        if command is not None:
+            pulumi.set(__self__, "command", command)
+        if user_group_id is not None:
+            pulumi.set(__self__, "user_group_id", user_group_id)
+        if user_id is not None:
+            pulumi.set(__self__, "user_id", user_id)
+        if working_dir is not None:
+            pulumi.set(__self__, "working_dir", working_dir)
 
     @property
     @pulumi.getter
@@ -38,6 +93,46 @@ class FunctionCustomImage(dict):
         Specifies the URL of SWR image, the URL must start with `swr.`.
         """
         return pulumi.get(self, "url")
+
+    @property
+    @pulumi.getter
+    def args(self) -> Optional[str]:
+        """
+        Specifies the command line arguments used to start the SWR image.  
+        If multiple arguments are separated by commas (,). e.g. `-args,value`.
+        If this parameter is not specified, the CMD in the image configuration will be used by default.
+        """
+        return pulumi.get(self, "args")
+
+    @property
+    @pulumi.getter
+    def command(self) -> Optional[str]:
+        """
+        Specifies the startup commands of the SWR image.  
+        Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+        If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+        """
+        return pulumi.get(self, "command")
+
+    @property
+    @pulumi.getter(name="userGroupId")
+    def user_group_id(self) -> Optional[str]:
+        return pulumi.get(self, "user_group_id")
+
+    @property
+    @pulumi.getter(name="userId")
+    def user_id(self) -> Optional[str]:
+        return pulumi.get(self, "user_id")
+
+    @property
+    @pulumi.getter(name="workingDir")
+    def working_dir(self) -> Optional[str]:
+        """
+        Specifies the working directory of the SWR image.  
+        If not specified, the default value is `/`.
+        Currently, the folder path can only be set to `/` and it cannot be created or modified.
+        """
+        return pulumi.get(self, "working_dir")
 
 
 @pulumi.output_type
@@ -74,8 +169,12 @@ class FunctionFuncMount(dict):
         """
         :param str local_mount_path: Specifies the function access path.
         :param str mount_resource: Specifies the ID of the mounted resource (corresponding cloud service).
-        :param str mount_share_path: Specifies the remote mount path. Example: 192.168.0.12:/data.
-        :param str mount_type: Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
+        :param str mount_share_path: Specifies the remote mount path, e.g. **192.168.0.12:/data**.
+        :param str mount_type: Specifies the mount type.
+               + **sfs**
+               + **sfsTurbo**
+               + **ecs**
+        :param str status: The mount status.
         """
         pulumi.set(__self__, "local_mount_path", local_mount_path)
         pulumi.set(__self__, "mount_resource", mount_resource)
@@ -104,7 +203,7 @@ class FunctionFuncMount(dict):
     @pulumi.getter(name="mountSharePath")
     def mount_share_path(self) -> str:
         """
-        Specifies the remote mount path. Example: 192.168.0.12:/data.
+        Specifies the remote mount path, e.g. **192.168.0.12:/data**.
         """
         return pulumi.get(self, "mount_share_path")
 
@@ -112,14 +211,544 @@ class FunctionFuncMount(dict):
     @pulumi.getter(name="mountType")
     def mount_type(self) -> str:
         """
-        Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
+        Specifies the mount type.
+        + **sfs**
+        + **sfsTurbo**
+        + **ecs**
         """
         return pulumi.get(self, "mount_type")
 
     @property
     @pulumi.getter
     def status(self) -> Optional[str]:
+        """
+        The mount status.
+        """
         return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class FunctionNetworkController(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "triggerAccessVpcs":
+            suggest = "trigger_access_vpcs"
+        elif key == "disablePublicNetwork":
+            suggest = "disable_public_network"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionNetworkController. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionNetworkController.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionNetworkController.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 trigger_access_vpcs: Sequence['outputs.FunctionNetworkControllerTriggerAccessVpc'],
+                 disable_public_network: Optional[bool] = None):
+        """
+        :param Sequence['FunctionNetworkControllerTriggerAccessVpcArgs'] trigger_access_vpcs: Specifies the configuration of the VPCs that can trigger the function.  
+               The trigger_access_vpcs structure is documented below.
+        :param bool disable_public_network: Specifies whether to disable the public network access.
+        """
+        pulumi.set(__self__, "trigger_access_vpcs", trigger_access_vpcs)
+        if disable_public_network is not None:
+            pulumi.set(__self__, "disable_public_network", disable_public_network)
+
+    @property
+    @pulumi.getter(name="triggerAccessVpcs")
+    def trigger_access_vpcs(self) -> Sequence['outputs.FunctionNetworkControllerTriggerAccessVpc']:
+        """
+        Specifies the configuration of the VPCs that can trigger the function.  
+        The trigger_access_vpcs structure is documented below.
+        """
+        return pulumi.get(self, "trigger_access_vpcs")
+
+    @property
+    @pulumi.getter(name="disablePublicNetwork")
+    def disable_public_network(self) -> Optional[bool]:
+        """
+        Specifies whether to disable the public network access.
+        """
+        return pulumi.get(self, "disable_public_network")
+
+
+@pulumi.output_type
+class FunctionNetworkControllerTriggerAccessVpc(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "vpcId":
+            suggest = "vpc_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionNetworkControllerTriggerAccessVpc. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionNetworkControllerTriggerAccessVpc.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionNetworkControllerTriggerAccessVpc.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 vpc_id: str):
+        """
+        :param str vpc_id: Specifies the ID of the VPC that can trigger the function.
+        """
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC that can trigger the function.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class FunctionReservedInstance(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "qualifierName":
+            suggest = "qualifier_name"
+        elif key == "qualifierType":
+            suggest = "qualifier_type"
+        elif key == "idleMode":
+            suggest = "idle_mode"
+        elif key == "tacticsConfig":
+            suggest = "tactics_config"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionReservedInstance. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionReservedInstance.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionReservedInstance.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 count: int,
+                 qualifier_name: str,
+                 qualifier_type: str,
+                 idle_mode: Optional[bool] = None,
+                 tactics_config: Optional['outputs.FunctionReservedInstanceTacticsConfig'] = None):
+        """
+        :param int count: Specifies the number of reserved instance to which the policy belongs.  
+               The valid value is range from `0` to `1,000`.
+        :param str qualifier_name: Specifies the version name or alias name.
+        :param str qualifier_type: Specifies the qualifier type of reserved instance.  
+               The valid values are as follows:
+               + **version**
+               + **alias**
+        :param bool idle_mode: Specifies whether to enable the idle mode.  
+               Defaults to **false**.
+               If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+               You will still be billed at the price of reserved instances for non-idle mode in this period.
+        :param 'FunctionReservedInstanceTacticsConfigArgs' tactics_config: Specifies the auto scaling policies for reserved instance.  
+               The tactics_config structure is documented below.
+        """
+        pulumi.set(__self__, "count", count)
+        pulumi.set(__self__, "qualifier_name", qualifier_name)
+        pulumi.set(__self__, "qualifier_type", qualifier_type)
+        if idle_mode is not None:
+            pulumi.set(__self__, "idle_mode", idle_mode)
+        if tactics_config is not None:
+            pulumi.set(__self__, "tactics_config", tactics_config)
+
+    @property
+    @pulumi.getter
+    def count(self) -> int:
+        """
+        Specifies the number of reserved instance to which the policy belongs.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "count")
+
+    @property
+    @pulumi.getter(name="qualifierName")
+    def qualifier_name(self) -> str:
+        """
+        Specifies the version name or alias name.
+        """
+        return pulumi.get(self, "qualifier_name")
+
+    @property
+    @pulumi.getter(name="qualifierType")
+    def qualifier_type(self) -> str:
+        """
+        Specifies the qualifier type of reserved instance.  
+        The valid values are as follows:
+        + **version**
+        + **alias**
+        """
+        return pulumi.get(self, "qualifier_type")
+
+    @property
+    @pulumi.getter(name="idleMode")
+    def idle_mode(self) -> Optional[bool]:
+        """
+        Specifies whether to enable the idle mode.  
+        Defaults to **false**.
+        If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+        You will still be billed at the price of reserved instances for non-idle mode in this period.
+        """
+        return pulumi.get(self, "idle_mode")
+
+    @property
+    @pulumi.getter(name="tacticsConfig")
+    def tactics_config(self) -> Optional['outputs.FunctionReservedInstanceTacticsConfig']:
+        """
+        Specifies the auto scaling policies for reserved instance.  
+        The tactics_config structure is documented below.
+        """
+        return pulumi.get(self, "tactics_config")
+
+
+@pulumi.output_type
+class FunctionReservedInstanceTacticsConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "cronConfigs":
+            suggest = "cron_configs"
+        elif key == "metricConfigs":
+            suggest = "metric_configs"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionReservedInstanceTacticsConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionReservedInstanceTacticsConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionReservedInstanceTacticsConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 cron_configs: Optional[Sequence['outputs.FunctionReservedInstanceTacticsConfigCronConfig']] = None,
+                 metric_configs: Optional[Sequence['outputs.FunctionReservedInstanceTacticsConfigMetricConfig']] = None):
+        """
+        :param Sequence['FunctionReservedInstanceTacticsConfigCronConfigArgs'] cron_configs: Specifies the list of scheduled policy configurations.  
+               The cron_configs structure is documented below.
+        :param Sequence['FunctionReservedInstanceTacticsConfigMetricConfigArgs'] metric_configs: Specifies the list of metric policy configurations.  
+               The metric_configs structure is documented below.
+        """
+        if cron_configs is not None:
+            pulumi.set(__self__, "cron_configs", cron_configs)
+        if metric_configs is not None:
+            pulumi.set(__self__, "metric_configs", metric_configs)
+
+    @property
+    @pulumi.getter(name="cronConfigs")
+    def cron_configs(self) -> Optional[Sequence['outputs.FunctionReservedInstanceTacticsConfigCronConfig']]:
+        """
+        Specifies the list of scheduled policy configurations.  
+        The cron_configs structure is documented below.
+        """
+        return pulumi.get(self, "cron_configs")
+
+    @property
+    @pulumi.getter(name="metricConfigs")
+    def metric_configs(self) -> Optional[Sequence['outputs.FunctionReservedInstanceTacticsConfigMetricConfig']]:
+        """
+        Specifies the list of metric policy configurations.  
+        The metric_configs structure is documented below.
+        """
+        return pulumi.get(self, "metric_configs")
+
+
+@pulumi.output_type
+class FunctionReservedInstanceTacticsConfigCronConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "expiredTime":
+            suggest = "expired_time"
+        elif key == "startTime":
+            suggest = "start_time"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionReservedInstanceTacticsConfigCronConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionReservedInstanceTacticsConfigCronConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionReservedInstanceTacticsConfigCronConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 count: int,
+                 cron: str,
+                 expired_time: int,
+                 name: str,
+                 start_time: int):
+        """
+        :param int count: Specifies the number of reserved instance to which the policy belongs.  
+               The valid value is range from `0` to `1,000`.
+        :param str cron: Specifies the cron expression.  
+               For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+        :param int expired_time: Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+        :param str name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param int start_time: Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+        """
+        pulumi.set(__self__, "count", count)
+        pulumi.set(__self__, "cron", cron)
+        pulumi.set(__self__, "expired_time", expired_time)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "start_time", start_time)
+
+    @property
+    @pulumi.getter
+    def count(self) -> int:
+        """
+        Specifies the number of reserved instance to which the policy belongs.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "count")
+
+    @property
+    @pulumi.getter
+    def cron(self) -> str:
+        """
+        Specifies the cron expression.  
+        For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+        """
+        return pulumi.get(self, "cron")
+
+    @property
+    @pulumi.getter(name="expiredTime")
+    def expired_time(self) -> int:
+        """
+        Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+        """
+        return pulumi.get(self, "expired_time")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="startTime")
+    def start_time(self) -> int:
+        """
+        Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+        """
+        return pulumi.get(self, "start_time")
+
+
+@pulumi.output_type
+class FunctionReservedInstanceTacticsConfigMetricConfig(dict):
+    def __init__(__self__, *,
+                 min: int,
+                 name: str,
+                 threshold: int,
+                 type: str):
+        """
+        :param int min: Specifies the minimun of traffic.  
+               The valid value is range from `0` to `1,000`.
+        :param str name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param int threshold: Specifies the metric policy threshold.  
+               The valid value is range from `1` to `99`.
+        :param str type: Specifies the type of metric policy.  
+               The valid value is as follows:
+               + **Concurrency**: Reserved instance usage.
+        """
+        pulumi.set(__self__, "min", min)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "threshold", threshold)
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def min(self) -> int:
+        """
+        Specifies the minimun of traffic.  
+        The valid value is range from `0` to `1,000`.
+        """
+        return pulumi.get(self, "min")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def threshold(self) -> int:
+        """
+        Specifies the metric policy threshold.  
+        The valid value is range from `1` to `99`.
+        """
+        return pulumi.get(self, "threshold")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of metric policy.  
+        The valid value is as follows:
+        + **Concurrency**: Reserved instance usage.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class FunctionVersion(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 aliases: Optional['outputs.FunctionVersionAliases'] = None,
+                 description: Optional[str] = None):
+        """
+        :param str name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param 'FunctionVersionAliasesArgs' aliases: Specifies the aliases management for specified version.  
+               The aliases structure is documented below.
+        :param str description: Specifies the description of the version alias.
+        """
+        pulumi.set(__self__, "name", name)
+        if aliases is not None:
+            pulumi.set(__self__, "aliases", aliases)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def aliases(self) -> Optional['outputs.FunctionVersionAliases']:
+        """
+        Specifies the aliases management for specified version.  
+        The aliases structure is documented below.
+        """
+        return pulumi.get(self, "aliases")
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the description of the version alias.
+        """
+        return pulumi.get(self, "description")
+
+
+@pulumi.output_type
+class FunctionVersionAliases(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "additionalVersionStrategy":
+            suggest = "additional_version_strategy"
+        elif key == "additionalVersionWeights":
+            suggest = "additional_version_weights"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in FunctionVersionAliases. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        FunctionVersionAliases.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        FunctionVersionAliases.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: str,
+                 additional_version_strategy: Optional[str] = None,
+                 additional_version_weights: Optional[str] = None,
+                 description: Optional[str] = None):
+        """
+        :param str name: Specifies the name of metric policy.  
+               The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+               allowed. The name must start with a letter and ending with a letter or digit.
+        :param str additional_version_strategy: Specifies the rule grayscale configuration of the version
+               alias, in JSON format.
+        :param str additional_version_weights: Specifies the percentage grayscale configuration of the version
+               alias, in JSON format.
+        :param str description: Specifies the description of the version alias.
+        """
+        pulumi.set(__self__, "name", name)
+        if additional_version_strategy is not None:
+            pulumi.set(__self__, "additional_version_strategy", additional_version_strategy)
+        if additional_version_weights is not None:
+            pulumi.set(__self__, "additional_version_weights", additional_version_weights)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of metric policy.  
+        The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+        allowed. The name must start with a letter and ending with a letter or digit.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="additionalVersionStrategy")
+    def additional_version_strategy(self) -> Optional[str]:
+        """
+        Specifies the rule grayscale configuration of the version
+        alias, in JSON format.
+        """
+        return pulumi.get(self, "additional_version_strategy")
+
+    @property
+    @pulumi.getter(name="additionalVersionWeights")
+    def additional_version_weights(self) -> Optional[str]:
+        """
+        Specifies the percentage grayscale configuration of the version
+        alias, in JSON format.
+        """
+        return pulumi.get(self, "additional_version_weights")
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the description of the version alias.
+        """
+        return pulumi.get(self, "description")
 
 
 @pulumi.output_type
@@ -371,6 +1000,8 @@ class TriggerKafka(dict):
             suggest = "topic_ids"
         elif key == "batchSize":
             suggest = "batch_size"
+        elif key == "userName":
+            suggest = "user_name"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in TriggerKafka. Access the value via the '{suggest}' property getter instead.")
@@ -386,7 +1017,9 @@ class TriggerKafka(dict):
     def __init__(__self__, *,
                  instance_id: str,
                  topic_ids: Sequence[str],
-                 batch_size: Optional[int] = None):
+                 batch_size: Optional[int] = None,
+                 password: Optional[str] = None,
+                 user_name: Optional[str] = None):
         """
         :param str instance_id: Specifies the ID of the APIG dedicated instance to which the API belongs.
                Required if the `type` is `DEDICATEDGATEWAY`. Changing this will create a new trigger resource.
@@ -395,11 +1028,19 @@ class TriggerKafka(dict):
         :param int batch_size: Specifies the The number of messages consumed from the topic each time.
                The valid value is range from `1` to `1,000`. Defaults to `100`.
                Changing this will create a new trigger resource.
+        :param str password: Specifies the password for logging in to the Kafka Manager.
+               Changing this will create a new trigger resource.
+        :param str user_name: Specifies the username for logging in to the Kafka Manager.
+               Changing this will create a new trigger resource.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "topic_ids", topic_ids)
         if batch_size is not None:
             pulumi.set(__self__, "batch_size", batch_size)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+        if user_name is not None:
+            pulumi.set(__self__, "user_name", user_name)
 
     @property
     @pulumi.getter(name="instanceId")
@@ -428,6 +1069,24 @@ class TriggerKafka(dict):
         Changing this will create a new trigger resource.
         """
         return pulumi.get(self, "batch_size")
+
+    @property
+    @pulumi.getter
+    def password(self) -> Optional[str]:
+        """
+        Specifies the password for logging in to the Kafka Manager.
+        Changing this will create a new trigger resource.
+        """
+        return pulumi.get(self, "password")
+
+    @property
+    @pulumi.getter(name="userName")
+    def user_name(self) -> Optional[str]:
+        """
+        Specifies the username for logging in to the Kafka Manager.
+        Changing this will create a new trigger resource.
+        """
+        return pulumi.get(self, "user_name")
 
 
 @pulumi.output_type
@@ -645,7 +1304,7 @@ class TriggerTimer(dict):
                  schedule_type: str,
                  additional_information: Optional[str] = None):
         """
-        :param str name: Specifies the trigger name, which can contains of 1 to 64 characters.
+        :param str name: Specifies the trigger name, which can contains of `1` to `64` characters.
                The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
                Changing this will create a new trigger resource.
         :param str schedule: Specifies the time schedule.
@@ -670,7 +1329,7 @@ class TriggerTimer(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the trigger name, which can contains of 1 to 64 characters.
+        Specifies the trigger name, which can contains of `1` to `64` characters.
         The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
         Changing this will create a new trigger resource.
         """
@@ -719,18 +1378,42 @@ class GetDependenciesPackageResult(dict):
                  name: str,
                  owner: str,
                  runtime: str,
-                 size: int):
+                 size: int,
+                 versions: Sequence['outputs.GetDependenciesPackageVersionResult']):
         """
-        :param str etag: Unique ID of the dependent package.
-        :param str file_name: File name of the Dependent package.
-        :param str id: Dependent package ID.
-        :param str link: URL of the dependent package in the OBS console.
-        :param str name: Specifies the dependent package runtime to match.
-        :param str owner: Dependent package owner.
-        :param str runtime: Specifies the dependent package runtime to match. Valid values: **Java8**,
-               **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-               **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
-        :param int size: Dependent package size.
+        :param str etag: The unique ID of the dependency package.
+        :param str file_name: The file name of the stored dependency package.
+        :param str id: The ID of the dependency package version.
+        :param str link: The OBS bucket path where the dependency package is located (FunctionGraph serivce side).
+        :param str name: Specifies the name of the dependency package.
+        :param str owner: The owner of the dependency package.
+        :param str runtime: Specifies the runtime of the dependency package.  
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Node.js16.17**
+               + **Node.js18.15**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Python3.10**
+               + **Go1.x**
+               + **C#(.NET Core 2.0)**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **Custom**
+               + **PHP7.3**
+               + **Cangjie1.0**
+               + **http**
+               + **Custom Image**
+        :param int size: The size of the dependency package.
+        :param Sequence['GetDependenciesPackageVersionArgs'] versions: The list of the versions for the dependency package.
+               The versions structure is documented below.
         """
         pulumi.set(__self__, "etag", etag)
         pulumi.set(__self__, "file_name", file_name)
@@ -740,12 +1423,13 @@ class GetDependenciesPackageResult(dict):
         pulumi.set(__self__, "owner", owner)
         pulumi.set(__self__, "runtime", runtime)
         pulumi.set(__self__, "size", size)
+        pulumi.set(__self__, "versions", versions)
 
     @property
     @pulumi.getter
     def etag(self) -> str:
         """
-        Unique ID of the dependent package.
+        The unique ID of the dependency package.
         """
         return pulumi.get(self, "etag")
 
@@ -753,7 +1437,7 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter(name="fileName")
     def file_name(self) -> str:
         """
-        File name of the Dependent package.
+        The file name of the stored dependency package.
         """
         return pulumi.get(self, "file_name")
 
@@ -761,7 +1445,7 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        Dependent package ID.
+        The ID of the dependency package version.
         """
         return pulumi.get(self, "id")
 
@@ -769,7 +1453,7 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def link(self) -> str:
         """
-        URL of the dependent package in the OBS console.
+        The OBS bucket path where the dependency package is located (FunctionGraph serivce side).
         """
         return pulumi.get(self, "link")
 
@@ -777,7 +1461,7 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the dependent package runtime to match.
+        Specifies the name of the dependency package.
         """
         return pulumi.get(self, "name")
 
@@ -785,7 +1469,7 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def owner(self) -> str:
         """
-        Dependent package owner.
+        The owner of the dependency package.
         """
         return pulumi.get(self, "owner")
 
@@ -793,9 +1477,30 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def runtime(self) -> str:
         """
-        Specifies the dependent package runtime to match. Valid values: **Java8**,
-        **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-        **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+        Specifies the runtime of the dependency package.  
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Node.js16.17**
+        + **Node.js18.15**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Python3.10**
+        + **Go1.x**
+        + **C#(.NET Core 2.0)**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **Custom**
+        + **PHP7.3**
+        + **Cangjie1.0**
+        + **http**
+        + **Custom Image**
         """
         return pulumi.get(self, "runtime")
 
@@ -803,8 +1508,46 @@ class GetDependenciesPackageResult(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Dependent package size.
+        The size of the dependency package.
         """
         return pulumi.get(self, "size")
+
+    @property
+    @pulumi.getter
+    def versions(self) -> Sequence['outputs.GetDependenciesPackageVersionResult']:
+        """
+        The list of the versions for the dependency package.
+        The versions structure is documented below.
+        """
+        return pulumi.get(self, "versions")
+
+
+@pulumi.output_type
+class GetDependenciesPackageVersionResult(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 version: int):
+        """
+        :param str id: The ID of the dependency package version.
+        :param int version: The dependency package version.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "version", version)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of the dependency package version.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def version(self) -> int:
+        """
+        The dependency package version.
+        """
+        return pulumi.get(self, "version")
 
 

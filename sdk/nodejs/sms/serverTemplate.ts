@@ -81,6 +81,7 @@ export class ServerTemplate extends pulumi.CustomResource {
     /**
      * Specifies the bandwidth size in Mbit/s about the public IP address
      * that will be used for migration.
+     * The valid value is range from `1` to `2,000`.
      */
     public readonly bandwidthSize!: pulumi.Output<number | undefined>;
     /**
@@ -103,7 +104,8 @@ export class ServerTemplate extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with
-     * the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+     * the target server.
+     * If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
      */
     public readonly securityGroupIds!: pulumi.Output<string[]>;
     /**
@@ -116,8 +118,8 @@ export class ServerTemplate extends pulumi.CustomResource {
      */
     public readonly targetServerName!: pulumi.Output<string>;
     /**
-     * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * defaults to **SAS**.
+     * Specifies the disk type of the target server.
+     * Available values are: **SAS**, **SSD**, defaults to **SAS**.
      */
     public readonly volumeType!: pulumi.Output<string | undefined>;
     /**
@@ -189,6 +191,7 @@ export interface ServerTemplateState {
     /**
      * Specifies the bandwidth size in Mbit/s about the public IP address
      * that will be used for migration.
+     * The valid value is range from `1` to `2,000`.
      */
     bandwidthSize?: pulumi.Input<number>;
     /**
@@ -211,7 +214,8 @@ export interface ServerTemplateState {
     region?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with
-     * the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+     * the target server.
+     * If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
      */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -224,8 +228,8 @@ export interface ServerTemplateState {
      */
     targetServerName?: pulumi.Input<string>;
     /**
-     * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * defaults to **SAS**.
+     * Specifies the disk type of the target server.
+     * Available values are: **SAS**, **SSD**, defaults to **SAS**.
      */
     volumeType?: pulumi.Input<string>;
     /**
@@ -250,6 +254,7 @@ export interface ServerTemplateArgs {
     /**
      * Specifies the bandwidth size in Mbit/s about the public IP address
      * that will be used for migration.
+     * The valid value is range from `1` to `2,000`.
      */
     bandwidthSize?: pulumi.Input<number>;
     /**
@@ -272,7 +277,8 @@ export interface ServerTemplateArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies an array of one or more security group IDs to associate with
-     * the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+     * the target server.
+     * If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
      */
     securityGroupIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -285,8 +291,8 @@ export interface ServerTemplateArgs {
      */
     targetServerName?: pulumi.Input<string>;
     /**
-     * Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-     * defaults to **SAS**.
+     * Specifies the disk type of the target server.
+     * Available values are: **SAS**, **SSD**, defaults to **SAS**.
      */
     volumeType?: pulumi.Input<string>;
     /**

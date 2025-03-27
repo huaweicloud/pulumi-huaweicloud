@@ -55,7 +55,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * EIP associations can be imported using the `id` of the EIP, e.g.
+ * EIP associations can be imported using the `id` of the EIP, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/eipAssociate:EipAssociate eip 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -113,6 +113,10 @@ export class EipAssociate extends pulumi.CustomResource {
      */
     public readonly publicIp!: pulumi.Output<string>;
     /**
+     * The IPv6 address of the private IP.
+     */
+    public /*out*/ readonly publicIpv6!: pulumi.Output<string>;
+    /**
      * Specifies the region in which to associate the EIP. If omitted, the provider-level
      * region will be used. Changing this creates a new resource.
      */
@@ -140,6 +144,7 @@ export class EipAssociate extends pulumi.CustomResource {
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["portId"] = state ? state.portId : undefined;
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
+            resourceInputs["publicIpv6"] = state ? state.publicIpv6 : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
         } else {
@@ -153,6 +158,7 @@ export class EipAssociate extends pulumi.CustomResource {
             resourceInputs["publicIp"] = args ? args.publicIp : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["macAddress"] = undefined /*out*/;
+            resourceInputs["publicIpv6"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -187,6 +193,10 @@ export interface EipAssociateState {
      * Specifies the EIP address to associate. Changing this creates a new resource.
      */
     publicIp?: pulumi.Input<string>;
+    /**
+     * The IPv6 address of the private IP.
+     */
+    publicIpv6?: pulumi.Input<string>;
     /**
      * Specifies the region in which to associate the EIP. If omitted, the provider-level
      * region will be used. Changing this creates a new resource.

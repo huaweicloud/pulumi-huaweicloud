@@ -41,6 +41,7 @@ class GetFlavorsResult:
     def flavors(self) -> Sequence['outputs.GetFlavorsFlavorResult']:
         """
         Indicates the flavors information. Structure is documented below.
+        The flavors structure is documented below.
         """
         return pulumi.get(self, "flavors")
 

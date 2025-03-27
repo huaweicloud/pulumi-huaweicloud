@@ -11,151 +11,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// SSL Certificate Manager (SCM) allows you to purchase Secure Sockets Layer (SSL) certificates from the world's leading
-// digital certificate authorities (CAs), upload existing SSL certificates, and centrally manage all your SSL certificates
-// in one place.
-//
-// ## Example Usage
-// ### Load the certificate contents from the local files
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"io/ioutil"
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Scm"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func readFileOrPanic(path string) pulumi.StringPtrInput {
-//		data, err := ioutil.ReadFile(path)
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//		return pulumi.String(string(data))
-//	}
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Scm.NewCertificate(ctx, "certificate1", &Scm.CertificateArgs{
-//				Certificate:      readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-//				CertificateChain: readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-//				PrivateKey:       readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Write the contents of the certificate into the Terrafrom script
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"fmt"
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Scm"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Scm.NewCertificate(ctx, "certificate2", &Scm.CertificateArgs{
-//				Certificate: pulumi.String(fmt.Sprintf(`-----BEGIN CERTIFICATE-----
-//
-// MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-// ZWlqaW5nMQswC...
-// (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-// -----END CERTIFICATE----------
-//
-// `)),
-//
-//	CertificateChain: pulumi.String(fmt.Sprintf(`-----BEGIN CERTIFICATE-----
-//
-// MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-// BQAwgYsxCzAJB...
-// (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-// -----END CERTIFICATE----------
-//
-// `)),
-//
-//	PrivateKey: pulumi.String(fmt.Sprintf(`-----BEGIN PRIVATE KEY-----
-//
-// QWH3GbHx5bGQyexHj2hre4yEahn4dAKKdjSAMUuSfLWygp2pEdNFOegYTdqk/snv
-// mhNmxp74oUcVfi1Msw6KY2...
-// (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-// -----END PRIVATE KEY-----
-//
-// `)),
-//
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Push the SSL certificate to another HUAWEI CLOUD service
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"io/ioutil"
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Scm"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Scm"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func readFileOrPanic(path string) pulumi.StringPtrInput {
-//		data, err := ioutil.ReadFile(path)
-//		if err != nil {
-//			panic(err.Error())
-//		}
-//		return pulumi.String(string(data))
-//	}
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Scm.NewCertificate(ctx, "certificate3", &Scm.CertificateArgs{
-//				Certificate:      readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-//				CertificateChain: readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-//				PrivateKey:       readFileOrPanic("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
-//				Targets: scm.CertificateTargetArray{
-//					&scm.CertificateTargetArgs{
-//						Projects: pulumi.StringArray{
-//							pulumi.String("la-south-2"),
-//						},
-//						Service: pulumi.String("Enhance_ELB"),
-//					},
-//					&scm.CertificateTargetArgs{
-//						Service: pulumi.String("CDN"),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
 // ## Import
 //
 // Certificates can be imported using the `id`, e.g.
@@ -171,19 +26,32 @@ type Certificate struct {
 	// (List) Domain ownership verification information.
 	// This is a list, each item of data is as follows:
 	Authentifications CertificateAuthentificationArrayOutput `pulumi:"authentifications"`
-	// The public encrypted key of the Certificate, PEM format.
+	// Specifies the content of the Certificate, PEM format.
+	// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+	// the certificate chain, then this field only takes the certificate itself.
 	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringOutput `pulumi:"certificate"`
-	// The chain of the certificate.
-	// It can be extracted from the *server.crt* file in the Nginx directory,
+	// Specifies the chain of the certificate.
+	// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
 	// Changing this parameter will create a new resource.
-	CertificateChain pulumi.StringOutput `pulumi:"certificateChain"`
+	CertificateChain pulumi.StringPtrOutput `pulumi:"certificateChain"`
 	// Domain name mapping to the verification value
 	Domain pulumi.StringOutput `pulumi:"domain"`
 	// Number of domain names can be bound to a certificate.
 	DomainCount pulumi.IntOutput `pulumi:"domainCount"`
-	// Human-readable name for the Certificate.
+	// Specifies the encrypted content of the state secret certificate.
+	// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+	EncCertificate pulumi.StringPtrOutput `pulumi:"encCertificate"`
+	// Specifies the encrypted private key of the state secret certificate.
+	// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+	// return and line feed characters.
+	EncPrivateKey pulumi.StringPtrOutput `pulumi:"encPrivateKey"`
+	// Specifies the enterprise project ID. This parameter is only
+	// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+	// if this parameter is not specified for enterprise users.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies the human-readable name for the certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -191,18 +59,19 @@ type Certificate struct {
 	NotAfter pulumi.StringOutput `pulumi:"notAfter"`
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore pulumi.StringOutput `pulumi:"notBefore"`
-	// The private encrypted key of the Certificate, PEM format.
+	// Specifies the private encrypted key of the Certificate, PEM format.
 	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringOutput `pulumi:"privateKey"`
 	// Whether a certificate can be pushed.
 	PushSupport pulumi.StringOutput `pulumi:"pushSupport"`
-	// The region in which to create the SCM certificate resource.
+	// Specifies the region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this setting will push a new certificate.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Certificate status. The value can be:
 	Status pulumi.StringOutput `pulumi:"status"`
-	// The service to which the certificate needs to be pushed.
+	// Specifies the service to which the certificate needs to be pushed.
+	// The target structure is documented below.
 	Targets CertificateTargetArrayOutput `pulumi:"targets"`
 }
 
@@ -215,9 +84,6 @@ func NewCertificate(ctx *pulumi.Context,
 
 	if args.Certificate == nil {
 		return nil, errors.New("invalid value for required argument 'Certificate'")
-	}
-	if args.CertificateChain == nil {
-		return nil, errors.New("invalid value for required argument 'CertificateChain'")
 	}
 	if args.PrivateKey == nil {
 		return nil, errors.New("invalid value for required argument 'PrivateKey'")
@@ -248,11 +114,13 @@ type certificateState struct {
 	// (List) Domain ownership verification information.
 	// This is a list, each item of data is as follows:
 	Authentifications []CertificateAuthentification `pulumi:"authentifications"`
-	// The public encrypted key of the Certificate, PEM format.
+	// Specifies the content of the Certificate, PEM format.
+	// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+	// the certificate chain, then this field only takes the certificate itself.
 	// Changing this parameter will create a new resource.
 	Certificate *string `pulumi:"certificate"`
-	// The chain of the certificate.
-	// It can be extracted from the *server.crt* file in the Nginx directory,
+	// Specifies the chain of the certificate.
+	// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
 	// Changing this parameter will create a new resource.
 	CertificateChain *string `pulumi:"certificateChain"`
@@ -260,7 +128,18 @@ type certificateState struct {
 	Domain *string `pulumi:"domain"`
 	// Number of domain names can be bound to a certificate.
 	DomainCount *int `pulumi:"domainCount"`
-	// Human-readable name for the Certificate.
+	// Specifies the encrypted content of the state secret certificate.
+	// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+	EncCertificate *string `pulumi:"encCertificate"`
+	// Specifies the encrypted private key of the state secret certificate.
+	// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+	// return and line feed characters.
+	EncPrivateKey *string `pulumi:"encPrivateKey"`
+	// Specifies the enterprise project ID. This parameter is only
+	// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+	// if this parameter is not specified for enterprise users.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the human-readable name for the certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
@@ -268,18 +147,19 @@ type certificateState struct {
 	NotAfter *string `pulumi:"notAfter"`
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore *string `pulumi:"notBefore"`
-	// The private encrypted key of the Certificate, PEM format.
+	// Specifies the private encrypted key of the Certificate, PEM format.
 	// Changing this parameter will create a new resource.
 	PrivateKey *string `pulumi:"privateKey"`
 	// Whether a certificate can be pushed.
 	PushSupport *string `pulumi:"pushSupport"`
-	// The region in which to create the SCM certificate resource.
+	// Specifies the region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this setting will push a new certificate.
 	Region *string `pulumi:"region"`
 	// Certificate status. The value can be:
 	Status *string `pulumi:"status"`
-	// The service to which the certificate needs to be pushed.
+	// Specifies the service to which the certificate needs to be pushed.
+	// The target structure is documented below.
 	Targets []CertificateTarget `pulumi:"targets"`
 }
 
@@ -287,11 +167,13 @@ type CertificateState struct {
 	// (List) Domain ownership verification information.
 	// This is a list, each item of data is as follows:
 	Authentifications CertificateAuthentificationArrayInput
-	// The public encrypted key of the Certificate, PEM format.
+	// Specifies the content of the Certificate, PEM format.
+	// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+	// the certificate chain, then this field only takes the certificate itself.
 	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringPtrInput
-	// The chain of the certificate.
-	// It can be extracted from the *server.crt* file in the Nginx directory,
+	// Specifies the chain of the certificate.
+	// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
 	// Changing this parameter will create a new resource.
 	CertificateChain pulumi.StringPtrInput
@@ -299,7 +181,18 @@ type CertificateState struct {
 	Domain pulumi.StringPtrInput
 	// Number of domain names can be bound to a certificate.
 	DomainCount pulumi.IntPtrInput
-	// Human-readable name for the Certificate.
+	// Specifies the encrypted content of the state secret certificate.
+	// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+	EncCertificate pulumi.StringPtrInput
+	// Specifies the encrypted private key of the state secret certificate.
+	// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+	// return and line feed characters.
+	EncPrivateKey pulumi.StringPtrInput
+	// Specifies the enterprise project ID. This parameter is only
+	// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+	// if this parameter is not specified for enterprise users.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the human-readable name for the certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
@@ -307,18 +200,19 @@ type CertificateState struct {
 	NotAfter pulumi.StringPtrInput
 	// Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
 	NotBefore pulumi.StringPtrInput
-	// The private encrypted key of the Certificate, PEM format.
+	// Specifies the private encrypted key of the Certificate, PEM format.
 	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringPtrInput
 	// Whether a certificate can be pushed.
 	PushSupport pulumi.StringPtrInput
-	// The region in which to create the SCM certificate resource.
+	// Specifies the region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this setting will push a new certificate.
 	Region pulumi.StringPtrInput
 	// Certificate status. The value can be:
 	Status pulumi.StringPtrInput
-	// The service to which the certificate needs to be pushed.
+	// Specifies the service to which the certificate needs to be pushed.
+	// The target structure is documented below.
 	Targets CertificateTargetArrayInput
 }
 
@@ -327,51 +221,79 @@ func (CertificateState) ElementType() reflect.Type {
 }
 
 type certificateArgs struct {
-	// The public encrypted key of the Certificate, PEM format.
+	// Specifies the content of the Certificate, PEM format.
+	// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+	// the certificate chain, then this field only takes the certificate itself.
 	// Changing this parameter will create a new resource.
 	Certificate string `pulumi:"certificate"`
-	// The chain of the certificate.
-	// It can be extracted from the *server.crt* file in the Nginx directory,
+	// Specifies the chain of the certificate.
+	// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
 	// Changing this parameter will create a new resource.
-	CertificateChain string `pulumi:"certificateChain"`
-	// Human-readable name for the Certificate.
+	CertificateChain *string `pulumi:"certificateChain"`
+	// Specifies the encrypted content of the state secret certificate.
+	// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+	EncCertificate *string `pulumi:"encCertificate"`
+	// Specifies the encrypted private key of the state secret certificate.
+	// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+	// return and line feed characters.
+	EncPrivateKey *string `pulumi:"encPrivateKey"`
+	// Specifies the enterprise project ID. This parameter is only
+	// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+	// if this parameter is not specified for enterprise users.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the human-readable name for the certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
 	// Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
-	// The private encrypted key of the Certificate, PEM format.
+	// Specifies the private encrypted key of the Certificate, PEM format.
 	// Changing this parameter will create a new resource.
 	PrivateKey string `pulumi:"privateKey"`
-	// The region in which to create the SCM certificate resource.
+	// Specifies the region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this setting will push a new certificate.
 	Region *string `pulumi:"region"`
-	// The service to which the certificate needs to be pushed.
+	// Specifies the service to which the certificate needs to be pushed.
+	// The target structure is documented below.
 	Targets []CertificateTarget `pulumi:"targets"`
 }
 
 // The set of arguments for constructing a Certificate resource.
 type CertificateArgs struct {
-	// The public encrypted key of the Certificate, PEM format.
+	// Specifies the content of the Certificate, PEM format.
+	// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+	// the certificate chain, then this field only takes the certificate itself.
 	// Changing this parameter will create a new resource.
 	Certificate pulumi.StringInput
-	// The chain of the certificate.
-	// It can be extracted from the *server.crt* file in the Nginx directory,
+	// Specifies the chain of the certificate.
+	// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 	// usually after the second paragraph is the certificate chain.
 	// Changing this parameter will create a new resource.
-	CertificateChain pulumi.StringInput
-	// Human-readable name for the Certificate.
+	CertificateChain pulumi.StringPtrInput
+	// Specifies the encrypted content of the state secret certificate.
+	// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+	EncCertificate pulumi.StringPtrInput
+	// Specifies the encrypted private key of the state secret certificate.
+	// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+	// return and line feed characters.
+	EncPrivateKey pulumi.StringPtrInput
+	// Specifies the enterprise project ID. This parameter is only
+	// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+	// if this parameter is not specified for enterprise users.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the human-readable name for the certificate.
 	// Does not have to be unique. The value contains a maximum of 63 characters.
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
-	// The private encrypted key of the Certificate, PEM format.
+	// Specifies the private encrypted key of the Certificate, PEM format.
 	// Changing this parameter will create a new resource.
 	PrivateKey pulumi.StringInput
-	// The region in which to create the SCM certificate resource.
+	// Specifies the region in which to create the SCM certificate resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this setting will push a new certificate.
 	Region pulumi.StringPtrInput
-	// The service to which the certificate needs to be pushed.
+	// Specifies the service to which the certificate needs to be pushed.
+	// The target structure is documented below.
 	Targets CertificateTargetArrayInput
 }
 
@@ -468,18 +390,20 @@ func (o CertificateOutput) Authentifications() CertificateAuthentificationArrayO
 	return o.ApplyT(func(v *Certificate) CertificateAuthentificationArrayOutput { return v.Authentifications }).(CertificateAuthentificationArrayOutput)
 }
 
-// The public encrypted key of the Certificate, PEM format.
+// Specifies the content of the Certificate, PEM format.
+// It can include intermediate certificates and root certificates. If the `certificateChain` is passed into
+// the certificate chain, then this field only takes the certificate itself.
 // Changing this parameter will create a new resource.
 func (o CertificateOutput) Certificate() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.Certificate }).(pulumi.StringOutput)
 }
 
-// The chain of the certificate.
-// It can be extracted from the *server.crt* file in the Nginx directory,
+// Specifies the chain of the certificate.
+// It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
 // usually after the second paragraph is the certificate chain.
 // Changing this parameter will create a new resource.
-func (o CertificateOutput) CertificateChain() pulumi.StringOutput {
-	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.CertificateChain }).(pulumi.StringOutput)
+func (o CertificateOutput) CertificateChain() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Certificate) pulumi.StringPtrOutput { return v.CertificateChain }).(pulumi.StringPtrOutput)
 }
 
 // Domain name mapping to the verification value
@@ -492,7 +416,27 @@ func (o CertificateOutput) DomainCount() pulumi.IntOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.IntOutput { return v.DomainCount }).(pulumi.IntOutput)
 }
 
-// Human-readable name for the Certificate.
+// Specifies the encrypted content of the state secret certificate.
+// Using the escape character `\n` or `\r\n` to replace carriage return and line feed characters.
+func (o CertificateOutput) EncCertificate() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Certificate) pulumi.StringPtrOutput { return v.EncCertificate }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the encrypted private key of the state secret certificate.
+// Password-protected private keys cannot be uploaded, and using the escape character `\n` or `\r\n` to replace carriage
+// return and line feed characters.
+func (o CertificateOutput) EncPrivateKey() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Certificate) pulumi.StringPtrOutput { return v.EncPrivateKey }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the enterprise project ID. This parameter is only
+// valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+// if this parameter is not specified for enterprise users.
+func (o CertificateOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the human-readable name for the certificate.
 // Does not have to be unique. The value contains a maximum of 63 characters.
 // Changing this parameter will create a new resource.
 func (o CertificateOutput) Name() pulumi.StringOutput {
@@ -509,7 +453,7 @@ func (o CertificateOutput) NotBefore() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.NotBefore }).(pulumi.StringOutput)
 }
 
-// The private encrypted key of the Certificate, PEM format.
+// Specifies the private encrypted key of the Certificate, PEM format.
 // Changing this parameter will create a new resource.
 func (o CertificateOutput) PrivateKey() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.PrivateKey }).(pulumi.StringOutput)
@@ -520,7 +464,7 @@ func (o CertificateOutput) PushSupport() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.PushSupport }).(pulumi.StringOutput)
 }
 
-// The region in which to create the SCM certificate resource.
+// Specifies the region in which to create the SCM certificate resource.
 // If omitted, the provider-level region will be used.
 // Changing this setting will push a new certificate.
 func (o CertificateOutput) Region() pulumi.StringOutput {
@@ -532,7 +476,8 @@ func (o CertificateOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Certificate) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// The service to which the certificate needs to be pushed.
+// Specifies the service to which the certificate needs to be pushed.
+// The target structure is documented below.
 func (o CertificateOutput) Targets() CertificateTargetArrayOutput {
 	return o.ApplyT(func(v *Certificate) CertificateTargetArrayOutput { return v.Targets }).(CertificateTargetArrayOutput)
 }

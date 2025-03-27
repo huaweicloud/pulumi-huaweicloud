@@ -10,23 +10,509 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type DedicatedDomainConnectionProtection struct {
+	// Specifies the protection duration (s) for connection protection. During this period, WAF
+	// stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+	Duration *int `pulumi:"duration"`
+	// Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+	// when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+	ErrorPercentage *float64 `pulumi:"errorPercentage"`
+	// Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+	// from `0` to `2,147,483,647`.
+	ErrorThreshold *int `pulumi:"errorThreshold"`
+	// Specifies the breakdown duration (s) when the breakdown is triggered for the first
+	// time. Valid value ranges from `0` to `2,147,483,647`.
+	InitialDowntime *int `pulumi:"initialDowntime"`
+	// Specifies the maximum multiplier for consecutive breakdowns
+	// that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+	// For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+	// protection is triggered for the second time, the website downtime is 360s (180s X 2).
+	// If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+	// The breakdowns are calculated every one hour.
+	MultiplierForConsecutiveBreakdowns *int `pulumi:"multiplierForConsecutiveBreakdowns"`
+	// Specifies the pending URL request threshold. Connection protection
+	// is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+	// `2,147,483,647`.
+	PendingUrlRequestThreshold *int `pulumi:"pendingUrlRequestThreshold"`
+	// Specifies whether to enable connection protection. Defaults to **false**.
+	Status *bool `pulumi:"status"`
+}
+
+// DedicatedDomainConnectionProtectionInput is an input type that accepts DedicatedDomainConnectionProtectionArgs and DedicatedDomainConnectionProtectionOutput values.
+// You can construct a concrete instance of `DedicatedDomainConnectionProtectionInput` via:
+//
+//	DedicatedDomainConnectionProtectionArgs{...}
+type DedicatedDomainConnectionProtectionInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainConnectionProtectionOutput() DedicatedDomainConnectionProtectionOutput
+	ToDedicatedDomainConnectionProtectionOutputWithContext(context.Context) DedicatedDomainConnectionProtectionOutput
+}
+
+type DedicatedDomainConnectionProtectionArgs struct {
+	// Specifies the protection duration (s) for connection protection. During this period, WAF
+	// stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+	Duration pulumi.IntPtrInput `pulumi:"duration"`
+	// Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+	// when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+	ErrorPercentage pulumi.Float64PtrInput `pulumi:"errorPercentage"`
+	// Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+	// from `0` to `2,147,483,647`.
+	ErrorThreshold pulumi.IntPtrInput `pulumi:"errorThreshold"`
+	// Specifies the breakdown duration (s) when the breakdown is triggered for the first
+	// time. Valid value ranges from `0` to `2,147,483,647`.
+	InitialDowntime pulumi.IntPtrInput `pulumi:"initialDowntime"`
+	// Specifies the maximum multiplier for consecutive breakdowns
+	// that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+	// For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+	// protection is triggered for the second time, the website downtime is 360s (180s X 2).
+	// If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+	// The breakdowns are calculated every one hour.
+	MultiplierForConsecutiveBreakdowns pulumi.IntPtrInput `pulumi:"multiplierForConsecutiveBreakdowns"`
+	// Specifies the pending URL request threshold. Connection protection
+	// is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+	// `2,147,483,647`.
+	PendingUrlRequestThreshold pulumi.IntPtrInput `pulumi:"pendingUrlRequestThreshold"`
+	// Specifies whether to enable connection protection. Defaults to **false**.
+	Status pulumi.BoolPtrInput `pulumi:"status"`
+}
+
+func (DedicatedDomainConnectionProtectionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainConnectionProtection)(nil)).Elem()
+}
+
+func (i DedicatedDomainConnectionProtectionArgs) ToDedicatedDomainConnectionProtectionOutput() DedicatedDomainConnectionProtectionOutput {
+	return i.ToDedicatedDomainConnectionProtectionOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainConnectionProtectionArgs) ToDedicatedDomainConnectionProtectionOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainConnectionProtectionOutput)
+}
+
+func (i DedicatedDomainConnectionProtectionArgs) ToDedicatedDomainConnectionProtectionPtrOutput() DedicatedDomainConnectionProtectionPtrOutput {
+	return i.ToDedicatedDomainConnectionProtectionPtrOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainConnectionProtectionArgs) ToDedicatedDomainConnectionProtectionPtrOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainConnectionProtectionOutput).ToDedicatedDomainConnectionProtectionPtrOutputWithContext(ctx)
+}
+
+// DedicatedDomainConnectionProtectionPtrInput is an input type that accepts DedicatedDomainConnectionProtectionArgs, DedicatedDomainConnectionProtectionPtr and DedicatedDomainConnectionProtectionPtrOutput values.
+// You can construct a concrete instance of `DedicatedDomainConnectionProtectionPtrInput` via:
+//
+//	        DedicatedDomainConnectionProtectionArgs{...}
+//
+//	or:
+//
+//	        nil
+type DedicatedDomainConnectionProtectionPtrInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainConnectionProtectionPtrOutput() DedicatedDomainConnectionProtectionPtrOutput
+	ToDedicatedDomainConnectionProtectionPtrOutputWithContext(context.Context) DedicatedDomainConnectionProtectionPtrOutput
+}
+
+type dedicatedDomainConnectionProtectionPtrType DedicatedDomainConnectionProtectionArgs
+
+func DedicatedDomainConnectionProtectionPtr(v *DedicatedDomainConnectionProtectionArgs) DedicatedDomainConnectionProtectionPtrInput {
+	return (*dedicatedDomainConnectionProtectionPtrType)(v)
+}
+
+func (*dedicatedDomainConnectionProtectionPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainConnectionProtection)(nil)).Elem()
+}
+
+func (i *dedicatedDomainConnectionProtectionPtrType) ToDedicatedDomainConnectionProtectionPtrOutput() DedicatedDomainConnectionProtectionPtrOutput {
+	return i.ToDedicatedDomainConnectionProtectionPtrOutputWithContext(context.Background())
+}
+
+func (i *dedicatedDomainConnectionProtectionPtrType) ToDedicatedDomainConnectionProtectionPtrOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainConnectionProtectionPtrOutput)
+}
+
+type DedicatedDomainConnectionProtectionOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainConnectionProtectionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainConnectionProtection)(nil)).Elem()
+}
+
+func (o DedicatedDomainConnectionProtectionOutput) ToDedicatedDomainConnectionProtectionOutput() DedicatedDomainConnectionProtectionOutput {
+	return o
+}
+
+func (o DedicatedDomainConnectionProtectionOutput) ToDedicatedDomainConnectionProtectionOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionOutput {
+	return o
+}
+
+func (o DedicatedDomainConnectionProtectionOutput) ToDedicatedDomainConnectionProtectionPtrOutput() DedicatedDomainConnectionProtectionPtrOutput {
+	return o.ToDedicatedDomainConnectionProtectionPtrOutputWithContext(context.Background())
+}
+
+func (o DedicatedDomainConnectionProtectionOutput) ToDedicatedDomainConnectionProtectionPtrOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DedicatedDomainConnectionProtection) *DedicatedDomainConnectionProtection {
+		return &v
+	}).(DedicatedDomainConnectionProtectionPtrOutput)
+}
+
+// Specifies the protection duration (s) for connection protection. During this period, WAF
+// stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionOutput) Duration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *int { return v.Duration }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+// when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+func (o DedicatedDomainConnectionProtectionOutput) ErrorPercentage() pulumi.Float64PtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *float64 { return v.ErrorPercentage }).(pulumi.Float64PtrOutput)
+}
+
+// Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+// from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionOutput) ErrorThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *int { return v.ErrorThreshold }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the breakdown duration (s) when the breakdown is triggered for the first
+// time. Valid value ranges from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionOutput) InitialDowntime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *int { return v.InitialDowntime }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum multiplier for consecutive breakdowns
+// that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+// For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+// protection is triggered for the second time, the website downtime is 360s (180s X 2).
+// If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+// The breakdowns are calculated every one hour.
+func (o DedicatedDomainConnectionProtectionOutput) MultiplierForConsecutiveBreakdowns() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *int { return v.MultiplierForConsecutiveBreakdowns }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the pending URL request threshold. Connection protection
+// is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+// `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionOutput) PendingUrlRequestThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *int { return v.PendingUrlRequestThreshold }).(pulumi.IntPtrOutput)
+}
+
+// Specifies whether to enable connection protection. Defaults to **false**.
+func (o DedicatedDomainConnectionProtectionOutput) Status() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainConnectionProtection) *bool { return v.Status }).(pulumi.BoolPtrOutput)
+}
+
+type DedicatedDomainConnectionProtectionPtrOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainConnectionProtectionPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainConnectionProtection)(nil)).Elem()
+}
+
+func (o DedicatedDomainConnectionProtectionPtrOutput) ToDedicatedDomainConnectionProtectionPtrOutput() DedicatedDomainConnectionProtectionPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainConnectionProtectionPtrOutput) ToDedicatedDomainConnectionProtectionPtrOutputWithContext(ctx context.Context) DedicatedDomainConnectionProtectionPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainConnectionProtectionPtrOutput) Elem() DedicatedDomainConnectionProtectionOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) DedicatedDomainConnectionProtection {
+		if v != nil {
+			return *v
+		}
+		var ret DedicatedDomainConnectionProtection
+		return ret
+	}).(DedicatedDomainConnectionProtectionOutput)
+}
+
+// Specifies the protection duration (s) for connection protection. During this period, WAF
+// stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionPtrOutput) Duration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *int {
+		if v == nil {
+			return nil
+		}
+		return v.Duration
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+// when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+func (o DedicatedDomainConnectionProtectionPtrOutput) ErrorPercentage() pulumi.Float64PtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *float64 {
+		if v == nil {
+			return nil
+		}
+		return v.ErrorPercentage
+	}).(pulumi.Float64PtrOutput)
+}
+
+// Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+// from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionPtrOutput) ErrorThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ErrorThreshold
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the breakdown duration (s) when the breakdown is triggered for the first
+// time. Valid value ranges from `0` to `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionPtrOutput) InitialDowntime() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *int {
+		if v == nil {
+			return nil
+		}
+		return v.InitialDowntime
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the maximum multiplier for consecutive breakdowns
+// that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+// For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+// protection is triggered for the second time, the website downtime is 360s (180s X 2).
+// If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+// The breakdowns are calculated every one hour.
+func (o DedicatedDomainConnectionProtectionPtrOutput) MultiplierForConsecutiveBreakdowns() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MultiplierForConsecutiveBreakdowns
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the pending URL request threshold. Connection protection
+// is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+// `2,147,483,647`.
+func (o DedicatedDomainConnectionProtectionPtrOutput) PendingUrlRequestThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *int {
+		if v == nil {
+			return nil
+		}
+		return v.PendingUrlRequestThreshold
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies whether to enable connection protection. Defaults to **false**.
+func (o DedicatedDomainConnectionProtectionPtrOutput) Status() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainConnectionProtection) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.Status
+	}).(pulumi.BoolPtrOutput)
+}
+
+type DedicatedDomainCustomPage struct {
+	// Specifies the content type of the custom alarm page.
+	// The value can be **text/html**, **text/xml** or **application/json**.
+	BlockPageType string `pulumi:"blockPageType"`
+	// Specifies the HTTP return code.
+	// The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+	HttpReturnCode string `pulumi:"httpReturnCode"`
+	// Specifies the page content. The page content based on the selected page type.
+	// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+	// can be available.
+	PageContent string `pulumi:"pageContent"`
+}
+
+// DedicatedDomainCustomPageInput is an input type that accepts DedicatedDomainCustomPageArgs and DedicatedDomainCustomPageOutput values.
+// You can construct a concrete instance of `DedicatedDomainCustomPageInput` via:
+//
+//	DedicatedDomainCustomPageArgs{...}
+type DedicatedDomainCustomPageInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainCustomPageOutput() DedicatedDomainCustomPageOutput
+	ToDedicatedDomainCustomPageOutputWithContext(context.Context) DedicatedDomainCustomPageOutput
+}
+
+type DedicatedDomainCustomPageArgs struct {
+	// Specifies the content type of the custom alarm page.
+	// The value can be **text/html**, **text/xml** or **application/json**.
+	BlockPageType pulumi.StringInput `pulumi:"blockPageType"`
+	// Specifies the HTTP return code.
+	// The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+	HttpReturnCode pulumi.StringInput `pulumi:"httpReturnCode"`
+	// Specifies the page content. The page content based on the selected page type.
+	// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+	// can be available.
+	PageContent pulumi.StringInput `pulumi:"pageContent"`
+}
+
+func (DedicatedDomainCustomPageArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainCustomPage)(nil)).Elem()
+}
+
+func (i DedicatedDomainCustomPageArgs) ToDedicatedDomainCustomPageOutput() DedicatedDomainCustomPageOutput {
+	return i.ToDedicatedDomainCustomPageOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainCustomPageArgs) ToDedicatedDomainCustomPageOutputWithContext(ctx context.Context) DedicatedDomainCustomPageOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainCustomPageOutput)
+}
+
+func (i DedicatedDomainCustomPageArgs) ToDedicatedDomainCustomPagePtrOutput() DedicatedDomainCustomPagePtrOutput {
+	return i.ToDedicatedDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainCustomPageArgs) ToDedicatedDomainCustomPagePtrOutputWithContext(ctx context.Context) DedicatedDomainCustomPagePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainCustomPageOutput).ToDedicatedDomainCustomPagePtrOutputWithContext(ctx)
+}
+
+// DedicatedDomainCustomPagePtrInput is an input type that accepts DedicatedDomainCustomPageArgs, DedicatedDomainCustomPagePtr and DedicatedDomainCustomPagePtrOutput values.
+// You can construct a concrete instance of `DedicatedDomainCustomPagePtrInput` via:
+//
+//	        DedicatedDomainCustomPageArgs{...}
+//
+//	or:
+//
+//	        nil
+type DedicatedDomainCustomPagePtrInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainCustomPagePtrOutput() DedicatedDomainCustomPagePtrOutput
+	ToDedicatedDomainCustomPagePtrOutputWithContext(context.Context) DedicatedDomainCustomPagePtrOutput
+}
+
+type dedicatedDomainCustomPagePtrType DedicatedDomainCustomPageArgs
+
+func DedicatedDomainCustomPagePtr(v *DedicatedDomainCustomPageArgs) DedicatedDomainCustomPagePtrInput {
+	return (*dedicatedDomainCustomPagePtrType)(v)
+}
+
+func (*dedicatedDomainCustomPagePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainCustomPage)(nil)).Elem()
+}
+
+func (i *dedicatedDomainCustomPagePtrType) ToDedicatedDomainCustomPagePtrOutput() DedicatedDomainCustomPagePtrOutput {
+	return i.ToDedicatedDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (i *dedicatedDomainCustomPagePtrType) ToDedicatedDomainCustomPagePtrOutputWithContext(ctx context.Context) DedicatedDomainCustomPagePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainCustomPagePtrOutput)
+}
+
+type DedicatedDomainCustomPageOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainCustomPageOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainCustomPage)(nil)).Elem()
+}
+
+func (o DedicatedDomainCustomPageOutput) ToDedicatedDomainCustomPageOutput() DedicatedDomainCustomPageOutput {
+	return o
+}
+
+func (o DedicatedDomainCustomPageOutput) ToDedicatedDomainCustomPageOutputWithContext(ctx context.Context) DedicatedDomainCustomPageOutput {
+	return o
+}
+
+func (o DedicatedDomainCustomPageOutput) ToDedicatedDomainCustomPagePtrOutput() DedicatedDomainCustomPagePtrOutput {
+	return o.ToDedicatedDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (o DedicatedDomainCustomPageOutput) ToDedicatedDomainCustomPagePtrOutputWithContext(ctx context.Context) DedicatedDomainCustomPagePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DedicatedDomainCustomPage) *DedicatedDomainCustomPage {
+		return &v
+	}).(DedicatedDomainCustomPagePtrOutput)
+}
+
+// Specifies the content type of the custom alarm page.
+// The value can be **text/html**, **text/xml** or **application/json**.
+func (o DedicatedDomainCustomPageOutput) BlockPageType() pulumi.StringOutput {
+	return o.ApplyT(func(v DedicatedDomainCustomPage) string { return v.BlockPageType }).(pulumi.StringOutput)
+}
+
+// Specifies the HTTP return code.
+// The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+func (o DedicatedDomainCustomPageOutput) HttpReturnCode() pulumi.StringOutput {
+	return o.ApplyT(func(v DedicatedDomainCustomPage) string { return v.HttpReturnCode }).(pulumi.StringOutput)
+}
+
+// Specifies the page content. The page content based on the selected page type.
+// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+// can be available.
+func (o DedicatedDomainCustomPageOutput) PageContent() pulumi.StringOutput {
+	return o.ApplyT(func(v DedicatedDomainCustomPage) string { return v.PageContent }).(pulumi.StringOutput)
+}
+
+type DedicatedDomainCustomPagePtrOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainCustomPagePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainCustomPage)(nil)).Elem()
+}
+
+func (o DedicatedDomainCustomPagePtrOutput) ToDedicatedDomainCustomPagePtrOutput() DedicatedDomainCustomPagePtrOutput {
+	return o
+}
+
+func (o DedicatedDomainCustomPagePtrOutput) ToDedicatedDomainCustomPagePtrOutputWithContext(ctx context.Context) DedicatedDomainCustomPagePtrOutput {
+	return o
+}
+
+func (o DedicatedDomainCustomPagePtrOutput) Elem() DedicatedDomainCustomPageOutput {
+	return o.ApplyT(func(v *DedicatedDomainCustomPage) DedicatedDomainCustomPage {
+		if v != nil {
+			return *v
+		}
+		var ret DedicatedDomainCustomPage
+		return ret
+	}).(DedicatedDomainCustomPageOutput)
+}
+
+// Specifies the content type of the custom alarm page.
+// The value can be **text/html**, **text/xml** or **application/json**.
+func (o DedicatedDomainCustomPagePtrOutput) BlockPageType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.BlockPageType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the HTTP return code.
+// The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+func (o DedicatedDomainCustomPagePtrOutput) HttpReturnCode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.HttpReturnCode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the page content. The page content based on the selected page type.
+// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+// can be available.
+func (o DedicatedDomainCustomPagePtrOutput) PageContent() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.PageContent
+	}).(pulumi.StringPtrOutput)
+}
+
 type DedicatedDomainServer struct {
-	// IP address or domain name of the web server that the client accesses. For
-	// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
+	// Specifies the IP address or domain name of the web server accessed by the
+	// client. For example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 	Address string `pulumi:"address"`
-	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
-	// Changing this creates a new service.
+	// Specifies the protocol type of the client. The options include **HTTP**
+	// and **HTTPS**. Changing this creates a new service.
 	ClientProtocol string `pulumi:"clientProtocol"`
-	// Port number used by the web server. The value ranges from 0 to 65535. Changing this
-	// creates a new service.
+	// Specifies the port number used by the web server. The value ranges from `0` to
+	// `65,535`. Changing this creates a new service.
 	Port int `pulumi:"port"`
-	// Protocol used by WAF to forward client requests to the server. The
-	// options include `HTTP` and `HTTPS`. Changing this creates a new service.
+	// Specifies the protocol used by WAF to forward client requests to the
+	// server. The valid values are **HTTP** and **HTTPS**. Changing this creates a new service.
 	ServerProtocol string `pulumi:"serverProtocol"`
-	// Server network type, IPv4 or IPv6. Valid values are: `ipv4` and `ipv6`. Changing
-	// this creates a new service.
+	// Specifies the server network type, IPv4 or IPv6.
+	// Valid values are **ipv4** and **ipv6**. Changing this creates a new service.
 	Type string `pulumi:"type"`
-	// The id of the vpc used by the server. Changing this creates a service.
+	// Specifies the ID of the VPC used by the server. Changing this creates a service.
 	VpcId string `pulumi:"vpcId"`
 }
 
@@ -42,22 +528,22 @@ type DedicatedDomainServerInput interface {
 }
 
 type DedicatedDomainServerArgs struct {
-	// IP address or domain name of the web server that the client accesses. For
-	// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
+	// Specifies the IP address or domain name of the web server accessed by the
+	// client. For example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 	Address pulumi.StringInput `pulumi:"address"`
-	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
-	// Changing this creates a new service.
+	// Specifies the protocol type of the client. The options include **HTTP**
+	// and **HTTPS**. Changing this creates a new service.
 	ClientProtocol pulumi.StringInput `pulumi:"clientProtocol"`
-	// Port number used by the web server. The value ranges from 0 to 65535. Changing this
-	// creates a new service.
+	// Specifies the port number used by the web server. The value ranges from `0` to
+	// `65,535`. Changing this creates a new service.
 	Port pulumi.IntInput `pulumi:"port"`
-	// Protocol used by WAF to forward client requests to the server. The
-	// options include `HTTP` and `HTTPS`. Changing this creates a new service.
+	// Specifies the protocol used by WAF to forward client requests to the
+	// server. The valid values are **HTTP** and **HTTPS**. Changing this creates a new service.
 	ServerProtocol pulumi.StringInput `pulumi:"serverProtocol"`
-	// Server network type, IPv4 or IPv6. Valid values are: `ipv4` and `ipv6`. Changing
-	// this creates a new service.
+	// Specifies the server network type, IPv4 or IPv6.
+	// Valid values are **ipv4** and **ipv6**. Changing this creates a new service.
 	Type pulumi.StringInput `pulumi:"type"`
-	// The id of the vpc used by the server. Changing this creates a service.
+	// Specifies the ID of the VPC used by the server. Changing this creates a service.
 	VpcId pulumi.StringInput `pulumi:"vpcId"`
 }
 
@@ -112,37 +598,37 @@ func (o DedicatedDomainServerOutput) ToDedicatedDomainServerOutputWithContext(ct
 	return o
 }
 
-// IP address or domain name of the web server that the client accesses. For
-// example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
+// Specifies the IP address or domain name of the web server accessed by the
+// client. For example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.Address }).(pulumi.StringOutput)
 }
 
-// Protocol type of the client. The options include `HTTP` and `HTTPS`.
-// Changing this creates a new service.
+// Specifies the protocol type of the client. The options include **HTTP**
+// and **HTTPS**. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) ClientProtocol() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.ClientProtocol }).(pulumi.StringOutput)
 }
 
-// Port number used by the web server. The value ranges from 0 to 65535. Changing this
-// creates a new service.
+// Specifies the port number used by the web server. The value ranges from `0` to
+// `65,535`. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) int { return v.Port }).(pulumi.IntOutput)
 }
 
-// Protocol used by WAF to forward client requests to the server. The
-// options include `HTTP` and `HTTPS`. Changing this creates a new service.
+// Specifies the protocol used by WAF to forward client requests to the
+// server. The valid values are **HTTP** and **HTTPS**. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) ServerProtocol() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.ServerProtocol }).(pulumi.StringOutput)
 }
 
-// Server network type, IPv4 or IPv6. Valid values are: `ipv4` and `ipv6`. Changing
-// this creates a new service.
+// Specifies the server network type, IPv4 or IPv6.
+// Valid values are **ipv4** and **ipv6**. Changing this creates a new service.
 func (o DedicatedDomainServerOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.Type }).(pulumi.StringOutput)
 }
 
-// The id of the vpc used by the server. Changing this creates a service.
+// Specifies the ID of the VPC used by the server. Changing this creates a service.
 func (o DedicatedDomainServerOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v DedicatedDomainServer) string { return v.VpcId }).(pulumi.StringOutput)
 }
@@ -167,17 +653,614 @@ func (o DedicatedDomainServerArrayOutput) Index(i pulumi.IntInput) DedicatedDoma
 	}).(DedicatedDomainServerOutput)
 }
 
+type DedicatedDomainTimeoutSettings struct {
+	// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+	// Valid value ranges from `0` to `180`.
+	ConnectionTimeout *int `pulumi:"connectionTimeout"`
+	// Specifies the timeout for WAF to receive responses from the origin server.
+	// The unit is second. Valid value ranges from `0` to `3,600`.
+	ReadTimeout *int `pulumi:"readTimeout"`
+	// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+	// Valid value ranges from `0` to `3,600`.
+	WriteTimeout *int `pulumi:"writeTimeout"`
+}
+
+// DedicatedDomainTimeoutSettingsInput is an input type that accepts DedicatedDomainTimeoutSettingsArgs and DedicatedDomainTimeoutSettingsOutput values.
+// You can construct a concrete instance of `DedicatedDomainTimeoutSettingsInput` via:
+//
+//	DedicatedDomainTimeoutSettingsArgs{...}
+type DedicatedDomainTimeoutSettingsInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainTimeoutSettingsOutput() DedicatedDomainTimeoutSettingsOutput
+	ToDedicatedDomainTimeoutSettingsOutputWithContext(context.Context) DedicatedDomainTimeoutSettingsOutput
+}
+
+type DedicatedDomainTimeoutSettingsArgs struct {
+	// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+	// Valid value ranges from `0` to `180`.
+	ConnectionTimeout pulumi.IntPtrInput `pulumi:"connectionTimeout"`
+	// Specifies the timeout for WAF to receive responses from the origin server.
+	// The unit is second. Valid value ranges from `0` to `3,600`.
+	ReadTimeout pulumi.IntPtrInput `pulumi:"readTimeout"`
+	// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+	// Valid value ranges from `0` to `3,600`.
+	WriteTimeout pulumi.IntPtrInput `pulumi:"writeTimeout"`
+}
+
+func (DedicatedDomainTimeoutSettingsArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainTimeoutSettings)(nil)).Elem()
+}
+
+func (i DedicatedDomainTimeoutSettingsArgs) ToDedicatedDomainTimeoutSettingsOutput() DedicatedDomainTimeoutSettingsOutput {
+	return i.ToDedicatedDomainTimeoutSettingsOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainTimeoutSettingsArgs) ToDedicatedDomainTimeoutSettingsOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTimeoutSettingsOutput)
+}
+
+func (i DedicatedDomainTimeoutSettingsArgs) ToDedicatedDomainTimeoutSettingsPtrOutput() DedicatedDomainTimeoutSettingsPtrOutput {
+	return i.ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainTimeoutSettingsArgs) ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTimeoutSettingsOutput).ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(ctx)
+}
+
+// DedicatedDomainTimeoutSettingsPtrInput is an input type that accepts DedicatedDomainTimeoutSettingsArgs, DedicatedDomainTimeoutSettingsPtr and DedicatedDomainTimeoutSettingsPtrOutput values.
+// You can construct a concrete instance of `DedicatedDomainTimeoutSettingsPtrInput` via:
+//
+//	        DedicatedDomainTimeoutSettingsArgs{...}
+//
+//	or:
+//
+//	        nil
+type DedicatedDomainTimeoutSettingsPtrInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainTimeoutSettingsPtrOutput() DedicatedDomainTimeoutSettingsPtrOutput
+	ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(context.Context) DedicatedDomainTimeoutSettingsPtrOutput
+}
+
+type dedicatedDomainTimeoutSettingsPtrType DedicatedDomainTimeoutSettingsArgs
+
+func DedicatedDomainTimeoutSettingsPtr(v *DedicatedDomainTimeoutSettingsArgs) DedicatedDomainTimeoutSettingsPtrInput {
+	return (*dedicatedDomainTimeoutSettingsPtrType)(v)
+}
+
+func (*dedicatedDomainTimeoutSettingsPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainTimeoutSettings)(nil)).Elem()
+}
+
+func (i *dedicatedDomainTimeoutSettingsPtrType) ToDedicatedDomainTimeoutSettingsPtrOutput() DedicatedDomainTimeoutSettingsPtrOutput {
+	return i.ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (i *dedicatedDomainTimeoutSettingsPtrType) ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTimeoutSettingsPtrOutput)
+}
+
+type DedicatedDomainTimeoutSettingsOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainTimeoutSettingsOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainTimeoutSettings)(nil)).Elem()
+}
+
+func (o DedicatedDomainTimeoutSettingsOutput) ToDedicatedDomainTimeoutSettingsOutput() DedicatedDomainTimeoutSettingsOutput {
+	return o
+}
+
+func (o DedicatedDomainTimeoutSettingsOutput) ToDedicatedDomainTimeoutSettingsOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsOutput {
+	return o
+}
+
+func (o DedicatedDomainTimeoutSettingsOutput) ToDedicatedDomainTimeoutSettingsPtrOutput() DedicatedDomainTimeoutSettingsPtrOutput {
+	return o.ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (o DedicatedDomainTimeoutSettingsOutput) ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DedicatedDomainTimeoutSettings) *DedicatedDomainTimeoutSettings {
+		return &v
+	}).(DedicatedDomainTimeoutSettingsPtrOutput)
+}
+
+// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+// Valid value ranges from `0` to `180`.
+func (o DedicatedDomainTimeoutSettingsOutput) ConnectionTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainTimeoutSettings) *int { return v.ConnectionTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to receive responses from the origin server.
+// The unit is second. Valid value ranges from `0` to `3,600`.
+func (o DedicatedDomainTimeoutSettingsOutput) ReadTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainTimeoutSettings) *int { return v.ReadTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+// Valid value ranges from `0` to `3,600`.
+func (o DedicatedDomainTimeoutSettingsOutput) WriteTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainTimeoutSettings) *int { return v.WriteTimeout }).(pulumi.IntPtrOutput)
+}
+
+type DedicatedDomainTimeoutSettingsPtrOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainTimeoutSettingsPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainTimeoutSettings)(nil)).Elem()
+}
+
+func (o DedicatedDomainTimeoutSettingsPtrOutput) ToDedicatedDomainTimeoutSettingsPtrOutput() DedicatedDomainTimeoutSettingsPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainTimeoutSettingsPtrOutput) ToDedicatedDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DedicatedDomainTimeoutSettingsPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainTimeoutSettingsPtrOutput) Elem() DedicatedDomainTimeoutSettingsOutput {
+	return o.ApplyT(func(v *DedicatedDomainTimeoutSettings) DedicatedDomainTimeoutSettings {
+		if v != nil {
+			return *v
+		}
+		var ret DedicatedDomainTimeoutSettings
+		return ret
+	}).(DedicatedDomainTimeoutSettingsOutput)
+}
+
+// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+// Valid value ranges from `0` to `180`.
+func (o DedicatedDomainTimeoutSettingsPtrOutput) ConnectionTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ConnectionTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to receive responses from the origin server.
+// The unit is second. Valid value ranges from `0` to `3,600`.
+func (o DedicatedDomainTimeoutSettingsPtrOutput) ReadTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ReadTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+// Valid value ranges from `0` to `3,600`.
+func (o DedicatedDomainTimeoutSettingsPtrOutput) WriteTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.WriteTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+type DedicatedDomainTrafficMark struct {
+	// Specifies the IP tags. HTTP request header field of the original client IP address.
+	// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+	// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+	// address list in order. Note:
+	// + If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+	// + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+	//   `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+	IpTags []string `pulumi:"ipTags"`
+	// Specifies the session tag. This tag is used by known attack source rules to block
+	// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+	// requests based on cookie attributes.
+	SessionTag *string `pulumi:"sessionTag"`
+	// Specifies the user tag. This tag is used by known attack source rules to block malicious
+	// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+	UserTag *string `pulumi:"userTag"`
+}
+
+// DedicatedDomainTrafficMarkInput is an input type that accepts DedicatedDomainTrafficMarkArgs and DedicatedDomainTrafficMarkOutput values.
+// You can construct a concrete instance of `DedicatedDomainTrafficMarkInput` via:
+//
+//	DedicatedDomainTrafficMarkArgs{...}
+type DedicatedDomainTrafficMarkInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainTrafficMarkOutput() DedicatedDomainTrafficMarkOutput
+	ToDedicatedDomainTrafficMarkOutputWithContext(context.Context) DedicatedDomainTrafficMarkOutput
+}
+
+type DedicatedDomainTrafficMarkArgs struct {
+	// Specifies the IP tags. HTTP request header field of the original client IP address.
+	// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+	// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+	// address list in order. Note:
+	// + If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+	// + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+	//   `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+	IpTags pulumi.StringArrayInput `pulumi:"ipTags"`
+	// Specifies the session tag. This tag is used by known attack source rules to block
+	// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+	// requests based on cookie attributes.
+	SessionTag pulumi.StringPtrInput `pulumi:"sessionTag"`
+	// Specifies the user tag. This tag is used by known attack source rules to block malicious
+	// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+	UserTag pulumi.StringPtrInput `pulumi:"userTag"`
+}
+
+func (DedicatedDomainTrafficMarkArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainTrafficMark)(nil)).Elem()
+}
+
+func (i DedicatedDomainTrafficMarkArgs) ToDedicatedDomainTrafficMarkOutput() DedicatedDomainTrafficMarkOutput {
+	return i.ToDedicatedDomainTrafficMarkOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainTrafficMarkArgs) ToDedicatedDomainTrafficMarkOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTrafficMarkOutput)
+}
+
+func (i DedicatedDomainTrafficMarkArgs) ToDedicatedDomainTrafficMarkPtrOutput() DedicatedDomainTrafficMarkPtrOutput {
+	return i.ToDedicatedDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (i DedicatedDomainTrafficMarkArgs) ToDedicatedDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTrafficMarkOutput).ToDedicatedDomainTrafficMarkPtrOutputWithContext(ctx)
+}
+
+// DedicatedDomainTrafficMarkPtrInput is an input type that accepts DedicatedDomainTrafficMarkArgs, DedicatedDomainTrafficMarkPtr and DedicatedDomainTrafficMarkPtrOutput values.
+// You can construct a concrete instance of `DedicatedDomainTrafficMarkPtrInput` via:
+//
+//	        DedicatedDomainTrafficMarkArgs{...}
+//
+//	or:
+//
+//	        nil
+type DedicatedDomainTrafficMarkPtrInput interface {
+	pulumi.Input
+
+	ToDedicatedDomainTrafficMarkPtrOutput() DedicatedDomainTrafficMarkPtrOutput
+	ToDedicatedDomainTrafficMarkPtrOutputWithContext(context.Context) DedicatedDomainTrafficMarkPtrOutput
+}
+
+type dedicatedDomainTrafficMarkPtrType DedicatedDomainTrafficMarkArgs
+
+func DedicatedDomainTrafficMarkPtr(v *DedicatedDomainTrafficMarkArgs) DedicatedDomainTrafficMarkPtrInput {
+	return (*dedicatedDomainTrafficMarkPtrType)(v)
+}
+
+func (*dedicatedDomainTrafficMarkPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainTrafficMark)(nil)).Elem()
+}
+
+func (i *dedicatedDomainTrafficMarkPtrType) ToDedicatedDomainTrafficMarkPtrOutput() DedicatedDomainTrafficMarkPtrOutput {
+	return i.ToDedicatedDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (i *dedicatedDomainTrafficMarkPtrType) ToDedicatedDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DedicatedDomainTrafficMarkPtrOutput)
+}
+
+type DedicatedDomainTrafficMarkOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainTrafficMarkOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DedicatedDomainTrafficMark)(nil)).Elem()
+}
+
+func (o DedicatedDomainTrafficMarkOutput) ToDedicatedDomainTrafficMarkOutput() DedicatedDomainTrafficMarkOutput {
+	return o
+}
+
+func (o DedicatedDomainTrafficMarkOutput) ToDedicatedDomainTrafficMarkOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkOutput {
+	return o
+}
+
+func (o DedicatedDomainTrafficMarkOutput) ToDedicatedDomainTrafficMarkPtrOutput() DedicatedDomainTrafficMarkPtrOutput {
+	return o.ToDedicatedDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (o DedicatedDomainTrafficMarkOutput) ToDedicatedDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DedicatedDomainTrafficMark) *DedicatedDomainTrafficMark {
+		return &v
+	}).(DedicatedDomainTrafficMarkPtrOutput)
+}
+
+// Specifies the IP tags. HTTP request header field of the original client IP address.
+// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+// address list in order. Note:
+//   - If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+//   - If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+//     `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+func (o DedicatedDomainTrafficMarkOutput) IpTags() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v DedicatedDomainTrafficMark) []string { return v.IpTags }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the session tag. This tag is used by known attack source rules to block
+// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+// requests based on cookie attributes.
+func (o DedicatedDomainTrafficMarkOutput) SessionTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainTrafficMark) *string { return v.SessionTag }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user tag. This tag is used by known attack source rules to block malicious
+// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+func (o DedicatedDomainTrafficMarkOutput) UserTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DedicatedDomainTrafficMark) *string { return v.UserTag }).(pulumi.StringPtrOutput)
+}
+
+type DedicatedDomainTrafficMarkPtrOutput struct{ *pulumi.OutputState }
+
+func (DedicatedDomainTrafficMarkPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DedicatedDomainTrafficMark)(nil)).Elem()
+}
+
+func (o DedicatedDomainTrafficMarkPtrOutput) ToDedicatedDomainTrafficMarkPtrOutput() DedicatedDomainTrafficMarkPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainTrafficMarkPtrOutput) ToDedicatedDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DedicatedDomainTrafficMarkPtrOutput {
+	return o
+}
+
+func (o DedicatedDomainTrafficMarkPtrOutput) Elem() DedicatedDomainTrafficMarkOutput {
+	return o.ApplyT(func(v *DedicatedDomainTrafficMark) DedicatedDomainTrafficMark {
+		if v != nil {
+			return *v
+		}
+		var ret DedicatedDomainTrafficMark
+		return ret
+	}).(DedicatedDomainTrafficMarkOutput)
+}
+
+// Specifies the IP tags. HTTP request header field of the original client IP address.
+// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+// address list in order. Note:
+//   - If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+//   - If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+//     `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+func (o DedicatedDomainTrafficMarkPtrOutput) IpTags() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *DedicatedDomainTrafficMark) []string {
+		if v == nil {
+			return nil
+		}
+		return v.IpTags
+	}).(pulumi.StringArrayOutput)
+}
+
+// Specifies the session tag. This tag is used by known attack source rules to block
+// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+// requests based on cookie attributes.
+func (o DedicatedDomainTrafficMarkPtrOutput) SessionTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainTrafficMark) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SessionTag
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user tag. This tag is used by known attack source rules to block malicious
+// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+func (o DedicatedDomainTrafficMarkPtrOutput) UserTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomainTrafficMark) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserTag
+	}).(pulumi.StringPtrOutput)
+}
+
+type DomainCustomPage struct {
+	// Specifies the content type of the custom alarm page.
+	// The value can be **text/html**, **text/xml** or **application/json**.
+	BlockPageType string `pulumi:"blockPageType"`
+	// Specifies the HTTP return code.
+	// The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+	HttpReturnCode string `pulumi:"httpReturnCode"`
+	// Specifies the page content. The page content based on the selected page type.
+	// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+	// can be available.
+	PageContent string `pulumi:"pageContent"`
+}
+
+// DomainCustomPageInput is an input type that accepts DomainCustomPageArgs and DomainCustomPageOutput values.
+// You can construct a concrete instance of `DomainCustomPageInput` via:
+//
+//	DomainCustomPageArgs{...}
+type DomainCustomPageInput interface {
+	pulumi.Input
+
+	ToDomainCustomPageOutput() DomainCustomPageOutput
+	ToDomainCustomPageOutputWithContext(context.Context) DomainCustomPageOutput
+}
+
+type DomainCustomPageArgs struct {
+	// Specifies the content type of the custom alarm page.
+	// The value can be **text/html**, **text/xml** or **application/json**.
+	BlockPageType pulumi.StringInput `pulumi:"blockPageType"`
+	// Specifies the HTTP return code.
+	// The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+	HttpReturnCode pulumi.StringInput `pulumi:"httpReturnCode"`
+	// Specifies the page content. The page content based on the selected page type.
+	// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+	// can be available.
+	PageContent pulumi.StringInput `pulumi:"pageContent"`
+}
+
+func (DomainCustomPageArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainCustomPage)(nil)).Elem()
+}
+
+func (i DomainCustomPageArgs) ToDomainCustomPageOutput() DomainCustomPageOutput {
+	return i.ToDomainCustomPageOutputWithContext(context.Background())
+}
+
+func (i DomainCustomPageArgs) ToDomainCustomPageOutputWithContext(ctx context.Context) DomainCustomPageOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainCustomPageOutput)
+}
+
+func (i DomainCustomPageArgs) ToDomainCustomPagePtrOutput() DomainCustomPagePtrOutput {
+	return i.ToDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (i DomainCustomPageArgs) ToDomainCustomPagePtrOutputWithContext(ctx context.Context) DomainCustomPagePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainCustomPageOutput).ToDomainCustomPagePtrOutputWithContext(ctx)
+}
+
+// DomainCustomPagePtrInput is an input type that accepts DomainCustomPageArgs, DomainCustomPagePtr and DomainCustomPagePtrOutput values.
+// You can construct a concrete instance of `DomainCustomPagePtrInput` via:
+//
+//	        DomainCustomPageArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainCustomPagePtrInput interface {
+	pulumi.Input
+
+	ToDomainCustomPagePtrOutput() DomainCustomPagePtrOutput
+	ToDomainCustomPagePtrOutputWithContext(context.Context) DomainCustomPagePtrOutput
+}
+
+type domainCustomPagePtrType DomainCustomPageArgs
+
+func DomainCustomPagePtr(v *DomainCustomPageArgs) DomainCustomPagePtrInput {
+	return (*domainCustomPagePtrType)(v)
+}
+
+func (*domainCustomPagePtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainCustomPage)(nil)).Elem()
+}
+
+func (i *domainCustomPagePtrType) ToDomainCustomPagePtrOutput() DomainCustomPagePtrOutput {
+	return i.ToDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (i *domainCustomPagePtrType) ToDomainCustomPagePtrOutputWithContext(ctx context.Context) DomainCustomPagePtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainCustomPagePtrOutput)
+}
+
+type DomainCustomPageOutput struct{ *pulumi.OutputState }
+
+func (DomainCustomPageOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainCustomPage)(nil)).Elem()
+}
+
+func (o DomainCustomPageOutput) ToDomainCustomPageOutput() DomainCustomPageOutput {
+	return o
+}
+
+func (o DomainCustomPageOutput) ToDomainCustomPageOutputWithContext(ctx context.Context) DomainCustomPageOutput {
+	return o
+}
+
+func (o DomainCustomPageOutput) ToDomainCustomPagePtrOutput() DomainCustomPagePtrOutput {
+	return o.ToDomainCustomPagePtrOutputWithContext(context.Background())
+}
+
+func (o DomainCustomPageOutput) ToDomainCustomPagePtrOutputWithContext(ctx context.Context) DomainCustomPagePtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainCustomPage) *DomainCustomPage {
+		return &v
+	}).(DomainCustomPagePtrOutput)
+}
+
+// Specifies the content type of the custom alarm page.
+// The value can be **text/html**, **text/xml** or **application/json**.
+func (o DomainCustomPageOutput) BlockPageType() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainCustomPage) string { return v.BlockPageType }).(pulumi.StringOutput)
+}
+
+// Specifies the HTTP return code.
+// The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+func (o DomainCustomPageOutput) HttpReturnCode() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainCustomPage) string { return v.HttpReturnCode }).(pulumi.StringOutput)
+}
+
+// Specifies the page content. The page content based on the selected page type.
+// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+// can be available.
+func (o DomainCustomPageOutput) PageContent() pulumi.StringOutput {
+	return o.ApplyT(func(v DomainCustomPage) string { return v.PageContent }).(pulumi.StringOutput)
+}
+
+type DomainCustomPagePtrOutput struct{ *pulumi.OutputState }
+
+func (DomainCustomPagePtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainCustomPage)(nil)).Elem()
+}
+
+func (o DomainCustomPagePtrOutput) ToDomainCustomPagePtrOutput() DomainCustomPagePtrOutput {
+	return o
+}
+
+func (o DomainCustomPagePtrOutput) ToDomainCustomPagePtrOutputWithContext(ctx context.Context) DomainCustomPagePtrOutput {
+	return o
+}
+
+func (o DomainCustomPagePtrOutput) Elem() DomainCustomPageOutput {
+	return o.ApplyT(func(v *DomainCustomPage) DomainCustomPage {
+		if v != nil {
+			return *v
+		}
+		var ret DomainCustomPage
+		return ret
+	}).(DomainCustomPageOutput)
+}
+
+// Specifies the content type of the custom alarm page.
+// The value can be **text/html**, **text/xml** or **application/json**.
+func (o DomainCustomPagePtrOutput) BlockPageType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.BlockPageType
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the HTTP return code.
+// The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+func (o DomainCustomPagePtrOutput) HttpReturnCode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.HttpReturnCode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the page content. The page content based on the selected page type.
+// The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+// can be available.
+func (o DomainCustomPagePtrOutput) PageContent() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainCustomPage) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.PageContent
+	}).(pulumi.StringPtrOutput)
+}
+
 type DomainServer struct {
-	// IP address or domain name of the web server that the client accesses. For example,
-	// `192.168.1.1` or `www.a.com`.
+	// Specifies the IP address or domain name of the web server that the client accesses.
 	Address string `pulumi:"address"`
-	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
+	// Specifies the protocol type of the client. The options include **HTTP** and **HTTPS**.
 	ClientProtocol string `pulumi:"clientProtocol"`
-	// Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
+	// Specifies the port number used by the web server. The value ranges from `0` to `65,535`,
+	// for example, `8,080`.
 	Port int `pulumi:"port"`
-	// Protocol used by WAF to forward client requests to the server. The options
-	// include `HTTP` and `HTTPS`.
+	// Specifies the protocol used by WAF to forward client requests to the server.
+	// The options include **HTTP** and **HTTPS**.
 	ServerProtocol string `pulumi:"serverProtocol"`
+	// Specifies the server network type. Valid values are: **ipv4** and **ipv6**.
+	// + When this field is set to **ipv4**, `address` must be set to an IPv4 address.
+	// + When this field is set to **ipv6**, `address` must be set to an IPv6 address.
+	Type *string `pulumi:"type"`
+	// Specifies the load balancing algorithm will assign requests to the origin
+	// site according to this weight.
+	// Defaults to `1`.
+	Weight *int `pulumi:"weight"`
 }
 
 // DomainServerInput is an input type that accepts DomainServerArgs and DomainServerOutput values.
@@ -192,16 +1275,24 @@ type DomainServerInput interface {
 }
 
 type DomainServerArgs struct {
-	// IP address or domain name of the web server that the client accesses. For example,
-	// `192.168.1.1` or `www.a.com`.
+	// Specifies the IP address or domain name of the web server that the client accesses.
 	Address pulumi.StringInput `pulumi:"address"`
-	// Protocol type of the client. The options include `HTTP` and `HTTPS`.
+	// Specifies the protocol type of the client. The options include **HTTP** and **HTTPS**.
 	ClientProtocol pulumi.StringInput `pulumi:"clientProtocol"`
-	// Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
+	// Specifies the port number used by the web server. The value ranges from `0` to `65,535`,
+	// for example, `8,080`.
 	Port pulumi.IntInput `pulumi:"port"`
-	// Protocol used by WAF to forward client requests to the server. The options
-	// include `HTTP` and `HTTPS`.
+	// Specifies the protocol used by WAF to forward client requests to the server.
+	// The options include **HTTP** and **HTTPS**.
 	ServerProtocol pulumi.StringInput `pulumi:"serverProtocol"`
+	// Specifies the server network type. Valid values are: **ipv4** and **ipv6**.
+	// + When this field is set to **ipv4**, `address` must be set to an IPv4 address.
+	// + When this field is set to **ipv6**, `address` must be set to an IPv6 address.
+	Type pulumi.StringPtrInput `pulumi:"type"`
+	// Specifies the load balancing algorithm will assign requests to the origin
+	// site according to this weight.
+	// Defaults to `1`.
+	Weight pulumi.IntPtrInput `pulumi:"weight"`
 }
 
 func (DomainServerArgs) ElementType() reflect.Type {
@@ -255,26 +1346,40 @@ func (o DomainServerOutput) ToDomainServerOutputWithContext(ctx context.Context)
 	return o
 }
 
-// IP address or domain name of the web server that the client accesses. For example,
-// `192.168.1.1` or `www.a.com`.
+// Specifies the IP address or domain name of the web server that the client accesses.
 func (o DomainServerOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainServer) string { return v.Address }).(pulumi.StringOutput)
 }
 
-// Protocol type of the client. The options include `HTTP` and `HTTPS`.
+// Specifies the protocol type of the client. The options include **HTTP** and **HTTPS**.
 func (o DomainServerOutput) ClientProtocol() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainServer) string { return v.ClientProtocol }).(pulumi.StringOutput)
 }
 
-// Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
+// Specifies the port number used by the web server. The value ranges from `0` to `65,535`,
+// for example, `8,080`.
 func (o DomainServerOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v DomainServer) int { return v.Port }).(pulumi.IntOutput)
 }
 
-// Protocol used by WAF to forward client requests to the server. The options
-// include `HTTP` and `HTTPS`.
+// Specifies the protocol used by WAF to forward client requests to the server.
+// The options include **HTTP** and **HTTPS**.
 func (o DomainServerOutput) ServerProtocol() pulumi.StringOutput {
 	return o.ApplyT(func(v DomainServer) string { return v.ServerProtocol }).(pulumi.StringOutput)
+}
+
+// Specifies the server network type. Valid values are: **ipv4** and **ipv6**.
+// + When this field is set to **ipv4**, `address` must be set to an IPv4 address.
+// + When this field is set to **ipv6**, `address` must be set to an IPv6 address.
+func (o DomainServerOutput) Type() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainServer) *string { return v.Type }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the load balancing algorithm will assign requests to the origin
+// site according to this weight.
+// Defaults to `1`.
+func (o DomainServerOutput) Weight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainServer) *int { return v.Weight }).(pulumi.IntPtrOutput)
 }
 
 type DomainServerArrayOutput struct{ *pulumi.OutputState }
@@ -297,34 +1402,583 @@ func (o DomainServerArrayOutput) Index(i pulumi.IntInput) DomainServerOutput {
 	}).(DomainServerOutput)
 }
 
+type DomainTimeoutSettings struct {
+	// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+	// Valid value ranges from `0` to `180`.
+	ConnectionTimeout *int `pulumi:"connectionTimeout"`
+	// Specifies the timeout for WAF to receive responses from the origin server.
+	// The unit is second. Valid value ranges from `0` to `3,600`.
+	ReadTimeout *int `pulumi:"readTimeout"`
+	// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+	// Valid value ranges from `0` to `3,600`.
+	WriteTimeout *int `pulumi:"writeTimeout"`
+}
+
+// DomainTimeoutSettingsInput is an input type that accepts DomainTimeoutSettingsArgs and DomainTimeoutSettingsOutput values.
+// You can construct a concrete instance of `DomainTimeoutSettingsInput` via:
+//
+//	DomainTimeoutSettingsArgs{...}
+type DomainTimeoutSettingsInput interface {
+	pulumi.Input
+
+	ToDomainTimeoutSettingsOutput() DomainTimeoutSettingsOutput
+	ToDomainTimeoutSettingsOutputWithContext(context.Context) DomainTimeoutSettingsOutput
+}
+
+type DomainTimeoutSettingsArgs struct {
+	// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+	// Valid value ranges from `0` to `180`.
+	ConnectionTimeout pulumi.IntPtrInput `pulumi:"connectionTimeout"`
+	// Specifies the timeout for WAF to receive responses from the origin server.
+	// The unit is second. Valid value ranges from `0` to `3,600`.
+	ReadTimeout pulumi.IntPtrInput `pulumi:"readTimeout"`
+	// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+	// Valid value ranges from `0` to `3,600`.
+	WriteTimeout pulumi.IntPtrInput `pulumi:"writeTimeout"`
+}
+
+func (DomainTimeoutSettingsArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainTimeoutSettings)(nil)).Elem()
+}
+
+func (i DomainTimeoutSettingsArgs) ToDomainTimeoutSettingsOutput() DomainTimeoutSettingsOutput {
+	return i.ToDomainTimeoutSettingsOutputWithContext(context.Background())
+}
+
+func (i DomainTimeoutSettingsArgs) ToDomainTimeoutSettingsOutputWithContext(ctx context.Context) DomainTimeoutSettingsOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTimeoutSettingsOutput)
+}
+
+func (i DomainTimeoutSettingsArgs) ToDomainTimeoutSettingsPtrOutput() DomainTimeoutSettingsPtrOutput {
+	return i.ToDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (i DomainTimeoutSettingsArgs) ToDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DomainTimeoutSettingsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTimeoutSettingsOutput).ToDomainTimeoutSettingsPtrOutputWithContext(ctx)
+}
+
+// DomainTimeoutSettingsPtrInput is an input type that accepts DomainTimeoutSettingsArgs, DomainTimeoutSettingsPtr and DomainTimeoutSettingsPtrOutput values.
+// You can construct a concrete instance of `DomainTimeoutSettingsPtrInput` via:
+//
+//	        DomainTimeoutSettingsArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainTimeoutSettingsPtrInput interface {
+	pulumi.Input
+
+	ToDomainTimeoutSettingsPtrOutput() DomainTimeoutSettingsPtrOutput
+	ToDomainTimeoutSettingsPtrOutputWithContext(context.Context) DomainTimeoutSettingsPtrOutput
+}
+
+type domainTimeoutSettingsPtrType DomainTimeoutSettingsArgs
+
+func DomainTimeoutSettingsPtr(v *DomainTimeoutSettingsArgs) DomainTimeoutSettingsPtrInput {
+	return (*domainTimeoutSettingsPtrType)(v)
+}
+
+func (*domainTimeoutSettingsPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainTimeoutSettings)(nil)).Elem()
+}
+
+func (i *domainTimeoutSettingsPtrType) ToDomainTimeoutSettingsPtrOutput() DomainTimeoutSettingsPtrOutput {
+	return i.ToDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (i *domainTimeoutSettingsPtrType) ToDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DomainTimeoutSettingsPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTimeoutSettingsPtrOutput)
+}
+
+type DomainTimeoutSettingsOutput struct{ *pulumi.OutputState }
+
+func (DomainTimeoutSettingsOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainTimeoutSettings)(nil)).Elem()
+}
+
+func (o DomainTimeoutSettingsOutput) ToDomainTimeoutSettingsOutput() DomainTimeoutSettingsOutput {
+	return o
+}
+
+func (o DomainTimeoutSettingsOutput) ToDomainTimeoutSettingsOutputWithContext(ctx context.Context) DomainTimeoutSettingsOutput {
+	return o
+}
+
+func (o DomainTimeoutSettingsOutput) ToDomainTimeoutSettingsPtrOutput() DomainTimeoutSettingsPtrOutput {
+	return o.ToDomainTimeoutSettingsPtrOutputWithContext(context.Background())
+}
+
+func (o DomainTimeoutSettingsOutput) ToDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DomainTimeoutSettingsPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainTimeoutSettings) *DomainTimeoutSettings {
+		return &v
+	}).(DomainTimeoutSettingsPtrOutput)
+}
+
+// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+// Valid value ranges from `0` to `180`.
+func (o DomainTimeoutSettingsOutput) ConnectionTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainTimeoutSettings) *int { return v.ConnectionTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to receive responses from the origin server.
+// The unit is second. Valid value ranges from `0` to `3,600`.
+func (o DomainTimeoutSettingsOutput) ReadTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainTimeoutSettings) *int { return v.ReadTimeout }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+// Valid value ranges from `0` to `3,600`.
+func (o DomainTimeoutSettingsOutput) WriteTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v DomainTimeoutSettings) *int { return v.WriteTimeout }).(pulumi.IntPtrOutput)
+}
+
+type DomainTimeoutSettingsPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainTimeoutSettingsPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainTimeoutSettings)(nil)).Elem()
+}
+
+func (o DomainTimeoutSettingsPtrOutput) ToDomainTimeoutSettingsPtrOutput() DomainTimeoutSettingsPtrOutput {
+	return o
+}
+
+func (o DomainTimeoutSettingsPtrOutput) ToDomainTimeoutSettingsPtrOutputWithContext(ctx context.Context) DomainTimeoutSettingsPtrOutput {
+	return o
+}
+
+func (o DomainTimeoutSettingsPtrOutput) Elem() DomainTimeoutSettingsOutput {
+	return o.ApplyT(func(v *DomainTimeoutSettings) DomainTimeoutSettings {
+		if v != nil {
+			return *v
+		}
+		var ret DomainTimeoutSettings
+		return ret
+	}).(DomainTimeoutSettingsOutput)
+}
+
+// Specifies the timeout for WAF to connect to the origin server. The unit is second.
+// Valid value ranges from `0` to `180`.
+func (o DomainTimeoutSettingsPtrOutput) ConnectionTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ConnectionTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to receive responses from the origin server.
+// The unit is second. Valid value ranges from `0` to `3,600`.
+func (o DomainTimeoutSettingsPtrOutput) ReadTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ReadTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+// Valid value ranges from `0` to `3,600`.
+func (o DomainTimeoutSettingsPtrOutput) WriteTimeout() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *DomainTimeoutSettings) *int {
+		if v == nil {
+			return nil
+		}
+		return v.WriteTimeout
+	}).(pulumi.IntPtrOutput)
+}
+
+type DomainTrafficMark struct {
+	// Specifies the IP tags. HTTP request header field of the original client IP address.
+	// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+	// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+	// address list in order. Note:
+	// + If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+	// + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+	//   **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+	// + When the website setting `proxy` is configured as **false**, this field does not take effect,
+	//   and the client IP is only obtained through the `$remote_addr` field.
+	IpTags []string `pulumi:"ipTags"`
+	// Specifies the session tag. This tag is used by known attack source rules to block
+	// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+	// requests based on cookie attributes.
+	SessionTag *string `pulumi:"sessionTag"`
+	// Specifies the user tag. This tag is used by known attack source rules to block malicious
+	// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+	UserTag *string `pulumi:"userTag"`
+}
+
+// DomainTrafficMarkInput is an input type that accepts DomainTrafficMarkArgs and DomainTrafficMarkOutput values.
+// You can construct a concrete instance of `DomainTrafficMarkInput` via:
+//
+//	DomainTrafficMarkArgs{...}
+type DomainTrafficMarkInput interface {
+	pulumi.Input
+
+	ToDomainTrafficMarkOutput() DomainTrafficMarkOutput
+	ToDomainTrafficMarkOutputWithContext(context.Context) DomainTrafficMarkOutput
+}
+
+type DomainTrafficMarkArgs struct {
+	// Specifies the IP tags. HTTP request header field of the original client IP address.
+	// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+	// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+	// address list in order. Note:
+	// + If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+	// + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+	//   **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+	// + When the website setting `proxy` is configured as **false**, this field does not take effect,
+	//   and the client IP is only obtained through the `$remote_addr` field.
+	IpTags pulumi.StringArrayInput `pulumi:"ipTags"`
+	// Specifies the session tag. This tag is used by known attack source rules to block
+	// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+	// requests based on cookie attributes.
+	SessionTag pulumi.StringPtrInput `pulumi:"sessionTag"`
+	// Specifies the user tag. This tag is used by known attack source rules to block malicious
+	// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+	UserTag pulumi.StringPtrInput `pulumi:"userTag"`
+}
+
+func (DomainTrafficMarkArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainTrafficMark)(nil)).Elem()
+}
+
+func (i DomainTrafficMarkArgs) ToDomainTrafficMarkOutput() DomainTrafficMarkOutput {
+	return i.ToDomainTrafficMarkOutputWithContext(context.Background())
+}
+
+func (i DomainTrafficMarkArgs) ToDomainTrafficMarkOutputWithContext(ctx context.Context) DomainTrafficMarkOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTrafficMarkOutput)
+}
+
+func (i DomainTrafficMarkArgs) ToDomainTrafficMarkPtrOutput() DomainTrafficMarkPtrOutput {
+	return i.ToDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (i DomainTrafficMarkArgs) ToDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DomainTrafficMarkPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTrafficMarkOutput).ToDomainTrafficMarkPtrOutputWithContext(ctx)
+}
+
+// DomainTrafficMarkPtrInput is an input type that accepts DomainTrafficMarkArgs, DomainTrafficMarkPtr and DomainTrafficMarkPtrOutput values.
+// You can construct a concrete instance of `DomainTrafficMarkPtrInput` via:
+//
+//	        DomainTrafficMarkArgs{...}
+//
+//	or:
+//
+//	        nil
+type DomainTrafficMarkPtrInput interface {
+	pulumi.Input
+
+	ToDomainTrafficMarkPtrOutput() DomainTrafficMarkPtrOutput
+	ToDomainTrafficMarkPtrOutputWithContext(context.Context) DomainTrafficMarkPtrOutput
+}
+
+type domainTrafficMarkPtrType DomainTrafficMarkArgs
+
+func DomainTrafficMarkPtr(v *DomainTrafficMarkArgs) DomainTrafficMarkPtrInput {
+	return (*domainTrafficMarkPtrType)(v)
+}
+
+func (*domainTrafficMarkPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainTrafficMark)(nil)).Elem()
+}
+
+func (i *domainTrafficMarkPtrType) ToDomainTrafficMarkPtrOutput() DomainTrafficMarkPtrOutput {
+	return i.ToDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (i *domainTrafficMarkPtrType) ToDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DomainTrafficMarkPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(DomainTrafficMarkPtrOutput)
+}
+
+type DomainTrafficMarkOutput struct{ *pulumi.OutputState }
+
+func (DomainTrafficMarkOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*DomainTrafficMark)(nil)).Elem()
+}
+
+func (o DomainTrafficMarkOutput) ToDomainTrafficMarkOutput() DomainTrafficMarkOutput {
+	return o
+}
+
+func (o DomainTrafficMarkOutput) ToDomainTrafficMarkOutputWithContext(ctx context.Context) DomainTrafficMarkOutput {
+	return o
+}
+
+func (o DomainTrafficMarkOutput) ToDomainTrafficMarkPtrOutput() DomainTrafficMarkPtrOutput {
+	return o.ToDomainTrafficMarkPtrOutputWithContext(context.Background())
+}
+
+func (o DomainTrafficMarkOutput) ToDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DomainTrafficMarkPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v DomainTrafficMark) *DomainTrafficMark {
+		return &v
+	}).(DomainTrafficMarkPtrOutput)
+}
+
+// Specifies the IP tags. HTTP request header field of the original client IP address.
+// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+// address list in order. Note:
+//   - If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+//   - If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+//     **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+//   - When the website setting `proxy` is configured as **false**, this field does not take effect,
+//     and the client IP is only obtained through the `$remote_addr` field.
+func (o DomainTrafficMarkOutput) IpTags() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v DomainTrafficMark) []string { return v.IpTags }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the session tag. This tag is used by known attack source rules to block
+// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+// requests based on cookie attributes.
+func (o DomainTrafficMarkOutput) SessionTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainTrafficMark) *string { return v.SessionTag }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user tag. This tag is used by known attack source rules to block malicious
+// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+func (o DomainTrafficMarkOutput) UserTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v DomainTrafficMark) *string { return v.UserTag }).(pulumi.StringPtrOutput)
+}
+
+type DomainTrafficMarkPtrOutput struct{ *pulumi.OutputState }
+
+func (DomainTrafficMarkPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**DomainTrafficMark)(nil)).Elem()
+}
+
+func (o DomainTrafficMarkPtrOutput) ToDomainTrafficMarkPtrOutput() DomainTrafficMarkPtrOutput {
+	return o
+}
+
+func (o DomainTrafficMarkPtrOutput) ToDomainTrafficMarkPtrOutputWithContext(ctx context.Context) DomainTrafficMarkPtrOutput {
+	return o
+}
+
+func (o DomainTrafficMarkPtrOutput) Elem() DomainTrafficMarkOutput {
+	return o.ApplyT(func(v *DomainTrafficMark) DomainTrafficMark {
+		if v != nil {
+			return *v
+		}
+		var ret DomainTrafficMark
+		return ret
+	}).(DomainTrafficMarkOutput)
+}
+
+// Specifies the IP tags. HTTP request header field of the original client IP address.
+// This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+// configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+// address list in order. Note:
+//   - If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+//   - If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+//     **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+//   - When the website setting `proxy` is configured as **false**, this field does not take effect,
+//     and the client IP is only obtained through the `$remote_addr` field.
+func (o DomainTrafficMarkPtrOutput) IpTags() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *DomainTrafficMark) []string {
+		if v == nil {
+			return nil
+		}
+		return v.IpTags
+	}).(pulumi.StringArrayOutput)
+}
+
+// Specifies the session tag. This tag is used by known attack source rules to block
+// malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+// requests based on cookie attributes.
+func (o DomainTrafficMarkPtrOutput) SessionTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainTrafficMark) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SessionTag
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user tag. This tag is used by known attack source rules to block malicious
+// attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+func (o DomainTrafficMarkPtrOutput) UserTag() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DomainTrafficMark) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserTag
+	}).(pulumi.StringPtrOutput)
+}
+
+type PolicyBindHost struct {
+	// The domain name.
+	Hostname *string `pulumi:"hostname"`
+	// The domain name ID.
+	Id *string `pulumi:"id"`
+	// The special domain name mode. This attribute is only valid for dedicated mode.
+	Mode *string `pulumi:"mode"`
+	// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+	// cloud WAF or **premium** for dedicated WAF instances.
+	WafType *string `pulumi:"wafType"`
+}
+
+// PolicyBindHostInput is an input type that accepts PolicyBindHostArgs and PolicyBindHostOutput values.
+// You can construct a concrete instance of `PolicyBindHostInput` via:
+//
+//	PolicyBindHostArgs{...}
+type PolicyBindHostInput interface {
+	pulumi.Input
+
+	ToPolicyBindHostOutput() PolicyBindHostOutput
+	ToPolicyBindHostOutputWithContext(context.Context) PolicyBindHostOutput
+}
+
+type PolicyBindHostArgs struct {
+	// The domain name.
+	Hostname pulumi.StringPtrInput `pulumi:"hostname"`
+	// The domain name ID.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// The special domain name mode. This attribute is only valid for dedicated mode.
+	Mode pulumi.StringPtrInput `pulumi:"mode"`
+	// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+	// cloud WAF or **premium** for dedicated WAF instances.
+	WafType pulumi.StringPtrInput `pulumi:"wafType"`
+}
+
+func (PolicyBindHostArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*PolicyBindHost)(nil)).Elem()
+}
+
+func (i PolicyBindHostArgs) ToPolicyBindHostOutput() PolicyBindHostOutput {
+	return i.ToPolicyBindHostOutputWithContext(context.Background())
+}
+
+func (i PolicyBindHostArgs) ToPolicyBindHostOutputWithContext(ctx context.Context) PolicyBindHostOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PolicyBindHostOutput)
+}
+
+// PolicyBindHostArrayInput is an input type that accepts PolicyBindHostArray and PolicyBindHostArrayOutput values.
+// You can construct a concrete instance of `PolicyBindHostArrayInput` via:
+//
+//	PolicyBindHostArray{ PolicyBindHostArgs{...} }
+type PolicyBindHostArrayInput interface {
+	pulumi.Input
+
+	ToPolicyBindHostArrayOutput() PolicyBindHostArrayOutput
+	ToPolicyBindHostArrayOutputWithContext(context.Context) PolicyBindHostArrayOutput
+}
+
+type PolicyBindHostArray []PolicyBindHostInput
+
+func (PolicyBindHostArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PolicyBindHost)(nil)).Elem()
+}
+
+func (i PolicyBindHostArray) ToPolicyBindHostArrayOutput() PolicyBindHostArrayOutput {
+	return i.ToPolicyBindHostArrayOutputWithContext(context.Background())
+}
+
+func (i PolicyBindHostArray) ToPolicyBindHostArrayOutputWithContext(ctx context.Context) PolicyBindHostArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PolicyBindHostArrayOutput)
+}
+
+type PolicyBindHostOutput struct{ *pulumi.OutputState }
+
+func (PolicyBindHostOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*PolicyBindHost)(nil)).Elem()
+}
+
+func (o PolicyBindHostOutput) ToPolicyBindHostOutput() PolicyBindHostOutput {
+	return o
+}
+
+func (o PolicyBindHostOutput) ToPolicyBindHostOutputWithContext(ctx context.Context) PolicyBindHostOutput {
+	return o
+}
+
+// The domain name.
+func (o PolicyBindHostOutput) Hostname() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v PolicyBindHost) *string { return v.Hostname }).(pulumi.StringPtrOutput)
+}
+
+// The domain name ID.
+func (o PolicyBindHostOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v PolicyBindHost) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// The special domain name mode. This attribute is only valid for dedicated mode.
+func (o PolicyBindHostOutput) Mode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v PolicyBindHost) *string { return v.Mode }).(pulumi.StringPtrOutput)
+}
+
+// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+// cloud WAF or **premium** for dedicated WAF instances.
+func (o PolicyBindHostOutput) WafType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v PolicyBindHost) *string { return v.WafType }).(pulumi.StringPtrOutput)
+}
+
+type PolicyBindHostArrayOutput struct{ *pulumi.OutputState }
+
+func (PolicyBindHostArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]PolicyBindHost)(nil)).Elem()
+}
+
+func (o PolicyBindHostArrayOutput) ToPolicyBindHostArrayOutput() PolicyBindHostArrayOutput {
+	return o
+}
+
+func (o PolicyBindHostArrayOutput) ToPolicyBindHostArrayOutputWithContext(ctx context.Context) PolicyBindHostArrayOutput {
+	return o
+}
+
+func (o PolicyBindHostArrayOutput) Index(i pulumi.IntInput) PolicyBindHostOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) PolicyBindHost {
+		return vs[0].([]PolicyBindHost)[vs[1].(int)]
+	}).(PolicyBindHostOutput)
+}
+
 type PolicyOption struct {
-	// Indicates whether Basic Web Protection is enabled.
+	// Specifies whether the javascript anti-crawler is enabled. Defaults to **false**.
+	AntiCrawler *bool `pulumi:"antiCrawler"`
+	// Specifies whether basic web protection is enabled. Defaults to **false**.
 	BasicWebProtection *bool `pulumi:"basicWebProtection"`
-	// Indicates whether Blacklist and Whitelist is enabled.
+	// Specifies whether the blacklist and whitelist protection is enabled.
+	// Defaults to **false**.
 	Blacklist *bool `pulumi:"blacklist"`
-	// Indicates whether CC Attack Protection is enabled.
+	// Specifies whether the anti-crawler protection is enabled. Defaults to **false**.
+	BotEnable *bool `pulumi:"botEnable"`
+	// Specifies whether the cc attack protection rules are enabled.
+	// Defaults to **false**.
 	CcAttackProtection *bool `pulumi:"ccAttackProtection"`
-	// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-	Crawler *bool `pulumi:"crawler"`
-	// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+	Crawler            *bool `pulumi:"crawler"`
+	// Specifies whether the search engine is enabled. Defaults to **false**.
 	CrawlerEngine *bool `pulumi:"crawlerEngine"`
-	// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+	// Specifies whether other crawler check is enabled. Defaults to **false**.
 	CrawlerOther *bool `pulumi:"crawlerOther"`
-	// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+	// Specifies whether the anti-crawler detection is enabled. Defaults to **false**.
 	CrawlerScanner *bool `pulumi:"crawlerScanner"`
-	// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+	// Specifies whether the script tool is enabled. Defaults to **false**.
 	CrawlerScript *bool `pulumi:"crawlerScript"`
-	// Indicates whether Data Masking is enabled.
+	// Specifies whether data masking is enabled. Defaults to **false**.
 	DataMasking *bool `pulumi:"dataMasking"`
-	// Indicates whether False Alarm Masking is enabled.
+	// Specifies whether false alarm masking is enabled. Defaults to **false**.
 	FalseAlarmMasking *bool `pulumi:"falseAlarmMasking"`
-	// Indicates whether General Check in Basic Web Protection is enabled.
+	// Specifies whether the general check in basic web protection is enabled.
+	// Defaults to **false**.
 	GeneralCheck *bool `pulumi:"generalCheck"`
-	// Indicates whether Precise Protection is enabled.
+	// Specifies whether the geolocation access control is enabled.
+	// Defaults to **false**.
+	GeolocationAccessControl *bool `pulumi:"geolocationAccessControl"`
+	// Specifies whether the information leakage prevention is enabled.
+	// Defaults to **false**.
+	InformationLeakagePrevention *bool `pulumi:"informationLeakagePrevention"`
+	// Specifies whether the known attack source is enabled. Defaults to **false**.
+	KnownAttackSource *bool `pulumi:"knownAttackSource"`
+	// Specifies whether the precise protection is enabled. Defaults to **false**.
 	PreciseProtection *bool `pulumi:"preciseProtection"`
-	// Indicates whether Web Tamper Protection is enabled.
+	// Specifies whether the web tamper protection is enabled.
+	// Defaults to **false**.
 	WebTamperProtection *bool `pulumi:"webTamperProtection"`
-	// Indicates whether webshell detection in Basic Web Protection is enabled.
+	// Specifies whether the web shell detection in basic web protection is enabled.
+	// Defaults to **false**.
 	Webshell *bool `pulumi:"webshell"`
 }
 
@@ -340,33 +1994,49 @@ type PolicyOptionInput interface {
 }
 
 type PolicyOptionArgs struct {
-	// Indicates whether Basic Web Protection is enabled.
+	// Specifies whether the javascript anti-crawler is enabled. Defaults to **false**.
+	AntiCrawler pulumi.BoolPtrInput `pulumi:"antiCrawler"`
+	// Specifies whether basic web protection is enabled. Defaults to **false**.
 	BasicWebProtection pulumi.BoolPtrInput `pulumi:"basicWebProtection"`
-	// Indicates whether Blacklist and Whitelist is enabled.
+	// Specifies whether the blacklist and whitelist protection is enabled.
+	// Defaults to **false**.
 	Blacklist pulumi.BoolPtrInput `pulumi:"blacklist"`
-	// Indicates whether CC Attack Protection is enabled.
+	// Specifies whether the anti-crawler protection is enabled. Defaults to **false**.
+	BotEnable pulumi.BoolPtrInput `pulumi:"botEnable"`
+	// Specifies whether the cc attack protection rules are enabled.
+	// Defaults to **false**.
 	CcAttackProtection pulumi.BoolPtrInput `pulumi:"ccAttackProtection"`
-	// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-	Crawler pulumi.BoolPtrInput `pulumi:"crawler"`
-	// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+	Crawler            pulumi.BoolPtrInput `pulumi:"crawler"`
+	// Specifies whether the search engine is enabled. Defaults to **false**.
 	CrawlerEngine pulumi.BoolPtrInput `pulumi:"crawlerEngine"`
-	// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+	// Specifies whether other crawler check is enabled. Defaults to **false**.
 	CrawlerOther pulumi.BoolPtrInput `pulumi:"crawlerOther"`
-	// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+	// Specifies whether the anti-crawler detection is enabled. Defaults to **false**.
 	CrawlerScanner pulumi.BoolPtrInput `pulumi:"crawlerScanner"`
-	// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+	// Specifies whether the script tool is enabled. Defaults to **false**.
 	CrawlerScript pulumi.BoolPtrInput `pulumi:"crawlerScript"`
-	// Indicates whether Data Masking is enabled.
+	// Specifies whether data masking is enabled. Defaults to **false**.
 	DataMasking pulumi.BoolPtrInput `pulumi:"dataMasking"`
-	// Indicates whether False Alarm Masking is enabled.
+	// Specifies whether false alarm masking is enabled. Defaults to **false**.
 	FalseAlarmMasking pulumi.BoolPtrInput `pulumi:"falseAlarmMasking"`
-	// Indicates whether General Check in Basic Web Protection is enabled.
+	// Specifies whether the general check in basic web protection is enabled.
+	// Defaults to **false**.
 	GeneralCheck pulumi.BoolPtrInput `pulumi:"generalCheck"`
-	// Indicates whether Precise Protection is enabled.
+	// Specifies whether the geolocation access control is enabled.
+	// Defaults to **false**.
+	GeolocationAccessControl pulumi.BoolPtrInput `pulumi:"geolocationAccessControl"`
+	// Specifies whether the information leakage prevention is enabled.
+	// Defaults to **false**.
+	InformationLeakagePrevention pulumi.BoolPtrInput `pulumi:"informationLeakagePrevention"`
+	// Specifies whether the known attack source is enabled. Defaults to **false**.
+	KnownAttackSource pulumi.BoolPtrInput `pulumi:"knownAttackSource"`
+	// Specifies whether the precise protection is enabled. Defaults to **false**.
 	PreciseProtection pulumi.BoolPtrInput `pulumi:"preciseProtection"`
-	// Indicates whether Web Tamper Protection is enabled.
+	// Specifies whether the web tamper protection is enabled.
+	// Defaults to **false**.
 	WebTamperProtection pulumi.BoolPtrInput `pulumi:"webTamperProtection"`
-	// Indicates whether webshell detection in Basic Web Protection is enabled.
+	// Specifies whether the web shell detection in basic web protection is enabled.
+	// Defaults to **false**.
 	Webshell pulumi.BoolPtrInput `pulumi:"webshell"`
 }
 
@@ -421,72 +2091,103 @@ func (o PolicyOptionOutput) ToPolicyOptionOutputWithContext(ctx context.Context)
 	return o
 }
 
-// Indicates whether Basic Web Protection is enabled.
+// Specifies whether the javascript anti-crawler is enabled. Defaults to **false**.
+func (o PolicyOptionOutput) AntiCrawler() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PolicyOption) *bool { return v.AntiCrawler }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether basic web protection is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) BasicWebProtection() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.BasicWebProtection }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether Blacklist and Whitelist is enabled.
+// Specifies whether the blacklist and whitelist protection is enabled.
+// Defaults to **false**.
 func (o PolicyOptionOutput) Blacklist() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.Blacklist }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether CC Attack Protection is enabled.
+// Specifies whether the anti-crawler protection is enabled. Defaults to **false**.
+func (o PolicyOptionOutput) BotEnable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PolicyOption) *bool { return v.BotEnable }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the cc attack protection rules are enabled.
+// Defaults to **false**.
 func (o PolicyOptionOutput) CcAttackProtection() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.CcAttackProtection }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
 func (o PolicyOptionOutput) Crawler() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.Crawler }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+// Specifies whether the search engine is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) CrawlerEngine() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.CrawlerEngine }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+// Specifies whether other crawler check is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) CrawlerOther() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.CrawlerOther }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+// Specifies whether the anti-crawler detection is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) CrawlerScanner() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.CrawlerScanner }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+// Specifies whether the script tool is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) CrawlerScript() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.CrawlerScript }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether Data Masking is enabled.
+// Specifies whether data masking is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) DataMasking() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.DataMasking }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether False Alarm Masking is enabled.
+// Specifies whether false alarm masking is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) FalseAlarmMasking() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.FalseAlarmMasking }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether General Check in Basic Web Protection is enabled.
+// Specifies whether the general check in basic web protection is enabled.
+// Defaults to **false**.
 func (o PolicyOptionOutput) GeneralCheck() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.GeneralCheck }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether Precise Protection is enabled.
+// Specifies whether the geolocation access control is enabled.
+// Defaults to **false**.
+func (o PolicyOptionOutput) GeolocationAccessControl() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PolicyOption) *bool { return v.GeolocationAccessControl }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the information leakage prevention is enabled.
+// Defaults to **false**.
+func (o PolicyOptionOutput) InformationLeakagePrevention() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PolicyOption) *bool { return v.InformationLeakagePrevention }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the known attack source is enabled. Defaults to **false**.
+func (o PolicyOptionOutput) KnownAttackSource() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v PolicyOption) *bool { return v.KnownAttackSource }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether the precise protection is enabled. Defaults to **false**.
 func (o PolicyOptionOutput) PreciseProtection() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.PreciseProtection }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether Web Tamper Protection is enabled.
+// Specifies whether the web tamper protection is enabled.
+// Defaults to **false**.
 func (o PolicyOptionOutput) WebTamperProtection() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.WebTamperProtection }).(pulumi.BoolPtrOutput)
 }
 
-// Indicates whether webshell detection in Basic Web Protection is enabled.
+// Specifies whether the web shell detection in basic web protection is enabled.
+// Defaults to **false**.
 func (o PolicyOptionOutput) Webshell() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v PolicyOption) *bool { return v.Webshell }).(pulumi.BoolPtrOutput)
 }
@@ -514,31 +2215,30 @@ func (o PolicyOptionArrayOutput) Index(i pulumi.IntInput) PolicyOptionOutput {
 type GetDedicatedInstancesInstance struct {
 	// The access status of the instance. `0`: inaccessible, `1`: accessible.
 	AccessStatus int `pulumi:"accessStatus"`
-	// The available zone names for the WAF dedicated instances.
+	// The available zone name of the WAF dedicated instance.
 	AvailableZone string `pulumi:"availableZone"`
-	// The ECS cpu architecture of WAF dedicated instance.
+	// The ECS CPU architecture of WAF dedicated instance.
 	CpuArchitecture string `pulumi:"cpuArchitecture"`
 	// The flavor of the ECS used by the WAF instance.
 	EcsFlavor string `pulumi:"ecsFlavor"`
-	// The instance group ID used by the WAF dedicated instance in ELB mode.
-	GroupId string `pulumi:"groupId"`
-	// The id of WAF dedicated instance.
+	GroupId   string `pulumi:"groupId"`
+	// Specifies the ID of WAF dedicated instance.
 	Id string `pulumi:"id"`
-	// The name of WAF dedicated instance.
+	// Specifies the name of WAF dedicated instance.
 	Name string `pulumi:"name"`
 	// The running status of the instance. Values are:
 	RunStatus int `pulumi:"runStatus"`
-	// The security group of the instance. This is an array of security group ids.
+	// The security group of the instance. This is an array of security group IDs.
 	SecurityGroups []string `pulumi:"securityGroups"`
-	// The service of the instance.
+	// The ID of the ECS hosting the dedicated engine.
 	ServerId string `pulumi:"serverId"`
-	// The service ip of the instance.
+	// The service plane IP address of the dedicated WAF instance.
 	ServiceIp string `pulumi:"serviceIp"`
-	// The subnet id of WAF dedicated instance VPC.
+	// The subnet ID of WAF dedicated instance VPC.
 	SubnetId string `pulumi:"subnetId"`
-	// The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+	// Whether the dedicated WAF instance can be upgraded. `0`: Cannot be upgraded; `1`: Can be upgraded.
 	Upgradable int `pulumi:"upgradable"`
-	// The VPC id of WAF dedicated instance.
+	// The VPC ID of WAF dedicated instance.
 	VpcId string `pulumi:"vpcId"`
 }
 
@@ -556,31 +2256,30 @@ type GetDedicatedInstancesInstanceInput interface {
 type GetDedicatedInstancesInstanceArgs struct {
 	// The access status of the instance. `0`: inaccessible, `1`: accessible.
 	AccessStatus pulumi.IntInput `pulumi:"accessStatus"`
-	// The available zone names for the WAF dedicated instances.
+	// The available zone name of the WAF dedicated instance.
 	AvailableZone pulumi.StringInput `pulumi:"availableZone"`
-	// The ECS cpu architecture of WAF dedicated instance.
+	// The ECS CPU architecture of WAF dedicated instance.
 	CpuArchitecture pulumi.StringInput `pulumi:"cpuArchitecture"`
 	// The flavor of the ECS used by the WAF instance.
 	EcsFlavor pulumi.StringInput `pulumi:"ecsFlavor"`
-	// The instance group ID used by the WAF dedicated instance in ELB mode.
-	GroupId pulumi.StringInput `pulumi:"groupId"`
-	// The id of WAF dedicated instance.
+	GroupId   pulumi.StringInput `pulumi:"groupId"`
+	// Specifies the ID of WAF dedicated instance.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The name of WAF dedicated instance.
+	// Specifies the name of WAF dedicated instance.
 	Name pulumi.StringInput `pulumi:"name"`
 	// The running status of the instance. Values are:
 	RunStatus pulumi.IntInput `pulumi:"runStatus"`
-	// The security group of the instance. This is an array of security group ids.
+	// The security group of the instance. This is an array of security group IDs.
 	SecurityGroups pulumi.StringArrayInput `pulumi:"securityGroups"`
-	// The service of the instance.
+	// The ID of the ECS hosting the dedicated engine.
 	ServerId pulumi.StringInput `pulumi:"serverId"`
-	// The service ip of the instance.
+	// The service plane IP address of the dedicated WAF instance.
 	ServiceIp pulumi.StringInput `pulumi:"serviceIp"`
-	// The subnet id of WAF dedicated instance VPC.
+	// The subnet ID of WAF dedicated instance VPC.
 	SubnetId pulumi.StringInput `pulumi:"subnetId"`
-	// The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+	// Whether the dedicated WAF instance can be upgraded. `0`: Cannot be upgraded; `1`: Can be upgraded.
 	Upgradable pulumi.IntInput `pulumi:"upgradable"`
-	// The VPC id of WAF dedicated instance.
+	// The VPC ID of WAF dedicated instance.
 	VpcId pulumi.StringInput `pulumi:"vpcId"`
 }
 
@@ -640,12 +2339,12 @@ func (o GetDedicatedInstancesInstanceOutput) AccessStatus() pulumi.IntOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) int { return v.AccessStatus }).(pulumi.IntOutput)
 }
 
-// The available zone names for the WAF dedicated instances.
+// The available zone name of the WAF dedicated instance.
 func (o GetDedicatedInstancesInstanceOutput) AvailableZone() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.AvailableZone }).(pulumi.StringOutput)
 }
 
-// The ECS cpu architecture of WAF dedicated instance.
+// The ECS CPU architecture of WAF dedicated instance.
 func (o GetDedicatedInstancesInstanceOutput) CpuArchitecture() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.CpuArchitecture }).(pulumi.StringOutput)
 }
@@ -655,17 +2354,16 @@ func (o GetDedicatedInstancesInstanceOutput) EcsFlavor() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.EcsFlavor }).(pulumi.StringOutput)
 }
 
-// The instance group ID used by the WAF dedicated instance in ELB mode.
 func (o GetDedicatedInstancesInstanceOutput) GroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.GroupId }).(pulumi.StringOutput)
 }
 
-// The id of WAF dedicated instance.
+// Specifies the ID of WAF dedicated instance.
 func (o GetDedicatedInstancesInstanceOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of WAF dedicated instance.
+// Specifies the name of WAF dedicated instance.
 func (o GetDedicatedInstancesInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -675,32 +2373,32 @@ func (o GetDedicatedInstancesInstanceOutput) RunStatus() pulumi.IntOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) int { return v.RunStatus }).(pulumi.IntOutput)
 }
 
-// The security group of the instance. This is an array of security group ids.
+// The security group of the instance. This is an array of security group IDs.
 func (o GetDedicatedInstancesInstanceOutput) SecurityGroups() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) []string { return v.SecurityGroups }).(pulumi.StringArrayOutput)
 }
 
-// The service of the instance.
+// The ID of the ECS hosting the dedicated engine.
 func (o GetDedicatedInstancesInstanceOutput) ServerId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.ServerId }).(pulumi.StringOutput)
 }
 
-// The service ip of the instance.
+// The service plane IP address of the dedicated WAF instance.
 func (o GetDedicatedInstancesInstanceOutput) ServiceIp() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.ServiceIp }).(pulumi.StringOutput)
 }
 
-// The subnet id of WAF dedicated instance VPC.
+// The subnet ID of WAF dedicated instance VPC.
 func (o GetDedicatedInstancesInstanceOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.SubnetId }).(pulumi.StringOutput)
 }
 
-// The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+// Whether the dedicated WAF instance can be upgraded. `0`: Cannot be upgraded; `1`: Can be upgraded.
 func (o GetDedicatedInstancesInstanceOutput) Upgradable() pulumi.IntOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) int { return v.Upgradable }).(pulumi.IntOutput)
 }
 
-// The VPC id of WAF dedicated instance.
+// The VPC ID of WAF dedicated instance.
 func (o GetDedicatedInstancesInstanceOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesInstance) string { return v.VpcId }).(pulumi.StringOutput)
 }
@@ -726,30 +2424,18 @@ func (o GetDedicatedInstancesInstanceArrayOutput) Index(i pulumi.IntInput) GetDe
 }
 
 type GetInstanceGroupsGroup struct {
-	// The body limit of the forwarding policy.
-	BodyLimit int `pulumi:"bodyLimit"`
-	// The time for connection timeout in the forwarding policy.
+	BodyLimit          int                                       `pulumi:"bodyLimit"`
 	ConnectionTimeout  int                                       `pulumi:"connectionTimeout"`
 	DedicatedInstances []GetInstanceGroupsGroupDedicatedInstance `pulumi:"dedicatedInstances"`
-	// Description of the instance group.
-	Description string                             `pulumi:"description"`
-	DomainNames []GetInstanceGroupsGroupDomainName `pulumi:"domainNames"`
-	// The header limit of the forwarding policy.
-	HeaderLimit int `pulumi:"headerLimit"`
-	// The IDs of the ELB instances that has been bound to the instance group.
-	LoadBalancers []string `pulumi:"loadBalancers"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
-	Name string `pulumi:"name"`
-	// The time for reading timeout in the forwarding policy.
-	ReadTimeout int `pulumi:"readTimeout"`
-	// The region in which to obtain the WAF instance groups.
-	// If omitted, the provider-level region will be used.
-	Region string `pulumi:"region"`
-	// The id of the VPC that the WAF dedicated instances belongs to.
-	VpcId string `pulumi:"vpcId"`
-	// The time for writing timeout in the forwarding policy.
-	WriteTimeout int `pulumi:"writeTimeout"`
+	Description        string                                    `pulumi:"description"`
+	DomainNames        []GetInstanceGroupsGroupDomainName        `pulumi:"domainNames"`
+	HeaderLimit        int                                       `pulumi:"headerLimit"`
+	LoadBalancers      []string                                  `pulumi:"loadBalancers"`
+	Name               string                                    `pulumi:"name"`
+	ReadTimeout        int                                       `pulumi:"readTimeout"`
+	Region             string                                    `pulumi:"region"`
+	VpcId              string                                    `pulumi:"vpcId"`
+	WriteTimeout       int                                       `pulumi:"writeTimeout"`
 }
 
 // GetInstanceGroupsGroupInput is an input type that accepts GetInstanceGroupsGroupArgs and GetInstanceGroupsGroupOutput values.
@@ -764,30 +2450,18 @@ type GetInstanceGroupsGroupInput interface {
 }
 
 type GetInstanceGroupsGroupArgs struct {
-	// The body limit of the forwarding policy.
-	BodyLimit pulumi.IntInput `pulumi:"bodyLimit"`
-	// The time for connection timeout in the forwarding policy.
+	BodyLimit          pulumi.IntInput                                   `pulumi:"bodyLimit"`
 	ConnectionTimeout  pulumi.IntInput                                   `pulumi:"connectionTimeout"`
 	DedicatedInstances GetInstanceGroupsGroupDedicatedInstanceArrayInput `pulumi:"dedicatedInstances"`
-	// Description of the instance group.
-	Description pulumi.StringInput                         `pulumi:"description"`
-	DomainNames GetInstanceGroupsGroupDomainNameArrayInput `pulumi:"domainNames"`
-	// The header limit of the forwarding policy.
-	HeaderLimit pulumi.IntInput `pulumi:"headerLimit"`
-	// The IDs of the ELB instances that has been bound to the instance group.
-	LoadBalancers pulumi.StringArrayInput `pulumi:"loadBalancers"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
-	Name pulumi.StringInput `pulumi:"name"`
-	// The time for reading timeout in the forwarding policy.
-	ReadTimeout pulumi.IntInput `pulumi:"readTimeout"`
-	// The region in which to obtain the WAF instance groups.
-	// If omitted, the provider-level region will be used.
-	Region pulumi.StringInput `pulumi:"region"`
-	// The id of the VPC that the WAF dedicated instances belongs to.
-	VpcId pulumi.StringInput `pulumi:"vpcId"`
-	// The time for writing timeout in the forwarding policy.
-	WriteTimeout pulumi.IntInput `pulumi:"writeTimeout"`
+	Description        pulumi.StringInput                                `pulumi:"description"`
+	DomainNames        GetInstanceGroupsGroupDomainNameArrayInput        `pulumi:"domainNames"`
+	HeaderLimit        pulumi.IntInput                                   `pulumi:"headerLimit"`
+	LoadBalancers      pulumi.StringArrayInput                           `pulumi:"loadBalancers"`
+	Name               pulumi.StringInput                                `pulumi:"name"`
+	ReadTimeout        pulumi.IntInput                                   `pulumi:"readTimeout"`
+	Region             pulumi.StringInput                                `pulumi:"region"`
+	VpcId              pulumi.StringInput                                `pulumi:"vpcId"`
+	WriteTimeout       pulumi.IntInput                                   `pulumi:"writeTimeout"`
 }
 
 func (GetInstanceGroupsGroupArgs) ElementType() reflect.Type {
@@ -841,12 +2515,10 @@ func (o GetInstanceGroupsGroupOutput) ToGetInstanceGroupsGroupOutputWithContext(
 	return o
 }
 
-// The body limit of the forwarding policy.
 func (o GetInstanceGroupsGroupOutput) BodyLimit() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) int { return v.BodyLimit }).(pulumi.IntOutput)
 }
 
-// The time for connection timeout in the forwarding policy.
 func (o GetInstanceGroupsGroupOutput) ConnectionTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) int { return v.ConnectionTimeout }).(pulumi.IntOutput)
 }
@@ -855,7 +2527,6 @@ func (o GetInstanceGroupsGroupOutput) DedicatedInstances() GetInstanceGroupsGrou
 	return o.ApplyT(func(v GetInstanceGroupsGroup) []GetInstanceGroupsGroupDedicatedInstance { return v.DedicatedInstances }).(GetInstanceGroupsGroupDedicatedInstanceArrayOutput)
 }
 
-// Description of the instance group.
 func (o GetInstanceGroupsGroupOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) string { return v.Description }).(pulumi.StringOutput)
 }
@@ -864,39 +2535,30 @@ func (o GetInstanceGroupsGroupOutput) DomainNames() GetInstanceGroupsGroupDomain
 	return o.ApplyT(func(v GetInstanceGroupsGroup) []GetInstanceGroupsGroupDomainName { return v.DomainNames }).(GetInstanceGroupsGroupDomainNameArrayOutput)
 }
 
-// The header limit of the forwarding policy.
 func (o GetInstanceGroupsGroupOutput) HeaderLimit() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) int { return v.HeaderLimit }).(pulumi.IntOutput)
 }
 
-// The IDs of the ELB instances that has been bound to the instance group.
 func (o GetInstanceGroupsGroupOutput) LoadBalancers() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) []string { return v.LoadBalancers }).(pulumi.StringArrayOutput)
 }
 
-// The name of WAF instance group used for matching.
-// The value is not case-sensitive and supports fuzzy matching.
 func (o GetInstanceGroupsGroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// The time for reading timeout in the forwarding policy.
 func (o GetInstanceGroupsGroupOutput) ReadTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) int { return v.ReadTimeout }).(pulumi.IntOutput)
 }
 
-// The region in which to obtain the WAF instance groups.
-// If omitted, the provider-level region will be used.
 func (o GetInstanceGroupsGroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// The id of the VPC that the WAF dedicated instances belongs to.
 func (o GetInstanceGroupsGroupOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) string { return v.VpcId }).(pulumi.StringOutput)
 }
 
-// The time for writing timeout in the forwarding policy.
 func (o GetInstanceGroupsGroupOutput) WriteTimeout() pulumi.IntOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroup) int { return v.WriteTimeout }).(pulumi.IntOutput)
 }
@@ -922,9 +2584,7 @@ func (o GetInstanceGroupsGroupArrayOutput) Index(i pulumi.IntInput) GetInstanceG
 }
 
 type GetInstanceGroupsGroupDedicatedInstance struct {
-	Id string `pulumi:"id"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
+	Id   string `pulumi:"id"`
 	Name string `pulumi:"name"`
 }
 
@@ -940,9 +2600,7 @@ type GetInstanceGroupsGroupDedicatedInstanceInput interface {
 }
 
 type GetInstanceGroupsGroupDedicatedInstanceArgs struct {
-	Id pulumi.StringInput `pulumi:"id"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
+	Id   pulumi.StringInput `pulumi:"id"`
 	Name pulumi.StringInput `pulumi:"name"`
 }
 
@@ -1001,8 +2659,6 @@ func (o GetInstanceGroupsGroupDedicatedInstanceOutput) Id() pulumi.StringOutput 
 	return o.ApplyT(func(v GetInstanceGroupsGroupDedicatedInstance) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of WAF instance group used for matching.
-// The value is not case-sensitive and supports fuzzy matching.
 func (o GetInstanceGroupsGroupDedicatedInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroupDedicatedInstance) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1028,9 +2684,7 @@ func (o GetInstanceGroupsGroupDedicatedInstanceArrayOutput) Index(i pulumi.IntIn
 }
 
 type GetInstanceGroupsGroupDomainName struct {
-	Id string `pulumi:"id"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
+	Id   string `pulumi:"id"`
 	Name string `pulumi:"name"`
 }
 
@@ -1046,9 +2700,7 @@ type GetInstanceGroupsGroupDomainNameInput interface {
 }
 
 type GetInstanceGroupsGroupDomainNameArgs struct {
-	Id pulumi.StringInput `pulumi:"id"`
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
+	Id   pulumi.StringInput `pulumi:"id"`
 	Name pulumi.StringInput `pulumi:"name"`
 }
 
@@ -1107,8 +2759,6 @@ func (o GetInstanceGroupsGroupDomainNameOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroupDomainName) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of WAF instance group used for matching.
-// The value is not case-sensitive and supports fuzzy matching.
 func (o GetInstanceGroupsGroupDomainNameOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsGroupDomainName) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1134,27 +2784,43 @@ func (o GetInstanceGroupsGroupDomainNameArrayOutput) Index(i pulumi.IntInput) Ge
 }
 
 type GetPoliciesPolicy struct {
-	// The detection mode in Precise Protection.
-	// + `true`: full detection. Full detection finishes all threat detections before blocking requests that meet Precise
-	//   Protection specified conditions.
-	// + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-	//   meets Precise Protection specified conditions.
+	// The protection switches. The object structure is documented below.
+	BindHosts []GetPoliciesPolicyBindHost `pulumi:"bindHosts"`
+	// The deep inspection in basic web protection.
+	DeepInspection bool `pulumi:"deepInspection"`
+	// The detection mode in precise protection.
+	// + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+	//   checks and blocks the request immediately.
+	// + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+	//   request immediately. Instead, it blocks the requests until other checks are finished.
 	FullDetection bool `pulumi:"fullDetection"`
-	// The WAF Policy ID.
+	// The header inspection in basic web protection.
+	HeaderInspection bool `pulumi:"headerInspection"`
+	// The domain name ID.
 	Id string `pulumi:"id"`
-	// Specifies the protection level. Valid values are:
-	// + `1`: low
-	// + `2`: medium
-	// + `3`: high
+	// The protection level. Valid values are:
+	// + **1**: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+	//   false alarms have been reported, this value is recommended.
+	// + **2**: Medium. This protection level meets web protection requirements in most scenarios.
+	// + **3**: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+	//   complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+	//   and Druid SQL injection attacks.
 	Level int `pulumi:"level"`
-	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+	// Specifies the policy name used for matching. The value is case-sensitive and supports
+	// fuzzy matching.
 	Name string `pulumi:"name"`
 	// The protection switches. The options object structure is documented below.
 	Options []GetPoliciesPolicyOption `pulumi:"options"`
-	// Specifies the protective action after a rule is matched. Valid values are:
-	// + `block`: WAF blocks and logs detected attacks.
-	// + `log`: WAF logs detected attacks only.
+	// The protective action after a rule is matched. Valid values are:
+	// + **block**: WAF blocks and logs detected attacks.
+	// + **log**: WAF logs detected attacks only.
 	ProtectionMode string `pulumi:"protectionMode"`
+	// The protective actions for each rule in anti-crawler protection. Valid values are:
+	// + **block**: WAF blocks discovered attacks.
+	// + **log**: WAF only logs discovered attacks.
+	RobotAction string `pulumi:"robotAction"`
+	// The shiro decryption check in basic web protection.
+	ShiroDecryptionCheck bool `pulumi:"shiroDecryptionCheck"`
 }
 
 // GetPoliciesPolicyInput is an input type that accepts GetPoliciesPolicyArgs and GetPoliciesPolicyOutput values.
@@ -1169,27 +2835,43 @@ type GetPoliciesPolicyInput interface {
 }
 
 type GetPoliciesPolicyArgs struct {
-	// The detection mode in Precise Protection.
-	// + `true`: full detection. Full detection finishes all threat detections before blocking requests that meet Precise
-	//   Protection specified conditions.
-	// + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-	//   meets Precise Protection specified conditions.
+	// The protection switches. The object structure is documented below.
+	BindHosts GetPoliciesPolicyBindHostArrayInput `pulumi:"bindHosts"`
+	// The deep inspection in basic web protection.
+	DeepInspection pulumi.BoolInput `pulumi:"deepInspection"`
+	// The detection mode in precise protection.
+	// + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+	//   checks and blocks the request immediately.
+	// + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+	//   request immediately. Instead, it blocks the requests until other checks are finished.
 	FullDetection pulumi.BoolInput `pulumi:"fullDetection"`
-	// The WAF Policy ID.
+	// The header inspection in basic web protection.
+	HeaderInspection pulumi.BoolInput `pulumi:"headerInspection"`
+	// The domain name ID.
 	Id pulumi.StringInput `pulumi:"id"`
-	// Specifies the protection level. Valid values are:
-	// + `1`: low
-	// + `2`: medium
-	// + `3`: high
+	// The protection level. Valid values are:
+	// + **1**: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+	//   false alarms have been reported, this value is recommended.
+	// + **2**: Medium. This protection level meets web protection requirements in most scenarios.
+	// + **3**: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+	//   complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+	//   and Druid SQL injection attacks.
 	Level pulumi.IntInput `pulumi:"level"`
-	// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+	// Specifies the policy name used for matching. The value is case-sensitive and supports
+	// fuzzy matching.
 	Name pulumi.StringInput `pulumi:"name"`
 	// The protection switches. The options object structure is documented below.
 	Options GetPoliciesPolicyOptionArrayInput `pulumi:"options"`
-	// Specifies the protective action after a rule is matched. Valid values are:
-	// + `block`: WAF blocks and logs detected attacks.
-	// + `log`: WAF logs detected attacks only.
+	// The protective action after a rule is matched. Valid values are:
+	// + **block**: WAF blocks and logs detected attacks.
+	// + **log**: WAF logs detected attacks only.
 	ProtectionMode pulumi.StringInput `pulumi:"protectionMode"`
+	// The protective actions for each rule in anti-crawler protection. Valid values are:
+	// + **block**: WAF blocks discovered attacks.
+	// + **log**: WAF only logs discovered attacks.
+	RobotAction pulumi.StringInput `pulumi:"robotAction"`
+	// The shiro decryption check in basic web protection.
+	ShiroDecryptionCheck pulumi.BoolInput `pulumi:"shiroDecryptionCheck"`
 }
 
 func (GetPoliciesPolicyArgs) ElementType() reflect.Type {
@@ -1243,29 +2925,48 @@ func (o GetPoliciesPolicyOutput) ToGetPoliciesPolicyOutputWithContext(ctx contex
 	return o
 }
 
-// The detection mode in Precise Protection.
-//   - `true`: full detection. Full detection finishes all threat detections before blocking requests that meet Precise
-//     Protection specified conditions.
-//   - `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-//     meets Precise Protection specified conditions.
+// The protection switches. The object structure is documented below.
+func (o GetPoliciesPolicyOutput) BindHosts() GetPoliciesPolicyBindHostArrayOutput {
+	return o.ApplyT(func(v GetPoliciesPolicy) []GetPoliciesPolicyBindHost { return v.BindHosts }).(GetPoliciesPolicyBindHostArrayOutput)
+}
+
+// The deep inspection in basic web protection.
+func (o GetPoliciesPolicyOutput) DeepInspection() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicy) bool { return v.DeepInspection }).(pulumi.BoolOutput)
+}
+
+// The detection mode in precise protection.
+//   - **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+//     checks and blocks the request immediately.
+//   - **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+//     request immediately. Instead, it blocks the requests until other checks are finished.
 func (o GetPoliciesPolicyOutput) FullDetection() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) bool { return v.FullDetection }).(pulumi.BoolOutput)
 }
 
-// The WAF Policy ID.
+// The header inspection in basic web protection.
+func (o GetPoliciesPolicyOutput) HeaderInspection() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicy) bool { return v.HeaderInspection }).(pulumi.BoolOutput)
+}
+
+// The domain name ID.
 func (o GetPoliciesPolicyOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// Specifies the protection level. Valid values are:
-// + `1`: low
-// + `2`: medium
-// + `3`: high
+// The protection level. Valid values are:
+//   - **1**: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+//     false alarms have been reported, this value is recommended.
+//   - **2**: Medium. This protection level meets web protection requirements in most scenarios.
+//   - **3**: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+//     complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+//     and Druid SQL injection attacks.
 func (o GetPoliciesPolicyOutput) Level() pulumi.IntOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) int { return v.Level }).(pulumi.IntOutput)
 }
 
-// Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+// Specifies the policy name used for matching. The value is case-sensitive and supports
+// fuzzy matching.
 func (o GetPoliciesPolicyOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1275,11 +2976,23 @@ func (o GetPoliciesPolicyOutput) Options() GetPoliciesPolicyOptionArrayOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) []GetPoliciesPolicyOption { return v.Options }).(GetPoliciesPolicyOptionArrayOutput)
 }
 
-// Specifies the protective action after a rule is matched. Valid values are:
-// + `block`: WAF blocks and logs detected attacks.
-// + `log`: WAF logs detected attacks only.
+// The protective action after a rule is matched. Valid values are:
+// + **block**: WAF blocks and logs detected attacks.
+// + **log**: WAF logs detected attacks only.
 func (o GetPoliciesPolicyOutput) ProtectionMode() pulumi.StringOutput {
 	return o.ApplyT(func(v GetPoliciesPolicy) string { return v.ProtectionMode }).(pulumi.StringOutput)
+}
+
+// The protective actions for each rule in anti-crawler protection. Valid values are:
+// + **block**: WAF blocks discovered attacks.
+// + **log**: WAF only logs discovered attacks.
+func (o GetPoliciesPolicyOutput) RobotAction() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPoliciesPolicy) string { return v.RobotAction }).(pulumi.StringOutput)
+}
+
+// The shiro decryption check in basic web protection.
+func (o GetPoliciesPolicyOutput) ShiroDecryptionCheck() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicy) bool { return v.ShiroDecryptionCheck }).(pulumi.BoolOutput)
 }
 
 type GetPoliciesPolicyArrayOutput struct{ *pulumi.OutputState }
@@ -1302,34 +3015,170 @@ func (o GetPoliciesPolicyArrayOutput) Index(i pulumi.IntInput) GetPoliciesPolicy
 	}).(GetPoliciesPolicyOutput)
 }
 
+type GetPoliciesPolicyBindHost struct {
+	// The domain name.
+	Hostname string `pulumi:"hostname"`
+	// The domain name ID.
+	Id string `pulumi:"id"`
+	// The special domain name mode. This attribute is only valid for dedicated mode.
+	Mode string `pulumi:"mode"`
+	// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+	// cloud WAF or **premium** for dedicated WAF instances.
+	WafType string `pulumi:"wafType"`
+}
+
+// GetPoliciesPolicyBindHostInput is an input type that accepts GetPoliciesPolicyBindHostArgs and GetPoliciesPolicyBindHostOutput values.
+// You can construct a concrete instance of `GetPoliciesPolicyBindHostInput` via:
+//
+//	GetPoliciesPolicyBindHostArgs{...}
+type GetPoliciesPolicyBindHostInput interface {
+	pulumi.Input
+
+	ToGetPoliciesPolicyBindHostOutput() GetPoliciesPolicyBindHostOutput
+	ToGetPoliciesPolicyBindHostOutputWithContext(context.Context) GetPoliciesPolicyBindHostOutput
+}
+
+type GetPoliciesPolicyBindHostArgs struct {
+	// The domain name.
+	Hostname pulumi.StringInput `pulumi:"hostname"`
+	// The domain name ID.
+	Id pulumi.StringInput `pulumi:"id"`
+	// The special domain name mode. This attribute is only valid for dedicated mode.
+	Mode pulumi.StringInput `pulumi:"mode"`
+	// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+	// cloud WAF or **premium** for dedicated WAF instances.
+	WafType pulumi.StringInput `pulumi:"wafType"`
+}
+
+func (GetPoliciesPolicyBindHostArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPoliciesPolicyBindHost)(nil)).Elem()
+}
+
+func (i GetPoliciesPolicyBindHostArgs) ToGetPoliciesPolicyBindHostOutput() GetPoliciesPolicyBindHostOutput {
+	return i.ToGetPoliciesPolicyBindHostOutputWithContext(context.Background())
+}
+
+func (i GetPoliciesPolicyBindHostArgs) ToGetPoliciesPolicyBindHostOutputWithContext(ctx context.Context) GetPoliciesPolicyBindHostOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPoliciesPolicyBindHostOutput)
+}
+
+// GetPoliciesPolicyBindHostArrayInput is an input type that accepts GetPoliciesPolicyBindHostArray and GetPoliciesPolicyBindHostArrayOutput values.
+// You can construct a concrete instance of `GetPoliciesPolicyBindHostArrayInput` via:
+//
+//	GetPoliciesPolicyBindHostArray{ GetPoliciesPolicyBindHostArgs{...} }
+type GetPoliciesPolicyBindHostArrayInput interface {
+	pulumi.Input
+
+	ToGetPoliciesPolicyBindHostArrayOutput() GetPoliciesPolicyBindHostArrayOutput
+	ToGetPoliciesPolicyBindHostArrayOutputWithContext(context.Context) GetPoliciesPolicyBindHostArrayOutput
+}
+
+type GetPoliciesPolicyBindHostArray []GetPoliciesPolicyBindHostInput
+
+func (GetPoliciesPolicyBindHostArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPoliciesPolicyBindHost)(nil)).Elem()
+}
+
+func (i GetPoliciesPolicyBindHostArray) ToGetPoliciesPolicyBindHostArrayOutput() GetPoliciesPolicyBindHostArrayOutput {
+	return i.ToGetPoliciesPolicyBindHostArrayOutputWithContext(context.Background())
+}
+
+func (i GetPoliciesPolicyBindHostArray) ToGetPoliciesPolicyBindHostArrayOutputWithContext(ctx context.Context) GetPoliciesPolicyBindHostArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetPoliciesPolicyBindHostArrayOutput)
+}
+
+type GetPoliciesPolicyBindHostOutput struct{ *pulumi.OutputState }
+
+func (GetPoliciesPolicyBindHostOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetPoliciesPolicyBindHost)(nil)).Elem()
+}
+
+func (o GetPoliciesPolicyBindHostOutput) ToGetPoliciesPolicyBindHostOutput() GetPoliciesPolicyBindHostOutput {
+	return o
+}
+
+func (o GetPoliciesPolicyBindHostOutput) ToGetPoliciesPolicyBindHostOutputWithContext(ctx context.Context) GetPoliciesPolicyBindHostOutput {
+	return o
+}
+
+// The domain name.
+func (o GetPoliciesPolicyBindHostOutput) Hostname() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyBindHost) string { return v.Hostname }).(pulumi.StringOutput)
+}
+
+// The domain name ID.
+func (o GetPoliciesPolicyBindHostOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyBindHost) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// The special domain name mode. This attribute is only valid for dedicated mode.
+func (o GetPoliciesPolicyBindHostOutput) Mode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyBindHost) string { return v.Mode }).(pulumi.StringOutput)
+}
+
+// The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+// cloud WAF or **premium** for dedicated WAF instances.
+func (o GetPoliciesPolicyBindHostOutput) WafType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyBindHost) string { return v.WafType }).(pulumi.StringOutput)
+}
+
+type GetPoliciesPolicyBindHostArrayOutput struct{ *pulumi.OutputState }
+
+func (GetPoliciesPolicyBindHostArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetPoliciesPolicyBindHost)(nil)).Elem()
+}
+
+func (o GetPoliciesPolicyBindHostArrayOutput) ToGetPoliciesPolicyBindHostArrayOutput() GetPoliciesPolicyBindHostArrayOutput {
+	return o
+}
+
+func (o GetPoliciesPolicyBindHostArrayOutput) ToGetPoliciesPolicyBindHostArrayOutputWithContext(ctx context.Context) GetPoliciesPolicyBindHostArrayOutput {
+	return o
+}
+
+func (o GetPoliciesPolicyBindHostArrayOutput) Index(i pulumi.IntInput) GetPoliciesPolicyBindHostOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetPoliciesPolicyBindHost {
+		return vs[0].([]GetPoliciesPolicyBindHost)[vs[1].(int)]
+	}).(GetPoliciesPolicyBindHostOutput)
+}
+
 type GetPoliciesPolicyOption struct {
+	// Indicates whether the javascript anti-crawler is enabled.
+	AntiCrawler bool `pulumi:"antiCrawler"`
 	// Indicates whether Basic Web Protection is enabled.
 	BasicWebProtection bool `pulumi:"basicWebProtection"`
-	// Indicates whether Blacklist and Whitelist is enabled.
+	// Indicates whether the blacklist and whitelist protection is enabled.
 	Blacklist bool `pulumi:"blacklist"`
-	// Indicates whether CC Attack Protection is enabled.
+	// Indicates whether the anti-crawler protection is enabled.
+	BotEnable bool `pulumi:"botEnable"`
+	// Indicates whether the cc attack protection rules are enabled.
 	CcAttackProtection bool `pulumi:"ccAttackProtection"`
-	// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-	Crawler bool `pulumi:"crawler"`
-	// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+	Crawler            bool `pulumi:"crawler"`
+	// Indicates whether the search engine is enabled.
 	CrawlerEngine bool `pulumi:"crawlerEngine"`
-	// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+	// Indicates whether other crawler check is enabled.
 	CrawlerOther bool `pulumi:"crawlerOther"`
-	// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+	// Indicates whether the anti-crawler detection is enabled.
 	CrawlerScanner bool `pulumi:"crawlerScanner"`
-	// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+	// Indicates whether the script tool is enabled.
 	CrawlerScript bool `pulumi:"crawlerScript"`
-	// Indicates whether Data Masking is enabled.
+	// Indicates whether data masking is enabled.
 	DataMasking bool `pulumi:"dataMasking"`
-	// Indicates whether False Alarm Masking is enabled.
+	// Indicates whether false alarm masking is enabled.
 	FalseAlarmMasking bool `pulumi:"falseAlarmMasking"`
 	// Indicates whether General Check in Basic Web Protection is enabled.
 	GeneralCheck bool `pulumi:"generalCheck"`
-	// Indicates whether Precise Protection is enabled.
+	// Indicates whether the geolocation access control is enabled.
+	GeolocationAccessControl bool `pulumi:"geolocationAccessControl"`
+	// Indicates whether the information leakage prevention is enabled.
+	InformationLeakagePrevention bool `pulumi:"informationLeakagePrevention"`
+	// Indicates whether the known attack source is enabled.
+	KnownAttackSource bool `pulumi:"knownAttackSource"`
+	// Indicates whether the precise protection is enabled.
 	PreciseProtection bool `pulumi:"preciseProtection"`
-	// Indicates whether Web Tamper Protection is enabled.
+	// Indicates whether the web tamper protection is enabled.
 	WebTamperProtection bool `pulumi:"webTamperProtection"`
-	// Indicates whether webshell detection in Basic Web Protection is enabled.
+	// Indicates whether the web shell detection in basic web protection is enabled.
 	Webshell bool `pulumi:"webshell"`
 }
 
@@ -1345,33 +3194,42 @@ type GetPoliciesPolicyOptionInput interface {
 }
 
 type GetPoliciesPolicyOptionArgs struct {
+	// Indicates whether the javascript anti-crawler is enabled.
+	AntiCrawler pulumi.BoolInput `pulumi:"antiCrawler"`
 	// Indicates whether Basic Web Protection is enabled.
 	BasicWebProtection pulumi.BoolInput `pulumi:"basicWebProtection"`
-	// Indicates whether Blacklist and Whitelist is enabled.
+	// Indicates whether the blacklist and whitelist protection is enabled.
 	Blacklist pulumi.BoolInput `pulumi:"blacklist"`
-	// Indicates whether CC Attack Protection is enabled.
+	// Indicates whether the anti-crawler protection is enabled.
+	BotEnable pulumi.BoolInput `pulumi:"botEnable"`
+	// Indicates whether the cc attack protection rules are enabled.
 	CcAttackProtection pulumi.BoolInput `pulumi:"ccAttackProtection"`
-	// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-	Crawler pulumi.BoolInput `pulumi:"crawler"`
-	// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+	Crawler            pulumi.BoolInput `pulumi:"crawler"`
+	// Indicates whether the search engine is enabled.
 	CrawlerEngine pulumi.BoolInput `pulumi:"crawlerEngine"`
-	// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+	// Indicates whether other crawler check is enabled.
 	CrawlerOther pulumi.BoolInput `pulumi:"crawlerOther"`
-	// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+	// Indicates whether the anti-crawler detection is enabled.
 	CrawlerScanner pulumi.BoolInput `pulumi:"crawlerScanner"`
-	// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+	// Indicates whether the script tool is enabled.
 	CrawlerScript pulumi.BoolInput `pulumi:"crawlerScript"`
-	// Indicates whether Data Masking is enabled.
+	// Indicates whether data masking is enabled.
 	DataMasking pulumi.BoolInput `pulumi:"dataMasking"`
-	// Indicates whether False Alarm Masking is enabled.
+	// Indicates whether false alarm masking is enabled.
 	FalseAlarmMasking pulumi.BoolInput `pulumi:"falseAlarmMasking"`
 	// Indicates whether General Check in Basic Web Protection is enabled.
 	GeneralCheck pulumi.BoolInput `pulumi:"generalCheck"`
-	// Indicates whether Precise Protection is enabled.
+	// Indicates whether the geolocation access control is enabled.
+	GeolocationAccessControl pulumi.BoolInput `pulumi:"geolocationAccessControl"`
+	// Indicates whether the information leakage prevention is enabled.
+	InformationLeakagePrevention pulumi.BoolInput `pulumi:"informationLeakagePrevention"`
+	// Indicates whether the known attack source is enabled.
+	KnownAttackSource pulumi.BoolInput `pulumi:"knownAttackSource"`
+	// Indicates whether the precise protection is enabled.
 	PreciseProtection pulumi.BoolInput `pulumi:"preciseProtection"`
-	// Indicates whether Web Tamper Protection is enabled.
+	// Indicates whether the web tamper protection is enabled.
 	WebTamperProtection pulumi.BoolInput `pulumi:"webTamperProtection"`
-	// Indicates whether webshell detection in Basic Web Protection is enabled.
+	// Indicates whether the web shell detection in basic web protection is enabled.
 	Webshell pulumi.BoolInput `pulumi:"webshell"`
 }
 
@@ -1426,52 +3284,61 @@ func (o GetPoliciesPolicyOptionOutput) ToGetPoliciesPolicyOptionOutputWithContex
 	return o
 }
 
+// Indicates whether the javascript anti-crawler is enabled.
+func (o GetPoliciesPolicyOptionOutput) AntiCrawler() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.AntiCrawler }).(pulumi.BoolOutput)
+}
+
 // Indicates whether Basic Web Protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) BasicWebProtection() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.BasicWebProtection }).(pulumi.BoolOutput)
 }
 
-// Indicates whether Blacklist and Whitelist is enabled.
+// Indicates whether the blacklist and whitelist protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) Blacklist() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.Blacklist }).(pulumi.BoolOutput)
 }
 
-// Indicates whether CC Attack Protection is enabled.
+// Indicates whether the anti-crawler protection is enabled.
+func (o GetPoliciesPolicyOptionOutput) BotEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.BotEnable }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the cc attack protection rules are enabled.
 func (o GetPoliciesPolicyOptionOutput) CcAttackProtection() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.CcAttackProtection }).(pulumi.BoolOutput)
 }
 
-// Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) Crawler() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.Crawler }).(pulumi.BoolOutput)
 }
 
-// Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+// Indicates whether the search engine is enabled.
 func (o GetPoliciesPolicyOptionOutput) CrawlerEngine() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.CrawlerEngine }).(pulumi.BoolOutput)
 }
 
-// Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+// Indicates whether other crawler check is enabled.
 func (o GetPoliciesPolicyOptionOutput) CrawlerOther() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.CrawlerOther }).(pulumi.BoolOutput)
 }
 
-// Indicates whether the Scanner switch in Basic Web Protection is enabled.
+// Indicates whether the anti-crawler detection is enabled.
 func (o GetPoliciesPolicyOptionOutput) CrawlerScanner() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.CrawlerScanner }).(pulumi.BoolOutput)
 }
 
-// Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+// Indicates whether the script tool is enabled.
 func (o GetPoliciesPolicyOptionOutput) CrawlerScript() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.CrawlerScript }).(pulumi.BoolOutput)
 }
 
-// Indicates whether Data Masking is enabled.
+// Indicates whether data masking is enabled.
 func (o GetPoliciesPolicyOptionOutput) DataMasking() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.DataMasking }).(pulumi.BoolOutput)
 }
 
-// Indicates whether False Alarm Masking is enabled.
+// Indicates whether false alarm masking is enabled.
 func (o GetPoliciesPolicyOptionOutput) FalseAlarmMasking() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.FalseAlarmMasking }).(pulumi.BoolOutput)
 }
@@ -1481,17 +3348,32 @@ func (o GetPoliciesPolicyOptionOutput) GeneralCheck() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.GeneralCheck }).(pulumi.BoolOutput)
 }
 
-// Indicates whether Precise Protection is enabled.
+// Indicates whether the geolocation access control is enabled.
+func (o GetPoliciesPolicyOptionOutput) GeolocationAccessControl() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.GeolocationAccessControl }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the information leakage prevention is enabled.
+func (o GetPoliciesPolicyOptionOutput) InformationLeakagePrevention() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.InformationLeakagePrevention }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the known attack source is enabled.
+func (o GetPoliciesPolicyOptionOutput) KnownAttackSource() pulumi.BoolOutput {
+	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.KnownAttackSource }).(pulumi.BoolOutput)
+}
+
+// Indicates whether the precise protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) PreciseProtection() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.PreciseProtection }).(pulumi.BoolOutput)
 }
 
-// Indicates whether Web Tamper Protection is enabled.
+// Indicates whether the web tamper protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) WebTamperProtection() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.WebTamperProtection }).(pulumi.BoolOutput)
 }
 
-// Indicates whether webshell detection in Basic Web Protection is enabled.
+// Indicates whether the web shell detection in basic web protection is enabled.
 func (o GetPoliciesPolicyOptionOutput) Webshell() pulumi.BoolOutput {
 	return o.ApplyT(func(v GetPoliciesPolicyOption) bool { return v.Webshell }).(pulumi.BoolOutput)
 }
@@ -1523,9 +3405,9 @@ type GetReferenceTablesTable struct {
 	CreationTime string `pulumi:"creationTime"`
 	// The description of the reference table.
 	Description string `pulumi:"description"`
-	// The id of the reference table.
+	// The ID of the reference table.
 	Id string `pulumi:"id"`
-	// The name of the reference table. The value is case sensitive and matches exactly.
+	// Specifies the name of the reference table. The value is case-sensitive and matches exactly.
 	Name string `pulumi:"name"`
 	// The type of the reference table, The options are: `url`, `user-agent`, `ip`, `params`, `cookie`, `referer`
 	// and `header`.
@@ -1550,9 +3432,9 @@ type GetReferenceTablesTableArgs struct {
 	CreationTime pulumi.StringInput `pulumi:"creationTime"`
 	// The description of the reference table.
 	Description pulumi.StringInput `pulumi:"description"`
-	// The id of the reference table.
+	// The ID of the reference table.
 	Id pulumi.StringInput `pulumi:"id"`
-	// The name of the reference table. The value is case sensitive and matches exactly.
+	// Specifies the name of the reference table. The value is case-sensitive and matches exactly.
 	Name pulumi.StringInput `pulumi:"name"`
 	// The type of the reference table, The options are: `url`, `user-agent`, `ip`, `params`, `cookie`, `referer`
 	// and `header`.
@@ -1625,12 +3507,12 @@ func (o GetReferenceTablesTableOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v GetReferenceTablesTable) string { return v.Description }).(pulumi.StringOutput)
 }
 
-// The id of the reference table.
+// The ID of the reference table.
 func (o GetReferenceTablesTableOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetReferenceTablesTable) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The name of the reference table. The value is case sensitive and matches exactly.
+// Specifies the name of the reference table. The value is case-sensitive and matches exactly.
 func (o GetReferenceTablesTableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetReferenceTablesTable) string { return v.Name }).(pulumi.StringOutput)
 }
@@ -1662,10 +3544,26 @@ func (o GetReferenceTablesTableArrayOutput) Index(i pulumi.IntInput) GetReferenc
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainConnectionProtectionInput)(nil)).Elem(), DedicatedDomainConnectionProtectionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainConnectionProtectionPtrInput)(nil)).Elem(), DedicatedDomainConnectionProtectionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainCustomPageInput)(nil)).Elem(), DedicatedDomainCustomPageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainCustomPagePtrInput)(nil)).Elem(), DedicatedDomainCustomPageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainServerInput)(nil)).Elem(), DedicatedDomainServerArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainServerArrayInput)(nil)).Elem(), DedicatedDomainServerArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainTimeoutSettingsInput)(nil)).Elem(), DedicatedDomainTimeoutSettingsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainTimeoutSettingsPtrInput)(nil)).Elem(), DedicatedDomainTimeoutSettingsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainTrafficMarkInput)(nil)).Elem(), DedicatedDomainTrafficMarkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DedicatedDomainTrafficMarkPtrInput)(nil)).Elem(), DedicatedDomainTrafficMarkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainCustomPageInput)(nil)).Elem(), DomainCustomPageArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainCustomPagePtrInput)(nil)).Elem(), DomainCustomPageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainServerInput)(nil)).Elem(), DomainServerArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DomainServerArrayInput)(nil)).Elem(), DomainServerArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainTimeoutSettingsInput)(nil)).Elem(), DomainTimeoutSettingsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainTimeoutSettingsPtrInput)(nil)).Elem(), DomainTimeoutSettingsArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainTrafficMarkInput)(nil)).Elem(), DomainTrafficMarkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*DomainTrafficMarkPtrInput)(nil)).Elem(), DomainTrafficMarkArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PolicyBindHostInput)(nil)).Elem(), PolicyBindHostArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PolicyBindHostArrayInput)(nil)).Elem(), PolicyBindHostArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PolicyOptionInput)(nil)).Elem(), PolicyOptionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PolicyOptionArrayInput)(nil)).Elem(), PolicyOptionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetDedicatedInstancesInstanceInput)(nil)).Elem(), GetDedicatedInstancesInstanceArgs{})
@@ -1678,14 +3576,32 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstanceGroupsGroupDomainNameArrayInput)(nil)).Elem(), GetInstanceGroupsGroupDomainNameArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyInput)(nil)).Elem(), GetPoliciesPolicyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyArrayInput)(nil)).Elem(), GetPoliciesPolicyArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyBindHostInput)(nil)).Elem(), GetPoliciesPolicyBindHostArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyBindHostArrayInput)(nil)).Elem(), GetPoliciesPolicyBindHostArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyOptionInput)(nil)).Elem(), GetPoliciesPolicyOptionArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetPoliciesPolicyOptionArrayInput)(nil)).Elem(), GetPoliciesPolicyOptionArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetReferenceTablesTableInput)(nil)).Elem(), GetReferenceTablesTableArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetReferenceTablesTableArrayInput)(nil)).Elem(), GetReferenceTablesTableArray{})
+	pulumi.RegisterOutputType(DedicatedDomainConnectionProtectionOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainConnectionProtectionPtrOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainCustomPageOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainCustomPagePtrOutput{})
 	pulumi.RegisterOutputType(DedicatedDomainServerOutput{})
 	pulumi.RegisterOutputType(DedicatedDomainServerArrayOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainTimeoutSettingsOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainTimeoutSettingsPtrOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainTrafficMarkOutput{})
+	pulumi.RegisterOutputType(DedicatedDomainTrafficMarkPtrOutput{})
+	pulumi.RegisterOutputType(DomainCustomPageOutput{})
+	pulumi.RegisterOutputType(DomainCustomPagePtrOutput{})
 	pulumi.RegisterOutputType(DomainServerOutput{})
 	pulumi.RegisterOutputType(DomainServerArrayOutput{})
+	pulumi.RegisterOutputType(DomainTimeoutSettingsOutput{})
+	pulumi.RegisterOutputType(DomainTimeoutSettingsPtrOutput{})
+	pulumi.RegisterOutputType(DomainTrafficMarkOutput{})
+	pulumi.RegisterOutputType(DomainTrafficMarkPtrOutput{})
+	pulumi.RegisterOutputType(PolicyBindHostOutput{})
+	pulumi.RegisterOutputType(PolicyBindHostArrayOutput{})
 	pulumi.RegisterOutputType(PolicyOptionOutput{})
 	pulumi.RegisterOutputType(PolicyOptionArrayOutput{})
 	pulumi.RegisterOutputType(GetDedicatedInstancesInstanceOutput{})
@@ -1698,6 +3614,8 @@ func init() {
 	pulumi.RegisterOutputType(GetInstanceGroupsGroupDomainNameArrayOutput{})
 	pulumi.RegisterOutputType(GetPoliciesPolicyOutput{})
 	pulumi.RegisterOutputType(GetPoliciesPolicyArrayOutput{})
+	pulumi.RegisterOutputType(GetPoliciesPolicyBindHostOutput{})
+	pulumi.RegisterOutputType(GetPoliciesPolicyBindHostArrayOutput{})
 	pulumi.RegisterOutputType(GetPoliciesPolicyOptionOutput{})
 	pulumi.RegisterOutputType(GetPoliciesPolicyOptionArrayOutput{})
 	pulumi.RegisterOutputType(GetReferenceTablesTableOutput{})

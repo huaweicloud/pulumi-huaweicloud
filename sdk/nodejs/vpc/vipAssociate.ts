@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Vip associate can be imported using the `vip_id` and port IDs separated by slashes (no limit on the number of port IDs), e.g.
+ * Vip associate can be imported using the `vip_id` and port IDs separated by slashes (no limit on the number of port IDs), e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/vipAssociate:VipAssociate vip_associated vip_id/port1_id/port2_id

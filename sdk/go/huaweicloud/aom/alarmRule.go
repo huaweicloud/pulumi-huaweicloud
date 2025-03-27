@@ -57,11 +57,11 @@ import (
 //
 // ## Import
 //
-// AOM alarm rules can be imported using the `id`, e.g.
+// AOM alarm rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule 966746116613832710
+//	$ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule <id>
 //
 // ```
 type AlarmRule struct {
@@ -75,21 +75,21 @@ type AlarmRule struct {
 	AlarmActions pulumi.StringArrayOutput `pulumi:"alarmActions"`
 	// Indicates whether the alarm rule is enabled.
 	AlarmEnabled pulumi.BoolOutput `pulumi:"alarmEnabled"`
-	// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+	// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-	// The default value is **2**.
+	// The default value is `2`.
 	AlarmLevel pulumi.IntPtrOutput `pulumi:"alarmLevel"`
 	// Specifies the comparison condition of alarm thresholds.
 	// The value can be **>**, **=**, **<**, **>=** or **<=**.
 	ComparisonOperator pulumi.StringOutput `pulumi:"comparisonOperator"`
 	// Specifies the description of the alarm rule.
-	// The value can be a string of 0 to 1000 characters.
+	// The value can be a string of `0` to `1,000` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the list of metric dimensions. The structure is described below.
 	// Changing this creates a new resource.
 	Dimensions AlarmRuleDimensionArrayOutput `pulumi:"dimensions"`
 	// Specifies the alarm checking evaluation periods.
-	// The value can be **1**, **2**, **3**, **4** and **5**.
+	// The value can be `1`, `2`, `3`, `4` and `5`.
 	EvaluationPeriods pulumi.IntOutput `pulumi:"evaluationPeriods"`
 	// Specifies the action triggered when the data is not enough.
 	// This is a list of strings. Changing this creates a new resource.
@@ -118,7 +118,9 @@ type AlarmRule struct {
 	Statistic pulumi.StringOutput `pulumi:"statistic"`
 	// Specifies the alarm threshold.
 	Threshold pulumi.StringOutput `pulumi:"threshold"`
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.\
+	// The valid value is range from `1` to `32`.
+	// Changing this creates a new resource.
 	Unit pulumi.StringOutput `pulumi:"unit"`
 }
 
@@ -187,21 +189,21 @@ type alarmRuleState struct {
 	AlarmActions []string `pulumi:"alarmActions"`
 	// Indicates whether the alarm rule is enabled.
 	AlarmEnabled *bool `pulumi:"alarmEnabled"`
-	// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+	// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-	// The default value is **2**.
+	// The default value is `2`.
 	AlarmLevel *int `pulumi:"alarmLevel"`
 	// Specifies the comparison condition of alarm thresholds.
 	// The value can be **>**, **=**, **<**, **>=** or **<=**.
 	ComparisonOperator *string `pulumi:"comparisonOperator"`
 	// Specifies the description of the alarm rule.
-	// The value can be a string of 0 to 1000 characters.
+	// The value can be a string of `0` to `1,000` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the list of metric dimensions. The structure is described below.
 	// Changing this creates a new resource.
 	Dimensions []AlarmRuleDimension `pulumi:"dimensions"`
 	// Specifies the alarm checking evaluation periods.
-	// The value can be **1**, **2**, **3**, **4** and **5**.
+	// The value can be `1`, `2`, `3`, `4` and `5`.
 	EvaluationPeriods *int `pulumi:"evaluationPeriods"`
 	// Specifies the action triggered when the data is not enough.
 	// This is a list of strings. Changing this creates a new resource.
@@ -230,7 +232,9 @@ type alarmRuleState struct {
 	Statistic *string `pulumi:"statistic"`
 	// Specifies the alarm threshold.
 	Threshold *string `pulumi:"threshold"`
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.\
+	// The valid value is range from `1` to `32`.
+	// Changing this creates a new resource.
 	Unit *string `pulumi:"unit"`
 }
 
@@ -243,21 +247,21 @@ type AlarmRuleState struct {
 	AlarmActions pulumi.StringArrayInput
 	// Indicates whether the alarm rule is enabled.
 	AlarmEnabled pulumi.BoolPtrInput
-	// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+	// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-	// The default value is **2**.
+	// The default value is `2`.
 	AlarmLevel pulumi.IntPtrInput
 	// Specifies the comparison condition of alarm thresholds.
 	// The value can be **>**, **=**, **<**, **>=** or **<=**.
 	ComparisonOperator pulumi.StringPtrInput
 	// Specifies the description of the alarm rule.
-	// The value can be a string of 0 to 1000 characters.
+	// The value can be a string of `0` to `1,000` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the list of metric dimensions. The structure is described below.
 	// Changing this creates a new resource.
 	Dimensions AlarmRuleDimensionArrayInput
 	// Specifies the alarm checking evaluation periods.
-	// The value can be **1**, **2**, **3**, **4** and **5**.
+	// The value can be `1`, `2`, `3`, `4` and `5`.
 	EvaluationPeriods pulumi.IntPtrInput
 	// Specifies the action triggered when the data is not enough.
 	// This is a list of strings. Changing this creates a new resource.
@@ -286,7 +290,9 @@ type AlarmRuleState struct {
 	Statistic pulumi.StringPtrInput
 	// Specifies the alarm threshold.
 	Threshold pulumi.StringPtrInput
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.\
+	// The valid value is range from `1` to `32`.
+	// Changing this creates a new resource.
 	Unit pulumi.StringPtrInput
 }
 
@@ -301,21 +307,21 @@ type alarmRuleArgs struct {
 	// Specifies the action triggered by an alarm. This is a list of strings.
 	// Changing this creates a new resource.
 	AlarmActions []string `pulumi:"alarmActions"`
-	// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+	// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-	// The default value is **2**.
+	// The default value is `2`.
 	AlarmLevel *int `pulumi:"alarmLevel"`
 	// Specifies the comparison condition of alarm thresholds.
 	// The value can be **>**, **=**, **<**, **>=** or **<=**.
 	ComparisonOperator string `pulumi:"comparisonOperator"`
 	// Specifies the description of the alarm rule.
-	// The value can be a string of 0 to 1000 characters.
+	// The value can be a string of `0` to `1,000` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the list of metric dimensions. The structure is described below.
 	// Changing this creates a new resource.
 	Dimensions []AlarmRuleDimension `pulumi:"dimensions"`
 	// Specifies the alarm checking evaluation periods.
-	// The value can be **1**, **2**, **3**, **4** and **5**.
+	// The value can be `1`, `2`, `3`, `4` and `5`.
 	EvaluationPeriods int `pulumi:"evaluationPeriods"`
 	// Specifies the action triggered when the data is not enough.
 	// This is a list of strings. Changing this creates a new resource.
@@ -340,7 +346,9 @@ type alarmRuleArgs struct {
 	Statistic string `pulumi:"statistic"`
 	// Specifies the alarm threshold.
 	Threshold string `pulumi:"threshold"`
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.\
+	// The valid value is range from `1` to `32`.
+	// Changing this creates a new resource.
 	Unit string `pulumi:"unit"`
 }
 
@@ -352,21 +360,21 @@ type AlarmRuleArgs struct {
 	// Specifies the action triggered by an alarm. This is a list of strings.
 	// Changing this creates a new resource.
 	AlarmActions pulumi.StringArrayInput
-	// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+	// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-	// The default value is **2**.
+	// The default value is `2`.
 	AlarmLevel pulumi.IntPtrInput
 	// Specifies the comparison condition of alarm thresholds.
 	// The value can be **>**, **=**, **<**, **>=** or **<=**.
 	ComparisonOperator pulumi.StringInput
 	// Specifies the description of the alarm rule.
-	// The value can be a string of 0 to 1000 characters.
+	// The value can be a string of `0` to `1,000` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the list of metric dimensions. The structure is described below.
 	// Changing this creates a new resource.
 	Dimensions AlarmRuleDimensionArrayInput
 	// Specifies the alarm checking evaluation periods.
-	// The value can be **1**, **2**, **3**, **4** and **5**.
+	// The value can be `1`, `2`, `3`, `4` and `5`.
 	EvaluationPeriods pulumi.IntInput
 	// Specifies the action triggered when the data is not enough.
 	// This is a list of strings. Changing this creates a new resource.
@@ -391,7 +399,9 @@ type AlarmRuleArgs struct {
 	Statistic pulumi.StringInput
 	// Specifies the alarm threshold.
 	Threshold pulumi.StringInput
-	// Specifies the data unit. Changing this creates a new resource.
+	// Specifies the data unit.\
+	// The valid value is range from `1` to `32`.
+	// Changing this creates a new resource.
 	Unit pulumi.StringInput
 }
 
@@ -499,9 +509,9 @@ func (o AlarmRuleOutput) AlarmEnabled() pulumi.BoolOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.BoolOutput { return v.AlarmEnabled }).(pulumi.BoolOutput)
 }
 
-// Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+// Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
 // which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-// The default value is **2**.
+// The default value is `2`.
 func (o AlarmRuleOutput) AlarmLevel() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.IntPtrOutput { return v.AlarmLevel }).(pulumi.IntPtrOutput)
 }
@@ -513,7 +523,7 @@ func (o AlarmRuleOutput) ComparisonOperator() pulumi.StringOutput {
 }
 
 // Specifies the description of the alarm rule.
-// The value can be a string of 0 to 1000 characters.
+// The value can be a string of `0` to `1,000` characters.
 func (o AlarmRuleOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -525,7 +535,7 @@ func (o AlarmRuleOutput) Dimensions() AlarmRuleDimensionArrayOutput {
 }
 
 // Specifies the alarm checking evaluation periods.
-// The value can be **1**, **2**, **3**, **4** and **5**.
+// The value can be `1`, `2`, `3`, `4` and `5`.
 func (o AlarmRuleOutput) EvaluationPeriods() pulumi.IntOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.IntOutput { return v.EvaluationPeriods }).(pulumi.IntOutput)
 }
@@ -590,7 +600,9 @@ func (o AlarmRuleOutput) Threshold() pulumi.StringOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.StringOutput { return v.Threshold }).(pulumi.StringOutput)
 }
 
-// Specifies the data unit. Changing this creates a new resource.
+// Specifies the data unit.\
+// The valid value is range from `1` to `32`.
+// Changing this creates a new resource.
 func (o AlarmRuleOutput) Unit() pulumi.StringOutput {
 	return o.ApplyT(func(v *AlarmRule) pulumi.StringOutput { return v.Unit }).(pulumi.StringOutput)
 }

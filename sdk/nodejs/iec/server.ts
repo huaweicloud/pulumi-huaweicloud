@@ -209,7 +209,7 @@ export class Server extends pulumi.CustomResource {
      */
     public readonly subnetIds!: pulumi.Output<string[]>;
     /**
-     * The system disk voume ID.
+     * The system disk volume ID.
      */
     public /*out*/ readonly systemDiskId!: pulumi.Output<string>;
     /**
@@ -437,7 +437,7 @@ export interface ServerState {
      */
     subnetIds?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * The system disk voume ID.
+     * The system disk volume ID.
      */
     systemDiskId?: pulumi.Input<string>;
     /**

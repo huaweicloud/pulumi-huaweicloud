@@ -36,10 +36,10 @@ class NetworkInstanceArgs:
                + **vpc**: Virtual Private Cloud.
                + **vgw**: virtual gateway.
         :param pulumi.Input[str] description: The description about the network instance.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] instance_domain_id: Account ID of the VPC or virtual gateway.
         :param pulumi.Input[str] name: The network instance name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
                underscores (_) and dots (.).
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
@@ -139,7 +139,7 @@ class NetworkInstanceArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         The description about the network instance.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -164,7 +164,7 @@ class NetworkInstanceArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         The network instance name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
         underscores (_) and dots (.).
         """
         return pulumi.get(self, "name")
@@ -207,12 +207,12 @@ class _NetworkInstanceState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] cidrs: List of routes advertised by the VPC or virtual gateway.
         :param pulumi.Input[str] cloud_connection_id: Cloud connection ID.
         :param pulumi.Input[str] description: The description about the network instance.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] domain_id: Account ID.
         :param pulumi.Input[str] instance_domain_id: Account ID of the VPC or virtual gateway.
         :param pulumi.Input[str] instance_id: ID of the VPC or virtual gateway to be loaded to the cloud connection.
         :param pulumi.Input[str] name: The network instance name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
                underscores (_) and dots (.).
         :param pulumi.Input[str] project_id: Project ID of the VPC or virtual gateway.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
@@ -280,7 +280,7 @@ class _NetworkInstanceState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         The description about the network instance.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -329,7 +329,7 @@ class _NetworkInstanceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         The network instance name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
         underscores (_) and dots (.).
         """
         return pulumi.get(self, "name")
@@ -429,9 +429,30 @@ class NetworkInstance(pulumi.CustomResource):
 
         Each network instance can be loaded onto only one cloud connection.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        cloud_connection_id = config.require_object("cloudConnectionId")
+        vpc_instance_id = config.require_object("vpcInstanceId")
+        vpc_project_id = config.require_object("vpcProjectId")
+        vpc_region_id = config.require_object("vpcRegionId")
+        cidr = config.require_object("cidr")
+        test = huaweicloud.cc.NetworkInstance("test",
+            type="vpc",
+            cloud_connection_id=cloud_connection_id,
+            instance_id=vpc_instance_id,
+            project_id=vpc_project_id,
+            region_id=vpc_region_id,
+            cidrs=[cidr])
+        ```
+
         ## Import
 
-        The network instance can be imported using the `id`, e.g.
+        The network instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cc/networkInstance:NetworkInstance test 0ce123456a00f2591fabc00385ff1234
@@ -442,11 +463,11 @@ class NetworkInstance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] cidrs: List of routes advertised by the VPC or virtual gateway.
         :param pulumi.Input[str] cloud_connection_id: Cloud connection ID.
         :param pulumi.Input[str] description: The description about the network instance.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] instance_domain_id: Account ID of the VPC or virtual gateway.
         :param pulumi.Input[str] instance_id: ID of the VPC or virtual gateway to be loaded to the cloud connection.
         :param pulumi.Input[str] name: The network instance name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
                underscores (_) and dots (.).
         :param pulumi.Input[str] project_id: Project ID of the VPC or virtual gateway.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
@@ -471,9 +492,30 @@ class NetworkInstance(pulumi.CustomResource):
 
         Each network instance can be loaded onto only one cloud connection.
 
+        ## Example Usage
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        cloud_connection_id = config.require_object("cloudConnectionId")
+        vpc_instance_id = config.require_object("vpcInstanceId")
+        vpc_project_id = config.require_object("vpcProjectId")
+        vpc_region_id = config.require_object("vpcRegionId")
+        cidr = config.require_object("cidr")
+        test = huaweicloud.cc.NetworkInstance("test",
+            type="vpc",
+            cloud_connection_id=cloud_connection_id,
+            instance_id=vpc_instance_id,
+            project_id=vpc_project_id,
+            region_id=vpc_region_id,
+            cidrs=[cidr])
+        ```
+
         ## Import
 
-        The network instance can be imported using the `id`, e.g.
+        The network instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cc/networkInstance:NetworkInstance test 0ce123456a00f2591fabc00385ff1234
@@ -569,12 +611,12 @@ class NetworkInstance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] cidrs: List of routes advertised by the VPC or virtual gateway.
         :param pulumi.Input[str] cloud_connection_id: Cloud connection ID.
         :param pulumi.Input[str] description: The description about the network instance.  
-               The description can contain a maximum of 255 characters.
+               The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         :param pulumi.Input[str] domain_id: Account ID.
         :param pulumi.Input[str] instance_domain_id: Account ID of the VPC or virtual gateway.
         :param pulumi.Input[str] instance_id: ID of the VPC or virtual gateway to be loaded to the cloud connection.
         :param pulumi.Input[str] name: The network instance name.  
-               The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+               The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
                underscores (_) and dots (.).
         :param pulumi.Input[str] project_id: Project ID of the VPC or virtual gateway.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
@@ -627,7 +669,7 @@ class NetworkInstance(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         The description about the network instance.  
-        The description can contain a maximum of 255 characters.
+        The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
         """
         return pulumi.get(self, "description")
 
@@ -660,7 +702,7 @@ class NetworkInstance(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         The network instance name.  
-        The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+        The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
         underscores (_) and dots (.).
         """
         return pulumi.get(self, "name")

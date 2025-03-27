@@ -61,6 +61,11 @@ func GetDomainName(ctx *pulumi.Context) string {
 	return config.Get(ctx, "huaweicloud:domainName")
 }
 
+// Whether to enable ForceNew
+func GetEnableForceNew(ctx *pulumi.Context) bool {
+	return config.GetBool(ctx, "huaweicloud:enableForceNew")
+}
+
 // The custom endpoints used to override the default endpoint URL.
 func GetEndpoints(ctx *pulumi.Context) string {
 	return config.Get(ctx, "huaweicloud:endpoints")
@@ -129,6 +134,21 @@ func GetSecurityToken(ctx *pulumi.Context) string {
 // The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
 func GetSharedConfigFile(ctx *pulumi.Context) string {
 	return config.Get(ctx, "huaweicloud:sharedConfigFile")
+}
+
+// The signing algorithm for authentication
+func GetSigningAlgorithm(ctx *pulumi.Context) string {
+	return config.Get(ctx, "huaweicloud:signingAlgorithm")
+}
+
+// Whether to skip upgrade check
+func GetSkipCheckUpgrade(ctx *pulumi.Context) bool {
+	return config.GetBool(ctx, "huaweicloud:skipCheckUpgrade")
+}
+
+// Whether to skip website type check
+func GetSkipCheckWebsiteType(ctx *pulumi.Context) bool {
+	return config.GetBool(ctx, "huaweicloud:skipCheckWebsiteType")
 }
 
 // The ID of the Tenant (Identity v2) to login with.

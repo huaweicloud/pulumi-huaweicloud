@@ -67,7 +67,7 @@ export class Application extends pulumi.CustomResource {
      * The application code must start with a letter, digit, plus sign (+) or slash (/).
      * Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
      */
-    public readonly appCodes!: pulumi.Output<string[] | undefined>;
+    public readonly appCodes!: pulumi.Output<string[]>;
     /**
      * App key.
      */
@@ -78,7 +78,7 @@ export class Application extends pulumi.CustomResource {
     public /*out*/ readonly appSecret!: pulumi.Output<string>;
     /**
      * Specifies the application description.  
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string>;
     /**
@@ -89,9 +89,9 @@ export class Application extends pulumi.CustomResource {
     public readonly instanceId!: pulumi.Output<string>;
     /**
      * Specifies the application name.  
-     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
      * are allowed.
-     * The name must start with a Chinese or English letter.
+     * The name must start with a Chinese character or English letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -179,7 +179,7 @@ export interface ApplicationState {
     appSecret?: pulumi.Input<string>;
     /**
      * Specifies the application description.  
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -190,9 +190,9 @@ export interface ApplicationState {
     instanceId?: pulumi.Input<string>;
     /**
      * Specifies the application name.  
-     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
      * are allowed.
-     * The name must start with a Chinese or English letter.
+     * The name must start with a Chinese character or English letter.
      */
     name?: pulumi.Input<string>;
     /**
@@ -229,7 +229,7 @@ export interface ApplicationArgs {
     appCodes?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the application description.  
-     * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+     * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -240,9 +240,9 @@ export interface ApplicationArgs {
     instanceId: pulumi.Input<string>;
     /**
      * Specifies the application name.  
-     * The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+     * The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
      * are allowed.
-     * The name must start with a Chinese or English letter.
+     * The name must start with a Chinese character or English letter.
      */
     name?: pulumi.Input<string>;
     /**

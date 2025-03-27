@@ -49,10 +49,10 @@ class SecgroupRuleInitArgs:
                needs to be between `1` and `65,535`. Changing this creates a new security group rule.
                This parameter and `ports` are alternative.
         :param pulumi.Input[str] ports: Specifies the allowed port value range, which supports single port (80),
-               continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+               continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
                Changing this creates a new security group rule.
         :param pulumi.Input[int] priority: Specifies the priority number.
-               The valid value is range from **1** to **100**. The default value is **1**.
+               The valid value is range from `1` to `100`. The default value is `1`.
                This parameter is not used with `port_range_min` and `port_range_max`.
                Changing this creates a new security group rule.
         :param pulumi.Input[str] protocol: Specifies the layer 4 protocol type, valid values are **tcp**, **udp**,
@@ -66,7 +66,8 @@ class SecgroupRuleInitArgs:
         :param pulumi.Input[str] remote_group_id: Specifies the remote group ID. Changing this creates a new security
                group rule.
         :param pulumi.Input[str] remote_ip_prefix: Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-               192.168.0.0/16). Changing this creates a new security group rule.
+               192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+               Changing this creates a new security group rule.
         """
         pulumi.set(__self__, "direction", direction)
         pulumi.set(__self__, "ethertype", ethertype)
@@ -194,7 +195,7 @@ class SecgroupRuleInitArgs:
     def ports(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the allowed port value range, which supports single port (80),
-        continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+        continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
         Changing this creates a new security group rule.
         """
         return pulumi.get(self, "ports")
@@ -208,7 +209,7 @@ class SecgroupRuleInitArgs:
     def priority(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the priority number.
-        The valid value is range from **1** to **100**. The default value is **1**.
+        The valid value is range from `1` to `100`. The default value is `1`.
         This parameter is not used with `port_range_min` and `port_range_max`.
         Changing this creates a new security group rule.
         """
@@ -277,7 +278,8 @@ class SecgroupRuleInitArgs:
     def remote_ip_prefix(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-        192.168.0.0/16). Changing this creates a new security group rule.
+        192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+        Changing this creates a new security group rule.
         """
         return pulumi.get(self, "remote_ip_prefix")
 
@@ -322,10 +324,10 @@ class _SecgroupRuleState:
                needs to be between `1` and `65,535`. Changing this creates a new security group rule.
                This parameter and `ports` are alternative.
         :param pulumi.Input[str] ports: Specifies the allowed port value range, which supports single port (80),
-               continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+               continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
                Changing this creates a new security group rule.
         :param pulumi.Input[int] priority: Specifies the priority number.
-               The valid value is range from **1** to **100**. The default value is **1**.
+               The valid value is range from `1` to `100`. The default value is `1`.
                This parameter is not used with `port_range_min` and `port_range_max`.
                Changing this creates a new security group rule.
         :param pulumi.Input[str] protocol: Specifies the layer 4 protocol type, valid values are **tcp**, **udp**,
@@ -339,7 +341,8 @@ class _SecgroupRuleState:
         :param pulumi.Input[str] remote_group_id: Specifies the remote group ID. Changing this creates a new security
                group rule.
         :param pulumi.Input[str] remote_ip_prefix: Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-               192.168.0.0/16). Changing this creates a new security group rule.
+               192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+               Changing this creates a new security group rule.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID the rule should belong to. Changing
                this creates a new security group rule.
         """
@@ -459,7 +462,7 @@ class _SecgroupRuleState:
     def ports(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the allowed port value range, which supports single port (80),
-        continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+        continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
         Changing this creates a new security group rule.
         """
         return pulumi.get(self, "ports")
@@ -473,7 +476,7 @@ class _SecgroupRuleState:
     def priority(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the priority number.
-        The valid value is range from **1** to **100**. The default value is **1**.
+        The valid value is range from `1` to `100`. The default value is `1`.
         This parameter is not used with `port_range_min` and `port_range_max`.
         Changing this creates a new security group rule.
         """
@@ -542,7 +545,8 @@ class _SecgroupRuleState:
     def remote_ip_prefix(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-        192.168.0.0/16). Changing this creates a new security group rule.
+        192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+        Changing this creates a new security group rule.
         """
         return pulumi.get(self, "remote_ip_prefix")
 
@@ -605,6 +609,23 @@ class SecgroupRule(pulumi.CustomResource):
             port_range_max=8080,
             remote_ip_prefix="0.0.0.0/0")
         ```
+        ### Create an egress rule that opens TCP port 8080 with port range parameters
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        security_group_id = config.require_object("securityGroupId")
+        test = huaweicloud.vpc.SecgroupRule("test",
+            security_group_id=security_group_id,
+            direction="egress",
+            ethertype="IPv4",
+            protocol="tcp",
+            port_range_min=8080,
+            port_range_max=8080,
+            remote_ip_prefix="0.0.0.0/0")
+        ```
         ### Create an ingress rule that enable the remote address group and open some TCP ports
 
         ```python
@@ -628,10 +649,33 @@ class SecgroupRule(pulumi.CustomResource):
             priority=5,
             remote_address_group_id=test_address_group.id)
         ```
+        ### Create an egress rule that enable the remote address group and open some TCP ports
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        group_name = config.require_object("groupName")
+        security_group_id = config.require_object("securityGroupId")
+        test_address_group = huaweicloud.vpc.AddressGroup("testAddressGroup", addresses=[
+            "192.168.10.12",
+            "192.168.11.0-192.168.11.240",
+        ])
+        test_secgroup_rule = huaweicloud.vpc.SecgroupRule("testSecgroupRule",
+            security_group_id=security_group_id,
+            direction="egress",
+            action="allow",
+            ethertype="IPv4",
+            ports="80,500,600-800",
+            protocol="tcp",
+            priority=5,
+            remote_address_group_id=test_address_group.id)
+        ```
 
         ## Import
 
-        Security Group Rules can be imported using the `id`, e.g.
+        Security Group Rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/secgroupRule:SecgroupRule secgroup_rule_1 aeb68ee3-6e9d-4256-955c-9584a6212745
@@ -656,10 +700,10 @@ class SecgroupRule(pulumi.CustomResource):
                needs to be between `1` and `65,535`. Changing this creates a new security group rule.
                This parameter and `ports` are alternative.
         :param pulumi.Input[str] ports: Specifies the allowed port value range, which supports single port (80),
-               continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+               continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
                Changing this creates a new security group rule.
         :param pulumi.Input[int] priority: Specifies the priority number.
-               The valid value is range from **1** to **100**. The default value is **1**.
+               The valid value is range from `1` to `100`. The default value is `1`.
                This parameter is not used with `port_range_min` and `port_range_max`.
                Changing this creates a new security group rule.
         :param pulumi.Input[str] protocol: Specifies the layer 4 protocol type, valid values are **tcp**, **udp**,
@@ -673,7 +717,8 @@ class SecgroupRule(pulumi.CustomResource):
         :param pulumi.Input[str] remote_group_id: Specifies the remote group ID. Changing this creates a new security
                group rule.
         :param pulumi.Input[str] remote_ip_prefix: Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-               192.168.0.0/16). Changing this creates a new security group rule.
+               192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+               Changing this creates a new security group rule.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID the rule should belong to. Changing
                this creates a new security group rule.
         """
@@ -704,6 +749,23 @@ class SecgroupRule(pulumi.CustomResource):
             port_range_max=8080,
             remote_ip_prefix="0.0.0.0/0")
         ```
+        ### Create an egress rule that opens TCP port 8080 with port range parameters
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        security_group_id = config.require_object("securityGroupId")
+        test = huaweicloud.vpc.SecgroupRule("test",
+            security_group_id=security_group_id,
+            direction="egress",
+            ethertype="IPv4",
+            protocol="tcp",
+            port_range_min=8080,
+            port_range_max=8080,
+            remote_ip_prefix="0.0.0.0/0")
+        ```
         ### Create an ingress rule that enable the remote address group and open some TCP ports
 
         ```python
@@ -727,10 +789,33 @@ class SecgroupRule(pulumi.CustomResource):
             priority=5,
             remote_address_group_id=test_address_group.id)
         ```
+        ### Create an egress rule that enable the remote address group and open some TCP ports
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        group_name = config.require_object("groupName")
+        security_group_id = config.require_object("securityGroupId")
+        test_address_group = huaweicloud.vpc.AddressGroup("testAddressGroup", addresses=[
+            "192.168.10.12",
+            "192.168.11.0-192.168.11.240",
+        ])
+        test_secgroup_rule = huaweicloud.vpc.SecgroupRule("testSecgroupRule",
+            security_group_id=security_group_id,
+            direction="egress",
+            action="allow",
+            ethertype="IPv4",
+            ports="80,500,600-800",
+            protocol="tcp",
+            priority=5,
+            remote_address_group_id=test_address_group.id)
+        ```
 
         ## Import
 
-        Security Group Rules can be imported using the `id`, e.g.
+        Security Group Rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/secgroupRule:SecgroupRule secgroup_rule_1 aeb68ee3-6e9d-4256-955c-9584a6212745
@@ -842,10 +927,10 @@ class SecgroupRule(pulumi.CustomResource):
                needs to be between `1` and `65,535`. Changing this creates a new security group rule.
                This parameter and `ports` are alternative.
         :param pulumi.Input[str] ports: Specifies the allowed port value range, which supports single port (80),
-               continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+               continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
                Changing this creates a new security group rule.
         :param pulumi.Input[int] priority: Specifies the priority number.
-               The valid value is range from **1** to **100**. The default value is **1**.
+               The valid value is range from `1` to `100`. The default value is `1`.
                This parameter is not used with `port_range_min` and `port_range_max`.
                Changing this creates a new security group rule.
         :param pulumi.Input[str] protocol: Specifies the layer 4 protocol type, valid values are **tcp**, **udp**,
@@ -859,7 +944,8 @@ class SecgroupRule(pulumi.CustomResource):
         :param pulumi.Input[str] remote_group_id: Specifies the remote group ID. Changing this creates a new security
                group rule.
         :param pulumi.Input[str] remote_ip_prefix: Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-               192.168.0.0/16). Changing this creates a new security group rule.
+               192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+               Changing this creates a new security group rule.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID the rule should belong to. Changing
                this creates a new security group rule.
         """
@@ -946,7 +1032,7 @@ class SecgroupRule(pulumi.CustomResource):
     def ports(self) -> pulumi.Output[str]:
         """
         Specifies the allowed port value range, which supports single port (80),
-        continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+        continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
         Changing this creates a new security group rule.
         """
         return pulumi.get(self, "ports")
@@ -956,7 +1042,7 @@ class SecgroupRule(pulumi.CustomResource):
     def priority(self) -> pulumi.Output[int]:
         """
         Specifies the priority number.
-        The valid value is range from **1** to **100**. The default value is **1**.
+        The valid value is range from `1` to `100`. The default value is `1`.
         This parameter is not used with `port_range_min` and `port_range_max`.
         Changing this creates a new security group rule.
         """
@@ -1005,7 +1091,8 @@ class SecgroupRule(pulumi.CustomResource):
     def remote_ip_prefix(self) -> pulumi.Output[str]:
         """
         Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-        192.168.0.0/16). Changing this creates a new security group rule.
+        192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+        Changing this creates a new security group rule.
         """
         return pulumi.get(self, "remote_ip_prefix")
 

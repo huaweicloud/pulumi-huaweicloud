@@ -22,6 +22,9 @@ class Database_privilegeArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Database_privilege resource.
+        :param pulumi.Input[str] db_name: Specifies the database name.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]] users: Specifies the account that associated with the database.
         """
         pulumi.set(__self__, "db_name", db_name)
         pulumi.set(__self__, "instance_id", instance_id)
@@ -32,6 +35,9 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "db_name")
 
     @db_name.setter
@@ -41,6 +47,9 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -50,6 +59,9 @@ class Database_privilegeArgs:
     @property
     @pulumi.getter
     def users(self) -> pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]:
+        """
+        Specifies the account that associated with the database.
+        """
         return pulumi.get(self, "users")
 
     @users.setter
@@ -75,6 +87,9 @@ class _Database_privilegeState:
                  users: Optional[pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]] = None):
         """
         Input properties used for looking up and filtering Database_privilege resources.
+        :param pulumi.Input[str] db_name: Specifies the database name.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]] users: Specifies the account that associated with the database.
         """
         if db_name is not None:
             pulumi.set(__self__, "db_name", db_name)
@@ -88,6 +103,9 @@ class _Database_privilegeState:
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "db_name")
 
     @db_name.setter
@@ -97,6 +115,9 @@ class _Database_privilegeState:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -115,6 +136,9 @@ class _Database_privilegeState:
     @property
     @pulumi.getter
     def users(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['Database_privilegeUserArgs']]]]:
+        """
+        Specifies the account that associated with the database.
+        """
         return pulumi.get(self, "users")
 
     @users.setter
@@ -136,6 +160,9 @@ class Database_privilege(pulumi.CustomResource):
         Create a Database_privilege resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] db_name: Specifies the database name.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['Database_privilegeUserArgs']]]] users: Specifies the account that associated with the database.
         """
         ...
     @overload
@@ -204,6 +231,9 @@ class Database_privilege(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] db_name: Specifies the database name.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['Database_privilegeUserArgs']]]] users: Specifies the account that associated with the database.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -218,11 +248,17 @@ class Database_privilege(pulumi.CustomResource):
     @property
     @pulumi.getter(name="dbName")
     def db_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the database name.
+        """
         return pulumi.get(self, "db_name")
 
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @property
@@ -233,5 +269,8 @@ class Database_privilege(pulumi.CustomResource):
     @property
     @pulumi.getter
     def users(self) -> pulumi.Output[Sequence['outputs.Database_privilegeUser']]:
+        """
+        Specifies the account that associated with the database.
+        """
         return pulumi.get(self, "users")
 

@@ -11,7 +11,14 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages an IoTDA product within HuaweiCloud.
+// Manages a product resource within HuaweiCloud.
+//
+// > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+// endpoint in `provider` block.
+// You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+// to view the HTTPS application access address. An example of the access address might be
+// **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+// `provider` block as follows:
 //
 // ## Example Usage
 //
@@ -116,11 +123,11 @@ import (
 //
 // ## Import
 //
-// Products can be imported using the `id`, e.g.
+// The product resource can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:IoTDA/product:Product test 10022532f4f94f26b01daa1e424853e1
+//	$ pulumi import huaweicloud:IoTDA/product:Product test <id>
 //
 // ```
 type Product struct {
@@ -130,26 +137,27 @@ type Product struct {
 	// The valid values are **json** and **binary**.
 	DataType pulumi.StringOutput `pulumi:"dataType"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the device type. The device type contains a maximum of 32 characters.
+	// Specifies the device type. The device type contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 	DeviceType pulumi.StringOutput `pulumi:"deviceType"`
 	// Specifies the industry which the device belongs to. The industry contains a maximum of
-	// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+	// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 	// the following special characters are allowed: `?'#().,&%@!`.
 	Industry pulumi.StringOutput `pulumi:"industry"`
-	// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+	// Specifies the manufacturer name.
+	// The name contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	ManufacturerName pulumi.StringOutput `pulumi:"manufacturerName"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the product ID. The product ID contains a maximum of 32
+	// Specifies the product ID. The product ID contains a maximum of `32`
 	// characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 	// automatically allocate a product ID. Changing this parameter will create a new resource.
 	ProductId pulumi.StringOutput `pulumi:"productId"`
@@ -213,26 +221,27 @@ type productState struct {
 	// The valid values are **json** and **binary**.
 	DataType *string `pulumi:"dataType"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
-	// Specifies the device type. The device type contains a maximum of 32 characters.
+	// Specifies the device type. The device type contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 	DeviceType *string `pulumi:"deviceType"`
 	// Specifies the industry which the device belongs to. The industry contains a maximum of
-	// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+	// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 	// the following special characters are allowed: `?'#().,&%@!`.
 	Industry *string `pulumi:"industry"`
-	// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+	// Specifies the manufacturer name.
+	// The name contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	ManufacturerName *string `pulumi:"manufacturerName"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
-	// Specifies the product ID. The product ID contains a maximum of 32
+	// Specifies the product ID. The product ID contains a maximum of `32`
 	// characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 	// automatically allocate a product ID. Changing this parameter will create a new resource.
 	ProductId *string `pulumi:"productId"`
@@ -255,26 +264,27 @@ type ProductState struct {
 	// The valid values are **json** and **binary**.
 	DataType pulumi.StringPtrInput
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
-	// Specifies the device type. The device type contains a maximum of 32 characters.
+	// Specifies the device type. The device type contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 	DeviceType pulumi.StringPtrInput
 	// Specifies the industry which the device belongs to. The industry contains a maximum of
-	// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+	// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 	// the following special characters are allowed: `?'#().,&%@!`.
 	Industry pulumi.StringPtrInput
-	// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+	// Specifies the manufacturer name.
+	// The name contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	ManufacturerName pulumi.StringPtrInput
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
-	// Specifies the product ID. The product ID contains a maximum of 32
+	// Specifies the product ID. The product ID contains a maximum of `32`
 	// characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 	// automatically allocate a product ID. Changing this parameter will create a new resource.
 	ProductId pulumi.StringPtrInput
@@ -301,26 +311,27 @@ type productArgs struct {
 	// The valid values are **json** and **binary**.
 	DataType string `pulumi:"dataType"`
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description *string `pulumi:"description"`
-	// Specifies the device type. The device type contains a maximum of 32 characters.
+	// Specifies the device type. The device type contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 	DeviceType string `pulumi:"deviceType"`
 	// Specifies the industry which the device belongs to. The industry contains a maximum of
-	// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+	// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 	// the following special characters are allowed: `?'#().,&%@!`.
 	Industry *string `pulumi:"industry"`
-	// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+	// Specifies the manufacturer name.
+	// The name contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	ManufacturerName *string `pulumi:"manufacturerName"`
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name *string `pulumi:"name"`
-	// Specifies the product ID. The product ID contains a maximum of 32
+	// Specifies the product ID. The product ID contains a maximum of `32`
 	// characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 	// automatically allocate a product ID. Changing this parameter will create a new resource.
 	ProductId *string `pulumi:"productId"`
@@ -344,26 +355,27 @@ type ProductArgs struct {
 	// The valid values are **json** and **binary**.
 	DataType pulumi.StringInput
 	// Specifies the description of the parameter. The description contains a maximum of
-	// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+	// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	Description pulumi.StringPtrInput
-	// Specifies the device type. The device type contains a maximum of 32 characters.
+	// Specifies the device type. The device type contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 	// are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 	DeviceType pulumi.StringInput
 	// Specifies the industry which the device belongs to. The industry contains a maximum of
-	// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+	// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 	// the following special characters are allowed: `?'#().,&%@!`.
 	Industry pulumi.StringPtrInput
-	// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+	// Specifies the manufacturer name.
+	// The name contains a maximum of `32` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 	// characters are allowed: `?'#().,&%@!`.
 	ManufacturerName pulumi.StringPtrInput
-	// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+	// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 	// Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 	// allowed: `?'#().,&%@!`.
 	Name pulumi.StringPtrInput
-	// Specifies the product ID. The product ID contains a maximum of 32
+	// Specifies the product ID. The product ID contains a maximum of `32`
 	// characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 	// automatically allocate a product ID. Changing this parameter will create a new resource.
 	ProductId pulumi.StringPtrInput
@@ -475,13 +487,13 @@ func (o ProductOutput) DataType() pulumi.StringOutput {
 }
 
 // Specifies the description of the parameter. The description contains a maximum of
-// 128 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
+// `128` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Product) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the device type. The device type contains a maximum of 32 characters.
+// Specifies the device type. The device type contains a maximum of `32` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
 // are allowed: `?'#().,&%@!`. Example: StreetLight, GasMeter, or WaterMeter.
 func (o ProductOutput) DeviceType() pulumi.StringOutput {
@@ -489,27 +501,28 @@ func (o ProductOutput) DeviceType() pulumi.StringOutput {
 }
 
 // Specifies the industry which the device belongs to. The industry contains a maximum of
-// 64 characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
+// `64` characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and
 // the following special characters are allowed: `?'#().,&%@!`.
 func (o ProductOutput) Industry() pulumi.StringOutput {
 	return o.ApplyT(func(v *Product) pulumi.StringOutput { return v.Industry }).(pulumi.StringOutput)
 }
 
-// Specifies the manufacturer name. The name contains a maximum of 32 characters.
+// Specifies the manufacturer name.
+// The name contains a maximum of `32` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special
 // characters are allowed: `?'#().,&%@!`.
 func (o ProductOutput) ManufacturerName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Product) pulumi.StringOutput { return v.ManufacturerName }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the parameter. The name contains a maximum of 64 characters.
+// Specifies the name of the parameter. The name contains a maximum of `64` characters.
 // Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
 // allowed: `?'#().,&%@!`.
 func (o ProductOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Product) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the product ID. The product ID contains a maximum of 32
+// Specifies the product ID. The product ID contains a maximum of `32`
 // characters. Only letters, digits, hyphens (-) and underscores (_) are allowed. If omitted, the platform will
 // automatically allocate a product ID. Changing this parameter will create a new resource.
 func (o ProductOutput) ProductId() pulumi.StringOutput {

@@ -62,6 +62,11 @@ domainName: Optional[str]
 The name of the Domain to scope to.
 """
 
+enableForceNew: Optional[bool]
+"""
+Whether to enable ForceNew
+"""
+
 endpoints: Optional[str]
 """
 The custom endpoints used to override the default endpoint URL.
@@ -130,6 +135,21 @@ The security token to authenticate with a temporary security credential.
 sharedConfigFile: Optional[str]
 """
 The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
+"""
+
+signingAlgorithm: Optional[str]
+"""
+The signing algorithm for authentication
+"""
+
+skipCheckUpgrade: Optional[bool]
+"""
+Whether to skip upgrade check
+"""
+
+skipCheckWebsiteType: Optional[bool]
+"""
+Whether to skip website type check
 """
 
 tenantId: Optional[str]

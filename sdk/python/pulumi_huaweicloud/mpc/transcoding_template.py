@@ -34,10 +34,12 @@ class TranscodingTemplateArgs:
                + **5**: MP3
                + **6**: ADTS
         :param pulumi.Input['TranscodingTemplateAudioArgs'] audio: Specifies the audio parameters. The object structure is documented below.
-        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration. This parameter is used only when `output_format`
-               is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. This parameter is used only
-               when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies Whether to enable low bitrate HD. The default value is false.
         :param pulumi.Input[str] name: Specifies the name of a transcoding template.
         :param pulumi.Input[str] region: The region in which to create the transcoding template resource. If omitted,
@@ -94,8 +96,9 @@ class TranscodingTemplateArgs:
     @pulumi.getter(name="dashSegmentDuration")
     def dash_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the dash segment duration. This parameter is used only when `output_format`
-        is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the dash segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "dash_segment_duration")
 
@@ -107,8 +110,9 @@ class TranscodingTemplateArgs:
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HLS segment duration. This parameter is used only
-        when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the HLS segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "hls_segment_duration")
 
@@ -180,10 +184,12 @@ class _TranscodingTemplateState:
         """
         Input properties used for looking up and filtering TranscodingTemplate resources.
         :param pulumi.Input['TranscodingTemplateAudioArgs'] audio: Specifies the audio parameters. The object structure is documented below.
-        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration. This parameter is used only when `output_format`
-               is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. This parameter is used only
-               when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies Whether to enable low bitrate HD. The default value is false.
         :param pulumi.Input[str] name: Specifies the name of a transcoding template.
         :param pulumi.Input[int] output_format: Specifies the packaging type. Possible values are:
@@ -230,8 +236,9 @@ class _TranscodingTemplateState:
     @pulumi.getter(name="dashSegmentDuration")
     def dash_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the dash segment duration. This parameter is used only when `output_format`
-        is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the dash segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "dash_segment_duration")
 
@@ -243,8 +250,9 @@ class _TranscodingTemplateState:
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HLS segment duration. This parameter is used only
-        when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the HLS segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "hls_segment_duration")
 
@@ -373,7 +381,7 @@ class TranscodingTemplate(pulumi.CustomResource):
 
         ## Import
 
-        MPC transcoding templates can be imported using the `id`, e.g.
+        MPC transcoding templates can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Mpc/transcodingTemplate:TranscodingTemplate test 542899
@@ -382,10 +390,12 @@ class TranscodingTemplate(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['TranscodingTemplateAudioArgs']] audio: Specifies the audio parameters. The object structure is documented below.
-        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration. This parameter is used only when `output_format`
-               is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. This parameter is used only
-               when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies Whether to enable low bitrate HD. The default value is false.
         :param pulumi.Input[str] name: Specifies the name of a transcoding template.
         :param pulumi.Input[int] output_format: Specifies the packaging type. Possible values are:
@@ -444,7 +454,7 @@ class TranscodingTemplate(pulumi.CustomResource):
 
         ## Import
 
-        MPC transcoding templates can be imported using the `id`, e.g.
+        MPC transcoding templates can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Mpc/transcodingTemplate:TranscodingTemplate test 542899
@@ -518,10 +528,12 @@ class TranscodingTemplate(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['TranscodingTemplateAudioArgs']] audio: Specifies the audio parameters. The object structure is documented below.
-        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration. This parameter is used only when `output_format`
-               is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. This parameter is used only
-               when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        :param pulumi.Input[int] dash_segment_duration: Specifies the dash segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration, in second.  
+               The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+               The default value is `5`.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies Whether to enable low bitrate HD. The default value is false.
         :param pulumi.Input[str] name: Specifies the name of a transcoding template.
         :param pulumi.Input[int] output_format: Specifies the packaging type. Possible values are:
@@ -561,8 +573,9 @@ class TranscodingTemplate(pulumi.CustomResource):
     @pulumi.getter(name="dashSegmentDuration")
     def dash_segment_duration(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the dash segment duration. This parameter is used only when `output_format`
-        is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the dash segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "dash_segment_duration")
 
@@ -570,8 +583,9 @@ class TranscodingTemplate(pulumi.CustomResource):
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the HLS segment duration. This parameter is used only
-        when `output_format` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+        Specifies the HLS segment duration, in second.  
+        The valid value is range from `2` to `10`, and it is used only when `output_format` is set to `1` or `3`.
+        The default value is `5`.
         """
         return pulumi.get(self, "hls_segment_duration")
 

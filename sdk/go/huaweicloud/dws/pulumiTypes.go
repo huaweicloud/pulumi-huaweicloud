@@ -10,6 +10,166 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type ClusterElb struct {
+	// The ID of the ELB load balancer.
+	Id *string `pulumi:"id"`
+	// Cluster name, which must be unique and contains 4 to 64 characters, which
+	// consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+	// Changing this creates a new cluster resource.
+	Name *string `pulumi:"name"`
+	// The private endpoint of the ELB load balancer.
+	PrivateEndpoint *string `pulumi:"privateEndpoint"`
+	// The private IP address of the ELB load balancer.
+	PrivateIp *string `pulumi:"privateIp"`
+	// The IPv6 address of the ELB load balancer.
+	PrivateIpV6 *string `pulumi:"privateIpV6"`
+	// The information about public IP.
+	PublicIp *string `pulumi:"publicIp"`
+	// The VPC ID.
+	// Changing this parameter will create a new resource.
+	VpcId *string `pulumi:"vpcId"`
+}
+
+// ClusterElbInput is an input type that accepts ClusterElbArgs and ClusterElbOutput values.
+// You can construct a concrete instance of `ClusterElbInput` via:
+//
+//	ClusterElbArgs{...}
+type ClusterElbInput interface {
+	pulumi.Input
+
+	ToClusterElbOutput() ClusterElbOutput
+	ToClusterElbOutputWithContext(context.Context) ClusterElbOutput
+}
+
+type ClusterElbArgs struct {
+	// The ID of the ELB load balancer.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Cluster name, which must be unique and contains 4 to 64 characters, which
+	// consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+	// Changing this creates a new cluster resource.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// The private endpoint of the ELB load balancer.
+	PrivateEndpoint pulumi.StringPtrInput `pulumi:"privateEndpoint"`
+	// The private IP address of the ELB load balancer.
+	PrivateIp pulumi.StringPtrInput `pulumi:"privateIp"`
+	// The IPv6 address of the ELB load balancer.
+	PrivateIpV6 pulumi.StringPtrInput `pulumi:"privateIpV6"`
+	// The information about public IP.
+	PublicIp pulumi.StringPtrInput `pulumi:"publicIp"`
+	// The VPC ID.
+	// Changing this parameter will create a new resource.
+	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
+}
+
+func (ClusterElbArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterElb)(nil)).Elem()
+}
+
+func (i ClusterElbArgs) ToClusterElbOutput() ClusterElbOutput {
+	return i.ToClusterElbOutputWithContext(context.Background())
+}
+
+func (i ClusterElbArgs) ToClusterElbOutputWithContext(ctx context.Context) ClusterElbOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterElbOutput)
+}
+
+// ClusterElbArrayInput is an input type that accepts ClusterElbArray and ClusterElbArrayOutput values.
+// You can construct a concrete instance of `ClusterElbArrayInput` via:
+//
+//	ClusterElbArray{ ClusterElbArgs{...} }
+type ClusterElbArrayInput interface {
+	pulumi.Input
+
+	ToClusterElbArrayOutput() ClusterElbArrayOutput
+	ToClusterElbArrayOutputWithContext(context.Context) ClusterElbArrayOutput
+}
+
+type ClusterElbArray []ClusterElbInput
+
+func (ClusterElbArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterElb)(nil)).Elem()
+}
+
+func (i ClusterElbArray) ToClusterElbArrayOutput() ClusterElbArrayOutput {
+	return i.ToClusterElbArrayOutputWithContext(context.Background())
+}
+
+func (i ClusterElbArray) ToClusterElbArrayOutputWithContext(ctx context.Context) ClusterElbArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ClusterElbArrayOutput)
+}
+
+type ClusterElbOutput struct{ *pulumi.OutputState }
+
+func (ClusterElbOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ClusterElb)(nil)).Elem()
+}
+
+func (o ClusterElbOutput) ToClusterElbOutput() ClusterElbOutput {
+	return o
+}
+
+func (o ClusterElbOutput) ToClusterElbOutputWithContext(ctx context.Context) ClusterElbOutput {
+	return o
+}
+
+// The ID of the ELB load balancer.
+func (o ClusterElbOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Cluster name, which must be unique and contains 4 to 64 characters, which
+// consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+// Changing this creates a new cluster resource.
+func (o ClusterElbOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+// The private endpoint of the ELB load balancer.
+func (o ClusterElbOutput) PrivateEndpoint() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.PrivateEndpoint }).(pulumi.StringPtrOutput)
+}
+
+// The private IP address of the ELB load balancer.
+func (o ClusterElbOutput) PrivateIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.PrivateIp }).(pulumi.StringPtrOutput)
+}
+
+// The IPv6 address of the ELB load balancer.
+func (o ClusterElbOutput) PrivateIpV6() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.PrivateIpV6 }).(pulumi.StringPtrOutput)
+}
+
+// The information about public IP.
+func (o ClusterElbOutput) PublicIp() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.PublicIp }).(pulumi.StringPtrOutput)
+}
+
+// The VPC ID.
+// Changing this parameter will create a new resource.
+func (o ClusterElbOutput) VpcId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ClusterElb) *string { return v.VpcId }).(pulumi.StringPtrOutput)
+}
+
+type ClusterElbArrayOutput struct{ *pulumi.OutputState }
+
+func (ClusterElbArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]ClusterElb)(nil)).Elem()
+}
+
+func (o ClusterElbArrayOutput) ToClusterElbArrayOutput() ClusterElbArrayOutput {
+	return o
+}
+
+func (o ClusterElbArrayOutput) ToClusterElbArrayOutputWithContext(ctx context.Context) ClusterElbArrayOutput {
+	return o
+}
+
+func (o ClusterElbArrayOutput) Index(i pulumi.IntInput) ClusterElbOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) ClusterElb {
+		return vs[0].([]ClusterElb)[vs[1].(int)]
+	}).(ClusterElbOutput)
+}
+
 type ClusterEndpoint struct {
 	// Private network connection information.
 	ConnectInfo *string `pulumi:"connectInfo"`
@@ -507,10 +667,9 @@ type ClusterVolume struct {
 	// The capacity size, in GB.
 	Capacity *string `pulumi:"capacity"`
 	// The volume type. Value options are as follows:
-	// + **SATA**: Common I/O. The SATA disk is used.
-	// + **SAS**: High I/O. The SAS disk is used.
 	// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-	//   The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+	// + **SAS**: High I/O. The SAS disk is used.
+	// + **SATA**: Common I/O. The SATA disk is used.
 	Type *string `pulumi:"type"`
 }
 
@@ -529,10 +688,9 @@ type ClusterVolumeArgs struct {
 	// The capacity size, in GB.
 	Capacity pulumi.StringPtrInput `pulumi:"capacity"`
 	// The volume type. Value options are as follows:
-	// + **SATA**: Common I/O. The SATA disk is used.
-	// + **SAS**: High I/O. The SAS disk is used.
 	// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-	//   The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+	// + **SAS**: High I/O. The SAS disk is used.
+	// + **SATA**: Common I/O. The SATA disk is used.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -619,10 +777,9 @@ func (o ClusterVolumeOutput) Capacity() pulumi.StringPtrOutput {
 }
 
 // The volume type. Value options are as follows:
-//   - **SATA**: Common I/O. The SATA disk is used.
-//   - **SAS**: High I/O. The SAS disk is used.
-//   - **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-//     The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+// + **SAS**: High I/O. The SAS disk is used.
+// + **SATA**: Common I/O. The SATA disk is used.
 func (o ClusterVolumeOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ClusterVolume) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -662,10 +819,9 @@ func (o ClusterVolumePtrOutput) Capacity() pulumi.StringPtrOutput {
 }
 
 // The volume type. Value options are as follows:
-//   - **SATA**: Common I/O. The SATA disk is used.
-//   - **SAS**: High I/O. The SAS disk is used.
-//   - **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-//     The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+// + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
+// + **SAS**: High I/O. The SAS disk is used.
+// + **SATA**: Common I/O. The SATA disk is used.
 func (o ClusterVolumePtrOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ClusterVolume) *string {
 		if v == nil {
@@ -685,6 +841,8 @@ type GetFlaovrsFlavor struct {
 	//   in single-node or cluster mode.
 	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
 	DatastoreType string `pulumi:"datastoreType"`
+	// The version of datastore.
+	DatastoreVersion string `pulumi:"datastoreVersion"`
 	// The ElasticVolumeSpec structure is documented below.
 	ElasticVolumeSpecs []GetFlaovrsFlavorElasticVolumeSpec `pulumi:"elasticVolumeSpecs"`
 	// The name of the dws node flavor.\
@@ -724,6 +882,8 @@ type GetFlaovrsFlavorArgs struct {
 	//   in single-node or cluster mode.
 	// - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
 	DatastoreType pulumi.StringInput `pulumi:"datastoreType"`
+	// The version of datastore.
+	DatastoreVersion pulumi.StringInput `pulumi:"datastoreVersion"`
 	// The ElasticVolumeSpec structure is documented below.
 	ElasticVolumeSpecs GetFlaovrsFlavorElasticVolumeSpecArrayInput `pulumi:"elasticVolumeSpecs"`
 	// The name of the dws node flavor.\
@@ -806,6 +966,11 @@ func (o GetFlaovrsFlavorOutput) AvailabilityZones() pulumi.StringArrayOutput {
 //   - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
 func (o GetFlaovrsFlavorOutput) DatastoreType() pulumi.StringOutput {
 	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.DatastoreType }).(pulumi.StringOutput)
+}
+
+// The version of datastore.
+func (o GetFlaovrsFlavorOutput) DatastoreVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlaovrsFlavor) string { return v.DatastoreVersion }).(pulumi.StringOutput)
 }
 
 // The ElasticVolumeSpec structure is documented below.
@@ -978,6 +1143,8 @@ func (o GetFlaovrsFlavorElasticVolumeSpecArrayOutput) Index(i pulumi.IntInput) G
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterElbInput)(nil)).Elem(), ClusterElbArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ClusterElbArrayInput)(nil)).Elem(), ClusterElbArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterEndpointInput)(nil)).Elem(), ClusterEndpointArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterEndpointArrayInput)(nil)).Elem(), ClusterEndpointArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ClusterMaintainWindowInput)(nil)).Elem(), ClusterMaintainWindowArgs{})
@@ -992,6 +1159,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorArrayInput)(nil)).Elem(), GetFlaovrsFlavorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpecInput)(nil)).Elem(), GetFlaovrsFlavorElasticVolumeSpecArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetFlaovrsFlavorElasticVolumeSpecArrayInput)(nil)).Elem(), GetFlaovrsFlavorElasticVolumeSpecArray{})
+	pulumi.RegisterOutputType(ClusterElbOutput{})
+	pulumi.RegisterOutputType(ClusterElbArrayOutput{})
 	pulumi.RegisterOutputType(ClusterEndpointOutput{})
 	pulumi.RegisterOutputType(ClusterEndpointArrayOutput{})
 	pulumi.RegisterOutputType(ClusterMaintainWindowOutput{})

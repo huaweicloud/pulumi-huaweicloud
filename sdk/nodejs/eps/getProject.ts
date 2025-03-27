@@ -20,35 +20,65 @@ import * as utilities from "../utilities";
  * ## Resources Supported Currently
  *
  * <!-- markdownlint-disable MD033 -->
- * Service Name | Resource Name | Sub Resource Name
- * ---- | --- | ---
- * AS  | huaweicloud.As.Group |
- * BCS | huaweicloud.Bcs.Instance |
- * BMS | huaweicloud.Bms.Instance |
- * CBR | huaweicloud.Cbr.Vault |
- * CCE | huaweicloud.Cce.Cluster | huaweicloud_cce_node<br>huaweicloud_cce_node_pool<br>huaweicloud_cce_addon
- * CDM | huaweicloud.Cdm.Cluster |
- * CDN | huaweicloud.Cdn.Domain |
- * CES | huaweicloud.Cse.Alarmrule |
- * DCS | huaweicloud.Dcs.Instance |
- * DDS | huaweicloud.Dds.Instance |
- * DMS | huaweicloud_dms_kafka_instance<br>huaweicloud_dms_rabbitmq_instance |
- * DNS | huaweicloud_dns_ptrrecord<br>huaweicloud_dns_zone |
- * ECS | huaweicloud.Ecs.Instance |
- * EIP | huaweicloud_vpc_eip<br>huaweicloud_vpc_bandwidth |
- * ELB | huaweicloud.Elb.Loadbalancer |
- * Dedicated ELB | huaweicloud_elb_certificate<br>huaweicloud_elb_ipgroup<br>huaweicloud_elb_loadbalancer |
- * EVS | huaweicloud.Evs.Volume |
- * FGS | huaweicloud.FunctionGraph.Function |
- * GaussDB | huaweicloud_gaussdb_cassandra_instance<br>huaweicloud_gaussdb_mysql_instance<br>huaweicloud_gaussdb_opengauss_instance |
- * IMS | huaweicloud.Ims.Image |
- * KMS | huaweicloud.Dew.Key |
- * NAT | huaweicloud.Nat.Gateway | huaweicloud_nat_snat_rule<br>huaweicloud_nat_dnat_rule
- * OBS | huaweicloud.Obs.Bucket | huaweicloud_obs_bucket_object<br>huaweicloud_obs_bucket_policy
- * RDS | huaweicloud_rds_instance<br>huaweicloud_rds_read_replica_instance |
- * SFS | huaweicloud_sfs_file_system<br>huaweicloud_sfs_turbo | huaweicloud.Sfs.AccessRule
- * SMN | huaweicloud.Smn.Topic |
- * VPC | huaweicloud_vpc<br>huaweicloud_networking_secgroup | huaweicloud_vpc_subnet<br>huaweicloud_vpc_route<br>huaweicloud_networking_secgroup_rule
+ * Service Name | Resource Name
+ * ---- | ---
+ * AOM | huaweicloudAomCmdbApplication
+ * APIG | huaweicloud.DedicatedApig.Instance
+ * AS  | huaweicloud.As.Group
+ * BCS | huaweicloud.Bcs.Instance
+ * BMS | huaweicloud.Bms.Instance
+ * CBR | huaweicloud.Cbr.Vault
+ * CC  | huaweicloud_cc_bandwidth_package<br>huaweicloud_cc_connection<br>huaweicloud_central_network
+ * CCE | huaweicloud.Cce.Cluster
+ * CCI | huaweicloud.Cci.Namespace
+ * CCM | huaweicloud_ccm_private_certificate<br>huaweicloud_ccm_private_ca
+ * CDM | huaweicloud.Cdm.Cluster
+ * CDN | huaweicloud.Cdn.Domain
+ * CES | huaweicloud_ces_alarmrule<br>huaweicloud_ces_resource_group
+ * CodeArts | huaweicloudCodeartsProject
+ * CPH | huaweicloudCphServer
+ * CSE | huaweicloud_cse__microservice_engine
+ * CSS | huaweicloud.Css.Cluster
+ * DataArts | huaweicloud.DataArtsStudio.StudioInstance
+ * DBSS | huaweicloudDbssInstance
+ * DC  | huaweicloud_dc_virtual_gateway<br>huaweicloud_dc_virtual_interface
+ * DCS | huaweicloud.Dcs.Instance
+ * DDM | huaweicloudDdmInstance
+ * DDS | huaweicloud.Dds.Instance
+ * DEW | huaweicloud.Dew.Key
+ * DIS | huaweicloud.Dis.Stream
+ * DLI | huaweicloud_dli_database<br>huaweicloud_dli_queue
+ * DMS | huaweicloud_dms_kafka_instance<br>huaweicloud_dms_rabbitmq_instance<br>huaweicloud_dms_rocketmq_instance
+ * DNS | huaweicloud_dns_ptrrecord<br>huaweicloud_dns_zone
+ * DRS | huaweicloud.Drs.Job
+ * DWS | huaweicloud.Dws.Cluster
+ * ECS | huaweicloud.Ecs.Instance
+ * EG  | huaweicloudEgCustomEventChannel
+ * EIP | huaweicloud_vpc_eip<br>huaweicloud_vpc_bandwidth
+ * ELB | huaweicloud_elb_loadbalancer<br>huaweicloud_elb_certificate<br>huaweicloud_elb_ipgroup<br>huaweicloud_elb_security_policy
+ * ER  | huaweicloudErInstance
+ * EVS | huaweicloud.Evs.Volume
+ * FGS | huaweicloud.FunctionGraph.Function
+ * GA  | huaweicloudGaAccelerator
+ * GaussDB | huaweicloud_gaussdb_cassandra_instance<br>huaweicloud_gaussdb_influx_instance<br>huaweicloud_gaussdb_mongo_instance<br>huaweicloud_gaussdb_mysql_instance<br>huaweicloud_gaussdb_opengauss_instance<br>huaweicloud_gaussdb_redis_instance
+ * GES | huaweicloudGesGraph
+ * HSS | huaweicloudHssHostGroup
+ * IAM | huaweicloud_identity_group_role_assignment<br>huaweicloud_identity_user_role_assignment
+ * IMS | huaweicloud_images_image<br>huaweicloud_images_image_copy
+ * LB  | huaweicloud_lb_certificate<br>huaweicloud_lb_loadbalancer
+ * LTS | huaweicloud_lts_stream<br>huaweicloud_lts_waf_access<br>huaweicloud_lts_search_criteria
+ * ModelArts | huaweicloudModelartsWorkspace
+ * MRS | huaweicloud.Mrs.cluster
+ * NAT | huaweicloud_nat_gateway<br>huaweicloud_nat_private_gateway<br>huaweicloud_nat_private_transit_ip
+ * OBS | huaweicloud.Obs.Bucket
+ * RDS | huaweicloud_rds_instance<br>huaweicloud_rds_read_replica_instance
+ * ServicesTage | huaweicloud_servicestage_application<br>huaweicloud_servicestage_environment
+ * SFS | huaweicloud_sfs_file_system<br>huaweicloud_sfs_turbo
+ * SMN | huaweicloud.Smn.Topic
+ * VPC | huaweicloud_vpc<br>huaweicloud_networking_secgroup<br>huaweicloud_vpc_address_group
+ * VPN | huaweicloudVpnGateway
+ * WAF | huaweicloud_waf_address_group<br>huaweicloud_waf_certificate<br>huaweicloud_waf_cloud_instance<br>huaweicloud_waf_dedicated_domain<br>huaweicloud_waf_dedicated_instance<br>huaweicloud_waf_domain<br>huaweicloud_waf_policy<br>huaweicloud_waf_reference_table<br> huaweicloud_waf_rule_anti_crawler<br>huaweicloud_waf_rule_blacklist<br>huaweicloud_waf_rule_cc_protection<br>huaweicloud_waf_rule_data_masking<br>huaweicloud_waf_rule_geolocation_access_control<br>huaweicloud_waf_rule_global_protection_whitelist<br>huaweicloud_waf_rule_information_leakage_prevention<br>huaweicloud_waf_rule_known_attack_source<br>huaweicloud_waf_rule_precise_protection<br>huaweicloud_waf_rule_web_tamper_protection
+ * WorkSpace | huaweicloud_workspace_desktop<br>
  * <!-- markdownlint-enable MD033 -->
  */
 export function getProject(args?: GetProjectArgs, opts?: pulumi.InvokeOptions): Promise<GetProjectResult> {

@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a Live transcoding within HuaweiCloud.
+// Manages a Live transcoding resource within HuaweiCloud.
 //
 // ## Example Usage
 // ### Create a transcoding
@@ -32,19 +32,16 @@ import (
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
 //			ingestDomainName := cfg.RequireObject("ingestDomainName")
-//			ingestDomain, err := Live.NewDomain(ctx, "ingestDomain", &Live.DomainArgs{
-//				Type: pulumi.String("push"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Live.NewTranscoding(ctx, "test", &Live.TranscodingArgs{
-//				DomainName:    ingestDomain.Name,
-//				AppName:       pulumi.String("live"),
-//				VideoEncoding: pulumi.String("H264"),
+//			appName := cfg.RequireObject("appName")
+//			videoEncoding := cfg.RequireObject("videoEncoding")
+//			templateName := cfg.RequireObject("templateName")
+//			_, err := Live.NewTranscoding(ctx, "test", &Live.TranscodingArgs{
+//				DomainName:    pulumi.Any(ingestDomainName),
+//				AppName:       pulumi.Any(appName),
+//				VideoEncoding: pulumi.Any(videoEncoding),
 //				Templates: live.TranscodingTemplateArray{
 //					&live.TranscodingTemplateArgs{
-//						Name:    pulumi.String("L"),
+//						Name:    pulumi.Any(templateName),
 //						Width:   pulumi.Int(300),
 //						Height:  pulumi.Int(400),
 //						Bitrate: pulumi.Int(300),
@@ -62,13 +59,27 @@ import (
 //
 // ## Import
 //
-// Transcodings can be imported using the `domain_name` and `app_name`, separated by a slash. e.g.
+// The resource can be imported using the `domain_name` and `app_name`, separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Live/transcoding:Transcoding test play.example.demo.com/live
+//	$ pulumi import huaweicloud:Live/transcoding:Transcoding test <domian_name>/<app_name>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`trans_type`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_transcoding" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	trans_type,
+//
+//	]
+//
+//	} }
 type Transcoding struct {
 	pulumi.CustomResourceState
 
@@ -79,16 +90,22 @@ type Transcoding struct {
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringOutput `pulumi:"domainName"`
 	// Specifies whether to enable low bitrate HD rates. If enabled
-	// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+	// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 	LowBitrateHd pulumi.BoolOutput `pulumi:"lowBitrateHd"`
-	// Specifies the region in which to create this resource. If omitted,
-	// the provider-level region will be used. Changing this parameter will create a new resource.
+	// Specifies the region in which to create this resource.
+	// If omitted, the provider-level region will be used.
+	// Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the video quality templates.
-	// The object structure is documented below. A maximum of 4 templates can be added.
+	// Specifies the video quality templates. A maximum of `4` templates can be added.
+	// The templates structure is documented below.
 	// For resolution and bitrate settings in the presets,
 	// please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 	Templates TranscodingTemplateArrayOutput `pulumi:"templates"`
+	// Specifies the transcoding stream trigger mode.
+	// The valid values are as follows:
+	// + **play**: Pull stream triggers transcoding.
+	// + **publish**: Push stream triggers transcoding.
+	TransType pulumi.StringPtrOutput `pulumi:"transType"`
 	// Specifies the video codec. The valid values are **H264** and **H265**.
 	VideoEncoding pulumi.StringOutput `pulumi:"videoEncoding"`
 }
@@ -142,16 +159,22 @@ type transcodingState struct {
 	// Changing this parameter will create a new resource.
 	DomainName *string `pulumi:"domainName"`
 	// Specifies whether to enable low bitrate HD rates. If enabled
-	// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+	// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
-	// Specifies the region in which to create this resource. If omitted,
-	// the provider-level region will be used. Changing this parameter will create a new resource.
+	// Specifies the region in which to create this resource.
+	// If omitted, the provider-level region will be used.
+	// Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the video quality templates.
-	// The object structure is documented below. A maximum of 4 templates can be added.
+	// Specifies the video quality templates. A maximum of `4` templates can be added.
+	// The templates structure is documented below.
 	// For resolution and bitrate settings in the presets,
 	// please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 	Templates []TranscodingTemplate `pulumi:"templates"`
+	// Specifies the transcoding stream trigger mode.
+	// The valid values are as follows:
+	// + **play**: Pull stream triggers transcoding.
+	// + **publish**: Push stream triggers transcoding.
+	TransType *string `pulumi:"transType"`
 	// Specifies the video codec. The valid values are **H264** and **H265**.
 	VideoEncoding *string `pulumi:"videoEncoding"`
 }
@@ -164,16 +187,22 @@ type TranscodingState struct {
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringPtrInput
 	// Specifies whether to enable low bitrate HD rates. If enabled
-	// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+	// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 	LowBitrateHd pulumi.BoolPtrInput
-	// Specifies the region in which to create this resource. If omitted,
-	// the provider-level region will be used. Changing this parameter will create a new resource.
+	// Specifies the region in which to create this resource.
+	// If omitted, the provider-level region will be used.
+	// Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the video quality templates.
-	// The object structure is documented below. A maximum of 4 templates can be added.
+	// Specifies the video quality templates. A maximum of `4` templates can be added.
+	// The templates structure is documented below.
 	// For resolution and bitrate settings in the presets,
 	// please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 	Templates TranscodingTemplateArrayInput
+	// Specifies the transcoding stream trigger mode.
+	// The valid values are as follows:
+	// + **play**: Pull stream triggers transcoding.
+	// + **publish**: Push stream triggers transcoding.
+	TransType pulumi.StringPtrInput
 	// Specifies the video codec. The valid values are **H264** and **H265**.
 	VideoEncoding pulumi.StringPtrInput
 }
@@ -190,16 +219,22 @@ type transcodingArgs struct {
 	// Changing this parameter will create a new resource.
 	DomainName string `pulumi:"domainName"`
 	// Specifies whether to enable low bitrate HD rates. If enabled
-	// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+	// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 	LowBitrateHd *bool `pulumi:"lowBitrateHd"`
-	// Specifies the region in which to create this resource. If omitted,
-	// the provider-level region will be used. Changing this parameter will create a new resource.
+	// Specifies the region in which to create this resource.
+	// If omitted, the provider-level region will be used.
+	// Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the video quality templates.
-	// The object structure is documented below. A maximum of 4 templates can be added.
+	// Specifies the video quality templates. A maximum of `4` templates can be added.
+	// The templates structure is documented below.
 	// For resolution and bitrate settings in the presets,
 	// please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 	Templates []TranscodingTemplate `pulumi:"templates"`
+	// Specifies the transcoding stream trigger mode.
+	// The valid values are as follows:
+	// + **play**: Pull stream triggers transcoding.
+	// + **publish**: Push stream triggers transcoding.
+	TransType *string `pulumi:"transType"`
 	// Specifies the video codec. The valid values are **H264** and **H265**.
 	VideoEncoding string `pulumi:"videoEncoding"`
 }
@@ -213,16 +248,22 @@ type TranscodingArgs struct {
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringInput
 	// Specifies whether to enable low bitrate HD rates. If enabled
-	// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+	// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 	LowBitrateHd pulumi.BoolPtrInput
-	// Specifies the region in which to create this resource. If omitted,
-	// the provider-level region will be used. Changing this parameter will create a new resource.
+	// Specifies the region in which to create this resource.
+	// If omitted, the provider-level region will be used.
+	// Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the video quality templates.
-	// The object structure is documented below. A maximum of 4 templates can be added.
+	// Specifies the video quality templates. A maximum of `4` templates can be added.
+	// The templates structure is documented below.
 	// For resolution and bitrate settings in the presets,
 	// please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 	Templates TranscodingTemplateArrayInput
+	// Specifies the transcoding stream trigger mode.
+	// The valid values are as follows:
+	// + **play**: Pull stream triggers transcoding.
+	// + **publish**: Push stream triggers transcoding.
+	TransType pulumi.StringPtrInput
 	// Specifies the video codec. The valid values are **H264** and **H265**.
 	VideoEncoding pulumi.StringInput
 }
@@ -327,23 +368,32 @@ func (o TranscodingOutput) DomainName() pulumi.StringOutput {
 }
 
 // Specifies whether to enable low bitrate HD rates. If enabled
-// the output media will have a lower bitrate with the same image quality. Defaults to `false`.
+// the output media will have a lower bitrate with the same image quality. Defaults to **false**.
 func (o TranscodingOutput) LowBitrateHd() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Transcoding) pulumi.BoolOutput { return v.LowBitrateHd }).(pulumi.BoolOutput)
 }
 
-// Specifies the region in which to create this resource. If omitted,
-// the provider-level region will be used. Changing this parameter will create a new resource.
+// Specifies the region in which to create this resource.
+// If omitted, the provider-level region will be used.
+// Changing this parameter will create a new resource.
 func (o TranscodingOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Transcoding) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the video quality templates.
-// The object structure is documented below. A maximum of 4 templates can be added.
+// Specifies the video quality templates. A maximum of `4` templates can be added.
+// The templates structure is documented below.
 // For resolution and bitrate settings in the presets,
 // please refer to the [document](https://support.huaweicloud.com/intl/en-us/usermanual-live/live01000802.html).
 func (o TranscodingOutput) Templates() TranscodingTemplateArrayOutput {
 	return o.ApplyT(func(v *Transcoding) TranscodingTemplateArrayOutput { return v.Templates }).(TranscodingTemplateArrayOutput)
+}
+
+// Specifies the transcoding stream trigger mode.
+// The valid values are as follows:
+// + **play**: Pull stream triggers transcoding.
+// + **publish**: Push stream triggers transcoding.
+func (o TranscodingOutput) TransType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Transcoding) pulumi.StringPtrOutput { return v.TransType }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the video codec. The valid values are **H264** and **H265**.

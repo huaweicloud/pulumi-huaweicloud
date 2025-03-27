@@ -14,7 +14,7 @@ import (
 // Manages a WAF reference table resource within HuaweiCloud.
 //
 // > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-// used. The reference table resource can be used in Cloud Mode (professional version), Dedicated Mode and ELB Mode.
+// used. The reference table resource can be used in Cloud Mode and Dedicated Mode.
 //
 // ## Example Usage
 //
@@ -32,8 +32,9 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			cfg := config.New(ctx, "")
+//			name := cfg.RequireObject("name")
 //			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
-//			_, err := Waf.NewReferenceTable(ctx, "refTable", &Waf.ReferenceTableArgs{
+//			_, err := Waf.NewReferenceTable(ctx, "test", &Waf.ReferenceTableArgs{
 //				Type:                pulumi.String("url"),
 //				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
 //				Conditions: pulumi.StringArray{
@@ -70,24 +71,26 @@ import (
 type ReferenceTable struct {
 	pulumi.CustomResourceState
 
-	// The conditions of the reference table. The maximum length is 30. The maximum length of
-	// condition is 2048 characters.
+	// Specifies the conditions of the reference table.
 	Conditions pulumi.StringArrayOutput `pulumi:"conditions"`
-	// The server time when reference table was created.
+	// The creation time of the reference table, in UTC format.
 	CreationTime pulumi.StringOutput `pulumi:"creationTime"`
-	// The description of the reference table. The maximum length is 128 characters.
+	// Specifies the description of the reference table.
+	// The maximum length is `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the enterprise project ID of WAF reference table.
+	// Specifies the enterprise project ID to which the reference
+	// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
-	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-	// maximum length is 64 characters.
+	// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+	// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// The region in which to create the WAF reference table resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new reference table.
+	// Specifies the region in which to create the WAF reference table resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-	// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+	// Specifies the type of the reference table.
+	// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+	// Changing this parameter will create a new resource.
 	Type pulumi.StringOutput `pulumi:"type"`
 }
 
@@ -124,46 +127,50 @@ func GetReferenceTable(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ReferenceTable resources.
 type referenceTableState struct {
-	// The conditions of the reference table. The maximum length is 30. The maximum length of
-	// condition is 2048 characters.
+	// Specifies the conditions of the reference table.
 	Conditions []string `pulumi:"conditions"`
-	// The server time when reference table was created.
+	// The creation time of the reference table, in UTC format.
 	CreationTime *string `pulumi:"creationTime"`
-	// The description of the reference table. The maximum length is 128 characters.
+	// Specifies the description of the reference table.
+	// The maximum length is `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise project ID of WAF reference table.
+	// Specifies the enterprise project ID to which the reference
+	// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-	// maximum length is 64 characters.
+	// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+	// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 	Name *string `pulumi:"name"`
-	// The region in which to create the WAF reference table resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new reference table.
+	// Specifies the region in which to create the WAF reference table resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-	// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+	// Specifies the type of the reference table.
+	// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+	// Changing this parameter will create a new resource.
 	Type *string `pulumi:"type"`
 }
 
 type ReferenceTableState struct {
-	// The conditions of the reference table. The maximum length is 30. The maximum length of
-	// condition is 2048 characters.
+	// Specifies the conditions of the reference table.
 	Conditions pulumi.StringArrayInput
-	// The server time when reference table was created.
+	// The creation time of the reference table, in UTC format.
 	CreationTime pulumi.StringPtrInput
-	// The description of the reference table. The maximum length is 128 characters.
+	// Specifies the description of the reference table.
+	// The maximum length is `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise project ID of WAF reference table.
+	// Specifies the enterprise project ID to which the reference
+	// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-	// maximum length is 64 characters.
+	// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+	// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 	Name pulumi.StringPtrInput
-	// The region in which to create the WAF reference table resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new reference table.
+	// Specifies the region in which to create the WAF reference table resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-	// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+	// Specifies the type of the reference table.
+	// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+	// Changing this parameter will create a new resource.
 	Type pulumi.StringPtrInput
 }
 
@@ -172,43 +179,47 @@ func (ReferenceTableState) ElementType() reflect.Type {
 }
 
 type referenceTableArgs struct {
-	// The conditions of the reference table. The maximum length is 30. The maximum length of
-	// condition is 2048 characters.
+	// Specifies the conditions of the reference table.
 	Conditions []string `pulumi:"conditions"`
-	// The description of the reference table. The maximum length is 128 characters.
+	// Specifies the description of the reference table.
+	// The maximum length is `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise project ID of WAF reference table.
+	// Specifies the enterprise project ID to which the reference
+	// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-	// maximum length is 64 characters.
+	// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+	// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 	Name *string `pulumi:"name"`
-	// The region in which to create the WAF reference table resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new reference table.
+	// Specifies the region in which to create the WAF reference table resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-	// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+	// Specifies the type of the reference table.
+	// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+	// Changing this parameter will create a new resource.
 	Type string `pulumi:"type"`
 }
 
 // The set of arguments for constructing a ReferenceTable resource.
 type ReferenceTableArgs struct {
-	// The conditions of the reference table. The maximum length is 30. The maximum length of
-	// condition is 2048 characters.
+	// Specifies the conditions of the reference table.
 	Conditions pulumi.StringArrayInput
-	// The description of the reference table. The maximum length is 128 characters.
+	// Specifies the description of the reference table.
+	// The maximum length is `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise project ID of WAF reference table.
+	// Specifies the enterprise project ID to which the reference
+	// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-	// maximum length is 64 characters.
+	// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+	// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 	Name pulumi.StringPtrInput
-	// The region in which to create the WAF reference table resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new reference table.
+	// Specifies the region in which to create the WAF reference table resource.
+	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-	// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+	// Specifies the type of the reference table.
+	// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+	// Changing this parameter will create a new resource.
 	Type pulumi.StringInput
 }
 
@@ -299,42 +310,44 @@ func (o ReferenceTableOutput) ToReferenceTableOutputWithContext(ctx context.Cont
 	return o
 }
 
-// The conditions of the reference table. The maximum length is 30. The maximum length of
-// condition is 2048 characters.
+// Specifies the conditions of the reference table.
 func (o ReferenceTableOutput) Conditions() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringArrayOutput { return v.Conditions }).(pulumi.StringArrayOutput)
 }
 
-// The server time when reference table was created.
+// The creation time of the reference table, in UTC format.
 func (o ReferenceTableOutput) CreationTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringOutput { return v.CreationTime }).(pulumi.StringOutput)
 }
 
-// The description of the reference table. The maximum length is 128 characters.
+// Specifies the description of the reference table.
+// The maximum length is `128` characters.
 func (o ReferenceTableOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise project ID of WAF reference table.
+// Specifies the enterprise project ID to which the reference
+// table belongs. For enterprise users, if omitted, default enterprise project will be used.
 // Changing this parameter will create a new resource.
 func (o ReferenceTableOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
-// The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-// maximum length is 64 characters.
+// Specifies the name of the reference table. Only letters, digits, hyphens (-),
+// underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
 func (o ReferenceTableOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The region in which to create the WAF reference table resource. If omitted,
-// the provider-level region will be used. Changing this setting will push a new reference table.
+// Specifies the region in which to create the WAF reference table resource.
+// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 func (o ReferenceTableOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The type of the reference table, The options are `url`, `user-agent`, `ip`,
-// `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+// Specifies the type of the reference table.
+// The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+// Changing this parameter will create a new resource.
 func (o ReferenceTableOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReferenceTable) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

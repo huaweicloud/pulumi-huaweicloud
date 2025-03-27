@@ -57,10 +57,10 @@ type SecurityGroupRule struct {
 	// default) or **IPv6**. Changing this parameter creates a new security group rule resource.
 	Ethertype pulumi.StringPtrOutput `pulumi:"ethertype"`
 	// Specifies the higher part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMax pulumi.IntPtrOutput `pulumi:"portRangeMax"`
 	// Specifies the lower part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMin pulumi.IntPtrOutput `pulumi:"portRangeMin"`
 	// Specifies the layer 4 protocol type, valid values are following. The valid
 	// values are: **tcp**, **udp**, **icmp** and **gre**. Changing this parameter creates a new security group rule
@@ -128,10 +128,10 @@ type securityGroupRuleState struct {
 	// default) or **IPv6**. Changing this parameter creates a new security group rule resource.
 	Ethertype *string `pulumi:"ethertype"`
 	// Specifies the higher part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMax *int `pulumi:"portRangeMax"`
 	// Specifies the lower part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMin *int `pulumi:"portRangeMin"`
 	// Specifies the layer 4 protocol type, valid values are following. The valid
 	// values are: **tcp**, **udp**, **icmp** and **gre**. Changing this parameter creates a new security group rule
@@ -161,10 +161,10 @@ type SecurityGroupRuleState struct {
 	// default) or **IPv6**. Changing this parameter creates a new security group rule resource.
 	Ethertype pulumi.StringPtrInput
 	// Specifies the higher part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMax pulumi.IntPtrInput
 	// Specifies the lower part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMin pulumi.IntPtrInput
 	// Specifies the layer 4 protocol type, valid values are following. The valid
 	// values are: **tcp**, **udp**, **icmp** and **gre**. Changing this parameter creates a new security group rule
@@ -198,10 +198,10 @@ type securityGroupRuleArgs struct {
 	// default) or **IPv6**. Changing this parameter creates a new security group rule resource.
 	Ethertype *string `pulumi:"ethertype"`
 	// Specifies the higher part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMax *int `pulumi:"portRangeMax"`
 	// Specifies the lower part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMin *int `pulumi:"portRangeMin"`
 	// Specifies the layer 4 protocol type, valid values are following. The valid
 	// values are: **tcp**, **udp**, **icmp** and **gre**. Changing this parameter creates a new security group rule
@@ -232,10 +232,10 @@ type SecurityGroupRuleArgs struct {
 	// default) or **IPv6**. Changing this parameter creates a new security group rule resource.
 	Ethertype pulumi.StringPtrInput
 	// Specifies the higher part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMax pulumi.IntPtrInput
 	// Specifies the lower part of the allowed port range, valid integer value
-	// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+	// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 	PortRangeMin pulumi.IntPtrInput
 	// Specifies the layer 4 protocol type, valid values are following. The valid
 	// values are: **tcp**, **udp**, **icmp** and **gre**. Changing this parameter creates a new security group rule
@@ -360,13 +360,13 @@ func (o SecurityGroupRuleOutput) Ethertype() pulumi.StringPtrOutput {
 }
 
 // Specifies the higher part of the allowed port range, valid integer value
-// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 func (o SecurityGroupRuleOutput) PortRangeMax() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *SecurityGroupRule) pulumi.IntPtrOutput { return v.PortRangeMax }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the lower part of the allowed port range, valid integer value
-// needs to be between 1 and 65535. Changing this parameter creates a new security group rule resource.
+// needs to be between `1` and `65,535`. Changing this parameter creates a new security group rule resource.
 func (o SecurityGroupRuleOutput) PortRangeMin() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *SecurityGroupRule) pulumi.IntPtrOutput { return v.PortRangeMin }).(pulumi.IntPtrOutput)
 }

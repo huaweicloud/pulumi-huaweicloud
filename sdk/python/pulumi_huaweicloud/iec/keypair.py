@@ -178,7 +178,7 @@ class Keypair(pulumi.CustomResource):
 
         ## Import
 
-        Keypairs can be imported using the `name`, e.g.
+        Keypairs can be imported using the `name`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/keypair:Keypair test_keypair iec-keypair-demo
@@ -214,7 +214,7 @@ class Keypair(pulumi.CustomResource):
 
         ## Import
 
-        Keypairs can be imported using the `name`, e.g.
+        Keypairs can be imported using the `name`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/keypair:Keypair test_keypair iec-keypair-demo

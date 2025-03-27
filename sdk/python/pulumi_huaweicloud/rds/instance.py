@@ -26,20 +26,40 @@ class InstanceArgs:
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
+                 binlog_retention_hours: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  collation: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 dss_pool_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
                  lower_case_table_names: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
+                 minor_version_auto_upgrade_enabled: Optional[pulumi.Input[bool]] = None,
+                 msdtc_hosts: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
                  parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 read_write_permissions: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 restore: Optional[pulumi.Input['InstanceRestoreArgs']] = None,
+                 rotate_day: Optional[pulumi.Input[int]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_interval: Optional[pulumi.Input[int]] = None,
+                 secret_id: Optional[pulumi.Input[str]] = None,
+                 secret_name: Optional[pulumi.Input[str]] = None,
+                 secret_version: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_status: Optional[pulumi.Input[str]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
+                 switch_strategy: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tde_enabled: Optional[pulumi.Input[bool]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Instance resource.
@@ -55,47 +75,75 @@ class InstanceArgs:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are "true" and "false".
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        :param pulumi.Input[int] binlog_retention_hours: Specify the binlog retention period in hours. This parameter applies only to
+               MySQL Server databases. Value range: `0` to `168` (7x24).
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] collation: Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the RDS instance. Changing this
-               parameter creates a new RDS instance.
-        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance. Changing this
-               parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] dss_pool_id: Specifies the exclusive storage ID for Dec users. It is different for each az
+               configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+               and separated by commas if database instance type is not standalone or read-only.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the RDS instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance.
         :param pulumi.Input[str] ha_replication_mode: Specifies the replication mode for the standby DB instance.
-               Changing this parameter will create a new resource.
-               + For MySQL, the value is *async* or *semisync*.
-               + For PostgreSQL, the value is *async* or *sync*.
-               + For Microsoft SQL Server, the value is *sync*.
+               + For MySQL, the value is **async** or **semisync**.
+               + For PostgreSQL, the value is **async** or **sync**.
+               + For Microsoft SQL Server, the value is **sync**.
+               + For MariaDB, the value is **async** or **semisync**.
         :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
                the default value is "1". Changing this parameter will create a new resource.
                + 0: Table names are stored as fixed and table names are case-sensitive.
                + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[bool] minor_version_auto_upgrade_enabled: Specifies whether to enable minor version auto upgrade.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]] msdtc_hosts: Specify the host information for MSDTC.
+               The msdtc_hosts structure is documented below.
         :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
                to take effect.
-        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
                launched. You can check on console to see which parameters supported. Structure is documented below.
         :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
                the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
                number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
                Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-               new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+               and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the instance.
+               Value options: **ON**, **OFF** and **REBOOT**.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] read_write_permissions: Specifies the read write permissions of the instance. Valid values:
+               + **readwrite**: read write permissions.
+               + **readonly**: readonly permissions.
         :param pulumi.Input[str] region: The region in which to create the rds instance resource. If omitted, the
                provider-level region will be used. Changing this creates a new rds instance resource.
+        :param pulumi.Input['InstanceRestoreArgs'] restore: Specifies the restoration information. It only supported restore to postpaid
+               instance. Structure is documented below. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] rotate_day: Specifies the rotation days of TDE rotation.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_interval: Specifies the seconds level monitoring interval. Valid values:
+               `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        :param pulumi.Input[str] secret_id: Specifies the key ID of TDE rotation.
+        :param pulumi.Input[str] secret_name: Specifies the key name of TDE rotation.
+        :param pulumi.Input[str] secret_version: Specifies the key version of TDE rotation.
+        :param pulumi.Input[str] slow_log_show_original_status: Specifies the slow log show original status of the instance.
+               Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
         :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for MySQL database.
+        :param pulumi.Input[str] switch_strategy: Specifies the database switchover policy.
+               + **reliability**: reliability first.
+               + **availability**: availability first.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
                pair.
+        :param pulumi.Input[bool] tde_enabled: Specifies whether enable TDE for the instance.
         :param pulumi.Input[str] time_zone: Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
                and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
                Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
                zone is expressed as a character string, refer to
-               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-               .
+               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         """
         pulumi.set(__self__, "availability_zones", availability_zones)
         pulumi.set(__self__, "db", db)
@@ -113,10 +161,16 @@ class InstanceArgs:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if binlog_retention_hours is not None:
+            pulumi.set(__self__, "binlog_retention_hours", binlog_retention_hours)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if collation is not None:
             pulumi.set(__self__, "collation", collation)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if fixed_ip is not None:
@@ -125,6 +179,14 @@ class InstanceArgs:
             pulumi.set(__self__, "ha_replication_mode", ha_replication_mode)
         if lower_case_table_names is not None:
             pulumi.set(__self__, "lower_case_table_names", lower_case_table_names)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
+        if minor_version_auto_upgrade_enabled is not None:
+            pulumi.set(__self__, "minor_version_auto_upgrade_enabled", minor_version_auto_upgrade_enabled)
+        if msdtc_hosts is not None:
+            pulumi.set(__self__, "msdtc_hosts", msdtc_hosts)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if param_group_id is not None:
@@ -135,12 +197,38 @@ class InstanceArgs:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if power_action is not None:
+            pulumi.set(__self__, "power_action", power_action)
+        if private_dns_name_prefix is not None:
+            pulumi.set(__self__, "private_dns_name_prefix", private_dns_name_prefix)
+        if read_write_permissions is not None:
+            pulumi.set(__self__, "read_write_permissions", read_write_permissions)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if restore is not None:
+            pulumi.set(__self__, "restore", restore)
+        if rotate_day is not None:
+            pulumi.set(__self__, "rotate_day", rotate_day)
+        if seconds_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_enabled", seconds_level_monitoring_enabled)
+        if seconds_level_monitoring_interval is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_interval", seconds_level_monitoring_interval)
+        if secret_id is not None:
+            pulumi.set(__self__, "secret_id", secret_id)
+        if secret_name is not None:
+            pulumi.set(__self__, "secret_name", secret_name)
+        if secret_version is not None:
+            pulumi.set(__self__, "secret_version", secret_version)
+        if slow_log_show_original_status is not None:
+            pulumi.set(__self__, "slow_log_show_original_status", slow_log_show_original_status)
         if ssl_enable is not None:
             pulumi.set(__self__, "ssl_enable", ssl_enable)
+        if switch_strategy is not None:
+            pulumi.set(__self__, "switch_strategy", switch_strategy)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if tde_enabled is not None:
+            pulumi.set(__self__, "tde_enabled", tde_enabled)
         if time_zone is not None:
             pulumi.set(__self__, "time_zone", time_zone)
 
@@ -265,11 +353,24 @@ class InstanceArgs:
         pulumi.set(self, "backup_strategy", value)
 
     @property
+    @pulumi.getter(name="binlogRetentionHours")
+    def binlog_retention_hours(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specify the binlog retention period in hours. This parameter applies only to
+        MySQL Server databases. Value range: `0` to `168` (7x24).
+        """
+        return pulumi.get(self, "binlog_retention_hours")
+
+    @binlog_retention_hours.setter
+    def binlog_retention_hours(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "binlog_retention_hours", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the RDS DB instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -282,7 +383,6 @@ class InstanceArgs:
     def collation(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "collation")
 
@@ -291,11 +391,37 @@ class InstanceArgs:
         pulumi.set(self, "collation", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the exclusive storage ID for Dec users. It is different for each az
+        configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+        and separated by commas if database instance type is not standalone or read-only.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @dss_pool_id.setter
+    def dss_pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dss_pool_id", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the RDS instance. Changing this
-        parameter creates a new RDS instance.
+        Specifies the enterprise project id of the RDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -307,8 +433,7 @@ class InstanceArgs:
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an intranet floating IP address of RDS DB instance. Changing this
-        parameter will create a new resource.
+        Specifies an intranet floating IP address of RDS DB instance.
         """
         return pulumi.get(self, "fixed_ip")
 
@@ -321,10 +446,10 @@ class InstanceArgs:
     def ha_replication_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the replication mode for the standby DB instance.
-        Changing this parameter will create a new resource.
-        + For MySQL, the value is *async* or *semisync*.
-        + For PostgreSQL, the value is *async* or *sync*.
-        + For Microsoft SQL Server, the value is *sync*.
+        + For MySQL, the value is **async** or **semisync**.
+        + For PostgreSQL, the value is **async** or **sync**.
+        + For Microsoft SQL Server, the value is **sync**.
+        + For MariaDB, the value is **async** or **semisync**.
         """
         return pulumi.get(self, "ha_replication_mode")
 
@@ -348,6 +473,55 @@ class InstanceArgs:
         pulumi.set(self, "lower_case_table_names", value)
 
     @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
+    @pulumi.getter(name="minorVersionAutoUpgradeEnabled")
+    def minor_version_auto_upgrade_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable minor version auto upgrade.
+        """
+        return pulumi.get(self, "minor_version_auto_upgrade_enabled")
+
+    @minor_version_auto_upgrade_enabled.setter
+    def minor_version_auto_upgrade_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "minor_version_auto_upgrade_enabled", value)
+
+    @property
+    @pulumi.getter(name="msdtcHosts")
+    def msdtc_hosts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]]:
+        """
+        Specify the host information for MSDTC.
+        The msdtc_hosts structure is documented below.
+        """
+        return pulumi.get(self, "msdtc_hosts")
+
+    @msdtc_hosts.setter
+    def msdtc_hosts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]]):
+        pulumi.set(self, "msdtc_hosts", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -364,8 +538,7 @@ class InstanceArgs:
     @pulumi.getter(name="paramGroupId")
     def param_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the parameter group ID. Changing this parameter will create
-        a new resource.
+        Specifies the parameter group ID.
         """
         return pulumi.get(self, "param_group_id")
 
@@ -405,15 +578,54 @@ class InstanceArgs:
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging period unit of the RDS DB instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-        new resource.
+        Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+        and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         """
         return pulumi.get(self, "period_unit")
 
     @period_unit.setter
     def period_unit(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action to be done for the instance.
+        Value options: **ON**, **OFF** and **REBOOT**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @power_action.setter
+    def power_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action", value)
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
+
+    @private_dns_name_prefix.setter
+    def private_dns_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_dns_name_prefix", value)
+
+    @property
+    @pulumi.getter(name="readWritePermissions")
+    def read_write_permissions(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the read write permissions of the instance. Valid values:
+        + **readwrite**: read write permissions.
+        + **readonly**: readonly permissions.
+        """
+        return pulumi.get(self, "read_write_permissions")
+
+    @read_write_permissions.setter
+    def read_write_permissions(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "read_write_permissions", value)
 
     @property
     @pulumi.getter
@@ -429,6 +641,105 @@ class InstanceArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def restore(self) -> Optional[pulumi.Input['InstanceRestoreArgs']]:
+        """
+        Specifies the restoration information. It only supported restore to postpaid
+        instance. Structure is documented below. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "restore")
+
+    @restore.setter
+    def restore(self, value: Optional[pulumi.Input['InstanceRestoreArgs']]):
+        pulumi.set(self, "restore", value)
+
+    @property
+    @pulumi.getter(name="rotateDay")
+    def rotate_day(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the rotation days of TDE rotation.
+        """
+        return pulumi.get(self, "rotate_day")
+
+    @rotate_day.setter
+    def rotate_day(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "rotate_day", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @seconds_level_monitoring_enabled.setter
+    def seconds_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "seconds_level_monitoring_enabled", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringInterval")
+    def seconds_level_monitoring_interval(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the seconds level monitoring interval. Valid values:
+        `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_interval")
+
+    @seconds_level_monitoring_interval.setter
+    def seconds_level_monitoring_interval(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "seconds_level_monitoring_interval", value)
+
+    @property
+    @pulumi.getter(name="secretId")
+    def secret_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key ID of TDE rotation.
+        """
+        return pulumi.get(self, "secret_id")
+
+    @secret_id.setter
+    def secret_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_id", value)
+
+    @property
+    @pulumi.getter(name="secretName")
+    def secret_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key name of TDE rotation.
+        """
+        return pulumi.get(self, "secret_name")
+
+    @secret_name.setter
+    def secret_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_name", value)
+
+    @property
+    @pulumi.getter(name="secretVersion")
+    def secret_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key version of TDE rotation.
+        """
+        return pulumi.get(self, "secret_version")
+
+    @secret_version.setter
+    def secret_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_version", value)
+
+    @property
+    @pulumi.getter(name="slowLogShowOriginalStatus")
+    def slow_log_show_original_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the slow log show original status of the instance.
+        Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+        """
+        return pulumi.get(self, "slow_log_show_original_status")
+
+    @slow_log_show_original_status.setter
+    def slow_log_show_original_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slow_log_show_original_status", value)
+
+    @property
     @pulumi.getter(name="sslEnable")
     def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -439,6 +750,20 @@ class InstanceArgs:
     @ssl_enable.setter
     def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "ssl_enable", value)
+
+    @property
+    @pulumi.getter(name="switchStrategy")
+    def switch_strategy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database switchover policy.
+        + **reliability**: reliability first.
+        + **availability**: availability first.
+        """
+        return pulumi.get(self, "switch_strategy")
+
+    @switch_strategy.setter
+    def switch_strategy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "switch_strategy", value)
 
     @property
     @pulumi.getter
@@ -454,6 +779,18 @@ class InstanceArgs:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter(name="tdeEnabled")
+    def tde_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether enable TDE for the instance.
+        """
+        return pulumi.get(self, "tde_enabled")
+
+    @tde_enabled.setter
+    def tde_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "tde_enabled", value)
+
+    @property
     @pulumi.getter(name="timeZone")
     def time_zone(self) -> Optional[pulumi.Input[str]]:
         """
@@ -461,8 +798,7 @@ class InstanceArgs:
         and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
         Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
         zone is expressed as a character string, refer to
-        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-        .
+        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         """
         return pulumi.get(self, "time_zone")
 
@@ -478,29 +814,50 @@ class _InstanceState:
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  backup_strategy: Optional[pulumi.Input['InstanceBackupStrategyArgs']] = None,
+                 binlog_retention_hours: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  collation: Optional[pulumi.Input[str]] = None,
                  created: Optional[pulumi.Input[str]] = None,
                  db: Optional[pulumi.Input['InstanceDbArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 dss_pool_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
                  lower_case_table_names: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
+                 minor_version_auto_upgrade_enabled: Optional[pulumi.Input[bool]] = None,
+                 msdtc_hosts: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nodes: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
                  parameters: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 private_dns_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  public_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 read_write_permissions: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 restore: Optional[pulumi.Input['InstanceRestoreArgs']] = None,
+                 rotate_day: Optional[pulumi.Input[int]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_interval: Optional[pulumi.Input[int]] = None,
+                 secret_id: Optional[pulumi.Input[str]] = None,
+                 secret_name: Optional[pulumi.Input[str]] = None,
+                 secret_version: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_status: Optional[pulumi.Input[str]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 switch_strategy: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tde_enabled: Optional[pulumi.Input[bool]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input['InstanceVolumeArgs']] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
@@ -510,58 +867,87 @@ class _InstanceState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input['InstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        :param pulumi.Input[int] binlog_retention_hours: Specify the binlog retention period in hours. This parameter applies only to
+               MySQL Server databases. Value range: `0` to `168` (7x24).
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] collation: Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: Indicates the creation time.
         :param pulumi.Input['InstanceDbArgs'] db: Specifies the database information. Structure is documented below. Changing this
                parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the RDS instance. Changing this
-               parameter creates a new RDS instance.
-        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance. Changing this
-               parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] dss_pool_id: Specifies the exclusive storage ID for Dec users. It is different for each az
+               configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+               and separated by commas if database instance type is not standalone or read-only.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the RDS instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
         :param pulumi.Input[str] ha_replication_mode: Specifies the replication mode for the standby DB instance.
-               Changing this parameter will create a new resource.
-               + For MySQL, the value is *async* or *semisync*.
-               + For PostgreSQL, the value is *async* or *sync*.
-               + For Microsoft SQL Server, the value is *sync*.
+               + For MySQL, the value is **async** or **semisync**.
+               + For PostgreSQL, the value is **async** or **sync**.
+               + For Microsoft SQL Server, the value is **sync**.
+               + For MariaDB, the value is **async** or **semisync**.
         :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
                the default value is "1". Changing this parameter will create a new resource.
                + 0: Table names are stored as fixed and table names are case-sensitive.
                + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[bool] minor_version_auto_upgrade_enabled: Specifies whether to enable minor version auto upgrade.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]] msdtc_hosts: Specify the host information for MSDTC.
+               The msdtc_hosts structure is documented below.
         :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
                to take effect.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID.
         :param pulumi.Input[Sequence[pulumi.Input['InstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
                launched. You can check on console to see which parameters supported. Structure is documented below.
         :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
                the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
                number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
                Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-               new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+               and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the instance.
+               Value options: **ON**, **OFF** and **REBOOT**.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_dns_names: Indicates the private domain name list of the DB instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the private IP address list. It is a blank string until an ECS is created.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ips: Indicates the public IP address list.
+        :param pulumi.Input[str] read_write_permissions: Specifies the read write permissions of the instance. Valid values:
+               + **readwrite**: read write permissions.
+               + **readonly**: readonly permissions.
         :param pulumi.Input[str] region: The region in which to create the rds instance resource. If omitted, the
                provider-level region will be used. Changing this creates a new rds instance resource.
+        :param pulumi.Input['InstanceRestoreArgs'] restore: Specifies the restoration information. It only supported restore to postpaid
+               instance. Structure is documented below. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] rotate_day: Specifies the rotation days of TDE rotation.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_interval: Specifies the seconds level monitoring interval. Valid values:
+               `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        :param pulumi.Input[str] secret_id: Specifies the key ID of TDE rotation.
+        :param pulumi.Input[str] secret_name: Specifies the key name of TDE rotation.
+        :param pulumi.Input[str] secret_version: Specifies the key version of TDE rotation.
         :param pulumi.Input[str] security_group_id: Specifies the security group which the RDS DB instance belongs to.
+        :param pulumi.Input[str] slow_log_show_original_status: Specifies the slow log show original status of the instance.
+               Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
         :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for MySQL database.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network id of a subnet. Changing this parameter will create a
                new resource.
+        :param pulumi.Input[str] switch_strategy: Specifies the database switchover policy.
+               + **reliability**: reliability first.
+               + **availability**: availability first.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
                pair.
+        :param pulumi.Input[bool] tde_enabled: Specifies whether enable TDE for the instance.
         :param pulumi.Input[str] time_zone: Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
                and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
                Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
                zone is expressed as a character string, refer to
-               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-               .
+               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         :param pulumi.Input['InstanceVolumeArgs'] volume: Specifies the volume information. Structure is documented below.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
@@ -576,6 +962,8 @@ class _InstanceState:
             pulumi.set(__self__, "availability_zones", availability_zones)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if binlog_retention_hours is not None:
+            pulumi.set(__self__, "binlog_retention_hours", binlog_retention_hours)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if collation is not None:
@@ -584,6 +972,10 @@ class _InstanceState:
             pulumi.set(__self__, "created", created)
         if db is not None:
             pulumi.set(__self__, "db", db)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if fixed_ip is not None:
@@ -594,6 +986,14 @@ class _InstanceState:
             pulumi.set(__self__, "ha_replication_mode", ha_replication_mode)
         if lower_case_table_names is not None:
             pulumi.set(__self__, "lower_case_table_names", lower_case_table_names)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
+        if minor_version_auto_upgrade_enabled is not None:
+            pulumi.set(__self__, "minor_version_auto_upgrade_enabled", minor_version_auto_upgrade_enabled)
+        if msdtc_hosts is not None:
+            pulumi.set(__self__, "msdtc_hosts", msdtc_hosts)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if nodes is not None:
@@ -606,22 +1006,50 @@ class _InstanceState:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if power_action is not None:
+            pulumi.set(__self__, "power_action", power_action)
+        if private_dns_name_prefix is not None:
+            pulumi.set(__self__, "private_dns_name_prefix", private_dns_name_prefix)
+        if private_dns_names is not None:
+            pulumi.set(__self__, "private_dns_names", private_dns_names)
         if private_ips is not None:
             pulumi.set(__self__, "private_ips", private_ips)
         if public_ips is not None:
             pulumi.set(__self__, "public_ips", public_ips)
+        if read_write_permissions is not None:
+            pulumi.set(__self__, "read_write_permissions", read_write_permissions)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if restore is not None:
+            pulumi.set(__self__, "restore", restore)
+        if rotate_day is not None:
+            pulumi.set(__self__, "rotate_day", rotate_day)
+        if seconds_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_enabled", seconds_level_monitoring_enabled)
+        if seconds_level_monitoring_interval is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_interval", seconds_level_monitoring_interval)
+        if secret_id is not None:
+            pulumi.set(__self__, "secret_id", secret_id)
+        if secret_name is not None:
+            pulumi.set(__self__, "secret_name", secret_name)
+        if secret_version is not None:
+            pulumi.set(__self__, "secret_version", secret_version)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if slow_log_show_original_status is not None:
+            pulumi.set(__self__, "slow_log_show_original_status", slow_log_show_original_status)
         if ssl_enable is not None:
             pulumi.set(__self__, "ssl_enable", ssl_enable)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if switch_strategy is not None:
+            pulumi.set(__self__, "switch_strategy", switch_strategy)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if tde_enabled is not None:
+            pulumi.set(__self__, "tde_enabled", tde_enabled)
         if time_zone is not None:
             pulumi.set(__self__, "time_zone", time_zone)
         if volume is not None:
@@ -676,11 +1104,24 @@ class _InstanceState:
         pulumi.set(self, "backup_strategy", value)
 
     @property
+    @pulumi.getter(name="binlogRetentionHours")
+    def binlog_retention_hours(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specify the binlog retention period in hours. This parameter applies only to
+        MySQL Server databases. Value range: `0` to `168` (7x24).
+        """
+        return pulumi.get(self, "binlog_retention_hours")
+
+    @binlog_retention_hours.setter
+    def binlog_retention_hours(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "binlog_retention_hours", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the RDS DB instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -693,7 +1134,6 @@ class _InstanceState:
     def collation(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "collation")
 
@@ -727,11 +1167,37 @@ class _InstanceState:
         pulumi.set(self, "db", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the exclusive storage ID for Dec users. It is different for each az
+        configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+        and separated by commas if database instance type is not standalone or read-only.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @dss_pool_id.setter
+    def dss_pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dss_pool_id", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the RDS instance. Changing this
-        parameter creates a new RDS instance.
+        Specifies the enterprise project id of the RDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -743,8 +1209,7 @@ class _InstanceState:
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an intranet floating IP address of RDS DB instance. Changing this
-        parameter will create a new resource.
+        Specifies an intranet floating IP address of RDS DB instance.
         """
         return pulumi.get(self, "fixed_ip")
 
@@ -769,10 +1234,10 @@ class _InstanceState:
     def ha_replication_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the replication mode for the standby DB instance.
-        Changing this parameter will create a new resource.
-        + For MySQL, the value is *async* or *semisync*.
-        + For PostgreSQL, the value is *async* or *sync*.
-        + For Microsoft SQL Server, the value is *sync*.
+        + For MySQL, the value is **async** or **semisync**.
+        + For PostgreSQL, the value is **async** or **sync**.
+        + For Microsoft SQL Server, the value is **sync**.
+        + For MariaDB, the value is **async** or **semisync**.
         """
         return pulumi.get(self, "ha_replication_mode")
 
@@ -794,6 +1259,55 @@ class _InstanceState:
     @lower_case_table_names.setter
     def lower_case_table_names(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "lower_case_table_names", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
+    @pulumi.getter(name="minorVersionAutoUpgradeEnabled")
+    def minor_version_auto_upgrade_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable minor version auto upgrade.
+        """
+        return pulumi.get(self, "minor_version_auto_upgrade_enabled")
+
+    @minor_version_auto_upgrade_enabled.setter
+    def minor_version_auto_upgrade_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "minor_version_auto_upgrade_enabled", value)
+
+    @property
+    @pulumi.getter(name="msdtcHosts")
+    def msdtc_hosts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]]:
+        """
+        Specify the host information for MSDTC.
+        The msdtc_hosts structure is documented below.
+        """
+        return pulumi.get(self, "msdtc_hosts")
+
+    @msdtc_hosts.setter
+    def msdtc_hosts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceMsdtcHostArgs']]]]):
+        pulumi.set(self, "msdtc_hosts", value)
 
     @property
     @pulumi.getter
@@ -824,8 +1338,7 @@ class _InstanceState:
     @pulumi.getter(name="paramGroupId")
     def param_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the parameter group ID. Changing this parameter will create
-        a new resource.
+        Specifies the parameter group ID.
         """
         return pulumi.get(self, "param_group_id")
 
@@ -865,15 +1378,52 @@ class _InstanceState:
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging period unit of the RDS DB instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-        new resource.
+        Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+        and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         """
         return pulumi.get(self, "period_unit")
 
     @period_unit.setter
     def period_unit(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action to be done for the instance.
+        Value options: **ON**, **OFF** and **REBOOT**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @power_action.setter
+    def power_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action", value)
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
+
+    @private_dns_name_prefix.setter
+    def private_dns_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_dns_name_prefix", value)
+
+    @property
+    @pulumi.getter(name="privateDnsNames")
+    def private_dns_names(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Indicates the private domain name list of the DB instance.
+        """
+        return pulumi.get(self, "private_dns_names")
+
+    @private_dns_names.setter
+    def private_dns_names(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "private_dns_names", value)
 
     @property
     @pulumi.getter(name="privateIps")
@@ -900,6 +1450,20 @@ class _InstanceState:
         pulumi.set(self, "public_ips", value)
 
     @property
+    @pulumi.getter(name="readWritePermissions")
+    def read_write_permissions(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the read write permissions of the instance. Valid values:
+        + **readwrite**: read write permissions.
+        + **readonly**: readonly permissions.
+        """
+        return pulumi.get(self, "read_write_permissions")
+
+    @read_write_permissions.setter
+    def read_write_permissions(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "read_write_permissions", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -913,6 +1477,92 @@ class _InstanceState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def restore(self) -> Optional[pulumi.Input['InstanceRestoreArgs']]:
+        """
+        Specifies the restoration information. It only supported restore to postpaid
+        instance. Structure is documented below. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "restore")
+
+    @restore.setter
+    def restore(self, value: Optional[pulumi.Input['InstanceRestoreArgs']]):
+        pulumi.set(self, "restore", value)
+
+    @property
+    @pulumi.getter(name="rotateDay")
+    def rotate_day(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the rotation days of TDE rotation.
+        """
+        return pulumi.get(self, "rotate_day")
+
+    @rotate_day.setter
+    def rotate_day(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "rotate_day", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @seconds_level_monitoring_enabled.setter
+    def seconds_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "seconds_level_monitoring_enabled", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringInterval")
+    def seconds_level_monitoring_interval(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the seconds level monitoring interval. Valid values:
+        `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_interval")
+
+    @seconds_level_monitoring_interval.setter
+    def seconds_level_monitoring_interval(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "seconds_level_monitoring_interval", value)
+
+    @property
+    @pulumi.getter(name="secretId")
+    def secret_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key ID of TDE rotation.
+        """
+        return pulumi.get(self, "secret_id")
+
+    @secret_id.setter
+    def secret_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_id", value)
+
+    @property
+    @pulumi.getter(name="secretName")
+    def secret_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key name of TDE rotation.
+        """
+        return pulumi.get(self, "secret_name")
+
+    @secret_name.setter
+    def secret_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_name", value)
+
+    @property
+    @pulumi.getter(name="secretVersion")
+    def secret_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key version of TDE rotation.
+        """
+        return pulumi.get(self, "secret_version")
+
+    @secret_version.setter
+    def secret_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "secret_version", value)
+
+    @property
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -923,6 +1573,19 @@ class _InstanceState:
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="slowLogShowOriginalStatus")
+    def slow_log_show_original_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the slow log show original status of the instance.
+        Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+        """
+        return pulumi.get(self, "slow_log_show_original_status")
+
+    @slow_log_show_original_status.setter
+    def slow_log_show_original_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slow_log_show_original_status", value)
 
     @property
     @pulumi.getter(name="sslEnable")
@@ -962,6 +1625,20 @@ class _InstanceState:
         pulumi.set(self, "subnet_id", value)
 
     @property
+    @pulumi.getter(name="switchStrategy")
+    def switch_strategy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the database switchover policy.
+        + **reliability**: reliability first.
+        + **availability**: availability first.
+        """
+        return pulumi.get(self, "switch_strategy")
+
+    @switch_strategy.setter
+    def switch_strategy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "switch_strategy", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
@@ -975,6 +1652,18 @@ class _InstanceState:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter(name="tdeEnabled")
+    def tde_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether enable TDE for the instance.
+        """
+        return pulumi.get(self, "tde_enabled")
+
+    @tde_enabled.setter
+    def tde_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "tde_enabled", value)
+
+    @property
     @pulumi.getter(name="timeZone")
     def time_zone(self) -> Optional[pulumi.Input[str]]:
         """
@@ -982,8 +1671,7 @@ class _InstanceState:
         and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
         Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
         zone is expressed as a character string, refer to
-        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-        .
+        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         """
         return pulumi.get(self, "time_zone")
 
@@ -1025,24 +1713,44 @@ class Instance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+                 binlog_retention_hours: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  collation: Optional[pulumi.Input[str]] = None,
                  db: Optional[pulumi.Input[pulumi.InputType['InstanceDbArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 dss_pool_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
                  lower_case_table_names: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
+                 minor_version_auto_upgrade_enabled: Optional[pulumi.Input[bool]] = None,
+                 msdtc_hosts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceMsdtcHostArgs']]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
                  parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 read_write_permissions: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 restore: Optional[pulumi.Input[pulumi.InputType['InstanceRestoreArgs']]] = None,
+                 rotate_day: Optional[pulumi.Input[int]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_interval: Optional[pulumi.Input[int]] = None,
+                 secret_id: Optional[pulumi.Input[str]] = None,
+                 secret_name: Optional[pulumi.Input[str]] = None,
+                 secret_version: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_status: Optional[pulumi.Input[str]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 switch_strategy: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tde_enabled: Optional[pulumi.Input[bool]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['InstanceVolumeArgs']]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -1062,6 +1770,7 @@ class Instance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1071,7 +1780,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1094,6 +1803,7 @@ class Instance(pulumi.CustomResource):
         secgroup_id = config.require_object("secgroupId")
         availability_zone1 = config.require_object("availabilityZone1")
         availability_zone2 = config.require_object("availabilityZone2")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2.ha",
             ha_replication_mode="async",
@@ -1101,13 +1811,13 @@ class Instance(pulumi.CustomResource):
             subnet_id=subnet_id,
             security_group_id=secgroup_id,
             availability_zones=[
-                var["availability_zone_1"],
-                var["availability_zone_2"],
+                availability_zone1,
+                availability_zone2,
             ],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1130,6 +1840,7 @@ class Instance(pulumi.CustomResource):
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
         kms_id = config.require_object("kmsId")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1139,7 +1850,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1162,6 +1873,7 @@ class Instance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1171,7 +1883,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1195,13 +1907,13 @@ class Instance(pulumi.CustomResource):
 
         ## Import
 
-        RDS instance can be imported using the `id`, e.g.
+        RDS instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
+         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `restore`,`param_group_id`, `power_action`, `availability_zone`, `read_write_permissions`, `rotate_day`, `secret_id`, `secret_name`, `secret_version`, `dss_pool_id`, `lower_case_table_names`, `slow_log_show_original_status`, `charging_mode`, `period_unit`, `period`, `auto_renew`, `auto_pay`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. hcl resource "huaweicloud_rds_instance" "instance_1" {
 
          ...
 
@@ -1209,7 +1921,11 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "db", "collation", "availability_zone", "lower_case_table_names"
+         "db", "restore", "param_group_id", "power_action", "availability_zone", "read_write_permissions", "rotate_day",
+
+         "secret_id", "secret_name", "secret_version", "dss_pool_id", "lower_case_table_names", "slow_log_show_original_status",
+
+         "charging_mode", "period_unit", "period", "auto_renew", "auto_pay",
 
          ]
 
@@ -1221,53 +1937,81 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        :param pulumi.Input[int] binlog_retention_hours: Specify the binlog retention period in hours. This parameter applies only to
+               MySQL Server databases. Value range: `0` to `168` (7x24).
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] collation: Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['InstanceDbArgs']] db: Specifies the database information. Structure is documented below. Changing this
                parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the RDS instance. Changing this
-               parameter creates a new RDS instance.
-        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance. Changing this
-               parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] dss_pool_id: Specifies the exclusive storage ID for Dec users. It is different for each az
+               configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+               and separated by commas if database instance type is not standalone or read-only.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the RDS instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
         :param pulumi.Input[str] ha_replication_mode: Specifies the replication mode for the standby DB instance.
-               Changing this parameter will create a new resource.
-               + For MySQL, the value is *async* or *semisync*.
-               + For PostgreSQL, the value is *async* or *sync*.
-               + For Microsoft SQL Server, the value is *sync*.
+               + For MySQL, the value is **async** or **semisync**.
+               + For PostgreSQL, the value is **async** or **sync**.
+               + For Microsoft SQL Server, the value is **sync**.
+               + For MariaDB, the value is **async** or **semisync**.
         :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
                the default value is "1". Changing this parameter will create a new resource.
                + 0: Table names are stored as fixed and table names are case-sensitive.
                + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[bool] minor_version_auto_upgrade_enabled: Specifies whether to enable minor version auto upgrade.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceMsdtcHostArgs']]]] msdtc_hosts: Specify the host information for MSDTC.
+               The msdtc_hosts structure is documented below.
         :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
                to take effect.
-        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
                launched. You can check on console to see which parameters supported. Structure is documented below.
         :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
                the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
                number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
                Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-               new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+               and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the instance.
+               Value options: **ON**, **OFF** and **REBOOT**.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] read_write_permissions: Specifies the read write permissions of the instance. Valid values:
+               + **readwrite**: read write permissions.
+               + **readonly**: readonly permissions.
         :param pulumi.Input[str] region: The region in which to create the rds instance resource. If omitted, the
                provider-level region will be used. Changing this creates a new rds instance resource.
+        :param pulumi.Input[pulumi.InputType['InstanceRestoreArgs']] restore: Specifies the restoration information. It only supported restore to postpaid
+               instance. Structure is documented below. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] rotate_day: Specifies the rotation days of TDE rotation.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_interval: Specifies the seconds level monitoring interval. Valid values:
+               `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        :param pulumi.Input[str] secret_id: Specifies the key ID of TDE rotation.
+        :param pulumi.Input[str] secret_name: Specifies the key name of TDE rotation.
+        :param pulumi.Input[str] secret_version: Specifies the key version of TDE rotation.
         :param pulumi.Input[str] security_group_id: Specifies the security group which the RDS DB instance belongs to.
+        :param pulumi.Input[str] slow_log_show_original_status: Specifies the slow log show original status of the instance.
+               Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
         :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for MySQL database.
         :param pulumi.Input[str] subnet_id: Specifies the network id of a subnet. Changing this parameter will create a
                new resource.
+        :param pulumi.Input[str] switch_strategy: Specifies the database switchover policy.
+               + **reliability**: reliability first.
+               + **availability**: availability first.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
                pair.
+        :param pulumi.Input[bool] tde_enabled: Specifies whether enable TDE for the instance.
         :param pulumi.Input[str] time_zone: Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
                and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
                Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
                zone is expressed as a character string, refer to
-               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-               .
+               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         :param pulumi.Input[pulumi.InputType['InstanceVolumeArgs']] volume: Specifies the volume information. Structure is documented below.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
@@ -1292,6 +2036,7 @@ class Instance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1301,7 +2046,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1324,6 +2069,7 @@ class Instance(pulumi.CustomResource):
         secgroup_id = config.require_object("secgroupId")
         availability_zone1 = config.require_object("availabilityZone1")
         availability_zone2 = config.require_object("availabilityZone2")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2.ha",
             ha_replication_mode="async",
@@ -1331,13 +2077,13 @@ class Instance(pulumi.CustomResource):
             subnet_id=subnet_id,
             security_group_id=secgroup_id,
             availability_zones=[
-                var["availability_zone_1"],
-                var["availability_zone_2"],
+                availability_zone1,
+                availability_zone2,
             ],
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1360,6 +2106,7 @@ class Instance(pulumi.CustomResource):
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
         kms_id = config.require_object("kmsId")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1369,7 +2116,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1392,6 +2139,7 @@ class Instance(pulumi.CustomResource):
         subnet_id = config.require_object("subnetId")
         secgroup_id = config.require_object("secgroupId")
         availability_zone = config.require_object("availabilityZone")
+        postgre_sql_password = config.require_object("postgreSQLPassword")
         instance = huaweicloud.rds.Instance("instance",
             flavor="rds.pg.n1.large.2",
             vpc_id=vpc_id,
@@ -1401,7 +2149,7 @@ class Instance(pulumi.CustomResource):
             db=huaweicloud.rds.InstanceDbArgs(
                 type="PostgreSQL",
                 version="12",
-                password="Huangwei!120521",
+                password=postgre_sql_password,
             ),
             volume=huaweicloud.rds.InstanceVolumeArgs(
                 type="ULTRAHIGH",
@@ -1425,13 +2173,13 @@ class Instance(pulumi.CustomResource):
 
         ## Import
 
-        RDS instance can be imported using the `id`, e.g.
+        RDS instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
+         $ pulumi import huaweicloud:Rds/instance:Instance instance_1 <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `restore`,`param_group_id`, `power_action`, `availability_zone`, `read_write_permissions`, `rotate_day`, `secret_id`, `secret_name`, `secret_version`, `dss_pool_id`, `lower_case_table_names`, `slow_log_show_original_status`, `charging_mode`, `period_unit`, `period`, `auto_renew`, `auto_pay`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. hcl resource "huaweicloud_rds_instance" "instance_1" {
 
          ...
 
@@ -1439,7 +2187,11 @@ class Instance(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "db", "collation", "availability_zone", "lower_case_table_names"
+         "db", "restore", "param_group_id", "power_action", "availability_zone", "read_write_permissions", "rotate_day",
+
+         "secret_id", "secret_name", "secret_version", "dss_pool_id", "lower_case_table_names", "slow_log_show_original_status",
+
+         "charging_mode", "period_unit", "period", "auto_renew", "auto_pay",
 
          ]
 
@@ -1464,24 +2216,44 @@ class Instance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+                 binlog_retention_hours: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  collation: Optional[pulumi.Input[str]] = None,
                  db: Optional[pulumi.Input[pulumi.InputType['InstanceDbArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 dss_pool_id: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  ha_replication_mode: Optional[pulumi.Input[str]] = None,
                  lower_case_table_names: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
+                 minor_version_auto_upgrade_enabled: Optional[pulumi.Input[bool]] = None,
+                 msdtc_hosts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceMsdtcHostArgs']]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  param_group_id: Optional[pulumi.Input[str]] = None,
                  parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 read_write_permissions: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 restore: Optional[pulumi.Input[pulumi.InputType['InstanceRestoreArgs']]] = None,
+                 rotate_day: Optional[pulumi.Input[int]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_interval: Optional[pulumi.Input[int]] = None,
+                 secret_id: Optional[pulumi.Input[str]] = None,
+                 secret_name: Optional[pulumi.Input[str]] = None,
+                 secret_version: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_status: Optional[pulumi.Input[str]] = None,
                  ssl_enable: Optional[pulumi.Input[bool]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 switch_strategy: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tde_enabled: Optional[pulumi.Input[bool]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['InstanceVolumeArgs']]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -1503,11 +2275,14 @@ class Instance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'availability_zones'")
             __props__.__dict__["availability_zones"] = availability_zones
             __props__.__dict__["backup_strategy"] = backup_strategy
+            __props__.__dict__["binlog_retention_hours"] = binlog_retention_hours
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["collation"] = collation
             if db is None and not opts.urn:
                 raise TypeError("Missing required property 'db'")
             __props__.__dict__["db"] = db
+            __props__.__dict__["description"] = description
+            __props__.__dict__["dss_pool_id"] = dss_pool_id
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["fixed_ip"] = fixed_ip
             if flavor is None and not opts.urn:
@@ -1515,20 +2290,37 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["flavor"] = flavor
             __props__.__dict__["ha_replication_mode"] = ha_replication_mode
             __props__.__dict__["lower_case_table_names"] = lower_case_table_names
+            __props__.__dict__["maintain_begin"] = maintain_begin
+            __props__.__dict__["maintain_end"] = maintain_end
+            __props__.__dict__["minor_version_auto_upgrade_enabled"] = minor_version_auto_upgrade_enabled
+            __props__.__dict__["msdtc_hosts"] = msdtc_hosts
             __props__.__dict__["name"] = name
             __props__.__dict__["param_group_id"] = param_group_id
             __props__.__dict__["parameters"] = parameters
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["power_action"] = power_action
+            __props__.__dict__["private_dns_name_prefix"] = private_dns_name_prefix
+            __props__.__dict__["read_write_permissions"] = read_write_permissions
             __props__.__dict__["region"] = region
+            __props__.__dict__["restore"] = restore
+            __props__.__dict__["rotate_day"] = rotate_day
+            __props__.__dict__["seconds_level_monitoring_enabled"] = seconds_level_monitoring_enabled
+            __props__.__dict__["seconds_level_monitoring_interval"] = seconds_level_monitoring_interval
+            __props__.__dict__["secret_id"] = secret_id
+            __props__.__dict__["secret_name"] = secret_name
+            __props__.__dict__["secret_version"] = secret_version
             if security_group_id is None and not opts.urn:
                 raise TypeError("Missing required property 'security_group_id'")
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["slow_log_show_original_status"] = slow_log_show_original_status
             __props__.__dict__["ssl_enable"] = ssl_enable
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["switch_strategy"] = switch_strategy
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["tde_enabled"] = tde_enabled
             __props__.__dict__["time_zone"] = time_zone
             if volume is None and not opts.urn:
                 raise TypeError("Missing required property 'volume'")
@@ -1538,6 +2330,7 @@ class Instance(pulumi.CustomResource):
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["created"] = None
             __props__.__dict__["nodes"] = None
+            __props__.__dict__["private_dns_names"] = None
             __props__.__dict__["private_ips"] = None
             __props__.__dict__["public_ips"] = None
             __props__.__dict__["status"] = None
@@ -1555,29 +2348,50 @@ class Instance(pulumi.CustomResource):
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']]] = None,
+            binlog_retention_hours: Optional[pulumi.Input[int]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             collation: Optional[pulumi.Input[str]] = None,
             created: Optional[pulumi.Input[str]] = None,
             db: Optional[pulumi.Input[pulumi.InputType['InstanceDbArgs']]] = None,
+            description: Optional[pulumi.Input[str]] = None,
+            dss_pool_id: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             fixed_ip: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             ha_replication_mode: Optional[pulumi.Input[str]] = None,
             lower_case_table_names: Optional[pulumi.Input[str]] = None,
+            maintain_begin: Optional[pulumi.Input[str]] = None,
+            maintain_end: Optional[pulumi.Input[str]] = None,
+            minor_version_auto_upgrade_enabled: Optional[pulumi.Input[bool]] = None,
+            msdtc_hosts: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceMsdtcHostArgs']]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]]] = None,
             param_group_id: Optional[pulumi.Input[str]] = None,
             parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
+            power_action: Optional[pulumi.Input[str]] = None,
+            private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+            private_dns_names: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             private_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             public_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            read_write_permissions: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            restore: Optional[pulumi.Input[pulumi.InputType['InstanceRestoreArgs']]] = None,
+            rotate_day: Optional[pulumi.Input[int]] = None,
+            seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+            seconds_level_monitoring_interval: Optional[pulumi.Input[int]] = None,
+            secret_id: Optional[pulumi.Input[str]] = None,
+            secret_name: Optional[pulumi.Input[str]] = None,
+            secret_version: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            slow_log_show_original_status: Optional[pulumi.Input[str]] = None,
             ssl_enable: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
+            switch_strategy: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            tde_enabled: Optional[pulumi.Input[bool]] = None,
             time_zone: Optional[pulumi.Input[str]] = None,
             volume: Optional[pulumi.Input[pulumi.InputType['InstanceVolumeArgs']]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Instance':
@@ -1592,58 +2406,87 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the list of AZ name. Changing this parameter will create a
                new resource.
         :param pulumi.Input[pulumi.InputType['InstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are
-               *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        :param pulumi.Input[int] binlog_retention_hours: Specify the binlog retention period in hours. This parameter applies only to
+               MySQL Server databases. Value range: `0` to `168` (7x24).
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] collation: Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: Indicates the creation time.
         :param pulumi.Input[pulumi.InputType['InstanceDbArgs']] db: Specifies the database information. Structure is documented below. Changing this
                parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the RDS instance. Changing this
-               parameter creates a new RDS instance.
-        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance. Changing this
-               parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] dss_pool_id: Specifies the exclusive storage ID for Dec users. It is different for each az
+               configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+               and separated by commas if database instance type is not standalone or read-only.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the RDS instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of RDS DB instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
         :param pulumi.Input[str] ha_replication_mode: Specifies the replication mode for the standby DB instance.
-               Changing this parameter will create a new resource.
-               + For MySQL, the value is *async* or *semisync*.
-               + For PostgreSQL, the value is *async* or *sync*.
-               + For Microsoft SQL Server, the value is *sync*.
+               + For MySQL, the value is **async** or **semisync**.
+               + For PostgreSQL, the value is **async** or **sync**.
+               + For Microsoft SQL Server, the value is **sync**.
+               + For MariaDB, the value is **async** or **semisync**.
         :param pulumi.Input[str] lower_case_table_names: Specifies the case-sensitive state of the database table name,
                the default value is "1". Changing this parameter will create a new resource.
                + 0: Table names are stored as fixed and table names are case-sensitive.
                + 1: Table names will be stored in lower case and table names are not case-sensitive.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[bool] minor_version_auto_upgrade_enabled: Specifies whether to enable minor version auto upgrade.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceMsdtcHostArgs']]]] msdtc_hosts: Specify the host information for MSDTC.
+               The msdtc_hosts structure is documented below.
         :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
                to take effect.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] param_group_id: Specifies the parameter group ID.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the RDS instance after
                launched. You can check on console to see which parameters supported. Structure is documented below.
         :param pulumi.Input[int] period: Specifies the backup cycle. Automatic backups will be performed on the specified days of
                the week, except when disabling the automatic backup policy. The value range is a comma-separated number, where each
                number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
                Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values
-               are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-               new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+               and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the instance.
+               Value options: **ON**, **OFF** and **REBOOT**.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] private_dns_names: Indicates the private domain name list of the DB instance.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] private_ips: Indicates the private IP address list. It is a blank string until an ECS is created.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ips: Indicates the public IP address list.
+        :param pulumi.Input[str] read_write_permissions: Specifies the read write permissions of the instance. Valid values:
+               + **readwrite**: read write permissions.
+               + **readonly**: readonly permissions.
         :param pulumi.Input[str] region: The region in which to create the rds instance resource. If omitted, the
                provider-level region will be used. Changing this creates a new rds instance resource.
+        :param pulumi.Input[pulumi.InputType['InstanceRestoreArgs']] restore: Specifies the restoration information. It only supported restore to postpaid
+               instance. Structure is documented below. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] rotate_day: Specifies the rotation days of TDE rotation.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_interval: Specifies the seconds level monitoring interval. Valid values:
+               `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        :param pulumi.Input[str] secret_id: Specifies the key ID of TDE rotation.
+        :param pulumi.Input[str] secret_name: Specifies the key name of TDE rotation.
+        :param pulumi.Input[str] secret_version: Specifies the key version of TDE rotation.
         :param pulumi.Input[str] security_group_id: Specifies the security group which the RDS DB instance belongs to.
+        :param pulumi.Input[str] slow_log_show_original_status: Specifies the slow log show original status of the instance.
+               Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
         :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for MySQL database.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network id of a subnet. Changing this parameter will create a
                new resource.
+        :param pulumi.Input[str] switch_strategy: Specifies the database switchover policy.
+               + **reliability**: reliability first.
+               + **availability**: availability first.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
                pair.
+        :param pulumi.Input[bool] tde_enabled: Specifies whether enable TDE for the instance.
         :param pulumi.Input[str] time_zone: Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
                and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
                Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
                zone is expressed as a character string, refer to
-               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-               .
+               [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         :param pulumi.Input[pulumi.InputType['InstanceVolumeArgs']] volume: Specifies the volume information. Structure is documented below.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
@@ -1655,29 +2498,50 @@ class Instance(pulumi.CustomResource):
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zones"] = availability_zones
         __props__.__dict__["backup_strategy"] = backup_strategy
+        __props__.__dict__["binlog_retention_hours"] = binlog_retention_hours
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["collation"] = collation
         __props__.__dict__["created"] = created
         __props__.__dict__["db"] = db
+        __props__.__dict__["description"] = description
+        __props__.__dict__["dss_pool_id"] = dss_pool_id
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["fixed_ip"] = fixed_ip
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["ha_replication_mode"] = ha_replication_mode
         __props__.__dict__["lower_case_table_names"] = lower_case_table_names
+        __props__.__dict__["maintain_begin"] = maintain_begin
+        __props__.__dict__["maintain_end"] = maintain_end
+        __props__.__dict__["minor_version_auto_upgrade_enabled"] = minor_version_auto_upgrade_enabled
+        __props__.__dict__["msdtc_hosts"] = msdtc_hosts
         __props__.__dict__["name"] = name
         __props__.__dict__["nodes"] = nodes
         __props__.__dict__["param_group_id"] = param_group_id
         __props__.__dict__["parameters"] = parameters
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["power_action"] = power_action
+        __props__.__dict__["private_dns_name_prefix"] = private_dns_name_prefix
+        __props__.__dict__["private_dns_names"] = private_dns_names
         __props__.__dict__["private_ips"] = private_ips
         __props__.__dict__["public_ips"] = public_ips
+        __props__.__dict__["read_write_permissions"] = read_write_permissions
         __props__.__dict__["region"] = region
+        __props__.__dict__["restore"] = restore
+        __props__.__dict__["rotate_day"] = rotate_day
+        __props__.__dict__["seconds_level_monitoring_enabled"] = seconds_level_monitoring_enabled
+        __props__.__dict__["seconds_level_monitoring_interval"] = seconds_level_monitoring_interval
+        __props__.__dict__["secret_id"] = secret_id
+        __props__.__dict__["secret_name"] = secret_name
+        __props__.__dict__["secret_version"] = secret_version
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["slow_log_show_original_status"] = slow_log_show_original_status
         __props__.__dict__["ssl_enable"] = ssl_enable
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
+        __props__.__dict__["switch_strategy"] = switch_strategy
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["tde_enabled"] = tde_enabled
         __props__.__dict__["time_zone"] = time_zone
         __props__.__dict__["volume"] = volume
         __props__.__dict__["vpc_id"] = vpc_id
@@ -1714,20 +2578,28 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "backup_strategy")
 
     @property
+    @pulumi.getter(name="binlogRetentionHours")
+    def binlog_retention_hours(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specify the binlog retention period in hours. This parameter applies only to
+        MySQL Server databases. Value range: `0` to `168` (7x24).
+        """
+        return pulumi.get(self, "binlog_retention_hours")
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> pulumi.Output[str]:
         """
-        Specifies the charging mode of the RDS DB instance. Valid values are
-        *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**.
         """
         return pulumi.get(self, "charging_mode")
 
     @property
     @pulumi.getter
-    def collation(self) -> pulumi.Output[Optional[str]]:
+    def collation(self) -> pulumi.Output[str]:
         """
         Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "collation")
 
@@ -1749,11 +2621,29 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "db")
 
     @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the exclusive storage ID for Dec users. It is different for each az
+        configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+        and separated by commas if database instance type is not standalone or read-only.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the RDS instance. Changing this
-        parameter creates a new RDS instance.
+        Specifies the enterprise project id of the RDS instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1761,8 +2651,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> pulumi.Output[str]:
         """
-        Specifies an intranet floating IP address of RDS DB instance. Changing this
-        parameter will create a new resource.
+        Specifies an intranet floating IP address of RDS DB instance.
         """
         return pulumi.get(self, "fixed_ip")
 
@@ -1779,10 +2668,10 @@ class Instance(pulumi.CustomResource):
     def ha_replication_mode(self) -> pulumi.Output[str]:
         """
         Specifies the replication mode for the standby DB instance.
-        Changing this parameter will create a new resource.
-        + For MySQL, the value is *async* or *semisync*.
-        + For PostgreSQL, the value is *async* or *sync*.
-        + For Microsoft SQL Server, the value is *sync*.
+        + For MySQL, the value is **async** or **semisync**.
+        + For PostgreSQL, the value is **async** or **sync**.
+        + For Microsoft SQL Server, the value is **sync**.
+        + For MariaDB, the value is **async** or **semisync**.
         """
         return pulumi.get(self, "ha_replication_mode")
 
@@ -1796,6 +2685,39 @@ class Instance(pulumi.CustomResource):
         + 1: Table names will be stored in lower case and table names are not case-sensitive.
         """
         return pulumi.get(self, "lower_case_table_names")
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> pulumi.Output[str]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> pulumi.Output[str]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @property
+    @pulumi.getter(name="minorVersionAutoUpgradeEnabled")
+    def minor_version_auto_upgrade_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable minor version auto upgrade.
+        """
+        return pulumi.get(self, "minor_version_auto_upgrade_enabled")
+
+    @property
+    @pulumi.getter(name="msdtcHosts")
+    def msdtc_hosts(self) -> pulumi.Output[Sequence['outputs.InstanceMsdtcHost']]:
+        """
+        Specify the host information for MSDTC.
+        The msdtc_hosts structure is documented below.
+        """
+        return pulumi.get(self, "msdtc_hosts")
 
     @property
     @pulumi.getter
@@ -1818,8 +2740,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="paramGroupId")
     def param_group_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the parameter group ID. Changing this parameter will create
-        a new resource.
+        Specifies the parameter group ID.
         """
         return pulumi.get(self, "param_group_id")
 
@@ -1847,11 +2768,36 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="periodUnit")
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the charging period unit of the RDS DB instance. Valid values
-        are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a
-        new resource.
+        Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+        and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         """
         return pulumi.get(self, "period_unit")
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the power action to be done for the instance.
+        Value options: **ON**, **OFF** and **REBOOT**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> pulumi.Output[str]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
+
+    @property
+    @pulumi.getter(name="privateDnsNames")
+    def private_dns_names(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Indicates the private domain name list of the DB instance.
+        """
+        return pulumi.get(self, "private_dns_names")
 
     @property
     @pulumi.getter(name="privateIps")
@@ -1870,6 +2816,16 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "public_ips")
 
     @property
+    @pulumi.getter(name="readWritePermissions")
+    def read_write_permissions(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the read write permissions of the instance. Valid values:
+        + **readwrite**: read write permissions.
+        + **readonly**: readonly permissions.
+        """
+        return pulumi.get(self, "read_write_permissions")
+
+    @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
@@ -1877,6 +2833,64 @@ class Instance(pulumi.CustomResource):
         provider-level region will be used. Changing this creates a new rds instance resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def restore(self) -> pulumi.Output[Optional['outputs.InstanceRestore']]:
+        """
+        Specifies the restoration information. It only supported restore to postpaid
+        instance. Structure is documented below. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "restore")
+
+    @property
+    @pulumi.getter(name="rotateDay")
+    def rotate_day(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the rotation days of TDE rotation.
+        """
+        return pulumi.get(self, "rotate_day")
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringInterval")
+    def seconds_level_monitoring_interval(self) -> pulumi.Output[int]:
+        """
+        Specifies the seconds level monitoring interval. Valid values:
+        `1`, `5`. It is mandatory when `seconds_level_monitoring_enabled` is **true**.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_interval")
+
+    @property
+    @pulumi.getter(name="secretId")
+    def secret_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the key ID of TDE rotation.
+        """
+        return pulumi.get(self, "secret_id")
+
+    @property
+    @pulumi.getter(name="secretName")
+    def secret_name(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the key name of TDE rotation.
+        """
+        return pulumi.get(self, "secret_name")
+
+    @property
+    @pulumi.getter(name="secretVersion")
+    def secret_version(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the key version of TDE rotation.
+        """
+        return pulumi.get(self, "secret_version")
 
     @property
     @pulumi.getter(name="securityGroupId")
@@ -1887,8 +2901,17 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "security_group_id")
 
     @property
+    @pulumi.getter(name="slowLogShowOriginalStatus")
+    def slow_log_show_original_status(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the slow log show original status of the instance.
+        Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+        """
+        return pulumi.get(self, "slow_log_show_original_status")
+
+    @property
     @pulumi.getter(name="sslEnable")
-    def ssl_enable(self) -> pulumi.Output[Optional[bool]]:
+    def ssl_enable(self) -> pulumi.Output[bool]:
         """
         Specifies whether to enable the SSL for MySQL database.
         """
@@ -1912,6 +2935,16 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "subnet_id")
 
     @property
+    @pulumi.getter(name="switchStrategy")
+    def switch_strategy(self) -> pulumi.Output[str]:
+        """
+        Specifies the database switchover policy.
+        + **reliability**: reliability first.
+        + **availability**: availability first.
+        """
+        return pulumi.get(self, "switch_strategy")
+
+    @property
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
@@ -1921,6 +2954,14 @@ class Instance(pulumi.CustomResource):
         return pulumi.get(self, "tags")
 
     @property
+    @pulumi.getter(name="tdeEnabled")
+    def tde_enabled(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether enable TDE for the instance.
+        """
+        return pulumi.get(self, "tde_enabled")
+
+    @property
     @pulumi.getter(name="timeZone")
     def time_zone(self) -> pulumi.Output[str]:
         """
@@ -1928,8 +2969,7 @@ class Instance(pulumi.CustomResource):
         and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
         Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
         zone is expressed as a character string, refer to
-        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-        .
+        [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
         """
         return pulumi.get(self, "time_zone")
 

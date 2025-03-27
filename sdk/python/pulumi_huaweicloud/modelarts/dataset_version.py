@@ -25,12 +25,12 @@ class DatasetVersionArgs:
         :param pulumi.Input[str] dataset_id: Specifies the ID of dataset.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of dataset version. It contains a maximum of
-               256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+               `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] hard_example: Specifies whether to enable ModelArts to write the hard example
                attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
                use these attributes to optimize hard example filtering. Default value is `false`.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of 1 to 32
+        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of `1` to `32`
                characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
@@ -68,7 +68,7 @@ class DatasetVersionArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of dataset version. It contains a maximum of
-        256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+        `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "description")
 
@@ -95,7 +95,7 @@ class DatasetVersionArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the dataset version. The name consists of 1 to 32
+        Specifies the name of the dataset version. The name consists of `1` to `32`
         characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
         Changing this parameter will create a new resource.
         """
@@ -156,7 +156,7 @@ class _DatasetVersionState:
         :param pulumi.Input[str] dataset_id: Specifies the ID of dataset.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of dataset version. It contains a maximum of
-               256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+               `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         :param pulumi.Input[int] files: The total number of samples.
         :param pulumi.Input[bool] hard_example: Specifies whether to enable ModelArts to write the hard example
                attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
@@ -167,7 +167,7 @@ class _DatasetVersionState:
                + **multi**: Indicates that there are multi-label samples.
                + **single**: Indicates that all samples are single-label.
                + **unlabeled**: Indicates that all samples are unlabeled.
-        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of 1 to 32
+        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of `1` to `32`
                characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
@@ -246,7 +246,7 @@ class _DatasetVersionState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of dataset version. It contains a maximum of
-        256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+        `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "description")
 
@@ -312,7 +312,7 @@ class _DatasetVersionState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the dataset version. The name consists of 1 to 32
+        Specifies the name of the dataset version. The name consists of `1` to `32`
         characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
         Changing this parameter will create a new resource.
         """
@@ -444,13 +444,13 @@ class DatasetVersion(pulumi.CustomResource):
 
         ## Import
 
-        The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g.
+        The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/datasetVersion:DatasetVersion test yiROKoTTjtwjvP71yLG/wieeeoTrtrtjvn67yLm
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset_version" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset_version" "test" {
 
          ...
 
@@ -469,12 +469,12 @@ class DatasetVersion(pulumi.CustomResource):
         :param pulumi.Input[str] dataset_id: Specifies the ID of dataset.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of dataset version. It contains a maximum of
-               256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+               `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] hard_example: Specifies whether to enable ModelArts to write the hard example
                attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
                use these attributes to optimize hard example filtering. Default value is `false`.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of 1 to 32
+        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of `1` to `32`
                characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
@@ -506,13 +506,13 @@ class DatasetVersion(pulumi.CustomResource):
 
         ## Import
 
-        The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g.
+        The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:ModelArts/datasetVersion:DatasetVersion test yiROKoTTjtwjvP71yLG/wieeeoTrtrtjvn67yLm
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset_version" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset_version" "test" {
 
          ...
 
@@ -609,7 +609,7 @@ class DatasetVersion(pulumi.CustomResource):
         :param pulumi.Input[str] dataset_id: Specifies the ID of dataset.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of dataset version. It contains a maximum of
-               256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+               `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         :param pulumi.Input[int] files: The total number of samples.
         :param pulumi.Input[bool] hard_example: Specifies whether to enable ModelArts to write the hard example
                attributes (difficult, hard-coefficient, and hard-reasons) into the XML and manifest labeling files. ModelArts will
@@ -620,7 +620,7 @@ class DatasetVersion(pulumi.CustomResource):
                + **multi**: Indicates that there are multi-label samples.
                + **single**: Indicates that all samples are single-label.
                + **unlabeled**: Indicates that all samples are unlabeled.
-        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of 1 to 32
+        :param pulumi.Input[str] name: Specifies the name of the dataset version. The name consists of `1` to `32`
                characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the resource. If omitted, the
@@ -681,7 +681,7 @@ class DatasetVersion(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of dataset version. It contains a maximum of
-        256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+        `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "description")
 
@@ -727,7 +727,7 @@ class DatasetVersion(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the dataset version. The name consists of 1 to 32
+        Specifies the name of the dataset version. The name consists of `1` to `32`
         characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
         Changing this parameter will create a new resource.
         """

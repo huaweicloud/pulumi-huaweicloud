@@ -16,6 +16,7 @@ __all__ = [
     'ServiceAdDomainArgs',
     'ServiceDesktopSecurityGroupArgs',
     'ServiceInfrastructureSecurityGroupArgs',
+    'ServiceOtpConfigInfoArgs',
 ]
 
 @pulumi.input_type
@@ -141,7 +142,6 @@ class DesktopNicArgs:
                  network_id: pulumi.Input[str]):
         """
         :param pulumi.Input[str] network_id: Specifies the network ID of subnet resource.
-               Changing this will create a new resource.
         """
         pulumi.set(__self__, "network_id", network_id)
 
@@ -150,7 +150,6 @@ class DesktopNicArgs:
     def network_id(self) -> pulumi.Input[str]:
         """
         Specifies the network ID of subnet resource.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "network_id")
 
@@ -524,5 +523,170 @@ class ServiceInfrastructureSecurityGroupArgs:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+
+@pulumi.input_type
+class ServiceOtpConfigInfoArgs:
+    def __init__(__self__, *,
+                 enable: pulumi.Input[bool],
+                 receive_mode: pulumi.Input[str],
+                 app_id: Optional[pulumi.Input[str]] = None,
+                 app_secret: Optional[pulumi.Input[str]] = None,
+                 auth_server_access_mode: Optional[pulumi.Input[str]] = None,
+                 auth_url: Optional[pulumi.Input[str]] = None,
+                 cert_content: Optional[pulumi.Input[str]] = None,
+                 rule: Optional[pulumi.Input[str]] = None,
+                 rule_type: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[bool] enable: Specifies whether to enable auxiliary authentication.
+        :param pulumi.Input[str] receive_mode: Specifies the verification code receiving mode.
+               + **VMFA**: Indicates virtual MFA device.
+               + **HMFA**: Indicates hardware MFA device.
+        :param pulumi.Input[str] app_id: Specifies the auxiliary authentication server access account.
+        :param pulumi.Input[str] app_secret: Specifies the authentication service access password.
+        :param pulumi.Input[str] auth_server_access_mode: Specifies the authentication service access mode.
+               + **INTERNET**: Indicates internet access.
+               + **DEDICATED**: Indicates dedicated access.
+               + **SYSTEM_DEFAULT**: Indicates system default.
+        :param pulumi.Input[str] auth_url: Specifies the auxiliary authentication server address.
+        :param pulumi.Input[str] cert_content: Specifies the PEM format certificate content.
+        :param pulumi.Input[str] rule: Specifies authentication application object.
+               + **INTERNET**: Indicates Internet access. Optional only when rule_type is **ACCESS_MODE**.
+               + **PRIVATE**: Indicates dedicated line access. Optional only when rule_type is **ACCESS_MODE**.
+        :param pulumi.Input[str] rule_type: Specifies authentication application object type.
+               + **ACCESS_MODE**: Indicates access type.
+        """
+        pulumi.set(__self__, "enable", enable)
+        pulumi.set(__self__, "receive_mode", receive_mode)
+        if app_id is not None:
+            pulumi.set(__self__, "app_id", app_id)
+        if app_secret is not None:
+            pulumi.set(__self__, "app_secret", app_secret)
+        if auth_server_access_mode is not None:
+            pulumi.set(__self__, "auth_server_access_mode", auth_server_access_mode)
+        if auth_url is not None:
+            pulumi.set(__self__, "auth_url", auth_url)
+        if cert_content is not None:
+            pulumi.set(__self__, "cert_content", cert_content)
+        if rule is not None:
+            pulumi.set(__self__, "rule", rule)
+        if rule_type is not None:
+            pulumi.set(__self__, "rule_type", rule_type)
+
+    @property
+    @pulumi.getter
+    def enable(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable auxiliary authentication.
+        """
+        return pulumi.get(self, "enable")
+
+    @enable.setter
+    def enable(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enable", value)
+
+    @property
+    @pulumi.getter(name="receiveMode")
+    def receive_mode(self) -> pulumi.Input[str]:
+        """
+        Specifies the verification code receiving mode.
+        + **VMFA**: Indicates virtual MFA device.
+        + **HMFA**: Indicates hardware MFA device.
+        """
+        return pulumi.get(self, "receive_mode")
+
+    @receive_mode.setter
+    def receive_mode(self, value: pulumi.Input[str]):
+        pulumi.set(self, "receive_mode", value)
+
+    @property
+    @pulumi.getter(name="appId")
+    def app_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the auxiliary authentication server access account.
+        """
+        return pulumi.get(self, "app_id")
+
+    @app_id.setter
+    def app_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "app_id", value)
+
+    @property
+    @pulumi.getter(name="appSecret")
+    def app_secret(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the authentication service access password.
+        """
+        return pulumi.get(self, "app_secret")
+
+    @app_secret.setter
+    def app_secret(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "app_secret", value)
+
+    @property
+    @pulumi.getter(name="authServerAccessMode")
+    def auth_server_access_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the authentication service access mode.
+        + **INTERNET**: Indicates internet access.
+        + **DEDICATED**: Indicates dedicated access.
+        + **SYSTEM_DEFAULT**: Indicates system default.
+        """
+        return pulumi.get(self, "auth_server_access_mode")
+
+    @auth_server_access_mode.setter
+    def auth_server_access_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_server_access_mode", value)
+
+    @property
+    @pulumi.getter(name="authUrl")
+    def auth_url(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the auxiliary authentication server address.
+        """
+        return pulumi.get(self, "auth_url")
+
+    @auth_url.setter
+    def auth_url(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_url", value)
+
+    @property
+    @pulumi.getter(name="certContent")
+    def cert_content(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the PEM format certificate content.
+        """
+        return pulumi.get(self, "cert_content")
+
+    @cert_content.setter
+    def cert_content(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cert_content", value)
+
+    @property
+    @pulumi.getter
+    def rule(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies authentication application object.
+        + **INTERNET**: Indicates Internet access. Optional only when rule_type is **ACCESS_MODE**.
+        + **PRIVATE**: Indicates dedicated line access. Optional only when rule_type is **ACCESS_MODE**.
+        """
+        return pulumi.get(self, "rule")
+
+    @rule.setter
+    def rule(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "rule", value)
+
+    @property
+    @pulumi.getter(name="ruleType")
+    def rule_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies authentication application object type.
+        + **ACCESS_MODE**: Indicates access type.
+        """
+        return pulumi.get(self, "rule_type")
+
+    @rule_type.setter
+    def rule_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "rule_type", value)
 
 

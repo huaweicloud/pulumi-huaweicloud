@@ -7,6 +7,9 @@ import * as utilities from "./utilities";
 /**
  * ## # huaweicloud.getAvailabilityZones
  *
+ * layout: "huaweicloud"
+ * page_title: "HuaweiCloud: huaweicloud.getAvailabilityZones"
+ * description: ""
  * Use this data source to get a list of availability zones from HuaweiCloud
  *
  * ## Example Usage

@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available HuaweiCloud GaussDB (for NoSQL) flavors.
+ * Use this data source to get available HuaweiCloud GeminiDB flavors.
  * This is an alternative to `huaweicloud.GaussDBforNoSQL.getCassandraFlavors`
  *
  * ## Example Usage

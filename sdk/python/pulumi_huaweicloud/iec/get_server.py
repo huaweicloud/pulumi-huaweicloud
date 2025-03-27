@@ -164,7 +164,7 @@ class GetServerResult:
     @pulumi.getter(name="publicIp")
     def public_ip(self) -> str:
         """
-        The EIP address that is associted to the IEC server.
+        The EIP address that is associated to the IEC server.
         """
         return pulumi.get(self, "public_ip")
 
@@ -185,7 +185,7 @@ class GetServerResult:
     @pulumi.getter(name="systemDiskId")
     def system_disk_id(self) -> str:
         """
-        The system disk voume ID.
+        The system disk volume ID.
         """
         return pulumi.get(self, "system_disk_id")
 

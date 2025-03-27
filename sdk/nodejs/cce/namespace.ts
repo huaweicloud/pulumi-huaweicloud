@@ -21,7 +21,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.
+ * CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cce/namespace:Namespace test bb6923e4-b16e-11eb-b0cd-0255ac101da1/test-namespace
@@ -75,17 +75,17 @@ export class Namespace extends pulumi.CustomResource {
      */
     public readonly labels!: pulumi.Output<{[key: string]: string}>;
     /**
-     * Specifies the unique name of the namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-     * and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-     * Exactly one of `name` or `prefix` must be provided.
+     * Specifies the unique name of the namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new namespace resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies a prefix used by the server to generate a unique name.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+     * Specifies a prefix used by the server to generate a unique name.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
      * hyphens (-), and must start and end with lowercase letters and digits.
-     * Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+     * Changing this will create a new namespace resource.
      */
     public readonly prefix!: pulumi.Output<string | undefined>;
     /**
@@ -162,17 +162,17 @@ export interface NamespaceState {
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the unique name of the namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-     * and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-     * Exactly one of `name` or `prefix` must be provided.
+     * Specifies the unique name of the namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new namespace resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies a prefix used by the server to generate a unique name.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+     * Specifies a prefix used by the server to generate a unique name.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
      * hyphens (-), and must start and end with lowercase letters and digits.
-     * Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+     * Changing this will create a new namespace resource.
      */
     prefix?: pulumi.Input<string>;
     /**
@@ -206,17 +206,17 @@ export interface NamespaceArgs {
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the unique name of the namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-     * and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-     * Exactly one of `name` or `prefix` must be provided.
+     * Specifies the unique name of the namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new namespace resource.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies a prefix used by the server to generate a unique name.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+     * Specifies a prefix used by the server to generate a unique name.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
      * hyphens (-), and must start and end with lowercase letters and digits.
-     * Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+     * Changing this will create a new namespace resource.
      */
     prefix?: pulumi.Input<string>;
     /**

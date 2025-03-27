@@ -29,13 +29,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * VPCs can be imported using the `id`, e.g.
+ * VPCs can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/vpc:Vpc vpc_v1 7117d38e-4c8f-4624-a505-bd96b97d024c
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You you can ignore changes as below. resource "huaweicloud_vpc" "vpc_v1" {
+ *  Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You can ignore changes as below. hcl resource "huaweicloud_vpc" "vpc_v1" {
  *
  *  ...
  *
@@ -84,8 +84,12 @@ export class Vpc extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise project id of the VPC. Changing this
-     * creates a new VPC resource.
+     * Specifies whether to enable local route enhancement function. It can not be
+     * closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+     */
+    public readonly enhancedLocalRoute!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID of the VPC.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -103,9 +107,14 @@ export class Vpc extends pulumi.CustomResource {
      */
     public /*out*/ readonly routes!: pulumi.Output<outputs.Vpc.VpcRoute[]>;
     /**
-     * Specifies the secondary CIDR block of the VPC.
+     * schema: Deprecated; use secondary_cidrs instead
      */
     public readonly secondaryCidr!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the secondary CIDR blocks of the VPC.
+     * Each VPC can have 5 secondary CIDR blocks.
+     */
+    public readonly secondaryCidrs!: pulumi.Output<string[]>;
     /**
      * The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
      */
@@ -130,11 +139,13 @@ export class Vpc extends pulumi.CustomResource {
             const state = argsOrState as VpcState | undefined;
             resourceInputs["cidr"] = state ? state.cidr : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["enhancedLocalRoute"] = state ? state.enhancedLocalRoute : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["routes"] = state ? state.routes : undefined;
             resourceInputs["secondaryCidr"] = state ? state.secondaryCidr : undefined;
+            resourceInputs["secondaryCidrs"] = state ? state.secondaryCidrs : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
         } else {
@@ -144,10 +155,12 @@ export class Vpc extends pulumi.CustomResource {
             }
             resourceInputs["cidr"] = args ? args.cidr : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["enhancedLocalRoute"] = args ? args.enhancedLocalRoute : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["secondaryCidr"] = args ? args.secondaryCidr : undefined;
+            resourceInputs["secondaryCidrs"] = args ? args.secondaryCidrs : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["routes"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
@@ -172,8 +185,12 @@ export interface VpcState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the VPC. Changing this
-     * creates a new VPC resource.
+     * Specifies whether to enable local route enhancement function. It can not be
+     * closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+     */
+    enhancedLocalRoute?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of the VPC.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -191,9 +208,14 @@ export interface VpcState {
      */
     routes?: pulumi.Input<pulumi.Input<inputs.Vpc.VpcRoute>[]>;
     /**
-     * Specifies the secondary CIDR block of the VPC.
+     * schema: Deprecated; use secondary_cidrs instead
      */
     secondaryCidr?: pulumi.Input<string>;
+    /**
+     * Specifies the secondary CIDR blocks of the VPC.
+     * Each VPC can have 5 secondary CIDR blocks.
+     */
+    secondaryCidrs?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
      */
@@ -219,8 +241,12 @@ export interface VpcArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the VPC. Changing this
-     * creates a new VPC resource.
+     * Specifies whether to enable local route enhancement function. It can not be
+     * closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+     */
+    enhancedLocalRoute?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID of the VPC.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -234,9 +260,14 @@ export interface VpcArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the secondary CIDR block of the VPC.
+     * schema: Deprecated; use secondary_cidrs instead
      */
     secondaryCidr?: pulumi.Input<string>;
+    /**
+     * Specifies the secondary CIDR blocks of the VPC.
+     * Each VPC can have 5 secondary CIDR blocks.
+     */
+    secondaryCidrs?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the key/value pairs to associate with the VPC.
      */

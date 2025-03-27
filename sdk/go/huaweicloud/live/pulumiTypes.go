@@ -16,10 +16,10 @@ type RecordingFlv struct {
 	FileNaming *string `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength *int `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength int `pulumi:"recordingLength"`
 }
@@ -41,10 +41,10 @@ type RecordingFlvArgs struct {
 	FileNaming pulumi.StringPtrInput `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength pulumi.IntPtrInput `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength pulumi.IntInput `pulumi:"recordingLength"`
 }
@@ -134,13 +134,13 @@ func (o RecordingFlvOutput) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingFlvOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v RecordingFlv) *int { return v.MaxStreamPauseLength }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingFlvOutput) RecordingLength() pulumi.IntOutput {
 	return o.ApplyT(func(v RecordingFlv) int { return v.RecordingLength }).(pulumi.IntOutput)
@@ -183,8 +183,8 @@ func (o RecordingFlvPtrOutput) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingFlvPtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingFlv) *int {
 		if v == nil {
@@ -194,7 +194,7 @@ func (o RecordingFlvPtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingFlvPtrOutput) RecordingLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingFlv) *int {
@@ -211,10 +211,13 @@ type RecordingHls struct {
 	FileNaming *string `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength *int `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the TS slice duration for HLS recording.
+	// Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
+	RecordSliceDuration *int `pulumi:"recordSliceDuration"`
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength int `pulumi:"recordingLength"`
 	// Specifies TS file name prefix.
@@ -239,10 +242,13 @@ type RecordingHlsArgs struct {
 	FileNaming pulumi.StringPtrInput `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength pulumi.IntPtrInput `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the TS slice duration for HLS recording.
+	// Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
+	RecordSliceDuration pulumi.IntPtrInput `pulumi:"recordSliceDuration"`
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength pulumi.IntInput `pulumi:"recordingLength"`
 	// Specifies TS file name prefix.
@@ -335,13 +341,19 @@ func (o RecordingHlsOutput) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingHlsOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v RecordingHls) *int { return v.MaxStreamPauseLength }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the TS slice duration for HLS recording.
+// Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
+func (o RecordingHlsOutput) RecordSliceDuration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v RecordingHls) *int { return v.RecordSliceDuration }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingHlsOutput) RecordingLength() pulumi.IntOutput {
 	return o.ApplyT(func(v RecordingHls) int { return v.RecordingLength }).(pulumi.IntOutput)
@@ -390,8 +402,8 @@ func (o RecordingHlsPtrOutput) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingHlsPtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingHls) *int {
 		if v == nil {
@@ -401,7 +413,18 @@ func (o RecordingHlsPtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the TS slice duration for HLS recording.
+// Value range: `2` ~ `60`, unit: `second`. Defaults to `10`.
+func (o RecordingHlsPtrOutput) RecordSliceDuration() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *RecordingHls) *int {
+		if v == nil {
+			return nil
+		}
+		return v.RecordSliceDuration
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingHlsPtrOutput) RecordingLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingHls) *int {
@@ -429,10 +452,10 @@ type RecordingMp4 struct {
 	FileNaming *string `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength *int `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength int `pulumi:"recordingLength"`
 }
@@ -454,10 +477,10 @@ type RecordingMp4Args struct {
 	FileNaming pulumi.StringPtrInput `pulumi:"fileNaming"`
 	// Specifies the interval threshold for combining recording chunks. If the
 	// stream pause length exceeds the value of this parameter, a new recording is generated.
-	// Value range: 0 ~ 300, unit: `second`.
-	// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+	// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+	// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 	MaxStreamPauseLength pulumi.IntPtrInput `pulumi:"maxStreamPauseLength"`
-	// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+	// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 	// A stream exceeding the recording length will generate a new recording.
 	RecordingLength pulumi.IntInput `pulumi:"recordingLength"`
 }
@@ -547,13 +570,13 @@ func (o RecordingMp4Output) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingMp4Output) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v RecordingMp4) *int { return v.MaxStreamPauseLength }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingMp4Output) RecordingLength() pulumi.IntOutput {
 	return o.ApplyT(func(v RecordingMp4) int { return v.RecordingLength }).(pulumi.IntOutput)
@@ -596,8 +619,8 @@ func (o RecordingMp4PtrOutput) FileNaming() pulumi.StringPtrOutput {
 
 // Specifies the interval threshold for combining recording chunks. If the
 // stream pause length exceeds the value of this parameter, a new recording is generated.
-// Value range: 0 ~ 300, unit: `second`.
-// If the value is set to `0`, a new file will be generated once the stream is interrupted. Defaults to `0`.
+// Value range: `0` ~ `300`, unit: `second`. Defaults to `0`.
+// If the value is set to `0`, a new file will be generated once the stream is interrupted.
 func (o RecordingMp4PtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingMp4) *int {
 		if v == nil {
@@ -607,7 +630,7 @@ func (o RecordingMp4PtrOutput) MaxStreamPauseLength() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the recording length. Value range: 15 ~ 180, unit: `minute`.
+// Specifies the recording length. Value range: `15` ~ `180`, unit: `minute`.
 // A stream exceeding the recording length will generate a new recording.
 func (o RecordingMp4PtrOutput) RecordingLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RecordingMp4) *int {
@@ -794,21 +817,42 @@ func (o RecordingObsPtrOutput) Region() pulumi.StringPtrOutput {
 }
 
 type TranscodingTemplate struct {
-	// Specifies the bitrate of a transcoded video, in kbit/s. Value range: 40 ~ 30000.
+	// Specifies the bitrate of a transcoded video, in kbit/s. Value range: `40` ~ `30,000`.
 	Bitrate int `pulumi:"bitrate"`
-	// Specifies the frame rate of the transcoded video, in fps. Value range: 0 ~ 30.
-	// Value 0 indicates that the frame rate remains unchanged.
+	// Specifies the adaptive bitrate.
+	// The valid values are as follows:
+	// + **off**: Disable rate adaptation and output the target rate according to the set rate.
+	// + **minimum**: Output the target bitrate based on the minimum value of the set bitrate and source file bitrate.
+	// + **adaptive**: Adaptive output of target bitrate based on source file bitrate.
+	BitrateAdaptive *string `pulumi:"bitrateAdaptive"`
+	// Specifies the frame rate of the transcoded video, in fps. Value range: `0` ~ `30`.
+	// Value `0` indicates that the frame rate remains unchanged.
 	FrameRate *int `pulumi:"frameRate"`
+	// Specifies the interval time for I-frames, in seconds.
+	// The value ranges from `0` to `10`, includes `0` and `10`. Defaults to `2`.
+	Gop *string `pulumi:"gop"`
 	// Specifies video height (unit: pixel).
-	// + **When the video encoding is H264**, value range: 32 ~ 2160 and must be a multiple of 2.
-	// + **When the video encoding is H265**, value range: 240 ~ 2160 and must be a multiple of 4.
+	// + **When the video encoding is H264**, value range: `32` ~ `2,160` and must be a multiple of `2`.
+	// + **When the video encoding is H265**, value range: `240` ~ `2,160` and must be a multiple of `4`.
 	Height int `pulumi:"height"`
+	// Specifies the maximum I-frame interval in frames.
+	// The value ranges from `0` to `500`, includes `0` and `500`. Defaults to `50`.
+	IFrameInterval *string `pulumi:"iFrameInterval"`
+	// Specifies the encoding output I-frame strategy.
+	// The valid values are as follows:
+	// + **auto**: I-frame output according to the set `gop` duration.
+	// + **strictSync**: The encoded output I-frame is completely consistent with the source, and the `gop` parameter is
+	//   invalid after setting this value.
+	IFramePolicy *string `pulumi:"iFramePolicy"`
 	// Specifies the template name. The name can contain a maximum of 64 characters, and only
 	// contains letters, digits and hyphens (-).
 	Name string `pulumi:"name"`
+	// Specifies the protocol type supported for transcoding output.
+	// The valid value is **RTMP**. Defaults to **RTMP**.
+	Protocol *string `pulumi:"protocol"`
 	// Specifies video width (unit: pixel).
-	// + **When the video encoding is H264**, value range: 32 ~ 3840 and must be a multiple of 2.
-	// + **When the video encoding is H265**, value range: 320 ~ 3840 and must be a multiple of 4.
+	// + **When the video encoding is H264**, value range: `32` ~ `3,840` and must be a multiple of `2`.
+	// + **When the video encoding is H265**, value range: `320` ~ `3,840` and must be a multiple of `4`.
 	Width int `pulumi:"width"`
 }
 
@@ -824,21 +868,42 @@ type TranscodingTemplateInput interface {
 }
 
 type TranscodingTemplateArgs struct {
-	// Specifies the bitrate of a transcoded video, in kbit/s. Value range: 40 ~ 30000.
+	// Specifies the bitrate of a transcoded video, in kbit/s. Value range: `40` ~ `30,000`.
 	Bitrate pulumi.IntInput `pulumi:"bitrate"`
-	// Specifies the frame rate of the transcoded video, in fps. Value range: 0 ~ 30.
-	// Value 0 indicates that the frame rate remains unchanged.
+	// Specifies the adaptive bitrate.
+	// The valid values are as follows:
+	// + **off**: Disable rate adaptation and output the target rate according to the set rate.
+	// + **minimum**: Output the target bitrate based on the minimum value of the set bitrate and source file bitrate.
+	// + **adaptive**: Adaptive output of target bitrate based on source file bitrate.
+	BitrateAdaptive pulumi.StringPtrInput `pulumi:"bitrateAdaptive"`
+	// Specifies the frame rate of the transcoded video, in fps. Value range: `0` ~ `30`.
+	// Value `0` indicates that the frame rate remains unchanged.
 	FrameRate pulumi.IntPtrInput `pulumi:"frameRate"`
+	// Specifies the interval time for I-frames, in seconds.
+	// The value ranges from `0` to `10`, includes `0` and `10`. Defaults to `2`.
+	Gop pulumi.StringPtrInput `pulumi:"gop"`
 	// Specifies video height (unit: pixel).
-	// + **When the video encoding is H264**, value range: 32 ~ 2160 and must be a multiple of 2.
-	// + **When the video encoding is H265**, value range: 240 ~ 2160 and must be a multiple of 4.
+	// + **When the video encoding is H264**, value range: `32` ~ `2,160` and must be a multiple of `2`.
+	// + **When the video encoding is H265**, value range: `240` ~ `2,160` and must be a multiple of `4`.
 	Height pulumi.IntInput `pulumi:"height"`
+	// Specifies the maximum I-frame interval in frames.
+	// The value ranges from `0` to `500`, includes `0` and `500`. Defaults to `50`.
+	IFrameInterval pulumi.StringPtrInput `pulumi:"iFrameInterval"`
+	// Specifies the encoding output I-frame strategy.
+	// The valid values are as follows:
+	// + **auto**: I-frame output according to the set `gop` duration.
+	// + **strictSync**: The encoded output I-frame is completely consistent with the source, and the `gop` parameter is
+	//   invalid after setting this value.
+	IFramePolicy pulumi.StringPtrInput `pulumi:"iFramePolicy"`
 	// Specifies the template name. The name can contain a maximum of 64 characters, and only
 	// contains letters, digits and hyphens (-).
 	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the protocol type supported for transcoding output.
+	// The valid value is **RTMP**. Defaults to **RTMP**.
+	Protocol pulumi.StringPtrInput `pulumi:"protocol"`
 	// Specifies video width (unit: pixel).
-	// + **When the video encoding is H264**, value range: 32 ~ 3840 and must be a multiple of 2.
-	// + **When the video encoding is H265**, value range: 320 ~ 3840 and must be a multiple of 4.
+	// + **When the video encoding is H264**, value range: `32` ~ `3,840` and must be a multiple of `2`.
+	// + **When the video encoding is H265**, value range: `320` ~ `3,840` and must be a multiple of `4`.
 	Width pulumi.IntInput `pulumi:"width"`
 }
 
@@ -893,22 +958,52 @@ func (o TranscodingTemplateOutput) ToTranscodingTemplateOutputWithContext(ctx co
 	return o
 }
 
-// Specifies the bitrate of a transcoded video, in kbit/s. Value range: 40 ~ 30000.
+// Specifies the bitrate of a transcoded video, in kbit/s. Value range: `40` ~ `30,000`.
 func (o TranscodingTemplateOutput) Bitrate() pulumi.IntOutput {
 	return o.ApplyT(func(v TranscodingTemplate) int { return v.Bitrate }).(pulumi.IntOutput)
 }
 
-// Specifies the frame rate of the transcoded video, in fps. Value range: 0 ~ 30.
-// Value 0 indicates that the frame rate remains unchanged.
+// Specifies the adaptive bitrate.
+// The valid values are as follows:
+// + **off**: Disable rate adaptation and output the target rate according to the set rate.
+// + **minimum**: Output the target bitrate based on the minimum value of the set bitrate and source file bitrate.
+// + **adaptive**: Adaptive output of target bitrate based on source file bitrate.
+func (o TranscodingTemplateOutput) BitrateAdaptive() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TranscodingTemplate) *string { return v.BitrateAdaptive }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the frame rate of the transcoded video, in fps. Value range: `0` ~ `30`.
+// Value `0` indicates that the frame rate remains unchanged.
 func (o TranscodingTemplateOutput) FrameRate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplate) *int { return v.FrameRate }).(pulumi.IntPtrOutput)
 }
 
+// Specifies the interval time for I-frames, in seconds.
+// The value ranges from `0` to `10`, includes `0` and `10`. Defaults to `2`.
+func (o TranscodingTemplateOutput) Gop() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TranscodingTemplate) *string { return v.Gop }).(pulumi.StringPtrOutput)
+}
+
 // Specifies video height (unit: pixel).
-// + **When the video encoding is H264**, value range: 32 ~ 2160 and must be a multiple of 2.
-// + **When the video encoding is H265**, value range: 240 ~ 2160 and must be a multiple of 4.
+// + **When the video encoding is H264**, value range: `32` ~ `2,160` and must be a multiple of `2`.
+// + **When the video encoding is H265**, value range: `240` ~ `2,160` and must be a multiple of `4`.
 func (o TranscodingTemplateOutput) Height() pulumi.IntOutput {
 	return o.ApplyT(func(v TranscodingTemplate) int { return v.Height }).(pulumi.IntOutput)
+}
+
+// Specifies the maximum I-frame interval in frames.
+// The value ranges from `0` to `500`, includes `0` and `500`. Defaults to `50`.
+func (o TranscodingTemplateOutput) IFrameInterval() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TranscodingTemplate) *string { return v.IFrameInterval }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the encoding output I-frame strategy.
+// The valid values are as follows:
+//   - **auto**: I-frame output according to the set `gop` duration.
+//   - **strictSync**: The encoded output I-frame is completely consistent with the source, and the `gop` parameter is
+//     invalid after setting this value.
+func (o TranscodingTemplateOutput) IFramePolicy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TranscodingTemplate) *string { return v.IFramePolicy }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the template name. The name can contain a maximum of 64 characters, and only
@@ -917,9 +1012,15 @@ func (o TranscodingTemplateOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v TranscodingTemplate) string { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the protocol type supported for transcoding output.
+// The valid value is **RTMP**. Defaults to **RTMP**.
+func (o TranscodingTemplateOutput) Protocol() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TranscodingTemplate) *string { return v.Protocol }).(pulumi.StringPtrOutput)
+}
+
 // Specifies video width (unit: pixel).
-// + **When the video encoding is H264**, value range: 32 ~ 3840 and must be a multiple of 2.
-// + **When the video encoding is H265**, value range: 320 ~ 3840 and must be a multiple of 4.
+// + **When the video encoding is H264**, value range: `32` ~ `3,840` and must be a multiple of `2`.
+// + **When the video encoding is H265**, value range: `320` ~ `3,840` and must be a multiple of `4`.
 func (o TranscodingTemplateOutput) Width() pulumi.IntOutput {
 	return o.ApplyT(func(v TranscodingTemplate) int { return v.Width }).(pulumi.IntOutput)
 }

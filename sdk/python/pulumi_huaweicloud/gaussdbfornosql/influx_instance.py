@@ -47,13 +47,13 @@ class InfluxInstanceArgs:
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -70,17 +70,18 @@ class InfluxInstanceArgs:
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -165,7 +166,7 @@ class InfluxInstanceArgs:
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -192,8 +193,8 @@ class InfluxInstanceArgs:
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> pulumi.Input[int]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         """
@@ -309,7 +310,7 @@ class InfluxInstanceArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -335,7 +336,7 @@ class InfluxInstanceArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -348,7 +349,7 @@ class InfluxInstanceArgs:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+        Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -360,10 +361,11 @@ class InfluxInstanceArgs:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -490,7 +492,7 @@ class _InfluxInstanceState:
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
                Changing this parameter will create a new resource.
@@ -500,17 +502,18 @@ class _InfluxInstanceState:
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
         :param pulumi.Input[Sequence[pulumi.Input['InfluxInstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -526,8 +529,8 @@ class _InfluxInstanceState:
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -715,7 +718,7 @@ class _InfluxInstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -791,7 +794,7 @@ class _InfluxInstanceState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -804,7 +807,7 @@ class _InfluxInstanceState:
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+        Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -828,7 +831,7 @@ class _InfluxInstanceState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -842,10 +845,11 @@ class _InfluxInstanceState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -971,8 +975,8 @@ class _InfluxInstanceState:
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         """
@@ -1025,10 +1029,10 @@ class InfluxInstance(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB for influx instance management within HuaweiCoud.
+        GeminiDB Influx instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for influx instance with tags
+        ### create a geminidb influx instance with tags
 
         ```python
         import pulumi
@@ -1047,7 +1051,7 @@ class InfluxInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb influx instance with backup strategy
+        ### create a geminidb influx instance with backup strategy
 
         ```python
         import pulumi
@@ -1069,7 +1073,7 @@ class InfluxInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB influx instance can be imported using the `id`, e.g.
+        GaussDB influx instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/influxInstance:InfluxInstance instance_1 e6f6b1fde738489793ce09320d732037in13
@@ -1093,23 +1097,24 @@ class InfluxInstance(pulumi.CustomResource):
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
                Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -1122,8 +1127,8 @@ class InfluxInstance(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -1135,10 +1140,10 @@ class InfluxInstance(pulumi.CustomResource):
                  args: InfluxInstanceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB for influx instance management within HuaweiCoud.
+        GeminiDB Influx instance management within HuaweiCould.
 
         ## Example Usage
-        ### create a gaussdb for influx instance with tags
+        ### create a geminidb influx instance with tags
 
         ```python
         import pulumi
@@ -1157,7 +1162,7 @@ class InfluxInstance(pulumi.CustomResource):
                 "key": "value",
             })
         ```
-        ### create a gaussdb influx instance with backup strategy
+        ### create a geminidb influx instance with backup strategy
 
         ```python
         import pulumi
@@ -1179,7 +1184,7 @@ class InfluxInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB influx instance can be imported using the `id`, e.g.
+        GaussDB influx instance can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:GaussDBforNoSQL/influxInstance:InfluxInstance instance_1 e6f6b1fde738489793ce09320d732037in13
@@ -1340,7 +1345,7 @@ class InfluxInstance(pulumi.CustomResource):
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this
                parameter will create a new resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id, Only valid for users who
-               have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+               have enabled the enterprise multi-project service.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
                Changing this parameter will create a new resource.
@@ -1350,17 +1355,18 @@ class InfluxInstance(pulumi.CustomResource):
         :param pulumi.Input[str] lb_port: Indicates the LB port of the db.
         :param pulumi.Input[str] mode: Indicates the instance type.
         :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The
-               value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+               value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
                letters, digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+        :param pulumi.Input[int] node_num: Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InfluxInstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be **8** to **32** characters in
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in
                length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
                advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-               value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-               will do nothing.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
@@ -1376,8 +1382,8 @@ class InfluxInstance(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create
                a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the instance.
-        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of **10**. For a
-               GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        :param pulumi.Input[int] volume_size: Specifies the storage space in GB. The value must be a multiple of `10`. For a
+               GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
                instance performance specifications. For details,
                see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
@@ -1503,7 +1509,7 @@ class InfluxInstance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project id, Only valid for users who
-        have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+        have enabled the enterprise multi-project service.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1555,7 +1561,7 @@ class InfluxInstance(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the instance name, which can be the same as an existing instance name. The
-        value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+        value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
         letters, digits, hyphens (-), and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -1564,7 +1570,7 @@ class InfluxInstance(pulumi.CustomResource):
     @pulumi.getter(name="nodeNum")
     def node_num(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+        Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
         """
         return pulumi.get(self, "node_num")
 
@@ -1580,7 +1586,7 @@ class InfluxInstance(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
         """
-        Specifies the database password. The value must be **8** to **32** characters in
+        Specifies the database password. The value must be `8` to `32` characters in
         length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
         advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -1590,10 +1596,11 @@ class InfluxInstance(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to **month** , the value ranges from **1** to **9**. If `period_unit` is set to *year*, the
-        value ranges from **1** to **3**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
-        will do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to *year*, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -1679,8 +1686,8 @@ class InfluxInstance(pulumi.CustomResource):
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> pulumi.Output[int]:
         """
-        Specifies the storage space in GB. The value must be a multiple of **10**. For a
-        GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+        Specifies the storage space in GB. The value must be a multiple of `10`. For a
+        GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
         instance performance specifications. For details,
         see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
         """

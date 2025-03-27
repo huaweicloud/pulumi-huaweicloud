@@ -295,6 +295,13 @@ class DeviceCertificate(pulumi.CustomResource):
         """
         Manages an IoTDA device CA certificate within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
 
         ```python
@@ -308,13 +315,13 @@ class DeviceCertificate(pulumi.CustomResource):
 
         ## Import
 
-        Device CA certificates can be imported by `id`, e.g.
+        Device CA certificates can be imported by `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/deviceCertificate:DeviceCertificate test 62b3cec5558d4b703f064534
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`content`, `space_id`, `verify_content`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_certificate" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`content`, `space_id`, `verify_content`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_certificate" "test" {
 
          ...
 
@@ -351,6 +358,13 @@ class DeviceCertificate(pulumi.CustomResource):
         """
         Manages an IoTDA device CA certificate within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
 
         ```python
@@ -364,13 +378,13 @@ class DeviceCertificate(pulumi.CustomResource):
 
         ## Import
 
-        Device CA certificates can be imported by `id`, e.g.
+        Device CA certificates can be imported by `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/deviceCertificate:DeviceCertificate test 62b3cec5558d4b703f064534
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`content`, `space_id`, `verify_content`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_certificate" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`content`, `space_id`, `verify_content`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_certificate" "test" {
 
          ...
 

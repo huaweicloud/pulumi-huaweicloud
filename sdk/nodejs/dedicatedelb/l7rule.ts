@@ -2,12 +2,14 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
  * Manages an ELB L7 Rule resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create by value
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -22,13 +24,65 @@ import * as utilities from "../utilities";
  *     value: "/api",
  * });
  * ```
+ * ### Create by conditions and type is HOST_NAME
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const l7policyId = config.requireObject("l7policyId");
+ * const l7rule1 = new huaweicloud.dedicatedelb.L7rule("l7rule1", {
+ *     l7policyId: l7policyId,
+ *     type: "HOST_NAME",
+ *     compareType: "EQUAL_TO",
+ *     conditions: [{
+ *         value: "test.com",
+ *     }],
+ * });
+ * ```
+ * ### Create by conditions and type is HEADER
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const l7policyId = config.requireObject("l7policyId");
+ * const l7rule1 = new huaweicloud.dedicatedelb.L7rule("l7rule1", {
+ *     l7policyId: l7policyId,
+ *     type: "HEADER",
+ *     compareType: "EQUAL_TO",
+ *     conditions: [{
+ *         key: "testKey",
+ *         value: "testValue",
+ *     }],
+ * });
+ * ```
+ * ### Create by conditions and type is SOURCE_IP
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const l7policyId = config.requireObject("l7policyId");
+ * const l7rule1 = new huaweicloud.dedicatedelb.L7rule("l7rule1", {
+ *     l7policyId: l7policyId,
+ *     type: "SOURCE_IP",
+ *     compareType: "EQUAL_TO",
+ *     conditions: [{
+ *         value: "192.168.0.2/32",
+ *     }],
+ * });
+ * ```
  *
  * ## Import
  *
- * ELB L7 rule can be imported using the L7 policy ID and L7 rule ID separated by a slash, e.g.
+ * ELB L7 rule can be imported using the `l7policy_id` and `id` separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
+ *  $ pulumi import huaweicloud:DedicatedElb/l7rule:L7rule rule_1 <l7policy_id>/<id>
  * ```
  */
 export class L7rule extends pulumi.CustomResource {
@@ -60,11 +114,26 @@ export class L7rule extends pulumi.CustomResource {
     }
 
     /**
-     * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+     * Specifies how requests are matched with the forwarding rule. Value options:
+     * + **EQUAL_TO**: Exact match.
+     * + **REGEX**: Regular expression match.
+     * + **STARTS_WITH**: Prefix match.
      */
     public readonly compareType!: pulumi.Output<string>;
     /**
-     * The ID of the L7 Policy. Changing this creates a new L7 Rule.
+     * Specifies the matching conditions of the forwarding rule. This parameter is available
+     * only when `enhanceL7policyEnable` of the listener is set to **true**. If it is specified, parameter `value` will
+     * not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+     * must be the same, whereas each value must be unique.
+     * The condition structure is documented below.
+     */
+    public readonly conditions!: pulumi.Output<outputs.DedicatedElb.L7ruleCondition[]>;
+    /**
+     * The create time of the L7 Rule.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
      */
     public readonly l7policyId!: pulumi.Output<string>;
     /**
@@ -73,12 +142,40 @@ export class L7rule extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-     * L7 Rule.
+     * Specifies the L7 Rule type. Value options:
+     * + **HOST_NAME**: A domain name will be used for matching.
+     * + **PATH**: A URL will be used for matching.
+     * + **METHOD**: An HTTP request method will be used for matching.
+     * + **HEADER**: The request header will be used for matching.
+     * + **QUERY_STRING**: A query string will be used for matching.
+     * + **SOURCE_IP**: The source IP address will be used for matching.
+     * + **COOKIE**: The cookie will be used for matching.
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * The value to use for the comparison.
+     * The update time of the L7 Rule.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
+    /**
+     * Specifies the value of the match item.
+     * + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+     * letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+     * If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+     * + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+     * `compareType` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+     * slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+     * + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+     * characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+     * An asterisk can match zero or more characters, and a question mark can match 1 character.
+     * + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+     * and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+     * backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+     * and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+     * more characters, and a question mark can match 1 character.
+     * + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+     * **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+     * + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+     * **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
      */
     public readonly value!: pulumi.Output<string>;
 
@@ -96,9 +193,12 @@ export class L7rule extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as L7ruleState | undefined;
             resourceInputs["compareType"] = state ? state.compareType : undefined;
+            resourceInputs["conditions"] = state ? state.conditions : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["l7policyId"] = state ? state.l7policyId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["value"] = state ? state.value : undefined;
         } else {
             const args = argsOrState as L7ruleArgs | undefined;
@@ -111,14 +211,14 @@ export class L7rule extends pulumi.CustomResource {
             if ((!args || args.type === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'type'");
             }
-            if ((!args || args.value === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'value'");
-            }
             resourceInputs["compareType"] = args ? args.compareType : undefined;
+            resourceInputs["conditions"] = args ? args.conditions : undefined;
             resourceInputs["l7policyId"] = args ? args.l7policyId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["value"] = args ? args.value : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(L7rule.__pulumiType, name, resourceInputs, opts);
@@ -130,11 +230,26 @@ export class L7rule extends pulumi.CustomResource {
  */
 export interface L7ruleState {
     /**
-     * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+     * Specifies how requests are matched with the forwarding rule. Value options:
+     * + **EQUAL_TO**: Exact match.
+     * + **REGEX**: Regular expression match.
+     * + **STARTS_WITH**: Prefix match.
      */
     compareType?: pulumi.Input<string>;
     /**
-     * The ID of the L7 Policy. Changing this creates a new L7 Rule.
+     * Specifies the matching conditions of the forwarding rule. This parameter is available
+     * only when `enhanceL7policyEnable` of the listener is set to **true**. If it is specified, parameter `value` will
+     * not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+     * must be the same, whereas each value must be unique.
+     * The condition structure is documented below.
+     */
+    conditions?: pulumi.Input<pulumi.Input<inputs.DedicatedElb.L7ruleCondition>[]>;
+    /**
+     * The create time of the L7 Rule.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
      */
     l7policyId?: pulumi.Input<string>;
     /**
@@ -143,12 +258,40 @@ export interface L7ruleState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-     * L7 Rule.
+     * Specifies the L7 Rule type. Value options:
+     * + **HOST_NAME**: A domain name will be used for matching.
+     * + **PATH**: A URL will be used for matching.
+     * + **METHOD**: An HTTP request method will be used for matching.
+     * + **HEADER**: The request header will be used for matching.
+     * + **QUERY_STRING**: A query string will be used for matching.
+     * + **SOURCE_IP**: The source IP address will be used for matching.
+     * + **COOKIE**: The cookie will be used for matching.
      */
     type?: pulumi.Input<string>;
     /**
-     * The value to use for the comparison.
+     * The update time of the L7 Rule.
+     */
+    updatedAt?: pulumi.Input<string>;
+    /**
+     * Specifies the value of the match item.
+     * + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+     * letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+     * If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+     * + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+     * `compareType` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+     * slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+     * + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+     * characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+     * An asterisk can match zero or more characters, and a question mark can match 1 character.
+     * + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+     * and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+     * backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+     * and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+     * more characters, and a question mark can match 1 character.
+     * + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+     * **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+     * + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+     * **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
      */
     value?: pulumi.Input<string>;
 }
@@ -158,11 +301,22 @@ export interface L7ruleState {
  */
 export interface L7ruleArgs {
     /**
-     * The comparison type for the L7 rule - can either be STARTS_WITH, EQUAL_TO or REGEX
+     * Specifies how requests are matched with the forwarding rule. Value options:
+     * + **EQUAL_TO**: Exact match.
+     * + **REGEX**: Regular expression match.
+     * + **STARTS_WITH**: Prefix match.
      */
     compareType: pulumi.Input<string>;
     /**
-     * The ID of the L7 Policy. Changing this creates a new L7 Rule.
+     * Specifies the matching conditions of the forwarding rule. This parameter is available
+     * only when `enhanceL7policyEnable` of the listener is set to **true**. If it is specified, parameter `value` will
+     * not take effect, and the value will contain all conditions configured for the forwarding rule. The keys in the list
+     * must be the same, whereas each value must be unique.
+     * The condition structure is documented below.
+     */
+    conditions?: pulumi.Input<pulumi.Input<inputs.DedicatedElb.L7ruleCondition>[]>;
+    /**
+     * Specifies the ID of the L7 Policy. Changing this creates a new L7 Rule.
      */
     l7policyId: pulumi.Input<string>;
     /**
@@ -171,12 +325,36 @@ export interface L7ruleArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The L7 Rule type - can either be HOST_NAME or PATH. Changing this creates a new
-     * L7 Rule.
+     * Specifies the L7 Rule type. Value options:
+     * + **HOST_NAME**: A domain name will be used for matching.
+     * + **PATH**: A URL will be used for matching.
+     * + **METHOD**: An HTTP request method will be used for matching.
+     * + **HEADER**: The request header will be used for matching.
+     * + **QUERY_STRING**: A query string will be used for matching.
+     * + **SOURCE_IP**: The source IP address will be used for matching.
+     * + **COOKIE**: The cookie will be used for matching.
      */
     type: pulumi.Input<string>;
     /**
-     * The value to use for the comparison.
+     * Specifies the value of the match item.
+     * + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+     * letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+     * If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+     * + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+     * `compareType` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+     * slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+     * + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+     * characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+     * An asterisk can match zero or more characters, and a question mark can match 1 character.
+     * + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+     * and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+     * backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+     * and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+     * more characters, and a question mark can match 1 character.
+     * + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+     * **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+     * + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+     * **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
      */
-    value: pulumi.Input<string>;
+    value?: pulumi.Input<string>;
 }

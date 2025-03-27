@@ -46,7 +46,7 @@ import (
 //
 // ## Import
 //
-// Repository can be imported using the organization name and repository name separated by a slash, e.g.
+// # Repository can be imported using the organization name and repository name separated by a slash, e.g.bash
 //
 // ```sh
 //
@@ -65,12 +65,15 @@ type Repository struct {
 	InternalPath pulumi.StringOutput `pulumi:"internalPath"`
 	// Specifies whether the repository is public. Default is false.
 	IsPublic pulumi.BoolPtrOutput `pulumi:"isPublic"`
-	// Specifies the name of the repository. Changing this creates a new resource.
+	// Specifies the name of the repository.\
+	// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+	// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+	// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Number of image tags in a repository.
 	NumImages pulumi.IntOutput `pulumi:"numImages"`
-	// Specifies the name of the organization (namespace) the repository belongs.
-	// Changing this creates a new resource.
+	// Specifies the name of the organization (namespace) the repository
+	// belongs. Changing this creates a new resource.
 	Organization pulumi.StringOutput `pulumi:"organization"`
 	// Image address for docker pull.
 	Path pulumi.StringOutput `pulumi:"path"`
@@ -125,12 +128,15 @@ type repositoryState struct {
 	InternalPath *string `pulumi:"internalPath"`
 	// Specifies whether the repository is public. Default is false.
 	IsPublic *bool `pulumi:"isPublic"`
-	// Specifies the name of the repository. Changing this creates a new resource.
+	// Specifies the name of the repository.\
+	// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+	// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+	// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 	Name *string `pulumi:"name"`
 	// Number of image tags in a repository.
 	NumImages *int `pulumi:"numImages"`
-	// Specifies the name of the organization (namespace) the repository belongs.
-	// Changing this creates a new resource.
+	// Specifies the name of the organization (namespace) the repository
+	// belongs. Changing this creates a new resource.
 	Organization *string `pulumi:"organization"`
 	// Image address for docker pull.
 	Path *string `pulumi:"path"`
@@ -153,12 +159,15 @@ type RepositoryState struct {
 	InternalPath pulumi.StringPtrInput
 	// Specifies whether the repository is public. Default is false.
 	IsPublic pulumi.BoolPtrInput
-	// Specifies the name of the repository. Changing this creates a new resource.
+	// Specifies the name of the repository.\
+	// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+	// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+	// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 	Name pulumi.StringPtrInput
 	// Number of image tags in a repository.
 	NumImages pulumi.IntPtrInput
-	// Specifies the name of the organization (namespace) the repository belongs.
-	// Changing this creates a new resource.
+	// Specifies the name of the organization (namespace) the repository
+	// belongs. Changing this creates a new resource.
 	Organization pulumi.StringPtrInput
 	// Image address for docker pull.
 	Path pulumi.StringPtrInput
@@ -183,10 +192,13 @@ type repositoryArgs struct {
 	Description *string `pulumi:"description"`
 	// Specifies whether the repository is public. Default is false.
 	IsPublic *bool `pulumi:"isPublic"`
-	// Specifies the name of the repository. Changing this creates a new resource.
+	// Specifies the name of the repository.\
+	// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+	// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+	// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 	Name *string `pulumi:"name"`
-	// Specifies the name of the organization (namespace) the repository belongs.
-	// Changing this creates a new resource.
+	// Specifies the name of the organization (namespace) the repository
+	// belongs. Changing this creates a new resource.
 	Organization string `pulumi:"organization"`
 	// Specifies the region in which to create the resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
@@ -202,10 +214,13 @@ type RepositoryArgs struct {
 	Description pulumi.StringPtrInput
 	// Specifies whether the repository is public. Default is false.
 	IsPublic pulumi.BoolPtrInput
-	// Specifies the name of the repository. Changing this creates a new resource.
+	// Specifies the name of the repository.\
+	// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+	// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+	// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 	Name pulumi.StringPtrInput
-	// Specifies the name of the organization (namespace) the repository belongs.
-	// Changing this creates a new resource.
+	// Specifies the name of the organization (namespace) the repository
+	// belongs. Changing this creates a new resource.
 	Organization pulumi.StringInput
 	// Specifies the region in which to create the resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
@@ -320,7 +335,10 @@ func (o RepositoryOutput) IsPublic() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Repository) pulumi.BoolPtrOutput { return v.IsPublic }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies the name of the repository. Changing this creates a new resource.
+// Specifies the name of the repository.\
+// The valid length is limited from `1` to `128`, only lowercase letters, digits, periods (.), hyphens (-) and
+// underscores (_) are allowed. Periods, underscores, and hyphens cannot be placed next to each other.
+// A maximum of two consecutive underscores are allowed. Changing this creates a new resource.
 func (o RepositoryOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Repository) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -330,8 +348,8 @@ func (o RepositoryOutput) NumImages() pulumi.IntOutput {
 	return o.ApplyT(func(v *Repository) pulumi.IntOutput { return v.NumImages }).(pulumi.IntOutput)
 }
 
-// Specifies the name of the organization (namespace) the repository belongs.
-// Changing this creates a new resource.
+// Specifies the name of the organization (namespace) the repository
+// belongs. Changing this creates a new resource.
 func (o RepositoryOutput) Organization() pulumi.StringOutput {
 	return o.ApplyT(func(v *Repository) pulumi.StringOutput { return v.Organization }).(pulumi.StringOutput)
 }

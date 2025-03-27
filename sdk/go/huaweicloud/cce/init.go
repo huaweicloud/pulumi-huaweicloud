@@ -23,8 +23,16 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 	switch typ {
 	case "huaweicloud:Cce/addon:Addon":
 		r = &Addon{}
+	case "huaweicloud:Cce/chart:Chart":
+		r = &Chart{}
 	case "huaweicloud:Cce/cluster:Cluster":
 		r = &Cluster{}
+	case "huaweicloud:Cce/clusterCertificateRevoke:ClusterCertificateRevoke":
+		r = &ClusterCertificateRevoke{}
+	case "huaweicloud:Cce/clusterLogConfig:ClusterLogConfig":
+		r = &ClusterLogConfig{}
+	case "huaweicloud:Cce/clusterUpgrade:ClusterUpgrade":
+		r = &ClusterUpgrade{}
 	case "huaweicloud:Cce/namespace:Namespace":
 		r = &Namespace{}
 	case "huaweicloud:Cce/node:Node":
@@ -33,6 +41,12 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &NodeAttach{}
 	case "huaweicloud:Cce/nodePool:NodePool":
 		r = &NodePool{}
+	case "huaweicloud:Cce/nodePoolNodesAdd:NodePoolNodesAdd":
+		r = &NodePoolNodesAdd{}
+	case "huaweicloud:Cce/nodePoolScale:NodePoolScale":
+		r = &NodePoolScale{}
+	case "huaweicloud:Cce/nodeSync:NodeSync":
+		r = &NodeSync{}
 	case "huaweicloud:Cce/pvc:Pvc":
 		r = &Pvc{}
 	default:
@@ -55,7 +69,27 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Cce/chart",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Cce/cluster",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/clusterCertificateRevoke",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/clusterLogConfig",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/clusterUpgrade",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
@@ -76,6 +110,21 @@ func init() {
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
 		"Cce/nodePool",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/nodePoolNodesAdd",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/nodePoolScale",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Cce/nodeSync",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(

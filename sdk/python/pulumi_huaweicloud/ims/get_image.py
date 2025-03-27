@@ -21,7 +21,10 @@ class GetImageResult:
     """
     A collection of values returned by getImage.
     """
-    def __init__(__self__, architecture=None, backup_id=None, checksum=None, container_format=None, created_at=None, disk_format=None, enterprise_project_id=None, file=None, flavor_id=None, id=None, image_type=None, metadata=None, min_disk_gb=None, min_ram_mb=None, most_recent=None, name=None, name_regex=None, os=None, os_version=None, owner=None, protected=None, region=None, schema=None, size_bytes=None, size_max=None, size_min=None, sort_direction=None, sort_key=None, status=None, tag=None, updated_at=None, visibility=None):
+    def __init__(__self__, active_at=None, architecture=None, backup_id=None, checksum=None, container_format=None, created_at=None, data_origin=None, description=None, disk_format=None, enterprise_project_id=None, file=None, flavor_id=None, id=None, image_id=None, image_type=None, is_whole_image=None, max_ram_mb=None, metadata=None, min_disk_gb=None, min_ram_mb=None, most_recent=None, name=None, name_regex=None, os=None, os_version=None, owner=None, protected=None, region=None, schema=None, size_bytes=None, size_max=None, size_min=None, sort_direction=None, sort_key=None, status=None, tag=None, updated_at=None, visibility=None):
+        if active_at and not isinstance(active_at, str):
+            raise TypeError("Expected argument 'active_at' to be a str")
+        pulumi.set(__self__, "active_at", active_at)
         if architecture and not isinstance(architecture, str):
             raise TypeError("Expected argument 'architecture' to be a str")
         pulumi.set(__self__, "architecture", architecture)
@@ -37,6 +40,12 @@ class GetImageResult:
         if created_at and not isinstance(created_at, str):
             raise TypeError("Expected argument 'created_at' to be a str")
         pulumi.set(__self__, "created_at", created_at)
+        if data_origin and not isinstance(data_origin, str):
+            raise TypeError("Expected argument 'data_origin' to be a str")
+        pulumi.set(__self__, "data_origin", data_origin)
+        if description and not isinstance(description, str):
+            raise TypeError("Expected argument 'description' to be a str")
+        pulumi.set(__self__, "description", description)
         if disk_format and not isinstance(disk_format, str):
             raise TypeError("Expected argument 'disk_format' to be a str")
         pulumi.set(__self__, "disk_format", disk_format)
@@ -52,9 +61,18 @@ class GetImageResult:
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
+        if image_id and not isinstance(image_id, str):
+            raise TypeError("Expected argument 'image_id' to be a str")
+        pulumi.set(__self__, "image_id", image_id)
         if image_type and not isinstance(image_type, str):
             raise TypeError("Expected argument 'image_type' to be a str")
         pulumi.set(__self__, "image_type", image_type)
+        if is_whole_image and not isinstance(is_whole_image, bool):
+            raise TypeError("Expected argument 'is_whole_image' to be a bool")
+        pulumi.set(__self__, "is_whole_image", is_whole_image)
+        if max_ram_mb and not isinstance(max_ram_mb, int):
+            raise TypeError("Expected argument 'max_ram_mb' to be a int")
+        pulumi.set(__self__, "max_ram_mb", max_ram_mb)
         if metadata and not isinstance(metadata, dict):
             raise TypeError("Expected argument 'metadata' to be a dict")
         pulumi.set(__self__, "metadata", metadata)
@@ -128,8 +146,16 @@ class GetImageResult:
         pulumi.set(__self__, "visibility", visibility)
 
     @property
+    @pulumi.getter(name="activeAt")
+    def active_at(self) -> str:
+        """
+        The time when the image status changes to active, in RFC3339 format.
+        """
+        return pulumi.get(self, "active_at")
+
+    @property
     @pulumi.getter
-    def architecture(self) -> Optional[str]:
+    def architecture(self) -> str:
         return pulumi.get(self, "architecture")
 
     @property
@@ -143,9 +169,6 @@ class GetImageResult:
     @property
     @pulumi.getter
     def checksum(self) -> str:
-        """
-        The checksum of the data associated with the image.
-        """
         return pulumi.get(self, "checksum")
 
     @property
@@ -160,15 +183,32 @@ class GetImageResult:
     @pulumi.getter(name="createdAt")
     def created_at(self) -> str:
         """
-        The date when the image was created.
+        The creation time of the image, in RFC3339 format.
         """
         return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="dataOrigin")
+    def data_origin(self) -> str:
+        """
+        The image source. The format is **server_backup,backup_id**,  **instance,instance_id**,
+        **server_backup,vault_id**,  **volume,volume_id**, **file,image_url**, or **image,region,image_id**.
+        """
+        return pulumi.get(self, "data_origin")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The description of the image.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="diskFormat")
     def disk_format(self) -> str:
         """
-        The format of the image's disk.
+        The image format. The value can be **zvhd2**, **vhd**, **zvhd**, **raw**, **qcow2**, or **iso**.
         """
         return pulumi.get(self, "disk_format")
 
@@ -181,14 +221,13 @@ class GetImageResult:
     @pulumi.getter
     def file(self) -> str:
         """
-        the trailing path after the glance endpoint that represent the location of the image or the path to retrieve
-        it.
+        The image file download and upload links.
         """
         return pulumi.get(self, "file")
 
     @property
     @pulumi.getter(name="flavorId")
-    def flavor_id(self) -> str:
+    def flavor_id(self) -> Optional[str]:
         return pulumi.get(self, "flavor_id")
 
     @property
@@ -200,24 +239,40 @@ class GetImageResult:
         return pulumi.get(self, "id")
 
     @property
+    @pulumi.getter(name="imageId")
+    def image_id(self) -> str:
+        return pulumi.get(self, "image_id")
+
+    @property
     @pulumi.getter(name="imageType")
     def image_type(self) -> str:
         return pulumi.get(self, "image_type")
 
     @property
+    @pulumi.getter(name="isWholeImage")
+    def is_whole_image(self) -> Optional[bool]:
+        return pulumi.get(self, "is_whole_image")
+
+    @property
+    @pulumi.getter(name="maxRamMb")
+    def max_ram_mb(self) -> int:
+        """
+        The maximum memory supported by the image, in MB unit.
+        """
+        return pulumi.get(self, "max_ram_mb")
+
+    @property
     @pulumi.getter
     def metadata(self) -> Mapping[str, str]:
-        """
-        The metadata associated with the image. Image metadata allow for meaningfully define the image properties
-        and tags.
-        """
         return pulumi.get(self, "metadata")
 
     @property
     @pulumi.getter(name="minDiskGb")
     def min_disk_gb(self) -> int:
         """
-        The minimum amount of disk space required to use the image.
+        The minimum disk space required to run an image, in GB unit.
+        + When the operating system is Linux, the value ranges from `10` to `1,024`.
+        + When the operating system is Windows, the value ranges from `20` to `1,024`.
         """
         return pulumi.get(self, "min_disk_gb")
 
@@ -225,7 +280,7 @@ class GetImageResult:
     @pulumi.getter(name="minRamMb")
     def min_ram_mb(self) -> int:
         """
-        The minimum amount of ram required to use the image.
+        The minimum memory required to run an image, in MB unit.
         """
         return pulumi.get(self, "min_ram_mb")
 
@@ -252,6 +307,9 @@ class GetImageResult:
     @property
     @pulumi.getter(name="osVersion")
     def os_version(self) -> str:
+        """
+        The operating system version of the image.
+        """
         return pulumi.get(self, "os_version")
 
     @property
@@ -263,7 +321,8 @@ class GetImageResult:
     @pulumi.getter
     def protected(self) -> bool:
         """
-        Whether or not the image is protected.
+        Indicates whether the image is protected, protected images cannot be deleted.
+        The valid value is **true** or **false**.
         """
         return pulumi.get(self, "protected")
 
@@ -276,7 +335,7 @@ class GetImageResult:
     @pulumi.getter
     def schema(self) -> str:
         """
-        The path to the JSON-schema that represent the image or image.
+        The image view.
         """
         return pulumi.get(self, "schema")
 
@@ -284,7 +343,7 @@ class GetImageResult:
     @pulumi.getter(name="sizeBytes")
     def size_bytes(self) -> int:
         """
-        The size of the image (in bytes).
+        The size of the image file, in bytes unit.
         """
         return pulumi.get(self, "size_bytes")
 
@@ -312,7 +371,7 @@ class GetImageResult:
     @pulumi.getter
     def status(self) -> str:
         """
-        The status of the image.
+        The status of the image. The valid value is **active**.
         """
         return pulumi.get(self, "status")
 
@@ -325,7 +384,7 @@ class GetImageResult:
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> str:
         """
-        The date when the image was last updated.
+        The last update time of the image, in RFC3339 format.
         """
         return pulumi.get(self, "updated_at")
 
@@ -341,17 +400,23 @@ class AwaitableGetImageResult(GetImageResult):
         if False:
             yield self
         return GetImageResult(
+            active_at=self.active_at,
             architecture=self.architecture,
             backup_id=self.backup_id,
             checksum=self.checksum,
             container_format=self.container_format,
             created_at=self.created_at,
+            data_origin=self.data_origin,
+            description=self.description,
             disk_format=self.disk_format,
             enterprise_project_id=self.enterprise_project_id,
             file=self.file,
             flavor_id=self.flavor_id,
             id=self.id,
+            image_id=self.image_id,
             image_type=self.image_type,
+            is_whole_image=self.is_whole_image,
+            max_ram_mb=self.max_ram_mb,
             metadata=self.metadata,
             min_disk_gb=self.min_disk_gb,
             min_ram_mb=self.min_ram_mb,
@@ -378,7 +443,9 @@ class AwaitableGetImageResult(GetImageResult):
 def get_image(architecture: Optional[str] = None,
               enterprise_project_id: Optional[str] = None,
               flavor_id: Optional[str] = None,
+              image_id: Optional[str] = None,
               image_type: Optional[str] = None,
+              is_whole_image: Optional[bool] = None,
               most_recent: Optional[bool] = None,
               name: Optional[str] = None,
               name_regex: Optional[str] = None,
@@ -394,7 +461,7 @@ def get_image(architecture: Optional[str] = None,
               visibility: Optional[str] = None,
               opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetImageResult:
     """
-    Use this data source to get the ID of an available HuaweiCloud image.
+    Use this data source to get an available IMS image within HuaweiCloud.
 
     ## Example Usage
 
@@ -402,53 +469,68 @@ def get_image(architecture: Optional[str] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    ubuntu = huaweicloud.Ims.get_image(most_recent=True,
-        name="Ubuntu 18.04 server 64bit",
-        visibility="public")
+    config = pulumi.Config()
+    image_id = config.require_object("imageId")
+    test = huaweicloud.Ims.get_image(image_id=image_id)
+    ubuntu = huaweicloud.Ims.get_image(name="Ubuntu 18.04 server 64bit",
+        visibility="public",
+        most_recent=True)
     centos_1 = huaweicloud.Ims.get_image(architecture="x86",
-        most_recent=True,
-        os_version="CentOS 7.4 64bit",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     centos_2 = huaweicloud.Ims.get_image(architecture="x86",
-        most_recent=True,
         name_regex="^CentOS 7.4",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     bms_image = huaweicloud.Ims.get_image(architecture="x86",
         image_type="Ironic",
-        most_recent=True,
-        os_version="CentOS 7.4 64bit",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     ```
 
 
-    :param str architecture: Specifies the image architecture type. The value can be **x86** and **arm**.
+    :param str architecture: Specifies the image architecture type. The value can be **x86** or **arm**.
     :param str enterprise_project_id: Specifies the enterprise project ID of the image.
+           For enterprise users, if omitted, will query the images under all enterprise projects.
     :param str flavor_id: Specifies the ECS flavor ID used to filter out available images.
            You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
-    :param str image_type: Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
-    :param bool most_recent: If more than one result is returned, use the latest updated image.
-    :param str name: The name of the image. Cannot be used simultaneously with `name_regex`.
-    :param str name_regex: The regular expressian of the name of the image.
+    :param str image_id: Specifies the ID of the image.
+    :param str image_type: Specifies the environment where the image is used.
+           The valid values are as follows:
+           + **FusionCompute**: Cloud server image, also known as system disk image.
+           + **DataImage**: Data disk image.
+           + **Ironic**: Bare metal server image.
+           + **IsoImage**: ISO image.
+    :param bool is_whole_image: Specifies whether it is a whole image. The valid value is **true** or **false**.
+           Defaults to **false**.
+    :param bool most_recent: Specifies whether to return the latest updated image if the query returns more than
+           results. The valid value is **true** or **false**. Defaults to **false**.
+    :param str name: Specifies the name of the image. Cannot be used simultaneously with `name_regex`.
+    :param str name_regex: Specifies the regular expression of the name of the image.
            Cannot be used simultaneously with `name`.
-    :param str os: Specifies the image OS type. The value can be **Windows**, **Ubuntu**,
-           **RedHat**, **SUSE**, **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**,
-           **CoreOS**, or **EulerOS**.
-    :param str os_version: Specifies the OS version. For example, *CentOS 7.4 64bit* or *Ubuntu 18.04 server 64bit*.
-    :param str owner: The owner (UUID) of the image.
-    :param str region: The region in which to obtain the images. If omitted, the provider-level region will be
-           used.
-    :param str sort_direction: Order the results in either `asc` or `desc`.
-    :param str sort_key: Sort images based on a certain key. Must be one of
-           "name", "container_format", "disk_format", "status", "id" or "size". Defaults to `name`.
-    :param str tag: Search for images with a specific tag in "Key=Value" format.
-    :param str visibility: The visibility of the image. Must be one of
-           **public**, **private**, **market** or **shared**.
+    :param str os: Specifies the image OS type. The value can be **Windows**, **Ubuntu**, **RedHat**, **SUSE**,
+           **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**, **CoreOS**, or **EulerOS**.
+    :param str os_version: The operating system version of the image.
+    :param str owner: Specifies the owner (UUID) of the image.
+    :param str region: Specifies the region in which to obtain the images.
+           If omitted, the provider-level region will be used.
+    :param str sort_direction: Specifies whether to sort the query results in ascending or descending order.
+           The valid values are as follows:
+           + **asc**: Ascending order.
+           + **desc**: Descending order.
+    :param str sort_key: Specifies which field to use for sorting. The valid values are **name**,
+           **container_format**, **disk_format**, **status**, **id**, **size**, and **created_at**. Defaults to **name**.
+    :param str tag: Specifies the image tag in **Key=Value** format.
+    :param str visibility: Specifies the visibility of the image. Must be one of **public**, **private**,
+           **market** or **shared**.
     """
     __args__ = dict()
     __args__['architecture'] = architecture
     __args__['enterpriseProjectId'] = enterprise_project_id
     __args__['flavorId'] = flavor_id
+    __args__['imageId'] = image_id
     __args__['imageType'] = image_type
+    __args__['isWholeImage'] = is_whole_image
     __args__['mostRecent'] = most_recent
     __args__['name'] = name
     __args__['nameRegex'] = name_regex
@@ -466,17 +548,23 @@ def get_image(architecture: Optional[str] = None,
     __ret__ = pulumi.runtime.invoke('huaweicloud:Ims/getImage:getImage', __args__, opts=opts, typ=GetImageResult).value
 
     return AwaitableGetImageResult(
+        active_at=__ret__.active_at,
         architecture=__ret__.architecture,
         backup_id=__ret__.backup_id,
         checksum=__ret__.checksum,
         container_format=__ret__.container_format,
         created_at=__ret__.created_at,
+        data_origin=__ret__.data_origin,
+        description=__ret__.description,
         disk_format=__ret__.disk_format,
         enterprise_project_id=__ret__.enterprise_project_id,
         file=__ret__.file,
         flavor_id=__ret__.flavor_id,
         id=__ret__.id,
+        image_id=__ret__.image_id,
         image_type=__ret__.image_type,
+        is_whole_image=__ret__.is_whole_image,
+        max_ram_mb=__ret__.max_ram_mb,
         metadata=__ret__.metadata,
         min_disk_gb=__ret__.min_disk_gb,
         min_ram_mb=__ret__.min_ram_mb,
@@ -504,7 +592,9 @@ def get_image(architecture: Optional[str] = None,
 def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
                      enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
                      flavor_id: Optional[pulumi.Input[Optional[str]]] = None,
+                     image_id: Optional[pulumi.Input[Optional[str]]] = None,
                      image_type: Optional[pulumi.Input[Optional[str]]] = None,
+                     is_whole_image: Optional[pulumi.Input[Optional[bool]]] = None,
                      most_recent: Optional[pulumi.Input[Optional[bool]]] = None,
                      name: Optional[pulumi.Input[Optional[str]]] = None,
                      name_regex: Optional[pulumi.Input[Optional[str]]] = None,
@@ -520,7 +610,7 @@ def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
                      visibility: Optional[pulumi.Input[Optional[str]]] = None,
                      opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetImageResult]:
     """
-    Use this data source to get the ID of an available HuaweiCloud image.
+    Use this data source to get an available IMS image within HuaweiCloud.
 
     ## Example Usage
 
@@ -528,46 +618,59 @@ def get_image_output(architecture: Optional[pulumi.Input[Optional[str]]] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    ubuntu = huaweicloud.Ims.get_image(most_recent=True,
-        name="Ubuntu 18.04 server 64bit",
-        visibility="public")
+    config = pulumi.Config()
+    image_id = config.require_object("imageId")
+    test = huaweicloud.Ims.get_image(image_id=image_id)
+    ubuntu = huaweicloud.Ims.get_image(name="Ubuntu 18.04 server 64bit",
+        visibility="public",
+        most_recent=True)
     centos_1 = huaweicloud.Ims.get_image(architecture="x86",
-        most_recent=True,
-        os_version="CentOS 7.4 64bit",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     centos_2 = huaweicloud.Ims.get_image(architecture="x86",
-        most_recent=True,
         name_regex="^CentOS 7.4",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     bms_image = huaweicloud.Ims.get_image(architecture="x86",
         image_type="Ironic",
-        most_recent=True,
-        os_version="CentOS 7.4 64bit",
-        visibility="public")
+        visibility="public",
+        most_recent=True)
     ```
 
 
-    :param str architecture: Specifies the image architecture type. The value can be **x86** and **arm**.
+    :param str architecture: Specifies the image architecture type. The value can be **x86** or **arm**.
     :param str enterprise_project_id: Specifies the enterprise project ID of the image.
+           For enterprise users, if omitted, will query the images under all enterprise projects.
     :param str flavor_id: Specifies the ECS flavor ID used to filter out available images.
            You can specify only one flavor ID and only ECS flavor ID is valid, BMS flavor is not supported.
-    :param str image_type: Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
-    :param bool most_recent: If more than one result is returned, use the latest updated image.
-    :param str name: The name of the image. Cannot be used simultaneously with `name_regex`.
-    :param str name_regex: The regular expressian of the name of the image.
+    :param str image_id: Specifies the ID of the image.
+    :param str image_type: Specifies the environment where the image is used.
+           The valid values are as follows:
+           + **FusionCompute**: Cloud server image, also known as system disk image.
+           + **DataImage**: Data disk image.
+           + **Ironic**: Bare metal server image.
+           + **IsoImage**: ISO image.
+    :param bool is_whole_image: Specifies whether it is a whole image. The valid value is **true** or **false**.
+           Defaults to **false**.
+    :param bool most_recent: Specifies whether to return the latest updated image if the query returns more than
+           results. The valid value is **true** or **false**. Defaults to **false**.
+    :param str name: Specifies the name of the image. Cannot be used simultaneously with `name_regex`.
+    :param str name_regex: Specifies the regular expression of the name of the image.
            Cannot be used simultaneously with `name`.
-    :param str os: Specifies the image OS type. The value can be **Windows**, **Ubuntu**,
-           **RedHat**, **SUSE**, **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**,
-           **CoreOS**, or **EulerOS**.
-    :param str os_version: Specifies the OS version. For example, *CentOS 7.4 64bit* or *Ubuntu 18.04 server 64bit*.
-    :param str owner: The owner (UUID) of the image.
-    :param str region: The region in which to obtain the images. If omitted, the provider-level region will be
-           used.
-    :param str sort_direction: Order the results in either `asc` or `desc`.
-    :param str sort_key: Sort images based on a certain key. Must be one of
-           "name", "container_format", "disk_format", "status", "id" or "size". Defaults to `name`.
-    :param str tag: Search for images with a specific tag in "Key=Value" format.
-    :param str visibility: The visibility of the image. Must be one of
-           **public**, **private**, **market** or **shared**.
+    :param str os: Specifies the image OS type. The value can be **Windows**, **Ubuntu**, **RedHat**, **SUSE**,
+           **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**, **CoreOS**, or **EulerOS**.
+    :param str os_version: The operating system version of the image.
+    :param str owner: Specifies the owner (UUID) of the image.
+    :param str region: Specifies the region in which to obtain the images.
+           If omitted, the provider-level region will be used.
+    :param str sort_direction: Specifies whether to sort the query results in ascending or descending order.
+           The valid values are as follows:
+           + **asc**: Ascending order.
+           + **desc**: Descending order.
+    :param str sort_key: Specifies which field to use for sorting. The valid values are **name**,
+           **container_format**, **disk_format**, **status**, **id**, **size**, and **created_at**. Defaults to **name**.
+    :param str tag: Specifies the image tag in **Key=Value** format.
+    :param str visibility: Specifies the visibility of the image. Must be one of **public**, **private**,
+           **market** or **shared**.
     """
     ...

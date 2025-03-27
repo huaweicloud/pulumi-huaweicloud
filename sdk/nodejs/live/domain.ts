@@ -26,10 +26,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Domains can be imported using the `name`, e.g.
+ * Domains can be imported using the `name`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Live/domain:Domain test domainName
+ *  $ pulumi import huaweicloud:Live/domain:Domain test <name>
  * ```
  */
 export class Domain extends pulumi.CustomResource {
@@ -65,10 +65,20 @@ export class Domain extends pulumi.CustomResource {
      */
     public /*out*/ readonly cname!: pulumi.Output<string>;
     /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
      * Specifies the ingest domain name, which associates with the streaming
      * domain name to push streams to nearby CDN nodes.
      */
     public readonly ingestDomainName!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether enable IPv6 switch. Defaults to **false**.
+     * This field can only be edited when `status` is **on**.
+     */
+    public readonly isIpv6!: pulumi.Output<boolean>;
     /**
      * Specifies the domain name. Changing this parameter will create a new resource.
      */
@@ -78,6 +88,13 @@ export class Domain extends pulumi.CustomResource {
      * the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the domain name acceleration service area. Valid values are:
+     * + **mainland_china**: Chinese mainland.
+     * + **outside_mainland_china**: Outside the Chinese mainland.
+     * + **global**: Global acceleration.
+     */
+    public readonly serviceArea!: pulumi.Output<string>;
     /**
      * Specifies status of the domain name. The options are as follows:
      * + **on**: enable the domain name.
@@ -105,9 +122,12 @@ export class Domain extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as DomainState | undefined;
             resourceInputs["cname"] = state ? state.cname : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["ingestDomainName"] = state ? state.ingestDomainName : undefined;
+            resourceInputs["isIpv6"] = state ? state.isIpv6 : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["serviceArea"] = state ? state.serviceArea : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
         } else {
@@ -115,9 +135,12 @@ export class Domain extends pulumi.CustomResource {
             if ((!args || args.type === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'type'");
             }
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["ingestDomainName"] = args ? args.ingestDomainName : undefined;
+            resourceInputs["isIpv6"] = args ? args.isIpv6 : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["serviceArea"] = args ? args.serviceArea : undefined;
             resourceInputs["status"] = args ? args.status : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["cname"] = undefined /*out*/;
@@ -136,10 +159,20 @@ export interface DomainState {
      */
     cname?: pulumi.Input<string>;
     /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the ingest domain name, which associates with the streaming
      * domain name to push streams to nearby CDN nodes.
      */
     ingestDomainName?: pulumi.Input<string>;
+    /**
+     * Specifies whether enable IPv6 switch. Defaults to **false**.
+     * This field can only be edited when `status` is **on**.
+     */
+    isIpv6?: pulumi.Input<boolean>;
     /**
      * Specifies the domain name. Changing this parameter will create a new resource.
      */
@@ -149,6 +182,13 @@ export interface DomainState {
      * the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the domain name acceleration service area. Valid values are:
+     * + **mainland_china**: Chinese mainland.
+     * + **outside_mainland_china**: Outside the Chinese mainland.
+     * + **global**: Global acceleration.
+     */
+    serviceArea?: pulumi.Input<string>;
     /**
      * Specifies status of the domain name. The options are as follows:
      * + **on**: enable the domain name.
@@ -168,10 +208,20 @@ export interface DomainState {
  */
 export interface DomainArgs {
     /**
+     * Specifies the enterprise project ID.
+     * Changing this parameter will create a new resource.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
      * Specifies the ingest domain name, which associates with the streaming
      * domain name to push streams to nearby CDN nodes.
      */
     ingestDomainName?: pulumi.Input<string>;
+    /**
+     * Specifies whether enable IPv6 switch. Defaults to **false**.
+     * This field can only be edited when `status` is **on**.
+     */
+    isIpv6?: pulumi.Input<boolean>;
     /**
      * Specifies the domain name. Changing this parameter will create a new resource.
      */
@@ -181,6 +231,13 @@ export interface DomainArgs {
      * the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the domain name acceleration service area. Valid values are:
+     * + **mainland_china**: Chinese mainland.
+     * + **outside_mainland_china**: Outside the Chinese mainland.
+     * + **global**: Global acceleration.
+     */
+    serviceArea?: pulumi.Input<string>;
     /**
      * Specifies status of the domain name. The options are as follows:
      * + **on**: enable the domain name.

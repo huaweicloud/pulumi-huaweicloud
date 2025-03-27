@@ -123,15 +123,13 @@ func (o InstanceDataDiskArrayOutput) Index(i pulumi.IntInput) InstanceDataDiskOu
 }
 
 type InstanceNic struct {
-	// Specifies a fixed IPv4 address to be used on this network. Changing this
-	// creates a new instance.
+	// Specifies a fixed IPv4 address to be used on this network.
 	IpAddress *string `pulumi:"ipAddress"`
 	// The MAC address of the nic.
 	MacAddress *string `pulumi:"macAddress"`
 	// The port ID corresponding to the IP address.
 	PortId *string `pulumi:"portId"`
-	// Specifies the ID of subnet to attach to the instance. Changing this creates
-	// a new instance.
+	// Specifies the ID of subnet to attach to the instance.
 	SubnetId string `pulumi:"subnetId"`
 }
 
@@ -147,15 +145,13 @@ type InstanceNicInput interface {
 }
 
 type InstanceNicArgs struct {
-	// Specifies a fixed IPv4 address to be used on this network. Changing this
-	// creates a new instance.
+	// Specifies a fixed IPv4 address to be used on this network.
 	IpAddress pulumi.StringPtrInput `pulumi:"ipAddress"`
 	// The MAC address of the nic.
 	MacAddress pulumi.StringPtrInput `pulumi:"macAddress"`
 	// The port ID corresponding to the IP address.
 	PortId pulumi.StringPtrInput `pulumi:"portId"`
-	// Specifies the ID of subnet to attach to the instance. Changing this creates
-	// a new instance.
+	// Specifies the ID of subnet to attach to the instance.
 	SubnetId pulumi.StringInput `pulumi:"subnetId"`
 }
 
@@ -210,8 +206,7 @@ func (o InstanceNicOutput) ToInstanceNicOutputWithContext(ctx context.Context) I
 	return o
 }
 
-// Specifies a fixed IPv4 address to be used on this network. Changing this
-// creates a new instance.
+// Specifies a fixed IPv4 address to be used on this network.
 func (o InstanceNicOutput) IpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNic) *string { return v.IpAddress }).(pulumi.StringPtrOutput)
 }
@@ -226,8 +221,7 @@ func (o InstanceNicOutput) PortId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNic) *string { return v.PortId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ID of subnet to attach to the instance. Changing this creates
-// a new instance.
+// Specifies the ID of subnet to attach to the instance.
 func (o InstanceNicOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceNic) string { return v.SubnetId }).(pulumi.StringOutput)
 }

@@ -82,7 +82,7 @@ export interface GetVaultsArgs {
      */
     region?: string;
     /**
-     * Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+     * Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
      */
     size?: number;
     /**
@@ -90,7 +90,7 @@ export interface GetVaultsArgs {
      */
     status?: string;
     /**
-     * Specifies the object type of the vault. The vaild values are as follows:
+     * Specifies the object type of the vault. The valid values are as follows:
      * + **server** (Cloud Servers)
      * + **disk** (EVS Disks)
      * + **turbo** (SFS Turbo file systems)
@@ -194,7 +194,7 @@ export interface GetVaultsOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+     * Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
      */
     size?: pulumi.Input<number>;
     /**
@@ -202,7 +202,7 @@ export interface GetVaultsOutputArgs {
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the object type of the vault. The vaild values are as follows:
+     * Specifies the object type of the vault. The valid values are as follows:
      * + **server** (Cloud Servers)
      * + **disk** (EVS Disks)
      * + **turbo** (SFS Turbo file systems)

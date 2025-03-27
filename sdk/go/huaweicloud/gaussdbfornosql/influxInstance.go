@@ -11,10 +11,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB for influx instance management within HuaweiCoud.
+// GeminiDB Influx instance management within HuaweiCould.
 //
 // ## Example Usage
-// ### create a gaussdb for influx instance with tags
+// ### create a geminidb influx instance with tags
 //
 // ```go
 // package main
@@ -49,7 +49,7 @@ import (
 //	}
 //
 // ```
-// ### create a gaussdb influx instance with backup strategy
+// ### create a geminidb influx instance with backup strategy
 //
 // ```go
 // package main
@@ -88,7 +88,7 @@ import (
 //
 // ## Import
 //
-// GaussDB influx instance can be imported using the `id`, e.g.
+// GaussDB influx instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -124,7 +124,7 @@ type InfluxInstance struct {
 	// parameter will create a new resource.
 	DedicatedResourceName pulumi.StringOutput `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
@@ -140,21 +140,22 @@ type InfluxInstance struct {
 	// Indicates the instance type.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+	// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 	NodeNum pulumi.IntPtrOutput `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InfluxInstanceNodeArrayOutput `pulumi:"nodes"`
-	// Specifies the database password. The value must be **8** to **32** characters in
+	// Specifies the database password. The value must be `8` to `32` characters in
 	// length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 	// advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringOutput `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-	// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-	// will do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
@@ -180,8 +181,8 @@ type InfluxInstance struct {
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 	// The key/value pairs to associate with the instance.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-	// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+	// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+	// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 	// instance performance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 	VolumeSize pulumi.IntOutput `pulumi:"volumeSize"`
@@ -263,7 +264,7 @@ type influxInstanceState struct {
 	// parameter will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
@@ -279,21 +280,22 @@ type influxInstanceState struct {
 	// Indicates the instance type.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+	// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []InfluxInstanceNode `pulumi:"nodes"`
-	// Specifies the database password. The value must be **8** to **32** characters in
+	// Specifies the database password. The value must be `8` to `32` characters in
 	// length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 	// advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password *string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-	// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-	// will do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
@@ -319,8 +321,8 @@ type influxInstanceState struct {
 	SubnetId *string `pulumi:"subnetId"`
 	// The key/value pairs to associate with the instance.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-	// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+	// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+	// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 	// instance performance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 	VolumeSize *int `pulumi:"volumeSize"`
@@ -355,7 +357,7 @@ type InfluxInstanceState struct {
 	// parameter will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
@@ -371,21 +373,22 @@ type InfluxInstanceState struct {
 	// Indicates the instance type.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+	// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InfluxInstanceNodeArrayInput
-	// Specifies the database password. The value must be **8** to **32** characters in
+	// Specifies the database password. The value must be `8` to `32` characters in
 	// length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 	// advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringPtrInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-	// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-	// will do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
@@ -411,8 +414,8 @@ type InfluxInstanceState struct {
 	SubnetId pulumi.StringPtrInput
 	// The key/value pairs to associate with the instance.
 	Tags pulumi.StringMapInput
-	// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-	// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+	// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+	// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 	// instance performance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 	VolumeSize pulumi.IntPtrInput
@@ -449,7 +452,7 @@ type influxInstanceArgs struct {
 	// parameter will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
@@ -459,19 +462,20 @@ type influxInstanceArgs struct {
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+	// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
-	// Specifies the database password. The value must be **8** to **32** characters in
+	// Specifies the database password. The value must be `8` to `32` characters in
 	// length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 	// advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-	// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-	// will do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
@@ -491,8 +495,8 @@ type influxInstanceArgs struct {
 	SubnetId string `pulumi:"subnetId"`
 	// The key/value pairs to associate with the instance.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-	// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+	// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+	// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 	// instance performance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 	VolumeSize int `pulumi:"volumeSize"`
@@ -526,7 +530,7 @@ type InfluxInstanceArgs struct {
 	// parameter will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
@@ -536,19 +540,20 @@ type InfluxInstanceArgs struct {
 	// existed.
 	ForceImport pulumi.BoolPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+	// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
-	// Specifies the database password. The value must be **8** to **32** characters in
+	// Specifies the database password. The value must be `8` to `32` characters in
 	// length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 	// advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-	// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-	// will do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
 	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
@@ -568,8 +573,8 @@ type InfluxInstanceArgs struct {
 	SubnetId pulumi.StringInput
 	// The key/value pairs to associate with the instance.
 	Tags pulumi.StringMapInput
-	// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-	// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+	// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+	// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 	// instance performance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 	VolumeSize pulumi.IntInput
@@ -717,7 +722,7 @@ func (o InfluxInstanceOutput) DedicatedResourceName() pulumi.StringOutput {
 }
 
 // Specifies the enterprise project id, Only valid for users who
-// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+// have enabled the enterprise multi-project service.
 func (o InfluxInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
@@ -751,13 +756,13 @@ func (o InfluxInstanceOutput) Mode() pulumi.StringOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The
-// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 // letters, digits, hyphens (-), and underscores (_).
 func (o InfluxInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the number of nodes, ranges from **3** to **16**. Defaults to **3**.
+// Specifies the number of nodes, ranges from `3` to `16`. Defaults to `3`.
 func (o InfluxInstanceOutput) NodeNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.IntPtrOutput { return v.NodeNum }).(pulumi.IntPtrOutput)
 }
@@ -767,17 +772,18 @@ func (o InfluxInstanceOutput) Nodes() InfluxInstanceNodeArrayOutput {
 	return o.ApplyT(func(v *InfluxInstance) InfluxInstanceNodeArrayOutput { return v.Nodes }).(InfluxInstanceNodeArrayOutput)
 }
 
-// Specifies the database password. The value must be **8** to **32** characters in
+// Specifies the database password. The value must be `8` to `32` characters in
 // length, including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are
 // advised to enter a strong password to improve security, preventing security risks such as brute force cracking.
 func (o InfluxInstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
-// Specifies the charging period of the instance.
-// If `periodUnit` is set to **month** , the value ranges from **1** to **9**. If `periodUnit` is set to *year*, the
-// value ranges from **1** to **3**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
-// will do nothing.
+// Specifies the charging period of the instance.\
+// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+// If `periodUnit` is set to *year*, the value ranges from `1` to `3`.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this will do nothing.
 func (o InfluxInstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
@@ -833,8 +839,8 @@ func (o InfluxInstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *InfluxInstance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the storage space in GB. The value must be a multiple of **10**. For a
-// GaussDB influx instance, the minimum storage space is **100** GB, and the maximum storage space is related to the
+// Specifies the storage space in GB. The value must be a multiple of `10`. For a
+// GaussDB influx instance, the minimum storage space is `100` GB, and the maximum storage space is related to the
 // instance performance specifications. For details,
 // see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/influxug-nosql/nosql_05_0045.html)
 func (o InfluxInstanceOutput) VolumeSize() pulumi.IntOutput {

@@ -101,7 +101,74 @@ import (
 //	}
 //
 // ```
-// ## Alarm rule for event monitoring
+// ### Alarm rule for All instance
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			topicUrn := cfg.RequireObject("topicUrn")
+//			_, err := Cse.NewAlarmrule(ctx, "test", &Cse.AlarmruleArgs{
+//				AlarmName:          pulumi.String("rule-test"),
+//				AlarmActionEnabled: pulumi.Bool(true),
+//				AlarmEnabled:       pulumi.Bool(true),
+//				AlarmType:          pulumi.String("ALL_INSTANCE"),
+//				Metric: &cse.AlarmruleMetricArgs{
+//					Namespace: pulumi.String("AGT.ECS"),
+//				},
+//				Resources: cse.AlarmruleResourceArray{
+//					&cse.AlarmruleResourceArgs{
+//						Dimensions: cse.AlarmruleResourceDimensionArray{
+//							&cse.AlarmruleResourceDimensionArgs{
+//								Name: pulumi.String("instance_id"),
+//							},
+//							&cse.AlarmruleResourceDimensionArgs{
+//								Name: pulumi.String("mount_point"),
+//							},
+//						},
+//					},
+//				},
+//				Conditions: cse.AlarmruleConditionArray{
+//					&cse.AlarmruleConditionArgs{
+//						AlarmLevel:         pulumi.Int(2),
+//						SuppressDuration:   pulumi.Int(0),
+//						Period:             pulumi.Int(1),
+//						Filter:             pulumi.String("average"),
+//						ComparisonOperator: pulumi.String(">"),
+//						Value:              pulumi.Float64(80),
+//						Count:              pulumi.Int(1),
+//						MetricName:         pulumi.String("disk_usedPercent"),
+//					},
+//				},
+//				AlarmActions: cse.AlarmruleAlarmActionArray{
+//					&cse.AlarmruleAlarmActionArgs{
+//						Type: pulumi.String("notification"),
+//						NotificationLists: pulumi.StringArray{
+//							pulumi.Any(topicUrn),
+//						},
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+// ### Alarm rule for event monitoring
 //
 // ```go
 // package main
@@ -159,7 +226,7 @@ import (
 //
 // ## Import
 //
-// CES alarm rules can be imported using the `id`, e.g.
+// CES alarm rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -183,8 +250,8 @@ type Alarmrule struct {
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
 	// The default value is 2.
 	AlarmLevel pulumi.IntOutput `pulumi:"alarmLevel"`
-	// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-	// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+	// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+	// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 	AlarmName pulumi.StringOutput `pulumi:"alarmName"`
 	// Indicates the alarm status. The value can be:
 	// + ok: The alarm status is normal;
@@ -196,8 +263,7 @@ type Alarmrule struct {
 	AlarmType pulumi.StringPtrOutput `pulumi:"alarmType"`
 	// Specifies the alarm triggering condition. The structure is described below.
 	Conditions AlarmruleConditionArrayOutput `pulumi:"conditions"`
-	// Specifies the enterprise project id of the alarm rule. Changing
-	// this creates a new resource.
+	// Specifies the enterprise project ID of the alarm rule.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Deprecated: insufficientdata_actions is deprecated
 	InsufficientdataActions AlarmruleInsufficientdataActionArrayOutput `pulumi:"insufficientdataActions"`
@@ -278,8 +344,8 @@ type alarmruleState struct {
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
 	// The default value is 2.
 	AlarmLevel *int `pulumi:"alarmLevel"`
-	// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-	// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+	// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+	// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 	AlarmName *string `pulumi:"alarmName"`
 	// Indicates the alarm status. The value can be:
 	// + ok: The alarm status is normal;
@@ -291,8 +357,7 @@ type alarmruleState struct {
 	AlarmType *string `pulumi:"alarmType"`
 	// Specifies the alarm triggering condition. The structure is described below.
 	Conditions []AlarmruleCondition `pulumi:"conditions"`
-	// Specifies the enterprise project id of the alarm rule. Changing
-	// this creates a new resource.
+	// Specifies the enterprise project ID of the alarm rule.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Deprecated: insufficientdata_actions is deprecated
 	InsufficientdataActions []AlarmruleInsufficientdataAction `pulumi:"insufficientdataActions"`
@@ -335,8 +400,8 @@ type AlarmruleState struct {
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
 	// The default value is 2.
 	AlarmLevel pulumi.IntPtrInput
-	// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-	// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+	// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+	// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 	AlarmName pulumi.StringPtrInput
 	// Indicates the alarm status. The value can be:
 	// + ok: The alarm status is normal;
@@ -348,8 +413,7 @@ type AlarmruleState struct {
 	AlarmType pulumi.StringPtrInput
 	// Specifies the alarm triggering condition. The structure is described below.
 	Conditions AlarmruleConditionArrayInput
-	// Specifies the enterprise project id of the alarm rule. Changing
-	// this creates a new resource.
+	// Specifies the enterprise project ID of the alarm rule.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Deprecated: insufficientdata_actions is deprecated
 	InsufficientdataActions AlarmruleInsufficientdataActionArrayInput
@@ -396,16 +460,15 @@ type alarmruleArgs struct {
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
 	// The default value is 2.
 	AlarmLevel *int `pulumi:"alarmLevel"`
-	// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-	// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+	// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+	// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 	AlarmName string `pulumi:"alarmName"`
 	// Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
 	// **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
 	AlarmType *string `pulumi:"alarmType"`
 	// Specifies the alarm triggering condition. The structure is described below.
 	Conditions []AlarmruleCondition `pulumi:"conditions"`
-	// Specifies the enterprise project id of the alarm rule. Changing
-	// this creates a new resource.
+	// Specifies the enterprise project ID of the alarm rule.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Deprecated: insufficientdata_actions is deprecated
 	InsufficientdataActions []AlarmruleInsufficientdataAction `pulumi:"insufficientdataActions"`
@@ -447,16 +510,15 @@ type AlarmruleArgs struct {
 	// which indicates *critical*, *major*, *minor*, and *informational*, respectively.
 	// The default value is 2.
 	AlarmLevel pulumi.IntPtrInput
-	// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-	// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+	// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+	// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 	AlarmName pulumi.StringInput
 	// Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
 	// **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
 	AlarmType pulumi.StringPtrInput
 	// Specifies the alarm triggering condition. The structure is described below.
 	Conditions AlarmruleConditionArrayInput
-	// Specifies the enterprise project id of the alarm rule. Changing
-	// this creates a new resource.
+	// Specifies the enterprise project ID of the alarm rule.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Deprecated: insufficientdata_actions is deprecated
 	InsufficientdataActions AlarmruleInsufficientdataActionArrayInput
@@ -598,8 +660,8 @@ func (o AlarmruleOutput) AlarmLevel() pulumi.IntOutput {
 	return o.ApplyT(func(v *Alarmrule) pulumi.IntOutput { return v.AlarmLevel }).(pulumi.IntOutput)
 }
 
-// Specifies the name of an alarm rule. The value can be a string of 1 to 128
-// characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+// Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+// characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
 func (o AlarmruleOutput) AlarmName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Alarmrule) pulumi.StringOutput { return v.AlarmName }).(pulumi.StringOutput)
 }
@@ -623,8 +685,7 @@ func (o AlarmruleOutput) Conditions() AlarmruleConditionArrayOutput {
 	return o.ApplyT(func(v *Alarmrule) AlarmruleConditionArrayOutput { return v.Conditions }).(AlarmruleConditionArrayOutput)
 }
 
-// Specifies the enterprise project id of the alarm rule. Changing
-// this creates a new resource.
+// Specifies the enterprise project ID of the alarm rule.
 func (o AlarmruleOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Alarmrule) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }

@@ -22,7 +22,7 @@ class GetNodesResult:
     """
     A collection of values returned by getNodes.
     """
-    def __init__(__self__, cluster_id=None, id=None, ids=None, name=None, node_id=None, nodes=None, region=None, status=None):
+    def __init__(__self__, cluster_id=None, id=None, ids=None, ignore_details=None, name=None, node_id=None, nodes=None, region=None, status=None):
         if cluster_id and not isinstance(cluster_id, str):
             raise TypeError("Expected argument 'cluster_id' to be a str")
         pulumi.set(__self__, "cluster_id", cluster_id)
@@ -32,6 +32,9 @@ class GetNodesResult:
         if ids and not isinstance(ids, list):
             raise TypeError("Expected argument 'ids' to be a list")
         pulumi.set(__self__, "ids", ids)
+        if ignore_details and not isinstance(ignore_details, str):
+            raise TypeError("Expected argument 'ignore_details' to be a str")
+        pulumi.set(__self__, "ignore_details", ignore_details)
         if name and not isinstance(name, str):
             raise TypeError("Expected argument 'name' to be a str")
         pulumi.set(__self__, "name", name)
@@ -68,6 +71,11 @@ class GetNodesResult:
         Indicates a list of IDs of all CCE nodes found.
         """
         return pulumi.get(self, "ids")
+
+    @property
+    @pulumi.getter(name="ignoreDetails")
+    def ignore_details(self) -> Optional[str]:
+        return pulumi.get(self, "ignore_details")
 
     @property
     @pulumi.getter
@@ -113,6 +121,7 @@ class AwaitableGetNodesResult(GetNodesResult):
             cluster_id=self.cluster_id,
             id=self.id,
             ids=self.ids,
+            ignore_details=self.ignore_details,
             name=self.name,
             node_id=self.node_id,
             nodes=self.nodes,
@@ -121,6 +130,7 @@ class AwaitableGetNodesResult(GetNodesResult):
 
 
 def get_nodes(cluster_id: Optional[str] = None,
+              ignore_details: Optional[str] = None,
               name: Optional[str] = None,
               node_id: Optional[str] = None,
               region: Optional[str] = None,
@@ -144,6 +154,10 @@ def get_nodes(cluster_id: Optional[str] = None,
 
 
     :param str cluster_id: Specifies the ID of CCE cluster.
+    :param str ignore_details: Specifies which detail information of the nodes to ignore.
+           You can use this parameter to ignore some information you don't care about and make the query faster.
+           The value can be:
+           + **tags**: ignore the tags of the nodes.
     :param str name: Specifies the of the node.
     :param str node_id: Specifies the ID of the node.
     :param str region: Specifies the region in which to obtain the CCE nodes. If omitted, the provider-level
@@ -152,6 +166,7 @@ def get_nodes(cluster_id: Optional[str] = None,
     """
     __args__ = dict()
     __args__['clusterId'] = cluster_id
+    __args__['ignoreDetails'] = ignore_details
     __args__['name'] = name
     __args__['nodeId'] = node_id
     __args__['region'] = region
@@ -163,6 +178,7 @@ def get_nodes(cluster_id: Optional[str] = None,
         cluster_id=__ret__.cluster_id,
         id=__ret__.id,
         ids=__ret__.ids,
+        ignore_details=__ret__.ignore_details,
         name=__ret__.name,
         node_id=__ret__.node_id,
         nodes=__ret__.nodes,
@@ -172,6 +188,7 @@ def get_nodes(cluster_id: Optional[str] = None,
 
 @_utilities.lift_output_func(get_nodes)
 def get_nodes_output(cluster_id: Optional[pulumi.Input[str]] = None,
+                     ignore_details: Optional[pulumi.Input[Optional[str]]] = None,
                      name: Optional[pulumi.Input[Optional[str]]] = None,
                      node_id: Optional[pulumi.Input[Optional[str]]] = None,
                      region: Optional[pulumi.Input[Optional[str]]] = None,
@@ -195,6 +212,10 @@ def get_nodes_output(cluster_id: Optional[pulumi.Input[str]] = None,
 
 
     :param str cluster_id: Specifies the ID of CCE cluster.
+    :param str ignore_details: Specifies which detail information of the nodes to ignore.
+           You can use this parameter to ignore some information you don't care about and make the query faster.
+           The value can be:
+           + **tags**: ignore the tags of the nodes.
     :param str name: Specifies the of the node.
     :param str node_id: Specifies the ID of the node.
     :param str region: Specifies the region in which to obtain the CCE nodes. If omitted, the provider-level

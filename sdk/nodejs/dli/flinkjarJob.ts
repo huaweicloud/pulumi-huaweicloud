@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  * });
  * const testFlinkjarJob = new huaweicloud.dli.FlinkjarJob("testFlinkjarJob", {
  *     queueName: queueName,
- *     entrypoint: pulumi.interpolate`${testPackage.groupName}/${testPackage.objectName}`,
+ *     entrypoint: pulumi.all([testPackage.groupName, testPackage.objectName]).apply(([groupName, objectName]) => `${groupName}/${objectName}`),
  *     entrypointArgs: entrypointArgs,
  *     tags: {
  *         foo: "bar",
@@ -37,7 +37,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The job can be imported by `id`. For example,
+ * The job can be imported by `id`. For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dli/flinkjarJob:FlinkjarJob test 12345
@@ -91,7 +91,7 @@ export class FlinkjarJob extends pulumi.CustomResource {
      */
     public readonly dependencyJars!: pulumi.Output<string[] | undefined>;
     /**
-     * Specifies job description. Length range: 1 to 512 characters.
+     * Specifies job description. Length range: `1` to `512` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -139,7 +139,7 @@ export class FlinkjarJob extends pulumi.CustomResource {
      */
     public readonly managerCuNum!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the name of the job. Length range: 1 to 57 characters.
+     * Specifies the name of the job. Length range: `1` to `57` characters.
      * Which may consist of letters, digits, underscores (_) and hyphens (-).
      */
     public readonly name!: pulumi.Output<string>;
@@ -192,7 +192,6 @@ export class FlinkjarJob extends pulumi.CustomResource {
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.
-     * Changing this parameter will create a new resource.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
@@ -304,7 +303,7 @@ export interface FlinkjarJobState {
      */
     dependencyJars?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies job description. Length range: 1 to 512 characters.
+     * Specifies job description. Length range: `1` to `512` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -352,7 +351,7 @@ export interface FlinkjarJobState {
      */
     managerCuNum?: pulumi.Input<number>;
     /**
-     * Specifies the name of the job. Length range: 1 to 57 characters.
+     * Specifies the name of the job. Length range: `1` to `57` characters.
      * Which may consist of letters, digits, underscores (_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
@@ -405,7 +404,6 @@ export interface FlinkjarJobState {
     status?: pulumi.Input<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -443,7 +441,7 @@ export interface FlinkjarJobArgs {
      */
     dependencyJars?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies job description. Length range: 1 to 512 characters.
+     * Specifies job description. Length range: `1` to `512` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -491,7 +489,7 @@ export interface FlinkjarJobArgs {
      */
     managerCuNum?: pulumi.Input<number>;
     /**
-     * Specifies the name of the job. Length range: 1 to 57 characters.
+     * Specifies the name of the job. Length range: `1` to `57` characters.
      * Which may consist of letters, digits, underscores (_) and hyphens (-).
      */
     name?: pulumi.Input<string>;
@@ -540,7 +538,6 @@ export interface FlinkjarJobArgs {
     smnTopic?: pulumi.Input<string>;
     /**
      * Specifies the key/value pairs to associate with the resource.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**

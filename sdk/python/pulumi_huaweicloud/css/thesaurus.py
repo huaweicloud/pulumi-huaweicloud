@@ -276,16 +276,31 @@ class Thesaurus(pulumi.CustomResource):
         """
         Manages CSS thesaurus resource within HuaweiCloud
 
-        > Only one thesaurus resource can be created for the specified cluster
+        > Only one thesaurus resource can be created for the specified cluster.
 
         ## Example Usage
+        ### Create a thesaurus
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        bucket_name = config.require_object("bucketName")
+        bucket_obj_key = config.require_object("bucketObjKey")
+        test = huaweicloud.css.Thesaurus("test",
+            cluster_id=cluster_id,
+            bucket_name=bucket_name,
+            main_object=bucket_obj_key)
+        ```
 
         ## Import
 
-        CSS thesaurus can be imported by `id`. For example,
+        CSS thesaurus can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/thesaurus:Thesaurus example e9ee3f48-f097-406a-aa74-cfece0af3e31
+         $ pulumi import huaweicloud:Css/thesaurus:Thesaurus test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -309,16 +324,31 @@ class Thesaurus(pulumi.CustomResource):
         """
         Manages CSS thesaurus resource within HuaweiCloud
 
-        > Only one thesaurus resource can be created for the specified cluster
+        > Only one thesaurus resource can be created for the specified cluster.
 
         ## Example Usage
+        ### Create a thesaurus
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        cluster_id = config.require_object("clusterId")
+        bucket_name = config.require_object("bucketName")
+        bucket_obj_key = config.require_object("bucketObjKey")
+        test = huaweicloud.css.Thesaurus("test",
+            cluster_id=cluster_id,
+            bucket_name=bucket_name,
+            main_object=bucket_obj_key)
+        ```
 
         ## Import
 
-        CSS thesaurus can be imported by `id`. For example,
+        CSS thesaurus can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/thesaurus:Thesaurus example e9ee3f48-f097-406a-aa74-cfece0af3e31
+         $ pulumi import huaweicloud:Css/thesaurus:Thesaurus test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -434,7 +464,7 @@ class Thesaurus(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="mainObject")
-    def main_object(self) -> pulumi.Output[Optional[str]]:
+    def main_object(self) -> pulumi.Output[str]:
         """
         Specifies the path of the main thesaurus file object.
         """
@@ -459,7 +489,7 @@ class Thesaurus(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="stopObject")
-    def stop_object(self) -> pulumi.Output[Optional[str]]:
+    def stop_object(self) -> pulumi.Output[str]:
         """
         Specifies the path of the stop word library file object.
         """
@@ -467,7 +497,7 @@ class Thesaurus(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="synonymObject")
-    def synonym_object(self) -> pulumi.Output[Optional[str]]:
+    def synonym_object(self) -> pulumi.Output[str]:
         """
         Specifies the path of the synonyms thesaurus file object.
         """

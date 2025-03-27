@@ -27,7 +27,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB whitelist can be imported using the whitelist ID, e.g.
+ * ELB whitelist can be imported using the whitelist ID, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/whitelist:Whitelist whitelist_1 5c20fdad-7288-11eb-b817-0255ac10158b

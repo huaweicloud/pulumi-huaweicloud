@@ -23,10 +23,10 @@ class GetKeypairsKeypairResult(dict):
                  scope: str):
         """
         :param str fingerprint: Specifies the fingerprint of the keypair.
-        :param bool is_managed: Specifies whether the private key is managed by HuaweiCloud.
+        :param bool is_managed: Indicates whether the private key is managed by HuaweiCloud.
         :param str name: Specifies the name of the keypair.
         :param str public_key: Specifies the imported OpenSSH-formatted public key.
-        :param str scope: Indicates the scope of key pair. The value can be **account**or **user**.
+        :param str scope: Indicates the scope of keypair. The value can be **account**or **user**.
         """
         pulumi.set(__self__, "fingerprint", fingerprint)
         pulumi.set(__self__, "is_managed", is_managed)
@@ -46,7 +46,7 @@ class GetKeypairsKeypairResult(dict):
     @pulumi.getter(name="isManaged")
     def is_managed(self) -> bool:
         """
-        Specifies whether the private key is managed by HuaweiCloud.
+        Indicates whether the private key is managed by HuaweiCloud.
         """
         return pulumi.get(self, "is_managed")
 
@@ -70,7 +70,7 @@ class GetKeypairsKeypairResult(dict):
     @pulumi.getter
     def scope(self) -> str:
         """
-        Indicates the scope of key pair. The value can be **account**or **user**.
+        Indicates the scope of keypair. The value can be **account**or **user**.
         """
         return pulumi.get(self, "scope")
 

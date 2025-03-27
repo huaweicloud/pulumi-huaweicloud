@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available HuaweiCloud gaussdb cassandra dedicated resource.
+ * Use this data source to get available HuaweiCloud GeminiDB Cassandra dedicated resource.
  *
  * ## Example Usage
  *

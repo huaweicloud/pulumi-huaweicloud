@@ -35,6 +35,7 @@ export function getInstance(args?: GetInstanceArgs, opts?: pulumi.InvokeOptions)
         "instanceId": args.instanceId,
         "name": args.name,
         "region": args.region,
+        "tags": args.tags,
     }, opts);
 }
 
@@ -67,6 +68,10 @@ export interface GetInstanceArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: string;
+    /**
+     * Specifies the tags to qurey the instance.
+     */
+    tags?: {[key: string]: string};
 }
 
 /**
@@ -77,7 +82,15 @@ export interface GetInstanceResult {
      * The availability zone where the instance is located.
      */
     readonly availabilityZone: string;
+    /**
+     * The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+     */
+    readonly chargingMode: string;
     readonly enterpriseProjectId: string;
+    /**
+     * The expired time of prePaid instance, in UTC format.
+     */
+    readonly expiredTime: string;
     /**
      * The fixed IPv4 address of the instance on this network.
      */
@@ -111,7 +124,7 @@ export interface GetInstanceResult {
      */
     readonly networks: outputs.Ecs.GetInstanceNetwork[];
     /**
-     * The EIP address that is associted to the instance.
+     * The EIP address that is associated to the instance.
      */
     readonly publicIp: string;
     readonly region: string;
@@ -133,13 +146,10 @@ export interface GetInstanceResult {
      */
     readonly status: string;
     /**
-     * The system disk voume ID.
+     * The system disk volume ID.
      */
     readonly systemDiskId: string;
-    /**
-     * The key/value pairs to associate with the instance.
-     */
-    readonly tags: {[key: string]: string};
+    readonly tags?: {[key: string]: string};
     /**
      * The user data (information after encoding) configured during instance creation.
      */
@@ -184,4 +194,8 @@ export interface GetInstanceOutputArgs {
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the tags to qurey the instance.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

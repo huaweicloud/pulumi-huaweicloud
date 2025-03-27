@@ -56,6 +56,7 @@ type GetFlavorsArgs struct {
 // A collection of values returned by getFlavors.
 type GetFlavorsResult struct {
 	// Indicates the flavors information. Structure is documented below.
+	// The flavors structure is documented below.
 	Flavors []GetFlavorsFlavor `pulumi:"flavors"`
 	// The provider-assigned unique ID for this managed resource.
 	Id     string `pulumi:"id"`
@@ -104,6 +105,7 @@ func (o GetFlavorsResultOutput) ToGetFlavorsResultOutputWithContext(ctx context.
 }
 
 // Indicates the flavors information. Structure is documented below.
+// The flavors structure is documented below.
 func (o GetFlavorsResultOutput) Flavors() GetFlavorsFlavorArrayOutput {
 	return o.ApplyT(func(v GetFlavorsResult) []GetFlavorsFlavor { return v.Flavors }).(GetFlavorsFlavorArrayOutput)
 }

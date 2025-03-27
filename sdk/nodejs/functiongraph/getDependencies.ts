@@ -6,10 +6,14 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to filter dependent packages of FGS from HuaweiCloud.
+ * Use this data source to query dependency packages within HuaweiCloud.
+ *
+ * > Between `1.64.2` and `1.72.1`, the version list of each dependency package is queried by default.
+ *    <br>This will cause the query to take up a lot of time and may trigger flow control.
+ *    <br>There are not recommended to use.
  *
  * ## Example Usage
- * ### Obtain all public dependent packages
+ * ### Obtain all public dependency packages
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -17,7 +21,7 @@ import * as utilities from "../utilities";
  *
  * const test = pulumi.output(huaweicloud.FunctionGraph.getDependencies());
  * ```
- * ### Obtain specific public dependent package by name
+ * ### Obtain specific public dependency package by name
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -28,7 +32,7 @@ import * as utilities from "../utilities";
  *     type: "public",
  * }));
  * ```
- * ### Obtain all public Python2.7 dependent packages
+ * ### Obtain all public Python2.7 dependency packages
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -48,6 +52,7 @@ export function getDependencies(args?: GetDependenciesArgs, opts?: pulumi.Invoke
 
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:FunctionGraph/getDependencies:getDependencies", {
+        "isVersionsQueryAllowed": args.isVersionsQueryAllowed,
         "name": args.name,
         "region": args.region,
         "runtime": args.runtime,
@@ -60,22 +65,51 @@ export function getDependencies(args?: GetDependenciesArgs, opts?: pulumi.Invoke
  */
 export interface GetDependenciesArgs {
     /**
-     * Specifies the dependent package runtime to match.
+     * Specifies whether to query the versions of each dependency package.
+     * Defaults to **false**.
+     */
+    isVersionsQueryAllowed?: boolean;
+    /**
+     * Specifies the name of the dependency package.
      */
     name?: string;
     /**
-     * Specifies the region in which to obtain the dependent packages. If omitted, the
-     * provider-level region will be used.
+     * Specifies the region where the dependency packages are located.  
+     * If omitted, the provider-level region will be used.
      */
     region?: string;
     /**
-     * Specifies the dependent package runtime to match. Valid values: **Java8**,
-     * **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-     * **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+     * Specifies the runtime of the dependency package.  
+     * The valid values are as follows:
+     * + **Java8**
+     * + **Java11**
+     * + **Node.js6.10**
+     * + **Node.js8.10**
+     * + **Node.js10.16**
+     * + **Node.js12.13**
+     * + **Node.js14.18**
+     * + **Node.js16.17**
+     * + **Node.js18.15**
+     * + **Python2.7**
+     * + **Python3.6**
+     * + **Python3.9**
+     * + **Python3.10**
+     * + **Go1.x**
+     * + **C#(.NET Core 2.0)**
+     * + **C#(.NET Core 2.1)**
+     * + **C#(.NET Core 3.1)**
+     * + **Custom**
+     * + **PHP7.3**
+     * + **Cangjie1.0**
+     * + **http**
+     * + **Custom Image**
      */
     runtime?: string;
     /**
-     * Specifies the dependent package type to match. Valid values: **public** and **private**.
+     * Specifies the type of the dependency package.  
+     * The valid values are as follows:
+     * + **public**
+     * + **private**
      */
     type?: string;
 }
@@ -88,17 +122,19 @@ export interface GetDependenciesResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
+    readonly isVersionsQueryAllowed?: boolean;
     /**
-     * Dependent package name.
+     * The name of the dependency package.
      */
     readonly name?: string;
     /**
-     * All dependent packages that match.
+     * All dependency packages that match the filter parameters.
+     * The packages structure is documented below.
      */
     readonly packages: outputs.FunctionGraph.GetDependenciesPackage[];
     readonly region: string;
     /**
-     * Dependent package runtime.
+     * The runtime of the dependency package.
      */
     readonly runtime?: string;
     readonly type?: string;
@@ -113,22 +149,51 @@ export function getDependenciesOutput(args?: GetDependenciesOutputArgs, opts?: p
  */
 export interface GetDependenciesOutputArgs {
     /**
-     * Specifies the dependent package runtime to match.
+     * Specifies whether to query the versions of each dependency package.
+     * Defaults to **false**.
+     */
+    isVersionsQueryAllowed?: pulumi.Input<boolean>;
+    /**
+     * Specifies the name of the dependency package.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the region in which to obtain the dependent packages. If omitted, the
-     * provider-level region will be used.
+     * Specifies the region where the dependency packages are located.  
+     * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the dependent package runtime to match. Valid values: **Java8**,
-     * **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-     * **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+     * Specifies the runtime of the dependency package.  
+     * The valid values are as follows:
+     * + **Java8**
+     * + **Java11**
+     * + **Node.js6.10**
+     * + **Node.js8.10**
+     * + **Node.js10.16**
+     * + **Node.js12.13**
+     * + **Node.js14.18**
+     * + **Node.js16.17**
+     * + **Node.js18.15**
+     * + **Python2.7**
+     * + **Python3.6**
+     * + **Python3.9**
+     * + **Python3.10**
+     * + **Go1.x**
+     * + **C#(.NET Core 2.0)**
+     * + **C#(.NET Core 2.1)**
+     * + **C#(.NET Core 3.1)**
+     * + **Custom**
+     * + **PHP7.3**
+     * + **Cangjie1.0**
+     * + **http**
+     * + **Custom Image**
      */
     runtime?: pulumi.Input<string>;
     /**
-     * Specifies the dependent package type to match. Valid values: **public** and **private**.
+     * Specifies the type of the dependency package.  
+     * The valid values are as follows:
+     * + **public**
+     * + **private**
      */
     type?: pulumi.Input<string>;
 }

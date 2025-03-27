@@ -47,7 +47,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * EIPs can be imported using the `id`, e.g.
+ * EIPs can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/eip:Eip test 2c7f39f3-702b-48d1-940c-b50384177ee1
@@ -86,6 +86,14 @@ export class Eip extends pulumi.CustomResource {
      */
     public /*out*/ readonly address!: pulumi.Output<string>;
     /**
+     * The associate id of EIP.
+     */
+    public /*out*/ readonly associateId!: pulumi.Output<string>;
+    /**
+     * The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+     */
+    public /*out*/ readonly associateType!: pulumi.Output<string>;
+    /**
      * @deprecated Deprecated
      */
     public readonly autoPay!: pulumi.Output<string | undefined>;
@@ -101,14 +109,25 @@ export class Eip extends pulumi.CustomResource {
     public readonly bandwidth!: pulumi.Output<outputs.Vpc.EipBandwidth>;
     /**
      * Specifies the charging mode of the EIP.  
-     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
-     * Specifies the enterprise project ID to which the EIP belongs.  
-     * Changing this will create a new resource.
+     * The create time of EIP.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID to which the EIP belongs.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * The instance id to which the port belongs. Return when `associateType` is **PORT**.
+     */
+    public /*out*/ readonly instanceId!: pulumi.Output<string>;
+    /**
+     * The instance type to which the port belongs. Return when `associateType` is **PORT**.
+     */
+    public /*out*/ readonly instanceType!: pulumi.Output<string>;
     /**
      * The IPv6 address of the EIP.
      */
@@ -128,7 +147,6 @@ export class Eip extends pulumi.CustomResource {
     /**
      * Specifies the charging period unit of the EIP.  
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this will create a new resource.
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
@@ -157,6 +175,10 @@ export class Eip extends pulumi.CustomResource {
      * Specifies the key/value pairs to associate with the EIP.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * The update time of EIP.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a Eip resource with the given unique name, arguments, and options.
@@ -172,11 +194,16 @@ export class Eip extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as EipState | undefined;
             resourceInputs["address"] = state ? state.address : undefined;
+            resourceInputs["associateId"] = state ? state.associateId : undefined;
+            resourceInputs["associateType"] = state ? state.associateType : undefined;
             resourceInputs["autoPay"] = state ? state.autoPay : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["bandwidth"] = state ? state.bandwidth : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["instanceId"] = state ? state.instanceId : undefined;
+            resourceInputs["instanceType"] = state ? state.instanceType : undefined;
             resourceInputs["ipv6Address"] = state ? state.ipv6Address : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
@@ -187,6 +214,7 @@ export class Eip extends pulumi.CustomResource {
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as EipArgs | undefined;
             if ((!args || args.bandwidth === undefined) && !opts.urn) {
@@ -207,10 +235,16 @@ export class Eip extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["address"] = undefined /*out*/;
+            resourceInputs["associateId"] = undefined /*out*/;
+            resourceInputs["associateType"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["instanceId"] = undefined /*out*/;
+            resourceInputs["instanceType"] = undefined /*out*/;
             resourceInputs["ipv6Address"] = undefined /*out*/;
             resourceInputs["portId"] = undefined /*out*/;
             resourceInputs["privateIp"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Eip.__pulumiType, name, resourceInputs, opts);
@@ -225,6 +259,14 @@ export interface EipState {
      * The IPv4 address of the EIP.
      */
     address?: pulumi.Input<string>;
+    /**
+     * The associate id of EIP.
+     */
+    associateId?: pulumi.Input<string>;
+    /**
+     * The associate type of EIP. Values are **PORT**, **NATGW**, **ELB**, **ELBV1** and **VPN**.
+     */
+    associateType?: pulumi.Input<string>;
     /**
      * @deprecated Deprecated
      */
@@ -241,14 +283,25 @@ export interface EipState {
     bandwidth?: pulumi.Input<inputs.Vpc.EipBandwidth>;
     /**
      * Specifies the charging mode of the EIP.  
-     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
      */
     chargingMode?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID to which the EIP belongs.  
-     * Changing this will create a new resource.
+     * The create time of EIP.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the EIP belongs.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * The instance id to which the port belongs. Return when `associateType` is **PORT**.
+     */
+    instanceId?: pulumi.Input<string>;
+    /**
+     * The instance type to which the port belongs. Return when `associateType` is **PORT**.
+     */
+    instanceType?: pulumi.Input<string>;
     /**
      * The IPv6 address of the EIP.
      */
@@ -268,7 +321,6 @@ export interface EipState {
     /**
      * Specifies the charging period unit of the EIP.  
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this will create a new resource.
      */
     periodUnit?: pulumi.Input<string>;
     /**
@@ -297,6 +349,10 @@ export interface EipState {
      * Specifies the key/value pairs to associate with the EIP.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * The update time of EIP.
+     */
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**
@@ -319,12 +375,11 @@ export interface EipArgs {
     bandwidth: pulumi.Input<inputs.Vpc.EipBandwidth>;
     /**
      * Specifies the charging mode of the EIP.  
-     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this will create a new resource.
+     * The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
      */
     chargingMode?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project ID to which the EIP belongs.  
-     * Changing this will create a new resource.
+     * Specifies the enterprise project ID to which the EIP belongs.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -342,7 +397,6 @@ export interface EipArgs {
     /**
      * Specifies the charging period unit of the EIP.  
      * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
-     * Changing this will create a new resource.
      */
     periodUnit?: pulumi.Input<string>;
     /**

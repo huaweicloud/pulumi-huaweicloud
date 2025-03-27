@@ -96,7 +96,7 @@ class GetFlavorsResult:
 
     @property
     @pulumi.getter
-    def region(self) -> Optional[str]:
+    def region(self) -> str:
         return pulumi.get(self, "region")
 
     @property
@@ -189,14 +189,14 @@ def get_flavors(arch_type: Optional[str] = None,
     :param str arch_type: Specifies the type of CPU architecture, e.g. **X86**.
     :param Sequence[str] availability_zones: Specifies the list of availability zones with available resources.
     :param str charging_mode: Specifies the flavor billing mode.
-           The valid valus are **prePaid** and **postPaid**.
-    :param str flavor_id: Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+           The valid values are **prePaid** and **postPaid**.
+    :param str flavor_id: Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
     :param str region: Specifies the region in which to obtain the dms kafka flavors.
            If omitted, the provider-level region will be used.
     :param str storage_spec_code: Specifies the disk IO encoding.
            + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
            + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
-    :param str type: Specifies flavor type. The valid values are **single** and **cluster**.
+    :param str type: Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
     """
     __args__ = dict()
     __args__['archType'] = arch_type
@@ -270,13 +270,13 @@ def get_flavors_output(arch_type: Optional[pulumi.Input[Optional[str]]] = None,
     :param str arch_type: Specifies the type of CPU architecture, e.g. **X86**.
     :param Sequence[str] availability_zones: Specifies the list of availability zones with available resources.
     :param str charging_mode: Specifies the flavor billing mode.
-           The valid valus are **prePaid** and **postPaid**.
-    :param str flavor_id: Specifies the DMS flvaor ID, e.g. **c6.2u4g.cluster**.
+           The valid values are **prePaid** and **postPaid**.
+    :param str flavor_id: Specifies the DMS flavor ID, e.g. **c6.2u4g.cluster**.
     :param str region: Specifies the region in which to obtain the dms kafka flavors.
            If omitted, the provider-level region will be used.
     :param str storage_spec_code: Specifies the disk IO encoding.
            + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
            + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
-    :param str type: Specifies flavor type. The valid values are **single** and **cluster**.
+    :param str type: Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
     """
     ...

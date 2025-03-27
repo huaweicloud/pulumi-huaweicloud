@@ -32,8 +32,25 @@ export class Account extends pulumi.CustomResource {
         return obj['__pulumiType'] === Account.__pulumiType;
     }
 
+    /**
+     * Specifies remarks of the DB account.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the IP addresses that are allowed to access your DB instance.
+     */
+    public readonly hosts!: pulumi.Output<string[]>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     public readonly instanceId!: pulumi.Output<string>;
+    /**
+     * Specifies the username of the DB account.
+     */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Specifies the password of the DB account.
+     */
     public readonly password!: pulumi.Output<string>;
     public readonly region!: pulumi.Output<string>;
 
@@ -50,6 +67,8 @@ export class Account extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as AccountState | undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["hosts"] = state ? state.hosts : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
@@ -62,6 +81,8 @@ export class Account extends pulumi.CustomResource {
             if ((!args || args.password === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'password'");
             }
+            resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["hosts"] = args ? args.hosts : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
@@ -76,8 +97,25 @@ export class Account extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Account resources.
  */
 export interface AccountState {
+    /**
+     * Specifies remarks of the DB account.
+     */
+    description?: pulumi.Input<string>;
+    /**
+     * Specifies the IP addresses that are allowed to access your DB instance.
+     */
+    hosts?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId?: pulumi.Input<string>;
+    /**
+     * Specifies the username of the DB account.
+     */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the password of the DB account.
+     */
     password?: pulumi.Input<string>;
     region?: pulumi.Input<string>;
 }
@@ -86,8 +124,25 @@ export interface AccountState {
  * The set of arguments for constructing a Account resource.
  */
 export interface AccountArgs {
+    /**
+     * Specifies remarks of the DB account.
+     */
+    description?: pulumi.Input<string>;
+    /**
+     * Specifies the IP addresses that are allowed to access your DB instance.
+     */
+    hosts?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId: pulumi.Input<string>;
+    /**
+     * Specifies the username of the DB account.
+     */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies the password of the DB account.
+     */
     password: pulumi.Input<string>;
     region?: pulumi.Input<string>;
 }

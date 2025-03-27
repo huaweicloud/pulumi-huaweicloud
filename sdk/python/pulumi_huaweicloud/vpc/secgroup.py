@@ -20,7 +20,8 @@ class SecgroupArgs:
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Secgroup resource.
         :param pulumi.Input[bool] delete_default_rules: Specifies whether or not to delete the default security rules.
@@ -31,6 +32,7 @@ class SecgroupArgs:
         :param pulumi.Input[str] name: Specifies a unique name for the security group.
         :param pulumi.Input[str] region: The region in which to create the security group resource. If omitted, the
                provider-level region will be used. Changing this creates a new security group resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the security group.
         """
         if delete_default_rules is not None:
             pulumi.set(__self__, "delete_default_rules", delete_default_rules)
@@ -42,6 +44,8 @@ class SecgroupArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="deleteDefaultRules")
@@ -106,6 +110,18 @@ class SecgroupArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the security group.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _SecgroupState:
@@ -117,6 +133,7 @@ class _SecgroupState:
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  rules: Optional[pulumi.Input[Sequence[pulumi.Input['SecgroupRuleArgs']]]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Secgroup resources.
@@ -131,6 +148,7 @@ class _SecgroupState:
                provider-level region will be used. Changing this creates a new security group resource.
         :param pulumi.Input[Sequence[pulumi.Input['SecgroupRuleArgs']]] rules: The array of security group rules associating with the security group.
                The rule object is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the security group.
         :param pulumi.Input[str] updated_at: The last update time, in UTC format.
         """
         if created_at is not None:
@@ -147,6 +165,8 @@ class _SecgroupState:
             pulumi.set(__self__, "region", region)
         if rules is not None:
             pulumi.set(__self__, "rules", rules)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if updated_at is not None:
             pulumi.set(__self__, "updated_at", updated_at)
 
@@ -239,6 +259,18 @@ class _SecgroupState:
         pulumi.set(self, "rules", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the security group.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
@@ -261,11 +293,12 @@ class Secgroup(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
         ## Import
 
-        Security Groups can be imported using the `id`, e.g.
+        Security Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/secgroup:Secgroup secgroup_1 38809219-5e8a-4852-9139-6f461c90e8bc
@@ -281,6 +314,7 @@ class Secgroup(pulumi.CustomResource):
         :param pulumi.Input[str] name: Specifies a unique name for the security group.
         :param pulumi.Input[str] region: The region in which to create the security group resource. If omitted, the
                provider-level region will be used. Changing this creates a new security group resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the security group.
         """
         ...
     @overload
@@ -291,7 +325,7 @@ class Secgroup(pulumi.CustomResource):
         """
         ## Import
 
-        Security Groups can be imported using the `id`, e.g.
+        Security Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/secgroup:Secgroup secgroup_1 38809219-5e8a-4852-9139-6f461c90e8bc
@@ -317,6 +351,7 @@ class Secgroup(pulumi.CustomResource):
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -331,6 +366,7 @@ class Secgroup(pulumi.CustomResource):
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             __props__.__dict__["created_at"] = None
             __props__.__dict__["rules"] = None
             __props__.__dict__["updated_at"] = None
@@ -351,6 +387,7 @@ class Secgroup(pulumi.CustomResource):
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             rules: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['SecgroupRuleArgs']]]]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             updated_at: Optional[pulumi.Input[str]] = None) -> 'Secgroup':
         """
         Get an existing Secgroup resource's state with the given name, id, and optional extra
@@ -370,6 +407,7 @@ class Secgroup(pulumi.CustomResource):
                provider-level region will be used. Changing this creates a new security group resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['SecgroupRuleArgs']]]] rules: The array of security group rules associating with the security group.
                The rule object is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the security group.
         :param pulumi.Input[str] updated_at: The last update time, in UTC format.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -383,6 +421,7 @@ class Secgroup(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         __props__.__dict__["rules"] = rules
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["updated_at"] = updated_at
         return Secgroup(resource_name, opts=opts, __props__=__props__)
 
@@ -445,6 +484,14 @@ class Secgroup(pulumi.CustomResource):
         The rule object is documented below.
         """
         return pulumi.get(self, "rules")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the security group.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="updatedAt")

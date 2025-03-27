@@ -35,6 +35,7 @@ import (
 //			subnetId := cfg.RequireObject("subnetId")
 //			secgroupId := cfg.RequireObject("secgroupId")
 //			availabilityZone := cfg.RequireObject("availabilityZone")
+//			postgreSQLPassword := cfg.RequireObject("postgreSQLPassword")
 //			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:          pulumi.String("rds.pg.n1.large.2"),
 //				VpcId:           pulumi.Any(vpcId),
@@ -46,7 +47,7 @@ import (
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
 //					Version:  pulumi.String("12"),
-//					Password: pulumi.String("Huangwei!120521"),
+//					Password: pulumi.Any(postgreSQLPassword),
 //				},
 //				Volume: &rds.InstanceVolumeArgs{
 //					Type: pulumi.String("ULTRAHIGH"),
@@ -87,6 +88,7 @@ import (
 //			secgroupId := cfg.RequireObject("secgroupId")
 //			availabilityZone1 := cfg.RequireObject("availabilityZone1")
 //			availabilityZone2 := cfg.RequireObject("availabilityZone2")
+//			postgreSQLPassword := cfg.RequireObject("postgreSQLPassword")
 //			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:            pulumi.String("rds.pg.n1.large.2.ha"),
 //				HaReplicationMode: pulumi.String("async"),
@@ -94,13 +96,13 @@ import (
 //				SubnetId:          pulumi.Any(subnetId),
 //				SecurityGroupId:   pulumi.Any(secgroupId),
 //				AvailabilityZones: pulumi.StringArray{
-//					pulumi.Any(_var.Availability_zone_1),
-//					pulumi.Any(_var.Availability_zone_2),
+//					pulumi.Any(availabilityZone1),
+//					pulumi.Any(availabilityZone2),
 //				},
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
 //					Version:  pulumi.String("12"),
-//					Password: pulumi.String("Huangwei!120521"),
+//					Password: pulumi.Any(postgreSQLPassword),
 //				},
 //				Volume: &rds.InstanceVolumeArgs{
 //					Type: pulumi.String("ULTRAHIGH"),
@@ -141,6 +143,7 @@ import (
 //			secgroupId := cfg.RequireObject("secgroupId")
 //			availabilityZone := cfg.RequireObject("availabilityZone")
 //			kmsId := cfg.RequireObject("kmsId")
+//			postgreSQLPassword := cfg.RequireObject("postgreSQLPassword")
 //			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:          pulumi.String("rds.pg.n1.large.2"),
 //				VpcId:           pulumi.Any(vpcId),
@@ -152,7 +155,7 @@ import (
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
 //					Version:  pulumi.String("12"),
-//					Password: pulumi.String("Huangwei!120521"),
+//					Password: pulumi.Any(postgreSQLPassword),
 //				},
 //				Volume: &rds.InstanceVolumeArgs{
 //					Type:             pulumi.String("ULTRAHIGH"),
@@ -193,6 +196,7 @@ import (
 //			subnetId := cfg.RequireObject("subnetId")
 //			secgroupId := cfg.RequireObject("secgroupId")
 //			availabilityZone := cfg.RequireObject("availabilityZone")
+//			postgreSQLPassword := cfg.RequireObject("postgreSQLPassword")
 //			_, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
 //				Flavor:          pulumi.String("rds.pg.n1.large.2"),
 //				VpcId:           pulumi.Any(vpcId),
@@ -204,7 +208,7 @@ import (
 //				Db: &rds.InstanceDbArgs{
 //					Type:     pulumi.String("PostgreSQL"),
 //					Version:  pulumi.String("12"),
-//					Password: pulumi.String("Huangwei!120521"),
+//					Password: pulumi.Any(postgreSQLPassword),
 //				},
 //				Volume: &rds.InstanceVolumeArgs{
 //					Type: pulumi.String("ULTRAHIGH"),
@@ -236,15 +240,15 @@ import (
 //
 // ## Import
 //
-// RDS instance can be imported using the `id`, e.g.
+// RDS instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Rds/instance:Instance instance_1 52e4b497d2c94df88a2eb4c661314903in01
+//	$ pulumi import huaweicloud:Rds/instance:Instance instance_1 <id>
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `collation`, `availability_zone`,`lower_case_table_names`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. resource "huaweicloud_rds_instance" "instance_1" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`db`, `restore`,`param_group_id`, `power_action`, `availability_zone`, `read_write_permissions`, `rotate_day`, `secret_id`, `secret_name`, `secret_version`, `dss_pool_id`, `lower_case_table_names`, `slow_log_show_original_status`, `charging_mode`, `period_unit`, `period`, `auto_renew`, `auto_pay`. It is generally recommended running `terraform plan` after importing a RDS instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also, you can ignore changes as below. hcl resource "huaweicloud_rds_instance" "instance_1" {
 //
 //	...
 //
@@ -252,7 +256,11 @@ import (
 //
 //	ignore_changes = [
 //
-//	"db", "collation", "availability_zone", "lower_case_table_names"
+//	"db", "restore", "param_group_id", "power_action", "availability_zone", "read_write_permissions", "rotate_day",
+//
+//	"secret_id", "secret_name", "secret_version", "dss_pool_id", "lower_case_table_names", "slow_log_show_original_status",
+//
+//	"charging_mode", "period_unit", "period", "auto_renew", "auto_pay",
 //
 //	]
 //
@@ -269,43 +277,58 @@ type Instance struct {
 	AvailabilityZones pulumi.StringArrayOutput `pulumi:"availabilityZones"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy InstanceBackupStrategyOutput `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the RDS DB instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// Specify the binlog retention period in hours. This parameter applies only to
+	// MySQL Server databases. Value range: `0` to `168` (7x24).
+	BinlogRetentionHours pulumi.IntPtrOutput `pulumi:"binlogRetentionHours"`
+	// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
 	// Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-	// Changing this parameter will create a new resource.
-	Collation pulumi.StringPtrOutput `pulumi:"collation"`
+	Collation pulumi.StringOutput `pulumi:"collation"`
 	// Indicates the creation time.
 	Created pulumi.StringOutput `pulumi:"created"`
 	// Specifies the database information. Structure is documented below. Changing this
 	// parameter will create a new resource.
 	Db InstanceDbOutput `pulumi:"db"`
-	// The enterprise project id of the RDS instance. Changing this
-	// parameter creates a new RDS instance.
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the exclusive storage ID for Dec users. It is different for each az
+	// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+	// and separated by commas if database instance type is not standalone or read-only.
+	DssPoolId pulumi.StringPtrOutput `pulumi:"dssPoolId"`
+	// Specifies the enterprise project id of the RDS instance.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
-	// Specifies an intranet floating IP address of RDS DB instance. Changing this
-	// parameter will create a new resource.
+	// Specifies an intranet floating IP address of RDS DB instance.
 	FixedIp pulumi.StringOutput `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor pulumi.StringOutput `pulumi:"flavor"`
 	// Specifies the replication mode for the standby DB instance.
-	// Changing this parameter will create a new resource.
-	// + For MySQL, the value is *async* or *semisync*.
-	// + For PostgreSQL, the value is *async* or *sync*.
-	// + For Microsoft SQL Server, the value is *sync*.
+	// + For MySQL, the value is **async** or **semisync**.
+	// + For PostgreSQL, the value is **async** or **sync**.
+	// + For Microsoft SQL Server, the value is **sync**.
+	// + For MariaDB, the value is **async** or **semisync**.
 	HaReplicationMode pulumi.StringOutput `pulumi:"haReplicationMode"`
 	// Specifies the case-sensitive state of the database table name,
 	// the default value is "1". Changing this parameter will create a new resource.
 	// + 0: Table names are stored as fixed and table names are case-sensitive.
 	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
 	LowerCaseTableNames pulumi.StringPtrOutput `pulumi:"lowerCaseTableNames"`
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringOutput `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
+	// Specifies whether to enable minor version auto upgrade.
+	MinorVersionAutoUpgradeEnabled pulumi.BoolOutput `pulumi:"minorVersionAutoUpgradeEnabled"`
+	// Specify the host information for MSDTC.
+	// The msdtcHosts structure is documented below.
+	MsdtcHosts InstanceMsdtcHostArrayOutput `pulumi:"msdtcHosts"`
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InstanceNodeArrayOutput `pulumi:"nodes"`
-	// Specifies the parameter group ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the parameter group ID.
 	ParamGroupId pulumi.StringPtrOutput `pulumi:"paramGroupId"`
 	// Specify an array of one or more parameters to be set to the RDS instance after
 	// launched. You can check on console to see which parameters supported. Structure is documented below.
@@ -315,35 +338,70 @@ type Instance struct {
 	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
 	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
-	// Specifies the charging period unit of the RDS DB instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-	// new resource.
+	// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+	// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
+	// Specifies the power action to be done for the instance.
+	// Value options: **ON**, **OFF** and **REBOOT**.
+	PowerAction pulumi.StringPtrOutput `pulumi:"powerAction"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringOutput `pulumi:"privateDnsNamePrefix"`
+	// Indicates the private domain name list of the DB instance.
+	PrivateDnsNames pulumi.StringArrayOutput `pulumi:"privateDnsNames"`
 	// Indicates the private IP address list. It is a blank string until an ECS is created.
 	PrivateIps pulumi.StringArrayOutput `pulumi:"privateIps"`
 	// Indicates the public IP address list.
 	PublicIps pulumi.StringArrayOutput `pulumi:"publicIps"`
+	// Specifies the read write permissions of the instance. Valid values:
+	// + **readwrite**: read write permissions.
+	// + **readonly**: readonly permissions.
+	ReadWritePermissions pulumi.StringPtrOutput `pulumi:"readWritePermissions"`
 	// The region in which to create the rds instance resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new rds instance resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the restoration information. It only supported restore to postpaid
+	// instance. Structure is documented below. Changing this parameter will create a new resource.
+	Restore InstanceRestorePtrOutput `pulumi:"restore"`
+	// Specifies the rotation days of TDE rotation.
+	RotateDay pulumi.IntPtrOutput `pulumi:"rotateDay"`
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolOutput `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level monitoring interval. Valid values:
+	// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+	SecondsLevelMonitoringInterval pulumi.IntOutput `pulumi:"secondsLevelMonitoringInterval"`
+	// Specifies the key ID of TDE rotation.
+	SecretId pulumi.StringPtrOutput `pulumi:"secretId"`
+	// Specifies the key name of TDE rotation.
+	SecretName pulumi.StringPtrOutput `pulumi:"secretName"`
+	// Specifies the key version of TDE rotation.
+	SecretVersion pulumi.StringPtrOutput `pulumi:"secretVersion"`
 	// Specifies the security group which the RDS DB instance belongs to.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
+	// Specifies the slow log show original status of the instance.
+	// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+	SlowLogShowOriginalStatus pulumi.StringPtrOutput `pulumi:"slowLogShowOriginalStatus"`
 	// Specifies whether to enable the SSL for MySQL database.
-	SslEnable pulumi.BoolPtrOutput `pulumi:"sslEnable"`
+	SslEnable pulumi.BoolOutput `pulumi:"sslEnable"`
 	// Indicates the node status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the network id of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
+	// Specifies the database switchover policy.
+	// + **reliability**: reliability first.
+	// + **availability**: availability first.
+	SwitchStrategy pulumi.StringOutput `pulumi:"switchStrategy"`
 	// A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 	// pair.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// Specifies whether enable TDE for the instance.
+	TdeEnabled pulumi.BoolOutput `pulumi:"tdeEnabled"`
 	// Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 	// and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 	// Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 	// zone is expressed as a character string, refer to
-	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-	// .
+	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 	TimeZone pulumi.StringOutput `pulumi:"timeZone"`
 	// Specifies the volume information. Structure is documented below.
 	Volume InstanceVolumeOutput `pulumi:"volume"`
@@ -411,43 +469,58 @@ type instanceState struct {
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *InstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the RDS DB instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// Specify the binlog retention period in hours. This parameter applies only to
+	// MySQL Server databases. Value range: `0` to `168` (7x24).
+	BinlogRetentionHours *int `pulumi:"binlogRetentionHours"`
+	// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-	// Changing this parameter will create a new resource.
 	Collation *string `pulumi:"collation"`
 	// Indicates the creation time.
 	Created *string `pulumi:"created"`
 	// Specifies the database information. Structure is documented below. Changing this
 	// parameter will create a new resource.
 	Db *InstanceDb `pulumi:"db"`
-	// The enterprise project id of the RDS instance. Changing this
-	// parameter creates a new RDS instance.
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description *string `pulumi:"description"`
+	// Specifies the exclusive storage ID for Dec users. It is different for each az
+	// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+	// and separated by commas if database instance type is not standalone or read-only.
+	DssPoolId *string `pulumi:"dssPoolId"`
+	// Specifies the enterprise project id of the RDS instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies an intranet floating IP address of RDS DB instance. Changing this
-	// parameter will create a new resource.
+	// Specifies an intranet floating IP address of RDS DB instance.
 	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor *string `pulumi:"flavor"`
 	// Specifies the replication mode for the standby DB instance.
-	// Changing this parameter will create a new resource.
-	// + For MySQL, the value is *async* or *semisync*.
-	// + For PostgreSQL, the value is *async* or *sync*.
-	// + For Microsoft SQL Server, the value is *sync*.
+	// + For MySQL, the value is **async** or **semisync**.
+	// + For PostgreSQL, the value is **async** or **sync**.
+	// + For Microsoft SQL Server, the value is **sync**.
+	// + For MariaDB, the value is **async** or **semisync**.
 	HaReplicationMode *string `pulumi:"haReplicationMode"`
 	// Specifies the case-sensitive state of the database table name,
 	// the default value is "1". Changing this parameter will create a new resource.
 	// + 0: Table names are stored as fixed and table names are case-sensitive.
 	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
 	LowerCaseTableNames *string `pulumi:"lowerCaseTableNames"`
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies whether to enable minor version auto upgrade.
+	MinorVersionAutoUpgradeEnabled *bool `pulumi:"minorVersionAutoUpgradeEnabled"`
+	// Specify the host information for MSDTC.
+	// The msdtcHosts structure is documented below.
+	MsdtcHosts []InstanceMsdtcHost `pulumi:"msdtcHosts"`
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
 	Name *string `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []InstanceNode `pulumi:"nodes"`
-	// Specifies the parameter group ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the parameter group ID.
 	ParamGroupId *string `pulumi:"paramGroupId"`
 	// Specify an array of one or more parameters to be set to the RDS instance after
 	// launched. You can check on console to see which parameters supported. Structure is documented below.
@@ -457,19 +530,49 @@ type instanceState struct {
 	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
 	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period *int `pulumi:"period"`
-	// Specifies the charging period unit of the RDS DB instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-	// new resource.
+	// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+	// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the power action to be done for the instance.
+	// Value options: **ON**, **OFF** and **REBOOT**.
+	PowerAction *string `pulumi:"powerAction"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix *string `pulumi:"privateDnsNamePrefix"`
+	// Indicates the private domain name list of the DB instance.
+	PrivateDnsNames []string `pulumi:"privateDnsNames"`
 	// Indicates the private IP address list. It is a blank string until an ECS is created.
 	PrivateIps []string `pulumi:"privateIps"`
 	// Indicates the public IP address list.
 	PublicIps []string `pulumi:"publicIps"`
+	// Specifies the read write permissions of the instance. Valid values:
+	// + **readwrite**: read write permissions.
+	// + **readonly**: readonly permissions.
+	ReadWritePermissions *string `pulumi:"readWritePermissions"`
 	// The region in which to create the rds instance resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new rds instance resource.
 	Region *string `pulumi:"region"`
+	// Specifies the restoration information. It only supported restore to postpaid
+	// instance. Structure is documented below. Changing this parameter will create a new resource.
+	Restore *InstanceRestore `pulumi:"restore"`
+	// Specifies the rotation days of TDE rotation.
+	RotateDay *int `pulumi:"rotateDay"`
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled *bool `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level monitoring interval. Valid values:
+	// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+	SecondsLevelMonitoringInterval *int `pulumi:"secondsLevelMonitoringInterval"`
+	// Specifies the key ID of TDE rotation.
+	SecretId *string `pulumi:"secretId"`
+	// Specifies the key name of TDE rotation.
+	SecretName *string `pulumi:"secretName"`
+	// Specifies the key version of TDE rotation.
+	SecretVersion *string `pulumi:"secretVersion"`
 	// Specifies the security group which the RDS DB instance belongs to.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies the slow log show original status of the instance.
+	// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+	SlowLogShowOriginalStatus *string `pulumi:"slowLogShowOriginalStatus"`
 	// Specifies whether to enable the SSL for MySQL database.
 	SslEnable *bool `pulumi:"sslEnable"`
 	// Indicates the node status.
@@ -477,15 +580,20 @@ type instanceState struct {
 	// Specifies the network id of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId *string `pulumi:"subnetId"`
+	// Specifies the database switchover policy.
+	// + **reliability**: reliability first.
+	// + **availability**: availability first.
+	SwitchStrategy *string `pulumi:"switchStrategy"`
 	// A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 	// pair.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies whether enable TDE for the instance.
+	TdeEnabled *bool `pulumi:"tdeEnabled"`
 	// Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 	// and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 	// Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 	// zone is expressed as a character string, refer to
-	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-	// .
+	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 	TimeZone *string `pulumi:"timeZone"`
 	// Specifies the volume information. Structure is documented below.
 	Volume *InstanceVolume `pulumi:"volume"`
@@ -503,43 +611,58 @@ type InstanceState struct {
 	AvailabilityZones pulumi.StringArrayInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy InstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the RDS DB instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// Specify the binlog retention period in hours. This parameter applies only to
+	// MySQL Server databases. Value range: `0` to `168` (7x24).
+	BinlogRetentionHours pulumi.IntPtrInput
+	// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-	// Changing this parameter will create a new resource.
 	Collation pulumi.StringPtrInput
 	// Indicates the creation time.
 	Created pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing this
 	// parameter will create a new resource.
 	Db InstanceDbPtrInput
-	// The enterprise project id of the RDS instance. Changing this
-	// parameter creates a new RDS instance.
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrInput
+	// Specifies the exclusive storage ID for Dec users. It is different for each az
+	// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+	// and separated by commas if database instance type is not standalone or read-only.
+	DssPoolId pulumi.StringPtrInput
+	// Specifies the enterprise project id of the RDS instance.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies an intranet floating IP address of RDS DB instance. Changing this
-	// parameter will create a new resource.
+	// Specifies an intranet floating IP address of RDS DB instance.
 	FixedIp pulumi.StringPtrInput
 	// Specifies the specification code.
 	Flavor pulumi.StringPtrInput
 	// Specifies the replication mode for the standby DB instance.
-	// Changing this parameter will create a new resource.
-	// + For MySQL, the value is *async* or *semisync*.
-	// + For PostgreSQL, the value is *async* or *sync*.
-	// + For Microsoft SQL Server, the value is *sync*.
+	// + For MySQL, the value is **async** or **semisync**.
+	// + For PostgreSQL, the value is **async** or **sync**.
+	// + For Microsoft SQL Server, the value is **sync**.
+	// + For MariaDB, the value is **async** or **semisync**.
 	HaReplicationMode pulumi.StringPtrInput
 	// Specifies the case-sensitive state of the database table name,
 	// the default value is "1". Changing this parameter will create a new resource.
 	// + 0: Table names are stored as fixed and table names are case-sensitive.
 	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
 	LowerCaseTableNames pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies whether to enable minor version auto upgrade.
+	MinorVersionAutoUpgradeEnabled pulumi.BoolPtrInput
+	// Specify the host information for MSDTC.
+	// The msdtcHosts structure is documented below.
+	MsdtcHosts InstanceMsdtcHostArrayInput
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
 	Name pulumi.StringPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes InstanceNodeArrayInput
-	// Specifies the parameter group ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the parameter group ID.
 	ParamGroupId pulumi.StringPtrInput
 	// Specify an array of one or more parameters to be set to the RDS instance after
 	// launched. You can check on console to see which parameters supported. Structure is documented below.
@@ -549,19 +672,49 @@ type InstanceState struct {
 	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
 	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrInput
-	// Specifies the charging period unit of the RDS DB instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-	// new resource.
+	// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+	// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	PeriodUnit pulumi.StringPtrInput
+	// Specifies the power action to be done for the instance.
+	// Value options: **ON**, **OFF** and **REBOOT**.
+	PowerAction pulumi.StringPtrInput
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringPtrInput
+	// Indicates the private domain name list of the DB instance.
+	PrivateDnsNames pulumi.StringArrayInput
 	// Indicates the private IP address list. It is a blank string until an ECS is created.
 	PrivateIps pulumi.StringArrayInput
 	// Indicates the public IP address list.
 	PublicIps pulumi.StringArrayInput
+	// Specifies the read write permissions of the instance. Valid values:
+	// + **readwrite**: read write permissions.
+	// + **readonly**: readonly permissions.
+	ReadWritePermissions pulumi.StringPtrInput
 	// The region in which to create the rds instance resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new rds instance resource.
 	Region pulumi.StringPtrInput
+	// Specifies the restoration information. It only supported restore to postpaid
+	// instance. Structure is documented below. Changing this parameter will create a new resource.
+	Restore InstanceRestorePtrInput
+	// Specifies the rotation days of TDE rotation.
+	RotateDay pulumi.IntPtrInput
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolPtrInput
+	// Specifies the seconds level monitoring interval. Valid values:
+	// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+	SecondsLevelMonitoringInterval pulumi.IntPtrInput
+	// Specifies the key ID of TDE rotation.
+	SecretId pulumi.StringPtrInput
+	// Specifies the key name of TDE rotation.
+	SecretName pulumi.StringPtrInput
+	// Specifies the key version of TDE rotation.
+	SecretVersion pulumi.StringPtrInput
 	// Specifies the security group which the RDS DB instance belongs to.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies the slow log show original status of the instance.
+	// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+	SlowLogShowOriginalStatus pulumi.StringPtrInput
 	// Specifies whether to enable the SSL for MySQL database.
 	SslEnable pulumi.BoolPtrInput
 	// Indicates the node status.
@@ -569,15 +722,20 @@ type InstanceState struct {
 	// Specifies the network id of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringPtrInput
+	// Specifies the database switchover policy.
+	// + **reliability**: reliability first.
+	// + **availability**: availability first.
+	SwitchStrategy pulumi.StringPtrInput
 	// A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 	// pair.
 	Tags pulumi.StringMapInput
+	// Specifies whether enable TDE for the instance.
+	TdeEnabled pulumi.BoolPtrInput
 	// Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 	// and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 	// Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 	// zone is expressed as a character string, refer to
-	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-	// .
+	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 	TimeZone pulumi.StringPtrInput
 	// Specifies the volume information. Structure is documented below.
 	Volume InstanceVolumePtrInput
@@ -599,39 +757,54 @@ type instanceArgs struct {
 	AvailabilityZones []string `pulumi:"availabilityZones"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *InstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the RDS DB instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// Specify the binlog retention period in hours. This parameter applies only to
+	// MySQL Server databases. Value range: `0` to `168` (7x24).
+	BinlogRetentionHours *int `pulumi:"binlogRetentionHours"`
+	// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-	// Changing this parameter will create a new resource.
 	Collation *string `pulumi:"collation"`
 	// Specifies the database information. Structure is documented below. Changing this
 	// parameter will create a new resource.
 	Db InstanceDb `pulumi:"db"`
-	// The enterprise project id of the RDS instance. Changing this
-	// parameter creates a new RDS instance.
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description *string `pulumi:"description"`
+	// Specifies the exclusive storage ID for Dec users. It is different for each az
+	// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+	// and separated by commas if database instance type is not standalone or read-only.
+	DssPoolId *string `pulumi:"dssPoolId"`
+	// Specifies the enterprise project id of the RDS instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies an intranet floating IP address of RDS DB instance. Changing this
-	// parameter will create a new resource.
+	// Specifies an intranet floating IP address of RDS DB instance.
 	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor string `pulumi:"flavor"`
 	// Specifies the replication mode for the standby DB instance.
-	// Changing this parameter will create a new resource.
-	// + For MySQL, the value is *async* or *semisync*.
-	// + For PostgreSQL, the value is *async* or *sync*.
-	// + For Microsoft SQL Server, the value is *sync*.
+	// + For MySQL, the value is **async** or **semisync**.
+	// + For PostgreSQL, the value is **async** or **sync**.
+	// + For Microsoft SQL Server, the value is **sync**.
+	// + For MariaDB, the value is **async** or **semisync**.
 	HaReplicationMode *string `pulumi:"haReplicationMode"`
 	// Specifies the case-sensitive state of the database table name,
 	// the default value is "1". Changing this parameter will create a new resource.
 	// + 0: Table names are stored as fixed and table names are case-sensitive.
 	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
 	LowerCaseTableNames *string `pulumi:"lowerCaseTableNames"`
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies whether to enable minor version auto upgrade.
+	MinorVersionAutoUpgradeEnabled *bool `pulumi:"minorVersionAutoUpgradeEnabled"`
+	// Specify the host information for MSDTC.
+	// The msdtcHosts structure is documented below.
+	MsdtcHosts []InstanceMsdtcHost `pulumi:"msdtcHosts"`
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
 	Name *string `pulumi:"name"`
-	// Specifies the parameter group ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the parameter group ID.
 	ParamGroupId *string `pulumi:"paramGroupId"`
 	// Specify an array of one or more parameters to be set to the RDS instance after
 	// launched. You can check on console to see which parameters supported. Structure is documented below.
@@ -641,29 +814,62 @@ type instanceArgs struct {
 	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
 	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period *int `pulumi:"period"`
-	// Specifies the charging period unit of the RDS DB instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-	// new resource.
+	// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+	// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the power action to be done for the instance.
+	// Value options: **ON**, **OFF** and **REBOOT**.
+	PowerAction *string `pulumi:"powerAction"`
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix *string `pulumi:"privateDnsNamePrefix"`
+	// Specifies the read write permissions of the instance. Valid values:
+	// + **readwrite**: read write permissions.
+	// + **readonly**: readonly permissions.
+	ReadWritePermissions *string `pulumi:"readWritePermissions"`
 	// The region in which to create the rds instance resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new rds instance resource.
 	Region *string `pulumi:"region"`
+	// Specifies the restoration information. It only supported restore to postpaid
+	// instance. Structure is documented below. Changing this parameter will create a new resource.
+	Restore *InstanceRestore `pulumi:"restore"`
+	// Specifies the rotation days of TDE rotation.
+	RotateDay *int `pulumi:"rotateDay"`
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled *bool `pulumi:"secondsLevelMonitoringEnabled"`
+	// Specifies the seconds level monitoring interval. Valid values:
+	// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+	SecondsLevelMonitoringInterval *int `pulumi:"secondsLevelMonitoringInterval"`
+	// Specifies the key ID of TDE rotation.
+	SecretId *string `pulumi:"secretId"`
+	// Specifies the key name of TDE rotation.
+	SecretName *string `pulumi:"secretName"`
+	// Specifies the key version of TDE rotation.
+	SecretVersion *string `pulumi:"secretVersion"`
 	// Specifies the security group which the RDS DB instance belongs to.
 	SecurityGroupId string `pulumi:"securityGroupId"`
+	// Specifies the slow log show original status of the instance.
+	// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+	SlowLogShowOriginalStatus *string `pulumi:"slowLogShowOriginalStatus"`
 	// Specifies whether to enable the SSL for MySQL database.
 	SslEnable *bool `pulumi:"sslEnable"`
 	// Specifies the network id of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId string `pulumi:"subnetId"`
+	// Specifies the database switchover policy.
+	// + **reliability**: reliability first.
+	// + **availability**: availability first.
+	SwitchStrategy *string `pulumi:"switchStrategy"`
 	// A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 	// pair.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies whether enable TDE for the instance.
+	TdeEnabled *bool `pulumi:"tdeEnabled"`
 	// Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 	// and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 	// Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 	// zone is expressed as a character string, refer to
-	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-	// .
+	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 	TimeZone *string `pulumi:"timeZone"`
 	// Specifies the volume information. Structure is documented below.
 	Volume InstanceVolume `pulumi:"volume"`
@@ -682,39 +888,54 @@ type InstanceArgs struct {
 	AvailabilityZones pulumi.StringArrayInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy InstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the RDS DB instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// Specify the binlog retention period in hours. This parameter applies only to
+	// MySQL Server databases. Value range: `0` to `168` (7x24).
+	BinlogRetentionHours pulumi.IntPtrInput
+	// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-	// Changing this parameter will create a new resource.
 	Collation pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing this
 	// parameter will create a new resource.
 	Db InstanceDbInput
-	// The enterprise project id of the RDS instance. Changing this
-	// parameter creates a new RDS instance.
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrInput
+	// Specifies the exclusive storage ID for Dec users. It is different for each az
+	// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+	// and separated by commas if database instance type is not standalone or read-only.
+	DssPoolId pulumi.StringPtrInput
+	// Specifies the enterprise project id of the RDS instance.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies an intranet floating IP address of RDS DB instance. Changing this
-	// parameter will create a new resource.
+	// Specifies an intranet floating IP address of RDS DB instance.
 	FixedIp pulumi.StringPtrInput
 	// Specifies the specification code.
 	Flavor pulumi.StringInput
 	// Specifies the replication mode for the standby DB instance.
-	// Changing this parameter will create a new resource.
-	// + For MySQL, the value is *async* or *semisync*.
-	// + For PostgreSQL, the value is *async* or *sync*.
-	// + For Microsoft SQL Server, the value is *sync*.
+	// + For MySQL, the value is **async** or **semisync**.
+	// + For PostgreSQL, the value is **async** or **sync**.
+	// + For Microsoft SQL Server, the value is **sync**.
+	// + For MariaDB, the value is **async** or **semisync**.
 	HaReplicationMode pulumi.StringPtrInput
 	// Specifies the case-sensitive state of the database table name,
 	// the default value is "1". Changing this parameter will create a new resource.
 	// + 0: Table names are stored as fixed and table names are case-sensitive.
 	// + 1: Table names will be stored in lower case and table names are not case-sensitive.
 	LowerCaseTableNames pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies whether to enable minor version auto upgrade.
+	MinorVersionAutoUpgradeEnabled pulumi.BoolPtrInput
+	// Specify the host information for MSDTC.
+	// The msdtcHosts structure is documented below.
+	MsdtcHosts InstanceMsdtcHostArrayInput
 	// Specifies the parameter name. Some of them needs the instance to be restarted
 	// to take effect.
 	Name pulumi.StringPtrInput
-	// Specifies the parameter group ID. Changing this parameter will create
-	// a new resource.
+	// Specifies the parameter group ID.
 	ParamGroupId pulumi.StringPtrInput
 	// Specify an array of one or more parameters to be set to the RDS instance after
 	// launched. You can check on console to see which parameters supported. Structure is documented below.
@@ -724,29 +945,62 @@ type InstanceArgs struct {
 	// number represents a day of the week. For example, a value of 1,2,3,4 would set the backup cycle to Monday, Tuesday,
 	// Wednesday, and Thursday. The default value is 1,2,3,4,5,6,7.
 	Period pulumi.IntPtrInput
-	// Specifies the charging period unit of the RDS DB instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-	// new resource.
+	// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+	// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	PeriodUnit pulumi.StringPtrInput
+	// Specifies the power action to be done for the instance.
+	// Value options: **ON**, **OFF** and **REBOOT**.
+	PowerAction pulumi.StringPtrInput
+	// Specifies the prefix of the private domain name. The value contains
+	// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+	PrivateDnsNamePrefix pulumi.StringPtrInput
+	// Specifies the read write permissions of the instance. Valid values:
+	// + **readwrite**: read write permissions.
+	// + **readonly**: readonly permissions.
+	ReadWritePermissions pulumi.StringPtrInput
 	// The region in which to create the rds instance resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new rds instance resource.
 	Region pulumi.StringPtrInput
+	// Specifies the restoration information. It only supported restore to postpaid
+	// instance. Structure is documented below. Changing this parameter will create a new resource.
+	Restore InstanceRestorePtrInput
+	// Specifies the rotation days of TDE rotation.
+	RotateDay pulumi.IntPtrInput
+	// Specifies whether to enable seconds level monitoring.
+	SecondsLevelMonitoringEnabled pulumi.BoolPtrInput
+	// Specifies the seconds level monitoring interval. Valid values:
+	// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+	SecondsLevelMonitoringInterval pulumi.IntPtrInput
+	// Specifies the key ID of TDE rotation.
+	SecretId pulumi.StringPtrInput
+	// Specifies the key name of TDE rotation.
+	SecretName pulumi.StringPtrInput
+	// Specifies the key version of TDE rotation.
+	SecretVersion pulumi.StringPtrInput
 	// Specifies the security group which the RDS DB instance belongs to.
 	SecurityGroupId pulumi.StringInput
+	// Specifies the slow log show original status of the instance.
+	// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+	SlowLogShowOriginalStatus pulumi.StringPtrInput
 	// Specifies whether to enable the SSL for MySQL database.
 	SslEnable pulumi.BoolPtrInput
 	// Specifies the network id of a subnet. Changing this parameter will create a
 	// new resource.
 	SubnetId pulumi.StringInput
+	// Specifies the database switchover policy.
+	// + **reliability**: reliability first.
+	// + **availability**: availability first.
+	SwitchStrategy pulumi.StringPtrInput
 	// A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 	// pair.
 	Tags pulumi.StringMapInput
+	// Specifies whether enable TDE for the instance.
+	TdeEnabled pulumi.BoolPtrInput
 	// Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 	// and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 	// Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 	// zone is expressed as a character string, refer to
-	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-	// .
+	// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 	TimeZone pulumi.StringPtrInput
 	// Specifies the volume information. Structure is documented below.
 	Volume InstanceVolumeInput
@@ -862,16 +1116,21 @@ func (o InstanceOutput) BackupStrategy() InstanceBackupStrategyOutput {
 	return o.ApplyT(func(v *Instance) InstanceBackupStrategyOutput { return v.BackupStrategy }).(InstanceBackupStrategyOutput)
 }
 
-// Specifies the charging mode of the RDS DB instance. Valid values are
-// *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+// Specify the binlog retention period in hours. This parameter applies only to
+// MySQL Server databases. Value range: `0` to `168` (7x24).
+func (o InstanceOutput) BinlogRetentionHours() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.BinlogRetentionHours }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging mode of the RDS DB instance. Valid values are **prePaid**
+// and **postPaid**, defaults to **postPaid**.
 func (o InstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
 // Specifies the Character Set, only available to Microsoft SQL Server DB instances.
-// Changing this parameter will create a new resource.
-func (o InstanceOutput) Collation() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Collation }).(pulumi.StringPtrOutput)
+func (o InstanceOutput) Collation() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Collation }).(pulumi.StringOutput)
 }
 
 // Indicates the creation time.
@@ -885,14 +1144,25 @@ func (o InstanceOutput) Db() InstanceDbOutput {
 	return o.ApplyT(func(v *Instance) InstanceDbOutput { return v.Db }).(InstanceDbOutput)
 }
 
-// The enterprise project id of the RDS instance. Changing this
-// parameter creates a new RDS instance.
+// Specifies the description of the instance. The value consists of 0 to 64
+// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+func (o InstanceOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the exclusive storage ID for Dec users. It is different for each az
+// configuration. When creating an instance for Dec users, it is needed to be specified for all nodes of the instance
+// and separated by commas if database instance type is not standalone or read-only.
+func (o InstanceOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the enterprise project id of the RDS instance.
 func (o InstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies an intranet floating IP address of RDS DB instance. Changing this
-// parameter will create a new resource.
+// Specifies an intranet floating IP address of RDS DB instance.
 func (o InstanceOutput) FixedIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.FixedIp }).(pulumi.StringOutput)
 }
@@ -903,10 +1173,10 @@ func (o InstanceOutput) Flavor() pulumi.StringOutput {
 }
 
 // Specifies the replication mode for the standby DB instance.
-// Changing this parameter will create a new resource.
-// + For MySQL, the value is *async* or *semisync*.
-// + For PostgreSQL, the value is *async* or *sync*.
-// + For Microsoft SQL Server, the value is *sync*.
+// + For MySQL, the value is **async** or **semisync**.
+// + For PostgreSQL, the value is **async** or **sync**.
+// + For Microsoft SQL Server, the value is **sync**.
+// + For MariaDB, the value is **async** or **semisync**.
 func (o InstanceOutput) HaReplicationMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.HaReplicationMode }).(pulumi.StringOutput)
 }
@@ -917,6 +1187,27 @@ func (o InstanceOutput) HaReplicationMode() pulumi.StringOutput {
 // + 1: Table names will be stored in lower case and table names are not case-sensitive.
 func (o InstanceOutput) LowerCaseTableNames() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.LowerCaseTableNames }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+func (o InstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+func (o InstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.MaintainEnd }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable minor version auto upgrade.
+func (o InstanceOutput) MinorVersionAutoUpgradeEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.MinorVersionAutoUpgradeEnabled }).(pulumi.BoolOutput)
+}
+
+// Specify the host information for MSDTC.
+// The msdtcHosts structure is documented below.
+func (o InstanceOutput) MsdtcHosts() InstanceMsdtcHostArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceMsdtcHostArrayOutput { return v.MsdtcHosts }).(InstanceMsdtcHostArrayOutput)
 }
 
 // Specifies the parameter name. Some of them needs the instance to be restarted
@@ -930,8 +1221,7 @@ func (o InstanceOutput) Nodes() InstanceNodeArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceNodeArrayOutput { return v.Nodes }).(InstanceNodeArrayOutput)
 }
 
-// Specifies the parameter group ID. Changing this parameter will create
-// a new resource.
+// Specifies the parameter group ID.
 func (o InstanceOutput) ParamGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.ParamGroupId }).(pulumi.StringPtrOutput)
 }
@@ -950,11 +1240,27 @@ func (o InstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the charging period unit of the RDS DB instance. Valid values
-// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a
-// new resource.
+// Specifies the charging period unit of the RDS DB instance. Valid values are **month**
+// and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 func (o InstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the power action to be done for the instance.
+// Value options: **ON**, **OFF** and **REBOOT**.
+func (o InstanceOutput) PowerAction() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.PowerAction }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the prefix of the private domain name. The value contains
+// `8` to `64` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+func (o InstanceOutput) PrivateDnsNamePrefix() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.PrivateDnsNamePrefix }).(pulumi.StringOutput)
+}
+
+// Indicates the private domain name list of the DB instance.
+func (o InstanceOutput) PrivateDnsNames() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.PrivateDnsNames }).(pulumi.StringArrayOutput)
 }
 
 // Indicates the private IP address list. It is a blank string until an ECS is created.
@@ -967,10 +1273,54 @@ func (o InstanceOutput) PublicIps() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.PublicIps }).(pulumi.StringArrayOutput)
 }
 
+// Specifies the read write permissions of the instance. Valid values:
+// + **readwrite**: read write permissions.
+// + **readonly**: readonly permissions.
+func (o InstanceOutput) ReadWritePermissions() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.ReadWritePermissions }).(pulumi.StringPtrOutput)
+}
+
 // The region in which to create the rds instance resource. If omitted, the
 // provider-level region will be used. Changing this creates a new rds instance resource.
 func (o InstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the restoration information. It only supported restore to postpaid
+// instance. Structure is documented below. Changing this parameter will create a new resource.
+func (o InstanceOutput) Restore() InstanceRestorePtrOutput {
+	return o.ApplyT(func(v *Instance) InstanceRestorePtrOutput { return v.Restore }).(InstanceRestorePtrOutput)
+}
+
+// Specifies the rotation days of TDE rotation.
+func (o InstanceOutput) RotateDay() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.RotateDay }).(pulumi.IntPtrOutput)
+}
+
+// Specifies whether to enable seconds level monitoring.
+func (o InstanceOutput) SecondsLevelMonitoringEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.SecondsLevelMonitoringEnabled }).(pulumi.BoolOutput)
+}
+
+// Specifies the seconds level monitoring interval. Valid values:
+// `1`, `5`. It is mandatory when `secondsLevelMonitoringEnabled` is **true**.
+func (o InstanceOutput) SecondsLevelMonitoringInterval() pulumi.IntOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntOutput { return v.SecondsLevelMonitoringInterval }).(pulumi.IntOutput)
+}
+
+// Specifies the key ID of TDE rotation.
+func (o InstanceOutput) SecretId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.SecretId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the key name of TDE rotation.
+func (o InstanceOutput) SecretName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.SecretName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the key version of TDE rotation.
+func (o InstanceOutput) SecretVersion() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.SecretVersion }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the security group which the RDS DB instance belongs to.
@@ -978,9 +1328,15 @@ func (o InstanceOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
 }
 
+// Specifies the slow log show original status of the instance.
+// Only **MySQL** and **PostgreSQL** are supported. Value options: **on**, **off**.
+func (o InstanceOutput) SlowLogShowOriginalStatus() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.SlowLogShowOriginalStatus }).(pulumi.StringPtrOutput)
+}
+
 // Specifies whether to enable the SSL for MySQL database.
-func (o InstanceOutput) SslEnable() pulumi.BoolPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.BoolPtrOutput { return v.SslEnable }).(pulumi.BoolPtrOutput)
+func (o InstanceOutput) SslEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.SslEnable }).(pulumi.BoolOutput)
 }
 
 // Indicates the node status.
@@ -994,18 +1350,29 @@ func (o InstanceOutput) SubnetId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SubnetId }).(pulumi.StringOutput)
 }
 
+// Specifies the database switchover policy.
+// + **reliability**: reliability first.
+// + **availability**: availability first.
+func (o InstanceOutput) SwitchStrategy() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SwitchStrategy }).(pulumi.StringOutput)
+}
+
 // A mapping of tags to assign to the RDS instance. Each tag is represented by one key-value
 // pair.
 func (o InstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
+// Specifies whether enable TDE for the instance.
+func (o InstanceOutput) TdeEnabled() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.TdeEnabled }).(pulumi.BoolOutput)
+}
+
 // Specifies the UTC time zone. For MySQL and PostgreSQL Chinese mainland site
 // and international site use UTC by default. The value ranges from UTC-12:00 to UTC+12:00 at the full hour. For
 // Microsoft SQL Server international site use UTC by default and Chinese mainland site use China Standard Time. The time
 // zone is expressed as a character string, refer to
-// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617)
-// .
+// [HuaweiCloud Document](https://support.huaweicloud.com/intl/en-us/api-rds/rds_01_0002.html#rds_01_0002__table613473883617).
 func (o InstanceOutput) TimeZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.TimeZone }).(pulumi.StringOutput)
 }

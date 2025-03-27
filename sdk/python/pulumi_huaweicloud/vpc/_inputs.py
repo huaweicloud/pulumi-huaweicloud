@@ -10,9 +10,13 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'AddressGroupIpExtraSetArgs',
     'BandwidthPublicipArgs',
     'EipBandwidthArgs',
     'EipPublicipArgs',
+    'NetworkAclAssociatedSubnetArgs',
+    'NetworkAclEgressRuleArgs',
+    'NetworkAclIngressRuleArgs',
     'PortAllowedAddressPairArgs',
     'PortExtraDhcpOptionArgs',
     'PortFixedIpArgs',
@@ -20,6 +24,46 @@ __all__ = [
     'SecgroupRuleArgs',
     'VpcRouteArgs',
 ]
+
+@pulumi.input_type
+class AddressGroupIpExtraSetArgs:
+    def __init__(__self__, *,
+                 ip: pulumi.Input[str],
+                 remarks: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] ip: Specifies the IP address, IP address range, or CIDR block.
+        :param pulumi.Input[str] remarks: Specifies the supplementary information about the IP address,
+               IP address range, or CIDR block.
+        """
+        pulumi.set(__self__, "ip", ip)
+        if remarks is not None:
+            pulumi.set(__self__, "remarks", remarks)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> pulumi.Input[str]:
+        """
+        Specifies the IP address, IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "ip")
+
+    @ip.setter
+    def ip(self, value: pulumi.Input[str]):
+        pulumi.set(self, "ip", value)
+
+    @property
+    @pulumi.getter
+    def remarks(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the supplementary information about the IP address,
+        IP address range, or CIDR block.
+        """
+        return pulumi.get(self, "remarks")
+
+    @remarks.setter
+    def remarks(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "remarks", value)
+
 
 @pulumi.input_type
 class BandwidthPublicipArgs:
@@ -106,7 +150,7 @@ class EipBandwidthArgs:
                + **PER**: Dedicated bandwidth
                + **WHOLE**: Shared bandwidth
         :param pulumi.Input[str] charge_mode: Specifies whether the bandwidth is billed by traffic or by bandwidth
-               size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+               size. The value can be **traffic** or **bandwidth**. If the `charging_mode` is **prePaid**, only **bandwidth** is valid.
         :param pulumi.Input[str] id: The shared bandwidth ID.  
                This parameter is mandatory when `share_type` is set to **WHOLE**. Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the bandwidth name.  
@@ -145,7 +189,7 @@ class EipBandwidthArgs:
     def charge_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether the bandwidth is billed by traffic or by bandwidth
-        size. The value can be **traffic** or **bandwidth**. Changing this will create a new resource.
+        size. The value can be **traffic** or **bandwidth**. If the `charging_mode` is **prePaid**, only **bandwidth** is valid.
         """
         return pulumi.get(self, "charge_mode")
 
@@ -272,6 +316,460 @@ class EipPublicipArgs:
 
 
 @pulumi.input_type
+class NetworkAclAssociatedSubnetArgs:
+    def __init__(__self__, *,
+                 subnet_id: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] subnet_id: Specifies the ID of the subnet to associate with the network ACL.
+        """
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the subnet to associate with the network ACL.
+        """
+        return pulumi.get(self, "subnet_id")
+
+    @subnet_id.setter
+    def subnet_id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "subnet_id", value)
+
+
+@pulumi.input_type
+class NetworkAclEgressRuleArgs:
+    def __init__(__self__, *,
+                 action: pulumi.Input[str],
+                 ip_version: pulumi.Input[int],
+                 protocol: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
+                 destination_ip_address: Optional[pulumi.Input[str]] = None,
+                 destination_ip_address_group_id: Optional[pulumi.Input[str]] = None,
+                 destination_port: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 rule_id: Optional[pulumi.Input[str]] = None,
+                 source_ip_address: Optional[pulumi.Input[str]] = None,
+                 source_ip_address_group_id: Optional[pulumi.Input[str]] = None,
+                 source_port: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] action: Specifies the rule action. The value can be: **allow** and **deny**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version of a network ACL rule.
+               The value can be **4** (IPv4) and **6** (IPv6).
+        :param pulumi.Input[str] protocol: Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+               or an IP protocol number (0–255). The value **any** indicates all protocols.
+        :param pulumi.Input[str] description: Specifies the network ACL rule description. The value can contain no more
+               than 255 characters. The value cannot contain angle brackets (< or >).
+        :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address or CIDR block of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] destination_ip_address_group_id: Specifies the destination IP address group ID of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] destination_port: Specifies the destination ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        :param pulumi.Input[str] name: Specifies the network ACL rule name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[str] rule_id: The ID of the rule.
+        :param pulumi.Input[str] source_ip_address: Specifies the source IP address or CIDR block of a network ACL rule.
+               The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] source_ip_address_group_id: Specifies the source IP address group ID of a network ACL rule.
+               `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] source_port: Specifies the source ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "protocol", protocol)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if destination_ip_address is not None:
+            pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        if destination_ip_address_group_id is not None:
+            pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        if destination_port is not None:
+            pulumi.set(__self__, "destination_port", destination_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if rule_id is not None:
+            pulumi.set(__self__, "rule_id", rule_id)
+        if source_ip_address is not None:
+            pulumi.set(__self__, "source_ip_address", source_ip_address)
+        if source_ip_address_group_id is not None:
+            pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        if source_port is not None:
+            pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> pulumi.Input[str]:
+        """
+        Specifies the rule action. The value can be: **allow** and **deny**.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: pulumi.Input[str]):
+        pulumi.set(self, "action", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> pulumi.Input[int]:
+        """
+        Specifies the IP version of a network ACL rule.
+        The value can be **4** (IPv4) and **6** (IPv6).
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: pulumi.Input[int]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> pulumi.Input[str]:
+        """
+        Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+        or an IP protocol number (0–255). The value **any** indicates all protocols.
+        """
+        return pulumi.get(self, "protocol")
+
+    @protocol.setter
+    def protocol(self, value: pulumi.Input[str]):
+        pulumi.set(self, "protocol", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ACL rule description. The value can contain no more
+        than 255 characters. The value cannot contain angle brackets (< or >).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination IP address or CIDR block of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @destination_ip_address.setter
+    def destination_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_ip_address", value)
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination IP address group ID of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @destination_ip_address_group_id.setter
+    def destination_ip_address_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_ip_address_group_id", value)
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @destination_port.setter
+    def destination_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_port", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ACL rule name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @rule_id.setter
+    def rule_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "rule_id", value)
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source IP address or CIDR block of a network ACL rule.
+        The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @source_ip_address.setter
+    def source_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_ip_address", value)
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source IP address group ID of a network ACL rule.
+        `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @source_ip_address_group_id.setter
+    def source_ip_address_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_ip_address_group_id", value)
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "source_port")
+
+    @source_port.setter
+    def source_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_port", value)
+
+
+@pulumi.input_type
+class NetworkAclIngressRuleArgs:
+    def __init__(__self__, *,
+                 action: pulumi.Input[str],
+                 ip_version: pulumi.Input[int],
+                 protocol: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
+                 destination_ip_address: Optional[pulumi.Input[str]] = None,
+                 destination_ip_address_group_id: Optional[pulumi.Input[str]] = None,
+                 destination_port: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 rule_id: Optional[pulumi.Input[str]] = None,
+                 source_ip_address: Optional[pulumi.Input[str]] = None,
+                 source_ip_address_group_id: Optional[pulumi.Input[str]] = None,
+                 source_port: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] action: Specifies the rule action. The value can be: **allow** and **deny**.
+        :param pulumi.Input[int] ip_version: Specifies the IP version of a network ACL rule.
+               The value can be **4** (IPv4) and **6** (IPv6).
+        :param pulumi.Input[str] protocol: Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+               or an IP protocol number (0–255). The value **any** indicates all protocols.
+        :param pulumi.Input[str] description: Specifies the network ACL rule description. The value can contain no more
+               than 255 characters. The value cannot contain angle brackets (< or >).
+        :param pulumi.Input[str] destination_ip_address: Specifies the destination IP address or CIDR block of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] destination_ip_address_group_id: Specifies the destination IP address group ID of a network ACL rule.
+               The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] destination_port: Specifies the destination ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        :param pulumi.Input[str] name: Specifies the network ACL rule name. The value can contain no more than 64 characters,
+               including letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[str] rule_id: The ID of the rule.
+        :param pulumi.Input[str] source_ip_address: Specifies the source IP address or CIDR block of a network ACL rule.
+               The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] source_ip_address_group_id: Specifies the source IP address group ID of a network ACL rule.
+               `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        :param pulumi.Input[str] source_port: Specifies the source ports of a network ACL rule.
+               You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "protocol", protocol)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if destination_ip_address is not None:
+            pulumi.set(__self__, "destination_ip_address", destination_ip_address)
+        if destination_ip_address_group_id is not None:
+            pulumi.set(__self__, "destination_ip_address_group_id", destination_ip_address_group_id)
+        if destination_port is not None:
+            pulumi.set(__self__, "destination_port", destination_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if rule_id is not None:
+            pulumi.set(__self__, "rule_id", rule_id)
+        if source_ip_address is not None:
+            pulumi.set(__self__, "source_ip_address", source_ip_address)
+        if source_ip_address_group_id is not None:
+            pulumi.set(__self__, "source_ip_address_group_id", source_ip_address_group_id)
+        if source_port is not None:
+            pulumi.set(__self__, "source_port", source_port)
+
+    @property
+    @pulumi.getter
+    def action(self) -> pulumi.Input[str]:
+        """
+        Specifies the rule action. The value can be: **allow** and **deny**.
+        """
+        return pulumi.get(self, "action")
+
+    @action.setter
+    def action(self, value: pulumi.Input[str]):
+        pulumi.set(self, "action", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> pulumi.Input[int]:
+        """
+        Specifies the IP version of a network ACL rule.
+        The value can be **4** (IPv4) and **6** (IPv6).
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: pulumi.Input[int]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> pulumi.Input[str]:
+        """
+        Specifies the rule protocol The value can be **tcp**, **udp**, **icmp**, **icmpv6**,
+        or an IP protocol number (0–255). The value **any** indicates all protocols.
+        """
+        return pulumi.get(self, "protocol")
+
+    @protocol.setter
+    def protocol(self, value: pulumi.Input[str]):
+        pulumi.set(self, "protocol", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ACL rule description. The value can contain no more
+        than 255 characters. The value cannot contain angle brackets (< or >).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="destinationIpAddress")
+    def destination_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination IP address or CIDR block of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address")
+
+    @destination_ip_address.setter
+    def destination_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_ip_address", value)
+
+    @property
+    @pulumi.getter(name="destinationIpAddressGroupId")
+    def destination_ip_address_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination IP address group ID of a network ACL rule.
+        The `destination_ip_address` and `destination_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "destination_ip_address_group_id")
+
+    @destination_ip_address_group_id.setter
+    def destination_ip_address_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_ip_address_group_id", value)
+
+    @property
+    @pulumi.getter(name="destinationPort")
+    def destination_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the destination ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "destination_port")
+
+    @destination_port.setter
+    def destination_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "destination_port", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ACL rule name. The value can contain no more than 64 characters,
+        including letters, digits, underscores (_), hyphens (-), and periods (.).
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="ruleId")
+    def rule_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the rule.
+        """
+        return pulumi.get(self, "rule_id")
+
+    @rule_id.setter
+    def rule_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "rule_id", value)
+
+    @property
+    @pulumi.getter(name="sourceIpAddress")
+    def source_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source IP address or CIDR block of a network ACL rule.
+        The `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address")
+
+    @source_ip_address.setter
+    def source_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_ip_address", value)
+
+    @property
+    @pulumi.getter(name="sourceIpAddressGroupId")
+    def source_ip_address_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source IP address group ID of a network ACL rule.
+        `source_ip_address` and `source_address_group_id` cannot be configured at the same time.
+        """
+        return pulumi.get(self, "source_ip_address_group_id")
+
+    @source_ip_address_group_id.setter
+    def source_ip_address_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_ip_address_group_id", value)
+
+    @property
+    @pulumi.getter(name="sourcePort")
+    def source_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the source ports of a network ACL rule.
+        You can specify a single port or a port range. Separate every two entries with a comma.
+        """
+        return pulumi.get(self, "source_port")
+
+    @source_port.setter
+    def source_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_port", value)
+
+
+@pulumi.input_type
 class PortAllowedAddressPairArgs:
     def __init__(__self__, *,
                  ip_address: pulumi.Input[str],
@@ -386,8 +884,10 @@ class RouteTableRouteArgs:
                + If the route type is **vpn**, the value is a VPN gateway ID.
                + If the route type is **dc**, the value is a Direct Connect gateway ID.
                + If the route type is **cc**, the value is a Cloud Connection ID.
+               + If the route type is **egw**, the value is a VPCEP endpoint ID.
+               + If the route type is **er**, the value is a ER instance ID.
         :param pulumi.Input[str] type: Specifies the route type. Currently, the value can be:
-               **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+               **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
         :param pulumi.Input[str] description: Specifies the supplementary information about the route.
                The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
         """
@@ -424,6 +924,8 @@ class RouteTableRouteArgs:
         + If the route type is **vpn**, the value is a VPN gateway ID.
         + If the route type is **dc**, the value is a Direct Connect gateway ID.
         + If the route type is **cc**, the value is a Cloud Connection ID.
+        + If the route type is **egw**, the value is a VPCEP endpoint ID.
+        + If the route type is **er**, the value is a ER instance ID.
         """
         return pulumi.get(self, "nexthop")
 
@@ -436,7 +938,7 @@ class RouteTableRouteArgs:
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the route type. Currently, the value can be:
-        **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc** and **cc**.
+        **ecs**, **eni**, **vip**, **nat**, **peering**, **vpn**, **dc**, **cc**, **egw** and **er**.
         """
         return pulumi.get(self, "type")
 

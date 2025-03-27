@@ -58,7 +58,7 @@ class TaskTargetServerDisk(dict):
         :param int size: Specifies the volume size in MB. Changing this parameter will create a new resource.
         :param str disk_id: Specifies the disk index, e.g. "0".
                Changing this parameter will create a new resource.
-        :param Sequence['TaskTargetServerDiskPhysicalVolumeArgs'] physical_volumes: Specifies an array of physical volume informations.
+        :param Sequence['TaskTargetServerDiskPhysicalVolumeArgs'] physical_volumes: Specifies an array of physical volume information.
                The object is documented below. Changing this parameter will create a new resource.
         :param int used_size: Specifies the used space in MB.
                Changing this parameter will create a new resource.
@@ -113,7 +113,7 @@ class TaskTargetServerDisk(dict):
     @pulumi.getter(name="physicalVolumes")
     def physical_volumes(self) -> Optional[Sequence['outputs.TaskTargetServerDiskPhysicalVolume']]:
         """
-        Specifies an array of physical volume informations.
+        Specifies an array of physical volume information.
         The object is documented below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "physical_volumes")

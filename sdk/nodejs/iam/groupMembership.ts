@@ -5,9 +5,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a User Group Membership resource within HuaweiCloud IAM service.
+ * Manages an IAM group membership resource within HuaweiCloud.
  *
- * Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  *
@@ -15,14 +15,17 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
+ * const config = new pulumi.Config();
+ * const user1Password = config.requireObject("user1Password");
+ * const user2Password = config.requireObject("user2Password");
  * const group1 = new huaweicloud.iam.Group("group1", {description: "This is a test group"});
  * const user1 = new huaweicloud.iam.User("user1", {
  *     enabled: true,
- *     password: "password12345!",
+ *     password: user1Password,
  * });
  * const user2 = new huaweicloud.iam.User("user2", {
  *     enabled: true,
- *     password: "password12345!",
+ *     password: user2Password,
  * });
  * const membership1 = new huaweicloud.iam.GroupMembership("membership1", {
  *     group: group1.id,
@@ -62,11 +65,11 @@ export class GroupMembership extends pulumi.CustomResource {
     }
 
     /**
-     * The group ID of this membership.
+     * Specifies the group ID of this membership.
      */
     public readonly group!: pulumi.Output<string>;
     /**
-     * A List of user IDs to associate to the group.
+     * Specifies a list of IAM user IDs to associate to the group.
      */
     public readonly users!: pulumi.Output<string[]>;
 
@@ -106,11 +109,11 @@ export class GroupMembership extends pulumi.CustomResource {
  */
 export interface GroupMembershipState {
     /**
-     * The group ID of this membership.
+     * Specifies the group ID of this membership.
      */
     group?: pulumi.Input<string>;
     /**
-     * A List of user IDs to associate to the group.
+     * Specifies a list of IAM user IDs to associate to the group.
      */
     users?: pulumi.Input<pulumi.Input<string>[]>;
 }
@@ -120,11 +123,11 @@ export interface GroupMembershipState {
  */
 export interface GroupMembershipArgs {
     /**
-     * The group ID of this membership.
+     * Specifies the group ID of this membership.
      */
     group: pulumi.Input<string>;
     /**
-     * A List of user IDs to associate to the group.
+     * Specifies a list of IAM user IDs to associate to the group.
      */
     users: pulumi.Input<pulumi.Input<string>[]>;
 }

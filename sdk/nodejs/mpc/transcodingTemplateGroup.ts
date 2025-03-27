@@ -47,7 +47,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * MPC transcoding template groups can be imported using the `id`, e.g.
+ * MPC transcoding template groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Mpc/transcodingTemplateGroup:TranscodingTemplateGroup test 589e49809bb84447a759f6fa9aa19949
@@ -86,13 +86,15 @@ export class TranscodingTemplateGroup extends pulumi.CustomResource {
      */
     public readonly audio!: pulumi.Output<outputs.Mpc.TranscodingTemplateGroupAudio | undefined>;
     /**
-     * Specifies the dash segment duration. This parameter is used only when `outputFormat`
-     * is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the dash segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     public readonly dashSegmentDuration!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the HLS segment duration. This parameter is used only
-     * when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the HLS segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     public readonly hlsSegmentDuration!: pulumi.Output<number | undefined>;
     /**
@@ -186,13 +188,15 @@ export interface TranscodingTemplateGroupState {
      */
     audio?: pulumi.Input<inputs.Mpc.TranscodingTemplateGroupAudio>;
     /**
-     * Specifies the dash segment duration. This parameter is used only when `outputFormat`
-     * is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the dash segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     dashSegmentDuration?: pulumi.Input<number>;
     /**
-     * Specifies the HLS segment duration. This parameter is used only
-     * when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the HLS segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     hlsSegmentDuration?: pulumi.Input<number>;
     /**
@@ -243,13 +247,15 @@ export interface TranscodingTemplateGroupArgs {
      */
     audio?: pulumi.Input<inputs.Mpc.TranscodingTemplateGroupAudio>;
     /**
-     * Specifies the dash segment duration. This parameter is used only when `outputFormat`
-     * is set to 2 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the dash segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     dashSegmentDuration?: pulumi.Input<number>;
     /**
-     * Specifies the HLS segment duration. This parameter is used only
-     * when `outputFormat` is set to 1 or 3. The value ranges from 2 to 10. The default value is 5. The unit is second.
+     * Specifies the HLS segment duration, in second.  
+     * The valid value is range from `2` to `10`, and it is used only when `outputFormat` is set to `1` or `3`.
+     * The default value is `5`.
      */
     hlsSegmentDuration?: pulumi.Input<number>;
     /**

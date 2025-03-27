@@ -8,24 +8,6 @@ import * as utilities from "../utilities";
  * Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
  *
  * ## Example Usage
- * ### DNAT rule in Direct Connect scenario
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const gatewayId = config.requireObject("gatewayId");
- * const publicipId = config.requireObject("publicipId");
- * const test = new huaweicloud.nat.DnatRule("test", {
- *     natGatewayId: gatewayId,
- *     floatingIpId: publicipId,
- *     privateIp: "10.0.0.12",
- *     protocol: "any",
- *     internalServicePort: 0,
- *     externalServicePort: 0,
- * });
- * ```
  *
  * ## Import
  *
@@ -94,7 +76,15 @@ export class DnatRule extends pulumi.CustomResource {
     /**
      * Specifies the ID of the floating IP address.
      */
-    public readonly floatingIpId!: pulumi.Output<string>;
+    public readonly floatingIpId!: pulumi.Output<string | undefined>;
+    /**
+     * The global EIP address connected by the DNAT rule.
+     */
+    public /*out*/ readonly globalEipAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the global EIP connected by the DNAT rule.
+     */
+    public readonly globalEipId!: pulumi.Output<string | undefined>;
     /**
      * Specifies port used by Floating IP provide services for external
      * systems.
@@ -118,12 +108,12 @@ export class DnatRule extends pulumi.CustomResource {
      * Use huaweicloud.Vpc.Port to get the port if just know a fixed IP addresses
      * on the port.
      */
-    public readonly portId!: pulumi.Output<string | undefined>;
+    public readonly portId!: pulumi.Output<string>;
     /**
      * Specifies the private IP address of a user. This parameter is mandatory in
      * Direct Connect scenario.
      */
-    public readonly privateIp!: pulumi.Output<string | undefined>;
+    public readonly privateIp!: pulumi.Output<string>;
     /**
      * Specifies the protocol type.  
      * The valid values are **tcp**, **udp**, and **any**.
@@ -158,6 +148,8 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["externalServicePortRange"] = state ? state.externalServicePortRange : undefined;
             resourceInputs["floatingIpAddress"] = state ? state.floatingIpAddress : undefined;
             resourceInputs["floatingIpId"] = state ? state.floatingIpId : undefined;
+            resourceInputs["globalEipAddress"] = state ? state.globalEipAddress : undefined;
+            resourceInputs["globalEipId"] = state ? state.globalEipId : undefined;
             resourceInputs["internalServicePort"] = state ? state.internalServicePort : undefined;
             resourceInputs["internalServicePortRange"] = state ? state.internalServicePortRange : undefined;
             resourceInputs["natGatewayId"] = state ? state.natGatewayId : undefined;
@@ -168,9 +160,6 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
         } else {
             const args = argsOrState as DnatRuleArgs | undefined;
-            if ((!args || args.floatingIpId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'floatingIpId'");
-            }
             if ((!args || args.natGatewayId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'natGatewayId'");
             }
@@ -181,6 +170,7 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["externalServicePort"] = args ? args.externalServicePort : undefined;
             resourceInputs["externalServicePortRange"] = args ? args.externalServicePortRange : undefined;
             resourceInputs["floatingIpId"] = args ? args.floatingIpId : undefined;
+            resourceInputs["globalEipId"] = args ? args.globalEipId : undefined;
             resourceInputs["internalServicePort"] = args ? args.internalServicePort : undefined;
             resourceInputs["internalServicePortRange"] = args ? args.internalServicePortRange : undefined;
             resourceInputs["natGatewayId"] = args ? args.natGatewayId : undefined;
@@ -190,6 +180,7 @@ export class DnatRule extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["floatingIpAddress"] = undefined /*out*/;
+            resourceInputs["globalEipAddress"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -233,6 +224,14 @@ export interface DnatRuleState {
      * Specifies the ID of the floating IP address.
      */
     floatingIpId?: pulumi.Input<string>;
+    /**
+     * The global EIP address connected by the DNAT rule.
+     */
+    globalEipAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the global EIP connected by the DNAT rule.
+     */
+    globalEipId?: pulumi.Input<string>;
     /**
      * Specifies port used by Floating IP provide services for external
      * systems.
@@ -305,7 +304,11 @@ export interface DnatRuleArgs {
     /**
      * Specifies the ID of the floating IP address.
      */
-    floatingIpId: pulumi.Input<string>;
+    floatingIpId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the global EIP connected by the DNAT rule.
+     */
+    globalEipId?: pulumi.Input<string>;
     /**
      * Specifies port used by Floating IP provide services for external
      * systems.

@@ -22,7 +22,7 @@ class GetFlavorsResult:
     """
     A collection of values returned by getFlavors.
     """
-    def __init__(__self__, bandwidth=None, cps=None, flavors=None, id=None, ids=None, max_connections=None, qps=None, region=None, type=None):
+    def __init__(__self__, bandwidth=None, cps=None, flavors=None, id=None, ids=None, max_connections=None, name=None, qps=None, region=None, type=None):
         if bandwidth and not isinstance(bandwidth, int):
             raise TypeError("Expected argument 'bandwidth' to be a int")
         pulumi.set(__self__, "bandwidth", bandwidth)
@@ -41,6 +41,9 @@ class GetFlavorsResult:
         if max_connections and not isinstance(max_connections, int):
             raise TypeError("Expected argument 'max_connections' to be a int")
         pulumi.set(__self__, "max_connections", max_connections)
+        if name and not isinstance(name, str):
+            raise TypeError("Expected argument 'name' to be a str")
+        pulumi.set(__self__, "name", name)
         if qps and not isinstance(qps, int):
             raise TypeError("Expected argument 'qps' to be a int")
         pulumi.set(__self__, "qps", qps)
@@ -101,6 +104,14 @@ class GetFlavorsResult:
 
     @property
     @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Name of the flavor.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
     def qps(self) -> Optional[int]:
         """
         Qps of the L7 flavor.
@@ -133,6 +144,7 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
             id=self.id,
             ids=self.ids,
             max_connections=self.max_connections,
+            name=self.name,
             qps=self.qps,
             region=self.region,
             type=self.type)
@@ -141,6 +153,7 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
 def get_flavors(bandwidth: Optional[int] = None,
                 cps: Optional[int] = None,
                 max_connections: Optional[int] = None,
+                name: Optional[str] = None,
                 qps: Optional[int] = None,
                 region: Optional[str] = None,
                 type: Optional[str] = None,
@@ -154,27 +167,33 @@ def get_flavors(bandwidth: Optional[int] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    flavors = huaweicloud.DedicatedElb.get_flavors(type="L7",
-        max_connections=200000,
+    flavors = huaweicloud.DedicatedElb.get_flavors(bandwidth=50,
         cps=2000,
-        bandwidth=50)
-    lb = huaweicloud.dedicated_elb.Loadbalancer("lb", l7_flavor_id=flavors.ids[0])
-    # Other properties...
+        max_connections=200000,
+        type="L7")
     ```
 
 
     :param int bandwidth: Specifies the bandwidth size(Mbit/s) in the flavor.
     :param int cps: Specifies the cps in the flavor.
     :param int max_connections: Specifies the maximum connections in the flavor.
+    :param str name: Specifies the flavor name.
     :param int qps: Specifies the qps in the L7 flavor.
     :param str region: The region in which to obtain the flavors. If omitted, the provider-level region will be
            used.
-    :param str type: Specifies the flavor type. Valid values are L4 and L7.
+    :param str type: Specifies the flavor type. Values options:
+           + **L4**: indicates Layer-4 flavor.
+           + **L7**: indicates Layer-7 flavor.
+           + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+           + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+           + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+           + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
     """
     __args__ = dict()
     __args__['bandwidth'] = bandwidth
     __args__['cps'] = cps
     __args__['maxConnections'] = max_connections
+    __args__['name'] = name
     __args__['qps'] = qps
     __args__['region'] = region
     __args__['type'] = type
@@ -188,6 +207,7 @@ def get_flavors(bandwidth: Optional[int] = None,
         id=__ret__.id,
         ids=__ret__.ids,
         max_connections=__ret__.max_connections,
+        name=__ret__.name,
         qps=__ret__.qps,
         region=__ret__.region,
         type=__ret__.type)
@@ -197,6 +217,7 @@ def get_flavors(bandwidth: Optional[int] = None,
 def get_flavors_output(bandwidth: Optional[pulumi.Input[Optional[int]]] = None,
                        cps: Optional[pulumi.Input[Optional[int]]] = None,
                        max_connections: Optional[pulumi.Input[Optional[int]]] = None,
+                       name: Optional[pulumi.Input[Optional[str]]] = None,
                        qps: Optional[pulumi.Input[Optional[int]]] = None,
                        region: Optional[pulumi.Input[Optional[str]]] = None,
                        type: Optional[pulumi.Input[Optional[str]]] = None,
@@ -210,21 +231,26 @@ def get_flavors_output(bandwidth: Optional[pulumi.Input[Optional[int]]] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    flavors = huaweicloud.DedicatedElb.get_flavors(type="L7",
-        max_connections=200000,
+    flavors = huaweicloud.DedicatedElb.get_flavors(bandwidth=50,
         cps=2000,
-        bandwidth=50)
-    lb = huaweicloud.dedicated_elb.Loadbalancer("lb", l7_flavor_id=flavors.ids[0])
-    # Other properties...
+        max_connections=200000,
+        type="L7")
     ```
 
 
     :param int bandwidth: Specifies the bandwidth size(Mbit/s) in the flavor.
     :param int cps: Specifies the cps in the flavor.
     :param int max_connections: Specifies the maximum connections in the flavor.
+    :param str name: Specifies the flavor name.
     :param int qps: Specifies the qps in the L7 flavor.
     :param str region: The region in which to obtain the flavors. If omitted, the provider-level region will be
            used.
-    :param str type: Specifies the flavor type. Valid values are L4 and L7.
+    :param str type: Specifies the flavor type. Values options:
+           + **L4**: indicates Layer-4 flavor.
+           + **L7**: indicates Layer-7 flavor.
+           + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+           + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+           + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+           + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
     """
     ...

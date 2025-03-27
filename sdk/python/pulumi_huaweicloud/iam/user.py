@@ -19,6 +19,9 @@ class UserArgs:
                  description: Optional[pulumi.Input[str]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 external_identity_id: Optional[pulumi.Input[str]] = None,
+                 external_identity_type: Optional[pulumi.Input[str]] = None,
+                 login_protect_verification_method: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  phone: Optional[pulumi.Input[str]] = None,
@@ -26,20 +29,27 @@ class UserArgs:
         """
         The set of arguments for constructing a User resource.
         :param pulumi.Input[str] access_type: Specifies the access type of the user. Available values are:
-               + default: support both programmatic and management console access.
-               + programmatic: only support programmatic access.
-               + console: only support management console access.
+               + **default**: support both programmatic and management console access.
+               + **programmatic**: only support programmatic access.
+               + **console**: only support management console access.
         :param pulumi.Input[str] country_code: Specifies the country code. The country code of the Chinese mainland is 0086. This
                parameter must be used together with `phone`.
         :param pulumi.Input[str] description: Specifies the description of the user.
-        :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
-        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        :param pulumi.Input[str] email: Specifies the email address with a maximum of `255` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
+        :param pulumi.Input[str] external_identity_id: Specifies the ID of the IAM user in the external system.
+               This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+               is the same as the `external_identity_id` of the corresponding IAM user.
+        :param pulumi.Input[str] external_identity_type: Specifies the type of the IAM user in the external system.
+               Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
+        :param pulumi.Input[str] login_protect_verification_method: Specifies the verification method of login protect. If it is
+               empty, the login protection will be disabled.
+        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of `1` to `32` characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
-        :param pulumi.Input[str] password: Specifies the password for the user with 6 to 32 characters. It must contain at least
+        :param pulumi.Input[str] password: Specifies the password for the user with `6` to `32` characters. It must contain at least
                two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
-        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of `32` digits. This parameter must be used
                together with `country_code`.
         :param pulumi.Input[bool] pwd_reset: Specifies whether or not the password should be reset. By default, the password is asked
                to reset at the first login.
@@ -54,6 +64,12 @@ class UserArgs:
             pulumi.set(__self__, "email", email)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if external_identity_id is not None:
+            pulumi.set(__self__, "external_identity_id", external_identity_id)
+        if external_identity_type is not None:
+            pulumi.set(__self__, "external_identity_type", external_identity_type)
+        if login_protect_verification_method is not None:
+            pulumi.set(__self__, "login_protect_verification_method", login_protect_verification_method)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if password is not None:
@@ -68,9 +84,9 @@ class UserArgs:
     def access_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the access type of the user. Available values are:
-        + default: support both programmatic and management console access.
-        + programmatic: only support programmatic access.
-        + console: only support management console access.
+        + **default**: support both programmatic and management console access.
+        + **programmatic**: only support programmatic access.
+        + **console**: only support management console access.
         """
         return pulumi.get(self, "access_type")
 
@@ -107,7 +123,7 @@ class UserArgs:
     @pulumi.getter
     def email(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the email address with a maximum of 255 characters.
+        Specifies the email address with a maximum of `255` characters.
         """
         return pulumi.get(self, "email")
 
@@ -119,7 +135,7 @@ class UserArgs:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+        Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "enabled")
 
@@ -128,10 +144,50 @@ class UserArgs:
         pulumi.set(self, "enabled", value)
 
     @property
+    @pulumi.getter(name="externalIdentityId")
+    def external_identity_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the IAM user in the external system.
+        This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+        is the same as the `external_identity_id` of the corresponding IAM user.
+        """
+        return pulumi.get(self, "external_identity_id")
+
+    @external_identity_id.setter
+    def external_identity_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_identity_id", value)
+
+    @property
+    @pulumi.getter(name="externalIdentityType")
+    def external_identity_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the IAM user in the external system.
+        Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
+        """
+        return pulumi.get(self, "external_identity_type")
+
+    @external_identity_type.setter
+    def external_identity_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_identity_type", value)
+
+    @property
+    @pulumi.getter(name="loginProtectVerificationMethod")
+    def login_protect_verification_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the verification method of login protect. If it is
+        empty, the login protection will be disabled.
+        """
+        return pulumi.get(self, "login_protect_verification_method")
+
+    @login_protect_verification_method.setter
+    def login_protect_verification_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "login_protect_verification_method", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        Specifies the name of the user. The user name consists of `1` to `32` characters. It can
         contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
         digit.
         """
@@ -145,7 +201,7 @@ class UserArgs:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the password for the user with 6 to 32 characters. It must contain at least
+        Specifies the password for the user with `6` to `32` characters. It must contain at least
         two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
         """
         return pulumi.get(self, "password")
@@ -158,7 +214,7 @@ class UserArgs:
     @pulumi.getter
     def phone(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        Specifies the mobile number with a maximum of `32` digits. This parameter must be used
         together with `country_code`.
         """
         return pulumi.get(self, "phone")
@@ -190,7 +246,10 @@ class _UserState:
                  description: Optional[pulumi.Input[str]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 external_identity_id: Optional[pulumi.Input[str]] = None,
+                 external_identity_type: Optional[pulumi.Input[str]] = None,
                  last_login: Optional[pulumi.Input[str]] = None,
+                 login_protect_verification_method: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  password_strength: Optional[pulumi.Input[str]] = None,
@@ -199,23 +258,30 @@ class _UserState:
         """
         Input properties used for looking up and filtering User resources.
         :param pulumi.Input[str] access_type: Specifies the access type of the user. Available values are:
-               + default: support both programmatic and management console access.
-               + programmatic: only support programmatic access.
-               + console: only support management console access.
+               + **default**: support both programmatic and management console access.
+               + **programmatic**: only support programmatic access.
+               + **console**: only support management console access.
         :param pulumi.Input[str] country_code: Specifies the country code. The country code of the Chinese mainland is 0086. This
                parameter must be used together with `phone`.
         :param pulumi.Input[str] create_time: The time when the IAM user was created.
         :param pulumi.Input[str] description: Specifies the description of the user.
-        :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+        :param pulumi.Input[str] email: Specifies the email address with a maximum of `255` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
+        :param pulumi.Input[str] external_identity_id: Specifies the ID of the IAM user in the external system.
+               This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+               is the same as the `external_identity_id` of the corresponding IAM user.
+        :param pulumi.Input[str] external_identity_type: Specifies the type of the IAM user in the external system.
+               Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
         :param pulumi.Input[str] last_login: The time when the IAM user last login.
-        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        :param pulumi.Input[str] login_protect_verification_method: Specifies the verification method of login protect. If it is
+               empty, the login protection will be disabled.
+        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of `1` to `32` characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
-        :param pulumi.Input[str] password: Specifies the password for the user with 6 to 32 characters. It must contain at least
+        :param pulumi.Input[str] password: Specifies the password for the user with `6` to `32` characters. It must contain at least
                two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
         :param pulumi.Input[str] password_strength: Indicates the password strength.
-        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of `32` digits. This parameter must be used
                together with `country_code`.
         :param pulumi.Input[bool] pwd_reset: Specifies whether or not the password should be reset. By default, the password is asked
                to reset at the first login.
@@ -232,8 +298,14 @@ class _UserState:
             pulumi.set(__self__, "email", email)
         if enabled is not None:
             pulumi.set(__self__, "enabled", enabled)
+        if external_identity_id is not None:
+            pulumi.set(__self__, "external_identity_id", external_identity_id)
+        if external_identity_type is not None:
+            pulumi.set(__self__, "external_identity_type", external_identity_type)
         if last_login is not None:
             pulumi.set(__self__, "last_login", last_login)
+        if login_protect_verification_method is not None:
+            pulumi.set(__self__, "login_protect_verification_method", login_protect_verification_method)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if password is not None:
@@ -250,9 +322,9 @@ class _UserState:
     def access_type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the access type of the user. Available values are:
-        + default: support both programmatic and management console access.
-        + programmatic: only support programmatic access.
-        + console: only support management console access.
+        + **default**: support both programmatic and management console access.
+        + **programmatic**: only support programmatic access.
+        + **console**: only support management console access.
         """
         return pulumi.get(self, "access_type")
 
@@ -301,7 +373,7 @@ class _UserState:
     @pulumi.getter
     def email(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the email address with a maximum of 255 characters.
+        Specifies the email address with a maximum of `255` characters.
         """
         return pulumi.get(self, "email")
 
@@ -313,13 +385,40 @@ class _UserState:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+        Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
     def enabled(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="externalIdentityId")
+    def external_identity_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the IAM user in the external system.
+        This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+        is the same as the `external_identity_id` of the corresponding IAM user.
+        """
+        return pulumi.get(self, "external_identity_id")
+
+    @external_identity_id.setter
+    def external_identity_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_identity_id", value)
+
+    @property
+    @pulumi.getter(name="externalIdentityType")
+    def external_identity_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the type of the IAM user in the external system.
+        Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
+        """
+        return pulumi.get(self, "external_identity_type")
+
+    @external_identity_type.setter
+    def external_identity_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "external_identity_type", value)
 
     @property
     @pulumi.getter(name="lastLogin")
@@ -334,10 +433,23 @@ class _UserState:
         pulumi.set(self, "last_login", value)
 
     @property
+    @pulumi.getter(name="loginProtectVerificationMethod")
+    def login_protect_verification_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the verification method of login protect. If it is
+        empty, the login protection will be disabled.
+        """
+        return pulumi.get(self, "login_protect_verification_method")
+
+    @login_protect_verification_method.setter
+    def login_protect_verification_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "login_protect_verification_method", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        Specifies the name of the user. The user name consists of `1` to `32` characters. It can
         contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
         digit.
         """
@@ -351,7 +463,7 @@ class _UserState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the password for the user with 6 to 32 characters. It must contain at least
+        Specifies the password for the user with `6` to `32` characters. It must contain at least
         two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
         """
         return pulumi.get(self, "password")
@@ -376,7 +488,7 @@ class _UserState:
     @pulumi.getter
     def phone(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        Specifies the mobile number with a maximum of `32` digits. This parameter must be used
         together with `country_code`.
         """
         return pulumi.get(self, "phone")
@@ -409,15 +521,18 @@ class User(pulumi.CustomResource):
                  description: Optional[pulumi.Input[str]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 external_identity_id: Optional[pulumi.Input[str]] = None,
+                 external_identity_type: Optional[pulumi.Input[str]] = None,
+                 login_protect_verification_method: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  phone: Optional[pulumi.Input[str]] = None,
                  pwd_reset: Optional[pulumi.Input[bool]] = None,
                  __props__=None):
         """
-        Manages a User resource within HuaweiCloud IAM service.
+        Manages an IAM user resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -425,20 +540,22 @@ class User(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
         user1 = huaweicloud.iam.User("user1",
             description="A user",
-            password="password123!")
+            password=user1_password)
         ```
 
         ## Import
 
-        Users can be imported using the `id`, e.g.
+        Users can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/user:User user_1 89c60255-9bd6-460c-822a-e2b959ede9d2
         ```
 
-         But due to the security reason, `password` can not be imported, you can ignore it as below. resource "huaweicloud_identity_user" "user_1" {
+         But due to the security reason, `password` can not be imported, you can ignore it as below. hcl resource "huaweicloud_identity_user" "user_1" {
 
          ...
 
@@ -446,7 +563,7 @@ class User(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "password",
+         password,
 
          ]
 
@@ -455,20 +572,27 @@ class User(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_type: Specifies the access type of the user. Available values are:
-               + default: support both programmatic and management console access.
-               + programmatic: only support programmatic access.
-               + console: only support management console access.
+               + **default**: support both programmatic and management console access.
+               + **programmatic**: only support programmatic access.
+               + **console**: only support management console access.
         :param pulumi.Input[str] country_code: Specifies the country code. The country code of the Chinese mainland is 0086. This
                parameter must be used together with `phone`.
         :param pulumi.Input[str] description: Specifies the description of the user.
-        :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
-        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        :param pulumi.Input[str] email: Specifies the email address with a maximum of `255` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
+        :param pulumi.Input[str] external_identity_id: Specifies the ID of the IAM user in the external system.
+               This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+               is the same as the `external_identity_id` of the corresponding IAM user.
+        :param pulumi.Input[str] external_identity_type: Specifies the type of the IAM user in the external system.
+               Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
+        :param pulumi.Input[str] login_protect_verification_method: Specifies the verification method of login protect. If it is
+               empty, the login protection will be disabled.
+        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of `1` to `32` characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
-        :param pulumi.Input[str] password: Specifies the password for the user with 6 to 32 characters. It must contain at least
+        :param pulumi.Input[str] password: Specifies the password for the user with `6` to `32` characters. It must contain at least
                two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
-        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of `32` digits. This parameter must be used
                together with `country_code`.
         :param pulumi.Input[bool] pwd_reset: Specifies whether or not the password should be reset. By default, the password is asked
                to reset at the first login.
@@ -480,9 +604,9 @@ class User(pulumi.CustomResource):
                  args: Optional[UserArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a User resource within HuaweiCloud IAM service.
+        Manages an IAM user resource within HuaweiCloud.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -490,20 +614,22 @@ class User(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        user1_password = config.require_object("user1Password")
         user1 = huaweicloud.iam.User("user1",
             description="A user",
-            password="password123!")
+            password=user1_password)
         ```
 
         ## Import
 
-        Users can be imported using the `id`, e.g.
+        Users can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iam/user:User user_1 89c60255-9bd6-460c-822a-e2b959ede9d2
         ```
 
-         But due to the security reason, `password` can not be imported, you can ignore it as below. resource "huaweicloud_identity_user" "user_1" {
+         But due to the security reason, `password` can not be imported, you can ignore it as below. hcl resource "huaweicloud_identity_user" "user_1" {
 
          ...
 
@@ -511,7 +637,7 @@ class User(pulumi.CustomResource):
 
          ignore_changes = [
 
-         "password",
+         password,
 
          ]
 
@@ -537,6 +663,9 @@ class User(pulumi.CustomResource):
                  description: Optional[pulumi.Input[str]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enabled: Optional[pulumi.Input[bool]] = None,
+                 external_identity_id: Optional[pulumi.Input[str]] = None,
+                 external_identity_type: Optional[pulumi.Input[str]] = None,
+                 login_protect_verification_method: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  phone: Optional[pulumi.Input[str]] = None,
@@ -555,6 +684,9 @@ class User(pulumi.CustomResource):
             __props__.__dict__["description"] = description
             __props__.__dict__["email"] = email
             __props__.__dict__["enabled"] = enabled
+            __props__.__dict__["external_identity_id"] = external_identity_id
+            __props__.__dict__["external_identity_type"] = external_identity_type
+            __props__.__dict__["login_protect_verification_method"] = login_protect_verification_method
             __props__.__dict__["name"] = name
             __props__.__dict__["password"] = password
             __props__.__dict__["phone"] = phone
@@ -578,7 +710,10 @@ class User(pulumi.CustomResource):
             description: Optional[pulumi.Input[str]] = None,
             email: Optional[pulumi.Input[str]] = None,
             enabled: Optional[pulumi.Input[bool]] = None,
+            external_identity_id: Optional[pulumi.Input[str]] = None,
+            external_identity_type: Optional[pulumi.Input[str]] = None,
             last_login: Optional[pulumi.Input[str]] = None,
+            login_protect_verification_method: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             password: Optional[pulumi.Input[str]] = None,
             password_strength: Optional[pulumi.Input[str]] = None,
@@ -592,23 +727,30 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] access_type: Specifies the access type of the user. Available values are:
-               + default: support both programmatic and management console access.
-               + programmatic: only support programmatic access.
-               + console: only support management console access.
+               + **default**: support both programmatic and management console access.
+               + **programmatic**: only support programmatic access.
+               + **console**: only support management console access.
         :param pulumi.Input[str] country_code: Specifies the country code. The country code of the Chinese mainland is 0086. This
                parameter must be used together with `phone`.
         :param pulumi.Input[str] create_time: The time when the IAM user was created.
         :param pulumi.Input[str] description: Specifies the description of the user.
-        :param pulumi.Input[str] email: Specifies the email address with a maximum of 255 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+        :param pulumi.Input[str] email: Specifies the email address with a maximum of `255` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
+        :param pulumi.Input[str] external_identity_id: Specifies the ID of the IAM user in the external system.
+               This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+               is the same as the `external_identity_id` of the corresponding IAM user.
+        :param pulumi.Input[str] external_identity_type: Specifies the type of the IAM user in the external system.
+               Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
         :param pulumi.Input[str] last_login: The time when the IAM user last login.
-        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        :param pulumi.Input[str] login_protect_verification_method: Specifies the verification method of login protect. If it is
+               empty, the login protection will be disabled.
+        :param pulumi.Input[str] name: Specifies the name of the user. The user name consists of `1` to `32` characters. It can
                contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
                digit.
-        :param pulumi.Input[str] password: Specifies the password for the user with 6 to 32 characters. It must contain at least
+        :param pulumi.Input[str] password: Specifies the password for the user with `6` to `32` characters. It must contain at least
                two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
         :param pulumi.Input[str] password_strength: Indicates the password strength.
-        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        :param pulumi.Input[str] phone: Specifies the mobile number with a maximum of `32` digits. This parameter must be used
                together with `country_code`.
         :param pulumi.Input[bool] pwd_reset: Specifies whether or not the password should be reset. By default, the password is asked
                to reset at the first login.
@@ -623,7 +765,10 @@ class User(pulumi.CustomResource):
         __props__.__dict__["description"] = description
         __props__.__dict__["email"] = email
         __props__.__dict__["enabled"] = enabled
+        __props__.__dict__["external_identity_id"] = external_identity_id
+        __props__.__dict__["external_identity_type"] = external_identity_type
         __props__.__dict__["last_login"] = last_login
+        __props__.__dict__["login_protect_verification_method"] = login_protect_verification_method
         __props__.__dict__["name"] = name
         __props__.__dict__["password"] = password
         __props__.__dict__["password_strength"] = password_strength
@@ -636,9 +781,9 @@ class User(pulumi.CustomResource):
     def access_type(self) -> pulumi.Output[str]:
         """
         Specifies the access type of the user. Available values are:
-        + default: support both programmatic and management console access.
-        + programmatic: only support programmatic access.
-        + console: only support management console access.
+        + **default**: support both programmatic and management console access.
+        + **programmatic**: only support programmatic access.
+        + **console**: only support management console access.
         """
         return pulumi.get(self, "access_type")
 
@@ -671,7 +816,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def email(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the email address with a maximum of 255 characters.
+        Specifies the email address with a maximum of `255` characters.
         """
         return pulumi.get(self, "email")
 
@@ -679,9 +824,28 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+        Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "enabled")
+
+    @property
+    @pulumi.getter(name="externalIdentityId")
+    def external_identity_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the IAM user in the external system.
+        This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+        is the same as the `external_identity_id` of the corresponding IAM user.
+        """
+        return pulumi.get(self, "external_identity_id")
+
+    @property
+    @pulumi.getter(name="externalIdentityType")
+    def external_identity_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the type of the IAM user in the external system.
+        Only **TenantIdp** is supported now. This parameter must be used together with `external_identity_id`.
+        """
+        return pulumi.get(self, "external_identity_type")
 
     @property
     @pulumi.getter(name="lastLogin")
@@ -692,10 +856,19 @@ class User(pulumi.CustomResource):
         return pulumi.get(self, "last_login")
 
     @property
+    @pulumi.getter(name="loginProtectVerificationMethod")
+    def login_protect_verification_method(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the verification method of login protect. If it is
+        empty, the login protection will be disabled.
+        """
+        return pulumi.get(self, "login_protect_verification_method")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+        Specifies the name of the user. The user name consists of `1` to `32` characters. It can
         contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
         digit.
         """
@@ -705,7 +878,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the password for the user with 6 to 32 characters. It must contain at least
+        Specifies the password for the user with `6` to `32` characters. It must contain at least
         two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
         """
         return pulumi.get(self, "password")
@@ -722,7 +895,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def phone(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+        Specifies the mobile number with a maximum of `32` digits. This parameter must be used
         together with `country_code`.
         """
         return pulumi.get(self, "phone")

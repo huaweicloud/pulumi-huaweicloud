@@ -38,7 +38,7 @@ import (
 //
 // ## Import
 //
-// Keypairs can be imported using the `name`, e.g.
+// Keypairs can be imported using the `name`, e.g. bash
 //
 // ```sh
 //

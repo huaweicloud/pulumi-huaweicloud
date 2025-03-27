@@ -73,11 +73,11 @@ type GetVaultsArgs struct {
 	// Specifies the region in which to query the vaults.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
-	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size *int `pulumi:"size"`
 	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status *string `pulumi:"status"`
-	// Specifies the object type of the vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The valid values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)
@@ -148,11 +148,11 @@ type GetVaultsOutputArgs struct {
 	// Specifies the region in which to query the vaults.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+	// Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
 	Size pulumi.IntPtrInput `pulumi:"size"`
 	// Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
 	Status pulumi.StringPtrInput `pulumi:"status"`
-	// Specifies the object type of the vault. The vaild values are as follows:
+	// Specifies the object type of the vault. The valid values are as follows:
 	// + **server** (Cloud Servers)
 	// + **disk** (EVS Disks)
 	// + **turbo** (SFS Turbo file systems)

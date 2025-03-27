@@ -13,7 +13,9 @@ import (
 
 // Manages the identity providers within HuaweiCloud IAM service.
 //
-// > **NOTE:** You can create up to 10 identity providers.
+// > **NOTE:** 1. You *must* have admin privileges to use this resource.
+//
+//	<br/>2. You can create up to 10 identity providers.
 //
 // ## Example Usage
 // ### Create a SAML protocol provider
@@ -23,15 +25,26 @@ import (
 //
 // import (
 //
+//	"io/ioutil"
+//
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Iam"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //
 // )
 //
+//	func readFileOrPanic(path string) pulumi.StringPtrInput {
+//		data, err := ioutil.ReadFile(path)
+//		if err != nil {
+//			panic(err.Error())
+//		}
+//		return pulumi.String(string(data))
+//	}
+//
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := Iam.NewProvider(ctx, "provider1", &Iam.ProviderArgs{
 //				Protocol: pulumi.String("saml"),
+//				Metadata: readFileOrPanic("/usr/local/data/files/metadata.txt"),
 //			})
 //			if err != nil {
 //				return err
@@ -100,7 +113,7 @@ import (
 //
 // ## Import
 //
-// Identity provider can be imported using the `name`, e.g.
+// Identity provider can be imported using the `name`, e.g. bash
 //
 // ```sh
 //
@@ -127,15 +140,19 @@ type Provider struct {
 	// The maximum length is 30,000 characters and it stores in the state with SHA1 algorithm.
 	Metadata pulumi.StringPtrOutput `pulumi:"metadata"`
 	// Specifies the name of the identity provider to be registered.
-	// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 	// The name is unique, it is recommended to include domain name information.
 	// Changing this creates a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the protocol of the identity provider.
-	// Valid values are *saml* and *oidc*.
-	// Changing this creates a new resource.
+	// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 	Protocol pulumi.StringOutput `pulumi:"protocol"`
-	// The single sign-on type of the identity provider.
+	// Specifies the single sign-on type of the identity provider.
+	// Valid values are as follows:
+	// + **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+	//   and assigns permissions to the user based on identity conversion rules.
+	// + **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+	//   ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
 	SsoType pulumi.StringOutput `pulumi:"ssoType"`
 	// Enabled status for the identity provider. Defaults to true.
 	Status pulumi.BoolPtrOutput `pulumi:"status"`
@@ -191,15 +208,19 @@ type providerState struct {
 	// The maximum length is 30,000 characters and it stores in the state with SHA1 algorithm.
 	Metadata *string `pulumi:"metadata"`
 	// Specifies the name of the identity provider to be registered.
-	// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 	// The name is unique, it is recommended to include domain name information.
 	// Changing this creates a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the protocol of the identity provider.
-	// Valid values are *saml* and *oidc*.
-	// Changing this creates a new resource.
+	// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 	Protocol *string `pulumi:"protocol"`
-	// The single sign-on type of the identity provider.
+	// Specifies the single sign-on type of the identity provider.
+	// Valid values are as follows:
+	// + **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+	//   and assigns permissions to the user based on identity conversion rules.
+	// + **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+	//   ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
 	SsoType *string `pulumi:"ssoType"`
 	// Enabled status for the identity provider. Defaults to true.
 	Status *bool `pulumi:"status"`
@@ -223,15 +244,19 @@ type ProviderState struct {
 	// The maximum length is 30,000 characters and it stores in the state with SHA1 algorithm.
 	Metadata pulumi.StringPtrInput
 	// Specifies the name of the identity provider to be registered.
-	// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 	// The name is unique, it is recommended to include domain name information.
 	// Changing this creates a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the protocol of the identity provider.
-	// Valid values are *saml* and *oidc*.
-	// Changing this creates a new resource.
+	// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 	Protocol pulumi.StringPtrInput
-	// The single sign-on type of the identity provider.
+	// Specifies the single sign-on type of the identity provider.
+	// Valid values are as follows:
+	// + **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+	//   and assigns permissions to the user based on identity conversion rules.
+	// + **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+	//   ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
 	SsoType pulumi.StringPtrInput
 	// Enabled status for the identity provider. Defaults to true.
 	Status pulumi.BoolPtrInput
@@ -254,14 +279,20 @@ type providerArgs struct {
 	// The maximum length is 30,000 characters and it stores in the state with SHA1 algorithm.
 	Metadata *string `pulumi:"metadata"`
 	// Specifies the name of the identity provider to be registered.
-	// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 	// The name is unique, it is recommended to include domain name information.
 	// Changing this creates a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the protocol of the identity provider.
-	// Valid values are *saml* and *oidc*.
-	// Changing this creates a new resource.
+	// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 	Protocol string `pulumi:"protocol"`
+	// Specifies the single sign-on type of the identity provider.
+	// Valid values are as follows:
+	// + **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+	//   and assigns permissions to the user based on identity conversion rules.
+	// + **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+	//   ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
+	SsoType *string `pulumi:"ssoType"`
 	// Enabled status for the identity provider. Defaults to true.
 	Status *bool `pulumi:"status"`
 }
@@ -280,14 +311,20 @@ type ProviderArgs struct {
 	// The maximum length is 30,000 characters and it stores in the state with SHA1 algorithm.
 	Metadata pulumi.StringPtrInput
 	// Specifies the name of the identity provider to be registered.
-	// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 	// The name is unique, it is recommended to include domain name information.
 	// Changing this creates a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the protocol of the identity provider.
-	// Valid values are *saml* and *oidc*.
-	// Changing this creates a new resource.
+	// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 	Protocol pulumi.StringInput
+	// Specifies the single sign-on type of the identity provider.
+	// Valid values are as follows:
+	// + **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+	//   and assigns permissions to the user based on identity conversion rules.
+	// + **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+	//   ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
+	SsoType pulumi.StringPtrInput
 	// Enabled status for the identity provider. Defaults to true.
 	Status pulumi.BoolPtrInput
 }
@@ -411,7 +448,7 @@ func (o ProviderOutput) Metadata() pulumi.StringPtrOutput {
 }
 
 // Specifies the name of the identity provider to be registered.
-// The maximum length is 64 characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+// The maximum length is `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
 // The name is unique, it is recommended to include domain name information.
 // Changing this creates a new resource.
 func (o ProviderOutput) Name() pulumi.StringOutput {
@@ -419,13 +456,17 @@ func (o ProviderOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies the protocol of the identity provider.
-// Valid values are *saml* and *oidc*.
-// Changing this creates a new resource.
+// Valid values are **saml** and **oidc**. Changing this creates a new resource.
 func (o ProviderOutput) Protocol() pulumi.StringOutput {
 	return o.ApplyT(func(v *Provider) pulumi.StringOutput { return v.Protocol }).(pulumi.StringOutput)
 }
 
-// The single sign-on type of the identity provider.
+// Specifies the single sign-on type of the identity provider.
+// Valid values are as follows:
+//   - **virtual_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically creates a virtual user
+//     and assigns permissions to the user based on identity conversion rules.
+//   - **iam_user_sso**: After a federated user logs in to HuaweiCloud, the system automatically maps the external identity
+//     ID to an IAM user so that the federated user has the permissions of the mapped IAM user.
 func (o ProviderOutput) SsoType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Provider) pulumi.StringOutput { return v.SsoType }).(pulumi.StringOutput)
 }

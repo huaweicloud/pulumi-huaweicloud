@@ -70,7 +70,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` and `secret_key`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_link" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `secret_key` and `config`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cdm_link" "test" {
 //
 //	...
 //
@@ -78,7 +78,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	password, secret_key,
+//	password, secret_key, config,
 //
 //	]
 //

@@ -67,7 +67,7 @@ import (
 //
 // ## Import
 //
-// Load Balancer L7 Policy can be imported using the L7 Policy ID, e.g.
+// # Load Balancer L7 Policy can be imported using the L7 Policy ID, e.g.bash
 //
 // ```sh
 //

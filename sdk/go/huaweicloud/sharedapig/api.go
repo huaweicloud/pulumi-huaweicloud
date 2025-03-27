@@ -67,7 +67,7 @@ import (
 //
 // ## Import
 //
-// API can be imported using the `id`, e.g.
+// API can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

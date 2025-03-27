@@ -91,6 +91,13 @@ class _ExportableConfig(types.ModuleType):
         return __config__.get('domainName')
 
     @property
+    def enable_force_new(self) -> Optional[bool]:
+        """
+        Whether to enable ForceNew
+        """
+        return __config__.get_bool('enableForceNew')
+
+    @property
     def endpoints(self) -> Optional[str]:
         """
         The custom endpoints used to override the default endpoint URL.
@@ -187,6 +194,27 @@ class _ExportableConfig(types.ModuleType):
         The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
         """
         return __config__.get('sharedConfigFile')
+
+    @property
+    def signing_algorithm(self) -> Optional[str]:
+        """
+        The signing algorithm for authentication
+        """
+        return __config__.get('signingAlgorithm')
+
+    @property
+    def skip_check_upgrade(self) -> Optional[bool]:
+        """
+        Whether to skip upgrade check
+        """
+        return __config__.get_bool('skipCheckUpgrade')
+
+    @property
+    def skip_check_website_type(self) -> Optional[bool]:
+        """
+        Whether to skip website type check
+        """
+        return __config__.get_bool('skipCheckWebsiteType')
 
     @property
     def tenant_id(self) -> Optional[str]:

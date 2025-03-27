@@ -72,13 +72,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB certificate can be imported using the certificate ID, e.g.
+ * ELB certificate can be imported using the certificate ID, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/certificate:Certificate certificate_1 5c20fdad-7288-11eb-b817-0255ac10158b
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. resource "huaweicloud_lb_certificate" "certificate_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`. It is generally recommended running `terraform plan` after importing a certificate. You can then decide if changes should be applied to the certificate, or the resource definition should be updated to align with the certificate. Also you can ignore changes as below. hcl resource "huaweicloud_lb_certificate" "certificate_1" {
  *
  *  ...
  *
@@ -143,6 +143,10 @@ export class Certificate extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
+     * Indicates the expire time.
+     */
+    public /*out*/ readonly expireTime!: pulumi.Output<string>;
+    /**
      * Human-readable name for the Certificate. Does not have to be unique.
      */
     public readonly name!: pulumi.Output<string>;
@@ -186,6 +190,7 @@ export class Certificate extends pulumi.CustomResource {
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["expireTime"] = state ? state.expireTime : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["privateKey"] = state ? state.privateKey : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -205,6 +210,7 @@ export class Certificate extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
+            resourceInputs["expireTime"] = undefined /*out*/;
             resourceInputs["updateTime"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -238,6 +244,10 @@ export interface CertificateState {
      * creates a new certificate.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Indicates the expire time.
+     */
+    expireTime?: pulumi.Input<string>;
     /**
      * Human-readable name for the Certificate. Does not have to be unique.
      */

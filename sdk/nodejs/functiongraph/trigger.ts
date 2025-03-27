@@ -6,7 +6,8 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a trigger resource within HuaweiCloud FunctionGraph.
+ * Manages a trigger resource within HuaweiCloud FunctionGraph.\
+ * It's recommend to use `huaweicloudFgsFunctionTrigger`, which makes a great improvement of managing function triggers.
  *
  * ## Example Usage
  * ### Create a Timing Trigger with rate schedule type
@@ -119,11 +120,14 @@ import * as utilities from "../utilities";
  * const functionUrn = config.requireObject("functionUrn");
  * const kafkaInstanceId = config.requireObject("kafkaInstanceId");
  * const kafkaTopicId = config.requireObject("kafkaTopicId");
+ * const userPassword = config.requireObject("userPassword");
  * const test = new huaweicloud.functiongraph.Trigger("test", {
  *     functionUrn: functionUrn,
  *     type: "KAFKA",
  *     kafka: {
  *         instanceId: kafkaInstanceId,
+ *         userName: "user",
+ *         password: userPassword,
  *         batchSize: 100,
  *         topicIds: [kafkaTopicId],
  *     },

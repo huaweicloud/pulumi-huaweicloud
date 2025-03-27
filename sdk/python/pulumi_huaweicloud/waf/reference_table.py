@@ -22,17 +22,19 @@ class ReferenceTableArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a ReferenceTable resource.
-        :param pulumi.Input[str] type: The type of the reference table, The options are `url`, `user-agent`, `ip`,
-               `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
-               condition is 2048 characters.
-        :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+        :param pulumi.Input[str] type: Specifies the type of the reference table.
+               The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-               maximum length is 64 characters.
-        :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new reference table.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: Specifies the conditions of the reference table.
+        :param pulumi.Input[str] description: Specifies the description of the reference table.
+               The maximum length is `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the reference
+               table belongs. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the name of the reference table. Only letters, digits, hyphens (-),
+               underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF reference table resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "type", type)
         if conditions is not None:
@@ -50,8 +52,9 @@ class ReferenceTableArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        The type of the reference table, The options are `url`, `user-agent`, `ip`,
-        `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        Specifies the type of the reference table.
+        The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "type")
 
@@ -63,8 +66,7 @@ class ReferenceTableArgs:
     @pulumi.getter
     def conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The conditions of the reference table. The maximum length is 30. The maximum length of
-        condition is 2048 characters.
+        Specifies the conditions of the reference table.
         """
         return pulumi.get(self, "conditions")
 
@@ -76,7 +78,8 @@ class ReferenceTableArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        The description of the reference table. The maximum length is 128 characters.
+        Specifies the description of the reference table.
+        The maximum length is `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -88,7 +91,8 @@ class ReferenceTableArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project ID of WAF reference table.
+        Specifies the enterprise project ID to which the reference
+        table belongs. For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -101,8 +105,8 @@ class ReferenceTableArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-        maximum length is 64 characters.
+        Specifies the name of the reference table. Only letters, digits, hyphens (-),
+        underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -114,8 +118,8 @@ class ReferenceTableArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF reference table resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new reference table.
+        Specifies the region in which to create the WAF reference table resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -136,18 +140,20 @@ class _ReferenceTableState:
                  type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering ReferenceTable resources.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
-               condition is 2048 characters.
-        :param pulumi.Input[str] creation_time: The server time when reference table was created.
-        :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: Specifies the conditions of the reference table.
+        :param pulumi.Input[str] creation_time: The creation time of the reference table, in UTC format.
+        :param pulumi.Input[str] description: Specifies the description of the reference table.
+               The maximum length is `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the reference
+               table belongs. For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-               maximum length is 64 characters.
-        :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new reference table.
-        :param pulumi.Input[str] type: The type of the reference table, The options are `url`, `user-agent`, `ip`,
-               `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        :param pulumi.Input[str] name: Specifies the name of the reference table. Only letters, digits, hyphens (-),
+               underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF reference table resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the reference table.
+               The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+               Changing this parameter will create a new resource.
         """
         if conditions is not None:
             pulumi.set(__self__, "conditions", conditions)
@@ -168,8 +174,7 @@ class _ReferenceTableState:
     @pulumi.getter
     def conditions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        The conditions of the reference table. The maximum length is 30. The maximum length of
-        condition is 2048 characters.
+        Specifies the conditions of the reference table.
         """
         return pulumi.get(self, "conditions")
 
@@ -181,7 +186,7 @@ class _ReferenceTableState:
     @pulumi.getter(name="creationTime")
     def creation_time(self) -> Optional[pulumi.Input[str]]:
         """
-        The server time when reference table was created.
+        The creation time of the reference table, in UTC format.
         """
         return pulumi.get(self, "creation_time")
 
@@ -193,7 +198,8 @@ class _ReferenceTableState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        The description of the reference table. The maximum length is 128 characters.
+        Specifies the description of the reference table.
+        The maximum length is `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -205,7 +211,8 @@ class _ReferenceTableState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project ID of WAF reference table.
+        Specifies the enterprise project ID to which the reference
+        table belongs. For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -218,8 +225,8 @@ class _ReferenceTableState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-        maximum length is 64 characters.
+        Specifies the name of the reference table. Only letters, digits, hyphens (-),
+        underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -231,8 +238,8 @@ class _ReferenceTableState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF reference table resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new reference table.
+        Specifies the region in which to create the WAF reference table resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -244,8 +251,9 @@ class _ReferenceTableState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        The type of the reference table, The options are `url`, `user-agent`, `ip`,
-        `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        Specifies the type of the reference table.
+        The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "type")
 
@@ -270,7 +278,7 @@ class ReferenceTable(pulumi.CustomResource):
         Manages a WAF reference table resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The reference table resource can be used in Cloud Mode (professional version), Dedicated Mode and ELB Mode.
+        used. The reference table resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
 
@@ -279,8 +287,9 @@ class ReferenceTable(pulumi.CustomResource):
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        name = config.require_object("name")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        ref_table = huaweicloud.waf.ReferenceTable("refTable",
+        test = huaweicloud.waf.ReferenceTable("test",
             type="url",
             enterprise_project_id=enterprise_project_id,
             conditions=[
@@ -305,17 +314,19 @@ class ReferenceTable(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
-               condition is 2048 characters.
-        :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: Specifies the conditions of the reference table.
+        :param pulumi.Input[str] description: Specifies the description of the reference table.
+               The maximum length is `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the reference
+               table belongs. For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-               maximum length is 64 characters.
-        :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new reference table.
-        :param pulumi.Input[str] type: The type of the reference table, The options are `url`, `user-agent`, `ip`,
-               `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        :param pulumi.Input[str] name: Specifies the name of the reference table. Only letters, digits, hyphens (-),
+               underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF reference table resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the reference table.
+               The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+               Changing this parameter will create a new resource.
         """
         ...
     @overload
@@ -327,7 +338,7 @@ class ReferenceTable(pulumi.CustomResource):
         Manages a WAF reference table resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The reference table resource can be used in Cloud Mode (professional version), Dedicated Mode and ELB Mode.
+        used. The reference table resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
 
@@ -336,8 +347,9 @@ class ReferenceTable(pulumi.CustomResource):
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        name = config.require_object("name")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        ref_table = huaweicloud.waf.ReferenceTable("refTable",
+        test = huaweicloud.waf.ReferenceTable("test",
             type="url",
             enterprise_project_id=enterprise_project_id,
             conditions=[
@@ -423,18 +435,20 @@ class ReferenceTable(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: The conditions of the reference table. The maximum length is 30. The maximum length of
-               condition is 2048 characters.
-        :param pulumi.Input[str] creation_time: The server time when reference table was created.
-        :param pulumi.Input[str] description: The description of the reference table. The maximum length is 128 characters.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF reference table.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] conditions: Specifies the conditions of the reference table.
+        :param pulumi.Input[str] creation_time: The creation time of the reference table, in UTC format.
+        :param pulumi.Input[str] description: Specifies the description of the reference table.
+               The maximum length is `128` characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the reference
+               table belongs. For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-               maximum length is 64 characters.
-        :param pulumi.Input[str] region: The region in which to create the WAF reference table resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new reference table.
-        :param pulumi.Input[str] type: The type of the reference table, The options are `url`, `user-agent`, `ip`,
-               `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        :param pulumi.Input[str] name: Specifies the name of the reference table. Only letters, digits, hyphens (-),
+               underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF reference table resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the type of the reference table.
+               The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+               Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -453,8 +467,7 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter
     def conditions(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        The conditions of the reference table. The maximum length is 30. The maximum length of
-        condition is 2048 characters.
+        Specifies the conditions of the reference table.
         """
         return pulumi.get(self, "conditions")
 
@@ -462,7 +475,7 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter(name="creationTime")
     def creation_time(self) -> pulumi.Output[str]:
         """
-        The server time when reference table was created.
+        The creation time of the reference table, in UTC format.
         """
         return pulumi.get(self, "creation_time")
 
@@ -470,7 +483,8 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        The description of the reference table. The maximum length is 128 characters.
+        Specifies the description of the reference table.
+        The maximum length is `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -478,7 +492,8 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the enterprise project ID of WAF reference table.
+        Specifies the enterprise project ID to which the reference
+        table belongs. For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -487,8 +502,8 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        The name of the reference table. Only letters, digits, and underscores(_) are allowed. The
-        maximum length is 64 characters.
+        Specifies the name of the reference table. Only letters, digits, hyphens (-),
+        underscores(_) and dots(.) are allowed. The maximum length is `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -496,8 +511,8 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the WAF reference table resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new reference table.
+        Specifies the region in which to create the WAF reference table resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -505,8 +520,9 @@ class ReferenceTable(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        The type of the reference table, The options are `url`, `user-agent`, `ip`,
-        `params`, `cookie`, `referer` and `header`. Changing this setting will push a new reference table.
+        Specifies the type of the reference table.
+        The valid values are **url**, **user-agent**, **ip**, **params**, **cookie**, **referer** and **header**.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "type")
 

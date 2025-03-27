@@ -50,11 +50,11 @@ import (
 //
 // ## Import
 //
-// Lifecycle hooks can be imported using the AS group ID and hook ID separated by a slash, e.g.
+// Lifecycle hooks can be imported using the AS group ID and hook ID separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test &ltAS group ID&gt/&ltLifecycle hook ID&gt
+//	$ pulumi import huaweicloud:As/lifecycleHook:LifecycleHook test <AS group ID>/<Lifecycle hook ID>
 //
 // ```
 type LifecycleHook struct {

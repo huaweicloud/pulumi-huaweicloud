@@ -2,12 +2,14 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
  * Manages an ELB L7 Policy resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### ELB L7 Policy redirect to pool
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -18,9 +20,77 @@ import * as utilities from "../utilities";
  * const poolId = config.requireObject("poolId");
  * const policy1 = new huaweicloud.dedicatedelb.L7policy("policy1", {
  *     action: "REDIRECT_TO_POOL",
+ *     priority: 20,
  *     description: "test description",
  *     listenerId: listenerId,
  *     redirectPoolId: poolId,
+ *     redirectPoolsExtendConfig: {
+ *         rewriteUrlEnabled: true,
+ *         rewriteUrlConfig: {
+ *             host: "test.com",
+ *             path: "/path",
+ *             query: "abc",
+ *         },
+ *     },
+ * });
+ * ```
+ * ### ELB L7 Policy redirect to listener
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const listenerId = config.requireObject("listenerId");
+ * const redirectListenerId = config.requireObject("redirectListenerId");
+ * const policy1 = new huaweicloud.dedicatedelb.L7policy("policy1", {
+ *     action: "REDIRECT_TO_LISTENER",
+ *     description: "test description",
+ *     listenerId: listenerId,
+ *     redirectListenerId: redirectListenerId,
+ * });
+ * ```
+ * ### ELB L7 Policy redirect to URL
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const listenerId = config.requireObject("listenerId");
+ * const policy1 = new huaweicloud.dedicatedelb.L7policy("policy1", {
+ *     action: "REDIRECT_TO_URL",
+ *     priority: 20,
+ *     description: "test description",
+ *     listenerId: listenerId,
+ *     redirectUrlConfig: {
+ *         protocol: "HTTP",
+ *         host: "test.com",
+ *         port: "6666",
+ *         path: "/test_policy",
+ *         query: "test_query",
+ *         statusCode: "301",
+ *     },
+ * });
+ * ```
+ * ### ELB L7 Policy redirect to fixed response
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const listenerId = config.requireObject("listenerId");
+ * const policy1 = new huaweicloud.dedicatedelb.L7policy("policy1", {
+ *     action: "FIXED_RESPONSE",
+ *     priority: 20,
+ *     description: "test description",
+ *     listenerId: listenerId,
+ *     fixedResponseConfig: {
+ *         statusCode: "200",
+ *         contentType: "application/json",
+ *         messageBody: "it is a test",
+ *     },
  * });
  * ```
  *
@@ -61,18 +131,32 @@ export class L7policy extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies whether requests are forwarded to another backend server group
+     * Whether requests are forwarded to another backend server group
      * or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
-     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
+     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId` or
+     * `redirectPoolsConfig`, the `protocol` of the listener must be **HTTP** or **HTTPS**.
      * + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
-     * HTTPS listener specified by `redirectListenerId`.
+     * HTTPS listener specified by `redirectListenerId`, the `protocol` of the listener must be **HTTP**.
+     * + **REDIRECT_TO_URL**: Requests are forwarded to another URL whose config specified by `redirectUrlConfig`.
+     * + **FIXED_RESPONSE**: Requests are forwarded to a fixed response body specified by `fixedResponseConfig`.
      * Defaults to **REDIRECT_TO_POOL**.
      */
     public readonly action!: pulumi.Output<string | undefined>;
     /**
+     * The create time of the L7 policy.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Human-readable description for the L7 Policy.
      */
     public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * The fixed configuration of the page to which the traffic is
+     * redirected. This parameter is mandatory when `action` is set to **FIXED_RESPONSE**. The `enhanceL7policyEnable` of
+     * the listener must be set to **true**.
+     * The fixedResponseConfig structure is documented below.
+     */
+    public readonly fixedResponseConfig!: pulumi.Output<outputs.DedicatedElb.L7policyFixedResponseConfig>;
     /**
      * The Listener on which the L7 Policy will be associated with. Changing
      * this creates a new L7 Policy.
@@ -83,7 +167,18 @@ export class L7policy extends pulumi.CustomResource {
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the listener to which the traffic is redirected.
+     * The forwarding policy priority. A smaller value indicates a higher priority. The value
+     * must be unique for forwarding policies of the same listener. This parameter will take effect only when
+     * `enhanceL7policyEnable` of the listener is set to **true**. If `action` is set to **REDIRECT_TO_LISTENER**,
+     * the value can only be 0.
+     */
+    public readonly priority!: pulumi.Output<number>;
+    /**
+     * The provisioning status of the forwarding policy.
+     */
+    public /*out*/ readonly provisioningStatus!: pulumi.Output<string>;
+    /**
+     * The ID of the listener to which the traffic is redirected.
      * This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
      * following requirements:
      * + Can only be an HTTPS listener.
@@ -91,18 +186,47 @@ export class L7policy extends pulumi.CustomResource {
      */
     public readonly redirectListenerId!: pulumi.Output<string>;
     /**
-     * Specifies the ID of the backend server group to which traffic is forwarded.
-     * This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+     * The ID of the backend server group to which traffic is forwarded.
+     * This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
      * following requirements:
      * + Cannot be the default backend server group of the listener.
      * + Cannot be the backend server group used by forwarding policies of other listeners.
      */
     public readonly redirectPoolId!: pulumi.Output<string>;
     /**
+     * The list of the backend server groups to which traffic is forwarded.
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsConfig structure is documented below.
+     */
+    public readonly redirectPoolsConfigs!: pulumi.Output<outputs.DedicatedElb.L7policyRedirectPoolsConfig[]>;
+    /**
+     * The config of the backend server group to which the
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsExtendConfig structure is documented below.
+     */
+    public readonly redirectPoolsExtendConfig!: pulumi.Output<outputs.DedicatedElb.L7policyRedirectPoolsExtendConfig>;
+    /**
+     * The session persistence between backend server groups which
+     * associated with the policy. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsStickySessionConfig structure is documented below.
+     */
+    public readonly redirectPoolsStickySessionConfig!: pulumi.Output<outputs.DedicatedElb.L7policyRedirectPoolsStickySessionConfig>;
+    /**
+     * The URL config to which the traffic is redirected.
+     * This parameter is mandatory when `action` is set to **REDIRECT_TO_URL**. The `enhanceL7policyEnable` of the
+     * listener must be set to **true**.
+     * The redirectUrlConfig structure is documented below.
+     */
+    public readonly redirectUrlConfig!: pulumi.Output<outputs.DedicatedElb.L7policyRedirectUrlConfig>;
+    /**
      * The region in which to create the L7 Policy resource. If omitted, the
      * provider-level region will be used. Changing this creates a new L7 Policy.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * The update time of the L7 policy.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a L7policy resource with the given unique name, arguments, and options.
@@ -118,12 +242,21 @@ export class L7policy extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as L7policyState | undefined;
             resourceInputs["action"] = state ? state.action : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["fixedResponseConfig"] = state ? state.fixedResponseConfig : undefined;
             resourceInputs["listenerId"] = state ? state.listenerId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["priority"] = state ? state.priority : undefined;
+            resourceInputs["provisioningStatus"] = state ? state.provisioningStatus : undefined;
             resourceInputs["redirectListenerId"] = state ? state.redirectListenerId : undefined;
             resourceInputs["redirectPoolId"] = state ? state.redirectPoolId : undefined;
+            resourceInputs["redirectPoolsConfigs"] = state ? state.redirectPoolsConfigs : undefined;
+            resourceInputs["redirectPoolsExtendConfig"] = state ? state.redirectPoolsExtendConfig : undefined;
+            resourceInputs["redirectPoolsStickySessionConfig"] = state ? state.redirectPoolsStickySessionConfig : undefined;
+            resourceInputs["redirectUrlConfig"] = state ? state.redirectUrlConfig : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as L7policyArgs | undefined;
             if ((!args || args.listenerId === undefined) && !opts.urn) {
@@ -131,11 +264,20 @@ export class L7policy extends pulumi.CustomResource {
             }
             resourceInputs["action"] = args ? args.action : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["fixedResponseConfig"] = args ? args.fixedResponseConfig : undefined;
             resourceInputs["listenerId"] = args ? args.listenerId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["priority"] = args ? args.priority : undefined;
             resourceInputs["redirectListenerId"] = args ? args.redirectListenerId : undefined;
             resourceInputs["redirectPoolId"] = args ? args.redirectPoolId : undefined;
+            resourceInputs["redirectPoolsConfigs"] = args ? args.redirectPoolsConfigs : undefined;
+            resourceInputs["redirectPoolsExtendConfig"] = args ? args.redirectPoolsExtendConfig : undefined;
+            resourceInputs["redirectPoolsStickySessionConfig"] = args ? args.redirectPoolsStickySessionConfig : undefined;
+            resourceInputs["redirectUrlConfig"] = args ? args.redirectUrlConfig : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["provisioningStatus"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(L7policy.__pulumiType, name, resourceInputs, opts);
@@ -147,18 +289,32 @@ export class L7policy extends pulumi.CustomResource {
  */
 export interface L7policyState {
     /**
-     * Specifies whether requests are forwarded to another backend server group
+     * Whether requests are forwarded to another backend server group
      * or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
-     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
+     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId` or
+     * `redirectPoolsConfig`, the `protocol` of the listener must be **HTTP** or **HTTPS**.
      * + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
-     * HTTPS listener specified by `redirectListenerId`.
+     * HTTPS listener specified by `redirectListenerId`, the `protocol` of the listener must be **HTTP**.
+     * + **REDIRECT_TO_URL**: Requests are forwarded to another URL whose config specified by `redirectUrlConfig`.
+     * + **FIXED_RESPONSE**: Requests are forwarded to a fixed response body specified by `fixedResponseConfig`.
      * Defaults to **REDIRECT_TO_POOL**.
      */
     action?: pulumi.Input<string>;
     /**
+     * The create time of the L7 policy.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Human-readable description for the L7 Policy.
      */
     description?: pulumi.Input<string>;
+    /**
+     * The fixed configuration of the page to which the traffic is
+     * redirected. This parameter is mandatory when `action` is set to **FIXED_RESPONSE**. The `enhanceL7policyEnable` of
+     * the listener must be set to **true**.
+     * The fixedResponseConfig structure is documented below.
+     */
+    fixedResponseConfig?: pulumi.Input<inputs.DedicatedElb.L7policyFixedResponseConfig>;
     /**
      * The Listener on which the L7 Policy will be associated with. Changing
      * this creates a new L7 Policy.
@@ -169,7 +325,18 @@ export interface L7policyState {
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the listener to which the traffic is redirected.
+     * The forwarding policy priority. A smaller value indicates a higher priority. The value
+     * must be unique for forwarding policies of the same listener. This parameter will take effect only when
+     * `enhanceL7policyEnable` of the listener is set to **true**. If `action` is set to **REDIRECT_TO_LISTENER**,
+     * the value can only be 0.
+     */
+    priority?: pulumi.Input<number>;
+    /**
+     * The provisioning status of the forwarding policy.
+     */
+    provisioningStatus?: pulumi.Input<string>;
+    /**
+     * The ID of the listener to which the traffic is redirected.
      * This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
      * following requirements:
      * + Can only be an HTTPS listener.
@@ -177,18 +344,47 @@ export interface L7policyState {
      */
     redirectListenerId?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the backend server group to which traffic is forwarded.
-     * This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+     * The ID of the backend server group to which traffic is forwarded.
+     * This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
      * following requirements:
      * + Cannot be the default backend server group of the listener.
      * + Cannot be the backend server group used by forwarding policies of other listeners.
      */
     redirectPoolId?: pulumi.Input<string>;
     /**
+     * The list of the backend server groups to which traffic is forwarded.
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsConfig structure is documented below.
+     */
+    redirectPoolsConfigs?: pulumi.Input<pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsConfig>[]>;
+    /**
+     * The config of the backend server group to which the
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsExtendConfig structure is documented below.
+     */
+    redirectPoolsExtendConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsExtendConfig>;
+    /**
+     * The session persistence between backend server groups which
+     * associated with the policy. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsStickySessionConfig structure is documented below.
+     */
+    redirectPoolsStickySessionConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsStickySessionConfig>;
+    /**
+     * The URL config to which the traffic is redirected.
+     * This parameter is mandatory when `action` is set to **REDIRECT_TO_URL**. The `enhanceL7policyEnable` of the
+     * listener must be set to **true**.
+     * The redirectUrlConfig structure is documented below.
+     */
+    redirectUrlConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectUrlConfig>;
+    /**
      * The region in which to create the L7 Policy resource. If omitted, the
      * provider-level region will be used. Changing this creates a new L7 Policy.
      */
     region?: pulumi.Input<string>;
+    /**
+     * The update time of the L7 policy.
+     */
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**
@@ -196,11 +392,14 @@ export interface L7policyState {
  */
 export interface L7policyArgs {
     /**
-     * Specifies whether requests are forwarded to another backend server group
+     * Whether requests are forwarded to another backend server group
      * or redirected to an HTTPS listener. Changing this creates a new L7 Policy. The value ranges:
-     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId`.
+     * + **REDIRECT_TO_POOL**: Requests are forwarded to the backend server group specified by `redirectPoolId` or
+     * `redirectPoolsConfig`, the `protocol` of the listener must be **HTTP** or **HTTPS**.
      * + **REDIRECT_TO_LISTENER**: Requests are redirected from the HTTP listener specified by `listenerId` to the
-     * HTTPS listener specified by `redirectListenerId`.
+     * HTTPS listener specified by `redirectListenerId`, the `protocol` of the listener must be **HTTP**.
+     * + **REDIRECT_TO_URL**: Requests are forwarded to another URL whose config specified by `redirectUrlConfig`.
+     * + **FIXED_RESPONSE**: Requests are forwarded to a fixed response body specified by `fixedResponseConfig`.
      * Defaults to **REDIRECT_TO_POOL**.
      */
     action?: pulumi.Input<string>;
@@ -208,6 +407,13 @@ export interface L7policyArgs {
      * Human-readable description for the L7 Policy.
      */
     description?: pulumi.Input<string>;
+    /**
+     * The fixed configuration of the page to which the traffic is
+     * redirected. This parameter is mandatory when `action` is set to **FIXED_RESPONSE**. The `enhanceL7policyEnable` of
+     * the listener must be set to **true**.
+     * The fixedResponseConfig structure is documented below.
+     */
+    fixedResponseConfig?: pulumi.Input<inputs.DedicatedElb.L7policyFixedResponseConfig>;
     /**
      * The Listener on which the L7 Policy will be associated with. Changing
      * this creates a new L7 Policy.
@@ -218,7 +424,14 @@ export interface L7policyArgs {
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the listener to which the traffic is redirected.
+     * The forwarding policy priority. A smaller value indicates a higher priority. The value
+     * must be unique for forwarding policies of the same listener. This parameter will take effect only when
+     * `enhanceL7policyEnable` of the listener is set to **true**. If `action` is set to **REDIRECT_TO_LISTENER**,
+     * the value can only be 0.
+     */
+    priority?: pulumi.Input<number>;
+    /**
+     * The ID of the listener to which the traffic is redirected.
      * This parameter is mandatory when `action` is set to **REDIRECT_TO_LISTENER**. The listener must meet the
      * following requirements:
      * + Can only be an HTTPS listener.
@@ -226,13 +439,38 @@ export interface L7policyArgs {
      */
     redirectListenerId?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the backend server group to which traffic is forwarded.
-     * This parameter is mandatory when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
+     * The ID of the backend server group to which traffic is forwarded.
+     * This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**. The backend server group must meet the
      * following requirements:
      * + Cannot be the default backend server group of the listener.
      * + Cannot be the backend server group used by forwarding policies of other listeners.
      */
     redirectPoolId?: pulumi.Input<string>;
+    /**
+     * The list of the backend server groups to which traffic is forwarded.
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsConfig structure is documented below.
+     */
+    redirectPoolsConfigs?: pulumi.Input<pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsConfig>[]>;
+    /**
+     * The config of the backend server group to which the
+     * traffic is redirected. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsExtendConfig structure is documented below.
+     */
+    redirectPoolsExtendConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsExtendConfig>;
+    /**
+     * The session persistence between backend server groups which
+     * associated with the policy. This parameter will take effect when `action` is set to **REDIRECT_TO_POOL**.
+     * The redirectPoolsStickySessionConfig structure is documented below.
+     */
+    redirectPoolsStickySessionConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectPoolsStickySessionConfig>;
+    /**
+     * The URL config to which the traffic is redirected.
+     * This parameter is mandatory when `action` is set to **REDIRECT_TO_URL**. The `enhanceL7policyEnable` of the
+     * listener must be set to **true**.
+     * The redirectUrlConfig structure is documented below.
+     */
+    redirectUrlConfig?: pulumi.Input<inputs.DedicatedElb.L7policyRedirectUrlConfig>;
     /**
      * The region in which to create the L7 Policy resource. If omitted, the
      * provider-level region will be used. Changing this creates a new L7 Policy.

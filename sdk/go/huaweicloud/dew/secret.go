@@ -7,7 +7,6 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -74,14 +73,42 @@ import (
 //	}
 //
 // ```
+// ### Encrypt String Binary
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dew"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			secretBinary := cfg.RequireObject("secretBinary")
+//			_, err := Dew.NewSecret(ctx, "test3", &Dew.SecretArgs{
+//				SecretBinary: pulumi.Any(secretBinary),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g.
+// CSMS secret can be imported using the ID and the name of secret, separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dew/secret:Secret test 93cba7f5-550b-45dc-912e-277b3296fb27/test_secret
+//	$ pulumi import huaweicloud:Dew/secret:Secret test <id>/<name>
 //
 // ```
 type Secret struct {
@@ -89,37 +116,54 @@ type Secret struct {
 
 	// Time when the CSMS secrets created, in UTC format.
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
-	// The description of a secret.
+	// Specifies the description of a secret.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	KmsKeyId    pulumi.StringOutput    `pulumi:"kmsKeyId"`
+	// Specifies the enterprise project ID to which the secret belongs.
+	// If omitted, the default enterprise project will be used.
+	// If the enterprise project function is not enabled, ignore this parameter.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies the event list associated with the secret.
+	// Currently, only one event can be associated.
+	EventSubscriptions pulumi.StringPtrOutput `pulumi:"eventSubscriptions"`
+	// Specifies the expiration time of a secret, `expireTime` can only be edited
+	// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+	// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+	ExpireTime pulumi.IntOutput    `pulumi:"expireTime"`
+	KmsKeyId   pulumi.StringOutput `pulumi:"kmsKeyId"`
 	// The latest version id.
 	LatestVersion pulumi.StringOutput `pulumi:"latestVersion"`
-	// The secret name. The maximum length is 64 characters.
+	// Specifies the secret name. The maximum length is 64 characters.
 	// Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// The region in which to create the CSMS secrets.
+	// Specifies the region in which to create the CSMS secrets.
 	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+	// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+	SecretBinary pulumi.StringPtrOutput `pulumi:"secretBinary"`
 	// The secret ID in UUID format.
 	SecretId pulumi.StringOutput `pulumi:"secretId"`
-	// The plaintext of a secret in text format. The maximum size is 32 KB.
-	SecretText pulumi.StringOutput `pulumi:"secretText"`
-	// The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+	// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+	// it in the initial version of the secret. The maximum size is 32 KB.
+	SecretText pulumi.StringPtrOutput `pulumi:"secretText"`
+	// Specifies the type of the secret.
+	// Currently, only supported **COMMON**. The default value is **COMMON**.
+	SecretType pulumi.StringOutput `pulumi:"secretType"`
+	// The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
 	Status pulumi.StringOutput `pulumi:"status"`
-	// The tags of a CSMS secrets, key/value pair format.
+	// Specifies the tags of a CSMS secrets, key/value pair format.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// The secret version status list.
+	VersionStages pulumi.StringArrayOutput `pulumi:"versionStages"`
 }
 
 // NewSecret registers a new resource with the given unique name, arguments, and options.
 func NewSecret(ctx *pulumi.Context,
 	name string, args *SecretArgs, opts ...pulumi.ResourceOption) (*Secret, error) {
 	if args == nil {
-		return nil, errors.New("missing one or more required arguments")
+		args = &SecretArgs{}
 	}
 
-	if args.SecretText == nil {
-		return nil, errors.New("invalid value for required argument 'SecretText'")
-	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource Secret
 	err := ctx.RegisterResource("huaweicloud:Dew/secret:Secret", name, args, &resource, opts...)
@@ -145,49 +189,89 @@ func GetSecret(ctx *pulumi.Context,
 type secretState struct {
 	// Time when the CSMS secrets created, in UTC format.
 	CreateTime *string `pulumi:"createTime"`
-	// The description of a secret.
+	// Specifies the description of a secret.
 	Description *string `pulumi:"description"`
-	KmsKeyId    *string `pulumi:"kmsKeyId"`
+	// Specifies the enterprise project ID to which the secret belongs.
+	// If omitted, the default enterprise project will be used.
+	// If the enterprise project function is not enabled, ignore this parameter.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the event list associated with the secret.
+	// Currently, only one event can be associated.
+	EventSubscriptions *string `pulumi:"eventSubscriptions"`
+	// Specifies the expiration time of a secret, `expireTime` can only be edited
+	// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+	// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+	ExpireTime *int    `pulumi:"expireTime"`
+	KmsKeyId   *string `pulumi:"kmsKeyId"`
 	// The latest version id.
 	LatestVersion *string `pulumi:"latestVersion"`
-	// The secret name. The maximum length is 64 characters.
+	// Specifies the secret name. The maximum length is 64 characters.
 	// Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 	Name *string `pulumi:"name"`
-	// The region in which to create the CSMS secrets.
+	// Specifies the region in which to create the CSMS secrets.
 	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+	// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+	SecretBinary *string `pulumi:"secretBinary"`
 	// The secret ID in UUID format.
 	SecretId *string `pulumi:"secretId"`
-	// The plaintext of a secret in text format. The maximum size is 32 KB.
+	// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+	// it in the initial version of the secret. The maximum size is 32 KB.
 	SecretText *string `pulumi:"secretText"`
-	// The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+	// Specifies the type of the secret.
+	// Currently, only supported **COMMON**. The default value is **COMMON**.
+	SecretType *string `pulumi:"secretType"`
+	// The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
 	Status *string `pulumi:"status"`
-	// The tags of a CSMS secrets, key/value pair format.
+	// Specifies the tags of a CSMS secrets, key/value pair format.
 	Tags map[string]string `pulumi:"tags"`
+	// The secret version status list.
+	VersionStages []string `pulumi:"versionStages"`
 }
 
 type SecretState struct {
 	// Time when the CSMS secrets created, in UTC format.
 	CreateTime pulumi.StringPtrInput
-	// The description of a secret.
+	// Specifies the description of a secret.
 	Description pulumi.StringPtrInput
-	KmsKeyId    pulumi.StringPtrInput
+	// Specifies the enterprise project ID to which the secret belongs.
+	// If omitted, the default enterprise project will be used.
+	// If the enterprise project function is not enabled, ignore this parameter.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the event list associated with the secret.
+	// Currently, only one event can be associated.
+	EventSubscriptions pulumi.StringPtrInput
+	// Specifies the expiration time of a secret, `expireTime` can only be edited
+	// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+	// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+	ExpireTime pulumi.IntPtrInput
+	KmsKeyId   pulumi.StringPtrInput
 	// The latest version id.
 	LatestVersion pulumi.StringPtrInput
-	// The secret name. The maximum length is 64 characters.
+	// Specifies the secret name. The maximum length is 64 characters.
 	// Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 	Name pulumi.StringPtrInput
-	// The region in which to create the CSMS secrets.
+	// Specifies the region in which to create the CSMS secrets.
 	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+	// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+	SecretBinary pulumi.StringPtrInput
 	// The secret ID in UUID format.
 	SecretId pulumi.StringPtrInput
-	// The plaintext of a secret in text format. The maximum size is 32 KB.
+	// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+	// it in the initial version of the secret. The maximum size is 32 KB.
 	SecretText pulumi.StringPtrInput
-	// The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+	// Specifies the type of the secret.
+	// Currently, only supported **COMMON**. The default value is **COMMON**.
+	SecretType pulumi.StringPtrInput
+	// The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
 	Status pulumi.StringPtrInput
-	// The tags of a CSMS secrets, key/value pair format.
+	// Specifies the tags of a CSMS secrets, key/value pair format.
 	Tags pulumi.StringMapInput
+	// The secret version status list.
+	VersionStages pulumi.StringArrayInput
 }
 
 func (SecretState) ElementType() reflect.Type {
@@ -195,35 +279,71 @@ func (SecretState) ElementType() reflect.Type {
 }
 
 type secretArgs struct {
-	// The description of a secret.
+	// Specifies the description of a secret.
 	Description *string `pulumi:"description"`
-	KmsKeyId    *string `pulumi:"kmsKeyId"`
-	// The secret name. The maximum length is 64 characters.
+	// Specifies the enterprise project ID to which the secret belongs.
+	// If omitted, the default enterprise project will be used.
+	// If the enterprise project function is not enabled, ignore this parameter.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the event list associated with the secret.
+	// Currently, only one event can be associated.
+	EventSubscriptions *string `pulumi:"eventSubscriptions"`
+	// Specifies the expiration time of a secret, `expireTime` can only be edited
+	// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+	// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+	ExpireTime *int    `pulumi:"expireTime"`
+	KmsKeyId   *string `pulumi:"kmsKeyId"`
+	// Specifies the secret name. The maximum length is 64 characters.
 	// Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 	Name *string `pulumi:"name"`
-	// The region in which to create the CSMS secrets.
+	// Specifies the region in which to create the CSMS secrets.
 	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 	Region *string `pulumi:"region"`
-	// The plaintext of a secret in text format. The maximum size is 32 KB.
-	SecretText string `pulumi:"secretText"`
-	// The tags of a CSMS secrets, key/value pair format.
+	// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+	// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+	SecretBinary *string `pulumi:"secretBinary"`
+	// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+	// it in the initial version of the secret. The maximum size is 32 KB.
+	SecretText *string `pulumi:"secretText"`
+	// Specifies the type of the secret.
+	// Currently, only supported **COMMON**. The default value is **COMMON**.
+	SecretType *string `pulumi:"secretType"`
+	// Specifies the tags of a CSMS secrets, key/value pair format.
 	Tags map[string]string `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Secret resource.
 type SecretArgs struct {
-	// The description of a secret.
+	// Specifies the description of a secret.
 	Description pulumi.StringPtrInput
-	KmsKeyId    pulumi.StringPtrInput
-	// The secret name. The maximum length is 64 characters.
+	// Specifies the enterprise project ID to which the secret belongs.
+	// If omitted, the default enterprise project will be used.
+	// If the enterprise project function is not enabled, ignore this parameter.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the event list associated with the secret.
+	// Currently, only one event can be associated.
+	EventSubscriptions pulumi.StringPtrInput
+	// Specifies the expiration time of a secret, `expireTime` can only be edited
+	// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+	// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+	ExpireTime pulumi.IntPtrInput
+	KmsKeyId   pulumi.StringPtrInput
+	// Specifies the secret name. The maximum length is 64 characters.
 	// Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 	Name pulumi.StringPtrInput
-	// The region in which to create the CSMS secrets.
+	// Specifies the region in which to create the CSMS secrets.
 	// If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 	Region pulumi.StringPtrInput
-	// The plaintext of a secret in text format. The maximum size is 32 KB.
-	SecretText pulumi.StringInput
-	// The tags of a CSMS secrets, key/value pair format.
+	// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+	// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+	SecretBinary pulumi.StringPtrInput
+	// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+	// it in the initial version of the secret. The maximum size is 32 KB.
+	SecretText pulumi.StringPtrInput
+	// Specifies the type of the secret.
+	// Currently, only supported **COMMON**. The default value is **COMMON**.
+	SecretType pulumi.StringPtrInput
+	// Specifies the tags of a CSMS secrets, key/value pair format.
 	Tags pulumi.StringMapInput
 }
 
@@ -319,9 +439,29 @@ func (o SecretOutput) CreateTime() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.CreateTime }).(pulumi.StringOutput)
 }
 
-// The description of a secret.
+// Specifies the description of a secret.
 func (o SecretOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the enterprise project ID to which the secret belongs.
+// If omitted, the default enterprise project will be used.
+// If the enterprise project function is not enabled, ignore this parameter.
+func (o SecretOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies the event list associated with the secret.
+// Currently, only one event can be associated.
+func (o SecretOutput) EventSubscriptions() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringPtrOutput { return v.EventSubscriptions }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the expiration time of a secret, `expireTime` can only be edited
+// when `status` is **ENABLED**. The time is in the format of timestamp, that is, the offset milliseconds
+// from 1970-01-01 00:00:00 UTC to the specified time. The time must be greater than the current time.
+func (o SecretOutput) ExpireTime() pulumi.IntOutput {
+	return o.ApplyT(func(v *Secret) pulumi.IntOutput { return v.ExpireTime }).(pulumi.IntOutput)
 }
 
 func (o SecretOutput) KmsKeyId() pulumi.StringOutput {
@@ -333,16 +473,22 @@ func (o SecretOutput) LatestVersion() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.LatestVersion }).(pulumi.StringOutput)
 }
 
-// The secret name. The maximum length is 64 characters.
+// Specifies the secret name. The maximum length is 64 characters.
 // Only digits, letters, underscores(_), hyphens(-) and dots(.) are allowed.
 func (o SecretOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// The region in which to create the CSMS secrets.
+// Specifies the region in which to create the CSMS secrets.
 // If omitted, the provider-level region will be used. Changing this setting will create a new resource.
 func (o SecretOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the plaintext of a binary secret encoded using Base64. CSMS encrypts
+// the plaintext and stores it in the initial version of the secret. The maximum size is 32 KB.
+func (o SecretOutput) SecretBinary() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringPtrOutput { return v.SecretBinary }).(pulumi.StringPtrOutput)
 }
 
 // The secret ID in UUID format.
@@ -350,19 +496,31 @@ func (o SecretOutput) SecretId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.SecretId }).(pulumi.StringOutput)
 }
 
-// The plaintext of a secret in text format. The maximum size is 32 KB.
-func (o SecretOutput) SecretText() pulumi.StringOutput {
-	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.SecretText }).(pulumi.StringOutput)
+// Specifies the plaintext of a text secret. CSMS encrypts the plaintext and stores
+// it in the initial version of the secret. The maximum size is 32 KB.
+func (o SecretOutput) SecretText() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringPtrOutput { return v.SecretText }).(pulumi.StringPtrOutput)
 }
 
-// The CSMS secret status. Values can be: ENABLED, DISABLED, PENDING_DELETE and FROZEN.
+// Specifies the type of the secret.
+// Currently, only supported **COMMON**. The default value is **COMMON**.
+func (o SecretOutput) SecretType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.SecretType }).(pulumi.StringOutput)
+}
+
+// The CSMS secret status. Values can be: **ENABLED**, **DISABLED**, **PENDING_DELETE** and **FROZEN**.
 func (o SecretOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
 
-// The tags of a CSMS secrets, key/value pair format.
+// Specifies the tags of a CSMS secrets, key/value pair format.
 func (o SecretOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Secret) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+// The secret version status list.
+func (o SecretOutput) VersionStages() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Secret) pulumi.StringArrayOutput { return v.VersionStages }).(pulumi.StringArrayOutput)
 }
 
 type SecretArrayOutput struct{ *pulumi.OutputState }

@@ -23,16 +23,16 @@ class ForwardRuleArgs:
         """
         The set of arguments for constructing a ForwardRule resource.
         :param pulumi.Input[int] forward_port: Specifies the forward port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[str] forward_protocol: Specifies the forward protocol.
                The valid values are **tcp** and **udp**.
         :param pulumi.Input[str] instance_id: Specifies the ID of advanced Anti-DDoS instance.
                Changing this will create a new rule resource.
-        :param pulumi.Input[str] ip: Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        :param pulumi.Input[str] ip: Specifies the public IP address to which Advanced Anti-DDoS instance
                belongs. Changing this will create a new rule resource.
         :param pulumi.Input[str] source_ip: Specifies the source IP addresses, separated by commas (,).
         :param pulumi.Input[int] source_port: Specifies the source port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         """
         pulumi.set(__self__, "forward_port", forward_port)
         pulumi.set(__self__, "forward_protocol", forward_protocol)
@@ -46,7 +46,7 @@ class ForwardRuleArgs:
     def forward_port(self) -> pulumi.Input[int]:
         """
         Specifies the forward port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "forward_port")
 
@@ -84,7 +84,7 @@ class ForwardRuleArgs:
     @pulumi.getter
     def ip(self) -> pulumi.Input[str]:
         """
-        Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        Specifies the public IP address to which Advanced Anti-DDoS instance
         belongs. Changing this will create a new rule resource.
         """
         return pulumi.get(self, "ip")
@@ -110,7 +110,7 @@ class ForwardRuleArgs:
     def source_port(self) -> pulumi.Input[int]:
         """
         Specifies the source port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "source_port")
 
@@ -134,18 +134,18 @@ class _ForwardRuleState:
         """
         Input properties used for looking up and filtering ForwardRule resources.
         :param pulumi.Input[int] forward_port: Specifies the forward port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[str] forward_protocol: Specifies the forward protocol.
                The valid values are **tcp** and **udp**.
         :param pulumi.Input[str] instance_id: Specifies the ID of advanced Anti-DDoS instance.
                Changing this will create a new rule resource.
-        :param pulumi.Input[str] ip: Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        :param pulumi.Input[str] ip: Specifies the public IP address to which Advanced Anti-DDoS instance
                belongs. Changing this will create a new rule resource.
         :param pulumi.Input[str] lb_method: The LVS forward policy.
         :param pulumi.Input[str] rule_id: schema: Deprecated
         :param pulumi.Input[str] source_ip: Specifies the source IP addresses, separated by commas (,).
         :param pulumi.Input[int] source_port: Specifies the source port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[int] status: The status of forward rule.
         """
         if forward_port is not None:
@@ -172,7 +172,7 @@ class _ForwardRuleState:
     def forward_port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the forward port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "forward_port")
 
@@ -210,7 +210,7 @@ class _ForwardRuleState:
     @pulumi.getter
     def ip(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        Specifies the public IP address to which Advanced Anti-DDoS instance
         belongs. Changing this will create a new rule resource.
         """
         return pulumi.get(self, "ip")
@@ -260,7 +260,7 @@ class _ForwardRuleState:
     def source_port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the source port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "source_port")
 
@@ -298,25 +298,25 @@ class ForwardRule(pulumi.CustomResource):
 
         ## Import
 
-        Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g.
+        Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test &ltinstance_id&gt/&ltip&gt/&ltforward_protocol&gt/&ltforward_port&gt
+         $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test <instance_id>/<ip>/<forward_protocol>/<forward_port>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] forward_port: Specifies the forward port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[str] forward_protocol: Specifies the forward protocol.
                The valid values are **tcp** and **udp**.
         :param pulumi.Input[str] instance_id: Specifies the ID of advanced Anti-DDoS instance.
                Changing this will create a new rule resource.
-        :param pulumi.Input[str] ip: Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        :param pulumi.Input[str] ip: Specifies the public IP address to which Advanced Anti-DDoS instance
                belongs. Changing this will create a new rule resource.
         :param pulumi.Input[str] source_ip: Specifies the source IP addresses, separated by commas (,).
         :param pulumi.Input[int] source_port: Specifies the source port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         """
         ...
     @overload
@@ -329,10 +329,10 @@ class ForwardRule(pulumi.CustomResource):
 
         ## Import
 
-        Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g.
+        Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test &ltinstance_id&gt/&ltip&gt/&ltforward_protocol&gt/&ltforward_port&gt
+         $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test <instance_id>/<ip>/<forward_protocol>/<forward_port>
         ```
 
         :param str resource_name: The name of the resource.
@@ -413,18 +413,18 @@ class ForwardRule(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[int] forward_port: Specifies the forward port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[str] forward_protocol: Specifies the forward protocol.
                The valid values are **tcp** and **udp**.
         :param pulumi.Input[str] instance_id: Specifies the ID of advanced Anti-DDoS instance.
                Changing this will create a new rule resource.
-        :param pulumi.Input[str] ip: Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        :param pulumi.Input[str] ip: Specifies the public IP address to which Advanced Anti-DDoS instance
                belongs. Changing this will create a new rule resource.
         :param pulumi.Input[str] lb_method: The LVS forward policy.
         :param pulumi.Input[str] rule_id: schema: Deprecated
         :param pulumi.Input[str] source_ip: Specifies the source IP addresses, separated by commas (,).
         :param pulumi.Input[int] source_port: Specifies the source port.
-               The valid value is range from **1** to **65535**.
+               The valid value is range from `1` to `65,535`.
         :param pulumi.Input[int] status: The status of forward rule.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -447,7 +447,7 @@ class ForwardRule(pulumi.CustomResource):
     def forward_port(self) -> pulumi.Output[int]:
         """
         Specifies the forward port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "forward_port")
 
@@ -473,7 +473,7 @@ class ForwardRule(pulumi.CustomResource):
     @pulumi.getter
     def ip(self) -> pulumi.Output[str]:
         """
-        Specifies the public IP addresss to which Advanced Anti-DDoS instance
+        Specifies the public IP address to which Advanced Anti-DDoS instance
         belongs. Changing this will create a new rule resource.
         """
         return pulumi.get(self, "ip")
@@ -507,7 +507,7 @@ class ForwardRule(pulumi.CustomResource):
     def source_port(self) -> pulumi.Output[int]:
         """
         Specifies the source port.
-        The valid value is range from **1** to **65535**.
+        The valid value is range from `1` to `65,535`.
         """
         return pulumi.get(self, "source_port")
 

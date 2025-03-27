@@ -17,35 +17,49 @@ class DeviceGroupArgs:
                  space_id: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  device_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 dynamic_group_rule: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  parent_group_id: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a DeviceGroup resource.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device group belongs.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-               are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[str] description: Specifies the description of device group.
+               The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
-        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] dynamic_group_rule: Specifies the dynamic device group rule, just fill in the content
+               of the **where** clause, the remaining clauses do not need to be filled in.
+               e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+               More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[str] parent_group_id: Specifies the parent group id.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the IoTDA device group resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the device group type.
+               The valid values are as follows:
+               + **STATIC**: Static device group.
+               + **DYNAMIC**: Dynamic device group.
         """
         pulumi.set(__self__, "space_id", space_id)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if device_ids is not None:
             pulumi.set(__self__, "device_ids", device_ids)
+        if dynamic_group_rule is not None:
+            pulumi.set(__self__, "dynamic_group_rule", dynamic_group_rule)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if parent_group_id is not None:
             pulumi.set(__self__, "parent_group_id", parent_group_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
 
     @property
     @pulumi.getter(name="spaceId")
@@ -64,9 +78,9 @@ class DeviceGroupArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-        are allowed: `?'#().,&%@!`.
+        Specifies the description of device group.
+        The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
 
@@ -87,10 +101,25 @@ class DeviceGroupArgs:
         pulumi.set(self, "device_ids", value)
 
     @property
+    @pulumi.getter(name="dynamicGroupRule")
+    def dynamic_group_rule(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the dynamic device group rule, just fill in the content
+        of the **where** clause, the remaining clauses do not need to be filled in.
+        e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+        More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        """
+        return pulumi.get(self, "dynamic_group_rule")
+
+    @dynamic_group_rule.setter
+    def dynamic_group_rule(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dynamic_group_rule", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of device group. The name contains a maximum of 64 characters.
+        Specifies the name of device group. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
@@ -125,23 +154,44 @@ class DeviceGroupArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the device group type.
+        The valid values are as follows:
+        + **STATIC**: Static device group.
+        + **DYNAMIC**: Dynamic device group.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
+
 
 @pulumi.input_type
 class _DeviceGroupState:
     def __init__(__self__, *,
                  description: Optional[pulumi.Input[str]] = None,
                  device_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 dynamic_group_rule: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  parent_group_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 space_id: Optional[pulumi.Input[str]] = None):
+                 space_id: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering DeviceGroup resources.
-        :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-               are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[str] description: Specifies the description of device group.
+               The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
-        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] dynamic_group_rule: Specifies the dynamic device group rule, just fill in the content
+               of the **where** clause, the remaining clauses do not need to be filled in.
+               e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+               More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[str] parent_group_id: Specifies the parent group id.
                Changing this parameter will create a new resource.
@@ -149,11 +199,17 @@ class _DeviceGroupState:
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device group belongs.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the device group type.
+               The valid values are as follows:
+               + **STATIC**: Static device group.
+               + **DYNAMIC**: Dynamic device group.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
         if device_ids is not None:
             pulumi.set(__self__, "device_ids", device_ids)
+        if dynamic_group_rule is not None:
+            pulumi.set(__self__, "dynamic_group_rule", dynamic_group_rule)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if parent_group_id is not None:
@@ -162,14 +218,16 @@ class _DeviceGroupState:
             pulumi.set(__self__, "region", region)
         if space_id is not None:
             pulumi.set(__self__, "space_id", space_id)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-        are allowed: `?'#().,&%@!`.
+        Specifies the description of device group.
+        The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
 
@@ -190,10 +248,25 @@ class _DeviceGroupState:
         pulumi.set(self, "device_ids", value)
 
     @property
+    @pulumi.getter(name="dynamicGroupRule")
+    def dynamic_group_rule(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the dynamic device group rule, just fill in the content
+        of the **where** clause, the remaining clauses do not need to be filled in.
+        e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+        More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        """
+        return pulumi.get(self, "dynamic_group_rule")
+
+    @dynamic_group_rule.setter
+    def dynamic_group_rule(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "dynamic_group_rule", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of device group. The name contains a maximum of 64 characters.
+        Specifies the name of device group. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
@@ -241,6 +314,21 @@ class _DeviceGroupState:
     def space_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "space_id", value)
 
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the device group type.
+        The valid values are as follows:
+        + **STATIC**: Static device group.
+        + **DYNAMIC**: Dynamic device group.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
+
 
 class DeviceGroup(pulumi.CustomResource):
     @overload
@@ -249,13 +337,22 @@ class DeviceGroup(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 dynamic_group_rule: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  parent_group_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  space_id: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages an IoTDA device group within HuaweiCloud.
+        Manages an IoTDA device group resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+          endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+          `provider` block as follows:
 
         ## Example Usage
 
@@ -264,22 +361,23 @@ class DeviceGroup(pulumi.CustomResource):
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        name = config.require_object("name")
         space_id = config.require_object("spaceId")
         device_id = config.require_object("deviceId")
-        group = huaweicloud.io_tda.DeviceGroup("group",
+        test = huaweicloud.io_tda.DeviceGroup("test",
             space_id=space_id,
             device_ids=[device_id])
         ```
 
         ## Import
 
-        Groups can be imported using the `id`, e.g.
+        The device group can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also, you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
 
          ...
 
@@ -295,11 +393,15 @@ class DeviceGroup(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-               are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[str] description: Specifies the description of device group.
+               The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
-        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] dynamic_group_rule: Specifies the dynamic device group rule, just fill in the content
+               of the **where** clause, the remaining clauses do not need to be filled in.
+               e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+               More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[str] parent_group_id: Specifies the parent group id.
                Changing this parameter will create a new resource.
@@ -307,6 +409,10 @@ class DeviceGroup(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device group belongs.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the device group type.
+               The valid values are as follows:
+               + **STATIC**: Static device group.
+               + **DYNAMIC**: Dynamic device group.
         """
         ...
     @overload
@@ -315,7 +421,14 @@ class DeviceGroup(pulumi.CustomResource):
                  args: DeviceGroupArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages an IoTDA device group within HuaweiCloud.
+        Manages an IoTDA device group resource within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+          endpoint in `provider` block.
+          You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+          to view the HTTPS application access address. An example of the access address might be
+          **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+          `provider` block as follows:
 
         ## Example Usage
 
@@ -324,22 +437,23 @@ class DeviceGroup(pulumi.CustomResource):
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        name = config.require_object("name")
         space_id = config.require_object("spaceId")
         device_id = config.require_object("deviceId")
-        group = huaweicloud.io_tda.DeviceGroup("group",
+        test = huaweicloud.io_tda.DeviceGroup("test",
             space_id=space_id,
             device_ids=[device_id])
         ```
 
         ## Import
 
-        Groups can be imported using the `id`, e.g.
+        The device group can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test 10022532f4f94f26b01daa1e424853e1
+         $ pulumi import huaweicloud:IoTDA/deviceGroup:DeviceGroup test <id>
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`space_id`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also, you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
 
          ...
 
@@ -370,10 +484,12 @@ class DeviceGroup(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  device_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 dynamic_group_rule: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  parent_group_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  space_id: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -385,12 +501,14 @@ class DeviceGroup(pulumi.CustomResource):
 
             __props__.__dict__["description"] = description
             __props__.__dict__["device_ids"] = device_ids
+            __props__.__dict__["dynamic_group_rule"] = dynamic_group_rule
             __props__.__dict__["name"] = name
             __props__.__dict__["parent_group_id"] = parent_group_id
             __props__.__dict__["region"] = region
             if space_id is None and not opts.urn:
                 raise TypeError("Missing required property 'space_id'")
             __props__.__dict__["space_id"] = space_id
+            __props__.__dict__["type"] = type
         super(DeviceGroup, __self__).__init__(
             'huaweicloud:IoTDA/deviceGroup:DeviceGroup',
             resource_name,
@@ -403,10 +521,12 @@ class DeviceGroup(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             description: Optional[pulumi.Input[str]] = None,
             device_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            dynamic_group_rule: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             parent_group_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
-            space_id: Optional[pulumi.Input[str]] = None) -> 'DeviceGroup':
+            space_id: Optional[pulumi.Input[str]] = None,
+            type: Optional[pulumi.Input[str]] = None) -> 'DeviceGroup':
         """
         Get an existing DeviceGroup resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -414,11 +534,15 @@ class DeviceGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of device group. The description contains a maximum of 64
-               characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-               are allowed: `?'#().,&%@!`.
+        :param pulumi.Input[str] description: Specifies the description of device group.
+               The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+               underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] device_ids: Specifies the list of device IDs bound to the group.
-        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of 64 characters.
+        :param pulumi.Input[str] dynamic_group_rule: Specifies the dynamic device group rule, just fill in the content
+               of the **where** clause, the remaining clauses do not need to be filled in.
+               e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+               More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        :param pulumi.Input[str] name: Specifies the name of device group. The name contains a maximum of `64` characters.
                Only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[str] parent_group_id: Specifies the parent group id.
                Changing this parameter will create a new resource.
@@ -426,6 +550,10 @@ class DeviceGroup(pulumi.CustomResource):
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device group belongs.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] type: Specifies the device group type.
+               The valid values are as follows:
+               + **STATIC**: Static device group.
+               + **DYNAMIC**: Dynamic device group.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -433,19 +561,21 @@ class DeviceGroup(pulumi.CustomResource):
 
         __props__.__dict__["description"] = description
         __props__.__dict__["device_ids"] = device_ids
+        __props__.__dict__["dynamic_group_rule"] = dynamic_group_rule
         __props__.__dict__["name"] = name
         __props__.__dict__["parent_group_id"] = parent_group_id
         __props__.__dict__["region"] = region
         __props__.__dict__["space_id"] = space_id
+        __props__.__dict__["type"] = type
         return DeviceGroup(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of device group. The description contains a maximum of 64
-        characters. Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters
-        are allowed: `?'#().,&%@!`.
+        Specifies the description of device group.
+        The description contains a maximum of `64` characters. Only letters, Chinese characters, digits, hyphens (-),
+        underscores (_) and the following special characters are allowed: `?'#().,&%@!`.
         """
         return pulumi.get(self, "description")
 
@@ -458,10 +588,21 @@ class DeviceGroup(pulumi.CustomResource):
         return pulumi.get(self, "device_ids")
 
     @property
+    @pulumi.getter(name="dynamicGroupRule")
+    def dynamic_group_rule(self) -> pulumi.Output[str]:
+        """
+        Specifies the dynamic device group rule, just fill in the content
+        of the **where** clause, the remaining clauses do not need to be filled in.
+        e.g. **device_name = 'xxx' or device_name = 'xxx'**.
+        More grammar rules, please see [API docs](https://support.huaweicloud.com/intl/en-us/api-iothub/SearchDevices.html).
+        """
+        return pulumi.get(self, "dynamic_group_rule")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of device group. The name contains a maximum of 64 characters.
+        Specifies the name of device group. The name contains a maximum of `64` characters.
         Only letters, digits, hyphens (-) and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
@@ -492,4 +633,15 @@ class DeviceGroup(pulumi.CustomResource):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "space_id")
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Output[str]:
+        """
+        Specifies the device group type.
+        The valid values are as follows:
+        + **STATIC**: Static device group.
+        + **DYNAMIC**: Dynamic device group.
+        """
+        return pulumi.get(self, "type")
 

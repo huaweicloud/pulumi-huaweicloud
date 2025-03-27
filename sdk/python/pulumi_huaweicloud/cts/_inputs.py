@@ -10,9 +10,73 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'NotificationFilterArgs',
     'NotificationOperationArgs',
     'NotificationOperationUserArgs',
 ]
+
+@pulumi.input_type
+class NotificationFilterArgs:
+    def __init__(__self__, *,
+                 condition: pulumi.Input[str],
+                 rules: pulumi.Input[Sequence[pulumi.Input[str]]]):
+        """
+        :param pulumi.Input[str] condition: Specifies the relationship between multiple rules. The valid values are as follows:
+               + **AND**: Effective after all filtering conditions are met.
+               + **OR**: Effective when any one of the conditions is met.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] rules: Specifies an array of filtering rules. It consists of three parts,
+               the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+               the format is: **key != value**.
+               + The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+               **resource_name**.
+               When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+               When the key is **code**, the length range of value is from `1` to `256`.
+               When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+               When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+               When the key is **resource_id**, the length range of value is from `1` to `350`.
+               When the key is **resource_name**, the length range of value is from `1` to `256`.
+               + The **rule** can be: **!=** or **=**.
+        """
+        pulumi.set(__self__, "condition", condition)
+        pulumi.set(__self__, "rules", rules)
+
+    @property
+    @pulumi.getter
+    def condition(self) -> pulumi.Input[str]:
+        """
+        Specifies the relationship between multiple rules. The valid values are as follows:
+        + **AND**: Effective after all filtering conditions are met.
+        + **OR**: Effective when any one of the conditions is met.
+        """
+        return pulumi.get(self, "condition")
+
+    @condition.setter
+    def condition(self, value: pulumi.Input[str]):
+        pulumi.set(self, "condition", value)
+
+    @property
+    @pulumi.getter
+    def rules(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
+        """
+        Specifies an array of filtering rules. It consists of three parts,
+        the first part is the **key**, the second part is the **rule**, and the third part is the **value**,
+        the format is: **key != value**.
+        + The **key** can be: **api_version**, **code**, **trace_rating**, **trace_type**, **resource_id** and
+        **resource_name**.
+        When the key is **api_version**, the value needs to follow the regular constraint: **^ (a-zA-Z0-9_ -.) {1,64}$**.
+        When the key is **code**, the length range of value is from `1` to `256`.
+        When the key is **trace_rating**, the value can be **normal**, **warning** or **incident**.
+        When the key is **trace_type**, the value can be **ConsoleAction**, **ApiCall** or **SystemAction**.
+        When the key is **resource_id**, the length range of value is from `1` to `350`.
+        When the key is **resource_name**, the length range of value is from `1` to `256`.
+        + The **rule** can be: **!=** or **=**.
+        """
+        return pulumi.get(self, "rules")
+
+    @rules.setter
+    def rules(self, value: pulumi.Input[Sequence[pulumi.Input[str]]]):
+        pulumi.set(self, "rules", value)
+
 
 @pulumi.input_type
 class NotificationOperationArgs:

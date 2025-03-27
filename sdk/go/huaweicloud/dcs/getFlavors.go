@@ -28,7 +28,7 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := Dcs.GetFlavors(ctx, &dcs.GetFlavorsArgs{
-//				Capacity: 4,
+//				Capacity: pulumi.Float64Ref(4),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -60,7 +60,7 @@ type GetFlavorsArgs struct {
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
-	Capacity float64 `pulumi:"capacity"`
+	Capacity *float64 `pulumi:"capacity"`
 	// The CPU architecture of cache instance.
 	// Valid values *x86_64* and *aarch64*.
 	CpuArchitecture *string `pulumi:"cpuArchitecture"`
@@ -82,7 +82,7 @@ type GetFlavorsResult struct {
 	// The mode of a cache instance.
 	CacheMode *string `pulumi:"cacheMode"`
 	// The total memory of the cache, in GB.
-	Capacity float64 `pulumi:"capacity"`
+	Capacity *float64 `pulumi:"capacity"`
 	// The CPU architecture of cache instance. Value is *x86_64* or *aarch64*.
 	CpuArchitecture *string `pulumi:"cpuArchitecture"`
 	// The engine of the cache instance. Value is *redis* or *memcached*.
@@ -122,7 +122,7 @@ type GetFlavorsOutputArgs struct {
 	// + **Redis3.0**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
 	//   Proxy cluster instance specifications support `64`, `128`, `256`, `512`, and `1024`.
 	// + **Memcached**: Stand-alone and active/standby type instance values: `2`, `4`, `8`, `16`, `32` and `64`.
-	Capacity pulumi.Float64Input `pulumi:"capacity"`
+	Capacity pulumi.Float64PtrInput `pulumi:"capacity"`
 	// The CPU architecture of cache instance.
 	// Valid values *x86_64* and *aarch64*.
 	CpuArchitecture pulumi.StringPtrInput `pulumi:"cpuArchitecture"`
@@ -164,8 +164,8 @@ func (o GetFlavorsResultOutput) CacheMode() pulumi.StringPtrOutput {
 }
 
 // The total memory of the cache, in GB.
-func (o GetFlavorsResultOutput) Capacity() pulumi.Float64Output {
-	return o.ApplyT(func(v GetFlavorsResult) float64 { return v.Capacity }).(pulumi.Float64Output)
+func (o GetFlavorsResultOutput) Capacity() pulumi.Float64PtrOutput {
+	return o.ApplyT(func(v GetFlavorsResult) *float64 { return v.Capacity }).(pulumi.Float64PtrOutput)
 }
 
 // The CPU architecture of cache instance. Value is *x86_64* or *aarch64*.

@@ -22,7 +22,7 @@ class GetNodePoolResult:
     """
     A collection of values returned by getNodePool.
     """
-    def __init__(__self__, availability_zone=None, cluster_id=None, current_node_count=None, data_volumes=None, extend_param=None, flavor_id=None, id=None, initial_node_count=None, key_pair=None, labels=None, max_node_count=None, max_pods=None, min_node_count=None, name=None, node_pool_id=None, os=None, priority=None, region=None, root_volumes=None, scale_down_cooldown_time=None, scall_enable=None, status=None, subnet_id=None, tags=None, type=None):
+    def __init__(__self__, availability_zone=None, cluster_id=None, current_node_count=None, data_volumes=None, enterprise_project_id=None, extend_param=None, flavor_id=None, hostname_configs=None, id=None, initial_node_count=None, key_pair=None, labels=None, max_node_count=None, max_pods=None, min_node_count=None, name=None, node_pool_id=None, os=None, priority=None, region=None, root_volumes=None, scale_down_cooldown_time=None, scall_enable=None, status=None, subnet_id=None, tags=None, type=None):
         if availability_zone and not isinstance(availability_zone, str):
             raise TypeError("Expected argument 'availability_zone' to be a str")
         pulumi.set(__self__, "availability_zone", availability_zone)
@@ -35,12 +35,18 @@ class GetNodePoolResult:
         if data_volumes and not isinstance(data_volumes, list):
             raise TypeError("Expected argument 'data_volumes' to be a list")
         pulumi.set(__self__, "data_volumes", data_volumes)
+        if enterprise_project_id and not isinstance(enterprise_project_id, str):
+            raise TypeError("Expected argument 'enterprise_project_id' to be a str")
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if extend_param and not isinstance(extend_param, dict):
             raise TypeError("Expected argument 'extend_param' to be a dict")
         pulumi.set(__self__, "extend_param", extend_param)
         if flavor_id and not isinstance(flavor_id, str):
             raise TypeError("Expected argument 'flavor_id' to be a str")
         pulumi.set(__self__, "flavor_id", flavor_id)
+        if hostname_configs and not isinstance(hostname_configs, list):
+            raise TypeError("Expected argument 'hostname_configs' to be a list")
+        pulumi.set(__self__, "hostname_configs", hostname_configs)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -129,6 +135,14 @@ class GetNodePoolResult:
         return pulumi.get(self, "data_volumes")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        The enterprise project ID of the node pool.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Mapping[str, str]:
         """
@@ -143,6 +157,15 @@ class GetNodePoolResult:
         The flavor ID.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="hostnameConfigs")
+    def hostname_configs(self) -> Sequence['outputs.GetNodePoolHostnameConfigResult']:
+        """
+        The hostname config of the kubernetes node.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "hostname_configs")
 
     @property
     @pulumi.getter
@@ -280,7 +303,7 @@ class GetNodePoolResult:
     @pulumi.getter
     def type(self) -> str:
         """
-        Node Pool type.
+        The hostname type of the kubernetes node.
         """
         return pulumi.get(self, "type")
 
@@ -295,8 +318,10 @@ class AwaitableGetNodePoolResult(GetNodePoolResult):
             cluster_id=self.cluster_id,
             current_node_count=self.current_node_count,
             data_volumes=self.data_volumes,
+            enterprise_project_id=self.enterprise_project_id,
             extend_param=self.extend_param,
             flavor_id=self.flavor_id,
+            hostname_configs=self.hostname_configs,
             id=self.id,
             initial_node_count=self.initial_node_count,
             key_pair=self.key_pair,
@@ -362,8 +387,10 @@ def get_node_pool(cluster_id: Optional[str] = None,
         cluster_id=__ret__.cluster_id,
         current_node_count=__ret__.current_node_count,
         data_volumes=__ret__.data_volumes,
+        enterprise_project_id=__ret__.enterprise_project_id,
         extend_param=__ret__.extend_param,
         flavor_id=__ret__.flavor_id,
+        hostname_configs=__ret__.hostname_configs,
         id=__ret__.id,
         initial_node_count=__ret__.initial_node_count,
         key_pair=__ret__.key_pair,

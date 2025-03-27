@@ -127,6 +127,17 @@ Object.defineProperty(exports, "domainName", {
 });
 
 /**
+ * Whether to enable ForceNew
+ */
+export declare const enableForceNew: boolean | undefined;
+Object.defineProperty(exports, "enableForceNew", {
+    get() {
+        return __config.getObject<boolean>("enableForceNew");
+    },
+    enumerable: true,
+});
+
+/**
  * The custom endpoints used to override the default endpoint URL.
  */
 export declare const endpoints: {[key: string]: string} | undefined;
@@ -276,6 +287,39 @@ export declare const sharedConfigFile: string | undefined;
 Object.defineProperty(exports, "sharedConfigFile", {
     get() {
         return __config.get("sharedConfigFile");
+    },
+    enumerable: true,
+});
+
+/**
+ * The signing algorithm for authentication
+ */
+export declare const signingAlgorithm: string | undefined;
+Object.defineProperty(exports, "signingAlgorithm", {
+    get() {
+        return __config.get("signingAlgorithm");
+    },
+    enumerable: true,
+});
+
+/**
+ * Whether to skip upgrade check
+ */
+export declare const skipCheckUpgrade: boolean | undefined;
+Object.defineProperty(exports, "skipCheckUpgrade", {
+    get() {
+        return __config.getObject<boolean>("skipCheckUpgrade");
+    },
+    enumerable: true,
+});
+
+/**
+ * Whether to skip website type check
+ */
+export declare const skipCheckWebsiteType: boolean | undefined;
+Object.defineProperty(exports, "skipCheckWebsiteType", {
+    get() {
+        return __config.getObject<boolean>("skipCheckWebsiteType");
     },
     enumerable: true,
 });

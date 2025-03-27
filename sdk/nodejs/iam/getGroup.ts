@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
 /**
  * Use this data source to get details of the specified IAM user group.
  *
- * > You *must* have IAM read privileges to use this data source.
+ * > **NOTE:** You *must* have IAM read privileges to use this data source.
  *
  * ## Example Usage
  *
@@ -66,7 +66,7 @@ export interface GetGroupResult {
      */
     readonly domainId: string;
     /**
-     * Indicates the ID of the User.
+     * Indicates the ID of the IAM user.
      */
     readonly id: string;
     /**

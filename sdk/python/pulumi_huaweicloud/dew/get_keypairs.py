@@ -49,7 +49,7 @@ class GetKeypairsResult:
     @pulumi.getter
     def fingerprint(self) -> Optional[str]:
         """
-        Indicates the fingerprint information about an key pair.
+        Indicates the fingerprint information about a keypair.
         """
         return pulumi.get(self, "fingerprint")
 
@@ -73,7 +73,7 @@ class GetKeypairsResult:
     @pulumi.getter
     def keypairs(self) -> Sequence['outputs.GetKeypairsKeypairResult']:
         """
-        Indicates a list of all keypairs found. Structure is documented below.
+        The KPS keypairs list.
         """
         return pulumi.get(self, "keypairs")
 
@@ -136,11 +136,11 @@ def get_keypairs(fingerprint: Optional[str] = None,
 
 
     :param str fingerprint: Specifies the fingerprint of the keypair.
-    :param bool is_managed: Specifies whether the private key is managed by HuaweiCloud.
+    :param bool is_managed: Indicates whether the private key is managed by HuaweiCloud.
     :param str name: Specifies the name of the keypair.
     :param str public_key: Specifies the imported OpenSSH-formatted public key.
-    :param str region: The region in which to obtain the keypairs. If omitted, the provider-level region will
-           be used.
+    :param str region: Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+           region will be used.
     """
     __args__ = dict()
     __args__['fingerprint'] = fingerprint
@@ -184,10 +184,10 @@ def get_keypairs_output(fingerprint: Optional[pulumi.Input[Optional[str]]] = Non
 
 
     :param str fingerprint: Specifies the fingerprint of the keypair.
-    :param bool is_managed: Specifies whether the private key is managed by HuaweiCloud.
+    :param bool is_managed: Indicates whether the private key is managed by HuaweiCloud.
     :param str name: Specifies the name of the keypair.
     :param str public_key: Specifies the imported OpenSSH-formatted public key.
-    :param str region: The region in which to obtain the keypairs. If omitted, the provider-level region will
-           be used.
+    :param str region: Specifies the region in which to obtain the keypairs. If omitted, the provider-level
+           region will be used.
     """
     ...

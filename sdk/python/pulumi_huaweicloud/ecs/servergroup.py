@@ -214,7 +214,7 @@ class Servergroup(pulumi.CustomResource):
 
         ## Import
 
-        Server Groups can be imported using the `id`, e.g.
+        Server Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Ecs/servergroup:Servergroup test-sg 1bc30ee9-9d5b-4c30-bdd5-7f1e663f5edf
@@ -254,7 +254,7 @@ class Servergroup(pulumi.CustomResource):
 
         ## Import
 
-        Server Groups can be imported using the `id`, e.g.
+        Server Groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Ecs/servergroup:Servergroup test-sg 1bc30ee9-9d5b-4c30-bdd5-7f1e663f5edf

@@ -100,7 +100,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * AS policies can be imported by their `id`, e.g.
+ * AS policies can be imported by their `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:As/policy:Policy test 9fcb65fe-fd79-4407-8fa0-07602044e1c3
@@ -134,6 +134,13 @@ export class Policy extends pulumi.CustomResource {
         return obj['__pulumiType'] === Policy.__pulumiType;
     }
 
+    /**
+     * Specifies the operation for the AS policy.
+     * The default value is **resume**. The valid values are as follows:
+     * + **resume**: Enables the AS policy.
+     * + **pause**: Disables the AS policy.
+     */
+    public readonly action!: pulumi.Output<string>;
     public readonly alarmId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the cooling duration (in seconds).
@@ -190,6 +197,7 @@ export class Policy extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as PolicyState | undefined;
+            resourceInputs["action"] = state ? state.action : undefined;
             resourceInputs["alarmId"] = state ? state.alarmId : undefined;
             resourceInputs["coolDownTime"] = state ? state.coolDownTime : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -210,6 +218,7 @@ export class Policy extends pulumi.CustomResource {
             if ((!args || args.scalingPolicyType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'scalingPolicyType'");
             }
+            resourceInputs["action"] = args ? args.action : undefined;
             resourceInputs["alarmId"] = args ? args.alarmId : undefined;
             resourceInputs["coolDownTime"] = args ? args.coolDownTime : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
@@ -229,6 +238,13 @@ export class Policy extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Policy resources.
  */
 export interface PolicyState {
+    /**
+     * Specifies the operation for the AS policy.
+     * The default value is **resume**. The valid values are as follows:
+     * + **resume**: Enables the AS policy.
+     * + **pause**: Disables the AS policy.
+     */
+    action?: pulumi.Input<string>;
     alarmId?: pulumi.Input<string>;
     /**
      * Specifies the cooling duration (in seconds).
@@ -277,6 +293,13 @@ export interface PolicyState {
  * The set of arguments for constructing a Policy resource.
  */
 export interface PolicyArgs {
+    /**
+     * Specifies the operation for the AS policy.
+     * The default value is **resume**. The valid values are as follows:
+     * + **resume**: Enables the AS policy.
+     * + **pause**: Disables the AS policy.
+     */
+    action?: pulumi.Input<string>;
     alarmId?: pulumi.Input<string>;
     /**
      * Specifies the cooling duration (in seconds).

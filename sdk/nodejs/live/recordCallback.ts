@@ -5,34 +5,33 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a callback configuration within HuaweiCloud Live.
+ * Manages a callback configuration resource within HuaweiCloud.
  *
  * > Only one callback configuration can be created for an ingestion domain name.
  *
  * ## Example Usage
- * ### Create a callback configuration for an ingest domain name
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const ingestDomainName = config.requireObject("ingestDomainName");
- * const ingestDomain = new huaweicloud.live.Domain("ingestDomain", {type: "push"});
- * const callback = new huaweicloud.live.RecordCallback("callback", {
- *     domainName: ingestDomainName,
- *     url: "http://mycallback.com.cn/record_notify",
- *     types: ["RECORD_NEW_FILE_START"],
- * });
- * ```
  *
  * ## Import
  *
- * Callback configurations can be imported using the `id`, e.g.
+ * The record callback resource can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test 55534eaa-533a-419d-9b40-ec427ea7195a
+ *  $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`key`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_record_callback" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  key,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class RecordCallback extends pulumi.CustomResource {
     /**
@@ -68,12 +67,26 @@ export class RecordCallback extends pulumi.CustomResource {
      */
     public readonly domainName!: pulumi.Output<string>;
     /**
+     * Specifies the callback key, which is used for authentication. This parameter is configured
+     * to protect user data security. The value can only contain letters and digits.
+     * The length cannot be less than `32` characters.
+     */
+    public readonly key!: pulumi.Output<string>;
+    /**
      * Specifies the region in which to create the resource.
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the types of recording notifications. The options are as follows:
+     * Specifies the sign type.
+     * The valid values are as follows:
+     * + **HMACSHA256**
+     * + **MD5**
+     */
+    public readonly signType!: pulumi.Output<string>;
+    /**
+     * Specifies the types of recording notifications.
+     * The valid values are as follows:
      * + **RECORD_NEW_FILE_START**: Recording started.
      * + **RECORD_FILE_COMPLETE**: Recording file generated.
      * + **RECORD_OVER**: Recording completed.
@@ -100,7 +113,9 @@ export class RecordCallback extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as RecordCallbackState | undefined;
             resourceInputs["domainName"] = state ? state.domainName : undefined;
+            resourceInputs["key"] = state ? state.key : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["signType"] = state ? state.signType : undefined;
             resourceInputs["types"] = state ? state.types : undefined;
             resourceInputs["url"] = state ? state.url : undefined;
         } else {
@@ -115,7 +130,9 @@ export class RecordCallback extends pulumi.CustomResource {
                 throw new Error("Missing required property 'url'");
             }
             resourceInputs["domainName"] = args ? args.domainName : undefined;
+            resourceInputs["key"] = args ? args.key : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["signType"] = args ? args.signType : undefined;
             resourceInputs["types"] = args ? args.types : undefined;
             resourceInputs["url"] = args ? args.url : undefined;
         }
@@ -134,12 +151,26 @@ export interface RecordCallbackState {
      */
     domainName?: pulumi.Input<string>;
     /**
+     * Specifies the callback key, which is used for authentication. This parameter is configured
+     * to protect user data security. The value can only contain letters and digits.
+     * The length cannot be less than `32` characters.
+     */
+    key?: pulumi.Input<string>;
+    /**
      * Specifies the region in which to create the resource.
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the types of recording notifications. The options are as follows:
+     * Specifies the sign type.
+     * The valid values are as follows:
+     * + **HMACSHA256**
+     * + **MD5**
+     */
+    signType?: pulumi.Input<string>;
+    /**
+     * Specifies the types of recording notifications.
+     * The valid values are as follows:
      * + **RECORD_NEW_FILE_START**: Recording started.
      * + **RECORD_FILE_COMPLETE**: Recording file generated.
      * + **RECORD_OVER**: Recording completed.
@@ -163,12 +194,26 @@ export interface RecordCallbackArgs {
      */
     domainName: pulumi.Input<string>;
     /**
+     * Specifies the callback key, which is used for authentication. This parameter is configured
+     * to protect user data security. The value can only contain letters and digits.
+     * The length cannot be less than `32` characters.
+     */
+    key?: pulumi.Input<string>;
+    /**
      * Specifies the region in which to create the resource.
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the types of recording notifications. The options are as follows:
+     * Specifies the sign type.
+     * The valid values are as follows:
+     * + **HMACSHA256**
+     * + **MD5**
+     */
+    signType?: pulumi.Input<string>;
+    /**
+     * Specifies the types of recording notifications.
+     * The valid values are as follows:
      * + **RECORD_NEW_FILE_START**: Recording started.
      * + **RECORD_FILE_COMPLETE**: Recording file generated.
      * + **RECORD_OVER**: Recording completed.

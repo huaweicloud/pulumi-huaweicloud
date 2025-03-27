@@ -25,11 +25,13 @@ class ApiArgs:
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input['ApiBackendParamArgs']]]] = None,
                  body_description: Optional[pulumi.Input[str]] = None,
+                 content_type: Optional[pulumi.Input[str]] = None,
                  cors: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  failure_response: Optional[pulumi.Input[str]] = None,
                  func_graph: Optional[pulumi.Input['ApiFuncGraphArgs']] = None,
                  func_graph_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]]] = None,
+                 is_send_fg_body_base64: Optional[pulumi.Input[bool]] = None,
                  matching: Optional[pulumi.Input[str]] = None,
                  mock: Optional[pulumi.Input['ApiMockArgs']] = None,
                  mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]]] = None,
@@ -40,11 +42,13 @@ class ApiArgs:
                  security_authentication: Optional[pulumi.Input[str]] = None,
                  simple_authentication: Optional[pulumi.Input[bool]] = None,
                  success_response: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  web: Optional[pulumi.Input['ApiWebArgs']] = None,
                  web_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]]] = None):
         """
         The set of arguments for constructing a Api resource.
-        :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
+        :param pulumi.Input[str] group_id: Specifies the ID of the APIG group to which the API belongs.  
+               Changing this will create a new API resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
         :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
@@ -58,12 +62,19 @@ class ApiArgs:
                **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] authorizer_id: Specifies the ID of the backend custom authorization.
         :param pulumi.Input[Sequence[pulumi.Input['ApiBackendParamArgs']]] backend_params: Specifies an array of one or more backend parameters. The maximum of request
                parameters is 50. The object structure is documented above.
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
                request body, media type or parameters.
                The request body does not exceed `20,480` characters.
+        :param pulumi.Input[str] content_type: Specifies the content type of the request body.  
+               The valid values are as follows:
+               + **application/json**
+               + **application/xml**
+               + **multipart/form-data**
+               + **text/plain**
         :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
         :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
                The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
@@ -75,6 +86,14 @@ class ApiArgs:
         :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends.  
                The maximum blocks of the policy is 5.
                The object structure is documented below.
+        :param pulumi.Input[bool] is_send_fg_body_base64: Specifies whether to perform base64 encoding on the body for interaction
+               with FunctionGraph.
+               Defaults to **true**.
+               The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+               These scenarios which can be applied:
+               + Custom authentication.
+               + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+               + APIs with FunctionGraph backend.
         :param pulumi.Input[str] matching: Specifies the route matching mode.  
                The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details.  
@@ -84,18 +103,20 @@ class ApiArgs:
                The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] region: Specifies the region where the API is located.  
                If omitted, the provider-level region will be used. Changing this will create a new API resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApiRequestParamArgs']]] request_params: Specifies the configurations of the front-end parameters.  
                The object structure is documented below.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
         :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
-               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+               The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
                The application code must located in the header when `simple_authentication` is true.
         :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
                The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] tags: Specifies the list of tags configuration.
         :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details.  
                The object structure is documented below. Changing this will create a new API resource.
         :param pulumi.Input[Sequence[pulumi.Input['ApiWebPolicyArgs']]] web_policies: Specifies the example response for a failed request.  
@@ -114,6 +135,8 @@ class ApiArgs:
             pulumi.set(__self__, "backend_params", backend_params)
         if body_description is not None:
             pulumi.set(__self__, "body_description", body_description)
+        if content_type is not None:
+            pulumi.set(__self__, "content_type", content_type)
         if cors is not None:
             pulumi.set(__self__, "cors", cors)
         if description is not None:
@@ -124,6 +147,8 @@ class ApiArgs:
             pulumi.set(__self__, "func_graph", func_graph)
         if func_graph_policies is not None:
             pulumi.set(__self__, "func_graph_policies", func_graph_policies)
+        if is_send_fg_body_base64 is not None:
+            pulumi.set(__self__, "is_send_fg_body_base64", is_send_fg_body_base64)
         if matching is not None:
             pulumi.set(__self__, "matching", matching)
         if mock is not None:
@@ -144,6 +169,8 @@ class ApiArgs:
             pulumi.set(__self__, "simple_authentication", simple_authentication)
         if success_response is not None:
             pulumi.set(__self__, "success_response", success_response)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if web is not None:
             pulumi.set(__self__, "web", web)
         if web_policies is not None:
@@ -153,7 +180,8 @@ class ApiArgs:
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Input[str]:
         """
-        Specifies an ID of the APIG group to which the API belongs to.
+        Specifies the ID of the APIG group to which the API belongs.  
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -222,6 +250,7 @@ class ApiArgs:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -267,6 +296,23 @@ class ApiArgs:
     @body_description.setter
     def body_description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "body_description", value)
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the content type of the request body.  
+        The valid values are as follows:
+        + **application/json**
+        + **application/xml**
+        + **multipart/form-data**
+        + **text/plain**
+        """
+        return pulumi.get(self, "content_type")
+
+    @content_type.setter
+    def content_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "content_type", value)
 
     @property
     @pulumi.getter
@@ -335,6 +381,25 @@ class ApiArgs:
         pulumi.set(self, "func_graph_policies", value)
 
     @property
+    @pulumi.getter(name="isSendFgBodyBase64")
+    def is_send_fg_body_base64(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to perform base64 encoding on the body for interaction
+        with FunctionGraph.
+        Defaults to **true**.
+        The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+        These scenarios which can be applied:
+        + Custom authentication.
+        + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+        + APIs with FunctionGraph backend.
+        """
+        return pulumi.get(self, "is_send_fg_body_base64")
+
+    @is_send_fg_body_base64.setter
+    def is_send_fg_body_base64(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_send_fg_body_base64", value)
+
+    @property
     @pulumi.getter
     def matching(self) -> Optional[pulumi.Input[str]]:
         """
@@ -380,7 +445,8 @@ class ApiArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -431,7 +497,7 @@ class ApiArgs:
     def security_authentication(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the security authentication mode of the API request.  
-        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -467,6 +533,18 @@ class ApiArgs:
 
     @property
     @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of tags configuration.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter
     def web(self) -> Optional[pulumi.Input['ApiWebArgs']]:
         """
         Specifies the web backend details.  
@@ -499,6 +577,7 @@ class _ApiState:
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input['ApiBackendParamArgs']]]] = None,
                  body_description: Optional[pulumi.Input[str]] = None,
+                 content_type: Optional[pulumi.Input[str]] = None,
                  cors: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  failure_response: Optional[pulumi.Input[str]] = None,
@@ -506,6 +585,7 @@ class _ApiState:
                  func_graph_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 is_send_fg_body_base64: Optional[pulumi.Input[bool]] = None,
                  matching: Optional[pulumi.Input[str]] = None,
                  mock: Optional[pulumi.Input['ApiMockArgs']] = None,
                  mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input['ApiMockPolicyArgs']]]] = None,
@@ -520,6 +600,7 @@ class _ApiState:
                  security_authentication: Optional[pulumi.Input[str]] = None,
                  simple_authentication: Optional[pulumi.Input[bool]] = None,
                  success_response: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  updated_at: Optional[pulumi.Input[str]] = None,
                  web: Optional[pulumi.Input['ApiWebArgs']] = None,
@@ -532,6 +613,12 @@ class _ApiState:
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
                request body, media type or parameters.
                The request body does not exceed `20,480` characters.
+        :param pulumi.Input[str] content_type: Specifies the content type of the request body.  
+               The valid values are as follows:
+               + **application/json**
+               + **application/xml**
+               + **multipart/form-data**
+               + **text/plain**
         :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
         :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
                The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
@@ -543,9 +630,18 @@ class _ApiState:
         :param pulumi.Input[Sequence[pulumi.Input['ApiFuncGraphPolicyArgs']]] func_graph_policies: Specifies the Mock policy backends.  
                The maximum blocks of the policy is 5.
                The object structure is documented below.
-        :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
+        :param pulumi.Input[str] group_id: Specifies the ID of the APIG group to which the API belongs.  
+               Changing this will create a new API resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
+        :param pulumi.Input[bool] is_send_fg_body_base64: Specifies whether to perform base64 encoding on the body for interaction
+               with FunctionGraph.
+               Defaults to **true**.
+               The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+               These scenarios which can be applied:
+               + Custom authentication.
+               + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+               + APIs with FunctionGraph backend.
         :param pulumi.Input[str] matching: Specifies the route matching mode.  
                The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         :param pulumi.Input['ApiMockArgs'] mock: Specifies the mock backend details.  
@@ -555,7 +651,8 @@ class _ApiState:
                The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] region: Specifies the region where the API is located.  
                If omitted, the provider-level region will be used. Changing this will create a new API resource.
         :param pulumi.Input[str] registered_at: The registered time of the API.
@@ -572,13 +669,15 @@ class _ApiState:
                **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
         :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
-               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+               The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
                The application code must located in the header when `simple_authentication` is true.
         :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
                The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] tags: Specifies the list of tags configuration.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] updated_at: The latest update time of the API.
         :param pulumi.Input['ApiWebArgs'] web: Specifies the web backend details.  
                The object structure is documented below. Changing this will create a new API resource.
@@ -592,6 +691,8 @@ class _ApiState:
             pulumi.set(__self__, "backend_params", backend_params)
         if body_description is not None:
             pulumi.set(__self__, "body_description", body_description)
+        if content_type is not None:
+            pulumi.set(__self__, "content_type", content_type)
         if cors is not None:
             pulumi.set(__self__, "cors", cors)
         if description is not None:
@@ -606,6 +707,8 @@ class _ApiState:
             pulumi.set(__self__, "group_id", group_id)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if is_send_fg_body_base64 is not None:
+            pulumi.set(__self__, "is_send_fg_body_base64", is_send_fg_body_base64)
         if matching is not None:
             pulumi.set(__self__, "matching", matching)
         if mock is not None:
@@ -634,6 +737,8 @@ class _ApiState:
             pulumi.set(__self__, "simple_authentication", simple_authentication)
         if success_response is not None:
             pulumi.set(__self__, "success_response", success_response)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if type is not None:
             pulumi.set(__self__, "type", type)
         if updated_at is not None:
@@ -681,6 +786,23 @@ class _ApiState:
     @body_description.setter
     def body_description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "body_description", value)
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the content type of the request body.  
+        The valid values are as follows:
+        + **application/json**
+        + **application/xml**
+        + **multipart/form-data**
+        + **text/plain**
+        """
+        return pulumi.get(self, "content_type")
+
+    @content_type.setter
+    def content_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "content_type", value)
 
     @property
     @pulumi.getter
@@ -752,7 +874,8 @@ class _ApiState:
     @pulumi.getter(name="groupId")
     def group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies an ID of the APIG group to which the API belongs to.
+        Specifies the ID of the APIG group to which the API belongs.  
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -772,6 +895,25 @@ class _ApiState:
     @instance_id.setter
     def instance_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="isSendFgBodyBase64")
+    def is_send_fg_body_base64(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to perform base64 encoding on the body for interaction
+        with FunctionGraph.
+        Defaults to **true**.
+        The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+        These scenarios which can be applied:
+        + Custom authentication.
+        + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+        + APIs with FunctionGraph backend.
+        """
+        return pulumi.get(self, "is_send_fg_body_base64")
+
+    @is_send_fg_body_base64.setter
+    def is_send_fg_body_base64(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_send_fg_body_base64", value)
 
     @property
     @pulumi.getter
@@ -819,7 +961,8 @@ class _ApiState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -924,7 +1067,7 @@ class _ApiState:
     def security_authentication(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the security authentication mode of the API request.  
-        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -960,10 +1103,23 @@ class _ApiState:
 
     @property
     @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of tags configuration.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 
@@ -1019,6 +1175,7 @@ class Api(pulumi.CustomResource):
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiBackendParamArgs']]]]] = None,
                  body_description: Optional[pulumi.Input[str]] = None,
+                 content_type: Optional[pulumi.Input[str]] = None,
                  cors: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  failure_response: Optional[pulumi.Input[str]] = None,
@@ -1026,6 +1183,7 @@ class Api(pulumi.CustomResource):
                  func_graph_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 is_send_fg_body_base64: Optional[pulumi.Input[bool]] = None,
                  matching: Optional[pulumi.Input[str]] = None,
                  mock: Optional[pulumi.Input[pulumi.InputType['ApiMockArgs']]] = None,
                  mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]]] = None,
@@ -1039,6 +1197,7 @@ class Api(pulumi.CustomResource):
                  security_authentication: Optional[pulumi.Input[str]] = None,
                  simple_authentication: Optional[pulumi.Input[bool]] = None,
                  success_response: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  web: Optional[pulumi.Input[pulumi.InputType['ApiWebArgs']]] = None,
                  web_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]]] = None,
@@ -1047,6 +1206,7 @@ class Api(pulumi.CustomResource):
         Manages an APIG API resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create an API with the Web backend and the protocol type is HTTP
 
         ```python
         import pulumi
@@ -1102,6 +1262,12 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
                request body, media type or parameters.
                The request body does not exceed `20,480` characters.
+        :param pulumi.Input[str] content_type: Specifies the content type of the request body.  
+               The valid values are as follows:
+               + **application/json**
+               + **application/xml**
+               + **multipart/form-data**
+               + **text/plain**
         :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
         :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
                The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
@@ -1113,9 +1279,18 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends.  
                The maximum blocks of the policy is 5.
                The object structure is documented below.
-        :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
+        :param pulumi.Input[str] group_id: Specifies the ID of the APIG group to which the API belongs.  
+               Changing this will create a new API resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
+        :param pulumi.Input[bool] is_send_fg_body_base64: Specifies whether to perform base64 encoding on the body for interaction
+               with FunctionGraph.
+               Defaults to **true**.
+               The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+               These scenarios which can be applied:
+               + Custom authentication.
+               + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+               + APIs with FunctionGraph backend.
         :param pulumi.Input[str] matching: Specifies the route matching mode.  
                The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details.  
@@ -1125,7 +1300,8 @@ class Api(pulumi.CustomResource):
                The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] region: Specifies the region where the API is located.  
                If omitted, the provider-level region will be used. Changing this will create a new API resource.
         :param pulumi.Input[str] request_method: Specifies the backend request method of the API.  
@@ -1141,13 +1317,15 @@ class Api(pulumi.CustomResource):
                **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
         :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
-               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+               The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
                The application code must located in the header when `simple_authentication` is true.
         :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
                The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] tags: Specifies the list of tags configuration.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details.  
                The object structure is documented below. Changing this will create a new API resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]] web_policies: Specifies the example response for a failed request.  
@@ -1164,6 +1342,7 @@ class Api(pulumi.CustomResource):
         Manages an APIG API resource within HuaweiCloud.
 
         ## Example Usage
+        ### Create an API with the Web backend and the protocol type is HTTP
 
         ```python
         import pulumi
@@ -1229,6 +1408,7 @@ class Api(pulumi.CustomResource):
                  authorizer_id: Optional[pulumi.Input[str]] = None,
                  backend_params: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiBackendParamArgs']]]]] = None,
                  body_description: Optional[pulumi.Input[str]] = None,
+                 content_type: Optional[pulumi.Input[str]] = None,
                  cors: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  failure_response: Optional[pulumi.Input[str]] = None,
@@ -1236,6 +1416,7 @@ class Api(pulumi.CustomResource):
                  func_graph_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]]] = None,
                  group_id: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 is_send_fg_body_base64: Optional[pulumi.Input[bool]] = None,
                  matching: Optional[pulumi.Input[str]] = None,
                  mock: Optional[pulumi.Input[pulumi.InputType['ApiMockArgs']]] = None,
                  mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]]] = None,
@@ -1249,6 +1430,7 @@ class Api(pulumi.CustomResource):
                  security_authentication: Optional[pulumi.Input[str]] = None,
                  simple_authentication: Optional[pulumi.Input[bool]] = None,
                  success_response: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  web: Optional[pulumi.Input[pulumi.InputType['ApiWebArgs']]] = None,
                  web_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiWebPolicyArgs']]]]] = None,
@@ -1264,6 +1446,7 @@ class Api(pulumi.CustomResource):
             __props__.__dict__["authorizer_id"] = authorizer_id
             __props__.__dict__["backend_params"] = backend_params
             __props__.__dict__["body_description"] = body_description
+            __props__.__dict__["content_type"] = content_type
             __props__.__dict__["cors"] = cors
             __props__.__dict__["description"] = description
             __props__.__dict__["failure_response"] = failure_response
@@ -1275,6 +1458,7 @@ class Api(pulumi.CustomResource):
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
+            __props__.__dict__["is_send_fg_body_base64"] = is_send_fg_body_base64
             __props__.__dict__["matching"] = matching
             __props__.__dict__["mock"] = mock
             __props__.__dict__["mock_policies"] = mock_policies
@@ -1294,6 +1478,7 @@ class Api(pulumi.CustomResource):
             __props__.__dict__["security_authentication"] = security_authentication
             __props__.__dict__["simple_authentication"] = simple_authentication
             __props__.__dict__["success_response"] = success_response
+            __props__.__dict__["tags"] = tags
             if type is None and not opts.urn:
                 raise TypeError("Missing required property 'type'")
             __props__.__dict__["type"] = type
@@ -1314,6 +1499,7 @@ class Api(pulumi.CustomResource):
             authorizer_id: Optional[pulumi.Input[str]] = None,
             backend_params: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiBackendParamArgs']]]]] = None,
             body_description: Optional[pulumi.Input[str]] = None,
+            content_type: Optional[pulumi.Input[str]] = None,
             cors: Optional[pulumi.Input[bool]] = None,
             description: Optional[pulumi.Input[str]] = None,
             failure_response: Optional[pulumi.Input[str]] = None,
@@ -1321,6 +1507,7 @@ class Api(pulumi.CustomResource):
             func_graph_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]]] = None,
             group_id: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
+            is_send_fg_body_base64: Optional[pulumi.Input[bool]] = None,
             matching: Optional[pulumi.Input[str]] = None,
             mock: Optional[pulumi.Input[pulumi.InputType['ApiMockArgs']]] = None,
             mock_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiMockPolicyArgs']]]]] = None,
@@ -1335,6 +1522,7 @@ class Api(pulumi.CustomResource):
             security_authentication: Optional[pulumi.Input[str]] = None,
             simple_authentication: Optional[pulumi.Input[bool]] = None,
             success_response: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             type: Optional[pulumi.Input[str]] = None,
             updated_at: Optional[pulumi.Input[str]] = None,
             web: Optional[pulumi.Input[pulumi.InputType['ApiWebArgs']]] = None,
@@ -1352,6 +1540,12 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[str] body_description: Specifies the description of the API request body, which can be an example
                request body, media type or parameters.
                The request body does not exceed `20,480` characters.
+        :param pulumi.Input[str] content_type: Specifies the content type of the request body.  
+               The valid values are as follows:
+               + **application/json**
+               + **application/xml**
+               + **multipart/form-data**
+               + **text/plain**
         :param pulumi.Input[bool] cors: Specifies whether CORS is supported, defaults to **false**.
         :param pulumi.Input[str] description: Specifies the description of the constant or system parameter.  
                The description contains a maximum of `255` characters and the angle brackets (< and >) are not allowed.
@@ -1363,9 +1557,18 @@ class Api(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ApiFuncGraphPolicyArgs']]]] func_graph_policies: Specifies the Mock policy backends.  
                The maximum blocks of the policy is 5.
                The object structure is documented below.
-        :param pulumi.Input[str] group_id: Specifies an ID of the APIG group to which the API belongs to.
+        :param pulumi.Input[str] group_id: Specifies the ID of the APIG group to which the API belongs.  
+               Changing this will create a new API resource.
         :param pulumi.Input[str] instance_id: Specifies an ID of the APIG dedicated instance to which the API belongs
                to. Changing this will create a new API resource.
+        :param pulumi.Input[bool] is_send_fg_body_base64: Specifies whether to perform base64 encoding on the body for interaction
+               with FunctionGraph.
+               Defaults to **true**.
+               The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+               These scenarios which can be applied:
+               + Custom authentication.
+               + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+               + APIs with FunctionGraph backend.
         :param pulumi.Input[str] matching: Specifies the route matching mode.  
                The valid values are **Exact** and **Prefix**, defaults to **Exact**.
         :param pulumi.Input[pulumi.InputType['ApiMockArgs']] mock: Specifies the mock backend details.  
@@ -1375,7 +1578,8 @@ class Api(pulumi.CustomResource):
                The maximum blocks of the policy is 5.
                The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the backend policy name.  
-               The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+               The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+               It must start with a letter.
         :param pulumi.Input[str] region: Specifies the region where the API is located.  
                If omitted, the provider-level region will be used. Changing this will create a new API resource.
         :param pulumi.Input[str] registered_at: The registered time of the API.
@@ -1392,13 +1596,15 @@ class Api(pulumi.CustomResource):
                **HTTPS**, defaults to **HTTPS**.
         :param pulumi.Input[str] response_id: Specifies the APIG group response ID.
         :param pulumi.Input[str] security_authentication: Specifies the security authentication mode of the API request.  
-               The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+               The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         :param pulumi.Input[bool] simple_authentication: Specifies whether the authentication of the application code is enabled.  
                The application code must located in the header when `simple_authentication` is true.
         :param pulumi.Input[str] success_response: Specifies the example response for a successful request.  
                The response contains a maximum of `20,480` characters.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] tags: Specifies the list of tags configuration.
         :param pulumi.Input[str] type: Specifies the condition type of the backend policy.  
                The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+               When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         :param pulumi.Input[str] updated_at: The latest update time of the API.
         :param pulumi.Input[pulumi.InputType['ApiWebArgs']] web: Specifies the web backend details.  
                The object structure is documented below. Changing this will create a new API resource.
@@ -1413,6 +1619,7 @@ class Api(pulumi.CustomResource):
         __props__.__dict__["authorizer_id"] = authorizer_id
         __props__.__dict__["backend_params"] = backend_params
         __props__.__dict__["body_description"] = body_description
+        __props__.__dict__["content_type"] = content_type
         __props__.__dict__["cors"] = cors
         __props__.__dict__["description"] = description
         __props__.__dict__["failure_response"] = failure_response
@@ -1420,6 +1627,7 @@ class Api(pulumi.CustomResource):
         __props__.__dict__["func_graph_policies"] = func_graph_policies
         __props__.__dict__["group_id"] = group_id
         __props__.__dict__["instance_id"] = instance_id
+        __props__.__dict__["is_send_fg_body_base64"] = is_send_fg_body_base64
         __props__.__dict__["matching"] = matching
         __props__.__dict__["mock"] = mock
         __props__.__dict__["mock_policies"] = mock_policies
@@ -1434,6 +1642,7 @@ class Api(pulumi.CustomResource):
         __props__.__dict__["security_authentication"] = security_authentication
         __props__.__dict__["simple_authentication"] = simple_authentication
         __props__.__dict__["success_response"] = success_response
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["type"] = type
         __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["web"] = web
@@ -1466,6 +1675,19 @@ class Api(pulumi.CustomResource):
         The request body does not exceed `20,480` characters.
         """
         return pulumi.get(self, "body_description")
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the content type of the request body.  
+        The valid values are as follows:
+        + **application/json**
+        + **application/xml**
+        + **multipart/form-data**
+        + **text/plain**
+        """
+        return pulumi.get(self, "content_type")
 
     @property
     @pulumi.getter
@@ -1517,7 +1739,8 @@ class Api(pulumi.CustomResource):
     @pulumi.getter(name="groupId")
     def group_id(self) -> pulumi.Output[str]:
         """
-        Specifies an ID of the APIG group to which the API belongs to.
+        Specifies the ID of the APIG group to which the API belongs.  
+        Changing this will create a new API resource.
         """
         return pulumi.get(self, "group_id")
 
@@ -1529,6 +1752,21 @@ class Api(pulumi.CustomResource):
         to. Changing this will create a new API resource.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="isSendFgBodyBase64")
+    def is_send_fg_body_base64(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to perform base64 encoding on the body for interaction
+        with FunctionGraph.
+        Defaults to **true**.
+        The body does not need to be encoded using base64 only when `content_type` is set to **application/json**.
+        These scenarios which can be applied:
+        + Custom authentication.
+        + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+        + APIs with FunctionGraph backend.
+        """
+        return pulumi.get(self, "is_send_fg_body_base64")
 
     @property
     @pulumi.getter
@@ -1564,7 +1802,8 @@ class Api(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the backend policy name.  
-        The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+        The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+        It must start with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -1596,7 +1835,7 @@ class Api(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="requestParams")
-    def request_params(self) -> pulumi.Output[Optional[Sequence['outputs.ApiRequestParam']]]:
+    def request_params(self) -> pulumi.Output[Sequence['outputs.ApiRequestParam']]:
         """
         Specifies the configurations of the front-end parameters.  
         The object structure is documented below.
@@ -1637,7 +1876,7 @@ class Api(pulumi.CustomResource):
     def security_authentication(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the security authentication mode of the API request.  
-        The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+        The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
         """
         return pulumi.get(self, "security_authentication")
 
@@ -1661,10 +1900,19 @@ class Api(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Sequence[str]]]:
+        """
+        Specifies the list of tags configuration.
+        """
+        return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
         Specifies the condition type of the backend policy.  
         The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+        When the `sys_name` is **req_method**, the valid values are **Equal** and **Enumerated**.
         """
         return pulumi.get(self, "type")
 

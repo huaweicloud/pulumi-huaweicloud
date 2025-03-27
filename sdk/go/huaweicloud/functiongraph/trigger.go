@@ -11,7 +11,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a trigger resource within HuaweiCloud FunctionGraph.
+// Manages a trigger resource within HuaweiCloud FunctionGraph.\
+// It's recommend to use `huaweicloudFgsFunctionTrigger`, which makes a great improvement of managing function triggers.
 //
 // ## Example Usage
 // ### Create a Timing Trigger with rate schedule type
@@ -221,11 +222,14 @@ import (
 //			functionUrn := cfg.RequireObject("functionUrn")
 //			kafkaInstanceId := cfg.RequireObject("kafkaInstanceId")
 //			kafkaTopicId := cfg.RequireObject("kafkaTopicId")
+//			userPassword := cfg.RequireObject("userPassword")
 //			_, err := FunctionGraph.NewTrigger(ctx, "test", &FunctionGraph.TriggerArgs{
 //				FunctionUrn: pulumi.Any(functionUrn),
 //				Type:        pulumi.String("KAFKA"),
 //				Kafka: &functiongraph.TriggerKafkaArgs{
 //					InstanceId: pulumi.Any(kafkaInstanceId),
+//					UserName:   pulumi.String("user"),
+//					Password:   pulumi.Any(userPassword),
 //					BatchSize:  pulumi.Int(100),
 //					TopicIds: pulumi.StringArray{
 //						pulumi.Any(kafkaTopicId),

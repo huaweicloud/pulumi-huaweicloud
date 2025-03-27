@@ -46,7 +46,7 @@ import (
 //
 // ## Import
 //
-// ELB listener can be imported using the listener ID, e.g.
+// ELB listener can be imported using the listener ID, e.g. bash
 //
 // ```sh
 //

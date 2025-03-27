@@ -107,7 +107,7 @@ type LookupOpengaussInstanceResult struct {
 	SwitchStrategy string `pulumi:"switchStrategy"`
 	// Indicates the default username.
 	TimeZone string `pulumi:"timeZone"`
-	// Indicates the volume type.
+	// Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
 	Type string `pulumi:"type"`
 	// Indicates the volume information. Structure is documented below.
 	Volumes []GetOpengaussInstanceVolume `pulumi:"volumes"`
@@ -272,7 +272,7 @@ func (o LookupOpengaussInstanceResultOutput) TimeZone() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupOpengaussInstanceResult) string { return v.TimeZone }).(pulumi.StringOutput)
 }
 
-// Indicates the volume type.
+// Indicates the volume type. Value options: **ULTRAHIGH**, **ESSD**.
 func (o LookupOpengaussInstanceResultOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupOpengaussInstanceResult) string { return v.Type }).(pulumi.StringOutput)
 }

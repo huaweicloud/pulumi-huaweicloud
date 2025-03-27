@@ -261,10 +261,10 @@ class Snapshot(pulumi.CustomResource):
 
         ## Import
 
-        This resource can be imported by specifying the CSS cluster ID and snapshot ID separated by a slash, e.g.
+        This resource can be imported by specifying the CSS cluster ID and snapshot ID separated by a slash, e.g.bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/snapshot:Snapshot snapshot_1 < cluster_id >/< snapshot_id >
+         $ pulumi import huaweicloud:Css/snapshot:Snapshot snapshot_1 <cluster_id>/<snapshot_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -305,10 +305,10 @@ class Snapshot(pulumi.CustomResource):
 
         ## Import
 
-        This resource can be imported by specifying the CSS cluster ID and snapshot ID separated by a slash, e.g.
+        This resource can be imported by specifying the CSS cluster ID and snapshot ID separated by a slash, e.g.bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/snapshot:Snapshot snapshot_1 < cluster_id >/< snapshot_id >
+         $ pulumi import huaweicloud:Css/snapshot:Snapshot snapshot_1 <cluster_id>/<snapshot_id>
         ```
 
         :param str resource_name: The name of the resource.

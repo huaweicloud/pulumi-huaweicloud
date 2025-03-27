@@ -42,9 +42,6 @@ class GetInstanceGroupsResult:
     @property
     @pulumi.getter
     def groups(self) -> Sequence['outputs.GetInstanceGroupsGroupResult']:
-        """
-        A list of WAF instance groups.
-        """
         return pulumi.get(self, "groups")
 
     @property
@@ -58,25 +55,16 @@ class GetInstanceGroupsResult:
     @property
     @pulumi.getter
     def name(self) -> Optional[str]:
-        """
-        The instance group name.
-        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
     def region(self) -> str:
-        """
-        The region in which to create the instance group.
-        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[str]:
-        """
-        The id of the VPC that the WAF dedicated instances belongs to.
-        """
         return pulumi.get(self, "vpc_id")
 
 
@@ -98,23 +86,7 @@ def get_instance_groups(name: Optional[str] = None,
                         vpc_id: Optional[str] = None,
                         opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetInstanceGroupsResult:
     """
-    Use this data source to get a list of WAF instance groups.
-
-    ## Example Usage
-
-    ```python
-    import pulumi
-    import pulumi_huaweicloud as huaweicloud
-
-    groups1 = huaweicloud.Waf.get_instance_groups(name="example_name")
-    ```
-
-
-    :param str name: The name of WAF instance group used for matching.
-           The value is not case-sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF instance groups.
-           If omitted, the provider-level region will be used.
-    :param str vpc_id: The id of the VPC that the WAF dedicated instances belongs to.
+    Use this data source to access information about an existing resource.
     """
     __args__ = dict()
     __args__['name'] = name
@@ -137,22 +109,6 @@ def get_instance_groups_output(name: Optional[pulumi.Input[Optional[str]]] = Non
                                vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                                opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetInstanceGroupsResult]:
     """
-    Use this data source to get a list of WAF instance groups.
-
-    ## Example Usage
-
-    ```python
-    import pulumi
-    import pulumi_huaweicloud as huaweicloud
-
-    groups1 = huaweicloud.Waf.get_instance_groups(name="example_name")
-    ```
-
-
-    :param str name: The name of WAF instance group used for matching.
-           The value is not case-sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF instance groups.
-           If omitted, the provider-level region will be used.
-    :param str vpc_id: The id of the VPC that the WAF dedicated instances belongs to.
+    Use this data source to access information about an existing resource.
     """
     ...

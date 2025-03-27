@@ -26,11 +26,11 @@ class PolicyBackupCycleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] execution_times: Specifies the backup time. Automated backups will be triggered at the backup
                time. The current time is in the UTC format (HH:MM). The minutes in the list must be set to **00** and the hours
                cannot be repeated. In the replication policy, you are advised to set one time point for one day.
-        :param pulumi.Input[str] days: Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-               WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-               configuration.
-        :param pulumi.Input[int] interval: Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-               parameter and `days` are alternative.
+        :param pulumi.Input[str] days: Specifies the weekly backup day of backup schedule.  
+               It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+               spaces, between date and date during the configuration.
+        :param pulumi.Input[int] interval: Specifies the interval (in days) of backup schedule.  
+               The valid value ranges from `1` to `30`.
         """
         pulumi.set(__self__, "execution_times", execution_times)
         if days is not None:
@@ -56,9 +56,9 @@ class PolicyBackupCycleArgs:
     @pulumi.getter
     def days(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the weekly backup day of backup schedule. It supports seven days a week (MO, TU,
-        WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without spaces, between date and date during the
-        configuration.
+        Specifies the weekly backup day of backup schedule.  
+        It supports seven days a week (MO, TU, WE, TH, FR, SA, SU) and this parameter is separated by a comma (,) without
+        spaces, between date and date during the configuration.
         """
         return pulumi.get(self, "days")
 
@@ -70,8 +70,8 @@ class PolicyBackupCycleArgs:
     @pulumi.getter
     def interval(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the interval (in days) of backup schedule. The value range is `1` to `30`. This
-        parameter and `days` are alternative.
+        Specifies the interval (in days) of backup schedule.  
+        The valid value ranges from `1` to `30`.
         """
         return pulumi.get(self, "interval")
 

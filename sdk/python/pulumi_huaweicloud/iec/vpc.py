@@ -220,7 +220,7 @@ class Vpc(pulumi.CustomResource):
 
         ## Import
 
-        VPCs can be imported using the `id`, e.g.
+        VPCs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vpc:Vpc myvpc 7117d38e-4c8f-4624-a505-bd96b97d024c
@@ -264,7 +264,7 @@ class Vpc(pulumi.CustomResource):
 
         ## Import
 
-        VPCs can be imported using the `id`, e.g.
+        VPCs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vpc:Vpc myvpc 7117d38e-4c8f-4624-a505-bd96b97d024c

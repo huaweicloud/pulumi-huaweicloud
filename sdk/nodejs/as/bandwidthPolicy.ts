@@ -83,7 +83,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The bandwidth scaling policies can be imported using the `id`, e.g.
+ * The bandwidth scaling policies can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:As/bandwidthPolicy:BandwidthPolicy test 0ce123456a00f2591fabc00385ff1234

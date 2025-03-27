@@ -6,10 +6,10 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * CDN domain management.
+ * Manages a CDN domain resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### Create a cdn domain
+ * ### Create a CDN domain
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -18,8 +18,9 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const domainName = config.requireObject("domainName");
  * const originServer = config.requireObject("originServer");
- * const domain1 = new huaweicloud.cdn.Domain("domain1", {
+ * const test = new huaweicloud.cdn.Domain("test", {
  *     type: "web",
+ *     serviceArea: "mainland_china",
  *     sources: [{
  *         origin: originServer,
  *         originType: "ipaddr",
@@ -31,7 +32,7 @@ import * as utilities from "../utilities";
  *     },
  * });
  * ```
- * ### Create a cdn domain with cache rules
+ * ### Create a CDN domain with cache rules
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -40,8 +41,9 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const domainName = config.requireObject("domainName");
  * const originServer = config.requireObject("originServer");
- * const domain1 = new huaweicloud.cdn.Domain("domain1", {
+ * const test = new huaweicloud.cdn.Domain("test", {
  *     type: "web",
+ *     serviceArea: "mainland_china",
  *     sources: [{
  *         origin: originServer,
  *         originType: "ipaddr",
@@ -49,15 +51,16 @@ import * as utilities from "../utilities";
  *     }],
  *     cacheSettings: {
  *         rules: [{
- *             ruleType: 0,
+ *             ruleType: "all",
  *             ttl: 180,
- *             ttlType: 4,
+ *             ttlType: "d",
  *             priority: 2,
+ *             urlParameterType: "ignore_url_params",
  *         }],
  *     },
  * });
  * ```
- * ### Create a cdn domain with configs
+ * ### Create a CDN domain with configs
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -67,8 +70,11 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const domainName = config.requireObject("domainName");
  * const originServer = config.requireObject("originServer");
- * const domain1 = new huaweicloud.cdn.Domain("domain1", {
+ * const ipOrDomain = config.requireObject("ipOrDomain");
+ * const caCertificateBody = config.requireObject("caCertificateBody");
+ * const test = new huaweicloud.cdn.Domain("test", {
  *     type: "web",
+ *     serviceArea: "mainland_china",
  *     sources: [{
  *         origin: originServer,
  *         originType: "ipaddr",
@@ -76,15 +82,16 @@ import * as utilities from "../utilities";
  *     }],
  *     configs: {
  *         originProtocol: "http",
+ *         ipv6Enable: true,
+ *         rangeBasedRetrievalEnabled: true,
+ *         description: "test description",
  *         httpsSettings: {
  *             certificateName: "terraform-test",
  *             certificateBody: fs.readFileSync("your_directory/chain.cer"),
  *             http2Enabled: true,
  *             httpsEnabled: true,
  *             privateKey: fs.readFileSync("your_directory/server_private.key"),
- *         },
- *         cacheUrlParameterFilter: {
- *             type: "ignore_url_params",
+ *             ocspStaplingStatus: "on",
  *         },
  *         retrievalRequestHeaders: [{
  *             name: "test-name",
@@ -97,7 +104,101 @@ import * as utilities from "../utilities";
  *             action: "set",
  *         }],
  *         urlSigning: {
- *             enabled: false,
+ *             enabled: true,
+ *             type: "type_a",
+ *             signMethod: "md5",
+ *             matchType: "all",
+ *             signArg: "Psd_123",
+ *             key: "A27jtfSTy13q7A0UnTA9vpxYXEb",
+ *             backupKey: "S36klgTFa60q3V8DmSK2hwfBOYp",
+ *             timeFormat: "dec",
+ *             expireTime: 30,
+ *             inheritConfig: {
+ *                 enabled: true,
+ *                 inheritType: "m3u8",
+ *                 inheritTimeType: "sys_time",
+ *             },
+ *         },
+ *         flexibleOrigins: [{
+ *             matchType: "all",
+ *             priority: 1,
+ *             backSources: {
+ *                 httpPort: 80,
+ *                 httpsPort: 443,
+ *                 ipOrDomain: ipOrDomain,
+ *                 sourcesType: "ipaddr",
+ *             },
+ *         }],
+ *         requestLimitRules: [{
+ *             limitRateAfter: 50,
+ *             limitRateValue: 1048576,
+ *             matchType: "catalog",
+ *             matchValue: "/test/ff",
+ *             priority: 4,
+ *             type: "size",
+ *         }],
+ *         errorCodeCaches: [{
+ *             code: 403,
+ *             ttl: 70,
+ *         }],
+ *         originRequestUrlRewrites: [{
+ *             matchType: "file_path",
+ *             priority: 10,
+ *             sourceUrl: "/tt/abc.txt",
+ *             targetUrl: `/new/$1/$2.html`,
+ *         }],
+ *         userAgentFilter: {
+ *             type: "black",
+ *             includeEmpty: "false",
+ *             uaLists: ["t1*"],
+ *         },
+ *         sni: {
+ *             enabled: true,
+ *             serverName: "backup.all.cn.com",
+ *         },
+ *         requestUrlRewrites: [{
+ *             executionMode: "break",
+ *             redirectUrl: "/test/index.html",
+ *             condition: {
+ *                 matchType: "catalog",
+ *                 matchValue: "/test/folder/1",
+ *                 priority: 10,
+ *             },
+ *         }],
+ *         browserCacheRules: [{
+ *             cacheType: "ttl",
+ *             ttl: 30,
+ *             ttlUnit: "m",
+ *             condition: {
+ *                 matchType: "file_extension",
+ *                 matchValue: ".jpg,.zip,.gz",
+ *                 priority: 2,
+ *             },
+ *         }],
+ *         clientCert: {
+ *             enabled: true,
+ *             hosts: "demo1.com.cn|demo2.com.cn|demo3.com.cn",
+ *             trustedCert: caCertificateBody,
+ *         },
+ *         remoteAuth: {
+ *             enabled: true,
+ *             remoteAuthRules: {
+ *                 authFailedStatus: "503",
+ *                 authServer: "https://testdomain-update.com",
+ *                 authSuccessStatus: "302",
+ *                 fileTypeSetting: "all",
+ *                 requestMethod: "POST",
+ *                 reserveArgsSetting: "reserve_all_args",
+ *                 reserveHeadersSetting: "reserve_all_headers",
+ *                 responseStatus: "206",
+ *                 timeout: 3000,
+ *                 timeoutAction: "forbid",
+ *                 addCustomArgsRules: [{
+ *                     key: "http_user_agent",
+ *                     type: "nginx_preset_var",
+ *                     value: `$server_protocol`,
+ *                 }],
+ *             },
  *         },
  *         compress: {
  *             enabled: false,
@@ -106,17 +207,69 @@ import * as utilities from "../utilities";
  *             enabled: true,
  *             type: "http",
  *         },
+ *         referer: {
+ *             type: "white",
+ *             value: "*.common.com,192.187.2.43,www.test.top:4990",
+ *             includeEmpty: false,
+ *         },
+ *     },
+ * });
+ * ```
+ * ### Create a CDN domain with SCM certificate HTTPS configs
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const domainName = config.requireObject("domainName");
+ * const originServer = config.requireObject("originServer");
+ * const certificateName = config.requireObject("certificateName");
+ * const scmCertificateId = config.requireObject("scmCertificateId");
+ * const test = new huaweicloud.cdn.Domain("test", {
+ *     type: "web",
+ *     serviceArea: "mainland_china",
+ *     sources: [{
+ *         origin: originServer,
+ *         originType: "ipaddr",
+ *         active: 1,
+ *     }],
+ *     configs: {
+ *         httpsSettings: {
+ *             certificateSource: 2,
+ *             certificateName: certificateName,
+ *             scmCertificateId: scmCertificateId,
+ *             certificateType: "server",
+ *             http2Enabled: true,
+ *             httpsEnabled: true,
+ *         },
  *     },
  * });
  * ```
  *
  * ## Import
  *
- * Domains can be imported using the `id`, e.g.
+ * The CDN domain resource can be imported using the domain `name`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cdn/domain:Domain domain_1 fe2462fac09a4a42a76ecc4a1ef542f1
+ *  $ pulumi import huaweicloud:Cdn/domain:Domain test <name>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `configs.0.url_signing.0.key`, `configs.0.url_signing.0.backup_key`, `configs.0.https_settings.0.certificate_body`, `configs.0.https_settings.0.private_key`, `cache_settings`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_cdn_domain" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  enterprise_project_id, configs.0.url_signing.0.key, configs.0.url_signing.0.backup_key,
+ *
+ *  configs.0.https_settings.0.certificate_body, configs.0.https_settings.0.private_key, cache_settings,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Domain extends pulumi.CustomResource {
     /**
@@ -147,7 +300,7 @@ export class Domain extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the cache configuration. The object structure
+     * Specifies the cache configuration. The cacheSettings structure
      * is documented below.
      */
     public readonly cacheSettings!: pulumi.Output<outputs.Cdn.DomainCacheSettings>;
@@ -156,32 +309,43 @@ export class Domain extends pulumi.CustomResource {
      */
     public /*out*/ readonly cname!: pulumi.Output<string>;
     /**
-     * Specifies the domain configuration items. The object structure is
+     * Specifies the domain configuration items. The configs structure is
      * documented below.
      */
     public readonly configs!: pulumi.Output<outputs.Cdn.DomainConfigs>;
     /**
+     * schema: Internal
+     */
+    public /*out*/ readonly domainName!: pulumi.Output<string>;
+    /**
      * The status of the acceleration domain name. The available values are
-     * 'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
+     * **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
      */
     public /*out*/ readonly domainStatus!: pulumi.Output<string>;
+    public readonly enableForceNew!: pulumi.Output<string | undefined>;
     /**
-     * The enterprise project id. Changing this parameter will create
-     * a new resource.
+     * Specifies the enterprise project ID.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the request or response header.
+     * Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+     * **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+     * **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+     * and hyphens (-), and starts with a letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * The area covered by the acceleration service. Valid values are
-     * `mainlandChina`, `outsideMainlandChina`, and `global`. Changing this parameter will create a new resource.
+     * Specifies the area covered by the acceleration service.
+     * Valid values are as follows:
+     * + **mainland_china**: Indicates that the service scope is mainland China.
+     * + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+     * + **global**: Indicates that the service scope is global.
      */
     public readonly serviceArea!: pulumi.Output<string>;
     /**
-     * An array of one or more objects specifies the domain name of the origin server.
-     * The sources object structure is documented below.
+     * Specifies an array of one or more objects specifying origin server settings.
+     * A maximum of `50` origin site configurations can be configured.
+     * The sources structure is documented below.
      */
     public readonly sources!: pulumi.Output<outputs.Cdn.DomainSource[]>;
     /**
@@ -189,11 +353,11 @@ export class Domain extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the operation type for caching URL parameters. Posiible values are:
-     * **full_url**: cache all parameters
-     * **ignore_url_params**: ignore all parameters
-     * **del_args**: ignore specific URL parameters
-     * **reserve_args**: reserve specified URL parameters
+     * Specifies the blacklist and whitelist rule type. Valid values are:
+     * + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+     * returned.
+     * + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+     * returned for other users.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -213,7 +377,9 @@ export class Domain extends pulumi.CustomResource {
             resourceInputs["cacheSettings"] = state ? state.cacheSettings : undefined;
             resourceInputs["cname"] = state ? state.cname : undefined;
             resourceInputs["configs"] = state ? state.configs : undefined;
+            resourceInputs["domainName"] = state ? state.domainName : undefined;
             resourceInputs["domainStatus"] = state ? state.domainStatus : undefined;
+            resourceInputs["enableForceNew"] = state ? state.enableForceNew : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["serviceArea"] = state ? state.serviceArea : undefined;
@@ -230,6 +396,7 @@ export class Domain extends pulumi.CustomResource {
             }
             resourceInputs["cacheSettings"] = args ? args.cacheSettings : undefined;
             resourceInputs["configs"] = args ? args.configs : undefined;
+            resourceInputs["enableForceNew"] = args ? args.enableForceNew : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["serviceArea"] = args ? args.serviceArea : undefined;
@@ -237,6 +404,7 @@ export class Domain extends pulumi.CustomResource {
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["cname"] = undefined /*out*/;
+            resourceInputs["domainName"] = undefined /*out*/;
             resourceInputs["domainStatus"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -249,7 +417,7 @@ export class Domain extends pulumi.CustomResource {
  */
 export interface DomainState {
     /**
-     * Specifies the cache configuration. The object structure
+     * Specifies the cache configuration. The cacheSettings structure
      * is documented below.
      */
     cacheSettings?: pulumi.Input<inputs.Cdn.DomainCacheSettings>;
@@ -258,32 +426,43 @@ export interface DomainState {
      */
     cname?: pulumi.Input<string>;
     /**
-     * Specifies the domain configuration items. The object structure is
+     * Specifies the domain configuration items. The configs structure is
      * documented below.
      */
     configs?: pulumi.Input<inputs.Cdn.DomainConfigs>;
     /**
+     * schema: Internal
+     */
+    domainName?: pulumi.Input<string>;
+    /**
      * The status of the acceleration domain name. The available values are
-     * 'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
+     * **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
      */
     domainStatus?: pulumi.Input<string>;
+    enableForceNew?: pulumi.Input<string>;
     /**
-     * The enterprise project id. Changing this parameter will create
-     * a new resource.
+     * Specifies the enterprise project ID.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the request or response header.
+     * Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+     * **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+     * **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+     * and hyphens (-), and starts with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * The area covered by the acceleration service. Valid values are
-     * `mainlandChina`, `outsideMainlandChina`, and `global`. Changing this parameter will create a new resource.
+     * Specifies the area covered by the acceleration service.
+     * Valid values are as follows:
+     * + **mainland_china**: Indicates that the service scope is mainland China.
+     * + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+     * + **global**: Indicates that the service scope is global.
      */
     serviceArea?: pulumi.Input<string>;
     /**
-     * An array of one or more objects specifies the domain name of the origin server.
-     * The sources object structure is documented below.
+     * Specifies an array of one or more objects specifying origin server settings.
+     * A maximum of `50` origin site configurations can be configured.
+     * The sources structure is documented below.
      */
     sources?: pulumi.Input<pulumi.Input<inputs.Cdn.DomainSource>[]>;
     /**
@@ -291,11 +470,11 @@ export interface DomainState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the operation type for caching URL parameters. Posiible values are:
-     * **full_url**: cache all parameters
-     * **ignore_url_params**: ignore all parameters
-     * **del_args**: ignore specific URL parameters
-     * **reserve_args**: reserve specified URL parameters
+     * Specifies the blacklist and whitelist rule type. Valid values are:
+     * + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+     * returned.
+     * + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+     * returned for other users.
      */
     type?: pulumi.Input<string>;
 }
@@ -305,32 +484,39 @@ export interface DomainState {
  */
 export interface DomainArgs {
     /**
-     * Specifies the cache configuration. The object structure
+     * Specifies the cache configuration. The cacheSettings structure
      * is documented below.
      */
     cacheSettings?: pulumi.Input<inputs.Cdn.DomainCacheSettings>;
     /**
-     * Specifies the domain configuration items. The object structure is
+     * Specifies the domain configuration items. The configs structure is
      * documented below.
      */
     configs?: pulumi.Input<inputs.Cdn.DomainConfigs>;
+    enableForceNew?: pulumi.Input<string>;
     /**
-     * The enterprise project id. Changing this parameter will create
-     * a new resource.
+     * Specifies the enterprise project ID.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the request or response header.
+     * Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+     * **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+     * **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+     * and hyphens (-), and starts with a letter.
      */
     name?: pulumi.Input<string>;
     /**
-     * The area covered by the acceleration service. Valid values are
-     * `mainlandChina`, `outsideMainlandChina`, and `global`. Changing this parameter will create a new resource.
+     * Specifies the area covered by the acceleration service.
+     * Valid values are as follows:
+     * + **mainland_china**: Indicates that the service scope is mainland China.
+     * + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+     * + **global**: Indicates that the service scope is global.
      */
     serviceArea?: pulumi.Input<string>;
     /**
-     * An array of one or more objects specifies the domain name of the origin server.
-     * The sources object structure is documented below.
+     * Specifies an array of one or more objects specifying origin server settings.
+     * A maximum of `50` origin site configurations can be configured.
+     * The sources structure is documented below.
      */
     sources: pulumi.Input<pulumi.Input<inputs.Cdn.DomainSource>[]>;
     /**
@@ -338,11 +524,11 @@ export interface DomainArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the operation type for caching URL parameters. Posiible values are:
-     * **full_url**: cache all parameters
-     * **ignore_url_params**: ignore all parameters
-     * **del_args**: ignore specific URL parameters
-     * **reserve_args**: reserve specified URL parameters
+     * Specifies the blacklist and whitelist rule type. Valid values are:
+     * + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+     * returned.
+     * + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+     * returned for other users.
      */
     type: pulumi.Input<string>;
 }

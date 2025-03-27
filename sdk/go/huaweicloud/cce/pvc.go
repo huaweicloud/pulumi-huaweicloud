@@ -132,7 +132,7 @@ import (
 //
 // ## Import
 //
-// CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
+// CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g. bash
 //
 // ```sh
 //
@@ -140,7 +140,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. resource "huaweicloud_cce_pvc" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. hcl resource "huaweicloud_cce_pvc" "test" {
 //
 //	...
 //
@@ -172,9 +172,10 @@ type Pvc struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new PVC resource.
 	Labels pulumi.StringMapOutput `pulumi:"labels"`
-	// Specifies the unique name of the PVC resource. This parameter can contain a
-	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-	// lowercase letters and digits. Changing this will create a new PVC resource.
+	// Specifies the unique name of the PVC resource.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new PVC resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the namespace to logically divide your containers into different
 	// group. Changing this will create a new PVC resource.
@@ -258,9 +259,10 @@ type pvcState struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new PVC resource.
 	Labels map[string]string `pulumi:"labels"`
-	// Specifies the unique name of the PVC resource. This parameter can contain a
-	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-	// lowercase letters and digits. Changing this will create a new PVC resource.
+	// Specifies the unique name of the PVC resource.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new PVC resource.
 	Name *string `pulumi:"name"`
 	// Specifies the namespace to logically divide your containers into different
 	// group. Changing this will create a new PVC resource.
@@ -300,9 +302,10 @@ type PvcState struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new PVC resource.
 	Labels pulumi.StringMapInput
-	// Specifies the unique name of the PVC resource. This parameter can contain a
-	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-	// lowercase letters and digits. Changing this will create a new PVC resource.
+	// Specifies the unique name of the PVC resource.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new PVC resource.
 	Name pulumi.StringPtrInput
 	// Specifies the namespace to logically divide your containers into different
 	// group. Changing this will create a new PVC resource.
@@ -344,9 +347,10 @@ type pvcArgs struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new PVC resource.
 	Labels map[string]string `pulumi:"labels"`
-	// Specifies the unique name of the PVC resource. This parameter can contain a
-	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-	// lowercase letters and digits. Changing this will create a new PVC resource.
+	// Specifies the unique name of the PVC resource.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new PVC resource.
 	Name *string `pulumi:"name"`
 	// Specifies the namespace to logically divide your containers into different
 	// group. Changing this will create a new PVC resource.
@@ -381,9 +385,10 @@ type PvcArgs struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new PVC resource.
 	Labels pulumi.StringMapInput
-	// Specifies the unique name of the PVC resource. This parameter can contain a
-	// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-	// lowercase letters and digits. Changing this will create a new PVC resource.
+	// Specifies the unique name of the PVC resource.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new PVC resource.
 	Name pulumi.StringPtrInput
 	// Specifies the namespace to logically divide your containers into different
 	// group. Changing this will create a new PVC resource.
@@ -520,9 +525,10 @@ func (o PvcOutput) Labels() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Pvc) pulumi.StringMapOutput { return v.Labels }).(pulumi.StringMapOutput)
 }
 
-// Specifies the unique name of the PVC resource. This parameter can contain a
-// maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-// lowercase letters and digits. Changing this will create a new PVC resource.
+// Specifies the unique name of the PVC resource.\
+// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+// hyphens (-), and must start and end with lowercase letters and digits.
+// Changing this will create a new PVC resource.
 func (o PvcOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Pvc) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

@@ -61,7 +61,7 @@ import (
 //
 // ## Import
 //
-// VPCs can be imported using the `id`, e.g.
+// VPCs can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -69,7 +69,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You you can ignore changes as below. resource "huaweicloud_vpc" "vpc_v1" {
+//	Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You can ignore changes as below. hcl resource "huaweicloud_vpc" "vpc_v1" {
 //
 //	...
 //
@@ -87,8 +87,10 @@ type Vpc struct {
 	// Specifies supplementary information about the VPC. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the enterprise project id of the VPC. Changing this
-	// creates a new VPC resource.
+	// Specifies whether to enable local route enhancement function. It can not be
+	// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+	EnhancedLocalRoute pulumi.StringOutput `pulumi:"enhancedLocalRoute"`
+	// Specifies the enterprise project ID of the VPC.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
 	// of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
@@ -98,8 +100,11 @@ type Vpc struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Deprecated: use huaweicloud_vpc_route_table data source to get all routes
 	Routes VpcRouteArrayOutput `pulumi:"routes"`
-	// Specifies the secondary CIDR block of the VPC.
+	// schema: Deprecated; use secondary_cidrs instead
 	SecondaryCidr pulumi.StringPtrOutput `pulumi:"secondaryCidr"`
+	// Specifies the secondary CIDR blocks of the VPC.
+	// Each VPC can have 5 secondary CIDR blocks.
+	SecondaryCidrs pulumi.StringArrayOutput `pulumi:"secondaryCidrs"`
 	// The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the VPC.
@@ -145,8 +150,10 @@ type vpcState struct {
 	// Specifies supplementary information about the VPC. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise project id of the VPC. Changing this
-	// creates a new VPC resource.
+	// Specifies whether to enable local route enhancement function. It can not be
+	// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+	EnhancedLocalRoute *string `pulumi:"enhancedLocalRoute"`
+	// Specifies the enterprise project ID of the VPC.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
 	// of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
@@ -156,8 +163,11 @@ type vpcState struct {
 	Region *string `pulumi:"region"`
 	// Deprecated: use huaweicloud_vpc_route_table data source to get all routes
 	Routes []VpcRoute `pulumi:"routes"`
-	// Specifies the secondary CIDR block of the VPC.
+	// schema: Deprecated; use secondary_cidrs instead
 	SecondaryCidr *string `pulumi:"secondaryCidr"`
+	// Specifies the secondary CIDR blocks of the VPC.
+	// Each VPC can have 5 secondary CIDR blocks.
+	SecondaryCidrs []string `pulumi:"secondaryCidrs"`
 	// The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
 	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs to associate with the VPC.
@@ -171,8 +181,10 @@ type VpcState struct {
 	// Specifies supplementary information about the VPC. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise project id of the VPC. Changing this
-	// creates a new VPC resource.
+	// Specifies whether to enable local route enhancement function. It can not be
+	// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+	EnhancedLocalRoute pulumi.StringPtrInput
+	// Specifies the enterprise project ID of the VPC.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
 	// of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
@@ -182,8 +194,11 @@ type VpcState struct {
 	Region pulumi.StringPtrInput
 	// Deprecated: use huaweicloud_vpc_route_table data source to get all routes
 	Routes VpcRouteArrayInput
-	// Specifies the secondary CIDR block of the VPC.
+	// schema: Deprecated; use secondary_cidrs instead
 	SecondaryCidr pulumi.StringPtrInput
+	// Specifies the secondary CIDR blocks of the VPC.
+	// Each VPC can have 5 secondary CIDR blocks.
+	SecondaryCidrs pulumi.StringArrayInput
 	// The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
 	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs to associate with the VPC.
@@ -201,8 +216,10 @@ type vpcArgs struct {
 	// Specifies supplementary information about the VPC. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise project id of the VPC. Changing this
-	// creates a new VPC resource.
+	// Specifies whether to enable local route enhancement function. It can not be
+	// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+	EnhancedLocalRoute *string `pulumi:"enhancedLocalRoute"`
+	// Specifies the enterprise project ID of the VPC.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
 	// of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
@@ -210,8 +227,11 @@ type vpcArgs struct {
 	// Specifies the region in which to create the VPC. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC resource.
 	Region *string `pulumi:"region"`
-	// Specifies the secondary CIDR block of the VPC.
+	// schema: Deprecated; use secondary_cidrs instead
 	SecondaryCidr *string `pulumi:"secondaryCidr"`
+	// Specifies the secondary CIDR blocks of the VPC.
+	// Each VPC can have 5 secondary CIDR blocks.
+	SecondaryCidrs []string `pulumi:"secondaryCidrs"`
 	// Specifies the key/value pairs to associate with the VPC.
 	Tags map[string]string `pulumi:"tags"`
 }
@@ -224,8 +244,10 @@ type VpcArgs struct {
 	// Specifies supplementary information about the VPC. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise project id of the VPC. Changing this
-	// creates a new VPC resource.
+	// Specifies whether to enable local route enhancement function. It can not be
+	// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+	EnhancedLocalRoute pulumi.StringPtrInput
+	// Specifies the enterprise project ID of the VPC.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
 	// of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
@@ -233,8 +255,11 @@ type VpcArgs struct {
 	// Specifies the region in which to create the VPC. If omitted, the
 	// provider-level region will be used. Changing this creates a new VPC resource.
 	Region pulumi.StringPtrInput
-	// Specifies the secondary CIDR block of the VPC.
+	// schema: Deprecated; use secondary_cidrs instead
 	SecondaryCidr pulumi.StringPtrInput
+	// Specifies the secondary CIDR blocks of the VPC.
+	// Each VPC can have 5 secondary CIDR blocks.
+	SecondaryCidrs pulumi.StringArrayInput
 	// Specifies the key/value pairs to associate with the VPC.
 	Tags pulumi.StringMapInput
 }
@@ -338,8 +363,13 @@ func (o VpcOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vpc) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise project id of the VPC. Changing this
-// creates a new VPC resource.
+// Specifies whether to enable local route enhancement function. It can not be
+// closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+func (o VpcOutput) EnhancedLocalRoute() pulumi.StringOutput {
+	return o.ApplyT(func(v *Vpc) pulumi.StringOutput { return v.EnhancedLocalRoute }).(pulumi.StringOutput)
+}
+
+// Specifies the enterprise project ID of the VPC.
 func (o VpcOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Vpc) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -361,9 +391,15 @@ func (o VpcOutput) Routes() VpcRouteArrayOutput {
 	return o.ApplyT(func(v *Vpc) VpcRouteArrayOutput { return v.Routes }).(VpcRouteArrayOutput)
 }
 
-// Specifies the secondary CIDR block of the VPC.
+// schema: Deprecated; use secondary_cidrs instead
 func (o VpcOutput) SecondaryCidr() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Vpc) pulumi.StringPtrOutput { return v.SecondaryCidr }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the secondary CIDR blocks of the VPC.
+// Each VPC can have 5 secondary CIDR blocks.
+func (o VpcOutput) SecondaryCidrs() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Vpc) pulumi.StringArrayOutput { return v.SecondaryCidrs }).(pulumi.StringArrayOutput)
 }
 
 // The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.

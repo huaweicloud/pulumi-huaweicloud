@@ -7,11 +7,14 @@ import * as utilities from "../utilities";
 /**
  * Manages a custom dependency package within HuaweiCloud FunctionGraph.
  *
+ * > This resource will be deprecated in a future version. Please use `huaweicloudFgsDependencyVersion` resource to
+ * replace it. For specific usage instructions, please refer to the corresponding document.
+ *
  * ## Example Usage
  *
  * ## Import
  *
- * Dependencies can be imported using the `id`, e.g.
+ * Dependencies can be imported using the `id`, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:FunctionGraph/dependency:Dependency test 795e722f-0c23-41b6-a189-dcd56f889cf6
@@ -47,17 +50,20 @@ export class Dependency extends pulumi.CustomResource {
 
     /**
      * Specifies the dependency description.
-     * The description can contain a maximum of 512 characters.
+     * The description can contain a maximum of `512` characters.
      */
     public readonly description!: pulumi.Output<string>;
     /**
      * The unique ID of the dependency package.
      */
     public /*out*/ readonly etag!: pulumi.Output<string>;
+    /**
+     * The OBS storage URL of the dependency package.
+     */
     public readonly link!: pulumi.Output<string>;
     /**
-     * Specifies the dependeny name.
-     * The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+     * Specifies the dependency name.
+     * The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
      * Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
@@ -72,15 +78,35 @@ export class Dependency extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * Specifies the dependency package runtime.
-     * The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-     * **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-     * **PHP7.3**.
+     * The valid values are as follows:
+     * + **Java8**
+     * + **Java11**
+     * + **Node.js6.10**
+     * + **Node.js8.10**
+     * + **Node.js10.16**
+     * + **Node.js12.13**
+     * + **Node.js14.18**
+     * + **Python2.7**
+     * + **Python3.6**
+     * + **Python3.9**
+     * + **Go1.8**
+     * + **Go1.x**
+     * + **C#(.NET Core 2.0)**
+     * + **C#(.NET Core 2.1)**
+     * + **C#(.NET Core 3.1)**
+     * + **PHP7.3**
+     * + **Custom**
+     * + **http**
      */
     public readonly runtime!: pulumi.Output<string>;
     /**
      * The dependency package size in bytes.
      */
     public /*out*/ readonly size!: pulumi.Output<number>;
+    /**
+     * The dependency package version.
+     */
+    public /*out*/ readonly version!: pulumi.Output<number>;
 
     /**
      * Create a Dependency resource with the given unique name, arguments, and options.
@@ -103,6 +129,7 @@ export class Dependency extends pulumi.CustomResource {
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["runtime"] = state ? state.runtime : undefined;
             resourceInputs["size"] = state ? state.size : undefined;
+            resourceInputs["version"] = state ? state.version : undefined;
         } else {
             const args = argsOrState as DependencyArgs | undefined;
             if ((!args || args.link === undefined) && !opts.urn) {
@@ -119,6 +146,7 @@ export class Dependency extends pulumi.CustomResource {
             resourceInputs["etag"] = undefined /*out*/;
             resourceInputs["owner"] = undefined /*out*/;
             resourceInputs["size"] = undefined /*out*/;
+            resourceInputs["version"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Dependency.__pulumiType, name, resourceInputs, opts);
@@ -131,17 +159,20 @@ export class Dependency extends pulumi.CustomResource {
 export interface DependencyState {
     /**
      * Specifies the dependency description.
-     * The description can contain a maximum of 512 characters.
+     * The description can contain a maximum of `512` characters.
      */
     description?: pulumi.Input<string>;
     /**
      * The unique ID of the dependency package.
      */
     etag?: pulumi.Input<string>;
+    /**
+     * The OBS storage URL of the dependency package.
+     */
     link?: pulumi.Input<string>;
     /**
-     * Specifies the dependeny name.
-     * The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+     * Specifies the dependency name.
+     * The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
      * Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
@@ -156,15 +187,35 @@ export interface DependencyState {
     region?: pulumi.Input<string>;
     /**
      * Specifies the dependency package runtime.
-     * The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-     * **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-     * **PHP7.3**.
+     * The valid values are as follows:
+     * + **Java8**
+     * + **Java11**
+     * + **Node.js6.10**
+     * + **Node.js8.10**
+     * + **Node.js10.16**
+     * + **Node.js12.13**
+     * + **Node.js14.18**
+     * + **Python2.7**
+     * + **Python3.6**
+     * + **Python3.9**
+     * + **Go1.8**
+     * + **Go1.x**
+     * + **C#(.NET Core 2.0)**
+     * + **C#(.NET Core 2.1)**
+     * + **C#(.NET Core 3.1)**
+     * + **PHP7.3**
+     * + **Custom**
+     * + **http**
      */
     runtime?: pulumi.Input<string>;
     /**
      * The dependency package size in bytes.
      */
     size?: pulumi.Input<number>;
+    /**
+     * The dependency package version.
+     */
+    version?: pulumi.Input<number>;
 }
 
 /**
@@ -173,13 +224,16 @@ export interface DependencyState {
 export interface DependencyArgs {
     /**
      * Specifies the dependency description.
-     * The description can contain a maximum of 512 characters.
+     * The description can contain a maximum of `512` characters.
      */
     description?: pulumi.Input<string>;
+    /**
+     * The OBS storage URL of the dependency package.
+     */
     link: pulumi.Input<string>;
     /**
-     * Specifies the dependeny name.
-     * The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+     * Specifies the dependency name.
+     * The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
      * Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
      */
     name?: pulumi.Input<string>;
@@ -190,9 +244,25 @@ export interface DependencyArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the dependency package runtime.
-     * The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-     * **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-     * **PHP7.3**.
+     * The valid values are as follows:
+     * + **Java8**
+     * + **Java11**
+     * + **Node.js6.10**
+     * + **Node.js8.10**
+     * + **Node.js10.16**
+     * + **Node.js12.13**
+     * + **Node.js14.18**
+     * + **Python2.7**
+     * + **Python3.6**
+     * + **Python3.9**
+     * + **Go1.8**
+     * + **Go1.x**
+     * + **C#(.NET Core 2.0)**
+     * + **C#(.NET Core 2.1)**
+     * + **C#(.NET Core 3.1)**
+     * + **PHP7.3**
+     * + **Custom**
+     * + **http**
      */
     runtime: pulumi.Input<string>;
 }

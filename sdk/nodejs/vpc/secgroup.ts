@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
 /**
  * ## Import
  *
- * Security Groups can be imported using the `id`, e.g.
+ * Security Groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/secgroup:Secgroup secgroup_1 38809219-5e8a-4852-9139-6f461c90e8bc
@@ -75,6 +75,10 @@ export class Secgroup extends pulumi.CustomResource {
      */
     public /*out*/ readonly rules!: pulumi.Output<outputs.Vpc.SecgroupRule[]>;
     /**
+     * Specifies the key/value pairs to associate with the security group.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
      * The last update time, in UTC format.
      */
     public /*out*/ readonly updatedAt!: pulumi.Output<string>;
@@ -99,6 +103,7 @@ export class Secgroup extends pulumi.CustomResource {
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["rules"] = state ? state.rules : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as SecgroupArgs | undefined;
@@ -107,6 +112,7 @@ export class Secgroup extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["rules"] = undefined /*out*/;
             resourceInputs["updatedAt"] = undefined /*out*/;
@@ -153,6 +159,10 @@ export interface SecgroupState {
      */
     rules?: pulumi.Input<pulumi.Input<inputs.Vpc.SecgroupRule>[]>;
     /**
+     * Specifies the key/value pairs to associate with the security group.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * The last update time, in UTC format.
      */
     updatedAt?: pulumi.Input<string>;
@@ -185,4 +195,8 @@ export interface SecgroupArgs {
      * provider-level region will be used. Changing this creates a new security group resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the security group.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

@@ -51,11 +51,11 @@ import (
 //
 // ## Import
 //
-// Network ACL can be imported using the `id`, e.g.
+// Network ACL can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Iec/networkAcl:NetworkAcl acl_test 40b1159c-4e6e-11eb-a00e-fa165c365e51
+//	$ pulumi import huaweicloud:Iec/networkAcl:NetworkAcl acl_test <id>
 //
 // ```
 type NetworkAcl struct {

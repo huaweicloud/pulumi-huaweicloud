@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available HuaweiCloud gaussdb opengauss instances.
+ * Use this data source to get available GaussDB OpenGauss instances.
  *
  * ## Example Usage
  *

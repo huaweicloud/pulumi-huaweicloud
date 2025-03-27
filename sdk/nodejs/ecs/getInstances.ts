@@ -31,6 +31,7 @@ export function getInstances(args?: GetInstancesArgs, opts?: pulumi.InvokeOption
     return pulumi.runtime.invoke("huaweicloud:Ecs/getInstances:getInstances", {
         "availabilityZone": args.availabilityZone,
         "enterpriseProjectId": args.enterpriseProjectId,
+        "fixedIpV4": args.fixedIpV4,
         "flavorId": args.flavorId,
         "flavorName": args.flavorName,
         "imageId": args.imageId,
@@ -39,6 +40,7 @@ export function getInstances(args?: GetInstancesArgs, opts?: pulumi.InvokeOption
         "name": args.name,
         "region": args.region,
         "status": args.status,
+        "tags": args.tags,
     }, opts);
 }
 
@@ -55,6 +57,10 @@ export interface GetInstancesArgs {
      * Specifies the enterprise project ID.
      */
     enterpriseProjectId?: string;
+    /**
+     * Specifies the IPv4 addresses of the ECS.
+     */
+    fixedIpV4?: string;
     /**
      * Specifies the flavor ID.
      */
@@ -92,6 +98,10 @@ export interface GetInstancesArgs {
      * + **ERROR**: An error has occurred on the instance.
      */
     status?: string;
+    /**
+     * Specifies the tags to qurey the instances.
+     */
+    tags?: {[key: string]: string};
 }
 
 /**
@@ -106,6 +116,10 @@ export interface GetInstancesResult {
      * The enterprise project ID.
      */
     readonly enterpriseProjectId?: string;
+    /**
+     * The fixed IPv4 address of the instance on this network.
+     */
+    readonly fixedIpV4?: string;
     /**
      * The flavor ID.
      */
@@ -140,6 +154,10 @@ export interface GetInstancesResult {
      * The instance status.
      */
     readonly status?: string;
+    /**
+     * The key/value pairs to associate with the instance.
+     */
+    readonly tags?: {[key: string]: string};
 }
 
 export function getInstancesOutput(args?: GetInstancesOutputArgs, opts?: pulumi.InvokeOptions): pulumi.Output<GetInstancesResult> {
@@ -159,6 +177,10 @@ export interface GetInstancesOutputArgs {
      * Specifies the enterprise project ID.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the IPv4 addresses of the ECS.
+     */
+    fixedIpV4?: pulumi.Input<string>;
     /**
      * Specifies the flavor ID.
      */
@@ -196,4 +218,8 @@ export interface GetInstancesOutputArgs {
      * + **ERROR**: An error has occurred on the instance.
      */
     status?: pulumi.Input<string>;
+    /**
+     * Specifies the tags to qurey the instances.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

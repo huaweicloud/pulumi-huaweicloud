@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a database role resource within HuaweiCloud.
+// Manages a DDS database role resource within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -56,11 +56,11 @@ import (
 //
 // ## Import
 //
-// Database roles can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+// DDS database roles can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+//	$ pulumi import huaweicloud:Dds/databaseRole:DatabaseRole test <instance_id>/<db_name>/<name>
 //
 // ```
 type DatabaseRole struct {
@@ -70,7 +70,7 @@ type DatabaseRole struct {
 	// Changing this parameter will create a new role.
 	DbName pulumi.StringOutput `pulumi:"dbName"`
 	// The list of database privileges owned by the current role, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges DatabaseRoleInheritedPrivilegeArrayOutput `pulumi:"inheritedPrivileges"`
 	// Specifies the DDS instance ID to which the role belongs.
 	// Changing this parameter will create a new role.
@@ -80,13 +80,13 @@ type DatabaseRole struct {
 	// allowed. Changing this parameter will create a new role.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The list of database privileges owned by the current role.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges DatabaseRolePrivilegeArrayOutput `pulumi:"privileges"`
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new role.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the list of roles owned by the current role.
-	// The object structure is documented below.
+	// The roles structure is documented below.
 	// Changing this parameter will create a new role.
 	Roles DatabaseRoleRoleArrayOutput `pulumi:"roles"`
 }
@@ -131,7 +131,7 @@ type databaseRoleState struct {
 	// Changing this parameter will create a new role.
 	DbName *string `pulumi:"dbName"`
 	// The list of database privileges owned by the current role, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges []DatabaseRoleInheritedPrivilege `pulumi:"inheritedPrivileges"`
 	// Specifies the DDS instance ID to which the role belongs.
 	// Changing this parameter will create a new role.
@@ -141,13 +141,13 @@ type databaseRoleState struct {
 	// allowed. Changing this parameter will create a new role.
 	Name *string `pulumi:"name"`
 	// The list of database privileges owned by the current role.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges []DatabaseRolePrivilege `pulumi:"privileges"`
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new role.
 	Region *string `pulumi:"region"`
 	// Specifies the list of roles owned by the current role.
-	// The object structure is documented below.
+	// The roles structure is documented below.
 	// Changing this parameter will create a new role.
 	Roles []DatabaseRoleRole `pulumi:"roles"`
 }
@@ -157,7 +157,7 @@ type DatabaseRoleState struct {
 	// Changing this parameter will create a new role.
 	DbName pulumi.StringPtrInput
 	// The list of database privileges owned by the current role, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges DatabaseRoleInheritedPrivilegeArrayInput
 	// Specifies the DDS instance ID to which the role belongs.
 	// Changing this parameter will create a new role.
@@ -167,13 +167,13 @@ type DatabaseRoleState struct {
 	// allowed. Changing this parameter will create a new role.
 	Name pulumi.StringPtrInput
 	// The list of database privileges owned by the current role.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges DatabaseRolePrivilegeArrayInput
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new role.
 	Region pulumi.StringPtrInput
 	// Specifies the list of roles owned by the current role.
-	// The object structure is documented below.
+	// The roles structure is documented below.
 	// Changing this parameter will create a new role.
 	Roles DatabaseRoleRoleArrayInput
 }
@@ -197,7 +197,7 @@ type databaseRoleArgs struct {
 	// Changing this parameter will create a new role.
 	Region *string `pulumi:"region"`
 	// Specifies the list of roles owned by the current role.
-	// The object structure is documented below.
+	// The roles structure is documented below.
 	// Changing this parameter will create a new role.
 	Roles []DatabaseRoleRole `pulumi:"roles"`
 }
@@ -218,7 +218,7 @@ type DatabaseRoleArgs struct {
 	// Changing this parameter will create a new role.
 	Region pulumi.StringPtrInput
 	// Specifies the list of roles owned by the current role.
-	// The object structure is documented below.
+	// The roles structure is documented below.
 	// Changing this parameter will create a new role.
 	Roles DatabaseRoleRoleArrayInput
 }
@@ -317,7 +317,7 @@ func (o DatabaseRoleOutput) DbName() pulumi.StringOutput {
 }
 
 // The list of database privileges owned by the current role, includes all privileges
-// inherited by owned roles. The object structure is documented below.
+// inherited by owned roles. The inheritedPrivileges structure is documented below.
 func (o DatabaseRoleOutput) InheritedPrivileges() DatabaseRoleInheritedPrivilegeArrayOutput {
 	return o.ApplyT(func(v *DatabaseRole) DatabaseRoleInheritedPrivilegeArrayOutput { return v.InheritedPrivileges }).(DatabaseRoleInheritedPrivilegeArrayOutput)
 }
@@ -336,7 +336,7 @@ func (o DatabaseRoleOutput) Name() pulumi.StringOutput {
 }
 
 // The list of database privileges owned by the current role.
-// The object structure is documented below.
+// The privileges structure is documented below.
 func (o DatabaseRoleOutput) Privileges() DatabaseRolePrivilegeArrayOutput {
 	return o.ApplyT(func(v *DatabaseRole) DatabaseRolePrivilegeArrayOutput { return v.Privileges }).(DatabaseRolePrivilegeArrayOutput)
 }
@@ -348,7 +348,7 @@ func (o DatabaseRoleOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the list of roles owned by the current role.
-// The object structure is documented below.
+// The roles structure is documented below.
 // Changing this parameter will create a new role.
 func (o DatabaseRoleOutput) Roles() DatabaseRoleRoleArrayOutput {
 	return o.ApplyT(func(v *DatabaseRole) DatabaseRoleRoleArrayOutput { return v.Roles }).(DatabaseRoleRoleArrayOutput)

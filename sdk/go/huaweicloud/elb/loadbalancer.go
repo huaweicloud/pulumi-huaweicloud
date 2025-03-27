@@ -64,7 +64,7 @@ import (
 //			cfg := config.New(ctx, "")
 //			ipv4SubnetId := cfg.RequireObject("ipv4SubnetId")
 //			lb1, err := Elb.NewLoadbalancer(ctx, "lb1", &Elb.LoadbalancerArgs{
-//				VipSubnetId: pulumi.Any(ipv4_subnet_id),
+//				VipSubnetId: pulumi.Any(ipv4SubnetId),
 //			})
 //			if err != nil {
 //				return err
@@ -84,28 +84,68 @@ import (
 //
 // ## Import
 //
-// Load balancers can be imported using the `id`, e.g.
+// Load balancers can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Elb/loadbalancer:Loadbalancer test 3e3632db-36c6-4b28-a92e-e72e6562daa6
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a loadbalancer. You can then decide if changes should be applied to the loadbalancer, or the resource definition should be updated to align with the loadbalancer. Also you can ignore changes as below. hcl resource "huaweicloud_lb_loadbalancer" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	period_unit, period, auto_renew,
+//
+//	]
+//
+//	} }
 type Loadbalancer struct {
 	pulumi.CustomResourceState
 
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
+	// Specifies whether auto renew is enabled.\
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
+	// Indicates how the load balancer will be billed.
+	ChargeMode pulumi.StringOutput `pulumi:"chargeMode"`
+	// Specifies the charging mode of the loadbalancer.\
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// The create time of the load balancer.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// The enterprise project id of the loadbalancer. Changing this
-	// creates a new loadbalancer.
+	// The enterprise project id of the loadbalancer.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// schema: Deprecated
 	Flavor pulumi.StringPtrOutput `pulumi:"flavor"`
+	// Indicates the scenario where the load balancer is frozen.
+	FrozenScene pulumi.StringOutput `pulumi:"frozenScene"`
 	// schema: Deprecated
 	LoadbalancerProvider pulumi.StringOutput `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the charging period of the loadbalancer.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the loadbalancer.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
+	// Specifies the reason to enable modification protection. Only valid when
+	// `protectionStatus` is **consoleProtection**.
+	ProtectionReason pulumi.StringPtrOutput `pulumi:"protectionReason"`
+	// Specifies whether modification protection is enabled. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringOutput `pulumi:"protectionStatus"`
 	// The EIP address that is associated to the Load Balancer instance.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
 	// The region in which to create the loadbalancer resource. If omitted, the
@@ -117,6 +157,8 @@ type Loadbalancer struct {
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Deprecated: tenant_id is deprecated
 	TenantId pulumi.StringOutput `pulumi:"tenantId"`
+	// The update time of the load balancer.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 	// The ip address of the load balancer. Changing this creates a new
 	// loadbalancer.
 	VipAddress pulumi.StringOutput `pulumi:"vipAddress"`
@@ -160,18 +202,44 @@ func GetLoadbalancer(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Loadbalancer resources.
 type loadbalancerState struct {
+	// schema: Deprecated
 	AdminStateUp *bool `pulumi:"adminStateUp"`
+	// Specifies whether auto renew is enabled.\
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
+	// Indicates how the load balancer will be billed.
+	ChargeMode *string `pulumi:"chargeMode"`
+	// Specifies the charging mode of the loadbalancer.\
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode *string `pulumi:"chargingMode"`
+	// The create time of the load balancer.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Human-readable description for the loadbalancer.
 	Description *string `pulumi:"description"`
-	// The enterprise project id of the loadbalancer. Changing this
-	// creates a new loadbalancer.
+	// The enterprise project id of the loadbalancer.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// schema: Deprecated
 	Flavor *string `pulumi:"flavor"`
+	// Indicates the scenario where the load balancer is frozen.
+	FrozenScene *string `pulumi:"frozenScene"`
 	// schema: Deprecated
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the loadbalancer.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the loadbalancer.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the reason to enable modification protection. Only valid when
+	// `protectionStatus` is **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// Specifies whether modification protection is enabled. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
 	// The EIP address that is associated to the Load Balancer instance.
 	PublicIp *string `pulumi:"publicIp"`
 	// The region in which to create the loadbalancer resource. If omitted, the
@@ -183,6 +251,8 @@ type loadbalancerState struct {
 	Tags map[string]string `pulumi:"tags"`
 	// Deprecated: tenant_id is deprecated
 	TenantId *string `pulumi:"tenantId"`
+	// The update time of the load balancer.
+	UpdatedAt *string `pulumi:"updatedAt"`
 	// The ip address of the load balancer. Changing this creates a new
 	// loadbalancer.
 	VipAddress *string `pulumi:"vipAddress"`
@@ -194,18 +264,44 @@ type loadbalancerState struct {
 }
 
 type LoadbalancerState struct {
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrInput
+	// Specifies whether auto renew is enabled.\
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrInput
+	// Indicates how the load balancer will be billed.
+	ChargeMode pulumi.StringPtrInput
+	// Specifies the charging mode of the loadbalancer.\
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringPtrInput
+	// The create time of the load balancer.
+	CreatedAt pulumi.StringPtrInput
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrInput
-	// The enterprise project id of the loadbalancer. Changing this
-	// creates a new loadbalancer.
+	// The enterprise project id of the loadbalancer.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// schema: Deprecated
 	Flavor pulumi.StringPtrInput
+	// Indicates the scenario where the load balancer is frozen.
+	FrozenScene pulumi.StringPtrInput
 	// schema: Deprecated
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the loadbalancer.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the loadbalancer.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the reason to enable modification protection. Only valid when
+	// `protectionStatus` is **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// Specifies whether modification protection is enabled. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
 	// The EIP address that is associated to the Load Balancer instance.
 	PublicIp pulumi.StringPtrInput
 	// The region in which to create the loadbalancer resource. If omitted, the
@@ -217,6 +313,8 @@ type LoadbalancerState struct {
 	Tags pulumi.StringMapInput
 	// Deprecated: tenant_id is deprecated
 	TenantId pulumi.StringPtrInput
+	// The update time of the load balancer.
+	UpdatedAt pulumi.StringPtrInput
 	// The ip address of the load balancer. Changing this creates a new
 	// loadbalancer.
 	VipAddress pulumi.StringPtrInput
@@ -232,11 +330,17 @@ func (LoadbalancerState) ElementType() reflect.Type {
 }
 
 type loadbalancerArgs struct {
+	// schema: Deprecated
 	AdminStateUp *bool `pulumi:"adminStateUp"`
+	// Specifies whether auto renew is enabled.\
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the charging mode of the loadbalancer.\
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Human-readable description for the loadbalancer.
 	Description *string `pulumi:"description"`
-	// The enterprise project id of the loadbalancer. Changing this
-	// creates a new loadbalancer.
+	// The enterprise project id of the loadbalancer.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// schema: Deprecated
 	Flavor *string `pulumi:"flavor"`
@@ -244,6 +348,20 @@ type loadbalancerArgs struct {
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the loadbalancer.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the loadbalancer.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the reason to enable modification protection. Only valid when
+	// `protectionStatus` is **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// Specifies whether modification protection is enabled. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
 	Region *string `pulumi:"region"`
@@ -263,11 +381,17 @@ type loadbalancerArgs struct {
 
 // The set of arguments for constructing a Loadbalancer resource.
 type LoadbalancerArgs struct {
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrInput
+	// Specifies whether auto renew is enabled.\
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrInput
+	// Specifies the charging mode of the loadbalancer.\
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringPtrInput
 	// Human-readable description for the loadbalancer.
 	Description pulumi.StringPtrInput
-	// The enterprise project id of the loadbalancer. Changing this
-	// creates a new loadbalancer.
+	// The enterprise project id of the loadbalancer.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// schema: Deprecated
 	Flavor pulumi.StringPtrInput
@@ -275,6 +399,20 @@ type LoadbalancerArgs struct {
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Human-readable name for the loadbalancer. Does not have to be unique.
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the loadbalancer.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the loadbalancer.\
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the reason to enable modification protection. Only valid when
+	// `protectionStatus` is **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// Specifies whether modification protection is enabled. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
 	// The region in which to create the loadbalancer resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new loadbalancer.
 	Region pulumi.StringPtrInput
@@ -379,8 +517,31 @@ func (o LoadbalancerOutput) ToLoadbalancerOutputWithContext(ctx context.Context)
 	return o
 }
 
+// schema: Deprecated
 func (o LoadbalancerOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether auto renew is enabled.\
+// Valid values are **true** and **false**. Defaults to **false**.
+func (o LoadbalancerOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
+// Indicates how the load balancer will be billed.
+func (o LoadbalancerOutput) ChargeMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.ChargeMode }).(pulumi.StringOutput)
+}
+
+// Specifies the charging mode of the loadbalancer.\
+// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+func (o LoadbalancerOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// The create time of the load balancer.
+func (o LoadbalancerOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Human-readable description for the loadbalancer.
@@ -388,8 +549,7 @@ func (o LoadbalancerOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// The enterprise project id of the loadbalancer. Changing this
-// creates a new loadbalancer.
+// The enterprise project id of the loadbalancer.
 func (o LoadbalancerOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -397,6 +557,11 @@ func (o LoadbalancerOutput) EnterpriseProjectId() pulumi.StringOutput {
 // schema: Deprecated
 func (o LoadbalancerOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.Flavor }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the scenario where the load balancer is frozen.
+func (o LoadbalancerOutput) FrozenScene() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.FrozenScene }).(pulumi.StringOutput)
 }
 
 // schema: Deprecated
@@ -407,6 +572,32 @@ func (o LoadbalancerOutput) LoadbalancerProvider() pulumi.StringOutput {
 // Human-readable name for the loadbalancer. Does not have to be unique.
 func (o LoadbalancerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the charging period of the loadbalancer.
+// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+func (o LoadbalancerOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the loadbalancer.\
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+func (o LoadbalancerOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the reason to enable modification protection. Only valid when
+// `protectionStatus` is **consoleProtection**.
+func (o LoadbalancerOutput) ProtectionReason() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringPtrOutput { return v.ProtectionReason }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether modification protection is enabled. Value options:
+// + **nonProtection**: No protection.
+// + **consoleProtection**: Console modification protection.
+func (o LoadbalancerOutput) ProtectionStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.ProtectionStatus }).(pulumi.StringOutput)
 }
 
 // The EIP address that is associated to the Load Balancer instance.
@@ -433,6 +624,11 @@ func (o LoadbalancerOutput) Tags() pulumi.StringMapOutput {
 // Deprecated: tenant_id is deprecated
 func (o LoadbalancerOutput) TenantId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.TenantId }).(pulumi.StringOutput)
+}
+
+// The update time of the load balancer.
+func (o LoadbalancerOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Loadbalancer) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 // The ip address of the load balancer. Changing this creates a new

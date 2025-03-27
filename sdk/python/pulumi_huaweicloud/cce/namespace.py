@@ -28,14 +28,14 @@ class NamespaceArgs:
                Changing this will create a new namespace resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-               and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-               Exactly one of `name` or `prefix` must be provided.
-        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        :param pulumi.Input[str] name: Specifies the unique name of the namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
                hyphens (-), and must start and end with lowercase letters and digits.
-               Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+               Changing this will create a new namespace resource.
+        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new namespace resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the namespace resource.
                If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
         """
@@ -94,10 +94,10 @@ class NamespaceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-        and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-        Exactly one of `name` or `prefix` must be provided.
+        Specifies the unique name of the namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "name")
 
@@ -109,10 +109,10 @@ class NamespaceArgs:
     @pulumi.getter
     def prefix(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a prefix used by the server to generate a unique name.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        Specifies a prefix used by the server to generate a unique name.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
         hyphens (-), and must start and end with lowercase letters and digits.
-        Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "prefix")
 
@@ -154,14 +154,14 @@ class _NamespaceState:
         :param pulumi.Input[str] creation_timestamp: The server time when namespace was created.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-               and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-               Exactly one of `name` or `prefix` must be provided.
-        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        :param pulumi.Input[str] name: Specifies the unique name of the namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
                hyphens (-), and must start and end with lowercase letters and digits.
-               Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+               Changing this will create a new namespace resource.
+        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new namespace resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the namespace resource.
                If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
         :param pulumi.Input[str] status: The current phase of the namespace.
@@ -238,10 +238,10 @@ class _NamespaceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unique name of the namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-        and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-        Exactly one of `name` or `prefix` must be provided.
+        Specifies the unique name of the namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "name")
 
@@ -253,10 +253,10 @@ class _NamespaceState:
     @pulumi.getter
     def prefix(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies a prefix used by the server to generate a unique name.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        Specifies a prefix used by the server to generate a unique name.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
         hyphens (-), and must start and end with lowercase letters and digits.
-        Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "prefix")
 
@@ -319,7 +319,7 @@ class Namespace(pulumi.CustomResource):
 
         ## Import
 
-        CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.
+        CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/namespace:Namespace test bb6923e4-b16e-11eb-b0cd-0255ac101da1/test-namespace
@@ -333,14 +333,14 @@ class Namespace(pulumi.CustomResource):
                Changing this will create a new namespace resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-               and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-               Exactly one of `name` or `prefix` must be provided.
-        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        :param pulumi.Input[str] name: Specifies the unique name of the namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
                hyphens (-), and must start and end with lowercase letters and digits.
-               Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+               Changing this will create a new namespace resource.
+        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new namespace resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the namespace resource.
                If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
         """
@@ -367,7 +367,7 @@ class Namespace(pulumi.CustomResource):
 
         ## Import
 
-        CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.
+        CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cce/namespace:Namespace test bb6923e4-b16e-11eb-b0cd-0255ac101da1/test-namespace
@@ -445,14 +445,14 @@ class Namespace(pulumi.CustomResource):
         :param pulumi.Input[str] creation_timestamp: The server time when namespace was created.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] labels: Specifies the map of string keys and values for labels.
                Changing this will create a new namespace resource.
-        :param pulumi.Input[str] name: Specifies the unique name of the namespace.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-               and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-               Exactly one of `name` or `prefix` must be provided.
-        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.
-               This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        :param pulumi.Input[str] name: Specifies the unique name of the namespace.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
                hyphens (-), and must start and end with lowercase letters and digits.
-               Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+               Changing this will create a new namespace resource.
+        :param pulumi.Input[str] prefix: Specifies a prefix used by the server to generate a unique name.  
+               This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+               hyphens (-), and must start and end with lowercase letters and digits.
+               Changing this will create a new namespace resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the namespace resource.
                If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
         :param pulumi.Input[str] status: The current phase of the namespace.
@@ -510,10 +510,10 @@ class Namespace(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the unique name of the namespace.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-        and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-        Exactly one of `name` or `prefix` must be provided.
+        Specifies the unique name of the namespace.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+        hyphens (-), and must start and end with lowercase letters and digits.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "name")
 
@@ -521,10 +521,10 @@ class Namespace(pulumi.CustomResource):
     @pulumi.getter
     def prefix(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies a prefix used by the server to generate a unique name.
-        This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+        Specifies a prefix used by the server to generate a unique name.  
+        This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
         hyphens (-), and must start and end with lowercase letters and digits.
-        Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+        Changing this will create a new namespace resource.
         """
         return pulumi.get(self, "prefix")
 

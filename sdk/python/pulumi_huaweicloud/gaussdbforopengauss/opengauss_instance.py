@@ -23,15 +23,21 @@ class OpengaussInstanceArgs:
                  subnet_id: pulumi.Input[str],
                  volume: pulumi.Input['OpengaussInstanceVolumeArgs'],
                  vpc_id: pulumi.Input[str],
+                 advance_features: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['OpengaussInstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  configuration_id: Optional[pulumi.Input[str]] = None,
                  coordinator_num: Optional[pulumi.Input[int]] = None,
                  datastore: Optional[pulumi.Input['OpengaussInstanceDatastoreArgs']] = None,
+                 disk_encryption_id: Optional[pulumi.Input[str]] = None,
+                 enable_force_switch: Optional[pulumi.Input[bool]] = None,
+                 enable_single_float_ip: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 mysql_compatibility_port: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[str]] = None,
@@ -39,13 +45,13 @@ class OpengaussInstanceArgs:
                  replica_num: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  sharding_num: Optional[pulumi.Input[int]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a OpengaussInstance resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] flavor: Specifies the instance specifications. Please reference the API docs for valid
-               options. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] flavor: Specifies the instance specifications.
         :param pulumi.Input['OpengaussInstanceHaArgs'] ha: Specifies the HA information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
@@ -58,28 +64,48 @@ class OpengaussInstanceArgs:
                The object structure is documented below.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID to which the subnet belongs.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]] advance_features: Specifies the advanced features.
+               The advance_features structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input['OpengaussInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy.
-               The object structure is documented below.
+               The backup_strategy structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of opengauss instance.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] configuration_id: Specifies the parameter template ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
+        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
                The value must not be greater than twice value of `sharding_num`.
         :param pulumi.Input['OpengaussInstanceDatastoreArgs'] datastore: Specifies the datastore information.
-               The object structure is documented below.
+               The datastore structure is documented below.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_force_switch: Specifies whether to forcibly promote a standby node to primary.
+               Defaults to **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_single_float_ip: Specifies whether to enable single floating IP address policy,
+               which is only suitable for primary/standby instances. Value options:
+               + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+               primary/standby fail over occurs, the floating IP address does not change.
+               + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+               fail over occurs, the floating IP addresses change.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: Specifies whether to import the instance with the given configuration instead of
                creation. If specified, try to import the instance instead of creation if the instance already existed.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] mysql_compatibility_port: Specifies the port for MySQL compatibility. Value range: **0** or
+               **1024** to **39989**.
+               + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+               **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+               **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+               **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+               **[Database port, Database port + 10]**.
+               + If the value is **0**, the MySQL compatibility port is disabled.
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
+        :param pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of opengauss instance.
                If `period_unit` is set to **month**, the value ranges from 1 to 9.
                If `period_unit` is set to **year**, the value ranges from 1 to 5.
@@ -93,15 +119,16 @@ class OpengaussInstanceArgs:
                + `2,378` to `2,380`
         :param pulumi.Input[str] region: Specifies the region in which to create the instance.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
+        :param pulumi.Input[int] replica_num: The replica number. The valid values are `2` and `3`, defaults to `3`.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-        :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3.
+        :param pulumi.Input[int] sharding_num: Specifies the sharding number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
                Changing this parameter will create a new resource.
         """
@@ -112,6 +139,8 @@ class OpengaussInstanceArgs:
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "volume", volume)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if advance_features is not None:
+            pulumi.set(__self__, "advance_features", advance_features)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if backup_strategy is not None:
@@ -124,12 +153,22 @@ class OpengaussInstanceArgs:
             pulumi.set(__self__, "coordinator_num", coordinator_num)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
+        if disk_encryption_id is not None:
+            pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
+        if enable_force_switch is not None:
+            pulumi.set(__self__, "enable_force_switch", enable_force_switch)
+        if enable_single_float_ip is not None:
+            pulumi.set(__self__, "enable_single_float_ip", enable_single_float_ip)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if mysql_compatibility_port is not None:
+            pulumi.set(__self__, "mysql_compatibility_port", mysql_compatibility_port)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -144,6 +183,8 @@ class OpengaussInstanceArgs:
             pulumi.set(__self__, "security_group_id", security_group_id)
         if sharding_num is not None:
             pulumi.set(__self__, "sharding_num", sharding_num)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if time_zone is not None:
             pulumi.set(__self__, "time_zone", time_zone)
 
@@ -164,8 +205,7 @@ class OpengaussInstanceArgs:
     @pulumi.getter
     def flavor(self) -> pulumi.Input[str]:
         """
-        Specifies the instance specifications. Please reference the API docs for valid
-        options. Changing this parameter will create a new resource.
+        Specifies the instance specifications.
         """
         return pulumi.get(self, "flavor")
 
@@ -241,6 +281,19 @@ class OpengaussInstanceArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter(name="advanceFeatures")
+    def advance_features(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]]:
+        """
+        Specifies the advanced features.
+        The advance_features structure is documented below.
+        """
+        return pulumi.get(self, "advance_features")
+
+    @advance_features.setter
+    def advance_features(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]]):
+        pulumi.set(self, "advance_features", value)
+
+    @property
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
@@ -258,7 +311,7 @@ class OpengaussInstanceArgs:
     def backup_strategy(self) -> Optional[pulumi.Input['OpengaussInstanceBackupStrategyArgs']]:
         """
         Specifies the advanced backup policy.
-        The object structure is documented below.
+        The backup_strategy structure is documented below.
         """
         return pulumi.get(self, "backup_strategy")
 
@@ -298,7 +351,8 @@ class OpengaussInstanceArgs:
     @pulumi.getter(name="coordinatorNum")
     def coordinator_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the coordinator number. Values: 1~9. The default value is 3.
+        Specifies the coordinator number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         The value must not be greater than twice value of `sharding_num`.
         """
         return pulumi.get(self, "coordinator_num")
@@ -312,7 +366,7 @@ class OpengaussInstanceArgs:
     def datastore(self) -> Optional[pulumi.Input['OpengaussInstanceDatastoreArgs']]:
         """
         Specifies the datastore information.
-        The object structure is documented below.
+        The datastore structure is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "datastore")
@@ -322,11 +376,53 @@ class OpengaussInstanceArgs:
         pulumi.set(self, "datastore", value)
 
     @property
+    @pulumi.getter(name="diskEncryptionId")
+    def disk_encryption_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key ID for disk encryption.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "disk_encryption_id")
+
+    @disk_encryption_id.setter
+    def disk_encryption_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "disk_encryption_id", value)
+
+    @property
+    @pulumi.getter(name="enableForceSwitch")
+    def enable_force_switch(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly promote a standby node to primary.
+        Defaults to **false**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enable_force_switch")
+
+    @enable_force_switch.setter
+    def enable_force_switch(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_force_switch", value)
+
+    @property
+    @pulumi.getter(name="enableSingleFloatIp")
+    def enable_single_float_ip(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable single floating IP address policy,
+        which is only suitable for primary/standby instances. Value options:
+        + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+        primary/standby fail over occurs, the floating IP address does not change.
+        + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+        fail over occurs, the floating IP addresses change.
+        """
+        return pulumi.get(self, "enable_single_float_ip")
+
+    @enable_single_float_ip.setter
+    def enable_single_float_ip(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_single_float_ip", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -348,18 +444,48 @@ class OpengaussInstanceArgs:
         pulumi.set(self, "force_import", value)
 
     @property
+    @pulumi.getter(name="mysqlCompatibilityPort")
+    def mysql_compatibility_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the port for MySQL compatibility. Value range: **0** or
+        **1024** to **39989**.
+        + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+        **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+        **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+        **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+        **[Database port, Database port + 10]**.
+        + If the value is **0**, the MySQL compatibility port is disabled.
+        """
+        return pulumi.get(self, "mysql_compatibility_port")
+
+    @mysql_compatibility_port.setter
+    def mysql_compatibility_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mysql_compatibility_port", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name.
-        The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-        letters, digits, hyphens (-), and underscores (_).
+        Specifies the name of the advance feature.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
 
     @property
     @pulumi.getter
@@ -422,7 +548,7 @@ class OpengaussInstanceArgs:
     @pulumi.getter(name="replicaNum")
     def replica_num(self) -> Optional[pulumi.Input[int]]:
         """
-        The replica number. The valid values are **2** and **3**, defaults to **3**.
+        The replica number. The valid values are `2` and `3`, defaults to `3`.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
         Changing this parameter will create a new resource.
         """
@@ -451,14 +577,26 @@ class OpengaussInstanceArgs:
     @pulumi.getter(name="shardingNum")
     def sharding_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3.
+        Specifies the sharding number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         """
         return pulumi.get(self, "sharding_num")
 
     @sharding_num.setter
     def sharding_num(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "sharding_num", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
     @property
     @pulumi.getter(name="timeZone")
@@ -477,22 +615,30 @@ class OpengaussInstanceArgs:
 @pulumi.input_type
 class _OpengaussInstanceState:
     def __init__(__self__, *,
+                 advance_features: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['OpengaussInstanceBackupStrategyArgs']] = None,
+                 balance_status: Optional[pulumi.Input[bool]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  configuration_id: Optional[pulumi.Input[str]] = None,
                  coordinator_num: Optional[pulumi.Input[int]] = None,
                  datastore: Optional[pulumi.Input['OpengaussInstanceDatastoreArgs']] = None,
                  db_user_name: Optional[pulumi.Input[str]] = None,
+                 disk_encryption_id: Optional[pulumi.Input[str]] = None,
+                 enable_force_switch: Optional[pulumi.Input[bool]] = None,
+                 enable_single_float_ip: Optional[pulumi.Input[bool]] = None,
                  endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 error_log_switch_status: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
                  ha: Optional[pulumi.Input['OpengaussInstanceHaArgs']] = None,
                  maintenance_window: Optional[pulumi.Input[str]] = None,
+                 mysql_compatibility_port: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nodes: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceNodeArgs']]]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -506,45 +652,69 @@ class _OpengaussInstanceState:
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  switch_strategy: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input['OpengaussInstanceVolumeArgs']] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering OpengaussInstance resources.
+        :param pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]] advance_features: Specifies the advanced features.
+               The advance_features structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
         :param pulumi.Input['OpengaussInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy.
-               The object structure is documented below.
+               The backup_strategy structure is documented below.
+        :param pulumi.Input[bool] balance_status: Indicates whether the host load is balanced due to a primary/standby switchover.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of opengauss instance.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] configuration_id: Specifies the parameter template ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
+        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
                The value must not be greater than twice value of `sharding_num`.
         :param pulumi.Input['OpengaussInstanceDatastoreArgs'] datastore: Specifies the datastore information.
-               The object structure is documented below.
+               The datastore structure is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
+        :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_force_switch: Specifies whether to forcibly promote a standby node to primary.
+               Defaults to **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_single_float_ip: Specifies whether to enable single floating IP address policy,
+               which is only suitable for primary/standby instances. Value options:
+               + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+               primary/standby fail over occurs, the floating IP address does not change.
+               + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+               fail over occurs, the floating IP addresses change.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] flavor: Specifies the instance specifications. Please reference the API docs for valid
-               options. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] error_log_switch_status: Indicates whether error log collection is enabled. The value can be:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] flavor: Specifies the instance specifications.
         :param pulumi.Input[bool] force_import: Specifies whether to import the instance with the given configuration instead of
                creation. If specified, try to import the instance instead of creation if the instance already existed.
         :param pulumi.Input['OpengaussInstanceHaArgs'] ha: Specifies the HA information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] maintenance_window: Indicates the maintenance window.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] mysql_compatibility_port: Specifies the port for MySQL compatibility. Value range: **0** or
+               **1024** to **39989**.
+               + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+               **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+               **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+               **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+               **[Database port, Database port + 10]**.
+               + If the value is **0**, the MySQL compatibility port is disabled.
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
         :param pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
                to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -563,19 +733,20 @@ class _OpengaussInstanceState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ips: Indicates the public IP address of the DB instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
+        :param pulumi.Input[int] replica_num: The replica number. The valid values are `2` and `3`, defaults to `3`.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-        :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3.
+        :param pulumi.Input[int] sharding_num: Specifies the sharding number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] switch_strategy: Indicates the switch strategy.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] type: Specifies the volume type. Only **ULTRAHIGH** is supported now.
@@ -585,12 +756,16 @@ class _OpengaussInstanceState:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID to which the subnet belongs.
                Changing this parameter will create a new resource.
         """
+        if advance_features is not None:
+            pulumi.set(__self__, "advance_features", advance_features)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if balance_status is not None:
+            pulumi.set(__self__, "balance_status", balance_status)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if configuration_id is not None:
@@ -601,10 +776,18 @@ class _OpengaussInstanceState:
             pulumi.set(__self__, "datastore", datastore)
         if db_user_name is not None:
             pulumi.set(__self__, "db_user_name", db_user_name)
+        if disk_encryption_id is not None:
+            pulumi.set(__self__, "disk_encryption_id", disk_encryption_id)
+        if enable_force_switch is not None:
+            pulumi.set(__self__, "enable_force_switch", enable_force_switch)
+        if enable_single_float_ip is not None:
+            pulumi.set(__self__, "enable_single_float_ip", enable_single_float_ip)
         if endpoints is not None:
             pulumi.set(__self__, "endpoints", endpoints)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if error_log_switch_status is not None:
+            pulumi.set(__self__, "error_log_switch_status", error_log_switch_status)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
         if force_import is not None:
@@ -613,10 +796,14 @@ class _OpengaussInstanceState:
             pulumi.set(__self__, "ha", ha)
         if maintenance_window is not None:
             pulumi.set(__self__, "maintenance_window", maintenance_window)
+        if mysql_compatibility_port is not None:
+            pulumi.set(__self__, "mysql_compatibility_port", mysql_compatibility_port)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if nodes is not None:
             pulumi.set(__self__, "nodes", nodes)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -643,6 +830,8 @@ class _OpengaussInstanceState:
             pulumi.set(__self__, "subnet_id", subnet_id)
         if switch_strategy is not None:
             pulumi.set(__self__, "switch_strategy", switch_strategy)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if time_zone is not None:
             pulumi.set(__self__, "time_zone", time_zone)
         if type is not None:
@@ -651,6 +840,19 @@ class _OpengaussInstanceState:
             pulumi.set(__self__, "volume", volume)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="advanceFeatures")
+    def advance_features(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]]:
+        """
+        Specifies the advanced features.
+        The advance_features structure is documented below.
+        """
+        return pulumi.get(self, "advance_features")
+
+    @advance_features.setter
+    def advance_features(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceAdvanceFeatureArgs']]]]):
+        pulumi.set(self, "advance_features", value)
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -683,13 +885,25 @@ class _OpengaussInstanceState:
     def backup_strategy(self) -> Optional[pulumi.Input['OpengaussInstanceBackupStrategyArgs']]:
         """
         Specifies the advanced backup policy.
-        The object structure is documented below.
+        The backup_strategy structure is documented below.
         """
         return pulumi.get(self, "backup_strategy")
 
     @backup_strategy.setter
     def backup_strategy(self, value: Optional[pulumi.Input['OpengaussInstanceBackupStrategyArgs']]):
         pulumi.set(self, "backup_strategy", value)
+
+    @property
+    @pulumi.getter(name="balanceStatus")
+    def balance_status(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the host load is balanced due to a primary/standby switchover.
+        """
+        return pulumi.get(self, "balance_status")
+
+    @balance_status.setter
+    def balance_status(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "balance_status", value)
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -723,7 +937,8 @@ class _OpengaussInstanceState:
     @pulumi.getter(name="coordinatorNum")
     def coordinator_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the coordinator number. Values: 1~9. The default value is 3.
+        Specifies the coordinator number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         The value must not be greater than twice value of `sharding_num`.
         """
         return pulumi.get(self, "coordinator_num")
@@ -737,7 +952,7 @@ class _OpengaussInstanceState:
     def datastore(self) -> Optional[pulumi.Input['OpengaussInstanceDatastoreArgs']]:
         """
         Specifies the datastore information.
-        The object structure is documented below.
+        The datastore structure is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "datastore")
@@ -759,6 +974,49 @@ class _OpengaussInstanceState:
         pulumi.set(self, "db_user_name", value)
 
     @property
+    @pulumi.getter(name="diskEncryptionId")
+    def disk_encryption_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the key ID for disk encryption.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "disk_encryption_id")
+
+    @disk_encryption_id.setter
+    def disk_encryption_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "disk_encryption_id", value)
+
+    @property
+    @pulumi.getter(name="enableForceSwitch")
+    def enable_force_switch(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to forcibly promote a standby node to primary.
+        Defaults to **false**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enable_force_switch")
+
+    @enable_force_switch.setter
+    def enable_force_switch(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_force_switch", value)
+
+    @property
+    @pulumi.getter(name="enableSingleFloatIp")
+    def enable_single_float_ip(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable single floating IP address policy,
+        which is only suitable for primary/standby instances. Value options:
+        + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+        primary/standby fail over occurs, the floating IP address does not change.
+        + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+        fail over occurs, the floating IP addresses change.
+        """
+        return pulumi.get(self, "enable_single_float_ip")
+
+    @enable_single_float_ip.setter
+    def enable_single_float_ip(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_single_float_ip", value)
+
+    @property
     @pulumi.getter
     def endpoints(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
@@ -775,7 +1033,6 @@ class _OpengaussInstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -784,11 +1041,24 @@ class _OpengaussInstanceState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="errorLogSwitchStatus")
+    def error_log_switch_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates whether error log collection is enabled. The value can be:
+        + **ON**: enabled
+        + **OFF**: disabled
+        """
+        return pulumi.get(self, "error_log_switch_status")
+
+    @error_log_switch_status.setter
+    def error_log_switch_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "error_log_switch_status", value)
+
+    @property
     @pulumi.getter
     def flavor(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance specifications. Please reference the API docs for valid
-        options. Changing this parameter will create a new resource.
+        Specifies the instance specifications.
         """
         return pulumi.get(self, "flavor")
 
@@ -836,12 +1106,29 @@ class _OpengaussInstanceState:
         pulumi.set(self, "maintenance_window", value)
 
     @property
+    @pulumi.getter(name="mysqlCompatibilityPort")
+    def mysql_compatibility_port(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the port for MySQL compatibility. Value range: **0** or
+        **1024** to **39989**.
+        + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+        **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+        **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+        **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+        **[Database port, Database port + 10]**.
+        + If the value is **0**, the MySQL compatibility port is disabled.
+        """
+        return pulumi.get(self, "mysql_compatibility_port")
+
+    @mysql_compatibility_port.setter
+    def mysql_compatibility_port(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "mysql_compatibility_port", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name.
-        The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-        letters, digits, hyphens (-), and underscores (_).
+        Specifies the name of the advance feature.
         """
         return pulumi.get(self, "name")
 
@@ -860,6 +1147,19 @@ class _OpengaussInstanceState:
     @nodes.setter
     def nodes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceNodeArgs']]]]):
         pulumi.set(self, "nodes", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['OpengaussInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
 
     @property
     @pulumi.getter
@@ -960,7 +1260,7 @@ class _OpengaussInstanceState:
     @pulumi.getter(name="replicaNum")
     def replica_num(self) -> Optional[pulumi.Input[int]]:
         """
-        The replica number. The valid values are **2** and **3**, defaults to **3**.
+        The replica number. The valid values are `2` and `3`, defaults to `3`.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
         Changing this parameter will create a new resource.
         """
@@ -989,8 +1289,8 @@ class _OpengaussInstanceState:
     @pulumi.getter(name="shardingNum")
     def sharding_num(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3.
+        Specifies the sharding number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         """
         return pulumi.get(self, "sharding_num")
 
@@ -1034,6 +1334,18 @@ class _OpengaussInstanceState:
     @switch_strategy.setter
     def switch_strategy(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "switch_strategy", value)
+
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
 
     @property
     @pulumi.getter(name="timeZone")
@@ -1093,6 +1405,7 @@ class OpengaussInstance(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 advance_features: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceAdvanceFeatureArgs']]]]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceBackupStrategyArgs']]] = None,
@@ -1100,11 +1413,16 @@ class OpengaussInstance(pulumi.CustomResource):
                  configuration_id: Optional[pulumi.Input[str]] = None,
                  coordinator_num: Optional[pulumi.Input[int]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']]] = None,
+                 disk_encryption_id: Optional[pulumi.Input[str]] = None,
+                 enable_force_switch: Optional[pulumi.Input[bool]] = None,
+                 enable_single_float_ip: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
                  ha: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceHaArgs']]] = None,
+                 mysql_compatibility_port: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1114,54 +1432,90 @@ class OpengaussInstance(pulumi.CustomResource):
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  sharding_num: Optional[pulumi.Input[int]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceVolumeArgs']]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB OpenGauss instance management within HuaweiCoud.
+        GaussDB OpenGauss instance management within HuaweiCould.
 
         ## Example Usage
 
         ## Import
 
-        OpenGaussDB instance can be imported using the `id`, e.g.
+        OpenGaussDB instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
+         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes include`password`, `ha.0.mode`, `ha.0.instance_mode`, `configuration_id`, `disk_encryption_id`, `enable_force_switch`, `enable_single_float_ip`, `parameters`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a GaussDB OpenGauss instance. You can then decide if changes should be applied to the GaussDB OpenGauss instance, or the resource definition should be updated to align with the GaussDB OpenGauss instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_opengauss_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         password, configuration_id, disk_encryption_id, enable_force_switch, enable_single_float_ip, parameters, period_unit,
+
+         period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceAdvanceFeatureArgs']]]] advance_features: Specifies the advanced features.
+               The advance_features structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy.
-               The object structure is documented below.
+               The backup_strategy structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of opengauss instance.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] configuration_id: Specifies the parameter template ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
+        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
                The value must not be greater than twice value of `sharding_num`.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']] datastore: Specifies the datastore information.
-               The object structure is documented below.
+               The datastore structure is documented below.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_force_switch: Specifies whether to forcibly promote a standby node to primary.
+               Defaults to **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_single_float_ip: Specifies whether to enable single floating IP address policy,
+               which is only suitable for primary/standby instances. Value options:
+               + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+               primary/standby fail over occurs, the floating IP address does not change.
+               + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+               fail over occurs, the floating IP addresses change.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] flavor: Specifies the instance specifications. Please reference the API docs for valid
-               options. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] flavor: Specifies the instance specifications.
         :param pulumi.Input[bool] force_import: Specifies whether to import the instance with the given configuration instead of
                creation. If specified, try to import the instance instead of creation if the instance already existed.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceHaArgs']] ha: Specifies the HA information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] mysql_compatibility_port: Specifies the port for MySQL compatibility. Value range: **0** or
+               **1024** to **39989**.
+               + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+               **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+               **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+               **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+               **[Database port, Database port + 10]**.
+               + If the value is **0**, the MySQL compatibility port is disabled.
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceParameterArgs']]]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
                to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -1178,17 +1532,18 @@ class OpengaussInstance(pulumi.CustomResource):
                + `2,378` to `2,380`
         :param pulumi.Input[str] region: Specifies the region in which to create the instance.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
+        :param pulumi.Input[int] replica_num: The replica number. The valid values are `2` and `3`, defaults to `3`.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-        :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3.
+        :param pulumi.Input[int] sharding_num: Specifies the sharding number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceVolumeArgs']] volume: Specifies the volume storage information.
@@ -1203,17 +1558,33 @@ class OpengaussInstance(pulumi.CustomResource):
                  args: OpengaussInstanceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB OpenGauss instance management within HuaweiCoud.
+        GaussDB OpenGauss instance management within HuaweiCould.
 
         ## Example Usage
 
         ## Import
 
-        OpenGaussDB instance can be imported using the `id`, e.g.
+        OpenGaussDB instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
+         $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes include`password`, `ha.0.mode`, `ha.0.instance_mode`, `configuration_id`, `disk_encryption_id`, `enable_force_switch`, `enable_single_float_ip`, `parameters`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a GaussDB OpenGauss instance. You can then decide if changes should be applied to the GaussDB OpenGauss instance, or the resource definition should be updated to align with the GaussDB OpenGauss instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_opengauss_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         password, configuration_id, disk_encryption_id, enable_force_switch, enable_single_float_ip, parameters, period_unit,
+
+         period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param OpengaussInstanceArgs args: The arguments to use to populate this resource's properties.
@@ -1230,6 +1601,7 @@ class OpengaussInstance(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 advance_features: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceAdvanceFeatureArgs']]]]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceBackupStrategyArgs']]] = None,
@@ -1237,11 +1609,16 @@ class OpengaussInstance(pulumi.CustomResource):
                  configuration_id: Optional[pulumi.Input[str]] = None,
                  coordinator_num: Optional[pulumi.Input[int]] = None,
                  datastore: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']]] = None,
+                 disk_encryption_id: Optional[pulumi.Input[str]] = None,
+                 enable_force_switch: Optional[pulumi.Input[bool]] = None,
+                 enable_single_float_ip: Optional[pulumi.Input[bool]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
                  ha: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceHaArgs']]] = None,
+                 mysql_compatibility_port: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1251,6 +1628,7 @@ class OpengaussInstance(pulumi.CustomResource):
                  security_group_id: Optional[pulumi.Input[str]] = None,
                  sharding_num: Optional[pulumi.Input[int]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceVolumeArgs']]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -1263,6 +1641,7 @@ class OpengaussInstance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = OpengaussInstanceArgs.__new__(OpengaussInstanceArgs)
 
+            __props__.__dict__["advance_features"] = advance_features
             __props__.__dict__["auto_renew"] = auto_renew
             if availability_zone is None and not opts.urn:
                 raise TypeError("Missing required property 'availability_zone'")
@@ -1272,6 +1651,9 @@ class OpengaussInstance(pulumi.CustomResource):
             __props__.__dict__["configuration_id"] = configuration_id
             __props__.__dict__["coordinator_num"] = coordinator_num
             __props__.__dict__["datastore"] = datastore
+            __props__.__dict__["disk_encryption_id"] = disk_encryption_id
+            __props__.__dict__["enable_force_switch"] = enable_force_switch
+            __props__.__dict__["enable_single_float_ip"] = enable_single_float_ip
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if flavor is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor'")
@@ -1280,7 +1662,9 @@ class OpengaussInstance(pulumi.CustomResource):
             if ha is None and not opts.urn:
                 raise TypeError("Missing required property 'ha'")
             __props__.__dict__["ha"] = ha
+            __props__.__dict__["mysql_compatibility_port"] = mysql_compatibility_port
             __props__.__dict__["name"] = name
+            __props__.__dict__["parameters"] = parameters
             if password is None and not opts.urn:
                 raise TypeError("Missing required property 'password'")
             __props__.__dict__["password"] = password
@@ -1294,6 +1678,7 @@ class OpengaussInstance(pulumi.CustomResource):
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
+            __props__.__dict__["tags"] = tags
             __props__.__dict__["time_zone"] = time_zone
             if volume is None and not opts.urn:
                 raise TypeError("Missing required property 'volume'")
@@ -1301,8 +1686,10 @@ class OpengaussInstance(pulumi.CustomResource):
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["balance_status"] = None
             __props__.__dict__["db_user_name"] = None
             __props__.__dict__["endpoints"] = None
+            __props__.__dict__["error_log_switch_status"] = None
             __props__.__dict__["maintenance_window"] = None
             __props__.__dict__["nodes"] = None
             __props__.__dict__["private_ips"] = None
@@ -1320,22 +1707,30 @@ class OpengaussInstance(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            advance_features: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceAdvanceFeatureArgs']]]]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceBackupStrategyArgs']]] = None,
+            balance_status: Optional[pulumi.Input[bool]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             configuration_id: Optional[pulumi.Input[str]] = None,
             coordinator_num: Optional[pulumi.Input[int]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']]] = None,
             db_user_name: Optional[pulumi.Input[str]] = None,
+            disk_encryption_id: Optional[pulumi.Input[str]] = None,
+            enable_force_switch: Optional[pulumi.Input[bool]] = None,
+            enable_single_float_ip: Optional[pulumi.Input[bool]] = None,
             endpoints: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            error_log_switch_status: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             force_import: Optional[pulumi.Input[bool]] = None,
             ha: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceHaArgs']]] = None,
             maintenance_window: Optional[pulumi.Input[str]] = None,
+            mysql_compatibility_port: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceNodeArgs']]]]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceParameterArgs']]]]] = None,
             password: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
@@ -1349,6 +1744,7 @@ class OpengaussInstance(pulumi.CustomResource):
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             switch_strategy: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             time_zone: Optional[pulumi.Input[str]] = None,
             type: Optional[pulumi.Input[str]] = None,
             volume: Optional[pulumi.Input[pulumi.InputType['OpengaussInstanceVolumeArgs']]] = None,
@@ -1360,39 +1756,62 @@ class OpengaussInstance(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceAdvanceFeatureArgs']]]] advance_features: Specifies the advanced features.
+               The advance_features structure is documented below.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
                Valid values are **true** and **false**. Defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone information, can be three same or
                different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy.
-               The object structure is documented below.
+               The backup_strategy structure is documented below.
+        :param pulumi.Input[bool] balance_status: Indicates whether the host load is balanced due to a primary/standby switchover.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of opengauss instance.
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] configuration_id: Specifies the parameter template ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number. Values: 1~9. The default value is 3.
+        :param pulumi.Input[int] coordinator_num: Specifies the coordinator number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
                The value must not be greater than twice value of `sharding_num`.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceDatastoreArgs']] datastore: Specifies the datastore information.
-               The object structure is documented below.
+               The datastore structure is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
+        :param pulumi.Input[str] disk_encryption_id: Specifies the key ID for disk encryption.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_force_switch: Specifies whether to forcibly promote a standby node to primary.
+               Defaults to **false**. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] enable_single_float_ip: Specifies whether to enable single floating IP address policy,
+               which is only suitable for primary/standby instances. Value options:
+               + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+               primary/standby fail over occurs, the floating IP address does not change.
+               + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+               fail over occurs, the floating IP addresses change.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] endpoints: Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] flavor: Specifies the instance specifications. Please reference the API docs for valid
-               options. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] error_log_switch_status: Indicates whether error log collection is enabled. The value can be:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] flavor: Specifies the instance specifications.
         :param pulumi.Input[bool] force_import: Specifies whether to import the instance with the given configuration instead of
                creation. If specified, try to import the instance instead of creation if the instance already existed.
         :param pulumi.Input[pulumi.InputType['OpengaussInstanceHaArgs']] ha: Specifies the HA information.
                The object structure is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] maintenance_window: Indicates the maintenance window.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name.
-               The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-               letters, digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] mysql_compatibility_port: Specifies the port for MySQL compatibility. Value range: **0** or
+               **1024** to **39989**.
+               + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+               **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+               **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+               **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+               **[Database port, Database port + 10]**.
+               + If the value is **0**, the MySQL compatibility port is disabled.
+        :param pulumi.Input[str] name: Specifies the name of the advance feature.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['OpengaussInstanceParameterArgs']]]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
         :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
                to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -1411,19 +1830,20 @@ class OpengaussInstance(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] public_ips: Indicates the public IP address of the DB instance.
         :param pulumi.Input[str] region: Specifies the region in which to create the instance.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[int] replica_num: The replica number. The valid values are **2** and **3**, defaults to **3**.
+        :param pulumi.Input[int] replica_num: The replica number. The valid values are `2` and `3`, defaults to `3`.
                Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] security_group_id: Specifies the security group ID to which the instance belongs.
                If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
                includes the `100` ports starting with the database port.
                (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-        :param pulumi.Input[int] sharding_num: Specifies the sharding number. The valid value is range form `1` to `9`.
-               The default value is 3.
+        :param pulumi.Input[int] sharding_num: Specifies the sharding number.  
+               The valid value is range form `1` to `9`. The default value is `3`.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of VPC subnet to which the instance belongs.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] switch_strategy: Indicates the switch strategy.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to **UTC+08:00**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] type: Specifies the volume type. Only **ULTRAHIGH** is supported now.
@@ -1437,22 +1857,30 @@ class OpengaussInstance(pulumi.CustomResource):
 
         __props__ = _OpengaussInstanceState.__new__(_OpengaussInstanceState)
 
+        __props__.__dict__["advance_features"] = advance_features
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["backup_strategy"] = backup_strategy
+        __props__.__dict__["balance_status"] = balance_status
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["configuration_id"] = configuration_id
         __props__.__dict__["coordinator_num"] = coordinator_num
         __props__.__dict__["datastore"] = datastore
         __props__.__dict__["db_user_name"] = db_user_name
+        __props__.__dict__["disk_encryption_id"] = disk_encryption_id
+        __props__.__dict__["enable_force_switch"] = enable_force_switch
+        __props__.__dict__["enable_single_float_ip"] = enable_single_float_ip
         __props__.__dict__["endpoints"] = endpoints
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["error_log_switch_status"] = error_log_switch_status
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["force_import"] = force_import
         __props__.__dict__["ha"] = ha
         __props__.__dict__["maintenance_window"] = maintenance_window
+        __props__.__dict__["mysql_compatibility_port"] = mysql_compatibility_port
         __props__.__dict__["name"] = name
         __props__.__dict__["nodes"] = nodes
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["password"] = password
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
@@ -1466,11 +1894,21 @@ class OpengaussInstance(pulumi.CustomResource):
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["switch_strategy"] = switch_strategy
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["time_zone"] = time_zone
         __props__.__dict__["type"] = type
         __props__.__dict__["volume"] = volume
         __props__.__dict__["vpc_id"] = vpc_id
         return OpengaussInstance(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="advanceFeatures")
+    def advance_features(self) -> pulumi.Output[Sequence['outputs.OpengaussInstanceAdvanceFeature']]:
+        """
+        Specifies the advanced features.
+        The advance_features structure is documented below.
+        """
+        return pulumi.get(self, "advance_features")
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -1495,9 +1933,17 @@ class OpengaussInstance(pulumi.CustomResource):
     def backup_strategy(self) -> pulumi.Output['outputs.OpengaussInstanceBackupStrategy']:
         """
         Specifies the advanced backup policy.
-        The object structure is documented below.
+        The backup_strategy structure is documented below.
         """
         return pulumi.get(self, "backup_strategy")
+
+    @property
+    @pulumi.getter(name="balanceStatus")
+    def balance_status(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the host load is balanced due to a primary/standby switchover.
+        """
+        return pulumi.get(self, "balance_status")
 
     @property
     @pulumi.getter(name="chargingMode")
@@ -1523,7 +1969,8 @@ class OpengaussInstance(pulumi.CustomResource):
     @pulumi.getter(name="coordinatorNum")
     def coordinator_num(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the coordinator number. Values: 1~9. The default value is 3.
+        Specifies the coordinator number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         The value must not be greater than twice value of `sharding_num`.
         """
         return pulumi.get(self, "coordinator_num")
@@ -1533,7 +1980,7 @@ class OpengaussInstance(pulumi.CustomResource):
     def datastore(self) -> pulumi.Output['outputs.OpengaussInstanceDatastore']:
         """
         Specifies the datastore information.
-        The object structure is documented below.
+        The datastore structure is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "datastore")
@@ -1547,6 +1994,37 @@ class OpengaussInstance(pulumi.CustomResource):
         return pulumi.get(self, "db_user_name")
 
     @property
+    @pulumi.getter(name="diskEncryptionId")
+    def disk_encryption_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the key ID for disk encryption.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "disk_encryption_id")
+
+    @property
+    @pulumi.getter(name="enableForceSwitch")
+    def enable_force_switch(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to forcibly promote a standby node to primary.
+        Defaults to **false**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enable_force_switch")
+
+    @property
+    @pulumi.getter(name="enableSingleFloatIp")
+    def enable_single_float_ip(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to enable single floating IP address policy,
+        which is only suitable for primary/standby instances. Value options:
+        + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+        primary/standby fail over occurs, the floating IP address does not change.
+        + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+        fail over occurs, the floating IP addresses change.
+        """
+        return pulumi.get(self, "enable_single_float_ip")
+
+    @property
     @pulumi.getter
     def endpoints(self) -> pulumi.Output[Sequence[str]]:
         """
@@ -1556,19 +2034,27 @@ class OpengaussInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+    def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the enterprise project ID.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="errorLogSwitchStatus")
+    def error_log_switch_status(self) -> pulumi.Output[str]:
+        """
+        Indicates whether error log collection is enabled. The value can be:
+        + **ON**: enabled
+        + **OFF**: disabled
+        """
+        return pulumi.get(self, "error_log_switch_status")
 
     @property
     @pulumi.getter
     def flavor(self) -> pulumi.Output[str]:
         """
-        Specifies the instance specifications. Please reference the API docs for valid
-        options. Changing this parameter will create a new resource.
+        Specifies the instance specifications.
         """
         return pulumi.get(self, "flavor")
 
@@ -1600,12 +2086,25 @@ class OpengaussInstance(pulumi.CustomResource):
         return pulumi.get(self, "maintenance_window")
 
     @property
+    @pulumi.getter(name="mysqlCompatibilityPort")
+    def mysql_compatibility_port(self) -> pulumi.Output[str]:
+        """
+        Specifies the port for MySQL compatibility. Value range: **0** or
+        **1024** to **39989**.
+        + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+        **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+        **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+        **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+        **[Database port, Database port + 10]**.
+        + If the value is **0**, the MySQL compatibility port is disabled.
+        """
+        return pulumi.get(self, "mysql_compatibility_port")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the instance name, which can be the same as an existing instance name.
-        The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-        letters, digits, hyphens (-), and underscores (_).
+        Specifies the name of the advance feature.
         """
         return pulumi.get(self, "name")
 
@@ -1616,6 +2115,15 @@ class OpengaussInstance(pulumi.CustomResource):
         Indicates the instance nodes information. Structure is documented below.
         """
         return pulumi.get(self, "nodes")
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.OpengaussInstanceParameter']]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
 
     @property
     @pulumi.getter
@@ -1688,7 +2196,7 @@ class OpengaussInstance(pulumi.CustomResource):
     @pulumi.getter(name="replicaNum")
     def replica_num(self) -> pulumi.Output[Optional[int]]:
         """
-        The replica number. The valid values are **2** and **3**, defaults to **3**.
+        The replica number. The valid values are `2` and `3`, defaults to `3`.
         Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
         Changing this parameter will create a new resource.
         """
@@ -1696,7 +2204,7 @@ class OpengaussInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="securityGroupId")
-    def security_group_id(self) -> pulumi.Output[Optional[str]]:
+    def security_group_id(self) -> pulumi.Output[str]:
         """
         Specifies the security group ID to which the instance belongs.
         If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
@@ -1709,8 +2217,8 @@ class OpengaussInstance(pulumi.CustomResource):
     @pulumi.getter(name="shardingNum")
     def sharding_num(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the sharding number. The valid value is range form `1` to `9`.
-        The default value is 3.
+        Specifies the sharding number.  
+        The valid value is range form `1` to `9`. The default value is `3`.
         """
         return pulumi.get(self, "sharding_num")
 
@@ -1738,6 +2246,14 @@ class OpengaussInstance(pulumi.CustomResource):
         Indicates the switch strategy.
         """
         return pulumi.get(self, "switch_strategy")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="timeZone")

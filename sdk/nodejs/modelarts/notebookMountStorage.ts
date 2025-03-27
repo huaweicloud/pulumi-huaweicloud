@@ -27,7 +27,7 @@ import * as utilities from "../utilities";
  *
  * The mount storage can be imported by `id`, It is composed of the ID of notebook and mount ID, separated by a slash.
  *
- * For example,
+ * For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ModelArts/notebookMountStorage:NotebookMountStorage test b11b407c-e604-4e8d-8bc4-92398320b847/4e206d3c-6831-4267-b93d-e236105cda38

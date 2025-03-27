@@ -5,31 +5,33 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Manages a User resource within HuaweiCloud IAM service.
+ * Manages an IAM user resource within HuaweiCloud.
  *
- * Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const user1 = new huaweicloud.Iam.User("user_1", {
+ * const config = new pulumi.Config();
+ * const user1Password = config.requireObject("user1Password");
+ * const user1 = new huaweicloud.iam.User("user1", {
  *     description: "A user",
- *     password: "password123!",
+ *     password: user1Password,
  * });
  * ```
  *
  * ## Import
  *
- * Users can be imported using the `id`, e.g.
+ * Users can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Iam/user:User user_1 89c60255-9bd6-460c-822a-e2b959ede9d2
  * ```
  *
- *  But due to the security reason, `password` can not be imported, you can ignore it as below. resource "huaweicloud_identity_user" "user_1" {
+ *  But due to the security reason, `password` can not be imported, you can ignore it as below. hcl resource "huaweicloud_identity_user" "user_1" {
  *
  *  ...
  *
@@ -37,7 +39,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  "password",
+ *  password,
  *
  *  ]
  *
@@ -73,9 +75,9 @@ export class User extends pulumi.CustomResource {
 
     /**
      * Specifies the access type of the user. Available values are:
-     * + default: support both programmatic and management console access.
-     * + programmatic: only support programmatic access.
-     * + console: only support management console access.
+     * + **default**: support both programmatic and management console access.
+     * + **programmatic**: only support programmatic access.
+     * + **console**: only support management console access.
      */
     public readonly accessType!: pulumi.Output<string>;
     /**
@@ -92,25 +94,41 @@ export class User extends pulumi.CustomResource {
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the email address with a maximum of 255 characters.
+     * Specifies the email address with a maximum of `255` characters.
      */
     public readonly email!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+     * Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the ID of the IAM user in the external system.
+     * This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+     * is the same as the `externalIdentityId` of the corresponding IAM user.
+     */
+    public readonly externalIdentityId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the type of the IAM user in the external system.
+     * Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+     */
+    public readonly externalIdentityType!: pulumi.Output<string>;
     /**
      * The time when the IAM user last login.
      */
     public /*out*/ readonly lastLogin!: pulumi.Output<string>;
     /**
-     * Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+     * Specifies the verification method of login protect. If it is
+     * empty, the login protection will be disabled.
+     */
+    public readonly loginProtectVerificationMethod!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the name of the user. The user name consists of `1` to `32` characters. It can
      * contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
      * digit.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the password for the user with 6 to 32 characters. It must contain at least
+     * Specifies the password for the user with `6` to `32` characters. It must contain at least
      * two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
      */
     public readonly password!: pulumi.Output<string | undefined>;
@@ -119,7 +137,7 @@ export class User extends pulumi.CustomResource {
      */
     public /*out*/ readonly passwordStrength!: pulumi.Output<string>;
     /**
-     * Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+     * Specifies the mobile number with a maximum of `32` digits. This parameter must be used
      * together with `countryCode`.
      */
     public readonly phone!: pulumi.Output<string | undefined>;
@@ -148,7 +166,10 @@ export class User extends pulumi.CustomResource {
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["email"] = state ? state.email : undefined;
             resourceInputs["enabled"] = state ? state.enabled : undefined;
+            resourceInputs["externalIdentityId"] = state ? state.externalIdentityId : undefined;
+            resourceInputs["externalIdentityType"] = state ? state.externalIdentityType : undefined;
             resourceInputs["lastLogin"] = state ? state.lastLogin : undefined;
+            resourceInputs["loginProtectVerificationMethod"] = state ? state.loginProtectVerificationMethod : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["passwordStrength"] = state ? state.passwordStrength : undefined;
@@ -161,6 +182,9 @@ export class User extends pulumi.CustomResource {
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["email"] = args ? args.email : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
+            resourceInputs["externalIdentityId"] = args ? args.externalIdentityId : undefined;
+            resourceInputs["externalIdentityType"] = args ? args.externalIdentityType : undefined;
+            resourceInputs["loginProtectVerificationMethod"] = args ? args.loginProtectVerificationMethod : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["phone"] = args ? args.phone : undefined;
@@ -180,9 +204,9 @@ export class User extends pulumi.CustomResource {
 export interface UserState {
     /**
      * Specifies the access type of the user. Available values are:
-     * + default: support both programmatic and management console access.
-     * + programmatic: only support programmatic access.
-     * + console: only support management console access.
+     * + **default**: support both programmatic and management console access.
+     * + **programmatic**: only support programmatic access.
+     * + **console**: only support management console access.
      */
     accessType?: pulumi.Input<string>;
     /**
@@ -199,25 +223,41 @@ export interface UserState {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the email address with a maximum of 255 characters.
+     * Specifies the email address with a maximum of `255` characters.
      */
     email?: pulumi.Input<string>;
     /**
-     * Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+     * Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
      */
     enabled?: pulumi.Input<boolean>;
+    /**
+     * Specifies the ID of the IAM user in the external system.
+     * This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+     * is the same as the `externalIdentityId` of the corresponding IAM user.
+     */
+    externalIdentityId?: pulumi.Input<string>;
+    /**
+     * Specifies the type of the IAM user in the external system.
+     * Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+     */
+    externalIdentityType?: pulumi.Input<string>;
     /**
      * The time when the IAM user last login.
      */
     lastLogin?: pulumi.Input<string>;
     /**
-     * Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+     * Specifies the verification method of login protect. If it is
+     * empty, the login protection will be disabled.
+     */
+    loginProtectVerificationMethod?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the user. The user name consists of `1` to `32` characters. It can
      * contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
      * digit.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the password for the user with 6 to 32 characters. It must contain at least
+     * Specifies the password for the user with `6` to `32` characters. It must contain at least
      * two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
      */
     password?: pulumi.Input<string>;
@@ -226,7 +266,7 @@ export interface UserState {
      */
     passwordStrength?: pulumi.Input<string>;
     /**
-     * Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+     * Specifies the mobile number with a maximum of `32` digits. This parameter must be used
      * together with `countryCode`.
      */
     phone?: pulumi.Input<string>;
@@ -243,9 +283,9 @@ export interface UserState {
 export interface UserArgs {
     /**
      * Specifies the access type of the user. Available values are:
-     * + default: support both programmatic and management console access.
-     * + programmatic: only support programmatic access.
-     * + console: only support management console access.
+     * + **default**: support both programmatic and management console access.
+     * + **programmatic**: only support programmatic access.
+     * + **console**: only support management console access.
      */
     accessType?: pulumi.Input<string>;
     /**
@@ -258,26 +298,42 @@ export interface UserArgs {
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the email address with a maximum of 255 characters.
+     * Specifies the email address with a maximum of `255` characters.
      */
     email?: pulumi.Input<string>;
     /**
-     * Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+     * Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+     * Specifies the ID of the IAM user in the external system.
+     * This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+     * is the same as the `externalIdentityId` of the corresponding IAM user.
+     */
+    externalIdentityId?: pulumi.Input<string>;
+    /**
+     * Specifies the type of the IAM user in the external system.
+     * Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+     */
+    externalIdentityType?: pulumi.Input<string>;
+    /**
+     * Specifies the verification method of login protect. If it is
+     * empty, the login protection will be disabled.
+     */
+    loginProtectVerificationMethod?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the user. The user name consists of `1` to `32` characters. It can
      * contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
      * digit.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the password for the user with 6 to 32 characters. It must contain at least
+     * Specifies the password for the user with `6` to `32` characters. It must contain at least
      * two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
      */
     password?: pulumi.Input<string>;
     /**
-     * Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+     * Specifies the mobile number with a maximum of `32` digits. This parameter must be used
      * together with `countryCode`.
      */
     phone?: pulumi.Input<string>;

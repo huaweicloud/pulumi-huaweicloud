@@ -43,7 +43,7 @@ class ConferenceArgs:
         """
         The set of arguments for constructing a Conference resource.
         :param pulumi.Input[int] duration: Specifies the duration of the conference, in minutes.
-               The valid value is range from `15` to `1440`, defaults to `30`.
+               The valid value is range from `15` to `1,440`, defaults to `30`.
         :param pulumi.Input[str] meeting_room_id: Specifies the cloud meeting room ID.
         :param pulumi.Input[str] topic: Specifies the conference topic. The topic can contain `1` to `128` characters.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -55,7 +55,7 @@ class ConferenceArgs:
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input['ConferenceConfigurationArgs'] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
@@ -64,9 +64,9 @@ class ConferenceArgs:
         :param pulumi.Input['ConferenceCycleParamsArgs'] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
         :param pulumi.Input[int] encrypt_mode: Specifies the conference media encryption mode.
-               **0**: Adaptive encryption.
-               **1**: Force encryption.
-               **2**: Do not encrypt.
+               + **0**: Adaptive encryption.
+               + **1**: Force encryption.
+               + **2**: Do not encrypt.
         :param pulumi.Input[int] is_auto_record: Specifies whether the conference automatically starts recording, it only takes
                effect when the recording type is:
                + **1**: Automatically start recording.
@@ -80,7 +80,7 @@ class ConferenceArgs:
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -89,13 +89,13 @@ class ConferenceArgs:
                time, the system will select Video by default).
                + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
         :param pulumi.Input[int] participant_number: Specifies the number of parties in the conference, the maximum number of
-               participants in the conference. Defaults to **0** (Unlimited).
+               participants in the conference. Defaults to `0` (Unlimited).
         :param pulumi.Input[Sequence[pulumi.Input['ConferenceParticipantArgs']]] participants: Specifies the attendee list.
                The object structure is documented below.
         :param pulumi.Input[int] record_auth_type: Specifies the recording authentication method.
-               **0**: Viewable/downloadable via link.
-               **1**: Enterprise users can watch/download.
-               **2**: Attendees can watch/download.
+               + **0**: Viewable/downloadable via link.
+               + **1**: Enterprise users can watch/download.
+               + **2**: Attendees can watch/download.
         :param pulumi.Input[int] record_type: Specifies the recording type.
                + **0**: Disabled.
                + **1**: Live broadcast.
@@ -159,7 +159,7 @@ class ConferenceArgs:
     def duration(self) -> pulumi.Input[int]:
         """
         Specifies the duration of the conference, in minutes.
-        The valid value is range from `15` to `1440`, defaults to `30`.
+        The valid value is range from `15` to `1,440`, defaults to `30`.
         """
         return pulumi.get(self, "duration")
 
@@ -248,7 +248,7 @@ class ConferenceArgs:
     def aux_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "aux_address")
 
@@ -301,9 +301,9 @@ class ConferenceArgs:
     def encrypt_mode(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the conference media encryption mode.
-        **0**: Adaptive encryption.
-        **1**: Force encryption.
-        **2**: Do not encrypt.
+        + **0**: Adaptive encryption.
+        + **1**: Force encryption.
+        + **2**: Do not encrypt.
         """
         return pulumi.get(self, "encrypt_mode")
 
@@ -361,7 +361,7 @@ class ConferenceArgs:
     def live_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "live_address")
 
@@ -392,7 +392,7 @@ class ConferenceArgs:
     def participant_number(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the number of parties in the conference, the maximum number of
-        participants in the conference. Defaults to **0** (Unlimited).
+        participants in the conference. Defaults to `0` (Unlimited).
         """
         return pulumi.get(self, "participant_number")
 
@@ -418,9 +418,9 @@ class ConferenceArgs:
     def record_auth_type(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the recording authentication method.
-        **0**: Viewable/downloadable via link.
-        **1**: Enterprise users can watch/download.
-        **2**: Attendees can watch/download.
+        + **0**: Viewable/downloadable via link.
+        + **1**: Enterprise users can watch/download.
+        + **2**: Attendees can watch/download.
         """
         return pulumi.get(self, "record_auth_type")
 
@@ -533,7 +533,7 @@ class _ConferenceState:
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] audience_join_uri: The audience meeting link address.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[str] chair_join_uri: The host meeting link address.
         :param pulumi.Input[str] conference_type: The conference type, the valid values are as follows:
                + **FUTURE**
@@ -548,11 +548,11 @@ class _ConferenceState:
         :param pulumi.Input['ConferenceCycleParamsArgs'] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
         :param pulumi.Input[int] duration: Specifies the duration of the conference, in minutes.
-               The valid value is range from `15` to `1440`, defaults to `30`.
+               The valid value is range from `15` to `1,440`, defaults to `30`.
         :param pulumi.Input[int] encrypt_mode: Specifies the conference media encryption mode.
-               **0**: Adaptive encryption.
-               **1**: Force encryption.
-               **2**: Do not encrypt.
+               + **0**: Adaptive encryption.
+               + **1**: Force encryption.
+               + **2**: Do not encrypt.
         :param pulumi.Input[str] guest_join_uri: The common attendee meeting link address.
         :param pulumi.Input[int] is_auto_record: Specifies whether the conference automatically starts recording, it only takes
                effect when the recording type is:
@@ -569,7 +569,7 @@ class _ConferenceState:
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -579,13 +579,13 @@ class _ConferenceState:
                + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
         :param pulumi.Input[str] meeting_room_id: Specifies the cloud meeting room ID.
         :param pulumi.Input[int] participant_number: Specifies the number of parties in the conference, the maximum number of
-               participants in the conference. Defaults to **0** (Unlimited).
+               participants in the conference. Defaults to `0` (Unlimited).
         :param pulumi.Input[Sequence[pulumi.Input['ConferenceParticipantArgs']]] participants: Specifies the attendee list.
                The object structure is documented below.
         :param pulumi.Input[int] record_auth_type: Specifies the recording authentication method.
-               **0**: Viewable/downloadable via link.
-               **1**: Enterprise users can watch/download.
-               **2**: Attendees can watch/download.
+               + **0**: Viewable/downloadable via link.
+               + **1**: Enterprise users can watch/download.
+               + **2**: Attendees can watch/download.
         :param pulumi.Input[int] record_type: Specifies the recording type.
                + **0**: Disabled.
                + **1**: Live broadcast.
@@ -752,7 +752,7 @@ class _ConferenceState:
     def aux_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "aux_address")
 
@@ -844,7 +844,7 @@ class _ConferenceState:
     def duration(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the duration of the conference, in minutes.
-        The valid value is range from `15` to `1440`, defaults to `30`.
+        The valid value is range from `15` to `1,440`, defaults to `30`.
         """
         return pulumi.get(self, "duration")
 
@@ -857,9 +857,9 @@ class _ConferenceState:
     def encrypt_mode(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the conference media encryption mode.
-        **0**: Adaptive encryption.
-        **1**: Force encryption.
-        **2**: Do not encrypt.
+        + **0**: Adaptive encryption.
+        + **1**: Force encryption.
+        + **2**: Do not encrypt.
         """
         return pulumi.get(self, "encrypt_mode")
 
@@ -942,7 +942,7 @@ class _ConferenceState:
     def live_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "live_address")
 
@@ -985,7 +985,7 @@ class _ConferenceState:
     def participant_number(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the number of parties in the conference, the maximum number of
-        participants in the conference. Defaults to **0** (Unlimited).
+        participants in the conference. Defaults to `0` (Unlimited).
         """
         return pulumi.get(self, "participant_number")
 
@@ -1011,9 +1011,9 @@ class _ConferenceState:
     def record_auth_type(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the recording authentication method.
-        **0**: Viewable/downloadable via link.
-        **1**: Enterprise users can watch/download.
-        **2**: Attendees can watch/download.
+        + **0**: Viewable/downloadable via link.
+        + **1**: Enterprise users can watch/download.
+        + **2**: Attendees can watch/download.
         """
         return pulumi.get(self, "record_auth_type")
 
@@ -1235,19 +1235,19 @@ class Conference(pulumi.CustomResource):
 
         ## Import
 
-        Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account.
+        Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+         $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<account_name>/<account_password>
         ```
 
-         Import a conference and authenticated by `APP ID`/`APP Key`.
+         Import a conference and authenticated by `APP ID`/`APP Key`. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+         $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
         ```
 
-         The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. resource "huaweicloud_meeting_conference" "test" {
+         The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. hcl resource "huaweicloud_meeting_conference" "test" {
 
          ...
 
@@ -1272,7 +1272,7 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[str] app_key: Specifies the Key information of the Third-party APP.
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[pulumi.InputType['ConferenceConfigurationArgs']] configuration: Specifies the other conference configurations.
                The object structure is documented below.
         :param pulumi.Input[str] corp_id: Specifies the corporation ID.
@@ -1281,11 +1281,11 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ConferenceCycleParamsArgs']] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
         :param pulumi.Input[int] duration: Specifies the duration of the conference, in minutes.
-               The valid value is range from `15` to `1440`, defaults to `30`.
+               The valid value is range from `15` to `1,440`, defaults to `30`.
         :param pulumi.Input[int] encrypt_mode: Specifies the conference media encryption mode.
-               **0**: Adaptive encryption.
-               **1**: Force encryption.
-               **2**: Do not encrypt.
+               + **0**: Adaptive encryption.
+               + **1**: Force encryption.
+               + **2**: Do not encrypt.
         :param pulumi.Input[int] is_auto_record: Specifies whether the conference automatically starts recording, it only takes
                effect when the recording type is:
                + **1**: Automatically start recording.
@@ -1299,7 +1299,7 @@ class Conference(pulumi.CustomResource):
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -1309,13 +1309,13 @@ class Conference(pulumi.CustomResource):
                + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
         :param pulumi.Input[str] meeting_room_id: Specifies the cloud meeting room ID.
         :param pulumi.Input[int] participant_number: Specifies the number of parties in the conference, the maximum number of
-               participants in the conference. Defaults to **0** (Unlimited).
+               participants in the conference. Defaults to `0` (Unlimited).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ConferenceParticipantArgs']]]] participants: Specifies the attendee list.
                The object structure is documented below.
         :param pulumi.Input[int] record_auth_type: Specifies the recording authentication method.
-               **0**: Viewable/downloadable via link.
-               **1**: Enterprise users can watch/download.
-               **2**: Attendees can watch/download.
+               + **0**: Viewable/downloadable via link.
+               + **1**: Enterprise users can watch/download.
+               + **2**: Attendees can watch/download.
         :param pulumi.Input[int] record_type: Specifies the recording type.
                + **0**: Disabled.
                + **1**: Live broadcast.
@@ -1424,19 +1424,19 @@ class Conference(pulumi.CustomResource):
 
         ## Import
 
-        Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account.
+        Conferences (only scheduled conference and progressing conference) can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a conference and authenticated by account. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+         $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<account_name>/<account_password>
         ```
 
-         Import a conference and authenticated by `APP ID`/`APP Key`.
+         Import a conference and authenticated by `APP ID`/`APP Key`. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/conference:Conference test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+         $ pulumi import huaweicloud:Meeting/conference:Conference test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
         ```
 
-         The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. resource "huaweicloud_meeting_conference" "test" {
+         The slashes cannot be missing even corporation ID and user ID are empty. Note that importing is not supported for expired conferences and the start time of the meeting is not imported along with it. You can ignore this change as below. hcl resource "huaweicloud_meeting_conference" "test" {
 
          ...
 
@@ -1598,7 +1598,7 @@ class Conference(pulumi.CustomResource):
                Required if `app_id` is set. Changing this parameter will create a new resource.
         :param pulumi.Input[str] audience_join_uri: The audience meeting link address.
         :param pulumi.Input[str] aux_address: Specifies the auxiliary streaming address, the maximum length is 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[str] chair_join_uri: The host meeting link address.
         :param pulumi.Input[str] conference_type: The conference type, the valid values are as follows:
                + **FUTURE**
@@ -1613,11 +1613,11 @@ class Conference(pulumi.CustomResource):
         :param pulumi.Input[pulumi.InputType['ConferenceCycleParamsArgs']] cycle_params: Specifies the configurations of the cyclical conference.
                The object structure is documented below.
         :param pulumi.Input[int] duration: Specifies the duration of the conference, in minutes.
-               The valid value is range from `15` to `1440`, defaults to `30`.
+               The valid value is range from `15` to `1,440`, defaults to `30`.
         :param pulumi.Input[int] encrypt_mode: Specifies the conference media encryption mode.
-               **0**: Adaptive encryption.
-               **1**: Force encryption.
-               **2**: Do not encrypt.
+               + **0**: Adaptive encryption.
+               + **1**: Force encryption.
+               + **2**: Do not encrypt.
         :param pulumi.Input[str] guest_join_uri: The common attendee meeting link address.
         :param pulumi.Input[int] is_auto_record: Specifies whether the conference automatically starts recording, it only takes
                effect when the recording type is:
@@ -1634,7 +1634,7 @@ class Conference(pulumi.CustomResource):
                + **zh-CN**: Simplified Chinese.
                + **en-US**: US English.
         :param pulumi.Input[str] live_address: Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-               Only available if `record_type` is **2** or **3**.
+               Only available if `record_type` is `2` or `3`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] media_types: Specifies the conference media type list.
                It consists of one or more enumerations, and the valid values are as follows:
                + **Voice**: Voice.
@@ -1644,13 +1644,13 @@ class Conference(pulumi.CustomResource):
                + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
         :param pulumi.Input[str] meeting_room_id: Specifies the cloud meeting room ID.
         :param pulumi.Input[int] participant_number: Specifies the number of parties in the conference, the maximum number of
-               participants in the conference. Defaults to **0** (Unlimited).
+               participants in the conference. Defaults to `0` (Unlimited).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ConferenceParticipantArgs']]]] participants: Specifies the attendee list.
                The object structure is documented below.
         :param pulumi.Input[int] record_auth_type: Specifies the recording authentication method.
-               **0**: Viewable/downloadable via link.
-               **1**: Enterprise users can watch/download.
-               **2**: Attendees can watch/download.
+               + **0**: Viewable/downloadable via link.
+               + **1**: Enterprise users can watch/download.
+               + **2**: Attendees can watch/download.
         :param pulumi.Input[int] record_type: Specifies the recording type.
                + **0**: Disabled.
                + **1**: Live broadcast.
@@ -1765,7 +1765,7 @@ class Conference(pulumi.CustomResource):
     def aux_address(self) -> pulumi.Output[str]:
         """
         Specifies the auxiliary streaming address, the maximum length is 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "aux_address")
 
@@ -1829,7 +1829,7 @@ class Conference(pulumi.CustomResource):
     def duration(self) -> pulumi.Output[int]:
         """
         Specifies the duration of the conference, in minutes.
-        The valid value is range from `15` to `1440`, defaults to `30`.
+        The valid value is range from `15` to `1,440`, defaults to `30`.
         """
         return pulumi.get(self, "duration")
 
@@ -1838,9 +1838,9 @@ class Conference(pulumi.CustomResource):
     def encrypt_mode(self) -> pulumi.Output[int]:
         """
         Specifies the conference media encryption mode.
-        **0**: Adaptive encryption.
-        **1**: Force encryption.
-        **2**: Do not encrypt.
+        + **0**: Adaptive encryption.
+        + **1**: Force encryption.
+        + **2**: Do not encrypt.
         """
         return pulumi.get(self, "encrypt_mode")
 
@@ -1899,7 +1899,7 @@ class Conference(pulumi.CustomResource):
     def live_address(self) -> pulumi.Output[str]:
         """
         Specifies the mainstream live broadcast address, with a maximum of 255 characters.
-        Only available if `record_type` is **2** or **3**.
+        Only available if `record_type` is `2` or `3`.
         """
         return pulumi.get(self, "live_address")
 
@@ -1930,7 +1930,7 @@ class Conference(pulumi.CustomResource):
     def participant_number(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the number of parties in the conference, the maximum number of
-        participants in the conference. Defaults to **0** (Unlimited).
+        participants in the conference. Defaults to `0` (Unlimited).
         """
         return pulumi.get(self, "participant_number")
 
@@ -1948,9 +1948,9 @@ class Conference(pulumi.CustomResource):
     def record_auth_type(self) -> pulumi.Output[int]:
         """
         Specifies the recording authentication method.
-        **0**: Viewable/downloadable via link.
-        **1**: Enterprise users can watch/download.
-        **2**: Attendees can watch/download.
+        + **0**: Viewable/downloadable via link.
+        + **1**: Enterprise users can watch/download.
+        + **2**: Attendees can watch/download.
         """
         return pulumi.get(self, "record_auth_type")
 

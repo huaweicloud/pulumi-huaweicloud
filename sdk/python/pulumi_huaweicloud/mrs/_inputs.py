@@ -12,10 +12,13 @@ from .. import _utilities
 __all__ = [
     'ClusterAnalysisCoreNodesArgs',
     'ClusterAnalysisTaskNodesArgs',
+    'ClusterBootstrapScriptArgs',
     'ClusterComponentConfigArgs',
     'ClusterComponentConfigConfigArgs',
     'ClusterCustomNodeArgs',
+    'ClusterExternalDatasourceArgs',
     'ClusterMasterNodesArgs',
+    'ClusterSmnNotifyArgs',
     'ClusterStreamingCoreNodesArgs',
     'ClusterStreamingTaskNodesArgs',
 ]
@@ -59,6 +62,9 @@ class ClusterAnalysisCoreNodesArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -192,6 +198,9 @@ class ClusterAnalysisCoreNodesArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 
@@ -239,6 +248,9 @@ class ClusterAnalysisTaskNodesArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -372,12 +384,198 @@ class ClusterAnalysisTaskNodesArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 
     @host_ips.setter
     def host_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "host_ips", value)
+
+
+@pulumi.input_type
+class ClusterBootstrapScriptArgs:
+    def __init__(__self__, *,
+                 fail_action: pulumi.Input[str],
+                 name: pulumi.Input[str],
+                 nodes: pulumi.Input[Sequence[pulumi.Input[str]]],
+                 uri: pulumi.Input[str],
+                 active_master: Optional[pulumi.Input[bool]] = None,
+                 before_component_start: Optional[pulumi.Input[bool]] = None,
+                 execute_need_sudo_root: Optional[pulumi.Input[bool]] = None,
+                 parameters: Optional[pulumi.Input[str]] = None,
+                 start_time: Optional[pulumi.Input[str]] = None,
+                 state: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] fail_action: Specifies the action after the bootstrap action script fails to be executed.
+               The options are as follows:
+               + **continue**: Continue to execute subsequent scripts.
+               + **errorout**: Stop the action.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] nodes: Specifies names of the node group where the bootstrap action script is executed.
+        :param pulumi.Input[str] uri: Specifies the path of a bootstrap action script.
+               Set this parameter to an OBS bucket path or a local VM path.
+               + **OBS bucket path**: The path of an OBS file system starts with *s3a://* or *obs://* and end with *.sh*.
+               + **Local VM path**: The script path must start with a slash (/) and end with *.sh*.
+        :param pulumi.Input[bool] active_master: Specifies whether the bootstrap action script runs only on active master nodes.
+               The default value is **false**, indicating that the bootstrap action script can run on all master nodes.
+        :param pulumi.Input[bool] before_component_start: Specifies whether the bootstrap action script is executed
+               before component start.
+               The options are as follows:
+               + **false**: After component start. The default value is **false**.
+               + **true**: Before component start.
+        :param pulumi.Input[bool] execute_need_sudo_root: Specifies whether the bootstrap action script involves root user
+               operations.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] parameters: Specifies bootstrap action script parameters.
+        """
+        pulumi.set(__self__, "fail_action", fail_action)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "nodes", nodes)
+        pulumi.set(__self__, "uri", uri)
+        if active_master is not None:
+            pulumi.set(__self__, "active_master", active_master)
+        if before_component_start is not None:
+            pulumi.set(__self__, "before_component_start", before_component_start)
+        if execute_need_sudo_root is not None:
+            pulumi.set(__self__, "execute_need_sudo_root", execute_need_sudo_root)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
+        if start_time is not None:
+            pulumi.set(__self__, "start_time", start_time)
+        if state is not None:
+            pulumi.set(__self__, "state", state)
+
+    @property
+    @pulumi.getter(name="failAction")
+    def fail_action(self) -> pulumi.Input[str]:
+        """
+        Specifies the action after the bootstrap action script fails to be executed.
+        The options are as follows:
+        + **continue**: Continue to execute subsequent scripts.
+        + **errorout**: Stop the action.
+        """
+        return pulumi.get(self, "fail_action")
+
+    @fail_action.setter
+    def fail_action(self, value: pulumi.Input[str]):
+        pulumi.set(self, "fail_action", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of a bootstrap action script.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def nodes(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
+        """
+        Specifies names of the node group where the bootstrap action script is executed.
+        """
+        return pulumi.get(self, "nodes")
+
+    @nodes.setter
+    def nodes(self, value: pulumi.Input[Sequence[pulumi.Input[str]]]):
+        pulumi.set(self, "nodes", value)
+
+    @property
+    @pulumi.getter
+    def uri(self) -> pulumi.Input[str]:
+        """
+        Specifies the path of a bootstrap action script.
+        Set this parameter to an OBS bucket path or a local VM path.
+        + **OBS bucket path**: The path of an OBS file system starts with *s3a://* or *obs://* and end with *.sh*.
+        + **Local VM path**: The script path must start with a slash (/) and end with *.sh*.
+        """
+        return pulumi.get(self, "uri")
+
+    @uri.setter
+    def uri(self, value: pulumi.Input[str]):
+        pulumi.set(self, "uri", value)
+
+    @property
+    @pulumi.getter(name="activeMaster")
+    def active_master(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the bootstrap action script runs only on active master nodes.
+        The default value is **false**, indicating that the bootstrap action script can run on all master nodes.
+        """
+        return pulumi.get(self, "active_master")
+
+    @active_master.setter
+    def active_master(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "active_master", value)
+
+    @property
+    @pulumi.getter(name="beforeComponentStart")
+    def before_component_start(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the bootstrap action script is executed
+        before component start.
+        The options are as follows:
+        + **false**: After component start. The default value is **false**.
+        + **true**: Before component start.
+        """
+        return pulumi.get(self, "before_component_start")
+
+    @before_component_start.setter
+    def before_component_start(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "before_component_start", value)
+
+    @property
+    @pulumi.getter(name="executeNeedSudoRoot")
+    def execute_need_sudo_root(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the bootstrap action script involves root user
+        operations.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "execute_need_sudo_root")
+
+    @execute_need_sudo_root.setter
+    def execute_need_sudo_root(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "execute_need_sudo_root", value)
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies bootstrap action script parameters.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter(name="startTime")
+    def start_time(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "start_time")
+
+    @start_time.setter
+    def start_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "start_time", value)
+
+    @property
+    @pulumi.getter
+    def state(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "state")
+
+    @state.setter
+    def state(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "state", value)
 
 
 @pulumi.input_type
@@ -388,7 +586,7 @@ class ClusterComponentConfigArgs:
         """
         :param pulumi.Input[Sequence[pulumi.Input['ClusterComponentConfigConfigArgs']]] configs: Specifies the configuration of component installed.
                The object structure is documented below.
-        :param pulumi.Input[str] name: Specifies the component name of the cluster which has installed.
+        :param pulumi.Input[str] name: Specifies the name of a bootstrap action script.
                Changing this will create a new MapReduce cluster resource.
         """
         pulumi.set(__self__, "configs", configs)
@@ -411,7 +609,7 @@ class ClusterComponentConfigArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
-        Specifies the component name of the cluster which has installed.
+        Specifies the name of a bootstrap action script.
         Changing this will create a new MapReduce cluster resource.
         """
         return pulumi.get(self, "name")
@@ -520,6 +718,9 @@ class ClusterCustomNodeArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -666,12 +867,105 @@ class ClusterCustomNodeArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 
     @host_ips.setter
     def host_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "host_ips", value)
+
+
+@pulumi.input_type
+class ClusterExternalDatasourceArgs:
+    def __init__(__self__, *,
+                 component_name: pulumi.Input[str],
+                 role_type: pulumi.Input[str],
+                 source_type: pulumi.Input[str],
+                 data_connection_id: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] component_name: Specifies the component name. The valid values are `Hive` and `Ranger`.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] role_type: Specifies the component role type.
+               The options are as follows:
+               + **hive_metastore**: Hive Metastore role.
+               + **ranger_data**: Ranger role.
+        :param pulumi.Input[str] source_type: Specifies the data connection type.
+               The options are as follows:
+               + **LOCAL_DB**: Local metadata.
+               + **RDS_POSTGRES**: RDS PostgreSQL database.
+               + **RDS_MYSQL**: RDS MySQL database.
+               + **gaussdb-mysql**: GaussDB(for MySQL).
+        :param pulumi.Input[str] data_connection_id: Specifies the data connection ID.
+               This parameter is mandatory if `source_type` is not **LOCAL_DB**.
+               Changing this will create a new MapReduce cluster resource.
+        """
+        pulumi.set(__self__, "component_name", component_name)
+        pulumi.set(__self__, "role_type", role_type)
+        pulumi.set(__self__, "source_type", source_type)
+        if data_connection_id is not None:
+            pulumi.set(__self__, "data_connection_id", data_connection_id)
+
+    @property
+    @pulumi.getter(name="componentName")
+    def component_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the component name. The valid values are `Hive` and `Ranger`.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "component_name")
+
+    @component_name.setter
+    def component_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "component_name", value)
+
+    @property
+    @pulumi.getter(name="roleType")
+    def role_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the component role type.
+        The options are as follows:
+        + **hive_metastore**: Hive Metastore role.
+        + **ranger_data**: Ranger role.
+        """
+        return pulumi.get(self, "role_type")
+
+    @role_type.setter
+    def role_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "role_type", value)
+
+    @property
+    @pulumi.getter(name="sourceType")
+    def source_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the data connection type.
+        The options are as follows:
+        + **LOCAL_DB**: Local metadata.
+        + **RDS_POSTGRES**: RDS PostgreSQL database.
+        + **RDS_MYSQL**: RDS MySQL database.
+        + **gaussdb-mysql**: GaussDB(for MySQL).
+        """
+        return pulumi.get(self, "source_type")
+
+    @source_type.setter
+    def source_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "source_type", value)
+
+    @property
+    @pulumi.getter(name="dataConnectionId")
+    def data_connection_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the data connection ID.
+        This parameter is mandatory if `source_type` is not **LOCAL_DB**.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "data_connection_id")
+
+    @data_connection_id.setter
+    def data_connection_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "data_connection_id", value)
 
 
 @pulumi.input_type
@@ -713,6 +1007,9 @@ class ClusterMasterNodesArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -846,12 +1143,56 @@ class ClusterMasterNodesArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 
     @host_ips.setter
     def host_ips(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "host_ips", value)
+
+
+@pulumi.input_type
+class ClusterSmnNotifyArgs:
+    def __init__(__self__, *,
+                 subscription_name: pulumi.Input[str],
+                 topic_urn: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] subscription_name: Specifies the subscription rule name.
+               Changing this will create a new MapReduce cluster resource.
+        :param pulumi.Input[str] topic_urn: Specifies the Uniform Resource Name (URN) of the topic.
+               Changing this will create a new MapReduce cluster resource.
+        """
+        pulumi.set(__self__, "subscription_name", subscription_name)
+        pulumi.set(__self__, "topic_urn", topic_urn)
+
+    @property
+    @pulumi.getter(name="subscriptionName")
+    def subscription_name(self) -> pulumi.Input[str]:
+        """
+        Specifies the subscription rule name.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "subscription_name")
+
+    @subscription_name.setter
+    def subscription_name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "subscription_name", value)
+
+    @property
+    @pulumi.getter(name="topicUrn")
+    def topic_urn(self) -> pulumi.Input[str]:
+        """
+        Specifies the Uniform Resource Name (URN) of the topic.
+        Changing this will create a new MapReduce cluster resource.
+        """
+        return pulumi.get(self, "topic_urn")
+
+    @topic_urn.setter
+    def topic_urn(self, value: pulumi.Input[str]):
+        pulumi.set(self, "topic_urn", value)
 
 
 @pulumi.input_type
@@ -893,6 +1234,9 @@ class ClusterStreamingCoreNodesArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -1026,6 +1370,9 @@ class ClusterStreamingCoreNodesArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 
@@ -1073,6 +1420,9 @@ class ClusterStreamingTaskNodesArgs:
                + **SAS**: high I/O disk.
                + **SSD**: ultra-high I/O disk.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] host_ips: The host list of this nodes group in the cluster.
+               * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+               * `bootstrap_scripts/state` - The status of one bootstrap action script.
+               The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         pulumi.set(__self__, "data_volume_count", data_volume_count)
         pulumi.set(__self__, "flavor", flavor)
@@ -1206,6 +1556,9 @@ class ClusterStreamingTaskNodesArgs:
     def host_ips(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The host list of this nodes group in the cluster.
+        * `bootstrap_scripts/start_time` - The execution time of one bootstrap action script, in RFC-3339 format.
+        * `bootstrap_scripts/state` - The status of one bootstrap action script.
+        The valid value are **PENDING**, **IN_PROGRESS**, **SUCCESS**, and **FAILURE**.
         """
         return pulumi.get(self, "host_ips")
 

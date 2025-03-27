@@ -22,11 +22,18 @@ class ServiceArgs:
                  vpc_id: pulumi.Input[str],
                  approval: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_policy: Optional[pulumi.Input[bool]] = None,
+                 ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 organization_permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 pool_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  service_type: Optional[pulumi.Input[str]] = None,
-                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 snat_network_id: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tcp_proxy: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Service resource.
         :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
@@ -43,14 +50,34 @@ class ServiceArgs:
                service belongs. Changing this creates a new VPC endpoint service.
         :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[bool] enable_policy: Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+               Changing this creates a new VPC endpoint service resource.
+        :param pulumi.Input[str] ip_address: The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint service.
+               The valid values are as follows:
+               + **ipv4** (Default value)
+               + **ipv6**
         :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
-               the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] organization_permissions: Specifies the list of organizations to access the VPC endpoint service.
+               The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+               organizations to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service.
+               The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[str] pool_id: The dedicated cluster ID associated with the VPC endpoint service.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint service. If omitted, the
                provider-level region will be used. Changing this creates a new VPC endpoint service resource.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
+        :param pulumi.Input[str] snat_network_id: Specifies the network ID of any subnet within the VPC used to create
+               the VPC endpoint service.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
+        :param pulumi.Input[str] tcp_proxy: Specifies whether to transfer client information (such as source IP address,
+               source port number and packet ID) to the server.
+               The valid values are as follows:
+               + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+               + **toa_open**: **TCP TOA** information is carried.
+               + **proxy_open**: **Proxy Protocol** information is carried.
+               + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
         """
         pulumi.set(__self__, "port_id", port_id)
         pulumi.set(__self__, "port_mappings", port_mappings)
@@ -60,16 +87,30 @@ class ServiceArgs:
             pulumi.set(__self__, "approval", approval)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_policy is not None:
+            pulumi.set(__self__, "enable_policy", enable_policy)
+        if ip_address is not None:
+            pulumi.set(__self__, "ip_address", ip_address)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if organization_permissions is not None:
+            pulumi.set(__self__, "organization_permissions", organization_permissions)
         if permissions is not None:
             pulumi.set(__self__, "permissions", permissions)
+        if pool_id is not None:
+            pulumi.set(__self__, "pool_id", pool_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if service_type is not None:
             pulumi.set(__self__, "service_type", service_type)
+        if snat_network_id is not None:
+            pulumi.set(__self__, "snat_network_id", snat_network_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if tcp_proxy is not None:
+            pulumi.set(__self__, "tcp_proxy", tcp_proxy)
 
     @property
     @pulumi.getter(name="portId")
@@ -152,6 +193,46 @@ class ServiceArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enablePolicy")
+    def enable_policy(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+        Changing this creates a new VPC endpoint service resource.
+        """
+        return pulumi.get(self, "enable_policy")
+
+    @enable_policy.setter
+    def enable_policy(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_policy", value)
+
+    @property
+    @pulumi.getter(name="ipAddress")
+    def ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        """
+        return pulumi.get(self, "ip_address")
+
+    @ip_address.setter
+    def ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_address", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP version of the VPC endpoint service.
+        The valid values are as follows:
+        + **ipv4** (Default value)
+        + **ipv6**
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -165,17 +246,43 @@ class ServiceArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="organizationPermissions")
+    def organization_permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of organizations to access the VPC endpoint service.
+        The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+        organizations to access the VPC endpoint service.
+        """
+        return pulumi.get(self, "organization_permissions")
+
+    @organization_permissions.setter
+    def organization_permissions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "organization_permissions", value)
+
+    @property
     @pulumi.getter
     def permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the list of accounts to access the VPC endpoint service. The record is in
-        the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        Specifies the list of accounts to access the VPC endpoint service.
+        The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
 
     @permissions.setter
     def permissions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "permissions", value)
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The dedicated cluster ID associated with the VPC endpoint service.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @pool_id.setter
+    def pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pool_id", value)
 
     @property
     @pulumi.getter
@@ -203,6 +310,19 @@ class ServiceArgs:
         pulumi.set(self, "service_type", value)
 
     @property
+    @pulumi.getter(name="snatNetworkId")
+    def snat_network_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ID of any subnet within the VPC used to create
+        the VPC endpoint service.
+        """
+        return pulumi.get(self, "snat_network_id")
+
+    @snat_network_id.setter
+    def snat_network_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "snat_network_id", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
@@ -214,6 +334,24 @@ class ServiceArgs:
     def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "tags", value)
 
+    @property
+    @pulumi.getter(name="tcpProxy")
+    def tcp_proxy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to transfer client information (such as source IP address,
+        source port number and packet ID) to the server.
+        The valid values are as follows:
+        + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+        + **toa_open**: **TCP TOA** information is carried.
+        + **proxy_open**: **Proxy Protocol** information is carried.
+        + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+        """
+        return pulumi.get(self, "tcp_proxy")
+
+    @tcp_proxy.setter
+    def tcp_proxy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "tcp_proxy", value)
+
 
 @pulumi.input_type
 class _ServiceState:
@@ -221,26 +359,44 @@ class _ServiceState:
                  approval: Optional[pulumi.Input[bool]] = None,
                  connections: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceConnectionArgs']]]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_policy: Optional[pulumi.Input[bool]] = None,
+                 ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 organization_permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 pool_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  port_mappings: Optional[pulumi.Input[Sequence[pulumi.Input['ServicePortMappingArgs']]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  server_type: Optional[pulumi.Input[str]] = None,
                  service_name: Optional[pulumi.Input[str]] = None,
                  service_type: Optional[pulumi.Input[str]] = None,
+                 snat_network_id: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tcp_proxy: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Service resources.
         :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[Sequence[pulumi.Input['ServiceConnectionArgs']]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[bool] enable_policy: Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+               Changing this creates a new VPC endpoint service resource.
+        :param pulumi.Input[str] ip_address: The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint service.
+               The valid values are as follows:
+               + **ipv4** (Default value)
+               + **ipv6**
         :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
-               the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] organization_permissions: Specifies the list of organizations to access the VPC endpoint service.
+               The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+               organizations to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service.
+               The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[str] pool_id: The dedicated cluster ID associated with the VPC endpoint service.
         :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -255,8 +411,17 @@ class _ServiceState:
                that require high reliability and disaster recovery.
         :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
+        :param pulumi.Input[str] snat_network_id: Specifies the network ID of any subnet within the VPC used to create
+               the VPC endpoint service.
         :param pulumi.Input[str] status: The connection status of the VPC endpoint.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
+        :param pulumi.Input[str] tcp_proxy: Specifies whether to transfer client information (such as source IP address,
+               source port number and packet ID) to the server.
+               The valid values are as follows:
+               + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+               + **toa_open**: **TCP TOA** information is carried.
+               + **proxy_open**: **Proxy Protocol** information is carried.
+               + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
@@ -266,10 +431,20 @@ class _ServiceState:
             pulumi.set(__self__, "connections", connections)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_policy is not None:
+            pulumi.set(__self__, "enable_policy", enable_policy)
+        if ip_address is not None:
+            pulumi.set(__self__, "ip_address", ip_address)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if organization_permissions is not None:
+            pulumi.set(__self__, "organization_permissions", organization_permissions)
         if permissions is not None:
             pulumi.set(__self__, "permissions", permissions)
+        if pool_id is not None:
+            pulumi.set(__self__, "pool_id", pool_id)
         if port_id is not None:
             pulumi.set(__self__, "port_id", port_id)
         if port_mappings is not None:
@@ -282,10 +457,14 @@ class _ServiceState:
             pulumi.set(__self__, "service_name", service_name)
         if service_type is not None:
             pulumi.set(__self__, "service_type", service_type)
+        if snat_network_id is not None:
+            pulumi.set(__self__, "snat_network_id", snat_network_id)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if tcp_proxy is not None:
+            pulumi.set(__self__, "tcp_proxy", tcp_proxy)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
@@ -326,6 +505,46 @@ class _ServiceState:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enablePolicy")
+    def enable_policy(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+        Changing this creates a new VPC endpoint service resource.
+        """
+        return pulumi.get(self, "enable_policy")
+
+    @enable_policy.setter
+    def enable_policy(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_policy", value)
+
+    @property
+    @pulumi.getter(name="ipAddress")
+    def ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        """
+        return pulumi.get(self, "ip_address")
+
+    @ip_address.setter
+    def ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_address", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP version of the VPC endpoint service.
+        The valid values are as follows:
+        + **ipv4** (Default value)
+        + **ipv6**
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -339,17 +558,43 @@ class _ServiceState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="organizationPermissions")
+    def organization_permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the list of organizations to access the VPC endpoint service.
+        The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+        organizations to access the VPC endpoint service.
+        """
+        return pulumi.get(self, "organization_permissions")
+
+    @organization_permissions.setter
+    def organization_permissions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "organization_permissions", value)
+
+    @property
     @pulumi.getter
     def permissions(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the list of accounts to access the VPC endpoint service. The record is in
-        the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        Specifies the list of accounts to access the VPC endpoint service.
+        The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
 
     @permissions.setter
     def permissions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "permissions", value)
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The dedicated cluster ID associated with the VPC endpoint service.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @pool_id.setter
+    def pool_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "pool_id", value)
 
     @property
     @pulumi.getter(name="portId")
@@ -432,6 +677,19 @@ class _ServiceState:
         pulumi.set(self, "service_type", value)
 
     @property
+    @pulumi.getter(name="snatNetworkId")
+    def snat_network_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ID of any subnet within the VPC used to create
+        the VPC endpoint service.
+        """
+        return pulumi.get(self, "snat_network_id")
+
+    @snat_network_id.setter
+    def snat_network_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "snat_network_id", value)
+
+    @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
@@ -456,6 +714,24 @@ class _ServiceState:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter(name="tcpProxy")
+    def tcp_proxy(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to transfer client information (such as source IP address,
+        source port number and packet ID) to the server.
+        The valid values are as follows:
+        + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+        + **toa_open**: **TCP TOA** information is carried.
+        + **proxy_open**: **Proxy Protocol** information is carried.
+        + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+        """
+        return pulumi.get(self, "tcp_proxy")
+
+    @tcp_proxy.setter
+    def tcp_proxy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "tcp_proxy", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -476,18 +752,25 @@ class Service(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  approval: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_policy: Optional[pulumi.Input[bool]] = None,
+                 ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 organization_permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 pool_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  port_mappings: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  server_type: Optional[pulumi.Input[str]] = None,
                  service_type: Optional[pulumi.Input[str]] = None,
+                 snat_network_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tcp_proxy: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Provides a resource to manage a VPC endpoint service resource.
+        Manages a VPC endpoint service resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -521,10 +804,21 @@ class Service(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[bool] enable_policy: Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+               Changing this creates a new VPC endpoint service resource.
+        :param pulumi.Input[str] ip_address: The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint service.
+               The valid values are as follows:
+               + **ipv4** (Default value)
+               + **ipv6**
         :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
-               the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] organization_permissions: Specifies the list of organizations to access the VPC endpoint service.
+               The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+               organizations to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service.
+               The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[str] pool_id: The dedicated cluster ID associated with the VPC endpoint service.
         :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -538,7 +832,16 @@ class Service(pulumi.CustomResource):
                + **LB**: Indicates the shared load balancer, which is applicable to services with high access traffic and services
                that require high reliability and disaster recovery.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
+        :param pulumi.Input[str] snat_network_id: Specifies the network ID of any subnet within the VPC used to create
+               the VPC endpoint service.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
+        :param pulumi.Input[str] tcp_proxy: Specifies whether to transfer client information (such as source IP address,
+               source port number and packet ID) to the server.
+               The valid values are as follows:
+               + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+               + **toa_open**: **TCP TOA** information is carried.
+               + **proxy_open**: **Proxy Protocol** information is carried.
+               + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
@@ -549,7 +852,7 @@ class Service(pulumi.CustomResource):
                  args: ServiceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Provides a resource to manage a VPC endpoint service resource.
+        Manages a VPC endpoint service resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -596,14 +899,21 @@ class Service(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  approval: Optional[pulumi.Input[bool]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_policy: Optional[pulumi.Input[bool]] = None,
+                 ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 organization_permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 pool_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  port_mappings: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  server_type: Optional[pulumi.Input[str]] = None,
                  service_type: Optional[pulumi.Input[str]] = None,
+                 snat_network_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 tcp_proxy: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -616,8 +926,13 @@ class Service(pulumi.CustomResource):
 
             __props__.__dict__["approval"] = approval
             __props__.__dict__["description"] = description
+            __props__.__dict__["enable_policy"] = enable_policy
+            __props__.__dict__["ip_address"] = ip_address
+            __props__.__dict__["ip_version"] = ip_version
             __props__.__dict__["name"] = name
+            __props__.__dict__["organization_permissions"] = organization_permissions
             __props__.__dict__["permissions"] = permissions
+            __props__.__dict__["pool_id"] = pool_id
             if port_id is None and not opts.urn:
                 raise TypeError("Missing required property 'port_id'")
             __props__.__dict__["port_id"] = port_id
@@ -629,7 +944,9 @@ class Service(pulumi.CustomResource):
                 raise TypeError("Missing required property 'server_type'")
             __props__.__dict__["server_type"] = server_type
             __props__.__dict__["service_type"] = service_type
+            __props__.__dict__["snat_network_id"] = snat_network_id
             __props__.__dict__["tags"] = tags
+            __props__.__dict__["tcp_proxy"] = tcp_proxy
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
@@ -649,16 +966,23 @@ class Service(pulumi.CustomResource):
             approval: Optional[pulumi.Input[bool]] = None,
             connections: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceConnectionArgs']]]]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enable_policy: Optional[pulumi.Input[bool]] = None,
+            ip_address: Optional[pulumi.Input[str]] = None,
+            ip_version: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            organization_permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             permissions: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            pool_id: Optional[pulumi.Input[str]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
             port_mappings: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServicePortMappingArgs']]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
             server_type: Optional[pulumi.Input[str]] = None,
             service_name: Optional[pulumi.Input[str]] = None,
             service_type: Optional[pulumi.Input[str]] = None,
+            snat_network_id: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            tcp_proxy: Optional[pulumi.Input[str]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Service':
         """
         Get an existing Service resource's state with the given name, id, and optional extra
@@ -670,10 +994,21 @@ class Service(pulumi.CustomResource):
         :param pulumi.Input[bool] approval: Specifies whether connection approval is required. The default value is false.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceConnectionArgs']]]] connections: An array of VPC endpoints connect to the VPC endpoint service. Structure is documented below.
         :param pulumi.Input[str] description: Specifies the description of the VPC endpoint service.
+        :param pulumi.Input[bool] enable_policy: Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+               Changing this creates a new VPC endpoint service resource.
+        :param pulumi.Input[str] ip_address: The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint service.
+               The valid values are as follows:
+               + **ipv4** (Default value)
+               + **ipv6**
         :param pulumi.Input[str] name: Specifies the name of the VPC endpoint service. The value contains a maximum of 16
                characters, including letters, digits, underscores (_), and hyphens (-).
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service. The record is in
-               the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] organization_permissions: Specifies the list of organizations to access the VPC endpoint service.
+               The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+               organizations to access the VPC endpoint service.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] permissions: Specifies the list of accounts to access the VPC endpoint service.
+               The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        :param pulumi.Input[str] pool_id: The dedicated cluster ID associated with the VPC endpoint service.
         :param pulumi.Input[str] port_id: Specifies the ID for identifying the backend resource of the VPC endpoint service.
                + If the `server_type` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
                + If the `server_type` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -688,8 +1023,17 @@ class Service(pulumi.CustomResource):
                that require high reliability and disaster recovery.
         :param pulumi.Input[str] service_name: The full name of the VPC endpoint service in the format: *region.name.id* or *region.id*.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
+        :param pulumi.Input[str] snat_network_id: Specifies the network ID of any subnet within the VPC used to create
+               the VPC endpoint service.
         :param pulumi.Input[str] status: The connection status of the VPC endpoint.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint service.
+        :param pulumi.Input[str] tcp_proxy: Specifies whether to transfer client information (such as source IP address,
+               source port number and packet ID) to the server.
+               The valid values are as follows:
+               + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+               + **toa_open**: **TCP TOA** information is carried.
+               + **proxy_open**: **Proxy Protocol** information is carried.
+               + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the backend resource of the VPC endpoint
                service belongs. Changing this creates a new VPC endpoint service.
         """
@@ -700,16 +1044,23 @@ class Service(pulumi.CustomResource):
         __props__.__dict__["approval"] = approval
         __props__.__dict__["connections"] = connections
         __props__.__dict__["description"] = description
+        __props__.__dict__["enable_policy"] = enable_policy
+        __props__.__dict__["ip_address"] = ip_address
+        __props__.__dict__["ip_version"] = ip_version
         __props__.__dict__["name"] = name
+        __props__.__dict__["organization_permissions"] = organization_permissions
         __props__.__dict__["permissions"] = permissions
+        __props__.__dict__["pool_id"] = pool_id
         __props__.__dict__["port_id"] = port_id
         __props__.__dict__["port_mappings"] = port_mappings
         __props__.__dict__["region"] = region
         __props__.__dict__["server_type"] = server_type
         __props__.__dict__["service_name"] = service_name
         __props__.__dict__["service_type"] = service_type
+        __props__.__dict__["snat_network_id"] = snat_network_id
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["tcp_proxy"] = tcp_proxy
         __props__.__dict__["vpc_id"] = vpc_id
         return Service(resource_name, opts=opts, __props__=__props__)
 
@@ -738,6 +1089,34 @@ class Service(pulumi.CustomResource):
         return pulumi.get(self, "description")
 
     @property
+    @pulumi.getter(name="enablePolicy")
+    def enable_policy(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+        Changing this creates a new VPC endpoint service resource.
+        """
+        return pulumi.get(self, "enable_policy")
+
+    @property
+    @pulumi.getter(name="ipAddress")
+    def ip_address(self) -> pulumi.Output[str]:
+        """
+        The IPv4 address or domain name of the server in the interface type VLAN scenario.
+        """
+        return pulumi.get(self, "ip_address")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> pulumi.Output[str]:
+        """
+        Specifies the IP version of the VPC endpoint service.
+        The valid values are as follows:
+        + **ipv4** (Default value)
+        + **ipv6**
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
@@ -747,13 +1126,31 @@ class Service(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="organizationPermissions")
+    def organization_permissions(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the list of organizations to access the VPC endpoint service.
+        The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+        organizations to access the VPC endpoint service.
+        """
+        return pulumi.get(self, "organization_permissions")
+
+    @property
     @pulumi.getter
     def permissions(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
-        Specifies the list of accounts to access the VPC endpoint service. The record is in
-        the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+        Specifies the list of accounts to access the VPC endpoint service.
+        The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
         """
         return pulumi.get(self, "permissions")
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> pulumi.Output[str]:
+        """
+        The dedicated cluster ID associated with the VPC endpoint service.
+        """
+        return pulumi.get(self, "pool_id")
 
     @property
     @pulumi.getter(name="portId")
@@ -812,6 +1209,15 @@ class Service(pulumi.CustomResource):
         return pulumi.get(self, "service_type")
 
     @property
+    @pulumi.getter(name="snatNetworkId")
+    def snat_network_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the network ID of any subnet within the VPC used to create
+        the VPC endpoint service.
+        """
+        return pulumi.get(self, "snat_network_id")
+
+    @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
@@ -826,6 +1232,20 @@ class Service(pulumi.CustomResource):
         The key/value pairs to associate with the VPC endpoint service.
         """
         return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter(name="tcpProxy")
+    def tcp_proxy(self) -> pulumi.Output[str]:
+        """
+        Specifies whether to transfer client information (such as source IP address,
+        source port number and packet ID) to the server.
+        The valid values are as follows:
+        + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+        + **toa_open**: **TCP TOA** information is carried.
+        + **proxy_open**: **Proxy Protocol** information is carried.
+        + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+        """
+        return pulumi.get(self, "tcp_proxy")
 
     @property
     @pulumi.getter(name="vpcId")

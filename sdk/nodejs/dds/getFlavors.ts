@@ -28,6 +28,7 @@ export function getFlavors(args: GetFlavorsArgs, opts?: pulumi.InvokeOptions): P
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Dds/getFlavors:getFlavors", {
         "engineName": args.engineName,
+        "engineVersion": args.engineVersion,
         "memory": args.memory,
         "region": args.region,
         "type": args.type,
@@ -40,12 +41,15 @@ export function getFlavors(args: GetFlavorsArgs, opts?: pulumi.InvokeOptions): P
  */
 export interface GetFlavorsArgs {
     /**
-     * Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-     * supported.
+     * Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
      */
     engineName: string;
     /**
-     * Specifies the ram of the dds flavor in GB.
+     * Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+     */
+    engineVersion?: string;
+    /**
+     * Specifies the memory size in GB.
      */
     memory?: string;
     /**
@@ -54,12 +58,12 @@ export interface GetFlavorsArgs {
      */
     region?: string;
     /**
-     * Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-     * are supported.
+     * Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+     * **replica**, **single** and **readonly**.
      */
     type?: string;
     /**
-     * Specifies the vcpus of the dds flavor.
+     * Specifies the number of vCPUs.
      */
     vcpus?: string;
 }
@@ -68,7 +72,11 @@ export interface GetFlavorsArgs {
  * A collection of values returned by getFlavors.
  */
 export interface GetFlavorsResult {
+    /**
+     * Indicates the engine name.
+     */
     readonly engineName: string;
+    readonly engineVersion?: string;
     /**
      * Indicates the flavors information. Structure is documented below.
      */
@@ -78,16 +86,16 @@ export interface GetFlavorsResult {
      */
     readonly id: string;
     /**
-     * See `memory` above.
+     * Indicates the memory size in GB.
      */
     readonly memory?: string;
     readonly region: string;
     /**
-     * See `type` above.
+     * Indicates the type of the flavor.
      */
     readonly type?: string;
     /**
-     * See `vcpus` above.
+     * Indicates the number of vCPUs.
      */
     readonly vcpus?: string;
 }
@@ -101,12 +109,15 @@ export function getFlavorsOutput(args: GetFlavorsOutputArgs, opts?: pulumi.Invok
  */
 export interface GetFlavorsOutputArgs {
     /**
-     * Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-     * supported.
+     * Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
      */
     engineName: pulumi.Input<string>;
     /**
-     * Specifies the ram of the dds flavor in GB.
+     * Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+     */
+    engineVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the memory size in GB.
      */
     memory?: pulumi.Input<string>;
     /**
@@ -115,12 +126,12 @@ export interface GetFlavorsOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-     * are supported.
+     * Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+     * **replica**, **single** and **readonly**.
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies the vcpus of the dds flavor.
+     * Specifies the number of vCPUs.
      */
     vcpus?: pulumi.Input<string>;
 }

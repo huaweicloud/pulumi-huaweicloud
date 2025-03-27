@@ -13,137 +13,61 @@ import (
 
 // Manages a dedicated microservice instance resource within HuaweiCloud.
 //
+// > Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+//
+//	table.
+//
 // ## Example Usage
-// ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+// ## Appendix
 //
-// ```go
-// package main
+// <a name="microserviceInstanceDefaultEngineAccessRules"></a>
+// Security group rules required to access the engine:
+// (Remote is not the minimum range and can be adjusted according to business needs)
 //
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			engineConnAddr := cfg.RequireObject("engineConnAddr")
-//			microserviceId := cfg.RequireObject("microserviceId")
-//			regionName := cfg.RequireObject("regionName")
-//			azName := cfg.RequireObject("azName")
-//			_, err := Cse.NewMicroserviceInstance(ctx, "test", &Cse.MicroserviceInstanceArgs{
-//				ConnectAddress: pulumi.Any(engineConnAddr),
-//				MicroserviceId: pulumi.Any(microserviceId),
-//				HostName:       pulumi.String("localhost"),
-//				Endpoints: pulumi.StringArray{
-//					pulumi.String("grpc://127.0.1.132:9980"),
-//					pulumi.String("rest://127.0.0.111:8081"),
-//				},
-//				Version: pulumi.String("1.0.0"),
-//				Properties: pulumi.StringMap{
-//					"_TAGS":  pulumi.String("A, B"),
-//					"attr1":  pulumi.String("a"),
-//					"nodeIP": pulumi.String("127.0.0.1"),
-//				},
-//				HealthCheck: &cse.MicroserviceInstanceHealthCheckArgs{
-//					Mode:       pulumi.String("push"),
-//					Interval:   pulumi.Int(30),
-//					MaxRetries: pulumi.Int(3),
-//				},
-//				DataCenter: &cse.MicroserviceInstanceDataCenterArgs{
-//					Name:             pulumi.String("dc"),
-//					Region:           pulumi.Any(regionName),
-//					AvailabilityZone: pulumi.Any(azName),
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-// ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Cse"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			engineConnAddr := cfg.RequireObject("engineConnAddr")
-//			microserviceId := cfg.RequireObject("microserviceId")
-//			regionName := cfg.RequireObject("regionName")
-//			azName := cfg.RequireObject("azName")
-//			_, err := Cse.NewMicroserviceInstance(ctx, "test", &Cse.MicroserviceInstanceArgs{
-//				ConnectAddress: pulumi.Any(engineConnAddr),
-//				MicroserviceId: pulumi.Any(microserviceId),
-//				HostName:       pulumi.String("localhost"),
-//				Endpoints: pulumi.StringArray{
-//					pulumi.String("grpc://127.0.1.132:9980"),
-//					pulumi.String("rest://127.0.0.111:8081"),
-//				},
-//				Version: pulumi.String("1.0.0"),
-//				Properties: pulumi.StringMap{
-//					"_TAGS":  pulumi.String("A, B"),
-//					"attr1":  pulumi.String("a"),
-//					"nodeIP": pulumi.String("127.0.0.1"),
-//				},
-//				HealthCheck: &cse.MicroserviceInstanceHealthCheckArgs{
-//					Mode:       pulumi.String("push"),
-//					Interval:   pulumi.Int(30),
-//					MaxRetries: pulumi.Int(3),
-//				},
-//				DataCenter: &cse.MicroserviceInstanceDataCenterArgs{
-//					Name:             pulumi.String("dc"),
-//					Region:           pulumi.Any(regionName),
-//					AvailabilityZone: pulumi.Any(azName),
-//				},
-//				AdminUser: pulumi.String("root"),
-//				AdminPass: pulumi.String("Huawei!123"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
+// | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+// | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+// | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+// | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+// | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+// | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+// | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+// | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+// | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+// | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 //
 // ## Import
 //
-// Microservices can be imported using related `connect_address`, `microservice_id` and their `id`, separated by a slash (/), e.g.
+// Microservice instances can be imported using related `auth_address`, `connect_address`, `microservice_id` and their `id`, separated by the slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7
+//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>
 //
 // ```
 //
-//	If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+//	If you enabled the **RBAC** authorization in the microservice engine, it's necessary to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>/<admin_user>/<admin_pass>
 //
 // ```
 //
-//	The single quotes can help you solve the problem of special characters reporting errors on bash.
+//	The single quotes (') or backslashes (\\) can help you solve the problem of special characters reporting errors on bash. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test\!123
+//
+// ```
+//
+//	bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+//
+// ```
 type MicroserviceInstance struct {
 	pulumi.CustomResourceState
 
@@ -159,8 +83,14 @@ type MicroserviceInstance struct {
 	// Specifies the account name. The initial account name is **root**.
 	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice instance.
 	AdminUser pulumi.StringPtrOutput `pulumi:"adminUser"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice instance.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringOutput `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice instance.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringOutput `pulumi:"connectAddress"`
 	// Specifies the data center configuration.
 	// The object structure is documented below.
@@ -243,8 +173,14 @@ type microserviceInstanceState struct {
 	// Specifies the account name. The initial account name is **root**.
 	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice instance.
 	AdminUser *string `pulumi:"adminUser"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice instance.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress *string `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice instance.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress *string `pulumi:"connectAddress"`
 	// Specifies the data center configuration.
 	// The object structure is documented below.
@@ -286,8 +222,14 @@ type MicroserviceInstanceState struct {
 	// Specifies the account name. The initial account name is **root**.
 	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice instance.
 	AdminUser pulumi.StringPtrInput
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice instance.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringPtrInput
+	// Specifies the address that used to access engine and manages
+	// microservice instance.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringPtrInput
 	// Specifies the data center configuration.
 	// The object structure is documented below.
@@ -333,8 +275,14 @@ type microserviceInstanceArgs struct {
 	// Specifies the account name. The initial account name is **root**.
 	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice instance.
 	AdminUser *string `pulumi:"adminUser"`
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice instance.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress *string `pulumi:"authAddress"`
+	// Specifies the address that used to access engine and manages
+	// microservice instance.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress string `pulumi:"connectAddress"`
 	// Specifies the data center configuration.
 	// The object structure is documented below.
@@ -375,8 +323,14 @@ type MicroserviceInstanceArgs struct {
 	// Specifies the account name. The initial account name is **root**.
 	// Required if the `authType` of engine is **RBAC**. Changing this will create a new microservice instance.
 	AdminUser pulumi.StringPtrInput
-	// Specifies the connection address of service registry center for the
-	// specified dedicated CSE engine. Changing this will create a new microservice instance.
+	// Specifies the address that used to request the access token.\
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
+	AuthAddress pulumi.StringPtrInput
+	// Specifies the address that used to access engine and manages
+	// microservice instance.
+	// Usually is the connection address of service center.
+	// Changing this will create a new resource.
 	ConnectAddress pulumi.StringInput
 	// Specifies the data center configuration.
 	// The object structure is documented below.
@@ -508,8 +462,17 @@ func (o MicroserviceInstanceOutput) AdminUser() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MicroserviceInstance) pulumi.StringPtrOutput { return v.AdminUser }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the connection address of service registry center for the
-// specified dedicated CSE engine. Changing this will create a new microservice instance.
+// Specifies the address that used to request the access token.\
+// Usually is the connection address of service center.
+// Changing this will create a new resource.
+func (o MicroserviceInstanceOutput) AuthAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *MicroserviceInstance) pulumi.StringOutput { return v.AuthAddress }).(pulumi.StringOutput)
+}
+
+// Specifies the address that used to access engine and manages
+// microservice instance.
+// Usually is the connection address of service center.
+// Changing this will create a new resource.
 func (o MicroserviceInstanceOutput) ConnectAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *MicroserviceInstance) pulumi.StringOutput { return v.ConnectAddress }).(pulumi.StringOutput)
 }

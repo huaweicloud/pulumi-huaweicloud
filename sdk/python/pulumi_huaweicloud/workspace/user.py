@@ -14,25 +14,33 @@ __all__ = ['UserArgs', 'User']
 @pulumi.input_type
 class UserArgs:
     def __init__(__self__, *,
-                 email: pulumi.Input[str],
                  account_expires: Optional[pulumi.Input[str]] = None,
+                 active_type: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  disabled: Optional[pulumi.Input[bool]] = None,
+                 email: Optional[pulumi.Input[str]] = None,
                  enable_change_password: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  next_login_change_password: Optional[pulumi.Input[bool]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  password_never_expires: Optional[pulumi.Input[bool]] = None,
+                 phone: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a User resource.
-        :param pulumi.Input[str] email: Specifies the email address of user. The value can contain `1` to `64` characters.
         :param pulumi.Input[str] account_expires: Specifies the user's valid period configuration.
+               Defaults to "0".
                + Never expires: **0**.
                + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
                The times is in local time, depending on the timezone.
+        :param pulumi.Input[str] active_type: Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+               The valid values are as follows:
+               + **USER_ACTIVATE**: Activated by the user.
+               + **ADMIN_ACTIVATE**: Activated by the administator.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
                Defaults to **false**.
+        :param pulumi.Input[str] email: Specifies the email address of user. The value can contain `1` to `64` characters.
         :param pulumi.Input[bool] enable_change_password: Specifies whether to allow password modification.
                Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the user name.
@@ -41,46 +49,45 @@ class UserArgs:
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
                Defaults to **true**.
+        :param pulumi.Input[str] password: Specifies the initial passowrd of user.  
+               This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
                Defaults to **false**.
+        :param pulumi.Input[str] phone: Specifies the phone number of user.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
-        pulumi.set(__self__, "email", email)
         if account_expires is not None:
             pulumi.set(__self__, "account_expires", account_expires)
+        if active_type is not None:
+            pulumi.set(__self__, "active_type", active_type)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if disabled is not None:
             pulumi.set(__self__, "disabled", disabled)
+        if email is not None:
+            pulumi.set(__self__, "email", email)
         if enable_change_password is not None:
             pulumi.set(__self__, "enable_change_password", enable_change_password)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if next_login_change_password is not None:
             pulumi.set(__self__, "next_login_change_password", next_login_change_password)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
         if password_never_expires is not None:
             pulumi.set(__self__, "password_never_expires", password_never_expires)
+        if phone is not None:
+            pulumi.set(__self__, "phone", phone)
         if region is not None:
             pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter
-    def email(self) -> pulumi.Input[str]:
-        """
-        Specifies the email address of user. The value can contain `1` to `64` characters.
-        """
-        return pulumi.get(self, "email")
-
-    @email.setter
-    def email(self, value: pulumi.Input[str]):
-        pulumi.set(self, "email", value)
 
     @property
     @pulumi.getter(name="accountExpires")
     def account_expires(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user's valid period configuration.
+        Defaults to "0".
         + Never expires: **0**.
         + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
         The times is in local time, depending on the timezone.
@@ -90,6 +97,21 @@ class UserArgs:
     @account_expires.setter
     def account_expires(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "account_expires", value)
+
+    @property
+    @pulumi.getter(name="activeType")
+    def active_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+        The valid values are as follows:
+        + **USER_ACTIVATE**: Activated by the user.
+        + **ADMIN_ACTIVATE**: Activated by the administator.
+        """
+        return pulumi.get(self, "active_type")
+
+    @active_type.setter
+    def active_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "active_type", value)
 
     @property
     @pulumi.getter
@@ -115,6 +137,18 @@ class UserArgs:
     @disabled.setter
     def disabled(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "disabled", value)
+
+    @property
+    @pulumi.getter
+    def email(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the email address of user. The value can contain `1` to `64` characters.
+        """
+        return pulumi.get(self, "email")
+
+    @email.setter
+    def email(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "email", value)
 
     @property
     @pulumi.getter(name="enableChangePassword")
@@ -158,6 +192,19 @@ class UserArgs:
         pulumi.set(self, "next_login_change_password", value)
 
     @property
+    @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the initial passowrd of user.  
+        This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
+
+    @property
     @pulumi.getter(name="passwordNeverExpires")
     def password_never_expires(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -169,6 +216,18 @@ class UserArgs:
     @password_never_expires.setter
     def password_never_expires(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "password_never_expires", value)
+
+    @property
+    @pulumi.getter
+    def phone(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the phone number of user.
+        """
+        return pulumi.get(self, "phone")
+
+    @phone.setter
+    def phone(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "phone", value)
 
     @property
     @pulumi.getter
@@ -188,6 +247,7 @@ class UserArgs:
 class _UserState:
     def __init__(__self__, *,
                  account_expires: Optional[pulumi.Input[str]] = None,
+                 active_type: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  disabled: Optional[pulumi.Input[bool]] = None,
                  email: Optional[pulumi.Input[str]] = None,
@@ -195,15 +255,22 @@ class _UserState:
                  locked: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  next_login_change_password: Optional[pulumi.Input[bool]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  password_never_expires: Optional[pulumi.Input[bool]] = None,
+                 phone: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  total_desktops: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering User resources.
         :param pulumi.Input[str] account_expires: Specifies the user's valid period configuration.
+               Defaults to "0".
                + Never expires: **0**.
                + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
                The times is in local time, depending on the timezone.
+        :param pulumi.Input[str] active_type: Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+               The valid values are as follows:
+               + **USER_ACTIVATE**: Activated by the user.
+               + **ADMIN_ACTIVATE**: Activated by the administator.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
                Defaults to **false**.
@@ -217,14 +284,19 @@ class _UserState:
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
                Defaults to **true**.
+        :param pulumi.Input[str] password: Specifies the initial passowrd of user.  
+               This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
                Defaults to **false**.
+        :param pulumi.Input[str] phone: Specifies the phone number of user.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[int] total_desktops: The number of desktops the user has.
         """
         if account_expires is not None:
             pulumi.set(__self__, "account_expires", account_expires)
+        if active_type is not None:
+            pulumi.set(__self__, "active_type", active_type)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if disabled is not None:
@@ -239,8 +311,12 @@ class _UserState:
             pulumi.set(__self__, "name", name)
         if next_login_change_password is not None:
             pulumi.set(__self__, "next_login_change_password", next_login_change_password)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
         if password_never_expires is not None:
             pulumi.set(__self__, "password_never_expires", password_never_expires)
+        if phone is not None:
+            pulumi.set(__self__, "phone", phone)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if total_desktops is not None:
@@ -251,6 +327,7 @@ class _UserState:
     def account_expires(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user's valid period configuration.
+        Defaults to "0".
         + Never expires: **0**.
         + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
         The times is in local time, depending on the timezone.
@@ -260,6 +337,21 @@ class _UserState:
     @account_expires.setter
     def account_expires(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "account_expires", value)
+
+    @property
+    @pulumi.getter(name="activeType")
+    def active_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+        The valid values are as follows:
+        + **USER_ACTIVATE**: Activated by the user.
+        + **ADMIN_ACTIVATE**: Activated by the administator.
+        """
+        return pulumi.get(self, "active_type")
+
+    @active_type.setter
+    def active_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "active_type", value)
 
     @property
     @pulumi.getter
@@ -352,6 +444,19 @@ class _UserState:
         pulumi.set(self, "next_login_change_password", value)
 
     @property
+    @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the initial passowrd of user.  
+        This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
+
+    @property
     @pulumi.getter(name="passwordNeverExpires")
     def password_never_expires(self) -> Optional[pulumi.Input[bool]]:
         """
@@ -363,6 +468,18 @@ class _UserState:
     @password_never_expires.setter
     def password_never_expires(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "password_never_expires", value)
+
+    @property
+    @pulumi.getter
+    def phone(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the phone number of user.
+        """
+        return pulumi.get(self, "phone")
+
+    @phone.setter
+    def phone(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "phone", value)
 
     @property
     @pulumi.getter
@@ -396,13 +513,16 @@ class User(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_expires: Optional[pulumi.Input[str]] = None,
+                 active_type: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  disabled: Optional[pulumi.Input[bool]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enable_change_password: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  next_login_change_password: Optional[pulumi.Input[bool]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  password_never_expires: Optional[pulumi.Input[bool]] = None,
+                 phone: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -429,18 +549,37 @@ class User(pulumi.CustomResource):
 
         ## Import
 
-        Users can be imported using the `id`, e.g.
+        Users can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Workspace/user:User test a96e632a399d452eb29e5091e0af806a
+         $ pulumi import huaweicloud:Workspace/user:User test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_user" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         password,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account_expires: Specifies the user's valid period configuration.
+               Defaults to "0".
                + Never expires: **0**.
                + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
                The times is in local time, depending on the timezone.
+        :param pulumi.Input[str] active_type: Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+               The valid values are as follows:
+               + **USER_ACTIVATE**: Activated by the user.
+               + **ADMIN_ACTIVATE**: Activated by the administator.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
                Defaults to **false**.
@@ -453,8 +592,11 @@ class User(pulumi.CustomResource):
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
                Defaults to **true**.
+        :param pulumi.Input[str] password: Specifies the initial passowrd of user.  
+               This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
                Defaults to **false**.
+        :param pulumi.Input[str] phone: Specifies the phone number of user.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
@@ -462,7 +604,7 @@ class User(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: UserArgs,
+                 args: Optional[UserArgs] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Manages a Workspace user resource within HuaweiCloud.
@@ -488,11 +630,25 @@ class User(pulumi.CustomResource):
 
         ## Import
 
-        Users can be imported using the `id`, e.g.
+        Users can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Workspace/user:User test a96e632a399d452eb29e5091e0af806a
+         $ pulumi import huaweicloud:Workspace/user:User test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_user" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         password,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param UserArgs args: The arguments to use to populate this resource's properties.
@@ -510,13 +666,16 @@ class User(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  account_expires: Optional[pulumi.Input[str]] = None,
+                 active_type: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  disabled: Optional[pulumi.Input[bool]] = None,
                  email: Optional[pulumi.Input[str]] = None,
                  enable_change_password: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  next_login_change_password: Optional[pulumi.Input[bool]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  password_never_expires: Optional[pulumi.Input[bool]] = None,
+                 phone: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -528,15 +687,16 @@ class User(pulumi.CustomResource):
             __props__ = UserArgs.__new__(UserArgs)
 
             __props__.__dict__["account_expires"] = account_expires
+            __props__.__dict__["active_type"] = active_type
             __props__.__dict__["description"] = description
             __props__.__dict__["disabled"] = disabled
-            if email is None and not opts.urn:
-                raise TypeError("Missing required property 'email'")
             __props__.__dict__["email"] = email
             __props__.__dict__["enable_change_password"] = enable_change_password
             __props__.__dict__["name"] = name
             __props__.__dict__["next_login_change_password"] = next_login_change_password
+            __props__.__dict__["password"] = password
             __props__.__dict__["password_never_expires"] = password_never_expires
+            __props__.__dict__["phone"] = phone
             __props__.__dict__["region"] = region
             __props__.__dict__["locked"] = None
             __props__.__dict__["total_desktops"] = None
@@ -551,6 +711,7 @@ class User(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             account_expires: Optional[pulumi.Input[str]] = None,
+            active_type: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             disabled: Optional[pulumi.Input[bool]] = None,
             email: Optional[pulumi.Input[str]] = None,
@@ -558,7 +719,9 @@ class User(pulumi.CustomResource):
             locked: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             next_login_change_password: Optional[pulumi.Input[bool]] = None,
+            password: Optional[pulumi.Input[str]] = None,
             password_never_expires: Optional[pulumi.Input[bool]] = None,
+            phone: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             total_desktops: Optional[pulumi.Input[int]] = None) -> 'User':
         """
@@ -569,9 +732,14 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] account_expires: Specifies the user's valid period configuration.
+               Defaults to "0".
                + Never expires: **0**.
                + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
                The times is in local time, depending on the timezone.
+        :param pulumi.Input[str] active_type: Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+               The valid values are as follows:
+               + **USER_ACTIVATE**: Activated by the user.
+               + **ADMIN_ACTIVATE**: Activated by the administator.
         :param pulumi.Input[str] description: Specifies the description of user. The maximum length is `255` characters.
         :param pulumi.Input[bool] disabled: Specifies whether the user is disabled.
                Defaults to **false**.
@@ -585,8 +753,11 @@ class User(pulumi.CustomResource):
                dots (.) are allowed. The name must start with a letter.
         :param pulumi.Input[bool] next_login_change_password: Specifies whether the next login requires a password reset.
                Defaults to **true**.
+        :param pulumi.Input[str] password: Specifies the initial passowrd of user.  
+               This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
         :param pulumi.Input[bool] password_never_expires: Specifies whether the password will never expires.
                Defaults to **false**.
+        :param pulumi.Input[str] phone: Specifies the phone number of user.
         :param pulumi.Input[str] region: The region in which to create the Workspace user resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[int] total_desktops: The number of desktops the user has.
@@ -596,6 +767,7 @@ class User(pulumi.CustomResource):
         __props__ = _UserState.__new__(_UserState)
 
         __props__.__dict__["account_expires"] = account_expires
+        __props__.__dict__["active_type"] = active_type
         __props__.__dict__["description"] = description
         __props__.__dict__["disabled"] = disabled
         __props__.__dict__["email"] = email
@@ -603,7 +775,9 @@ class User(pulumi.CustomResource):
         __props__.__dict__["locked"] = locked
         __props__.__dict__["name"] = name
         __props__.__dict__["next_login_change_password"] = next_login_change_password
+        __props__.__dict__["password"] = password
         __props__.__dict__["password_never_expires"] = password_never_expires
+        __props__.__dict__["phone"] = phone
         __props__.__dict__["region"] = region
         __props__.__dict__["total_desktops"] = total_desktops
         return User(resource_name, opts=opts, __props__=__props__)
@@ -613,11 +787,23 @@ class User(pulumi.CustomResource):
     def account_expires(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the user's valid period configuration.
+        Defaults to "0".
         + Never expires: **0**.
         + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
         The times is in local time, depending on the timezone.
         """
         return pulumi.get(self, "account_expires")
+
+    @property
+    @pulumi.getter(name="activeType")
+    def active_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.  
+        The valid values are as follows:
+        + **USER_ACTIVATE**: Activated by the user.
+        + **ADMIN_ACTIVATE**: Activated by the administator.
+        """
+        return pulumi.get(self, "active_type")
 
     @property
     @pulumi.getter
@@ -638,7 +824,7 @@ class User(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def email(self) -> pulumi.Output[str]:
+    def email(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the email address of user. The value can contain `1` to `64` characters.
         """
@@ -682,6 +868,15 @@ class User(pulumi.CustomResource):
         return pulumi.get(self, "next_login_change_password")
 
     @property
+    @pulumi.getter
+    def password(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the initial passowrd of user.  
+        This parameter is available and required when `active_type` is set to **ADMIN_ACTIVATE**.
+        """
+        return pulumi.get(self, "password")
+
+    @property
     @pulumi.getter(name="passwordNeverExpires")
     def password_never_expires(self) -> pulumi.Output[Optional[bool]]:
         """
@@ -689,6 +884,14 @@ class User(pulumi.CustomResource):
         Defaults to **false**.
         """
         return pulumi.get(self, "password_never_expires")
+
+    @property
+    @pulumi.getter
+    def phone(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the phone number of user.
+        """
+        return pulumi.get(self, "phone")
 
     @property
     @pulumi.getter

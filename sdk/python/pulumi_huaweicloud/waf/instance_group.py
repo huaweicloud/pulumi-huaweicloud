@@ -20,12 +20,6 @@ class InstanceGroupArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a InstanceGroup resource.
-        :param pulumi.Input[str] vpc_id: Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        :param pulumi.Input[str] description: Specifies the description of the instance group.
-        :param pulumi.Input[str] name: Specifies the instance group name.
-               The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the instance group.
-               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
         """
         pulumi.set(__self__, "vpc_id", vpc_id)
         if description is not None:
@@ -38,9 +32,6 @@ class InstanceGroupArgs:
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Input[str]:
-        """
-        Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        """
         return pulumi.get(self, "vpc_id")
 
     @vpc_id.setter
@@ -50,9 +41,6 @@ class InstanceGroupArgs:
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the description of the instance group.
-        """
         return pulumi.get(self, "description")
 
     @description.setter
@@ -62,10 +50,6 @@ class InstanceGroupArgs:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the instance group name.
-        The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -75,10 +59,6 @@ class InstanceGroupArgs:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the instance group.
-        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -101,18 +81,6 @@ class _InstanceGroupState:
                  write_timeout: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering InstanceGroup resources.
-        :param pulumi.Input[int] body_limit: The body limit of the forwarding policy.
-        :param pulumi.Input[int] connection_timeout: The time for connection timeout in the forwarding policy.
-        :param pulumi.Input[str] description: Specifies the description of the instance group.
-        :param pulumi.Input[int] header_limit: The header limit of the forwarding policy.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: The IDs of the ELB instances that has been bound to the instance group.
-        :param pulumi.Input[str] name: Specifies the instance group name.
-               The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[int] read_timeout: The time for reading timeout in the forwarding policy.
-        :param pulumi.Input[str] region: The region in which to create the instance group.
-               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        :param pulumi.Input[str] vpc_id: Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        :param pulumi.Input[int] write_timeout: The time for writing timeout in the forwarding policy.
         """
         if body_limit is not None:
             pulumi.set(__self__, "body_limit", body_limit)
@@ -138,9 +106,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="bodyLimit")
     def body_limit(self) -> Optional[pulumi.Input[int]]:
-        """
-        The body limit of the forwarding policy.
-        """
         return pulumi.get(self, "body_limit")
 
     @body_limit.setter
@@ -150,9 +115,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="connectionTimeout")
     def connection_timeout(self) -> Optional[pulumi.Input[int]]:
-        """
-        The time for connection timeout in the forwarding policy.
-        """
         return pulumi.get(self, "connection_timeout")
 
     @connection_timeout.setter
@@ -162,9 +124,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the description of the instance group.
-        """
         return pulumi.get(self, "description")
 
     @description.setter
@@ -174,9 +133,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="headerLimit")
     def header_limit(self) -> Optional[pulumi.Input[int]]:
-        """
-        The header limit of the forwarding policy.
-        """
         return pulumi.get(self, "header_limit")
 
     @header_limit.setter
@@ -186,9 +142,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
-        """
-        The IDs of the ELB instances that has been bound to the instance group.
-        """
         return pulumi.get(self, "load_balancers")
 
     @load_balancers.setter
@@ -198,10 +151,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the instance group name.
-        The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -211,9 +160,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="readTimeout")
     def read_timeout(self) -> Optional[pulumi.Input[int]]:
-        """
-        The time for reading timeout in the forwarding policy.
-        """
         return pulumi.get(self, "read_timeout")
 
     @read_timeout.setter
@@ -223,10 +169,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
-        """
-        The region in which to create the instance group.
-        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @region.setter
@@ -236,9 +178,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        """
         return pulumi.get(self, "vpc_id")
 
     @vpc_id.setter
@@ -248,9 +187,6 @@ class _InstanceGroupState:
     @property
     @pulumi.getter(name="writeTimeout")
     def write_timeout(self) -> Optional[pulumi.Input[int]]:
-        """
-        The time for writing timeout in the forwarding policy.
-        """
         return pulumi.get(self, "write_timeout")
 
     @write_timeout.setter
@@ -269,35 +205,9 @@ class InstanceGroup(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages WAF instance groups within HuaweiCloud. The groups are used to bind the ELB instance to the ELB mode WAF.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        vpc_id = config.require_object("vpcId")
-        group1 = huaweicloud.waf.InstanceGroup("group1", vpc_id=vpc_id)
-        ```
-
-        ## Import
-
-        The instance group can be imported using the ID, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Waf/instanceGroup:InstanceGroup group_1 0be1e69d-1987-4d9c-9dc5-fc7eed592398
-        ```
-
+        Create a InstanceGroup resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the instance group.
-        :param pulumi.Input[str] name: Specifies the instance group name.
-               The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the instance group.
-               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        :param pulumi.Input[str] vpc_id: Specifies the id of the VPC that the WAF dedicated instances belongs to.
         """
         ...
     @overload
@@ -306,27 +216,7 @@ class InstanceGroup(pulumi.CustomResource):
                  args: InstanceGroupArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages WAF instance groups within HuaweiCloud. The groups are used to bind the ELB instance to the ELB mode WAF.
-
-        ## Example Usage
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        vpc_id = config.require_object("vpcId")
-        group1 = huaweicloud.waf.InstanceGroup("group1", vpc_id=vpc_id)
-        ```
-
-        ## Import
-
-        The instance group can be imported using the ID, e.g.
-
-        ```sh
-         $ pulumi import huaweicloud:Waf/instanceGroup:InstanceGroup group_1 0be1e69d-1987-4d9c-9dc5-fc7eed592398
-        ```
-
+        Create a InstanceGroup resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param InstanceGroupArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -394,18 +284,6 @@ class InstanceGroup(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] body_limit: The body limit of the forwarding policy.
-        :param pulumi.Input[int] connection_timeout: The time for connection timeout in the forwarding policy.
-        :param pulumi.Input[str] description: Specifies the description of the instance group.
-        :param pulumi.Input[int] header_limit: The header limit of the forwarding policy.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] load_balancers: The IDs of the ELB instances that has been bound to the instance group.
-        :param pulumi.Input[str] name: Specifies the instance group name.
-               The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        :param pulumi.Input[int] read_timeout: The time for reading timeout in the forwarding policy.
-        :param pulumi.Input[str] region: The region in which to create the instance group.
-               If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        :param pulumi.Input[str] vpc_id: Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        :param pulumi.Input[int] write_timeout: The time for writing timeout in the forwarding policy.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -426,82 +304,50 @@ class InstanceGroup(pulumi.CustomResource):
     @property
     @pulumi.getter(name="bodyLimit")
     def body_limit(self) -> pulumi.Output[int]:
-        """
-        The body limit of the forwarding policy.
-        """
         return pulumi.get(self, "body_limit")
 
     @property
     @pulumi.getter(name="connectionTimeout")
     def connection_timeout(self) -> pulumi.Output[int]:
-        """
-        The time for connection timeout in the forwarding policy.
-        """
         return pulumi.get(self, "connection_timeout")
 
     @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
-        """
-        Specifies the description of the instance group.
-        """
         return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="headerLimit")
     def header_limit(self) -> pulumi.Output[int]:
-        """
-        The header limit of the forwarding policy.
-        """
         return pulumi.get(self, "header_limit")
 
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> pulumi.Output[Sequence[str]]:
-        """
-        The IDs of the ELB instances that has been bound to the instance group.
-        """
         return pulumi.get(self, "load_balancers")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
-        """
-        Specifies the instance group name.
-        The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter(name="readTimeout")
     def read_timeout(self) -> pulumi.Output[int]:
-        """
-        The time for reading timeout in the forwarding policy.
-        """
         return pulumi.get(self, "read_timeout")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
-        """
-        The region in which to create the instance group.
-        If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
-        """
-        Specifies the id of the VPC that the WAF dedicated instances belongs to.
-        """
         return pulumi.get(self, "vpc_id")
 
     @property
     @pulumi.getter(name="writeTimeout")
     def write_timeout(self) -> pulumi.Output[int]:
-        """
-        The time for writing timeout in the forwarding policy.
-        """
         return pulumi.get(self, "write_timeout")
 

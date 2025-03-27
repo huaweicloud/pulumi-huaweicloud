@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB member can be imported using the pool ID and member ID separated by a slash, e.g.
+ * ELB member can be imported using the pool ID and member ID separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Elb/member:Member member_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
@@ -65,11 +65,22 @@ export class Member extends pulumi.CustomResource {
      * Changing this creates a new member.
      */
     public readonly address!: pulumi.Output<string>;
+    /**
+     * schema: Deprecated
+     */
     public readonly adminStateUp!: pulumi.Output<boolean | undefined>;
+    /**
+     * Indicates the administrative status of the backend server.
+     */
+    public /*out*/ readonly backendServerStatus!: pulumi.Output<boolean>;
     /**
      * Human-readable name for the member.
      */
     public readonly name!: pulumi.Output<string>;
+    /**
+     * Indicates the health check result of the backend server.
+     */
+    public /*out*/ readonly operatingStatus!: pulumi.Output<string>;
     /**
      * The id of the pool that this member will be assigned to.
      */
@@ -114,7 +125,9 @@ export class Member extends pulumi.CustomResource {
             const state = argsOrState as MemberState | undefined;
             resourceInputs["address"] = state ? state.address : undefined;
             resourceInputs["adminStateUp"] = state ? state.adminStateUp : undefined;
+            resourceInputs["backendServerStatus"] = state ? state.backendServerStatus : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["operatingStatus"] = state ? state.operatingStatus : undefined;
             resourceInputs["poolId"] = state ? state.poolId : undefined;
             resourceInputs["protocolPort"] = state ? state.protocolPort : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -144,6 +157,8 @@ export class Member extends pulumi.CustomResource {
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tenantId"] = args ? args.tenantId : undefined;
             resourceInputs["weight"] = args ? args.weight : undefined;
+            resourceInputs["backendServerStatus"] = undefined /*out*/;
+            resourceInputs["operatingStatus"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Member.__pulumiType, name, resourceInputs, opts);
@@ -159,11 +174,22 @@ export interface MemberState {
      * Changing this creates a new member.
      */
     address?: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
+    /**
+     * Indicates the administrative status of the backend server.
+     */
+    backendServerStatus?: pulumi.Input<boolean>;
     /**
      * Human-readable name for the member.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Indicates the health check result of the backend server.
+     */
+    operatingStatus?: pulumi.Input<string>;
     /**
      * The id of the pool that this member will be assigned to.
      */
@@ -203,6 +229,9 @@ export interface MemberArgs {
      * Changing this creates a new member.
      */
     address: pulumi.Input<string>;
+    /**
+     * schema: Deprecated
+     */
     adminStateUp?: pulumi.Input<boolean>;
     /**
      * Human-readable name for the member.

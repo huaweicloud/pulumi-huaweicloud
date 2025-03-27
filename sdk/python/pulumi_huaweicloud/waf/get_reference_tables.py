@@ -56,7 +56,7 @@ class GetReferenceTablesResult:
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        The name of the reference table. The maximum length is 64 characters.
+        The name of the reference table. The maximum length is `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -102,14 +102,15 @@ def get_reference_tables(enterprise_project_id: Optional[str] = None,
 
     config = pulumi.Config()
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    reftables = huaweicloud.Waf.get_reference_tables(name="reference_table_name",
+    test = huaweicloud.Waf.get_reference_tables(name="reference_table_name",
         enterprise_project_id=enterprise_project_id)
     ```
 
 
     :param str enterprise_project_id: Specifies the enterprise project ID of WAF reference tables.
-    :param str name: The name of the reference table. The value is case sensitive and matches exactly.
-    :param str region: The region in which to create the WAF reference table resource.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str name: Specifies the name of the reference table. The value is case-sensitive and matches exactly.
+    :param str region: Specifies the region in which to create the WAF reference table resource.
            If omitted, the provider-level region will be used.
     """
     __args__ = dict()
@@ -143,14 +144,15 @@ def get_reference_tables_output(enterprise_project_id: Optional[pulumi.Input[Opt
 
     config = pulumi.Config()
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    reftables = huaweicloud.Waf.get_reference_tables(name="reference_table_name",
+    test = huaweicloud.Waf.get_reference_tables(name="reference_table_name",
         enterprise_project_id=enterprise_project_id)
     ```
 
 
     :param str enterprise_project_id: Specifies the enterprise project ID of WAF reference tables.
-    :param str name: The name of the reference table. The value is case sensitive and matches exactly.
-    :param str region: The region in which to create the WAF reference table resource.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str name: Specifies the name of the reference table. The value is case-sensitive and matches exactly.
+    :param str region: Specifies the region in which to create the WAF reference table resource.
            If omitted, the provider-level region will be used.
     """
     ...

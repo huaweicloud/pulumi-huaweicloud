@@ -53,13 +53,14 @@ func GetDedicatedInstances(ctx *pulumi.Context, args *GetDedicatedInstancesArgs,
 
 // A collection of arguments for invoking getDedicatedInstances.
 type GetDedicatedInstancesArgs struct {
-	// The enterprise project ID of WAF dedicated instance.
+	// Specifies the enterprise project ID of WAF dedicated instance.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// The id of WAF dedicated instance.
+	// Specifies the ID of WAF dedicated instance.
 	Id *string `pulumi:"id"`
-	// The name of WAF dedicated instance.
+	// Specifies the name of WAF dedicated instance.
 	Name *string `pulumi:"name"`
-	// The region in which to query the WAF dedicated instance.
+	// Specifies the region in which to query the WAF dedicated instance.
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 }
@@ -69,7 +70,7 @@ type GetDedicatedInstancesResult struct {
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The ID of WAF dedicated instance.
 	Id string `pulumi:"id"`
-	// An array of available WAF dedicated instances.
+	// The WAF dedicated instances list.
 	Instances []GetDedicatedInstancesInstance `pulumi:"instances"`
 	// The name of WAF dedicated instance.
 	Name   *string `pulumi:"name"`
@@ -91,13 +92,14 @@ func GetDedicatedInstancesOutput(ctx *pulumi.Context, args GetDedicatedInstances
 
 // A collection of arguments for invoking getDedicatedInstances.
 type GetDedicatedInstancesOutputArgs struct {
-	// The enterprise project ID of WAF dedicated instance.
+	// Specifies the enterprise project ID of WAF dedicated instance.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	EnterpriseProjectId pulumi.StringPtrInput `pulumi:"enterpriseProjectId"`
-	// The id of WAF dedicated instance.
+	// Specifies the ID of WAF dedicated instance.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// The name of WAF dedicated instance.
+	// Specifies the name of WAF dedicated instance.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The region in which to query the WAF dedicated instance.
+	// Specifies the region in which to query the WAF dedicated instance.
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 }
@@ -130,7 +132,7 @@ func (o GetDedicatedInstancesResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// An array of available WAF dedicated instances.
+// The WAF dedicated instances list.
 func (o GetDedicatedInstancesResultOutput) Instances() GetDedicatedInstancesInstanceArrayOutput {
 	return o.ApplyT(func(v GetDedicatedInstancesResult) []GetDedicatedInstancesInstance { return v.Instances }).(GetDedicatedInstancesInstanceArrayOutput)
 }

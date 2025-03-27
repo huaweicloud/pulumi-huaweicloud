@@ -14,6 +14,9 @@ type InstanceBandwidth struct {
 	// Specifies the bandwidth billing mode. The value can be *traffic* or *bandwidth*.
 	// Changing this creates a new instance.
 	ChargeMode *string `pulumi:"chargeMode"`
+	// Specifies the additional EIP information.
+	// Changing this creates a new instance.
+	ExtendParam map[string]string `pulumi:"extendParam"`
 	// Specifies the **shared** bandwidth id. This parameter is mandatory when
 	// `shareType` is set to **WHOLE**. Changing this creates a new instance.
 	Id *string `pulumi:"id"`
@@ -42,6 +45,9 @@ type InstanceBandwidthArgs struct {
 	// Specifies the bandwidth billing mode. The value can be *traffic* or *bandwidth*.
 	// Changing this creates a new instance.
 	ChargeMode pulumi.StringPtrInput `pulumi:"chargeMode"`
+	// Specifies the additional EIP information.
+	// Changing this creates a new instance.
+	ExtendParam pulumi.StringMapInput `pulumi:"extendParam"`
 	// Specifies the **shared** bandwidth id. This parameter is mandatory when
 	// `shareType` is set to **WHOLE**. Changing this creates a new instance.
 	Id pulumi.StringPtrInput `pulumi:"id"`
@@ -138,6 +144,12 @@ func (o InstanceBandwidthOutput) ChargeMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceBandwidth) *string { return v.ChargeMode }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the additional EIP information.
+// Changing this creates a new instance.
+func (o InstanceBandwidthOutput) ExtendParam() pulumi.StringMapOutput {
+	return o.ApplyT(func(v InstanceBandwidth) map[string]string { return v.ExtendParam }).(pulumi.StringMapOutput)
+}
+
 // Specifies the **shared** bandwidth id. This parameter is mandatory when
 // `shareType` is set to **WHOLE**. Changing this creates a new instance.
 func (o InstanceBandwidthOutput) Id() pulumi.StringPtrOutput {
@@ -193,6 +205,17 @@ func (o InstanceBandwidthPtrOutput) ChargeMode() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the additional EIP information.
+// Changing this creates a new instance.
+func (o InstanceBandwidthPtrOutput) ExtendParam() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *InstanceBandwidth) map[string]string {
+		if v == nil {
+			return nil
+		}
+		return v.ExtendParam
+	}).(pulumi.StringMapOutput)
+}
+
 // Specifies the **shared** bandwidth id. This parameter is mandatory when
 // `shareType` is set to **WHOLE**. Changing this creates a new instance.
 func (o InstanceBandwidthPtrOutput) Id() pulumi.StringPtrOutput {
@@ -229,6 +252,12 @@ func (o InstanceBandwidthPtrOutput) Size() pulumi.IntPtrOutput {
 }
 
 type InstanceDataDisk struct {
+	// Specifies the data disk DSS pool ID. This field is used
+	// only for dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId *string `pulumi:"dssPoolId"`
+	// Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+	// The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
+	Iops *int `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the disk.
 	// Changing this creates a new instance.
 	KmsKeyId *string `pulumi:"kmsKeyId"`
@@ -238,8 +267,10 @@ type InstanceDataDisk struct {
 	// Specifies the EVS snapshot ID or ID of the original data disk contained in
 	// the full-ECS image. Changing this creates a new instance.
 	SnapshotId *string `pulumi:"snapshotId"`
-	// Specifies the ECS data disk type, which must be one of available disk types,
-	// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+	// Specifies the throughput for the disk. The Unit is MiB/s.
+	// The field is valid and required when `type` is set to **GPSSD2**.
+	Throughput *int `pulumi:"throughput"`
+	// Specifies the ECS data disk type. Changing this creates a new instance.
 	Type string `pulumi:"type"`
 }
 
@@ -255,6 +286,12 @@ type InstanceDataDiskInput interface {
 }
 
 type InstanceDataDiskArgs struct {
+	// Specifies the data disk DSS pool ID. This field is used
+	// only for dedicated storage. Changing this parameter will create a new resource.
+	DssPoolId pulumi.StringPtrInput `pulumi:"dssPoolId"`
+	// Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+	// The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the ID of a KMS key. This is used to encrypt the disk.
 	// Changing this creates a new instance.
 	KmsKeyId pulumi.StringPtrInput `pulumi:"kmsKeyId"`
@@ -264,8 +301,10 @@ type InstanceDataDiskArgs struct {
 	// Specifies the EVS snapshot ID or ID of the original data disk contained in
 	// the full-ECS image. Changing this creates a new instance.
 	SnapshotId pulumi.StringPtrInput `pulumi:"snapshotId"`
-	// Specifies the ECS data disk type, which must be one of available disk types,
-	// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+	// Specifies the throughput for the disk. The Unit is MiB/s.
+	// The field is valid and required when `type` is set to **GPSSD2**.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
+	// Specifies the ECS data disk type. Changing this creates a new instance.
 	Type pulumi.StringInput `pulumi:"type"`
 }
 
@@ -320,6 +359,18 @@ func (o InstanceDataDiskOutput) ToInstanceDataDiskOutputWithContext(ctx context.
 	return o
 }
 
+// Specifies the data disk DSS pool ID. This field is used
+// only for dedicated storage. Changing this parameter will create a new resource.
+func (o InstanceDataDiskOutput) DssPoolId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v InstanceDataDisk) *string { return v.DssPoolId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IOPS(Input/Output Operations Per Second) for the disk.
+// The field is valid and required when `type` is set to **GPSSD2** or **ESSD2**.
+func (o InstanceDataDiskOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceDataDisk) *int { return v.Iops }).(pulumi.IntPtrOutput)
+}
+
 // Specifies the ID of a KMS key. This is used to encrypt the disk.
 // Changing this creates a new instance.
 func (o InstanceDataDiskOutput) KmsKeyId() pulumi.StringPtrOutput {
@@ -338,8 +389,13 @@ func (o InstanceDataDiskOutput) SnapshotId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceDataDisk) *string { return v.SnapshotId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ECS data disk type, which must be one of available disk types,
-// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+// Specifies the throughput for the disk. The Unit is MiB/s.
+// The field is valid and required when `type` is set to **GPSSD2**.
+func (o InstanceDataDiskOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v InstanceDataDisk) *int { return v.Throughput }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ECS data disk type. Changing this creates a new instance.
 func (o InstanceDataDiskOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceDataDisk) string { return v.Type }).(pulumi.StringOutput)
 }
@@ -369,7 +425,6 @@ type InstanceNetwork struct {
 	// Accepts true or false. Defaults to false.
 	AccessNetwork *bool `pulumi:"accessNetwork"`
 	// Specifies a fixed IPv4 address to be used on this network.
-	// Changing this creates a new instance.
 	FixedIpV4 *string `pulumi:"fixedIpV4"`
 	// The Fixed IPv6 address of the instance on that network.
 	FixedIpV6 *string `pulumi:"fixedIpV6"`
@@ -385,7 +440,6 @@ type InstanceNetwork struct {
 	// virtual IP address bound to it.
 	SourceDestCheck *bool `pulumi:"sourceDestCheck"`
 	// Specifies the network UUID to attach to the instance.
-	// Changing this creates a new instance.
 	Uuid *string `pulumi:"uuid"`
 }
 
@@ -405,7 +459,6 @@ type InstanceNetworkArgs struct {
 	// Accepts true or false. Defaults to false.
 	AccessNetwork pulumi.BoolPtrInput `pulumi:"accessNetwork"`
 	// Specifies a fixed IPv4 address to be used on this network.
-	// Changing this creates a new instance.
 	FixedIpV4 pulumi.StringPtrInput `pulumi:"fixedIpV4"`
 	// The Fixed IPv6 address of the instance on that network.
 	FixedIpV6 pulumi.StringPtrInput `pulumi:"fixedIpV6"`
@@ -421,7 +474,6 @@ type InstanceNetworkArgs struct {
 	// virtual IP address bound to it.
 	SourceDestCheck pulumi.BoolPtrInput `pulumi:"sourceDestCheck"`
 	// Specifies the network UUID to attach to the instance.
-	// Changing this creates a new instance.
 	Uuid pulumi.StringPtrInput `pulumi:"uuid"`
 }
 
@@ -483,7 +535,6 @@ func (o InstanceNetworkOutput) AccessNetwork() pulumi.BoolPtrOutput {
 }
 
 // Specifies a fixed IPv4 address to be used on this network.
-// Changing this creates a new instance.
 func (o InstanceNetworkOutput) FixedIpV4() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNetwork) *string { return v.FixedIpV4 }).(pulumi.StringPtrOutput)
 }
@@ -517,7 +568,6 @@ func (o InstanceNetworkOutput) SourceDestCheck() pulumi.BoolPtrOutput {
 }
 
 // Specifies the network UUID to attach to the instance.
-// Changing this creates a new instance.
 func (o InstanceNetworkOutput) Uuid() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceNetwork) *string { return v.Uuid }).(pulumi.StringPtrOutput)
 }
@@ -686,8 +736,7 @@ type InstanceVolumeAttached struct {
 	// Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
 	// This parameter is mandatory when `shareType` is set to **PER**. Changing this creates a new instance.
 	Size *int `pulumi:"size"`
-	// Specifies the ECS data disk type, which must be one of available disk types,
-	// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+	// Specifies the ECS data disk type. Changing this creates a new instance.
 	Type *string `pulumi:"type"`
 	// The volume ID on that attachment.
 	VolumeId *string `pulumi:"volumeId"`
@@ -715,8 +764,7 @@ type InstanceVolumeAttachedArgs struct {
 	// Specifies the bandwidth size. The value ranges from 1 to 300 Mbit/s.
 	// This parameter is mandatory when `shareType` is set to **PER**. Changing this creates a new instance.
 	Size pulumi.IntPtrInput `pulumi:"size"`
-	// Specifies the ECS data disk type, which must be one of available disk types,
-	// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+	// Specifies the ECS data disk type. Changing this creates a new instance.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 	// The volume ID on that attachment.
 	VolumeId pulumi.StringPtrInput `pulumi:"volumeId"`
@@ -795,8 +843,7 @@ func (o InstanceVolumeAttachedOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceVolumeAttached) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the ECS data disk type, which must be one of available disk types,
-// contains of *SSD*, *GPSSD* and *SAS*. Changing this creates a new instance.
+// Specifies the ECS data disk type. Changing this creates a new instance.
 func (o InstanceVolumeAttachedOutput) Type() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InstanceVolumeAttached) *string { return v.Type }).(pulumi.StringPtrOutput)
 }
@@ -824,6 +871,169 @@ func (o InstanceVolumeAttachedArrayOutput) Index(i pulumi.IntInput) InstanceVolu
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) InstanceVolumeAttached {
 		return vs[0].([]InstanceVolumeAttached)[vs[1].(int)]
 	}).(InstanceVolumeAttachedOutput)
+}
+
+type GetFlavorsFlavor struct {
+	// Specifies the number of vCPUs in the ECS flavor.
+	CpuCoreCount int `pulumi:"cpuCoreCount"`
+	// Specifies the generation of an ECS type. For example, **s3** indicates
+	// the general-purpose third-generation ECSs. For details, see
+	// [ECS Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-ecs/ecs_01_0014.html).
+	Generation string `pulumi:"generation"`
+	// The ID of the flavor.
+	Id string `pulumi:"id"`
+	// Specifies the memory size(GB) in the ECS flavor.
+	MemorySize int `pulumi:"memorySize"`
+	// Specifies the ECS flavor type. Possible values are as follows:
+	// + **normal**: General computing
+	// + **computingv3**: General computing-plus
+	// + **highmem**: Memory-optimized
+	// + **saphana**: Large-memory HANA ECS
+	// + **diskintensive**: Disk-intensive
+	PerformanceType string `pulumi:"performanceType"`
+	// Specifies the storage type.
+	StorageType string `pulumi:"storageType"`
+}
+
+// GetFlavorsFlavorInput is an input type that accepts GetFlavorsFlavorArgs and GetFlavorsFlavorOutput values.
+// You can construct a concrete instance of `GetFlavorsFlavorInput` via:
+//
+//	GetFlavorsFlavorArgs{...}
+type GetFlavorsFlavorInput interface {
+	pulumi.Input
+
+	ToGetFlavorsFlavorOutput() GetFlavorsFlavorOutput
+	ToGetFlavorsFlavorOutputWithContext(context.Context) GetFlavorsFlavorOutput
+}
+
+type GetFlavorsFlavorArgs struct {
+	// Specifies the number of vCPUs in the ECS flavor.
+	CpuCoreCount pulumi.IntInput `pulumi:"cpuCoreCount"`
+	// Specifies the generation of an ECS type. For example, **s3** indicates
+	// the general-purpose third-generation ECSs. For details, see
+	// [ECS Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-ecs/ecs_01_0014.html).
+	Generation pulumi.StringInput `pulumi:"generation"`
+	// The ID of the flavor.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the memory size(GB) in the ECS flavor.
+	MemorySize pulumi.IntInput `pulumi:"memorySize"`
+	// Specifies the ECS flavor type. Possible values are as follows:
+	// + **normal**: General computing
+	// + **computingv3**: General computing-plus
+	// + **highmem**: Memory-optimized
+	// + **saphana**: Large-memory HANA ECS
+	// + **diskintensive**: Disk-intensive
+	PerformanceType pulumi.StringInput `pulumi:"performanceType"`
+	// Specifies the storage type.
+	StorageType pulumi.StringInput `pulumi:"storageType"`
+}
+
+func (GetFlavorsFlavorArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetFlavorsFlavor)(nil)).Elem()
+}
+
+func (i GetFlavorsFlavorArgs) ToGetFlavorsFlavorOutput() GetFlavorsFlavorOutput {
+	return i.ToGetFlavorsFlavorOutputWithContext(context.Background())
+}
+
+func (i GetFlavorsFlavorArgs) ToGetFlavorsFlavorOutputWithContext(ctx context.Context) GetFlavorsFlavorOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetFlavorsFlavorOutput)
+}
+
+// GetFlavorsFlavorArrayInput is an input type that accepts GetFlavorsFlavorArray and GetFlavorsFlavorArrayOutput values.
+// You can construct a concrete instance of `GetFlavorsFlavorArrayInput` via:
+//
+//	GetFlavorsFlavorArray{ GetFlavorsFlavorArgs{...} }
+type GetFlavorsFlavorArrayInput interface {
+	pulumi.Input
+
+	ToGetFlavorsFlavorArrayOutput() GetFlavorsFlavorArrayOutput
+	ToGetFlavorsFlavorArrayOutputWithContext(context.Context) GetFlavorsFlavorArrayOutput
+}
+
+type GetFlavorsFlavorArray []GetFlavorsFlavorInput
+
+func (GetFlavorsFlavorArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetFlavorsFlavor)(nil)).Elem()
+}
+
+func (i GetFlavorsFlavorArray) ToGetFlavorsFlavorArrayOutput() GetFlavorsFlavorArrayOutput {
+	return i.ToGetFlavorsFlavorArrayOutputWithContext(context.Background())
+}
+
+func (i GetFlavorsFlavorArray) ToGetFlavorsFlavorArrayOutputWithContext(ctx context.Context) GetFlavorsFlavorArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetFlavorsFlavorArrayOutput)
+}
+
+type GetFlavorsFlavorOutput struct{ *pulumi.OutputState }
+
+func (GetFlavorsFlavorOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetFlavorsFlavor)(nil)).Elem()
+}
+
+func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutput() GetFlavorsFlavorOutput {
+	return o
+}
+
+func (o GetFlavorsFlavorOutput) ToGetFlavorsFlavorOutputWithContext(ctx context.Context) GetFlavorsFlavorOutput {
+	return o
+}
+
+// Specifies the number of vCPUs in the ECS flavor.
+func (o GetFlavorsFlavorOutput) CpuCoreCount() pulumi.IntOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) int { return v.CpuCoreCount }).(pulumi.IntOutput)
+}
+
+// Specifies the generation of an ECS type. For example, **s3** indicates
+// the general-purpose third-generation ECSs. For details, see
+// [ECS Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-ecs/ecs_01_0014.html).
+func (o GetFlavorsFlavorOutput) Generation() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Generation }).(pulumi.StringOutput)
+}
+
+// The ID of the flavor.
+func (o GetFlavorsFlavorOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the memory size(GB) in the ECS flavor.
+func (o GetFlavorsFlavorOutput) MemorySize() pulumi.IntOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) int { return v.MemorySize }).(pulumi.IntOutput)
+}
+
+// Specifies the ECS flavor type. Possible values are as follows:
+// + **normal**: General computing
+// + **computingv3**: General computing-plus
+// + **highmem**: Memory-optimized
+// + **saphana**: Large-memory HANA ECS
+// + **diskintensive**: Disk-intensive
+func (o GetFlavorsFlavorOutput) PerformanceType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.PerformanceType }).(pulumi.StringOutput)
+}
+
+// Specifies the storage type.
+func (o GetFlavorsFlavorOutput) StorageType() pulumi.StringOutput {
+	return o.ApplyT(func(v GetFlavorsFlavor) string { return v.StorageType }).(pulumi.StringOutput)
+}
+
+type GetFlavorsFlavorArrayOutput struct{ *pulumi.OutputState }
+
+func (GetFlavorsFlavorArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetFlavorsFlavor)(nil)).Elem()
+}
+
+func (o GetFlavorsFlavorArrayOutput) ToGetFlavorsFlavorArrayOutput() GetFlavorsFlavorArrayOutput {
+	return o
+}
+
+func (o GetFlavorsFlavorArrayOutput) ToGetFlavorsFlavorArrayOutputWithContext(ctx context.Context) GetFlavorsFlavorArrayOutput {
+	return o
+}
+
+func (o GetFlavorsFlavorArrayOutput) Index(i pulumi.IntInput) GetFlavorsFlavorOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetFlavorsFlavor {
+		return vs[0].([]GetFlavorsFlavor)[vs[1].(int)]
+	}).(GetFlavorsFlavorOutput)
 }
 
 type GetInstanceNetwork struct {
@@ -1202,8 +1412,12 @@ type GetInstancesInstance struct {
 	// Specifies the availability zone where the instance is located.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?ECS) for this argument.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+	ChargingMode string `pulumi:"chargingMode"`
 	// Specifies the enterprise project ID.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
+	// The expired time of prePaid instance, in UTC format.
+	ExpiredTime string `pulumi:"expiredTime"`
 	// Specifies the flavor ID.
 	FlavorId string `pulumi:"flavorId"`
 	// Specifies the flavor name of the instance.
@@ -1222,7 +1436,7 @@ type GetInstancesInstance struct {
 	// An array of one or more networks to attach to the instance.
 	// The network object structure is documented below.
 	Networks []GetInstancesInstanceNetwork `pulumi:"networks"`
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp string `pulumi:"publicIp"`
 	// The scheduler with hints on how the instance should be launched.
 	// The scheduler hints structure is documented below.
@@ -1234,9 +1448,9 @@ type GetInstancesInstance struct {
 	// + **SHUTOFF**: The instance has been properly stopped.
 	// + **ERROR**: An error has occurred on the instance.
 	Status string `pulumi:"status"`
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId string `pulumi:"systemDiskId"`
-	// The key/value pairs to associate with the instance.
+	// Specifies the tags to qurey the instances.
 	Tags map[string]string `pulumi:"tags"`
 	// The user data (information after encoding) configured during instance creation.
 	UserData string `pulumi:"userData"`
@@ -1260,8 +1474,12 @@ type GetInstancesInstanceArgs struct {
 	// Specifies the availability zone where the instance is located.
 	// Please following [reference](https://developer.huaweicloud.com/intl/en-us/endpoint?ECS) for this argument.
 	AvailabilityZone pulumi.StringInput `pulumi:"availabilityZone"`
+	// The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+	ChargingMode pulumi.StringInput `pulumi:"chargingMode"`
 	// Specifies the enterprise project ID.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
+	// The expired time of prePaid instance, in UTC format.
+	ExpiredTime pulumi.StringInput `pulumi:"expiredTime"`
 	// Specifies the flavor ID.
 	FlavorId pulumi.StringInput `pulumi:"flavorId"`
 	// Specifies the flavor name of the instance.
@@ -1280,7 +1498,7 @@ type GetInstancesInstanceArgs struct {
 	// An array of one or more networks to attach to the instance.
 	// The network object structure is documented below.
 	Networks GetInstancesInstanceNetworkArrayInput `pulumi:"networks"`
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp pulumi.StringInput `pulumi:"publicIp"`
 	// The scheduler with hints on how the instance should be launched.
 	// The scheduler hints structure is documented below.
@@ -1292,9 +1510,9 @@ type GetInstancesInstanceArgs struct {
 	// + **SHUTOFF**: The instance has been properly stopped.
 	// + **ERROR**: An error has occurred on the instance.
 	Status pulumi.StringInput `pulumi:"status"`
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId pulumi.StringInput `pulumi:"systemDiskId"`
-	// The key/value pairs to associate with the instance.
+	// Specifies the tags to qurey the instances.
 	Tags pulumi.StringMapInput `pulumi:"tags"`
 	// The user data (information after encoding) configured during instance creation.
 	UserData pulumi.StringInput `pulumi:"userData"`
@@ -1360,9 +1578,19 @@ func (o GetInstancesInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
+// The charging mode of the instance. Valid values are **prePaid**, **postPaid** and **spot**.
+func (o GetInstancesInstanceOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v GetInstancesInstance) string { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
 // Specifies the enterprise project ID.
 func (o GetInstancesInstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// The expired time of prePaid instance, in UTC format.
+func (o GetInstancesInstanceOutput) ExpiredTime() pulumi.StringOutput {
+	return o.ApplyT(func(v GetInstancesInstance) string { return v.ExpiredTime }).(pulumi.StringOutput)
 }
 
 // Specifies the flavor ID.
@@ -1407,7 +1635,7 @@ func (o GetInstancesInstanceOutput) Networks() GetInstancesInstanceNetworkArrayO
 	return o.ApplyT(func(v GetInstancesInstance) []GetInstancesInstanceNetwork { return v.Networks }).(GetInstancesInstanceNetworkArrayOutput)
 }
 
-// The EIP address that is associted to the instance.
+// The EIP address that is associated to the instance.
 func (o GetInstancesInstanceOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.PublicIp }).(pulumi.StringOutput)
 }
@@ -1431,12 +1659,12 @@ func (o GetInstancesInstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.Status }).(pulumi.StringOutput)
 }
 
-// The system disk voume ID.
+// The system disk volume ID.
 func (o GetInstancesInstanceOutput) SystemDiskId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstance) string { return v.SystemDiskId }).(pulumi.StringOutput)
 }
 
-// The key/value pairs to associate with the instance.
+// Specifies the tags to qurey the instances.
 func (o GetInstancesInstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v GetInstancesInstance) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
@@ -1473,7 +1701,7 @@ func (o GetInstancesInstanceArrayOutput) Index(i pulumi.IntInput) GetInstancesIn
 }
 
 type GetInstancesInstanceNetwork struct {
-	// The fixed IPv4 address of the instance on this network.
+	// Specifies the IPv4 addresses of the ECS.
 	FixedIpV4 string `pulumi:"fixedIpV4"`
 	// The Fixed IPv6 address of the instance on that network.
 	FixedIpV6 string `pulumi:"fixedIpV6"`
@@ -1497,7 +1725,7 @@ type GetInstancesInstanceNetworkInput interface {
 }
 
 type GetInstancesInstanceNetworkArgs struct {
-	// The fixed IPv4 address of the instance on this network.
+	// Specifies the IPv4 addresses of the ECS.
 	FixedIpV4 pulumi.StringInput `pulumi:"fixedIpV4"`
 	// The Fixed IPv6 address of the instance on that network.
 	FixedIpV6 pulumi.StringInput `pulumi:"fixedIpV6"`
@@ -1560,7 +1788,7 @@ func (o GetInstancesInstanceNetworkOutput) ToGetInstancesInstanceNetworkOutputWi
 	return o
 }
 
-// The fixed IPv4 address of the instance on this network.
+// Specifies the IPv4 addresses of the ECS.
 func (o GetInstancesInstanceNetworkOutput) FixedIpV4() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstancesInstanceNetwork) string { return v.FixedIpV4 }).(pulumi.StringOutput)
 }
@@ -1844,6 +2072,130 @@ func (o GetInstancesInstanceVolumeAttachedArrayOutput) Index(i pulumi.IntInput) 
 	}).(GetInstancesInstanceVolumeAttachedOutput)
 }
 
+type GetServergroupsServergroup struct {
+	// The server group ID in UUID format.
+	Id string `pulumi:"id"`
+	// An array of one or more instance ID attached to the server group.
+	Members []string `pulumi:"members"`
+	// Specifies the server group name.
+	Name string `pulumi:"name"`
+	// The set of policies for the server group.
+	Policies []string `pulumi:"policies"`
+}
+
+// GetServergroupsServergroupInput is an input type that accepts GetServergroupsServergroupArgs and GetServergroupsServergroupOutput values.
+// You can construct a concrete instance of `GetServergroupsServergroupInput` via:
+//
+//	GetServergroupsServergroupArgs{...}
+type GetServergroupsServergroupInput interface {
+	pulumi.Input
+
+	ToGetServergroupsServergroupOutput() GetServergroupsServergroupOutput
+	ToGetServergroupsServergroupOutputWithContext(context.Context) GetServergroupsServergroupOutput
+}
+
+type GetServergroupsServergroupArgs struct {
+	// The server group ID in UUID format.
+	Id pulumi.StringInput `pulumi:"id"`
+	// An array of one or more instance ID attached to the server group.
+	Members pulumi.StringArrayInput `pulumi:"members"`
+	// Specifies the server group name.
+	Name pulumi.StringInput `pulumi:"name"`
+	// The set of policies for the server group.
+	Policies pulumi.StringArrayInput `pulumi:"policies"`
+}
+
+func (GetServergroupsServergroupArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetServergroupsServergroup)(nil)).Elem()
+}
+
+func (i GetServergroupsServergroupArgs) ToGetServergroupsServergroupOutput() GetServergroupsServergroupOutput {
+	return i.ToGetServergroupsServergroupOutputWithContext(context.Background())
+}
+
+func (i GetServergroupsServergroupArgs) ToGetServergroupsServergroupOutputWithContext(ctx context.Context) GetServergroupsServergroupOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetServergroupsServergroupOutput)
+}
+
+// GetServergroupsServergroupArrayInput is an input type that accepts GetServergroupsServergroupArray and GetServergroupsServergroupArrayOutput values.
+// You can construct a concrete instance of `GetServergroupsServergroupArrayInput` via:
+//
+//	GetServergroupsServergroupArray{ GetServergroupsServergroupArgs{...} }
+type GetServergroupsServergroupArrayInput interface {
+	pulumi.Input
+
+	ToGetServergroupsServergroupArrayOutput() GetServergroupsServergroupArrayOutput
+	ToGetServergroupsServergroupArrayOutputWithContext(context.Context) GetServergroupsServergroupArrayOutput
+}
+
+type GetServergroupsServergroupArray []GetServergroupsServergroupInput
+
+func (GetServergroupsServergroupArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetServergroupsServergroup)(nil)).Elem()
+}
+
+func (i GetServergroupsServergroupArray) ToGetServergroupsServergroupArrayOutput() GetServergroupsServergroupArrayOutput {
+	return i.ToGetServergroupsServergroupArrayOutputWithContext(context.Background())
+}
+
+func (i GetServergroupsServergroupArray) ToGetServergroupsServergroupArrayOutputWithContext(ctx context.Context) GetServergroupsServergroupArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetServergroupsServergroupArrayOutput)
+}
+
+type GetServergroupsServergroupOutput struct{ *pulumi.OutputState }
+
+func (GetServergroupsServergroupOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetServergroupsServergroup)(nil)).Elem()
+}
+
+func (o GetServergroupsServergroupOutput) ToGetServergroupsServergroupOutput() GetServergroupsServergroupOutput {
+	return o
+}
+
+func (o GetServergroupsServergroupOutput) ToGetServergroupsServergroupOutputWithContext(ctx context.Context) GetServergroupsServergroupOutput {
+	return o
+}
+
+// The server group ID in UUID format.
+func (o GetServergroupsServergroupOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetServergroupsServergroup) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// An array of one or more instance ID attached to the server group.
+func (o GetServergroupsServergroupOutput) Members() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetServergroupsServergroup) []string { return v.Members }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the server group name.
+func (o GetServergroupsServergroupOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v GetServergroupsServergroup) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// The set of policies for the server group.
+func (o GetServergroupsServergroupOutput) Policies() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v GetServergroupsServergroup) []string { return v.Policies }).(pulumi.StringArrayOutput)
+}
+
+type GetServergroupsServergroupArrayOutput struct{ *pulumi.OutputState }
+
+func (GetServergroupsServergroupArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetServergroupsServergroup)(nil)).Elem()
+}
+
+func (o GetServergroupsServergroupArrayOutput) ToGetServergroupsServergroupArrayOutput() GetServergroupsServergroupArrayOutput {
+	return o
+}
+
+func (o GetServergroupsServergroupArrayOutput) ToGetServergroupsServergroupArrayOutputWithContext(ctx context.Context) GetServergroupsServergroupArrayOutput {
+	return o
+}
+
+func (o GetServergroupsServergroupArrayOutput) Index(i pulumi.IntInput) GetServergroupsServergroupOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetServergroupsServergroup {
+		return vs[0].([]GetServergroupsServergroup)[vs[1].(int)]
+	}).(GetServergroupsServergroupOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBandwidthInput)(nil)).Elem(), InstanceBandwidthArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceBandwidthPtrInput)(nil)).Elem(), InstanceBandwidthArgs{})
@@ -1855,6 +2207,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceSchedulerHintArrayInput)(nil)).Elem(), InstanceSchedulerHintArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumeAttachedInput)(nil)).Elem(), InstanceVolumeAttachedArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*InstanceVolumeAttachedArrayInput)(nil)).Elem(), InstanceVolumeAttachedArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorInput)(nil)).Elem(), GetFlavorsFlavorArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetFlavorsFlavorArrayInput)(nil)).Elem(), GetFlavorsFlavorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstanceNetworkInput)(nil)).Elem(), GetInstanceNetworkArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstanceNetworkArrayInput)(nil)).Elem(), GetInstanceNetworkArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstanceSchedulerHintInput)(nil)).Elem(), GetInstanceSchedulerHintArgs{})
@@ -1869,6 +2223,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceSchedulerHintArrayInput)(nil)).Elem(), GetInstancesInstanceSchedulerHintArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceVolumeAttachedInput)(nil)).Elem(), GetInstancesInstanceVolumeAttachedArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetInstancesInstanceVolumeAttachedArrayInput)(nil)).Elem(), GetInstancesInstanceVolumeAttachedArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetServergroupsServergroupInput)(nil)).Elem(), GetServergroupsServergroupArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetServergroupsServergroupArrayInput)(nil)).Elem(), GetServergroupsServergroupArray{})
 	pulumi.RegisterOutputType(InstanceBandwidthOutput{})
 	pulumi.RegisterOutputType(InstanceBandwidthPtrOutput{})
 	pulumi.RegisterOutputType(InstanceDataDiskOutput{})
@@ -1879,6 +2235,8 @@ func init() {
 	pulumi.RegisterOutputType(InstanceSchedulerHintArrayOutput{})
 	pulumi.RegisterOutputType(InstanceVolumeAttachedOutput{})
 	pulumi.RegisterOutputType(InstanceVolumeAttachedArrayOutput{})
+	pulumi.RegisterOutputType(GetFlavorsFlavorOutput{})
+	pulumi.RegisterOutputType(GetFlavorsFlavorArrayOutput{})
 	pulumi.RegisterOutputType(GetInstanceNetworkOutput{})
 	pulumi.RegisterOutputType(GetInstanceNetworkArrayOutput{})
 	pulumi.RegisterOutputType(GetInstanceSchedulerHintOutput{})
@@ -1893,4 +2251,6 @@ func init() {
 	pulumi.RegisterOutputType(GetInstancesInstanceSchedulerHintArrayOutput{})
 	pulumi.RegisterOutputType(GetInstancesInstanceVolumeAttachedOutput{})
 	pulumi.RegisterOutputType(GetInstancesInstanceVolumeAttachedArrayOutput{})
+	pulumi.RegisterOutputType(GetServergroupsServergroupOutput{})
+	pulumi.RegisterOutputType(GetServergroupsServergroupArrayOutput{})
 }

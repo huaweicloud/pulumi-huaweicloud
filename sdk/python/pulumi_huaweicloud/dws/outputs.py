@@ -11,6 +11,7 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'ClusterElb',
     'ClusterEndpoint',
     'ClusterMaintainWindow',
     'ClusterPublicEndpoint',
@@ -19,6 +20,128 @@ __all__ = [
     'GetFlaovrsFlavorResult',
     'GetFlaovrsFlavorElasticVolumeSpecResult',
 ]
+
+@pulumi.output_type
+class ClusterElb(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "privateEndpoint":
+            suggest = "private_endpoint"
+        elif key == "privateIp":
+            suggest = "private_ip"
+        elif key == "privateIpV6":
+            suggest = "private_ip_v6"
+        elif key == "publicIp":
+            suggest = "public_ip"
+        elif key == "vpcId":
+            suggest = "vpc_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterElb. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterElb.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterElb.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 id: Optional[str] = None,
+                 name: Optional[str] = None,
+                 private_endpoint: Optional[str] = None,
+                 private_ip: Optional[str] = None,
+                 private_ip_v6: Optional[str] = None,
+                 public_ip: Optional[str] = None,
+                 vpc_id: Optional[str] = None):
+        """
+        :param str id: The ID of the ELB load balancer.
+        :param str name: Cluster name, which must be unique and contains 4 to 64 characters, which
+               consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+               Changing this creates a new cluster resource.
+        :param str private_endpoint: The private endpoint of the ELB load balancer.
+        :param str private_ip: The private IP address of the ELB load balancer.
+        :param str private_ip_v6: The IPv6 address of the ELB load balancer.
+        :param str public_ip: The information about public IP.
+        :param str vpc_id: The VPC ID.
+               Changing this parameter will create a new resource.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if private_endpoint is not None:
+            pulumi.set(__self__, "private_endpoint", private_endpoint)
+        if private_ip is not None:
+            pulumi.set(__self__, "private_ip", private_ip)
+        if private_ip_v6 is not None:
+            pulumi.set(__self__, "private_ip_v6", private_ip_v6)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The ID of the ELB load balancer.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Cluster name, which must be unique and contains 4 to 64 characters, which
+        consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+        Changing this creates a new cluster resource.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="privateEndpoint")
+    def private_endpoint(self) -> Optional[str]:
+        """
+        The private endpoint of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_endpoint")
+
+    @property
+    @pulumi.getter(name="privateIp")
+    def private_ip(self) -> Optional[str]:
+        """
+        The private IP address of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_ip")
+
+    @property
+    @pulumi.getter(name="privateIpV6")
+    def private_ip_v6(self) -> Optional[str]:
+        """
+        The IPv6 address of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_ip_v6")
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[str]:
+        """
+        The information about public IP.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[str]:
+        """
+        The VPC ID.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
 
 @pulumi.output_type
 class ClusterEndpoint(dict):
@@ -246,10 +369,9 @@ class ClusterVolume(dict):
         """
         :param str capacity: The capacity size, in GB.
         :param str type: The volume type. Value options are as follows:
-               + **SATA**: Common I/O. The SATA disk is used.
-               + **SAS**: High I/O. The SAS disk is used.
                + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+               + **SAS**: High I/O. The SAS disk is used.
+               + **SATA**: Common I/O. The SATA disk is used.
         """
         if capacity is not None:
             pulumi.set(__self__, "capacity", capacity)
@@ -269,10 +391,9 @@ class ClusterVolume(dict):
     def type(self) -> Optional[str]:
         """
         The volume type. Value options are as follows:
-        + **SATA**: Common I/O. The SATA disk is used.
-        + **SAS**: High I/O. The SAS disk is used.
         + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        + **SAS**: High I/O. The SAS disk is used.
+        + **SATA**: Common I/O. The SATA disk is used.
         """
         return pulumi.get(self, "type")
 
@@ -282,6 +403,7 @@ class GetFlaovrsFlavorResult(dict):
     def __init__(__self__, *,
                  availability_zones: Sequence[str],
                  datastore_type: str,
+                 datastore_version: str,
                  elastic_volume_specs: Sequence['outputs.GetFlaovrsFlavorElasticVolumeSpecResult'],
                  flavor_id: str,
                  memory: int,
@@ -296,6 +418,7 @@ class GetFlaovrsFlavorResult(dict):
                - **hybrid**: a single data warehouse used for transaction and analytics workloads,
                in single-node or cluster mode.
                - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
+        :param str datastore_version: The version of datastore.
         :param Sequence['GetFlaovrsFlavorElasticVolumeSpecArgs'] elastic_volume_specs: The ElasticVolumeSpec structure is documented below.
         :param str flavor_id: The name of the dws node flavor.  
                It is referenced by `node_type` in `_dws.get_flaovrs`.
@@ -309,6 +432,7 @@ class GetFlaovrsFlavorResult(dict):
         """
         pulumi.set(__self__, "availability_zones", availability_zones)
         pulumi.set(__self__, "datastore_type", datastore_type)
+        pulumi.set(__self__, "datastore_version", datastore_version)
         pulumi.set(__self__, "elastic_volume_specs", elastic_volume_specs)
         pulumi.set(__self__, "flavor_id", flavor_id)
         pulumi.set(__self__, "memory", memory)
@@ -336,6 +460,14 @@ class GetFlaovrsFlavorResult(dict):
         - **stream**: built-in time series operators; up to 40:1 compression ratio; applicable to IoT services.
         """
         return pulumi.get(self, "datastore_type")
+
+    @property
+    @pulumi.getter(name="datastoreVersion")
+    def datastore_version(self) -> str:
+        """
+        The version of datastore.
+        """
+        return pulumi.get(self, "datastore_version")
 
     @property
     @pulumi.getter(name="elasticVolumeSpecs")

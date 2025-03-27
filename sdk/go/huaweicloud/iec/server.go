@@ -193,7 +193,7 @@ type Server struct {
 	// Specifies an array of one or more subnet ID of Network for the IEC server
 	// binding. Changing this parameter creates a new IEC server resource.
 	SubnetIds pulumi.StringArrayOutput `pulumi:"subnetIds"`
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId pulumi.StringOutput `pulumi:"systemDiskId"`
 	// Specifies the size of system disk for the IEC server binding. The
 	// value range is 40 to 100 in GB. Changing this parameter creates a new IEC server resource.
@@ -323,7 +323,7 @@ type serverState struct {
 	// Specifies an array of one or more subnet ID of Network for the IEC server
 	// binding. Changing this parameter creates a new IEC server resource.
 	SubnetIds []string `pulumi:"subnetIds"`
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId *string `pulumi:"systemDiskId"`
 	// Specifies the size of system disk for the IEC server binding. The
 	// value range is 40 to 100 in GB. Changing this parameter creates a new IEC server resource.
@@ -400,7 +400,7 @@ type ServerState struct {
 	// Specifies an array of one or more subnet ID of Network for the IEC server
 	// binding. Changing this parameter creates a new IEC server resource.
 	SubnetIds pulumi.StringArrayInput
-	// The system disk voume ID.
+	// The system disk volume ID.
 	SystemDiskId pulumi.StringPtrInput
 	// Specifies the size of system disk for the IEC server binding. The
 	// value range is 40 to 100 in GB. Changing this parameter creates a new IEC server resource.
@@ -740,7 +740,7 @@ func (o ServerOutput) SubnetIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Server) pulumi.StringArrayOutput { return v.SubnetIds }).(pulumi.StringArrayOutput)
 }
 
-// The system disk voume ID.
+// The system disk volume ID.
 func (o ServerOutput) SystemDiskId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Server) pulumi.StringOutput { return v.SystemDiskId }).(pulumi.StringOutput)
 }

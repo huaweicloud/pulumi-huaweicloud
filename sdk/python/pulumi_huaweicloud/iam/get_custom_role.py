@@ -51,7 +51,7 @@ class GetCustomRoleResult:
     @pulumi.getter
     def catalog(self) -> str:
         """
-        The catalog of the custom policy.
+        The catalog of the custom policy. The value is **CUSTOMED**.
         """
         return pulumi.get(self, "catalog")
 
@@ -79,7 +79,7 @@ class GetCustomRoleResult:
     @pulumi.getter
     def policy(self) -> str:
         """
-        Document of the custom policy.
+        The content of the custom policy in JSON format.
         """
         return pulumi.get(self, "policy")
 
@@ -118,9 +118,9 @@ def get_custom_role(description: Optional[str] = None,
                     type: Optional[str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCustomRoleResult:
     """
-    Use this data source to get the ID of an IAM **custom policy**.
+    Use this data source to get details of the specified IAM **custom policy**.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 
@@ -128,16 +128,18 @@ def get_custom_role(description: Optional[str] = None,
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    role = huaweicloud.Iam.get_custom_role(name="custom_role")
+    policy = huaweicloud.Iam.get_custom_role(name="custom_policy")
     ```
 
 
-    :param str description: Description of the custom policy.
-    :param str domain_id: The domain the policy belongs to.
-    :param str id: ID of the custom policy.
-    :param str name: Name of the custom policy.
-    :param int references: The number of citations for the custom policy.
-    :param str type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+    :param str description: Specifies the description of the custom policy.
+    :param str domain_id: Specifies the domain the policy belongs to.
+    :param str id: Specifies the ID of the custom policy. It's required if `name` is not specified.
+    :param str name: Specifies the name of the custom policy. It's required if `id` is not specified.
+    :param int references: Specifies the number of citations for the custom policy.
+    :param str type: Specifies the display mode of the custom policy. Valid options are as follows:
+           + **AX**: the global service project.
+           + **XA**: region-specific projects.
     """
     __args__ = dict()
     __args__['description'] = description
@@ -169,9 +171,9 @@ def get_custom_role_output(description: Optional[pulumi.Input[Optional[str]]] = 
                            type: Optional[pulumi.Input[Optional[str]]] = None,
                            opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCustomRoleResult]:
     """
-    Use this data source to get the ID of an IAM **custom policy**.
+    Use this data source to get details of the specified IAM **custom policy**.
 
-    > You *must* have IAM read privileges to use this data source.
+    > **NOTE:** You *must* have IAM read privileges to use this data source.
 
     ## Example Usage
 
@@ -179,15 +181,17 @@ def get_custom_role_output(description: Optional[pulumi.Input[Optional[str]]] = 
     import pulumi
     import pulumi_huaweicloud as huaweicloud
 
-    role = huaweicloud.Iam.get_custom_role(name="custom_role")
+    policy = huaweicloud.Iam.get_custom_role(name="custom_policy")
     ```
 
 
-    :param str description: Description of the custom policy.
-    :param str domain_id: The domain the policy belongs to.
-    :param str id: ID of the custom policy.
-    :param str name: Name of the custom policy.
-    :param int references: The number of citations for the custom policy.
-    :param str type: Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+    :param str description: Specifies the description of the custom policy.
+    :param str domain_id: Specifies the domain the policy belongs to.
+    :param str id: Specifies the ID of the custom policy. It's required if `name` is not specified.
+    :param str name: Specifies the name of the custom policy. It's required if `id` is not specified.
+    :param int references: Specifies the number of citations for the custom policy.
+    :param str type: Specifies the display mode of the custom policy. Valid options are as follows:
+           + **AX**: the global service project.
+           + **XA**: region-specific projects.
     """
     ...

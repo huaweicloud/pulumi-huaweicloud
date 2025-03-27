@@ -69,28 +69,37 @@ export class Group extends pulumi.CustomResource {
     }
 
     /**
+     * The creation time of the group, in RFC3339 format.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Specifies the group description.  
      * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
      * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
+     * Specifies whether to use the debugging domain name to access the APIs
+     * within the group. The default value is `false`.
+     */
+    public readonly domainAccessEnabled!: pulumi.Output<boolean>;
+    /**
      * Specifies an array of one or more environments of the associated group.  
      * The object structure is documented below.
      */
-    public readonly environments!: pulumi.Output<outputs.DedicatedApig.GroupEnvironment[] | undefined>;
+    public readonly environments!: pulumi.Output<outputs.DedicatedApig.GroupEnvironment[]>;
+    /**
+     * Specifies whether to delete all sub-resources (for API) when deleting this group.  
+     * Defaults to **false**.
+     */
+    public readonly forceDestroy!: pulumi.Output<boolean>;
     /**
      * Specifies the ID of the dedicated instance to which the group belongs.  
      * Changing this will create a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the variable name.  
-     * The valid length is limited from `3` to `32` characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-     * It is replaced by the actual value when the API is published in an environment.
-     * The variable names are not allowed to be repeated for an API group.
+     * Specifies the domain name. The valid must comply with the domian name specifications.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -99,19 +108,22 @@ export class Group extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The registration time, in RFC-3339 format.
+     * The registration time.
      */
     public /*out*/ readonly registrationTime!: pulumi.Output<string>;
     /**
-     * schema: Deprecated; The latest update time of the group.
-     *
-     * @deprecated Use 'updated_at' instead
+     * The latest update time of the group.
      */
     public /*out*/ readonly updateTime!: pulumi.Output<string>;
     /**
-     * The time when the API group was last modified, in RFC-3339 format.
+     * The latest update time of the group, in RFC3339 format.
      */
     public /*out*/ readonly updatedAt!: pulumi.Output<string>;
+    /**
+     * Specifies independent domain names of the associated with group.  
+     * The urlDomains structure is documented below.
+     */
+    public readonly urlDomains!: pulumi.Output<outputs.DedicatedApig.GroupUrlDomain[] | undefined>;
 
     /**
      * Create a Group resource with the given unique name, arguments, and options.
@@ -126,24 +138,32 @@ export class Group extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as GroupState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["domainAccessEnabled"] = state ? state.domainAccessEnabled : undefined;
             resourceInputs["environments"] = state ? state.environments : undefined;
+            resourceInputs["forceDestroy"] = state ? state.forceDestroy : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["registrationTime"] = state ? state.registrationTime : undefined;
             resourceInputs["updateTime"] = state ? state.updateTime : undefined;
             resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
+            resourceInputs["urlDomains"] = state ? state.urlDomains : undefined;
         } else {
             const args = argsOrState as GroupArgs | undefined;
             if ((!args || args.instanceId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'instanceId'");
             }
             resourceInputs["description"] = args ? args.description : undefined;
+            resourceInputs["domainAccessEnabled"] = args ? args.domainAccessEnabled : undefined;
             resourceInputs["environments"] = args ? args.environments : undefined;
+            resourceInputs["forceDestroy"] = args ? args.forceDestroy : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["urlDomains"] = args ? args.urlDomains : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["registrationTime"] = undefined /*out*/;
             resourceInputs["updateTime"] = undefined /*out*/;
             resourceInputs["updatedAt"] = undefined /*out*/;
@@ -158,28 +178,37 @@ export class Group extends pulumi.CustomResource {
  */
 export interface GroupState {
     /**
+     * The creation time of the group, in RFC3339 format.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Specifies the group description.  
      * The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
      * Chinese characters must be in **UTF-8** or **Unicode** format.
      */
     description?: pulumi.Input<string>;
     /**
+     * Specifies whether to use the debugging domain name to access the APIs
+     * within the group. The default value is `false`.
+     */
+    domainAccessEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies an array of one or more environments of the associated group.  
      * The object structure is documented below.
      */
     environments?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupEnvironment>[]>;
+    /**
+     * Specifies whether to delete all sub-resources (for API) when deleting this group.  
+     * Defaults to **false**.
+     */
+    forceDestroy?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the dedicated instance to which the group belongs.  
      * Changing this will create a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the variable name.  
-     * The valid length is limited from `3` to `32` characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-     * It is replaced by the actual value when the API is published in an environment.
-     * The variable names are not allowed to be repeated for an API group.
+     * Specifies the domain name. The valid must comply with the domian name specifications.
      */
     name?: pulumi.Input<string>;
     /**
@@ -188,19 +217,22 @@ export interface GroupState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The registration time, in RFC-3339 format.
+     * The registration time.
      */
     registrationTime?: pulumi.Input<string>;
     /**
-     * schema: Deprecated; The latest update time of the group.
-     *
-     * @deprecated Use 'updated_at' instead
+     * The latest update time of the group.
      */
     updateTime?: pulumi.Input<string>;
     /**
-     * The time when the API group was last modified, in RFC-3339 format.
+     * The latest update time of the group, in RFC3339 format.
      */
     updatedAt?: pulumi.Input<string>;
+    /**
+     * Specifies independent domain names of the associated with group.  
+     * The urlDomains structure is documented below.
+     */
+    urlDomains?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupUrlDomain>[]>;
 }
 
 /**
@@ -214,22 +246,27 @@ export interface GroupArgs {
      */
     description?: pulumi.Input<string>;
     /**
+     * Specifies whether to use the debugging domain name to access the APIs
+     * within the group. The default value is `false`.
+     */
+    domainAccessEnabled?: pulumi.Input<boolean>;
+    /**
      * Specifies an array of one or more environments of the associated group.  
      * The object structure is documented below.
      */
     environments?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupEnvironment>[]>;
+    /**
+     * Specifies whether to delete all sub-resources (for API) when deleting this group.  
+     * Defaults to **false**.
+     */
+    forceDestroy?: pulumi.Input<boolean>;
     /**
      * Specifies the ID of the dedicated instance to which the group belongs.  
      * Changing this will create a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the variable name.  
-     * The valid length is limited from `3` to `32` characters.
-     * Only letters, digits, hyphens (-), and underscores (_) are allowed, and must start with a letter.
-     * In the definition of an API, `name` (case-sensitive) indicates a variable, such as #Name#.
-     * It is replaced by the actual value when the API is published in an environment.
-     * The variable names are not allowed to be repeated for an API group.
+     * Specifies the domain name. The valid must comply with the domian name specifications.
      */
     name?: pulumi.Input<string>;
     /**
@@ -237,4 +274,9 @@ export interface GroupArgs {
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies independent domain names of the associated with group.  
+     * The urlDomains structure is documented below.
+     */
+    urlDomains?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.GroupUrlDomain>[]>;
 }

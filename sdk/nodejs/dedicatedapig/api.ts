@@ -9,6 +9,7 @@ import * as utilities from "../utilities";
  * Manages an APIG API resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create an API with the Web backend and the protocol type is HTTP
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -101,6 +102,15 @@ export class Api extends pulumi.CustomResource {
      */
     public readonly bodyDescription!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the content type of the request body.  
+     * The valid values are as follows:
+     * + **application/json**
+     * + **application/xml**
+     * + **multipart/form-data**
+     * + **text/plain**
+     */
+    public readonly contentType!: pulumi.Output<string>;
+    /**
      * Specifies whether CORS is supported, defaults to **false**.
      */
     public readonly cors!: pulumi.Output<boolean | undefined>;
@@ -127,7 +137,8 @@ export class Api extends pulumi.CustomResource {
      */
     public readonly funcGraphPolicies!: pulumi.Output<outputs.DedicatedApig.ApiFuncGraphPolicy[] | undefined>;
     /**
-     * Specifies an ID of the APIG group to which the API belongs to.
+     * Specifies the ID of the APIG group to which the API belongs.  
+     * Changing this will create a new API resource.
      */
     public readonly groupId!: pulumi.Output<string>;
     /**
@@ -135,6 +146,17 @@ export class Api extends pulumi.CustomResource {
      * to. Changing this will create a new API resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
+    /**
+     * Specifies whether to perform base64 encoding on the body for interaction
+     * with FunctionGraph.
+     * Defaults to **true**.
+     * The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+     * These scenarios which can be applied:
+     * + Custom authentication.
+     * + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+     * + APIs with FunctionGraph backend.
+     */
+    public readonly isSendFgBodyBase64!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the route matching mode.  
      * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
@@ -154,7 +176,8 @@ export class Api extends pulumi.CustomResource {
     public readonly mockPolicies!: pulumi.Output<outputs.DedicatedApig.ApiMockPolicy[] | undefined>;
     /**
      * Specifies the backend policy name.  
-     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * It must start with a letter.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -175,7 +198,7 @@ export class Api extends pulumi.CustomResource {
      * Specifies the configurations of the front-end parameters.  
      * The object structure is documented below.
      */
-    public readonly requestParams!: pulumi.Output<outputs.DedicatedApig.ApiRequestParam[] | undefined>;
+    public readonly requestParams!: pulumi.Output<outputs.DedicatedApig.ApiRequestParam[]>;
     /**
      * Specifies the request address, which can contain a maximum of `512` characters,
      * the request parameters enclosed with brackets ({}).
@@ -195,7 +218,7 @@ export class Api extends pulumi.CustomResource {
     public readonly responseId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the security authentication mode of the API request.  
-     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+     * The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
      */
     public readonly securityAuthentication!: pulumi.Output<string | undefined>;
     /**
@@ -209,8 +232,13 @@ export class Api extends pulumi.CustomResource {
      */
     public readonly successResponse!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the list of tags configuration.
+     */
+    public readonly tags!: pulumi.Output<string[] | undefined>;
+    /**
      * Specifies the condition type of the backend policy.  
      * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+     * When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
      */
     public readonly type!: pulumi.Output<string>;
     /**
@@ -245,6 +273,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["authorizerId"] = state ? state.authorizerId : undefined;
             resourceInputs["backendParams"] = state ? state.backendParams : undefined;
             resourceInputs["bodyDescription"] = state ? state.bodyDescription : undefined;
+            resourceInputs["contentType"] = state ? state.contentType : undefined;
             resourceInputs["cors"] = state ? state.cors : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["failureResponse"] = state ? state.failureResponse : undefined;
@@ -252,6 +281,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["funcGraphPolicies"] = state ? state.funcGraphPolicies : undefined;
             resourceInputs["groupId"] = state ? state.groupId : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
+            resourceInputs["isSendFgBodyBase64"] = state ? state.isSendFgBodyBase64 : undefined;
             resourceInputs["matching"] = state ? state.matching : undefined;
             resourceInputs["mock"] = state ? state.mock : undefined;
             resourceInputs["mockPolicies"] = state ? state.mockPolicies : undefined;
@@ -266,6 +296,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["securityAuthentication"] = state ? state.securityAuthentication : undefined;
             resourceInputs["simpleAuthentication"] = state ? state.simpleAuthentication : undefined;
             resourceInputs["successResponse"] = state ? state.successResponse : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["web"] = state ? state.web : undefined;
@@ -293,6 +324,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["authorizerId"] = args ? args.authorizerId : undefined;
             resourceInputs["backendParams"] = args ? args.backendParams : undefined;
             resourceInputs["bodyDescription"] = args ? args.bodyDescription : undefined;
+            resourceInputs["contentType"] = args ? args.contentType : undefined;
             resourceInputs["cors"] = args ? args.cors : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["failureResponse"] = args ? args.failureResponse : undefined;
@@ -300,6 +332,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["funcGraphPolicies"] = args ? args.funcGraphPolicies : undefined;
             resourceInputs["groupId"] = args ? args.groupId : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
+            resourceInputs["isSendFgBodyBase64"] = args ? args.isSendFgBodyBase64 : undefined;
             resourceInputs["matching"] = args ? args.matching : undefined;
             resourceInputs["mock"] = args ? args.mock : undefined;
             resourceInputs["mockPolicies"] = args ? args.mockPolicies : undefined;
@@ -313,6 +346,7 @@ export class Api extends pulumi.CustomResource {
             resourceInputs["securityAuthentication"] = args ? args.securityAuthentication : undefined;
             resourceInputs["simpleAuthentication"] = args ? args.simpleAuthentication : undefined;
             resourceInputs["successResponse"] = args ? args.successResponse : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["web"] = args ? args.web : undefined;
             resourceInputs["webPolicies"] = args ? args.webPolicies : undefined;
@@ -344,6 +378,15 @@ export interface ApiState {
      */
     bodyDescription?: pulumi.Input<string>;
     /**
+     * Specifies the content type of the request body.  
+     * The valid values are as follows:
+     * + **application/json**
+     * + **application/xml**
+     * + **multipart/form-data**
+     * + **text/plain**
+     */
+    contentType?: pulumi.Input<string>;
+    /**
      * Specifies whether CORS is supported, defaults to **false**.
      */
     cors?: pulumi.Input<boolean>;
@@ -370,7 +413,8 @@ export interface ApiState {
      */
     funcGraphPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiFuncGraphPolicy>[]>;
     /**
-     * Specifies an ID of the APIG group to which the API belongs to.
+     * Specifies the ID of the APIG group to which the API belongs.  
+     * Changing this will create a new API resource.
      */
     groupId?: pulumi.Input<string>;
     /**
@@ -378,6 +422,17 @@ export interface ApiState {
      * to. Changing this will create a new API resource.
      */
     instanceId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to perform base64 encoding on the body for interaction
+     * with FunctionGraph.
+     * Defaults to **true**.
+     * The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+     * These scenarios which can be applied:
+     * + Custom authentication.
+     * + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+     * + APIs with FunctionGraph backend.
+     */
+    isSendFgBodyBase64?: pulumi.Input<boolean>;
     /**
      * Specifies the route matching mode.  
      * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
@@ -397,7 +452,8 @@ export interface ApiState {
     mockPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiMockPolicy>[]>;
     /**
      * Specifies the backend policy name.  
-     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * It must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
@@ -438,7 +494,7 @@ export interface ApiState {
     responseId?: pulumi.Input<string>;
     /**
      * Specifies the security authentication mode of the API request.  
-     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+     * The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
      */
     securityAuthentication?: pulumi.Input<string>;
     /**
@@ -452,8 +508,13 @@ export interface ApiState {
      */
     successResponse?: pulumi.Input<string>;
     /**
+     * Specifies the list of tags configuration.
+     */
+    tags?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the condition type of the backend policy.  
      * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+     * When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
      */
     type?: pulumi.Input<string>;
     /**
@@ -493,6 +554,15 @@ export interface ApiArgs {
      */
     bodyDescription?: pulumi.Input<string>;
     /**
+     * Specifies the content type of the request body.  
+     * The valid values are as follows:
+     * + **application/json**
+     * + **application/xml**
+     * + **multipart/form-data**
+     * + **text/plain**
+     */
+    contentType?: pulumi.Input<string>;
+    /**
      * Specifies whether CORS is supported, defaults to **false**.
      */
     cors?: pulumi.Input<boolean>;
@@ -519,7 +589,8 @@ export interface ApiArgs {
      */
     funcGraphPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiFuncGraphPolicy>[]>;
     /**
-     * Specifies an ID of the APIG group to which the API belongs to.
+     * Specifies the ID of the APIG group to which the API belongs.  
+     * Changing this will create a new API resource.
      */
     groupId: pulumi.Input<string>;
     /**
@@ -527,6 +598,17 @@ export interface ApiArgs {
      * to. Changing this will create a new API resource.
      */
     instanceId: pulumi.Input<string>;
+    /**
+     * Specifies whether to perform base64 encoding on the body for interaction
+     * with FunctionGraph.
+     * Defaults to **true**.
+     * The body does not need to be encoded using base64 only when `contentType` is set to **application/json**.
+     * These scenarios which can be applied:
+     * + Custom authentication.
+     * + Bound circuit breaker plug-in with FunctionGraph backend downgrade policy.
+     * + APIs with FunctionGraph backend.
+     */
+    isSendFgBodyBase64?: pulumi.Input<boolean>;
     /**
      * Specifies the route matching mode.  
      * The valid values are **Exact** and **Prefix**, defaults to **Exact**.
@@ -546,7 +628,8 @@ export interface ApiArgs {
     mockPolicies?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.ApiMockPolicy>[]>;
     /**
      * Specifies the backend policy name.  
-     * The valid length is limited from can contain `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * The valid length is limited from `3` to `64`, only letters, digits and underscores (_) are allowed.
+     * It must start with a letter.
      */
     name?: pulumi.Input<string>;
     /**
@@ -583,7 +666,7 @@ export interface ApiArgs {
     responseId?: pulumi.Input<string>;
     /**
      * Specifies the security authentication mode of the API request.  
-     * The valid values are **NONE**, **APP** and **IAM**, defaults to **NONE**.
+     * The valid values are **NONE**, **APP**, **IAM** and **AUTHORIZER**, defaults to **NONE**.
      */
     securityAuthentication?: pulumi.Input<string>;
     /**
@@ -597,8 +680,13 @@ export interface ApiArgs {
      */
     successResponse?: pulumi.Input<string>;
     /**
+     * Specifies the list of tags configuration.
+     */
+    tags?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the condition type of the backend policy.  
      * The valid values are **Equal**, **Enumerated** and **Matching**, defaults to **Equal**.
+     * When the `sysName` is **req_method**, the valid values are **Equal** and **Enumerated**.
      */
     type: pulumi.Input<string>;
     /**

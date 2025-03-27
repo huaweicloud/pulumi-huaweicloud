@@ -43,7 +43,7 @@ export interface GetEngineVersionsArgs {
     region?: string;
     /**
      * Specifies the RDS engine type.
-     * The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+     * The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
      */
     type?: string;
 }
@@ -79,7 +79,7 @@ export interface GetEngineVersionsOutputArgs {
     region?: pulumi.Input<string>;
     /**
      * Specifies the RDS engine type.
-     * The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+     * The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
      */
     type?: pulumi.Input<string>;
 }

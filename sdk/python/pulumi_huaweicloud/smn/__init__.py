@@ -8,4 +8,5 @@ import typing
 from .get_topics import *
 from .subscription import *
 from .topic import *
+from ._inputs import *
 from . import outputs

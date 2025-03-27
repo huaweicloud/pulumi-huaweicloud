@@ -21,16 +21,33 @@ class GetCertificateResult:
     """
     A collection of values returned by getCertificate.
     """
-    def __init__(__self__, enterprise_project_id=None, expiration=None, expire_status=None, id=None, name=None, region=None):
+    def __init__(__self__, created_at=None, enterprise_project_id=None, expiration=None, expiration_status=None, expire_status=None, expired_at=None, id=None, name=None, region=None):
+        if created_at and not isinstance(created_at, str):
+            raise TypeError("Expected argument 'created_at' to be a str")
+        pulumi.set(__self__, "created_at", created_at)
         if enterprise_project_id and not isinstance(enterprise_project_id, str):
             raise TypeError("Expected argument 'enterprise_project_id' to be a str")
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if expiration and not isinstance(expiration, str):
             raise TypeError("Expected argument 'expiration' to be a str")
+        if expiration is not None:
+            warnings.warn("""Use 'expired_at' instead. """, DeprecationWarning)
+            pulumi.log.warn("""expiration is deprecated: Use 'expired_at' instead. """)
+
         pulumi.set(__self__, "expiration", expiration)
+        if expiration_status and not isinstance(expiration_status, str):
+            raise TypeError("Expected argument 'expiration_status' to be a str")
+        pulumi.set(__self__, "expiration_status", expiration_status)
         if expire_status and not isinstance(expire_status, int):
             raise TypeError("Expected argument 'expire_status' to be a int")
+        if expire_status is not None:
+            warnings.warn("""Use 'expiration_status' instead. """, DeprecationWarning)
+            pulumi.log.warn("""expire_status is deprecated: Use 'expiration_status' instead. """)
+
         pulumi.set(__self__, "expire_status", expire_status)
+        if expired_at and not isinstance(expired_at, str):
+            raise TypeError("Expected argument 'expired_at' to be a str")
+        pulumi.set(__self__, "expired_at", expired_at)
         if id and not isinstance(id, str):
             raise TypeError("Expected argument 'id' to be a str")
         pulumi.set(__self__, "id", id)
@@ -42,22 +59,40 @@ class GetCertificateResult:
         pulumi.set(__self__, "region", region)
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Indicates the time when the certificate uploaded, in RFC3339 format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> Optional[str]:
+    def enterprise_project_id(self) -> str:
         return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter
     def expiration(self) -> str:
-        """
-        Indicates the time when the certificate expires.
-        """
         return pulumi.get(self, "expiration")
+
+    @property
+    @pulumi.getter(name="expirationStatus")
+    def expiration_status(self) -> str:
+        return pulumi.get(self, "expiration_status")
 
     @property
     @pulumi.getter(name="expireStatus")
     def expire_status(self) -> Optional[int]:
         return pulumi.get(self, "expire_status")
+
+    @property
+    @pulumi.getter(name="expiredAt")
+    def expired_at(self) -> str:
+        """
+        Indicates the time when the certificate expires, in RFC3339 format.
+        """
+        return pulumi.get(self, "expired_at")
 
     @property
     @pulumi.getter
@@ -84,21 +119,27 @@ class AwaitableGetCertificateResult(GetCertificateResult):
         if False:
             yield self
         return GetCertificateResult(
+            created_at=self.created_at,
             enterprise_project_id=self.enterprise_project_id,
             expiration=self.expiration,
+            expiration_status=self.expiration_status,
             expire_status=self.expire_status,
+            expired_at=self.expired_at,
             id=self.id,
             name=self.name,
             region=self.region)
 
 
 def get_certificate(enterprise_project_id: Optional[str] = None,
+                    expiration_status: Optional[str] = None,
                     expire_status: Optional[int] = None,
                     name: Optional[str] = None,
                     region: Optional[str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCertificateResult:
     """
-    Get the certificate in the WAF, including the one pushed from SCM.
+    Use this data source to get the certificate of WAF within HuaweiCloud.
+
+    > When multiple pieces of data are queried, the datasource will process the first piece of data and put it back.
 
     ## Example Usage
 
@@ -108,22 +149,24 @@ def get_certificate(enterprise_project_id: Optional[str] = None,
 
     config = pulumi.Config()
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name",
+    test = huaweicloud.Waf.get_certificate(name="test-name",
         enterprise_project_id=enterprise_project_id)
     ```
 
 
-    :param str enterprise_project_id: The enterprise project ID of WAF certificate.
-    :param int expire_status: The expire status of certificate. Defaults is `0`. The value can be:
-           + `0`: not expire
-           + `1`: has expired
-           + `2`: wil expired soon
-    :param str name: The name of certificate. The value is case sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF. If omitted, the provider-level region will be
-           used.
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str expiration_status: Specifies the certificate expiration status. The options are as follows:
+           + `0`: Not expired;
+           + `1`: Expired;
+           + `2`: Expired soon (The certificate will expire in one month.)
+    :param str name: Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
+    :param str region: Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+           will be used.
     """
     __args__ = dict()
     __args__['enterpriseProjectId'] = enterprise_project_id
+    __args__['expirationStatus'] = expiration_status
     __args__['expireStatus'] = expire_status
     __args__['name'] = name
     __args__['region'] = region
@@ -131,9 +174,12 @@ def get_certificate(enterprise_project_id: Optional[str] = None,
     __ret__ = pulumi.runtime.invoke('huaweicloud:Waf/getCertificate:getCertificate', __args__, opts=opts, typ=GetCertificateResult).value
 
     return AwaitableGetCertificateResult(
+        created_at=__ret__.created_at,
         enterprise_project_id=__ret__.enterprise_project_id,
         expiration=__ret__.expiration,
+        expiration_status=__ret__.expiration_status,
         expire_status=__ret__.expire_status,
+        expired_at=__ret__.expired_at,
         id=__ret__.id,
         name=__ret__.name,
         region=__ret__.region)
@@ -141,12 +187,15 @@ def get_certificate(enterprise_project_id: Optional[str] = None,
 
 @_utilities.lift_output_func(get_certificate)
 def get_certificate_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]] = None,
+                           expiration_status: Optional[pulumi.Input[Optional[str]]] = None,
                            expire_status: Optional[pulumi.Input[Optional[int]]] = None,
-                           name: Optional[pulumi.Input[str]] = None,
+                           name: Optional[pulumi.Input[Optional[str]]] = None,
                            region: Optional[pulumi.Input[Optional[str]]] = None,
                            opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCertificateResult]:
     """
-    Get the certificate in the WAF, including the one pushed from SCM.
+    Use this data source to get the certificate of WAF within HuaweiCloud.
+
+    > When multiple pieces of data are queried, the datasource will process the first piece of data and put it back.
 
     ## Example Usage
 
@@ -156,18 +205,19 @@ def get_certificate_output(enterprise_project_id: Optional[pulumi.Input[Optional
 
     config = pulumi.Config()
     enterprise_project_id = config.require_object("enterpriseProjectId")
-    certificate1 = huaweicloud.Waf.get_certificate(name="certificate name",
+    test = huaweicloud.Waf.get_certificate(name="test-name",
         enterprise_project_id=enterprise_project_id)
     ```
 
 
-    :param str enterprise_project_id: The enterprise project ID of WAF certificate.
-    :param int expire_status: The expire status of certificate. Defaults is `0`. The value can be:
-           + `0`: not expire
-           + `1`: has expired
-           + `2`: wil expired soon
-    :param str name: The name of certificate. The value is case sensitive and supports fuzzy matching.
-    :param str region: The region in which to obtain the WAF. If omitted, the provider-level region will be
-           used.
+    :param str enterprise_project_id: Specifies the enterprise project ID of WAF certificate.
+           For enterprise users, if omitted, default enterprise project will be used.
+    :param str expiration_status: Specifies the certificate expiration status. The options are as follows:
+           + `0`: Not expired;
+           + `1`: Expired;
+           + `2`: Expired soon (The certificate will expire in one month.)
+    :param str name: Specifies the name of certificate. The value is case-sensitive and supports fuzzy matching.
+    :param str region: Specifies the region in which to obtain the WAF. If omitted, the provider-level region
+           will be used.
     """
     ...

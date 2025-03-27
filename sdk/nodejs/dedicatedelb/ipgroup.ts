@@ -52,6 +52,10 @@ export class Ipgroup extends pulumi.CustomResource {
     }
 
     /**
+     * The create time of the ip group.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Human-readable description for the ip.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -66,6 +70,10 @@ export class Ipgroup extends pulumi.CustomResource {
      */
     public readonly ipLists!: pulumi.Output<outputs.DedicatedElb.IpgroupIpList[]>;
     /**
+     * The listener IDs which the ip group associated with.
+     */
+    public /*out*/ readonly listenerIds!: pulumi.Output<string[]>;
+    /**
      * Human-readable name for the ip group.
      */
     public readonly name!: pulumi.Output<string>;
@@ -74,6 +82,10 @@ export class Ipgroup extends pulumi.CustomResource {
      * provider-level region will be used. Changing this creates a new ip group.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * The update time of the ip group.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
 
     /**
      * Create a Ipgroup resource with the given unique name, arguments, and options.
@@ -88,11 +100,14 @@ export class Ipgroup extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as IpgroupState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["ipLists"] = state ? state.ipLists : undefined;
+            resourceInputs["listenerIds"] = state ? state.listenerIds : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
         } else {
             const args = argsOrState as IpgroupArgs | undefined;
             if ((!args || args.ipLists === undefined) && !opts.urn) {
@@ -103,6 +118,9 @@ export class Ipgroup extends pulumi.CustomResource {
             resourceInputs["ipLists"] = args ? args.ipLists : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["listenerIds"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Ipgroup.__pulumiType, name, resourceInputs, opts);
@@ -113,6 +131,10 @@ export class Ipgroup extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Ipgroup resources.
  */
 export interface IpgroupState {
+    /**
+     * The create time of the ip group.
+     */
+    createdAt?: pulumi.Input<string>;
     /**
      * Human-readable description for the ip.
      */
@@ -128,6 +150,10 @@ export interface IpgroupState {
      */
     ipLists?: pulumi.Input<pulumi.Input<inputs.DedicatedElb.IpgroupIpList>[]>;
     /**
+     * The listener IDs which the ip group associated with.
+     */
+    listenerIds?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Human-readable name for the ip group.
      */
     name?: pulumi.Input<string>;
@@ -136,6 +162,10 @@ export interface IpgroupState {
      * provider-level region will be used. Changing this creates a new ip group.
      */
     region?: pulumi.Input<string>;
+    /**
+     * The update time of the ip group.
+     */
+    updatedAt?: pulumi.Input<string>;
 }
 
 /**

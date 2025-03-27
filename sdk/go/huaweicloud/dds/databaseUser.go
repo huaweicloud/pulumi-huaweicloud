@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a database user resource within HuaweiCloud.
+// Manages a DDS database user resource within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -57,15 +57,15 @@ import (
 //
 // ## Import
 //
-// Database users can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+// DDS database user can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+//	$ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test <instance_id>/<db_name>/<name>
 //
 // ```
 //
-//	Due to security reason, the imported state may not be identical to your resource definition (`password` parameter). It is generally recommended running `terraform plan` after importing a user resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. resource "huaweicloud_dds_database_user" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DDS database user. You can then decide if changes should be applied to the DDS database user, or the resource definition should be updated to align with the DDS database user. Also you can ignore changes as below. hcl resource "huaweicloud_dds_database_user" "test" {
 //
 //	...
 //
@@ -85,7 +85,7 @@ type DatabaseUser struct {
 	// Changing this parameter will create a new user.
 	DbName pulumi.StringOutput `pulumi:"dbName"`
 	// The list of database privileges owned by the current user, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges DatabaseUserInheritedPrivilegeArrayOutput `pulumi:"inheritedPrivileges"`
 	// Specifies the DDS instance ID to which the user belongs.
 	// Changing this parameter will create a new user.
@@ -95,16 +95,16 @@ type DatabaseUser struct {
 	// allowed. Changing this parameter will create a new user.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the user password.
-	// The assword content must meet the following conditions:
+	// The password content must meet the following conditions:
 	Password pulumi.StringOutput `pulumi:"password"`
 	// The list of database privileges owned by the current user.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges DatabaseUserPrivilegeArrayOutput `pulumi:"privileges"`
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new user.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the list of roles owned by the current user.
-	// The object structure is documented below. Changing this parameter will create a new user.
+	// The roles structure is documented below. Changing this parameter will create a new user.
 	Roles DatabaseUserRoleArrayOutput `pulumi:"roles"`
 }
 
@@ -154,7 +154,7 @@ type databaseUserState struct {
 	// Changing this parameter will create a new user.
 	DbName *string `pulumi:"dbName"`
 	// The list of database privileges owned by the current user, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges []DatabaseUserInheritedPrivilege `pulumi:"inheritedPrivileges"`
 	// Specifies the DDS instance ID to which the user belongs.
 	// Changing this parameter will create a new user.
@@ -164,16 +164,16 @@ type databaseUserState struct {
 	// allowed. Changing this parameter will create a new user.
 	Name *string `pulumi:"name"`
 	// Specifies the user password.
-	// The assword content must meet the following conditions:
+	// The password content must meet the following conditions:
 	Password *string `pulumi:"password"`
 	// The list of database privileges owned by the current user.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges []DatabaseUserPrivilege `pulumi:"privileges"`
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new user.
 	Region *string `pulumi:"region"`
 	// Specifies the list of roles owned by the current user.
-	// The object structure is documented below. Changing this parameter will create a new user.
+	// The roles structure is documented below. Changing this parameter will create a new user.
 	Roles []DatabaseUserRole `pulumi:"roles"`
 }
 
@@ -182,7 +182,7 @@ type DatabaseUserState struct {
 	// Changing this parameter will create a new user.
 	DbName pulumi.StringPtrInput
 	// The list of database privileges owned by the current user, includes all privileges
-	// inherited by owned roles. The object structure is documented below.
+	// inherited by owned roles. The inheritedPrivileges structure is documented below.
 	InheritedPrivileges DatabaseUserInheritedPrivilegeArrayInput
 	// Specifies the DDS instance ID to which the user belongs.
 	// Changing this parameter will create a new user.
@@ -192,16 +192,16 @@ type DatabaseUserState struct {
 	// allowed. Changing this parameter will create a new user.
 	Name pulumi.StringPtrInput
 	// Specifies the user password.
-	// The assword content must meet the following conditions:
+	// The password content must meet the following conditions:
 	Password pulumi.StringPtrInput
 	// The list of database privileges owned by the current user.
-	// The object structure is documented below.
+	// The privileges structure is documented below.
 	Privileges DatabaseUserPrivilegeArrayInput
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new user.
 	Region pulumi.StringPtrInput
 	// Specifies the list of roles owned by the current user.
-	// The object structure is documented below. Changing this parameter will create a new user.
+	// The roles structure is documented below. Changing this parameter will create a new user.
 	Roles DatabaseUserRoleArrayInput
 }
 
@@ -221,13 +221,13 @@ type databaseUserArgs struct {
 	// allowed. Changing this parameter will create a new user.
 	Name *string `pulumi:"name"`
 	// Specifies the user password.
-	// The assword content must meet the following conditions:
+	// The password content must meet the following conditions:
 	Password string `pulumi:"password"`
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new user.
 	Region *string `pulumi:"region"`
 	// Specifies the list of roles owned by the current user.
-	// The object structure is documented below. Changing this parameter will create a new user.
+	// The roles structure is documented below. Changing this parameter will create a new user.
 	Roles []DatabaseUserRole `pulumi:"roles"`
 }
 
@@ -244,13 +244,13 @@ type DatabaseUserArgs struct {
 	// allowed. Changing this parameter will create a new user.
 	Name pulumi.StringPtrInput
 	// Specifies the user password.
-	// The assword content must meet the following conditions:
+	// The password content must meet the following conditions:
 	Password pulumi.StringInput
 	// Specifies the region where the DDS instance is located.
 	// Changing this parameter will create a new user.
 	Region pulumi.StringPtrInput
 	// Specifies the list of roles owned by the current user.
-	// The object structure is documented below. Changing this parameter will create a new user.
+	// The roles structure is documented below. Changing this parameter will create a new user.
 	Roles DatabaseUserRoleArrayInput
 }
 
@@ -348,7 +348,7 @@ func (o DatabaseUserOutput) DbName() pulumi.StringOutput {
 }
 
 // The list of database privileges owned by the current user, includes all privileges
-// inherited by owned roles. The object structure is documented below.
+// inherited by owned roles. The inheritedPrivileges structure is documented below.
 func (o DatabaseUserOutput) InheritedPrivileges() DatabaseUserInheritedPrivilegeArrayOutput {
 	return o.ApplyT(func(v *DatabaseUser) DatabaseUserInheritedPrivilegeArrayOutput { return v.InheritedPrivileges }).(DatabaseUserInheritedPrivilegeArrayOutput)
 }
@@ -367,13 +367,13 @@ func (o DatabaseUserOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies the user password.
-// The assword content must meet the following conditions:
+// The password content must meet the following conditions:
 func (o DatabaseUserOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *DatabaseUser) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
 // The list of database privileges owned by the current user.
-// The object structure is documented below.
+// The privileges structure is documented below.
 func (o DatabaseUserOutput) Privileges() DatabaseUserPrivilegeArrayOutput {
 	return o.ApplyT(func(v *DatabaseUser) DatabaseUserPrivilegeArrayOutput { return v.Privileges }).(DatabaseUserPrivilegeArrayOutput)
 }
@@ -385,7 +385,7 @@ func (o DatabaseUserOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the list of roles owned by the current user.
-// The object structure is documented below. Changing this parameter will create a new user.
+// The roles structure is documented below. Changing this parameter will create a new user.
 func (o DatabaseUserOutput) Roles() DatabaseUserRoleArrayOutput {
 	return o.ApplyT(func(v *DatabaseUser) DatabaseUserRoleArrayOutput { return v.Roles }).(DatabaseUserRoleArrayOutput)
 }

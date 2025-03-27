@@ -24,7 +24,9 @@ class ServiceArgs:
                  dedicated_subnets: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_id: Optional[pulumi.Input[str]] = None,
                  internet_access_port: Optional[pulumi.Input[int]] = None,
+                 lock_enabled: Optional[pulumi.Input[bool]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
+                 otp_config_info: Optional[pulumi.Input['ServiceOtpConfigInfoArgs']] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Service resource.
@@ -52,7 +54,11 @@ class ServiceArgs:
                The ID can contain `1` to `32` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[int] internet_access_port: Specifies the internet access port.
                The valid value is range from `1,025` to `65,535`.
+        :param pulumi.Input[bool] lock_enabled: Specifies whether to allow the provider to automatically unlock locked service
+               when it is running. The default value is **false**.
         :param pulumi.Input[str] management_subnet_cidr: The subnet segment of the management component.
+        :param pulumi.Input['ServiceOtpConfigInfoArgs'] otp_config_info: Specifies the configuration of auxiliary authentication.
+               The object structure is documented below.
         :param pulumi.Input[str] region: The region in which to register the Workspace service.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
@@ -69,8 +75,12 @@ class ServiceArgs:
             pulumi.set(__self__, "enterprise_id", enterprise_id)
         if internet_access_port is not None:
             pulumi.set(__self__, "internet_access_port", internet_access_port)
+        if lock_enabled is not None:
+            pulumi.set(__self__, "lock_enabled", lock_enabled)
         if management_subnet_cidr is not None:
             pulumi.set(__self__, "management_subnet_cidr", management_subnet_cidr)
+        if otp_config_info is not None:
+            pulumi.set(__self__, "otp_config_info", otp_config_info)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
@@ -187,6 +197,19 @@ class ServiceArgs:
         pulumi.set(self, "internet_access_port", value)
 
     @property
+    @pulumi.getter(name="lockEnabled")
+    def lock_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow the provider to automatically unlock locked service
+        when it is running. The default value is **false**.
+        """
+        return pulumi.get(self, "lock_enabled")
+
+    @lock_enabled.setter
+    def lock_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "lock_enabled", value)
+
+    @property
     @pulumi.getter(name="managementSubnetCidr")
     def management_subnet_cidr(self) -> Optional[pulumi.Input[str]]:
         """
@@ -197,6 +220,19 @@ class ServiceArgs:
     @management_subnet_cidr.setter
     def management_subnet_cidr(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "management_subnet_cidr", value)
+
+    @property
+    @pulumi.getter(name="otpConfigInfo")
+    def otp_config_info(self) -> Optional[pulumi.Input['ServiceOtpConfigInfoArgs']]:
+        """
+        Specifies the configuration of auxiliary authentication.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "otp_config_info")
+
+    @otp_config_info.setter
+    def otp_config_info(self, value: Optional[pulumi.Input['ServiceOtpConfigInfoArgs']]):
+        pulumi.set(self, "otp_config_info", value)
 
     @property
     @pulumi.getter
@@ -224,8 +260,13 @@ class _ServiceState:
                  infrastructure_security_groups: Optional[pulumi.Input[Sequence[pulumi.Input['ServiceInfrastructureSecurityGroupArgs']]]] = None,
                  internet_access_address: Optional[pulumi.Input[str]] = None,
                  internet_access_port: Optional[pulumi.Input[int]] = None,
+                 is_locked: Optional[pulumi.Input[int]] = None,
+                 lock_enabled: Optional[pulumi.Input[bool]] = None,
+                 lock_reason: Optional[pulumi.Input[str]] = None,
+                 lock_time: Optional[pulumi.Input[str]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  network_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 otp_config_info: Optional[pulumi.Input['ServiceOtpConfigInfoArgs']] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
@@ -256,10 +297,19 @@ class _ServiceState:
                This attribute is returned only when the access_mode is **INTERNET** or **BOTH**.
         :param pulumi.Input[int] internet_access_port: Specifies the internet access port.
                The valid value is range from `1,025` to `65,535`.
+        :param pulumi.Input[int] is_locked: Whether the Workspace service is locked. The valid values are as follows:
+               + **0**: Indicates not locked.
+               + **1**: Indicates locked.
+        :param pulumi.Input[bool] lock_enabled: Specifies whether to allow the provider to automatically unlock locked service
+               when it is running. The default value is **false**.
+        :param pulumi.Input[str] lock_reason: The reason of the Workspace service is locked.
+        :param pulumi.Input[str] lock_time: The time of the Workspace service is locked.
         :param pulumi.Input[str] management_subnet_cidr: The subnet segment of the management component.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] network_ids: The network ID list of subnets that the service have.
                The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpc_id`.
                These subnet segments cannot conflict with `172.16.0.0/12`.
+        :param pulumi.Input['ServiceOtpConfigInfoArgs'] otp_config_info: Specifies the configuration of auxiliary authentication.
+               The object structure is documented below.
         :param pulumi.Input[str] region: The region in which to register the Workspace service.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The current status of the Workspace service.
@@ -284,10 +334,20 @@ class _ServiceState:
             pulumi.set(__self__, "internet_access_address", internet_access_address)
         if internet_access_port is not None:
             pulumi.set(__self__, "internet_access_port", internet_access_port)
+        if is_locked is not None:
+            pulumi.set(__self__, "is_locked", is_locked)
+        if lock_enabled is not None:
+            pulumi.set(__self__, "lock_enabled", lock_enabled)
+        if lock_reason is not None:
+            pulumi.set(__self__, "lock_reason", lock_reason)
+        if lock_time is not None:
+            pulumi.set(__self__, "lock_time", lock_time)
         if management_subnet_cidr is not None:
             pulumi.set(__self__, "management_subnet_cidr", management_subnet_cidr)
         if network_ids is not None:
             pulumi.set(__self__, "network_ids", network_ids)
+        if otp_config_info is not None:
+            pulumi.set(__self__, "otp_config_info", otp_config_info)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if status is not None:
@@ -420,6 +480,57 @@ class _ServiceState:
         pulumi.set(self, "internet_access_port", value)
 
     @property
+    @pulumi.getter(name="isLocked")
+    def is_locked(self) -> Optional[pulumi.Input[int]]:
+        """
+        Whether the Workspace service is locked. The valid values are as follows:
+        + **0**: Indicates not locked.
+        + **1**: Indicates locked.
+        """
+        return pulumi.get(self, "is_locked")
+
+    @is_locked.setter
+    def is_locked(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "is_locked", value)
+
+    @property
+    @pulumi.getter(name="lockEnabled")
+    def lock_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to allow the provider to automatically unlock locked service
+        when it is running. The default value is **false**.
+        """
+        return pulumi.get(self, "lock_enabled")
+
+    @lock_enabled.setter
+    def lock_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "lock_enabled", value)
+
+    @property
+    @pulumi.getter(name="lockReason")
+    def lock_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        The reason of the Workspace service is locked.
+        """
+        return pulumi.get(self, "lock_reason")
+
+    @lock_reason.setter
+    def lock_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lock_reason", value)
+
+    @property
+    @pulumi.getter(name="lockTime")
+    def lock_time(self) -> Optional[pulumi.Input[str]]:
+        """
+        The time of the Workspace service is locked.
+        """
+        return pulumi.get(self, "lock_time")
+
+    @lock_time.setter
+    def lock_time(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "lock_time", value)
+
+    @property
     @pulumi.getter(name="managementSubnetCidr")
     def management_subnet_cidr(self) -> Optional[pulumi.Input[str]]:
         """
@@ -444,6 +555,19 @@ class _ServiceState:
     @network_ids.setter
     def network_ids(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
         pulumi.set(self, "network_ids", value)
+
+    @property
+    @pulumi.getter(name="otpConfigInfo")
+    def otp_config_info(self) -> Optional[pulumi.Input['ServiceOtpConfigInfoArgs']]:
+        """
+        Specifies the configuration of auxiliary authentication.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "otp_config_info")
+
+    @otp_config_info.setter
+    def otp_config_info(self, value: Optional[pulumi.Input['ServiceOtpConfigInfoArgs']]):
+        pulumi.set(self, "otp_config_info", value)
 
     @property
     @pulumi.getter
@@ -495,13 +619,17 @@ class Service(pulumi.CustomResource):
                  dedicated_subnets: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_id: Optional[pulumi.Input[str]] = None,
                  internet_access_port: Optional[pulumi.Input[int]] = None,
+                 lock_enabled: Optional[pulumi.Input[bool]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  network_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 otp_config_info: Optional[pulumi.Input[pulumi.InputType['ServiceOtpConfigInfoArgs']]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Use this resource to register or unregister the Workspace service in HuaweiCloud.
+
+        > **NOTE:** Only one resource can be created in a region.
 
         ## Example Usage
         ### Register the Workspace service and use local authentication
@@ -516,7 +644,13 @@ class Service(pulumi.CustomResource):
         test = huaweicloud.workspace.Service("test",
             access_mode="INTERNET",
             vpc_id=vpc_id,
-            network_ids=network_ids)
+            network_ids=network_ids,
+            otp_config_info=huaweicloud.workspace.ServiceOtpConfigInfoArgs(
+                enable=True,
+                receive_mode="VMFA",
+                rule_type="ACCESS_MODE",
+                rule="PRIVATE",
+            ))
         ```
         ## Appendix
 
@@ -549,10 +683,16 @@ class Service(pulumi.CustomResource):
 
         ## Import
 
-        Service can be imported using the `id`, e.g.
+        Service can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Workspace/service:Service test fd3f81cb-d95f-43ce-b342-81b6b5dcadda
+         $ pulumi import huaweicloud:Workspace/service:Service test <id>
+        ```
+
+         'NA' or other characters can be used to instead of the `id`. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Workspace/service:Service test NA
         ```
 
         :param str resource_name: The name of the resource.
@@ -576,10 +716,14 @@ class Service(pulumi.CustomResource):
                The ID can contain `1` to `32` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
         :param pulumi.Input[int] internet_access_port: Specifies the internet access port.
                The valid value is range from `1,025` to `65,535`.
+        :param pulumi.Input[bool] lock_enabled: Specifies whether to allow the provider to automatically unlock locked service
+               when it is running. The default value is **false**.
         :param pulumi.Input[str] management_subnet_cidr: The subnet segment of the management component.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] network_ids: The network ID list of subnets that the service have.
                The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpc_id`.
                These subnet segments cannot conflict with `172.16.0.0/12`.
+        :param pulumi.Input[pulumi.InputType['ServiceOtpConfigInfoArgs']] otp_config_info: Specifies the configuration of auxiliary authentication.
+               The object structure is documented below.
         :param pulumi.Input[str] region: The region in which to register the Workspace service.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID to which the service belongs.
@@ -594,6 +738,8 @@ class Service(pulumi.CustomResource):
         """
         Use this resource to register or unregister the Workspace service in HuaweiCloud.
 
+        > **NOTE:** Only one resource can be created in a region.
+
         ## Example Usage
         ### Register the Workspace service and use local authentication
 
@@ -607,7 +753,13 @@ class Service(pulumi.CustomResource):
         test = huaweicloud.workspace.Service("test",
             access_mode="INTERNET",
             vpc_id=vpc_id,
-            network_ids=network_ids)
+            network_ids=network_ids,
+            otp_config_info=huaweicloud.workspace.ServiceOtpConfigInfoArgs(
+                enable=True,
+                receive_mode="VMFA",
+                rule_type="ACCESS_MODE",
+                rule="PRIVATE",
+            ))
         ```
         ## Appendix
 
@@ -640,10 +792,16 @@ class Service(pulumi.CustomResource):
 
         ## Import
 
-        Service can be imported using the `id`, e.g.
+        Service can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Workspace/service:Service test fd3f81cb-d95f-43ce-b342-81b6b5dcadda
+         $ pulumi import huaweicloud:Workspace/service:Service test <id>
+        ```
+
+         'NA' or other characters can be used to instead of the `id`. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Workspace/service:Service test NA
         ```
 
         :param str resource_name: The name of the resource.
@@ -667,8 +825,10 @@ class Service(pulumi.CustomResource):
                  dedicated_subnets: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_id: Optional[pulumi.Input[str]] = None,
                  internet_access_port: Optional[pulumi.Input[int]] = None,
+                 lock_enabled: Optional[pulumi.Input[bool]] = None,
                  management_subnet_cidr: Optional[pulumi.Input[str]] = None,
                  network_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 otp_config_info: Optional[pulumi.Input[pulumi.InputType['ServiceOtpConfigInfoArgs']]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -688,10 +848,12 @@ class Service(pulumi.CustomResource):
             __props__.__dict__["dedicated_subnets"] = dedicated_subnets
             __props__.__dict__["enterprise_id"] = enterprise_id
             __props__.__dict__["internet_access_port"] = internet_access_port
+            __props__.__dict__["lock_enabled"] = lock_enabled
             __props__.__dict__["management_subnet_cidr"] = management_subnet_cidr
             if network_ids is None and not opts.urn:
                 raise TypeError("Missing required property 'network_ids'")
             __props__.__dict__["network_ids"] = network_ids
+            __props__.__dict__["otp_config_info"] = otp_config_info
             __props__.__dict__["region"] = region
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
@@ -699,6 +861,9 @@ class Service(pulumi.CustomResource):
             __props__.__dict__["desktop_security_groups"] = None
             __props__.__dict__["infrastructure_security_groups"] = None
             __props__.__dict__["internet_access_address"] = None
+            __props__.__dict__["is_locked"] = None
+            __props__.__dict__["lock_reason"] = None
+            __props__.__dict__["lock_time"] = None
             __props__.__dict__["status"] = None
         super(Service, __self__).__init__(
             'huaweicloud:Workspace/service:Service',
@@ -719,8 +884,13 @@ class Service(pulumi.CustomResource):
             infrastructure_security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ServiceInfrastructureSecurityGroupArgs']]]]] = None,
             internet_access_address: Optional[pulumi.Input[str]] = None,
             internet_access_port: Optional[pulumi.Input[int]] = None,
+            is_locked: Optional[pulumi.Input[int]] = None,
+            lock_enabled: Optional[pulumi.Input[bool]] = None,
+            lock_reason: Optional[pulumi.Input[str]] = None,
+            lock_time: Optional[pulumi.Input[str]] = None,
             management_subnet_cidr: Optional[pulumi.Input[str]] = None,
             network_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            otp_config_info: Optional[pulumi.Input[pulumi.InputType['ServiceOtpConfigInfoArgs']]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'Service':
@@ -756,10 +926,19 @@ class Service(pulumi.CustomResource):
                This attribute is returned only when the access_mode is **INTERNET** or **BOTH**.
         :param pulumi.Input[int] internet_access_port: Specifies the internet access port.
                The valid value is range from `1,025` to `65,535`.
+        :param pulumi.Input[int] is_locked: Whether the Workspace service is locked. The valid values are as follows:
+               + **0**: Indicates not locked.
+               + **1**: Indicates locked.
+        :param pulumi.Input[bool] lock_enabled: Specifies whether to allow the provider to automatically unlock locked service
+               when it is running. The default value is **false**.
+        :param pulumi.Input[str] lock_reason: The reason of the Workspace service is locked.
+        :param pulumi.Input[str] lock_time: The time of the Workspace service is locked.
         :param pulumi.Input[str] management_subnet_cidr: The subnet segment of the management component.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] network_ids: The network ID list of subnets that the service have.
                The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpc_id`.
                These subnet segments cannot conflict with `172.16.0.0/12`.
+        :param pulumi.Input[pulumi.InputType['ServiceOtpConfigInfoArgs']] otp_config_info: Specifies the configuration of auxiliary authentication.
+               The object structure is documented below.
         :param pulumi.Input[str] region: The region in which to register the Workspace service.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] status: The current status of the Workspace service.
@@ -779,8 +958,13 @@ class Service(pulumi.CustomResource):
         __props__.__dict__["infrastructure_security_groups"] = infrastructure_security_groups
         __props__.__dict__["internet_access_address"] = internet_access_address
         __props__.__dict__["internet_access_port"] = internet_access_port
+        __props__.__dict__["is_locked"] = is_locked
+        __props__.__dict__["lock_enabled"] = lock_enabled
+        __props__.__dict__["lock_reason"] = lock_reason
+        __props__.__dict__["lock_time"] = lock_time
         __props__.__dict__["management_subnet_cidr"] = management_subnet_cidr
         __props__.__dict__["network_ids"] = network_ids
+        __props__.__dict__["otp_config_info"] = otp_config_info
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
         __props__.__dict__["vpc_id"] = vpc_id
@@ -875,6 +1059,41 @@ class Service(pulumi.CustomResource):
         return pulumi.get(self, "internet_access_port")
 
     @property
+    @pulumi.getter(name="isLocked")
+    def is_locked(self) -> pulumi.Output[int]:
+        """
+        Whether the Workspace service is locked. The valid values are as follows:
+        + **0**: Indicates not locked.
+        + **1**: Indicates locked.
+        """
+        return pulumi.get(self, "is_locked")
+
+    @property
+    @pulumi.getter(name="lockEnabled")
+    def lock_enabled(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether to allow the provider to automatically unlock locked service
+        when it is running. The default value is **false**.
+        """
+        return pulumi.get(self, "lock_enabled")
+
+    @property
+    @pulumi.getter(name="lockReason")
+    def lock_reason(self) -> pulumi.Output[str]:
+        """
+        The reason of the Workspace service is locked.
+        """
+        return pulumi.get(self, "lock_reason")
+
+    @property
+    @pulumi.getter(name="lockTime")
+    def lock_time(self) -> pulumi.Output[str]:
+        """
+        The time of the Workspace service is locked.
+        """
+        return pulumi.get(self, "lock_time")
+
+    @property
     @pulumi.getter(name="managementSubnetCidr")
     def management_subnet_cidr(self) -> pulumi.Output[str]:
         """
@@ -891,6 +1110,15 @@ class Service(pulumi.CustomResource):
         These subnet segments cannot conflict with `172.16.0.0/12`.
         """
         return pulumi.get(self, "network_ids")
+
+    @property
+    @pulumi.getter(name="otpConfigInfo")
+    def otp_config_info(self) -> pulumi.Output[Optional['outputs.ServiceOtpConfigInfo']]:
+        """
+        Specifies the configuration of auxiliary authentication.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "otp_config_info")
 
     @property
     @pulumi.getter

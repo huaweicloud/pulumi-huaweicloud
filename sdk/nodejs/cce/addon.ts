@@ -6,29 +6,12 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Provides a CCE add-on resource within HuaweiCloud.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const clusterId = config.requireObject("clusterId");
- * const addonTest = new huaweicloud.cce.Addon("addonTest", {
- *     clusterId: clusterId,
- *     templateName: "metrics-server",
- *     version: "1.0.0",
- * });
- * ```
- *
  * ## Import
  *
- * CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.
+ * CCE add-on can be imported using the cluster ID and add-on ID separated by a slash, e.g.bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cce/addon:Addon my_addon bb6923e4-b16e-11eb-b0cd-0255ac101da1/c7ecb230-b16f-11eb-b3b6-0255ac1015a3
+ *  $ pulumi import huaweicloud:Cce/addon:Addon my_addon <cluster_id>/<id>
  * ```
  */
 export class Addon extends pulumi.CustomResource {
@@ -84,7 +67,7 @@ export class Addon extends pulumi.CustomResource {
     public readonly templateName!: pulumi.Output<string>;
     /**
      * Specifies the add-on template installation parameters.
-     * These parameters vary depending on the add-on. Structure is documented below.
+     * These parameters vary depending on the add-on. The structure is documented below.
      */
     public readonly values!: pulumi.Output<outputs.Cce.AddonValues | undefined>;
     /**
@@ -162,7 +145,7 @@ export interface AddonState {
     templateName?: pulumi.Input<string>;
     /**
      * Specifies the add-on template installation parameters.
-     * These parameters vary depending on the add-on. Structure is documented below.
+     * These parameters vary depending on the add-on. The structure is documented below.
      */
     values?: pulumi.Input<inputs.Cce.AddonValues>;
     /**
@@ -192,7 +175,7 @@ export interface AddonArgs {
     templateName: pulumi.Input<string>;
     /**
      * Specifies the add-on template installation parameters.
-     * These parameters vary depending on the add-on. Structure is documented below.
+     * These parameters vary depending on the add-on. The structure is documented below.
      */
     values?: pulumi.Input<inputs.Cce.AddonValues>;
     /**

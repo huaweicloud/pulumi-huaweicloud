@@ -24,6 +24,8 @@ __all__ = [
     'InstanceConfigurationArgs',
     'InstanceDatastoreArgs',
     'InstanceFlavorArgs',
+    'InstanceGroupArgs',
+    'InstanceGroupNodeArgs',
     'InstanceNodeArgs',
 ]
 
@@ -35,7 +37,7 @@ class DatabaseRoleInheritedPrivilegeArgs:
         """
         :param pulumi.Input[Sequence[pulumi.Input[str]]] actions: The operation permission list.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRoleInheritedPrivilegeResourceArgs']]] resources: The details of the resource to which the privilege belongs.
-               The object structure is documented below.
+               The resources structure is documented below.
         """
         if actions is not None:
             pulumi.set(__self__, "actions", actions)
@@ -59,7 +61,7 @@ class DatabaseRoleInheritedPrivilegeArgs:
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRoleInheritedPrivilegeResourceArgs']]]]:
         """
         The details of the resource to which the privilege belongs.
-        The object structure is documented below.
+        The resources structure is documented below.
         """
         return pulumi.get(self, "resources")
 
@@ -117,7 +119,7 @@ class DatabaseRolePrivilegeArgs:
         """
         :param pulumi.Input[Sequence[pulumi.Input[str]]] actions: The operation permission list.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseRolePrivilegeResourceArgs']]] resources: The details of the resource to which the privilege belongs.
-               The object structure is documented below.
+               The resources structure is documented below.
         """
         if actions is not None:
             pulumi.set(__self__, "actions", actions)
@@ -141,7 +143,7 @@ class DatabaseRolePrivilegeArgs:
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseRolePrivilegeResourceArgs']]]]:
         """
         The details of the resource to which the privilege belongs.
-        The object structure is documented below.
+        The resources structure is documented below.
         """
         return pulumi.get(self, "resources")
 
@@ -242,7 +244,7 @@ class DatabaseUserInheritedPrivilegeArgs:
         """
         :param pulumi.Input[Sequence[pulumi.Input[str]]] actions: The operation permission list.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserInheritedPrivilegeResourceArgs']]] resources: The details of the resource to which the privilege belongs.
-               The object structure is documented below.
+               The resources structure is documented below.
         """
         if actions is not None:
             pulumi.set(__self__, "actions", actions)
@@ -266,7 +268,7 @@ class DatabaseUserInheritedPrivilegeArgs:
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseUserInheritedPrivilegeResourceArgs']]]]:
         """
         The details of the resource to which the privilege belongs.
-        The object structure is documented below.
+        The resources structure is documented below.
         """
         return pulumi.get(self, "resources")
 
@@ -324,7 +326,7 @@ class DatabaseUserPrivilegeArgs:
         """
         :param pulumi.Input[Sequence[pulumi.Input[str]]] actions: The operation permission list.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserPrivilegeResourceArgs']]] resources: The details of the resource to which the privilege belongs.
-               The object structure is documented below.
+               The resources structure is documented below.
         """
         if actions is not None:
             pulumi.set(__self__, "actions", actions)
@@ -348,7 +350,7 @@ class DatabaseUserPrivilegeArgs:
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseUserPrivilegeResourceArgs']]]]:
         """
         The details of the resource to which the privilege belongs.
-        The object structure is documented below.
+        The resources structure is documented below.
         """
         return pulumi.get(self, "resources")
 
@@ -445,31 +447,35 @@ class DatabaseUserRoleArgs:
 class InstanceBackupStrategyArgs:
     def __init__(__self__, *,
                  keep_days: pulumi.Input[int],
-                 start_time: pulumi.Input[str]):
+                 start_time: pulumi.Input[str],
+                 period: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[int] keep_days: Specifies the number of days to retain the generated backup files. The value range is
-               from 0 to 732.
-               + If this parameter is set to 0, the automated backup policy is not set.
-               + If this parameter is not transferred, the automated backup policy is enabled by default. Backup files are stored
-               for seven days by default.
-        :param pulumi.Input[str] start_time: Specifies the backup time window. Automated backups will be triggered during the
-               backup time window. The value cannot be empty. It must be a valid value in the
-               "hh:mm-HH:MM" format. The current time is in the UTC format.
+               from 0 to 732. If this parameter is set to 0, the automated backup policy is disabled.
+        :param pulumi.Input[str] start_time: Specifies the backup time window. Automated backups will be triggered during
+               the backup time window. The value cannot be empty. It must be a valid value in the "hh:mm-HH:MM" format.
+               The current time is in the UTC format.
                + The HH value must be 1 greater than the hh value.
-               + The values from mm and MM must be the same and must be set to any of the following 00, 15, 30, or 45.
+               + The values from mm and MM must be the same and must be set to **00**.
+        :param pulumi.Input[str] period: Specifies the backup cycle. Data will be automatically backed up on the
+               selected days every week.
+               + If you set the `keep_days` to 0, this parameter is no need to set.
+               + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+               backed up on each day every week.
+               + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+               For example: **1**, **3,5**.
         """
         pulumi.set(__self__, "keep_days", keep_days)
         pulumi.set(__self__, "start_time", start_time)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
 
     @property
     @pulumi.getter(name="keepDays")
     def keep_days(self) -> pulumi.Input[int]:
         """
         Specifies the number of days to retain the generated backup files. The value range is
-        from 0 to 732.
-        + If this parameter is set to 0, the automated backup policy is not set.
-        + If this parameter is not transferred, the automated backup policy is enabled by default. Backup files are stored
-        for seven days by default.
+        from 0 to 732. If this parameter is set to 0, the automated backup policy is disabled.
         """
         return pulumi.get(self, "keep_days")
 
@@ -481,17 +487,35 @@ class InstanceBackupStrategyArgs:
     @pulumi.getter(name="startTime")
     def start_time(self) -> pulumi.Input[str]:
         """
-        Specifies the backup time window. Automated backups will be triggered during the
-        backup time window. The value cannot be empty. It must be a valid value in the
-        "hh:mm-HH:MM" format. The current time is in the UTC format.
+        Specifies the backup time window. Automated backups will be triggered during
+        the backup time window. The value cannot be empty. It must be a valid value in the "hh:mm-HH:MM" format.
+        The current time is in the UTC format.
         + The HH value must be 1 greater than the hh value.
-        + The values from mm and MM must be the same and must be set to any of the following 00, 15, 30, or 45.
+        + The values from mm and MM must be the same and must be set to **00**.
         """
         return pulumi.get(self, "start_time")
 
     @start_time.setter
     def start_time(self, value: pulumi.Input[str]):
         pulumi.set(self, "start_time", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the backup cycle. Data will be automatically backed up on the
+        selected days every week.
+        + If you set the `keep_days` to 0, this parameter is no need to set.
+        + If you set the `keep_days` within 6 days, set the parameter value to **1,2,3,4,5,6,7**, data is automatically
+        backed up on each day every week.
+        + If you set the `keep_days` between 7 and 732 days, set the parameter value to at least one day of every week.
+        For example: **1**, **3,5**.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period", value)
 
 
 @pulumi.input_type
@@ -501,12 +525,9 @@ class InstanceConfigurationArgs:
                  type: pulumi.Input[str]):
         """
         :param pulumi.Input[str] id: Specifies the ID of the template.
-               Changing this creates a new instance.
         :param pulumi.Input[str] type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-               + For an Enhanced Edition cluster instance, the value is **shard**.
-               + For a Community Edition replica set instance, the value is **replica**.
-               + For a Community Edition single node instance, the value is **single**.
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
         """
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "type", type)
@@ -516,7 +537,6 @@ class InstanceConfigurationArgs:
     def id(self) -> pulumi.Input[str]:
         """
         Specifies the ID of the template.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "id")
 
@@ -529,10 +549,8 @@ class InstanceConfigurationArgs:
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-        + For an Enhanced Edition cluster instance, the value is **shard**.
-        + For a Community Edition replica set instance, the value is **replica**.
-        + For a Community Edition single node instance, the value is **single**.
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
         """
         return pulumi.get(self, "type")
 
@@ -549,15 +567,13 @@ class InstanceDatastoreArgs:
                  storage_engine: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-               + For an Enhanced Edition cluster instance, the value is **shard**.
-               + For a Community Edition replica set instance, the value is **replica**.
-               + For a Community Edition single node instance, the value is **single**.
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
         :param pulumi.Input[str] version: Specifies the DB instance version. For the Community Edition, the valid
-               values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
+               values are `4.0`, `4.2`, `4.4` or `5.0`.
         :param pulumi.Input[str] storage_engine: Specifies the storage engine of the DB instance.
-               If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
-               If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
+               If `version` is set to `4.0`, the value is **wiredTiger**.
+               If `version` is set to `4.2`, `4.4` or `5.0`, the value is **rocksDB**.
         """
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "version", version)
@@ -569,10 +585,8 @@ class InstanceDatastoreArgs:
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-        + For an Enhanced Edition cluster instance, the value is **shard**.
-        + For a Community Edition replica set instance, the value is **replica**.
-        + For a Community Edition single node instance, the value is **single**.
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
         """
         return pulumi.get(self, "type")
 
@@ -585,7 +599,7 @@ class InstanceDatastoreArgs:
     def version(self) -> pulumi.Input[str]:
         """
         Specifies the DB instance version. For the Community Edition, the valid
-        values are `3.2`, `3.4`, `4.0`, `4.2`, or `4.4`.
+        values are `4.0`, `4.2`, `4.4` or `5.0`.
         """
         return pulumi.get(self, "version")
 
@@ -598,8 +612,8 @@ class InstanceDatastoreArgs:
     def storage_engine(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the storage engine of the DB instance.
-        If `version` is set to `3.2`, `3.4`, or `4.0`, the value is **wiredTiger**.
-        If `version` is set to `4.2`, or `4.4`, the value is **rocksDB**.
+        If `version` is set to `4.0`, the value is **wiredTiger**.
+        If `version` is set to `4.2`, `4.4` or `5.0`, the value is **rocksDB**.
         """
         return pulumi.get(self, "storage_engine")
 
@@ -618,28 +632,29 @@ class InstanceFlavorArgs:
                  storage: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[int] num: Specifies the node quantity. Valid value:
-               + In a Community Edition cluster instance,the number of mongos ranges from 2 to 16.
-               + In a Community Edition cluster instance,the number of shards ranges from 2 to 16.
-               + In an Enhanced Edition cluster instance, the number of shards ranges from 2 to 12.
-               + config: the value is 1.
-               + replica: the value is 1.
-               + single: The value is 1. This parameter can be updated when the value of `type` is mongos or shard.
+               + If the value of type is **mongos**, num indicates the number of mongos nodes in the cluster instance. Value ranges
+               from `2` to `16`.
+               + If the value of type is **shard**, num indicates the number of shard groups in the cluster instance. Value ranges
+               from `2` to `16`.
+               + If the value of type is **config**, num indicates the number of config groups in the cluster instance. Value can
+               only be `1`.
+               + If the value of type is **replica**, num indicates the number of replica nodes in the replica set instance. Value
+               can be `3`, `5`, or `7`.
         :param pulumi.Input[str] spec_code: Specifies the resource specification code. In a cluster instance, multiple
                specifications need to be specified. All specifications must be of the same series, that is, general-purpose (s6),
                enhanced (c3), or enhanced II (c6). For example:
                + dds.mongodb.s6.large.4.mongos and dds.mongodb.s6.large.4.config have the same specifications.
-               + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications. This parameter
-               can be updated when the value of `type` is mongos, shard, replica or single.
+               + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications.
         :param pulumi.Input[str] type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-               + For an Enhanced Edition cluster instance, the value is **shard**.
-               + For a Community Edition replica set instance, the value is **replica**.
-               + For a Community Edition single node instance, the value is **single**.
-        :param pulumi.Input[int] size: Specifies the disk size. The value must be a multiple of 10. The unit is GB. This parameter
-               is mandatory for nodes except mongos and invalid for mongos. This parameter can be updated when the value of `type` is
-               shard, replica or single.
-        :param pulumi.Input[str] storage: Specifies the disk type.
-               Valid value: **ULTRAHIGH** which indicates the type SSD.
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
+        :param pulumi.Input[int] size: Specifies the disk size. The value must be a multiple of `10`. The unit is GB. This parameter
+               is mandatory for nodes except mongos and invalid for mongos.For a cluster instance, the storage space of a shard node
+               can be `10` to `2,000` GB, and the config storage space is `20` GB. For a replica set instance, the value ranges
+               from `10` to `3000` GB. This parameter can be updated when the value of `type` is shard or replica.
+        :param pulumi.Input[str] storage: Specifies the disk type. Valid value:
+               + **ULTRAHIGH**: SSD storage.
+               + **EXTREMEHIGH**: Extreme SSD storage.
         """
         pulumi.set(__self__, "num", num)
         pulumi.set(__self__, "spec_code", spec_code)
@@ -654,12 +669,14 @@ class InstanceFlavorArgs:
     def num(self) -> pulumi.Input[int]:
         """
         Specifies the node quantity. Valid value:
-        + In a Community Edition cluster instance,the number of mongos ranges from 2 to 16.
-        + In a Community Edition cluster instance,the number of shards ranges from 2 to 16.
-        + In an Enhanced Edition cluster instance, the number of shards ranges from 2 to 12.
-        + config: the value is 1.
-        + replica: the value is 1.
-        + single: The value is 1. This parameter can be updated when the value of `type` is mongos or shard.
+        + If the value of type is **mongos**, num indicates the number of mongos nodes in the cluster instance. Value ranges
+        from `2` to `16`.
+        + If the value of type is **shard**, num indicates the number of shard groups in the cluster instance. Value ranges
+        from `2` to `16`.
+        + If the value of type is **config**, num indicates the number of config groups in the cluster instance. Value can
+        only be `1`.
+        + If the value of type is **replica**, num indicates the number of replica nodes in the replica set instance. Value
+        can be `3`, `5`, or `7`.
         """
         return pulumi.get(self, "num")
 
@@ -675,8 +692,7 @@ class InstanceFlavorArgs:
         specifications need to be specified. All specifications must be of the same series, that is, general-purpose (s6),
         enhanced (c3), or enhanced II (c6). For example:
         + dds.mongodb.s6.large.4.mongos and dds.mongodb.s6.large.4.config have the same specifications.
-        + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications. This parameter
-        can be updated when the value of `type` is mongos, shard, replica or single.
+        + dds.mongodb.s6.large.4.mongos and dds.mongodb.c3.large.4.config are not of the same specifications.
         """
         return pulumi.get(self, "spec_code")
 
@@ -689,10 +705,8 @@ class InstanceFlavorArgs:
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-        + For an Enhanced Edition cluster instance, the value is **shard**.
-        + For a Community Edition replica set instance, the value is **replica**.
-        + For a Community Edition single node instance, the value is **single**.
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
         """
         return pulumi.get(self, "type")
 
@@ -704,9 +718,10 @@ class InstanceFlavorArgs:
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the disk size. The value must be a multiple of 10. The unit is GB. This parameter
-        is mandatory for nodes except mongos and invalid for mongos. This parameter can be updated when the value of `type` is
-        shard, replica or single.
+        Specifies the disk size. The value must be a multiple of `10`. The unit is GB. This parameter
+        is mandatory for nodes except mongos and invalid for mongos.For a cluster instance, the storage space of a shard node
+        can be `10` to `2,000` GB, and the config storage space is `20` GB. For a replica set instance, the value ranges
+        from `10` to `3000` GB. This parameter can be updated when the value of `type` is shard or replica.
         """
         return pulumi.get(self, "size")
 
@@ -718,8 +733,9 @@ class InstanceFlavorArgs:
     @pulumi.getter
     def storage(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the disk type.
-        Valid value: **ULTRAHIGH** which indicates the type SSD.
+        Specifies the disk type. Valid value:
+        + **ULTRAHIGH**: SSD storage.
+        + **EXTREMEHIGH**: Extreme SSD storage.
         """
         return pulumi.get(self, "storage")
 
@@ -729,7 +745,140 @@ class InstanceFlavorArgs:
 
 
 @pulumi.input_type
-class InstanceNodeArgs:
+class InstanceGroupArgs:
+    def __init__(__self__, *,
+                 id: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 nodes: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupNodeArgs']]]] = None,
+                 size: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None,
+                 used: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the template.
+        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
+               same tenant.
+        :param pulumi.Input[Sequence[pulumi.Input['InstanceGroupNodeArgs']]] nodes: Indicates the nodes info.
+               The nodes structure is documented below.
+        :param pulumi.Input[str] size: Specifies the disk size. The value must be a multiple of `10`. The unit is GB. This parameter
+               is mandatory for nodes except mongos and invalid for mongos.For a cluster instance, the storage space of a shard node
+               can be `10` to `2,000` GB, and the config storage space is `20` GB. For a replica set instance, the value ranges
+               from `10` to `3000` GB. This parameter can be updated when the value of `type` is shard or replica.
+        :param pulumi.Input[str] status: Indicates the node status.
+        :param pulumi.Input[str] type: Specifies the node type. Valid value:
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
+        :param pulumi.Input[str] used: Indicates the disk usage.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if nodes is not None:
+            pulumi.set(__self__, "nodes", nodes)
+        if size is not None:
+            pulumi.set(__self__, "size", size)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+        if used is not None:
+            pulumi.set(__self__, "used", used)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the template.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the DB instance name. The DB instance name of the same type is unique in the
+        same tenant.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def nodes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupNodeArgs']]]]:
+        """
+        Indicates the nodes info.
+        The nodes structure is documented below.
+        """
+        return pulumi.get(self, "nodes")
+
+    @nodes.setter
+    def nodes(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['InstanceGroupNodeArgs']]]]):
+        pulumi.set(self, "nodes", value)
+
+    @property
+    @pulumi.getter
+    def size(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the disk size. The value must be a multiple of `10`. The unit is GB. This parameter
+        is mandatory for nodes except mongos and invalid for mongos.For a cluster instance, the storage space of a shard node
+        can be `10` to `2,000` GB, and the config storage space is `20` GB. For a replica set instance, the value ranges
+        from `10` to `3000` GB. This parameter can be updated when the value of `type` is shard or replica.
+        """
+        return pulumi.get(self, "size")
+
+    @size.setter
+    def size(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "size", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the node status.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the node type. Valid value:
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def used(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the disk usage.
+        """
+        return pulumi.get(self, "used")
+
+    @used.setter
+    def used(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "used", value)
+
+
+@pulumi.input_type
+class InstanceGroupNodeArgs:
     def __init__(__self__, *,
                  id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -740,7 +889,6 @@ class InstanceNodeArgs:
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] id: Specifies the ID of the template.
-               Changing this creates a new instance.
         :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
                same tenant.
         :param pulumi.Input[str] private_ip: Indicates the private IP address of a node. This parameter is valid only for mongos nodes, replica set
@@ -750,10 +898,8 @@ class InstanceNodeArgs:
         :param pulumi.Input[str] role: Indicates the node role.
         :param pulumi.Input[str] status: Indicates the node status.
         :param pulumi.Input[str] type: Specifies the node type. Valid value:
-               + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-               + For an Enhanced Edition cluster instance, the value is **shard**.
-               + For a Community Edition replica set instance, the value is **replica**.
-               + For a Community Edition single node instance, the value is **single**.
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
         """
         if id is not None:
             pulumi.set(__self__, "id", id)
@@ -775,7 +921,6 @@ class InstanceNodeArgs:
     def id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the template.
-        Changing this creates a new instance.
         """
         return pulumi.get(self, "id")
 
@@ -851,10 +996,137 @@ class InstanceNodeArgs:
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the node type. Valid value:
-        + For a Community Edition cluster instance, the value can be **mongos**, **shard**, or **config**.
-        + For an Enhanced Edition cluster instance, the value is **shard**.
-        + For a Community Edition replica set instance, the value is **replica**.
-        + For a Community Edition single node instance, the value is **single**.
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
+
+
+@pulumi.input_type
+class InstanceNodeArgs:
+    def __init__(__self__, *,
+                 id: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 private_ip: Optional[pulumi.Input[str]] = None,
+                 public_ip: Optional[pulumi.Input[str]] = None,
+                 role: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
+                 type: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the template.
+        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type is unique in the
+               same tenant.
+        :param pulumi.Input[str] private_ip: Indicates the private IP address of a node. This parameter is valid only for mongos nodes, replica set
+               instances, and single node instances.
+        :param pulumi.Input[str] public_ip: Indicates the EIP that has been bound on a node. This parameter is valid only for mongos nodes of
+               cluster instances, primary nodes and secondary nodes of replica set instances, and single node instances.
+        :param pulumi.Input[str] role: Indicates the node role.
+        :param pulumi.Input[str] status: Indicates the node status.
+        :param pulumi.Input[str] type: Specifies the node type. Valid value:
+               + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+               + For a replica set instance, the value is **replica**.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if private_ip is not None:
+            pulumi.set(__self__, "private_ip", private_ip)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the template.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the DB instance name. The DB instance name of the same type is unique in the
+        same tenant.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="privateIp")
+    def private_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the private IP address of a node. This parameter is valid only for mongos nodes, replica set
+        instances, and single node instances.
+        """
+        return pulumi.get(self, "private_ip")
+
+    @private_ip.setter
+    def private_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_ip", value)
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the EIP that has been bound on a node. This parameter is valid only for mongos nodes of
+        cluster instances, primary nodes and secondary nodes of replica set instances, and single node instances.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @public_ip.setter
+    def public_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip", value)
+
+    @property
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the node role.
+        """
+        return pulumi.get(self, "role")
+
+    @role.setter
+    def role(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "role", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the node status.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the node type. Valid value:
+        + For a cluster instance, the value can be **mongos**, **shard**, or **config**.
+        + For a replica set instance, the value is **replica**.
         """
         return pulumi.get(self, "type")
 

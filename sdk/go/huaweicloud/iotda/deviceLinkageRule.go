@@ -13,6 +13,13 @@ import (
 
 // Manages an IoTDA device linkage rule within HuaweiCloud.
 //
+// > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+// endpoint in `provider` block.
+// You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+// to view the HTTPS application access address. An example of the access address might be
+// **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+// `provider` block as follows:
+//
 // ## Example Usage
 //
 // ```go
@@ -105,7 +112,7 @@ import (
 //
 // ## Import
 //
-// Device linkage rules can be imported using the `id`, e.g.
+// Device linkage rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -118,12 +125,13 @@ type DeviceLinkageRule struct {
 	// Specifies the list of the actions, at most 10 actions.
 	// The actions structure is documented below.
 	Actions DeviceLinkageRuleActionArrayOutput `pulumi:"actions"`
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the effective period of the device linkage rule. Always effectives
 	// by default. The effectivePeriod structure is documented below.
 	EffectivePeriod DeviceLinkageRuleEffectivePeriodPtrOutput `pulumi:"effectivePeriod"`
-	// Specifies whether to enable the device linkage rule. Defaults to `true`.
+	// Specifies whether to enable the device linkage rule. Defaults to **true**.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
 	// Specifies the name of the alarm.
 	Name pulumi.StringOutput `pulumi:"name"`
@@ -184,12 +192,13 @@ type deviceLinkageRuleState struct {
 	// Specifies the list of the actions, at most 10 actions.
 	// The actions structure is documented below.
 	Actions []DeviceLinkageRuleAction `pulumi:"actions"`
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the effective period of the device linkage rule. Always effectives
 	// by default. The effectivePeriod structure is documented below.
 	EffectivePeriod *DeviceLinkageRuleEffectivePeriod `pulumi:"effectivePeriod"`
-	// Specifies whether to enable the device linkage rule. Defaults to `true`.
+	// Specifies whether to enable the device linkage rule. Defaults to **true**.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the name of the alarm.
 	Name *string `pulumi:"name"`
@@ -212,12 +221,13 @@ type DeviceLinkageRuleState struct {
 	// Specifies the list of the actions, at most 10 actions.
 	// The actions structure is documented below.
 	Actions DeviceLinkageRuleActionArrayInput
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the effective period of the device linkage rule. Always effectives
 	// by default. The effectivePeriod structure is documented below.
 	EffectivePeriod DeviceLinkageRuleEffectivePeriodPtrInput
-	// Specifies whether to enable the device linkage rule. Defaults to `true`.
+	// Specifies whether to enable the device linkage rule. Defaults to **true**.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the name of the alarm.
 	Name pulumi.StringPtrInput
@@ -244,12 +254,13 @@ type deviceLinkageRuleArgs struct {
 	// Specifies the list of the actions, at most 10 actions.
 	// The actions structure is documented below.
 	Actions []DeviceLinkageRuleAction `pulumi:"actions"`
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description *string `pulumi:"description"`
 	// Specifies the effective period of the device linkage rule. Always effectives
 	// by default. The effectivePeriod structure is documented below.
 	EffectivePeriod *DeviceLinkageRuleEffectivePeriod `pulumi:"effectivePeriod"`
-	// Specifies whether to enable the device linkage rule. Defaults to `true`.
+	// Specifies whether to enable the device linkage rule. Defaults to **true**.
 	Enabled *bool `pulumi:"enabled"`
 	// Specifies the name of the alarm.
 	Name *string `pulumi:"name"`
@@ -273,12 +284,13 @@ type DeviceLinkageRuleArgs struct {
 	// Specifies the list of the actions, at most 10 actions.
 	// The actions structure is documented below.
 	Actions DeviceLinkageRuleActionArrayInput
-	// Specifies the description of the alarm.
+	// Specifies the description of the alarm.\
+	// The value can contain a maximum of `256` characters.
 	Description pulumi.StringPtrInput
 	// Specifies the effective period of the device linkage rule. Always effectives
 	// by default. The effectivePeriod structure is documented below.
 	EffectivePeriod DeviceLinkageRuleEffectivePeriodPtrInput
-	// Specifies whether to enable the device linkage rule. Defaults to `true`.
+	// Specifies whether to enable the device linkage rule. Defaults to **true**.
 	Enabled pulumi.BoolPtrInput
 	// Specifies the name of the alarm.
 	Name pulumi.StringPtrInput
@@ -390,7 +402,8 @@ func (o DeviceLinkageRuleOutput) Actions() DeviceLinkageRuleActionArrayOutput {
 	return o.ApplyT(func(v *DeviceLinkageRule) DeviceLinkageRuleActionArrayOutput { return v.Actions }).(DeviceLinkageRuleActionArrayOutput)
 }
 
-// Specifies the description of the alarm.
+// Specifies the description of the alarm.\
+// The value can contain a maximum of `256` characters.
 func (o DeviceLinkageRuleOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRule) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -401,7 +414,7 @@ func (o DeviceLinkageRuleOutput) EffectivePeriod() DeviceLinkageRuleEffectivePer
 	return o.ApplyT(func(v *DeviceLinkageRule) DeviceLinkageRuleEffectivePeriodPtrOutput { return v.EffectivePeriod }).(DeviceLinkageRuleEffectivePeriodPtrOutput)
 }
 
-// Specifies whether to enable the device linkage rule. Defaults to `true`.
+// Specifies whether to enable the device linkage rule. Defaults to **true**.
 func (o DeviceLinkageRuleOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DeviceLinkageRule) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
 }

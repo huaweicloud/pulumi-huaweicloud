@@ -76,7 +76,7 @@ import (
 //
 // ## Import
 //
-// Load Balancer L7 Rule can be imported using the L7 Policy ID and L7 Rule ID separated by a slash, e.g.
+// # Load Balancer L7 Rule can be imported using the L7 Policy ID and L7 Rule ID separated by a slash, e.g.bash
 //
 // ```sh
 //

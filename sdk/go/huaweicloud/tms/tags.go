@@ -47,8 +47,8 @@ import (
 type Tags struct {
 	pulumi.CustomResourceState
 
-	// Specifies an array of one or more predefined tags. The tags object
-	// structure is documented below. Changing this will create a new resource.
+	// Specifies an array of one or more predefined tags.
+	// The tags structure is documented below.
 	Tags TagsTagArrayOutput `pulumi:"tags"`
 }
 
@@ -85,14 +85,14 @@ func GetTags(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Tags resources.
 type tagsState struct {
-	// Specifies an array of one or more predefined tags. The tags object
-	// structure is documented below. Changing this will create a new resource.
+	// Specifies an array of one or more predefined tags.
+	// The tags structure is documented below.
 	Tags []TagsTag `pulumi:"tags"`
 }
 
 type TagsState struct {
-	// Specifies an array of one or more predefined tags. The tags object
-	// structure is documented below. Changing this will create a new resource.
+	// Specifies an array of one or more predefined tags.
+	// The tags structure is documented below.
 	Tags TagsTagArrayInput
 }
 
@@ -101,15 +101,15 @@ func (TagsState) ElementType() reflect.Type {
 }
 
 type tagsArgs struct {
-	// Specifies an array of one or more predefined tags. The tags object
-	// structure is documented below. Changing this will create a new resource.
+	// Specifies an array of one or more predefined tags.
+	// The tags structure is documented below.
 	Tags []TagsTag `pulumi:"tags"`
 }
 
 // The set of arguments for constructing a Tags resource.
 type TagsArgs struct {
-	// Specifies an array of one or more predefined tags. The tags object
-	// structure is documented below. Changing this will create a new resource.
+	// Specifies an array of one or more predefined tags.
+	// The tags structure is documented below.
 	Tags TagsTagArrayInput
 }
 
@@ -200,8 +200,8 @@ func (o TagsOutput) ToTagsOutputWithContext(ctx context.Context) TagsOutput {
 	return o
 }
 
-// Specifies an array of one or more predefined tags. The tags object
-// structure is documented below. Changing this will create a new resource.
+// Specifies an array of one or more predefined tags.
+// The tags structure is documented below.
 func (o TagsOutput) Tags() TagsTagArrayOutput {
 	return o.ApplyT(func(v *Tags) TagsTagArrayOutput { return v.Tags }).(TagsTagArrayOutput)
 }

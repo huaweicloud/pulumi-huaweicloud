@@ -63,7 +63,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * vpc route tables can be imported using the `id`, e.g.
+ * vpc route tables can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/routeTable:RouteTable demo e1b3208a-544b-42a7-84e6-5d70371dd982
@@ -104,7 +104,7 @@ export class RouteTable extends pulumi.CustomResource {
     public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies the route table name. The value is a string of no more than
-     * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+     * `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -174,7 +174,7 @@ export interface RouteTableState {
     description?: pulumi.Input<string>;
     /**
      * Specifies the route table name. The value is a string of no more than
-     * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+     * `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     name?: pulumi.Input<string>;
     /**
@@ -209,7 +209,7 @@ export interface RouteTableArgs {
     description?: pulumi.Input<string>;
     /**
      * Specifies the route table name. The value is a string of no more than
-     * 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+     * `64` characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.).
      */
     name?: pulumi.Input<string>;
     /**

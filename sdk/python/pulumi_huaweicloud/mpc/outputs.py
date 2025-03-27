@@ -59,9 +59,9 @@ class TranscodingTemplateAudio(dict):
                + **4**: AUDIO_SAMPLE_44100 (44,100 Hz)
                + **5**: AUDIO_SAMPLE_48000 (48,000 Hz)
                + **6**: AUDIO_SAMPLE_96000 (96,000 Hz)
-        :param int bitrate: Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-               30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-               adaptive value.
+        :param int bitrate: Specifies the average output bitrate.  
+               The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+               If this parameter is set to `0`, the average output bitrate is an adaptive value.
         :param str output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
         """
@@ -112,9 +112,9 @@ class TranscodingTemplateAudio(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-        30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-        adaptive value.
+        Specifies the average output bitrate.  
+        The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+        If this parameter is set to `0`, the average output bitrate is an adaptive value.
         """
         return pulumi.get(self, "bitrate")
 
@@ -170,9 +170,9 @@ class TranscodingTemplateGroupAudio(dict):
                + **4**: AUDIO_SAMPLE_44100 (44,100 Hz)
                + **5**: AUDIO_SAMPLE_48000 (48,000 Hz)
                + **6**: AUDIO_SAMPLE_96000 (96,000 Hz)
-        :param int bitrate: Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-               30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-               adaptive value.
+        :param int bitrate: Specifies the average output bitrate.  
+               The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+               If this parameter is set to `0`, the average output bitrate is an adaptive value.
         :param str output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
         """
@@ -223,9 +223,9 @@ class TranscodingTemplateGroupAudio(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-        30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-        adaptive value.
+        Specifies the average output bitrate.  
+        The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+        If this parameter is set to `0`, the average output bitrate is an adaptive value.
         """
         return pulumi.get(self, "bitrate")
 
@@ -246,15 +246,17 @@ class TranscodingTemplateGroupVideo(dict):
                  height: Optional[int] = None,
                  width: Optional[int] = None):
         """
-        :param int bitrate: Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-               30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-               adaptive value.
-        :param int height: Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-               and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-               is an adaptive value. The default value is 0.
-        :param int width: Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-               and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-               is an adaptive value. The default value is 0.
+        :param int bitrate: Specifies the average output bitrate.  
+               The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+               If this parameter is set to `0`, the average output bitrate is an adaptive value.
+        :param int height: Specifies the video height.  
+               The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+               `2,880` for H.265. The unit is pixel.
+               If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
+        :param int width: Specifies the video width.  
+               The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+               `4,096` for H.265. The unit is pixel.
+               If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
         """
         if bitrate is not None:
             pulumi.set(__self__, "bitrate", bitrate)
@@ -267,9 +269,9 @@ class TranscodingTemplateGroupVideo(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-        30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-        adaptive value.
+        Specifies the average output bitrate.  
+        The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+        If this parameter is set to `0`, the average output bitrate is an adaptive value.
         """
         return pulumi.get(self, "bitrate")
 
@@ -277,9 +279,10 @@ class TranscodingTemplateGroupVideo(dict):
     @pulumi.getter
     def height(self) -> Optional[int]:
         """
-        Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-        and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-        is an adaptive value. The default value is 0.
+        Specifies the video height.  
+        The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+        `2,880` for H.265. The unit is pixel.
+        If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
         """
         return pulumi.get(self, "height")
 
@@ -287,9 +290,10 @@ class TranscodingTemplateGroupVideo(dict):
     @pulumi.getter
     def width(self) -> Optional[int]:
         """
-        Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-        and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-        is an adaptive value. The default value is 0.
+        Specifies the video width.  
+        The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+        `4,096` for H.265. The unit is pixel.
+        If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
         """
         return pulumi.get(self, "width")
 
@@ -340,8 +344,8 @@ class TranscodingTemplateGroupVideoCommon(dict):
         :param int codec: Specifies the video codec. Possible values are:
                + **1**: H.264
                + **2**: H.265
-        :param int fps: Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-               The default value is 0. The unit is FPS.
+        :param int fps: Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+               The default value is `0`. The unit is FPS.
         :param int level: Specifies the encoding level. Possible values are:
                + **1**: VIDEO_LEVEL_1_0
                + **2**: VIDEO_LEVEL_1_1
@@ -359,12 +363,13 @@ class TranscodingTemplateGroupVideoCommon(dict):
                + **14**: VIDEO_LEVEL_5_0
                + **15**: VIDEO_LEVEL_5_1
         :param int max_consecutive_bframes: Specifies the maximum number of B-frames.
-               The vaule range is  0 to 7, and the default value is 4. The unit is frame.
-        :param int max_iframes_interval: Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-               The default value is 5. The unit is second.
+               The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
+        :param int max_iframes_interval: Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+               The default value is `5`. The unit is second.
         :param str output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
-        :param int profile: Specifies the encoding profile. The recommended value is 3. Possible values are:
+        :param int profile: Specifies the encoding profile.  
+               Possible values are:
                + **1**: VIDEO_PROFILE_H264_BASE
                + **2**: VIDEO_PROFILE_H264_MAIN
                + **3**: VIDEO_PROFILE_H264_HIGH
@@ -421,8 +426,8 @@ class TranscodingTemplateGroupVideoCommon(dict):
     @pulumi.getter
     def fps(self) -> Optional[int]:
         """
-        Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-        The default value is 0. The unit is FPS.
+        Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+        The default value is `0`. The unit is FPS.
         """
         return pulumi.get(self, "fps")
 
@@ -454,7 +459,7 @@ class TranscodingTemplateGroupVideoCommon(dict):
     def max_consecutive_bframes(self) -> Optional[int]:
         """
         Specifies the maximum number of B-frames.
-        The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+        The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
         """
         return pulumi.get(self, "max_consecutive_bframes")
 
@@ -462,8 +467,8 @@ class TranscodingTemplateGroupVideoCommon(dict):
     @pulumi.getter(name="maxIframesInterval")
     def max_iframes_interval(self) -> Optional[int]:
         """
-        Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-        The default value is 5. The unit is second.
+        Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+        The default value is `5`. The unit is second.
         """
         return pulumi.get(self, "max_iframes_interval")
 
@@ -485,7 +490,8 @@ class TranscodingTemplateGroupVideoCommon(dict):
     @pulumi.getter
     def profile(self) -> Optional[int]:
         """
-        Specifies the encoding profile. The recommended value is 3. Possible values are:
+        Specifies the encoding profile.  
+        Possible values are:
         + **1**: VIDEO_PROFILE_H264_BASE
         + **2**: VIDEO_PROFILE_H264_MAIN
         + **3**: VIDEO_PROFILE_H264_HIGH
@@ -548,9 +554,9 @@ class TranscodingTemplateVideo(dict):
                  quality: Optional[int] = None,
                  width: Optional[int] = None):
         """
-        :param int bitrate: Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-               30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-               adaptive value.
+        :param int bitrate: Specifies the average output bitrate.  
+               The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+               If this parameter is set to `0`, the average output bitrate is an adaptive value.
         :param int black_bar_removal: Specifies whether to enable black bar removal. Possible values are:
                + **0**: Disable black bar removal.
                + **1**: Enable black bar removal and low-complexity algorithms for long videos (>5 minutes).
@@ -558,12 +564,14 @@ class TranscodingTemplateVideo(dict):
         :param int codec: Specifies the video codec. Possible values are:
                + **1**: H.264
                + **2**: H.265
-        :param int fps: Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-               The default value is 0. The unit is FPS.
-        :param int height: Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-               and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-               is an adaptive value. The default value is 0.
-        :param int level: Specifies the encoding level. Possible values are:
+        :param int fps: Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+               The default value is `0`. The unit is FPS.
+        :param int height: Specifies the video height.  
+               The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+               `2,880` for H.265. The unit is pixel.
+               If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
+        :param int level: Specifies the encoding level.  
+               Possible values are:
                + **1**: VIDEO_LEVEL_1_0
                + **2**: VIDEO_LEVEL_1_1
                + **3**: VIDEO_LEVEL_1_2
@@ -580,12 +588,13 @@ class TranscodingTemplateVideo(dict):
                + **14**: VIDEO_LEVEL_5_0
                + **15**: VIDEO_LEVEL_5_1
         :param int max_consecutive_bframes: Specifies the maximum number of B-frames.
-               The vaule range is  0 to 7, and the default value is 4. The unit is frame.
-        :param int max_iframes_interval: Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-               The default value is 5. The unit is second.
+               The value range is `0` to `7`, and the default value is `4`. The unit is frame.
+        :param int max_iframes_interval: Specifies the maximum I-frame interval, in second.  
+               The value ranges from `2` to `10`. The default value is `5`.
         :param str output_policy: Specifies the output policy. Possible values are **discard** and **transcode**.
                The default value is transcode.
-        :param int profile: Specifies the encoding profile. The recommended value is 3. Possible values are:
+        :param int profile: Specifies the encoding profile.  
+               Possible values are:
                + **1**: VIDEO_PROFILE_H264_BASE
                + **2**: VIDEO_PROFILE_H264_MAIN
                + **3**: VIDEO_PROFILE_H264_HIGH
@@ -595,9 +604,10 @@ class TranscodingTemplateVideo(dict):
                + **1**: VIDEO_PRESET_HSPEED2
                + **2**: VIDEO_PRESET_HSPEED
                + **3**: VIDEO_PRESET_NORMAL
-        :param int width: Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-               and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-               is an adaptive value. The default value is 0.
+        :param int width: Specifies the video width.  
+               The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+               `4,096` for H.265. The unit is pixel.
+               If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
         """
         if bitrate is not None:
             pulumi.set(__self__, "bitrate", bitrate)
@@ -630,9 +640,9 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def bitrate(self) -> Optional[int]:
         """
-        Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-        30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-        adaptive value.
+        Specifies the average output bitrate.  
+        The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+        If this parameter is set to `0`, the average output bitrate is an adaptive value.
         """
         return pulumi.get(self, "bitrate")
 
@@ -661,8 +671,8 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def fps(self) -> Optional[int]:
         """
-        Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-        The default value is 0. The unit is FPS.
+        Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+        The default value is `0`. The unit is FPS.
         """
         return pulumi.get(self, "fps")
 
@@ -670,9 +680,10 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def height(self) -> Optional[int]:
         """
-        Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-        and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-        is an adaptive value. The default value is 0.
+        Specifies the video height.  
+        The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+        `2,880` for H.265. The unit is pixel.
+        If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
         """
         return pulumi.get(self, "height")
 
@@ -680,7 +691,8 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def level(self) -> Optional[int]:
         """
-        Specifies the encoding level. Possible values are:
+        Specifies the encoding level.  
+        Possible values are:
         + **1**: VIDEO_LEVEL_1_0
         + **2**: VIDEO_LEVEL_1_1
         + **3**: VIDEO_LEVEL_1_2
@@ -704,7 +716,7 @@ class TranscodingTemplateVideo(dict):
     def max_consecutive_bframes(self) -> Optional[int]:
         """
         Specifies the maximum number of B-frames.
-        The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+        The value range is `0` to `7`, and the default value is `4`. The unit is frame.
         """
         return pulumi.get(self, "max_consecutive_bframes")
 
@@ -712,8 +724,8 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter(name="maxIframesInterval")
     def max_iframes_interval(self) -> Optional[int]:
         """
-        Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-        The default value is 5. The unit is second.
+        Specifies the maximum I-frame interval, in second.  
+        The value ranges from `2` to `10`. The default value is `5`.
         """
         return pulumi.get(self, "max_iframes_interval")
 
@@ -735,7 +747,8 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def profile(self) -> Optional[int]:
         """
-        Specifies the encoding profile. The recommended value is 3. Possible values are:
+        Specifies the encoding profile.  
+        Possible values are:
         + **1**: VIDEO_PROFILE_H264_BASE
         + **2**: VIDEO_PROFILE_H264_MAIN
         + **3**: VIDEO_PROFILE_H264_HIGH
@@ -759,9 +772,10 @@ class TranscodingTemplateVideo(dict):
     @pulumi.getter
     def width(self) -> Optional[int]:
         """
-        Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-        and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-        is an adaptive value. The default value is 0.
+        Specifies the video width.  
+        The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+        `4,096` for H.265. The unit is pixel.
+        If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
         """
         return pulumi.get(self, "width")
 

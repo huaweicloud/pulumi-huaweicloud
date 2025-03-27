@@ -17,26 +17,39 @@ class RuleWebTamperProtectionArgs:
                  domain: pulumi.Input[str],
                  path: pulumi.Input[str],
                  policy_id: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a RuleWebTamperProtection resource.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
+        :param pulumi.Input[str] description: Specifies the description of WAF web tamper protection rule.
+               Changing this creates a new rule.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
-               rule. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the WAF web tamper protection rules resource. If
-               omitted, the provider-level region will be used. Changing this creates a new rule.
+               rule. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF web tamper protection rules
+               resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[int] status: Specifies the status of WAF web tamper protection rule.
+               Valid values are as follows:
+               + `0`: Disabled.
+               + `1`: Enabled.
         """
         pulumi.set(__self__, "domain", domain)
         pulumi.set(__self__, "path", path)
         pulumi.set(__self__, "policy_id", policy_id)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter
@@ -76,11 +89,25 @@ class RuleWebTamperProtectionArgs:
         pulumi.set(self, "policy_id", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of WAF web tamper protection rule.
+        Changing this creates a new rule.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF tamper protection
-        rule. Changing this parameter will create a new resource.
+        rule. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -92,8 +119,8 @@ class RuleWebTamperProtectionArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF web tamper protection rules resource. If
-        omitted, the provider-level region will be used. Changing this creates a new rule.
+        Specifies the region in which to create the WAF web tamper protection rules
+        resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
         """
         return pulumi.get(self, "region")
 
@@ -101,26 +128,52 @@ class RuleWebTamperProtectionArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the status of WAF web tamper protection rule.
+        Valid values are as follows:
+        + `0`: Disabled.
+        + `1`: Enabled.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status", value)
+
 
 @pulumi.input_type
 class _RuleWebTamperProtectionState:
     def __init__(__self__, *,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering RuleWebTamperProtection resources.
+        :param pulumi.Input[str] description: Specifies the description of WAF web tamper protection rule.
+               Changing this creates a new rule.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
-               rule. Changing this parameter will create a new resource.
+               rule. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
-        :param pulumi.Input[str] region: The region in which to create the WAF web tamper protection rules resource. If
-               omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF web tamper protection rules
+               resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[int] status: Specifies the status of WAF web tamper protection rule.
+               Valid values are as follows:
+               + `0`: Disabled.
+               + `1`: Enabled.
         """
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if domain is not None:
             pulumi.set(__self__, "domain", domain)
         if enterprise_project_id is not None:
@@ -131,6 +184,21 @@ class _RuleWebTamperProtectionState:
             pulumi.set(__self__, "policy_id", policy_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of WAF web tamper protection rule.
+        Changing this creates a new rule.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter
@@ -149,7 +217,8 @@ class _RuleWebTamperProtectionState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF tamper protection
-        rule. Changing this parameter will create a new resource.
+        rule. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -186,8 +255,8 @@ class _RuleWebTamperProtectionState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF web tamper protection rules resource. If
-        omitted, the provider-level region will be used. Changing this creates a new rule.
+        Specifies the region in which to create the WAF web tamper protection rules
+        resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
         """
         return pulumi.get(self, "region")
 
@@ -195,23 +264,40 @@ class _RuleWebTamperProtectionState:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the status of WAF web tamper protection rule.
+        Valid values are as follows:
+        + `0`: Disabled.
+        + `1`: Enabled.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status", value)
+
 
 class RuleWebTamperProtection(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
         Manages a WAF web tamper protection rule resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The web tamper protection rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+        used. The web tamper protection rule resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
 
@@ -222,11 +308,12 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         config = pulumi.Config()
         enterprise_project_id = config.require_object("enterpriseProjectId")
         policy_id = config.require_object("policyId")
-        rule1 = huaweicloud.waf.RuleWebTamperProtection("rule1",
+        test = huaweicloud.waf.RuleWebTamperProtection("test",
             policy_id=policy_id,
             enterprise_project_id=enterprise_project_id,
             domain="www.your-domain.com",
-            path="/payment")
+            path="/payment",
+            description="test description")
         ```
 
         ## Import
@@ -245,14 +332,21 @@ class RuleWebTamperProtection(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies the description of WAF web tamper protection rule.
+               Changing this creates a new rule.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
-               rule. Changing this parameter will create a new resource.
+               rule. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
-        :param pulumi.Input[str] region: The region in which to create the WAF web tamper protection rules resource. If
-               omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF web tamper protection rules
+               resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[int] status: Specifies the status of WAF web tamper protection rule.
+               Valid values are as follows:
+               + `0`: Disabled.
+               + `1`: Enabled.
         """
         ...
     @overload
@@ -264,7 +358,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         Manages a WAF web tamper protection rule resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The web tamper protection rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+        used. The web tamper protection rule resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
 
@@ -275,11 +369,12 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         config = pulumi.Config()
         enterprise_project_id = config.require_object("enterpriseProjectId")
         policy_id = config.require_object("policyId")
-        rule1 = huaweicloud.waf.RuleWebTamperProtection("rule1",
+        test = huaweicloud.waf.RuleWebTamperProtection("test",
             policy_id=policy_id,
             enterprise_project_id=enterprise_project_id,
             domain="www.your-domain.com",
-            path="/payment")
+            path="/payment",
+            description="test description")
         ```
 
         ## Import
@@ -311,11 +406,13 @@ class RuleWebTamperProtection(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  path: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -325,6 +422,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = RuleWebTamperProtectionArgs.__new__(RuleWebTamperProtectionArgs)
 
+            __props__.__dict__["description"] = description
             if domain is None and not opts.urn:
                 raise TypeError("Missing required property 'domain'")
             __props__.__dict__["domain"] = domain
@@ -336,6 +434,7 @@ class RuleWebTamperProtection(pulumi.CustomResource):
                 raise TypeError("Missing required property 'policy_id'")
             __props__.__dict__["policy_id"] = policy_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["status"] = status
         super(RuleWebTamperProtection, __self__).__init__(
             'huaweicloud:Waf/ruleWebTamperProtection:RuleWebTamperProtection',
             resource_name,
@@ -346,11 +445,13 @@ class RuleWebTamperProtection(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            description: Optional[pulumi.Input[str]] = None,
             domain: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             path: Optional[pulumi.Input[str]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'RuleWebTamperProtection':
+            region: Optional[pulumi.Input[str]] = None,
+            status: Optional[pulumi.Input[int]] = None) -> 'RuleWebTamperProtection':
         """
         Get an existing RuleWebTamperProtection resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -358,25 +459,43 @@ class RuleWebTamperProtection(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies the description of WAF web tamper protection rule.
+               Changing this creates a new rule.
         :param pulumi.Input[str] domain: Specifies the domain name. Changing this creates a new rule.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF tamper protection
-               rule. Changing this parameter will create a new resource.
+               rule. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] path: Specifies the URL protected by the web tamper protection rule, excluding a
                domain name. Changing this creates a new rule.
         :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule.
-        :param pulumi.Input[str] region: The region in which to create the WAF web tamper protection rules resource. If
-               omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF web tamper protection rules
+               resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
+        :param pulumi.Input[int] status: Specifies the status of WAF web tamper protection rule.
+               Valid values are as follows:
+               + `0`: Disabled.
+               + `1`: Enabled.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _RuleWebTamperProtectionState.__new__(_RuleWebTamperProtectionState)
 
+        __props__.__dict__["description"] = description
         __props__.__dict__["domain"] = domain
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["path"] = path
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["region"] = region
+        __props__.__dict__["status"] = status
         return RuleWebTamperProtection(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[str]:
+        """
+        Specifies the description of WAF web tamper protection rule.
+        Changing this creates a new rule.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter
@@ -391,7 +510,8 @@ class RuleWebTamperProtection(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project ID of WAF tamper protection
-        rule. Changing this parameter will create a new resource.
+        rule. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -416,8 +536,19 @@ class RuleWebTamperProtection(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the WAF web tamper protection rules resource. If
-        omitted, the provider-level region will be used. Changing this creates a new rule.
+        Specifies the region in which to create the WAF web tamper protection rules
+        resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the status of WAF web tamper protection rule.
+        Valid values are as follows:
+        + `0`: Disabled.
+        + `1`: Enabled.
+        """
+        return pulumi.get(self, "status")
 

@@ -72,6 +72,7 @@ class GetEipsEipResult(dict):
                  bandwidth_name: str,
                  bandwidth_share_type: str,
                  bandwidth_size: int,
+                 created_at: str,
                  enterprise_project_id: str,
                  id: str,
                  ip_version: int,
@@ -88,6 +89,7 @@ class GetEipsEipResult(dict):
         :param str bandwidth_name: The bandwidth name of the EIP.
         :param str bandwidth_share_type: The bandwidth share type of the EIP.
         :param int bandwidth_size: The bandwidth size of the EIP.
+        :param str created_at: The create time of the EIP.
         :param str enterprise_project_id: Specifies the enterprise project ID which the desired EIP belongs to.
         :param str id: The ID of the EIP.
         :param int ip_version: Specifies ip version of the desired EIP. The options are:
@@ -106,6 +108,7 @@ class GetEipsEipResult(dict):
         pulumi.set(__self__, "bandwidth_name", bandwidth_name)
         pulumi.set(__self__, "bandwidth_share_type", bandwidth_share_type)
         pulumi.set(__self__, "bandwidth_size", bandwidth_size)
+        pulumi.set(__self__, "created_at", created_at)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "ip_version", ip_version)
@@ -149,6 +152,14 @@ class GetEipsEipResult(dict):
         The bandwidth size of the EIP.
         """
         return pulumi.get(self, "bandwidth_size")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The create time of the EIP.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")

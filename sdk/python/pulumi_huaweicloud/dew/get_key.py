@@ -229,7 +229,7 @@ def get_key(default_key_flag: Optional[str] = None,
 
     :param str default_key_flag: Identification of a Master Key. The value "1" indicates a Default Master Key,
            and the value "0" indicates a key. Changing this gets a new key.
-    :param str domain_id: - ID of a user domain for the key. Changing this gets a new key.
+    :param str domain_id: The ID of a user domain for the key. Changing this gets a new key.
     :param str enterprise_project_id: The enterprise project id of the kms key.
     :param str key_alias: The alias in which to create the key. It is required when we create a new key.
            Changing this gets the new key.
@@ -303,7 +303,7 @@ def get_key_output(default_key_flag: Optional[pulumi.Input[Optional[str]]] = Non
 
     :param str default_key_flag: Identification of a Master Key. The value "1" indicates a Default Master Key,
            and the value "0" indicates a key. Changing this gets a new key.
-    :param str domain_id: - ID of a user domain for the key. Changing this gets a new key.
+    :param str domain_id: The ID of a user domain for the key. Changing this gets a new key.
     :param str enterprise_project_id: The enterprise project id of the kms key.
     :param str key_alias: The alias in which to create the key. It is required when we create a new key.
            Changing this gets the new key.

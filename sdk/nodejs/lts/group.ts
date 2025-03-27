@@ -8,24 +8,23 @@ import * as utilities from "../utilities";
  * Manages a log group resource within HuaweiCloud.
  *
  * ## Example Usage
- * ### create a log group
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const logGroup1 = new huaweicloud.Lts.Group("log_group1", {
+ * const test = new huaweicloud.Lts.Group("test", {
  *     groupName: "log_group1",
- *     ttlInDays: 1,
+ *     ttlInDays: 30,
  * });
  * ```
  *
  * ## Import
  *
- * Log group can be imported using the `id`, e.g.
+ * The log group can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Lts/group:Group group_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+ *  $ pulumi import huaweicloud:Lts/group:Group test <id>
  * ```
  */
 export class Group extends pulumi.CustomResource {
@@ -57,17 +56,32 @@ export class Group extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the log group name. Changing this parameter will create a new
-     * resource.
+     * The creation time of the log group.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the enterprise project ID to which the log group belongs.
+     * Changing this parameter will create a new resource.
+     * This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+     * will be used.
+     */
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies the log group name. Changing this parameter will create a new resource.
      */
     public readonly groupName!: pulumi.Output<string>;
     /**
-     * The region in which to create the log group resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new log group resource.
+     * Specifies the region in which to create the log group resource. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the log expiration time(days), value range: 1-30.
+     * Specifies the key/value pairs to associate with the log group.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specifies the log expiration time(days).  
+     * The value is range from `1` to `365`.
      */
     public readonly ttlInDays!: pulumi.Output<number>;
 
@@ -84,8 +98,11 @@ export class Group extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as GroupState | undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["groupName"] = state ? state.groupName : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["ttlInDays"] = state ? state.ttlInDays : undefined;
         } else {
             const args = argsOrState as GroupArgs | undefined;
@@ -95,9 +112,12 @@ export class Group extends pulumi.CustomResource {
             if ((!args || args.ttlInDays === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'ttlInDays'");
             }
+            resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["groupName"] = args ? args.groupName : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["ttlInDays"] = args ? args.ttlInDays : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Group.__pulumiType, name, resourceInputs, opts);
@@ -109,17 +129,32 @@ export class Group extends pulumi.CustomResource {
  */
 export interface GroupState {
     /**
-     * Specifies the log group name. Changing this parameter will create a new
-     * resource.
+     * The creation time of the log group.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the enterprise project ID to which the log group belongs.
+     * Changing this parameter will create a new resource.
+     * This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+     * will be used.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the log group name. Changing this parameter will create a new resource.
      */
     groupName?: pulumi.Input<string>;
     /**
-     * The region in which to create the log group resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new log group resource.
+     * Specifies the region in which to create the log group resource. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the log expiration time(days), value range: 1-30.
+     * Specifies the key/value pairs to associate with the log group.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the log expiration time(days).  
+     * The value is range from `1` to `365`.
      */
     ttlInDays?: pulumi.Input<number>;
 }
@@ -129,17 +164,28 @@ export interface GroupState {
  */
 export interface GroupArgs {
     /**
-     * Specifies the log group name. Changing this parameter will create a new
-     * resource.
+     * Specifies the enterprise project ID to which the log group belongs.
+     * Changing this parameter will create a new resource.
+     * This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+     * will be used.
+     */
+    enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the log group name. Changing this parameter will create a new resource.
      */
     groupName: pulumi.Input<string>;
     /**
-     * The region in which to create the log group resource. If omitted, the
-     * provider-level region will be used. Changing this creates a new log group resource.
+     * Specifies the region in which to create the log group resource. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the log expiration time(days), value range: 1-30.
+     * Specifies the key/value pairs to associate with the log group.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the log expiration time(days).  
+     * The value is range from `1` to `365`.
      */
     ttlInDays: pulumi.Input<number>;
 }

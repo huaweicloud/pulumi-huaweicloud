@@ -31,6 +31,7 @@ export function getNodes(args: GetNodesArgs, opts?: pulumi.InvokeOptions): Promi
     opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
     return pulumi.runtime.invoke("huaweicloud:Cce/getNodes:getNodes", {
         "clusterId": args.clusterId,
+        "ignoreDetails": args.ignoreDetails,
         "name": args.name,
         "nodeId": args.nodeId,
         "region": args.region,
@@ -46,6 +47,13 @@ export interface GetNodesArgs {
      * Specifies the ID of CCE cluster.
      */
     clusterId: string;
+    /**
+     * Specifies which detail information of the nodes to ignore.
+     * You can use this parameter to ignore some information you don't care about and make the query faster.
+     * The value can be:
+     * + **tags**: ignore the tags of the nodes.
+     */
+    ignoreDetails?: string;
     /**
      * Specifies the of the node.
      */
@@ -78,6 +86,7 @@ export interface GetNodesResult {
      * Indicates a list of IDs of all CCE nodes found.
      */
     readonly ids: string[];
+    readonly ignoreDetails?: string;
     /**
      * The name of the node.
      */
@@ -106,6 +115,13 @@ export interface GetNodesOutputArgs {
      * Specifies the ID of CCE cluster.
      */
     clusterId: pulumi.Input<string>;
+    /**
+     * Specifies which detail information of the nodes to ignore.
+     * You can use this parameter to ignore some information you don't care about and make the query faster.
+     * The value can be:
+     * + **tags**: ignore the tags of the nodes.
+     */
+    ignoreDetails?: pulumi.Input<string>;
     /**
      * Specifies the of the node.
      */

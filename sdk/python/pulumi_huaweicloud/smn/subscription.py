@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['SubscriptionArgs', 'Subscription']
 
@@ -17,6 +19,7 @@ class SubscriptionArgs:
                  endpoint: pulumi.Input[str],
                  protocol: pulumi.Input[str],
                  topic_urn: pulumi.Input[str],
+                 extension: Optional[pulumi.Input['SubscriptionExtensionArgs']] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  remark: Optional[pulumi.Input[str]] = None):
         """
@@ -29,9 +32,19 @@ class SubscriptionArgs:
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
                + **For a functionstage subscription**, the endpoint is a function urn.
                + **For a functiongraph subscription**, the endpoint is a workflow ID.
-        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, email, sms, http,
-               https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+               + **For a callnotify subscription**, the endpoint is a phone number,
+               the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+               + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+               + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+               + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+               + **For a welink subscription**, the endpoint is a a WeLink group account.
+        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, **email**,
+               **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+               **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] topic_urn: Specifies the resource identifier of a topic, which is unique.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input['SubscriptionExtensionArgs'] extension: Specifies the extension configurations.
+               The extension structure is documented below.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
@@ -41,6 +54,8 @@ class SubscriptionArgs:
         pulumi.set(__self__, "endpoint", endpoint)
         pulumi.set(__self__, "protocol", protocol)
         pulumi.set(__self__, "topic_urn", topic_urn)
+        if extension is not None:
+            pulumi.set(__self__, "extension", extension)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if remark is not None:
@@ -58,6 +73,12 @@ class SubscriptionArgs:
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
         + **For a functionstage subscription**, the endpoint is a function urn.
         + **For a functiongraph subscription**, the endpoint is a workflow ID.
+        + **For a callnotify subscription**, the endpoint is a phone number,
+        the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+        + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+        + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+        + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+        + **For a welink subscription**, the endpoint is a a WeLink group account.
         """
         return pulumi.get(self, "endpoint")
 
@@ -69,8 +90,9 @@ class SubscriptionArgs:
     @pulumi.getter
     def protocol(self) -> pulumi.Input[str]:
         """
-        Specifies the protocol of the message endpoint. Currently, email, sms, http,
-        https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+        Specifies the protocol of the message endpoint. Currently, **email**,
+        **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+        **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "protocol")
 
@@ -90,6 +112,20 @@ class SubscriptionArgs:
     @topic_urn.setter
     def topic_urn(self, value: pulumi.Input[str]):
         pulumi.set(self, "topic_urn", value)
+
+    @property
+    @pulumi.getter
+    def extension(self) -> Optional[pulumi.Input['SubscriptionExtensionArgs']]:
+        """
+        Specifies the extension configurations.
+        The extension structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension")
+
+    @extension.setter
+    def extension(self, value: Optional[pulumi.Input['SubscriptionExtensionArgs']]):
+        pulumi.set(self, "extension", value)
 
     @property
     @pulumi.getter
@@ -122,6 +158,8 @@ class SubscriptionArgs:
 class _SubscriptionState:
     def __init__(__self__, *,
                  endpoint: Optional[pulumi.Input[str]] = None,
+                 extension: Optional[pulumi.Input['SubscriptionExtensionArgs']] = None,
+                 filter_policies: Optional[pulumi.Input[Sequence[pulumi.Input['SubscriptionFilterPolicyArgs']]]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -139,9 +177,21 @@ class _SubscriptionState:
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
                + **For a functionstage subscription**, the endpoint is a function urn.
                + **For a functiongraph subscription**, the endpoint is a workflow ID.
+               + **For a callnotify subscription**, the endpoint is a phone number,
+               the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+               + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+               + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+               + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+               + **For a welink subscription**, the endpoint is a a WeLink group account.
+        :param pulumi.Input['SubscriptionExtensionArgs'] extension: Specifies the extension configurations.
+               The extension structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input['SubscriptionFilterPolicyArgs']]] filter_policies: The message filter policies of a subscriber.
+               The filter_policies structure is documented below.
         :param pulumi.Input[str] owner: Project ID of the topic creator.
-        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, email, sms, http,
-               https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, **email**,
+               **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+               **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
@@ -156,6 +206,10 @@ class _SubscriptionState:
         """
         if endpoint is not None:
             pulumi.set(__self__, "endpoint", endpoint)
+        if extension is not None:
+            pulumi.set(__self__, "extension", extension)
+        if filter_policies is not None:
+            pulumi.set(__self__, "filter_policies", filter_policies)
         if owner is not None:
             pulumi.set(__self__, "owner", owner)
         if protocol is not None:
@@ -183,12 +237,45 @@ class _SubscriptionState:
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
         + **For a functionstage subscription**, the endpoint is a function urn.
         + **For a functiongraph subscription**, the endpoint is a workflow ID.
+        + **For a callnotify subscription**, the endpoint is a phone number,
+        the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+        + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+        + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+        + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+        + **For a welink subscription**, the endpoint is a a WeLink group account.
         """
         return pulumi.get(self, "endpoint")
 
     @endpoint.setter
     def endpoint(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "endpoint", value)
+
+    @property
+    @pulumi.getter
+    def extension(self) -> Optional[pulumi.Input['SubscriptionExtensionArgs']]:
+        """
+        Specifies the extension configurations.
+        The extension structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension")
+
+    @extension.setter
+    def extension(self, value: Optional[pulumi.Input['SubscriptionExtensionArgs']]):
+        pulumi.set(self, "extension", value)
+
+    @property
+    @pulumi.getter(name="filterPolicies")
+    def filter_policies(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['SubscriptionFilterPolicyArgs']]]]:
+        """
+        The message filter policies of a subscriber.
+        The filter_policies structure is documented below.
+        """
+        return pulumi.get(self, "filter_policies")
+
+    @filter_policies.setter
+    def filter_policies(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['SubscriptionFilterPolicyArgs']]]]):
+        pulumi.set(self, "filter_policies", value)
 
     @property
     @pulumi.getter
@@ -206,8 +293,9 @@ class _SubscriptionState:
     @pulumi.getter
     def protocol(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the protocol of the message endpoint. Currently, email, sms, http,
-        https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+        Specifies the protocol of the message endpoint. Currently, **email**,
+        **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+        **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "protocol")
 
@@ -288,6 +376,7 @@ class Subscription(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  endpoint: Optional[pulumi.Input[str]] = None,
+                 extension: Optional[pulumi.Input[pulumi.InputType['SubscriptionExtensionArgs']]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  remark: Optional[pulumi.Input[str]] = None,
@@ -317,7 +406,7 @@ class Subscription(pulumi.CustomResource):
 
         ## Import
 
-        SMN subscription can be imported using the `id` (subscription urn), e.g.
+        SMN subscription can be imported using the `id` (subscription urn), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Smn/subscription:Subscription subscription_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1:a2aa5a1f66df494184f4e108398de1a6
@@ -333,8 +422,18 @@ class Subscription(pulumi.CustomResource):
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
                + **For a functionstage subscription**, the endpoint is a function urn.
                + **For a functiongraph subscription**, the endpoint is a workflow ID.
-        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, email, sms, http,
-               https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+               + **For a callnotify subscription**, the endpoint is a phone number,
+               the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+               + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+               + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+               + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+               + **For a welink subscription**, the endpoint is a a WeLink group account.
+        :param pulumi.Input[pulumi.InputType['SubscriptionExtensionArgs']] extension: Specifies the extension configurations.
+               The extension structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, **email**,
+               **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+               **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
@@ -372,7 +471,7 @@ class Subscription(pulumi.CustomResource):
 
         ## Import
 
-        SMN subscription can be imported using the `id` (subscription urn), e.g.
+        SMN subscription can be imported using the `id` (subscription urn), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Smn/subscription:Subscription subscription_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1:a2aa5a1f66df494184f4e108398de1a6
@@ -394,6 +493,7 @@ class Subscription(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  endpoint: Optional[pulumi.Input[str]] = None,
+                 extension: Optional[pulumi.Input[pulumi.InputType['SubscriptionExtensionArgs']]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  remark: Optional[pulumi.Input[str]] = None,
@@ -410,6 +510,7 @@ class Subscription(pulumi.CustomResource):
             if endpoint is None and not opts.urn:
                 raise TypeError("Missing required property 'endpoint'")
             __props__.__dict__["endpoint"] = endpoint
+            __props__.__dict__["extension"] = extension
             if protocol is None and not opts.urn:
                 raise TypeError("Missing required property 'protocol'")
             __props__.__dict__["protocol"] = protocol
@@ -418,6 +519,7 @@ class Subscription(pulumi.CustomResource):
             if topic_urn is None and not opts.urn:
                 raise TypeError("Missing required property 'topic_urn'")
             __props__.__dict__["topic_urn"] = topic_urn
+            __props__.__dict__["filter_policies"] = None
             __props__.__dict__["owner"] = None
             __props__.__dict__["status"] = None
             __props__.__dict__["subscription_urn"] = None
@@ -432,6 +534,8 @@ class Subscription(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             endpoint: Optional[pulumi.Input[str]] = None,
+            extension: Optional[pulumi.Input[pulumi.InputType['SubscriptionExtensionArgs']]] = None,
+            filter_policies: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['SubscriptionFilterPolicyArgs']]]]] = None,
             owner: Optional[pulumi.Input[str]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
@@ -454,9 +558,21 @@ class Subscription(pulumi.CustomResource):
                the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
                + **For a functionstage subscription**, the endpoint is a function urn.
                + **For a functiongraph subscription**, the endpoint is a workflow ID.
+               + **For a callnotify subscription**, the endpoint is a phone number,
+               the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+               + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+               + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+               + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+               + **For a welink subscription**, the endpoint is a a WeLink group account.
+        :param pulumi.Input[pulumi.InputType['SubscriptionExtensionArgs']] extension: Specifies the extension configurations.
+               The extension structure is documented below.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['SubscriptionFilterPolicyArgs']]]] filter_policies: The message filter policies of a subscriber.
+               The filter_policies structure is documented below.
         :param pulumi.Input[str] owner: Project ID of the topic creator.
-        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, email, sms, http,
-               https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] protocol: Specifies the protocol of the message endpoint. Currently, **email**,
+               **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+               **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the SMN subscription resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] remark: Remark information. The remarks must be a UTF-8-coded character string
@@ -474,6 +590,8 @@ class Subscription(pulumi.CustomResource):
         __props__ = _SubscriptionState.__new__(_SubscriptionState)
 
         __props__.__dict__["endpoint"] = endpoint
+        __props__.__dict__["extension"] = extension
+        __props__.__dict__["filter_policies"] = filter_policies
         __props__.__dict__["owner"] = owner
         __props__.__dict__["protocol"] = protocol
         __props__.__dict__["region"] = region
@@ -495,8 +613,33 @@ class Subscription(pulumi.CustomResource):
         the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
         + **For a functionstage subscription**, the endpoint is a function urn.
         + **For a functiongraph subscription**, the endpoint is a workflow ID.
+        + **For a callnotify subscription**, the endpoint is a phone number,
+        the format is \\[+\\]\\[country code\\]\\[phone number\\], e.g. +86185xxxx0000.
+        + **For a dingding subscription**, the endpoint is an IP address of a DingTalk group chatbot.
+        + **For a wechat subscription**, the endpoint is an IP address of a WeChat group chatbot.
+        + **For a feishu subscription**, the endpoint is a an IP address of a Lark group chatbot.
+        + **For a welink subscription**, the endpoint is a a WeLink group account.
         """
         return pulumi.get(self, "endpoint")
+
+    @property
+    @pulumi.getter
+    def extension(self) -> pulumi.Output['outputs.SubscriptionExtension']:
+        """
+        Specifies the extension configurations.
+        The extension structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "extension")
+
+    @property
+    @pulumi.getter(name="filterPolicies")
+    def filter_policies(self) -> pulumi.Output[Sequence['outputs.SubscriptionFilterPolicy']]:
+        """
+        The message filter policies of a subscriber.
+        The filter_policies structure is documented below.
+        """
+        return pulumi.get(self, "filter_policies")
 
     @property
     @pulumi.getter
@@ -510,8 +653,9 @@ class Subscription(pulumi.CustomResource):
     @pulumi.getter
     def protocol(self) -> pulumi.Output[str]:
         """
-        Specifies the protocol of the message endpoint. Currently, email, sms, http,
-        https, functionstage and functiongraph are supported. Changing this parameter will create a new resource.
+        Specifies the protocol of the message endpoint. Currently, **email**,
+        **sms**, **http**, **https**, **functionstage**, **functiongraph**, **callnotify**, **wechat**, **dingding**,
+        **feishu** and **welink** are supported. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "protocol")
 

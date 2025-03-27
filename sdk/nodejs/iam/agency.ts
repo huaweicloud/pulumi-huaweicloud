@@ -6,7 +6,9 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages an agency resource within huawei cloud.
+ * Manages an agency resource within HuaweiCloud.
+ *
+ * > **NOTE:** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  * ### Delegate another HUAWEI CLOUD account to perform operations on your resources
@@ -29,7 +31,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Agencies can be imported using the `id`, e.g.
+ * Agencies can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Iam/agency:Agency agency 0b97661f9900f23f4fc2c00971ea4dc0

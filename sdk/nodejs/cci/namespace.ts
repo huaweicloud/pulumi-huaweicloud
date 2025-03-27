@@ -23,7 +23,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CCI Namespaces can be imported using their `name`, e.g.,
+ * CCI Namespaces can be imported using their `name`, e.g., bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cci/namespace:Namespace test terraform-test
@@ -79,9 +79,9 @@ export class Namespace extends pulumi.CustomResource {
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the unique name of the CCI namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-     * and must start and end with lowercase letters and digits.
+     * Specifies the unique name of the CCI namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
      * Changing this will create a new CCI namespace resource.
      */
     public readonly name!: pulumi.Output<string>;
@@ -113,7 +113,8 @@ export class Namespace extends pulumi.CustomResource {
      */
     public readonly type!: pulumi.Output<string>;
     /**
-     * Specifies the size of IP pool to warm-up.
+     * Specifies the size of IP pool to warm-up.  
+     * The valid value is range from `1` to `500`.
      * Changing this will create a new CCI namespace resource.
      */
     public readonly warmupPoolSize!: pulumi.Output<number>;
@@ -190,9 +191,9 @@ export interface NamespaceState {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the unique name of the CCI namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-     * and must start and end with lowercase letters and digits.
+     * Specifies the unique name of the CCI namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
      * Changing this will create a new CCI namespace resource.
      */
     name?: pulumi.Input<string>;
@@ -224,7 +225,8 @@ export interface NamespaceState {
      */
     type?: pulumi.Input<string>;
     /**
-     * Specifies the size of IP pool to warm-up.
+     * Specifies the size of IP pool to warm-up.  
+     * The valid value is range from `1` to `500`.
      * Changing this will create a new CCI namespace resource.
      */
     warmupPoolSize?: pulumi.Input<number>;
@@ -252,9 +254,9 @@ export interface NamespaceArgs {
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the unique name of the CCI namespace.
-     * This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens,
-     * and must start and end with lowercase letters and digits.
+     * Specifies the unique name of the CCI namespace.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
      * Changing this will create a new CCI namespace resource.
      */
     name?: pulumi.Input<string>;
@@ -282,7 +284,8 @@ export interface NamespaceArgs {
      */
     type: pulumi.Input<string>;
     /**
-     * Specifies the size of IP pool to warm-up.
+     * Specifies the size of IP pool to warm-up.  
+     * The valid value is range from `1` to `500`.
      * Changing this will create a new CCI namespace resource.
      */
     warmupPoolSize?: pulumi.Input<number>;

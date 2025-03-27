@@ -12,6 +12,7 @@ from .. import _utilities
 __all__ = [
     'BucketCorsRuleArgs',
     'BucketLifecycleRuleArgs',
+    'BucketLifecycleRuleAbortIncompleteMultipartUploadArgs',
     'BucketLifecycleRuleExpirationArgs',
     'BucketLifecycleRuleNoncurrentVersionExpirationArgs',
     'BucketLifecycleRuleNoncurrentVersionTransitionArgs',
@@ -121,6 +122,7 @@ class BucketLifecycleRuleArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[bool],
                  name: pulumi.Input[str],
+                 abort_incomplete_multipart_uploads: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleAbortIncompleteMultipartUploadArgs']]]] = None,
                  expirations: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleExpirationArgs']]]] = None,
                  noncurrent_version_expirations: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleNoncurrentVersionExpirationArgs']]]] = None,
                  noncurrent_version_transitions: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleNoncurrentVersionTransitionArgs']]]] = None,
@@ -129,6 +131,8 @@ class BucketLifecycleRuleArgs:
         """
         :param pulumi.Input[bool] enabled: Specifies lifecycle rule status.
         :param pulumi.Input[str] name: Unique identifier for lifecycle rules. The Rule Name contains a maximum of 255 characters.
+        :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleAbortIncompleteMultipartUploadArgs']]] abort_incomplete_multipart_uploads: Specifies a period when the not merged parts (fragments) in an
+               incomplete upload are automatically deleted. (documented below).
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleExpirationArgs']]] expirations: Specifies a period when objects that have been last updated are automatically
                deleted. (documented below).
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleNoncurrentVersionExpirationArgs']]] noncurrent_version_expirations: Specifies a period when noncurrent object versions are
@@ -138,11 +142,15 @@ class BucketLifecycleRuleArgs:
         :param pulumi.Input[str] prefix: Object key prefix identifying one or more objects to which the rule applies. If omitted,
                all objects in the bucket will be managed by the lifecycle rule. The prefix cannot start or end with a slash (/),
                cannot have consecutive slashes (/), and cannot contain the following special characters: \\:*?"<>|.
+               When configuring multiple `lifecycle_rule`, field `prefix` in multiple `lifecycle_rule` cannot have an inclusive
+               relationship.
         :param pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleTransitionArgs']]] transitions: Specifies a period when objects that have been last updated are automatically
                transitioned to `WARM` or `COLD` storage class (documented below).
         """
         pulumi.set(__self__, "enabled", enabled)
         pulumi.set(__self__, "name", name)
+        if abort_incomplete_multipart_uploads is not None:
+            pulumi.set(__self__, "abort_incomplete_multipart_uploads", abort_incomplete_multipart_uploads)
         if expirations is not None:
             pulumi.set(__self__, "expirations", expirations)
         if noncurrent_version_expirations is not None:
@@ -177,6 +185,19 @@ class BucketLifecycleRuleArgs:
     @name.setter
     def name(self, value: pulumi.Input[str]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="abortIncompleteMultipartUploads")
+    def abort_incomplete_multipart_uploads(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleAbortIncompleteMultipartUploadArgs']]]]:
+        """
+        Specifies a period when the not merged parts (fragments) in an
+        incomplete upload are automatically deleted. (documented below).
+        """
+        return pulumi.get(self, "abort_incomplete_multipart_uploads")
+
+    @abort_incomplete_multipart_uploads.setter
+    def abort_incomplete_multipart_uploads(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleAbortIncompleteMultipartUploadArgs']]]]):
+        pulumi.set(self, "abort_incomplete_multipart_uploads", value)
 
     @property
     @pulumi.getter
@@ -224,6 +245,8 @@ class BucketLifecycleRuleArgs:
         Object key prefix identifying one or more objects to which the rule applies. If omitted,
         all objects in the bucket will be managed by the lifecycle rule. The prefix cannot start or end with a slash (/),
         cannot have consecutive slashes (/), and cannot contain the following special characters: \\:*?"<>|.
+        When configuring multiple `lifecycle_rule`, field `prefix` in multiple `lifecycle_rule` cannot have an inclusive
+        relationship.
         """
         return pulumi.get(self, "prefix")
 
@@ -243,6 +266,32 @@ class BucketLifecycleRuleArgs:
     @transitions.setter
     def transitions(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['BucketLifecycleRuleTransitionArgs']]]]):
         pulumi.set(self, "transitions", value)
+
+
+@pulumi.input_type
+class BucketLifecycleRuleAbortIncompleteMultipartUploadArgs:
+    def __init__(__self__, *,
+                 days: pulumi.Input[int]):
+        """
+        :param pulumi.Input[int] days: Specifies the number of days since the initiation of an incomplete multipart upload that OBS
+               will wait before deleting the not merged parts (fragments) of the upload.
+               The valid value ranges from 1 to 2,147,483,647.
+        """
+        pulumi.set(__self__, "days", days)
+
+    @property
+    @pulumi.getter
+    def days(self) -> pulumi.Input[int]:
+        """
+        Specifies the number of days since the initiation of an incomplete multipart upload that OBS
+        will wait before deleting the not merged parts (fragments) of the upload.
+        The valid value ranges from 1 to 2,147,483,647.
+        """
+        return pulumi.get(self, "days")
+
+    @days.setter
+    def days(self, value: pulumi.Input[int]):
+        pulumi.set(self, "days", value)
 
 
 @pulumi.input_type
@@ -377,13 +426,17 @@ class BucketLifecycleRuleTransitionArgs:
 class BucketLoggingArgs:
     def __init__(__self__, *,
                  target_bucket: pulumi.Input[str],
+                 agency: Optional[pulumi.Input[str]] = None,
                  target_prefix: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] target_bucket: The name of the bucket that will receive the log objects. The acl policy of the
                target bucket should be `log-delivery-write`.
+        :param pulumi.Input[str] agency: Specifies the IAM agency of OBS cloud service.
         :param pulumi.Input[str] target_prefix: To specify a key prefix for log objects.
         """
         pulumi.set(__self__, "target_bucket", target_bucket)
+        if agency is not None:
+            pulumi.set(__self__, "agency", agency)
         if target_prefix is not None:
             pulumi.set(__self__, "target_prefix", target_prefix)
 
@@ -399,6 +452,18 @@ class BucketLoggingArgs:
     @target_bucket.setter
     def target_bucket(self, value: pulumi.Input[str]):
         pulumi.set(self, "target_bucket", value)
+
+    @property
+    @pulumi.getter
+    def agency(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IAM agency of OBS cloud service.
+        """
+        return pulumi.get(self, "agency")
+
+    @agency.setter
+    def agency(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "agency", value)
 
     @property
     @pulumi.getter(name="targetPrefix")

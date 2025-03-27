@@ -255,6 +255,8 @@ def get_file_system(id: Optional[str] = None,
                     status: Optional[str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetFileSystemResult:
     """
+    !> **WARNING:** It has been deprecated.
+
     Provides information about an Shared File System (SFS) within HuaweiCloud.
 
     ## Example Usage
@@ -312,6 +314,8 @@ def get_file_system_output(id: Optional[pulumi.Input[Optional[str]]] = None,
                            status: Optional[pulumi.Input[Optional[str]]] = None,
                            opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetFileSystemResult]:
     """
+    !> **WARNING:** It has been deprecated.
+
     Provides information about an Shared File System (SFS) within HuaweiCloud.
 
     ## Example Usage

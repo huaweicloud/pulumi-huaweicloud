@@ -14,12 +14,13 @@ __all__ = ['DnatRuleArgs', 'DnatRule']
 @pulumi.input_type
 class DnatRuleArgs:
     def __init__(__self__, *,
-                 floating_ip_id: pulumi.Input[str],
                  nat_gateway_id: pulumi.Input[str],
                  protocol: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  external_service_port: Optional[pulumi.Input[int]] = None,
                  external_service_port_range: Optional[pulumi.Input[str]] = None,
+                 floating_ip_id: Optional[pulumi.Input[str]] = None,
+                 global_eip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
                  internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
@@ -27,7 +28,6 @@ class DnatRuleArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a DnatRule resource.
-        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
         :param pulumi.Input[str] nat_gateway_id: Specifies the ID of the NAT gateway to which the DNAT rule belongs.  
                Changing this will create a new resource.
         :param pulumi.Input[str] protocol: Specifies the protocol type.  
@@ -43,6 +43,8 @@ class DnatRuleArgs:
                This parameter and `internal_service_port_range` are mapped **1:1** in sequence(, ranges must have the same length).
                The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
                Required if `internal_service_port_range` is set.
+        :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[str] global_eip_id: Specifies the ID of the global EIP connected by the DNAT rule.
         :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
                systems.
                Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
@@ -58,7 +60,6 @@ class DnatRuleArgs:
         :param pulumi.Input[str] region: Specifies the region where the DNAT rule is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
-        pulumi.set(__self__, "floating_ip_id", floating_ip_id)
         pulumi.set(__self__, "nat_gateway_id", nat_gateway_id)
         pulumi.set(__self__, "protocol", protocol)
         if description is not None:
@@ -67,6 +68,10 @@ class DnatRuleArgs:
             pulumi.set(__self__, "external_service_port", external_service_port)
         if external_service_port_range is not None:
             pulumi.set(__self__, "external_service_port_range", external_service_port_range)
+        if floating_ip_id is not None:
+            pulumi.set(__self__, "floating_ip_id", floating_ip_id)
+        if global_eip_id is not None:
+            pulumi.set(__self__, "global_eip_id", global_eip_id)
         if internal_service_port is not None:
             pulumi.set(__self__, "internal_service_port", internal_service_port)
         if internal_service_port_range is not None:
@@ -77,18 +82,6 @@ class DnatRuleArgs:
             pulumi.set(__self__, "private_ip", private_ip)
         if region is not None:
             pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter(name="floatingIpId")
-    def floating_ip_id(self) -> pulumi.Input[str]:
-        """
-        Specifies the ID of the floating IP address.
-        """
-        return pulumi.get(self, "floating_ip_id")
-
-    @floating_ip_id.setter
-    def floating_ip_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "floating_ip_id", value)
 
     @property
     @pulumi.getter(name="natGatewayId")
@@ -159,6 +152,30 @@ class DnatRuleArgs:
     @external_service_port_range.setter
     def external_service_port_range(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "external_service_port_range", value)
+
+    @property
+    @pulumi.getter(name="floatingIpId")
+    def floating_ip_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the floating IP address.
+        """
+        return pulumi.get(self, "floating_ip_id")
+
+    @floating_ip_id.setter
+    def floating_ip_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "floating_ip_id", value)
+
+    @property
+    @pulumi.getter(name="globalEipId")
+    def global_eip_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the global EIP connected by the DNAT rule.
+        """
+        return pulumi.get(self, "global_eip_id")
+
+    @global_eip_id.setter
+    def global_eip_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "global_eip_id", value)
 
     @property
     @pulumi.getter(name="internalServicePort")
@@ -239,6 +256,8 @@ class _DnatRuleState:
                  external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_address: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
+                 global_eip_address: Optional[pulumi.Input[str]] = None,
+                 global_eip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
                  internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
@@ -263,6 +282,8 @@ class _DnatRuleState:
                Required if `internal_service_port_range` is set.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
         :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[str] global_eip_address: The global EIP address connected by the DNAT rule.
+        :param pulumi.Input[str] global_eip_id: Specifies the ID of the global EIP connected by the DNAT rule.
         :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
                systems.
                Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
@@ -295,6 +316,10 @@ class _DnatRuleState:
             pulumi.set(__self__, "floating_ip_address", floating_ip_address)
         if floating_ip_id is not None:
             pulumi.set(__self__, "floating_ip_id", floating_ip_id)
+        if global_eip_address is not None:
+            pulumi.set(__self__, "global_eip_address", global_eip_address)
+        if global_eip_id is not None:
+            pulumi.set(__self__, "global_eip_id", global_eip_id)
         if internal_service_port is not None:
             pulumi.set(__self__, "internal_service_port", internal_service_port)
         if internal_service_port_range is not None:
@@ -391,6 +416,30 @@ class _DnatRuleState:
     @floating_ip_id.setter
     def floating_ip_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "floating_ip_id", value)
+
+    @property
+    @pulumi.getter(name="globalEipAddress")
+    def global_eip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        The global EIP address connected by the DNAT rule.
+        """
+        return pulumi.get(self, "global_eip_address")
+
+    @global_eip_address.setter
+    def global_eip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "global_eip_address", value)
+
+    @property
+    @pulumi.getter(name="globalEipId")
+    def global_eip_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the global EIP connected by the DNAT rule.
+        """
+        return pulumi.get(self, "global_eip_id")
+
+    @global_eip_id.setter
+    def global_eip_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "global_eip_id", value)
 
     @property
     @pulumi.getter(name="internalServicePort")
@@ -509,6 +558,7 @@ class DnatRule(pulumi.CustomResource):
                  external_service_port: Optional[pulumi.Input[int]] = None,
                  external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
+                 global_eip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
                  internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
@@ -521,23 +571,6 @@ class DnatRule(pulumi.CustomResource):
         Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
-        ### DNAT rule in Direct Connect scenario
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        gateway_id = config.require_object("gatewayId")
-        publicip_id = config.require_object("publicipId")
-        test = huaweicloud.nat.DnatRule("test",
-            nat_gateway_id=gateway_id,
-            floating_ip_id=publicip_id,
-            private_ip="10.0.0.12",
-            protocol="any",
-            internal_service_port=0,
-            external_service_port=0)
-        ```
 
         ## Import
 
@@ -561,6 +594,7 @@ class DnatRule(pulumi.CustomResource):
                The valid value for range is **1~65535** and the port ranges can only be concatenated with the `-` character.
                Required if `internal_service_port_range` is set.
         :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[str] global_eip_id: Specifies the ID of the global EIP connected by the DNAT rule.
         :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
                systems.
                Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
@@ -590,23 +624,6 @@ class DnatRule(pulumi.CustomResource):
         Manages a DNAT rule resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
-        ### DNAT rule in Direct Connect scenario
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        gateway_id = config.require_object("gatewayId")
-        publicip_id = config.require_object("publicipId")
-        test = huaweicloud.nat.DnatRule("test",
-            nat_gateway_id=gateway_id,
-            floating_ip_id=publicip_id,
-            private_ip="10.0.0.12",
-            protocol="any",
-            internal_service_port=0,
-            external_service_port=0)
-        ```
 
         ## Import
 
@@ -635,6 +652,7 @@ class DnatRule(pulumi.CustomResource):
                  external_service_port: Optional[pulumi.Input[int]] = None,
                  external_service_port_range: Optional[pulumi.Input[str]] = None,
                  floating_ip_id: Optional[pulumi.Input[str]] = None,
+                 global_eip_id: Optional[pulumi.Input[str]] = None,
                  internal_service_port: Optional[pulumi.Input[int]] = None,
                  internal_service_port_range: Optional[pulumi.Input[str]] = None,
                  nat_gateway_id: Optional[pulumi.Input[str]] = None,
@@ -654,9 +672,8 @@ class DnatRule(pulumi.CustomResource):
             __props__.__dict__["description"] = description
             __props__.__dict__["external_service_port"] = external_service_port
             __props__.__dict__["external_service_port_range"] = external_service_port_range
-            if floating_ip_id is None and not opts.urn:
-                raise TypeError("Missing required property 'floating_ip_id'")
             __props__.__dict__["floating_ip_id"] = floating_ip_id
+            __props__.__dict__["global_eip_id"] = global_eip_id
             __props__.__dict__["internal_service_port"] = internal_service_port
             __props__.__dict__["internal_service_port_range"] = internal_service_port_range
             if nat_gateway_id is None and not opts.urn:
@@ -670,6 +687,7 @@ class DnatRule(pulumi.CustomResource):
             __props__.__dict__["region"] = region
             __props__.__dict__["created_at"] = None
             __props__.__dict__["floating_ip_address"] = None
+            __props__.__dict__["global_eip_address"] = None
             __props__.__dict__["status"] = None
         super(DnatRule, __self__).__init__(
             'huaweicloud:Nat/dnatRule:DnatRule',
@@ -687,6 +705,8 @@ class DnatRule(pulumi.CustomResource):
             external_service_port_range: Optional[pulumi.Input[str]] = None,
             floating_ip_address: Optional[pulumi.Input[str]] = None,
             floating_ip_id: Optional[pulumi.Input[str]] = None,
+            global_eip_address: Optional[pulumi.Input[str]] = None,
+            global_eip_id: Optional[pulumi.Input[str]] = None,
             internal_service_port: Optional[pulumi.Input[int]] = None,
             internal_service_port_range: Optional[pulumi.Input[str]] = None,
             nat_gateway_id: Optional[pulumi.Input[str]] = None,
@@ -716,6 +736,8 @@ class DnatRule(pulumi.CustomResource):
                Required if `internal_service_port_range` is set.
         :param pulumi.Input[str] floating_ip_address: The actual floating IP address.
         :param pulumi.Input[str] floating_ip_id: Specifies the ID of the floating IP address.
+        :param pulumi.Input[str] global_eip_address: The global EIP address connected by the DNAT rule.
+        :param pulumi.Input[str] global_eip_id: Specifies the ID of the global EIP connected by the DNAT rule.
         :param pulumi.Input[int] internal_service_port: Specifies port used by Floating IP provide services for external
                systems.
                Exactly one of `internal_service_port` and `internal_service_port_range` must be set.
@@ -746,6 +768,8 @@ class DnatRule(pulumi.CustomResource):
         __props__.__dict__["external_service_port_range"] = external_service_port_range
         __props__.__dict__["floating_ip_address"] = floating_ip_address
         __props__.__dict__["floating_ip_id"] = floating_ip_id
+        __props__.__dict__["global_eip_address"] = global_eip_address
+        __props__.__dict__["global_eip_id"] = global_eip_id
         __props__.__dict__["internal_service_port"] = internal_service_port
         __props__.__dict__["internal_service_port_range"] = internal_service_port_range
         __props__.__dict__["nat_gateway_id"] = nat_gateway_id
@@ -806,11 +830,27 @@ class DnatRule(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="floatingIpId")
-    def floating_ip_id(self) -> pulumi.Output[str]:
+    def floating_ip_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the ID of the floating IP address.
         """
         return pulumi.get(self, "floating_ip_id")
+
+    @property
+    @pulumi.getter(name="globalEipAddress")
+    def global_eip_address(self) -> pulumi.Output[str]:
+        """
+        The global EIP address connected by the DNAT rule.
+        """
+        return pulumi.get(self, "global_eip_address")
+
+    @property
+    @pulumi.getter(name="globalEipId")
+    def global_eip_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the ID of the global EIP connected by the DNAT rule.
+        """
+        return pulumi.get(self, "global_eip_id")
 
     @property
     @pulumi.getter(name="internalServicePort")
@@ -844,7 +884,7 @@ class DnatRule(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="portId")
-    def port_id(self) -> pulumi.Output[Optional[str]]:
+    def port_id(self) -> pulumi.Output[str]:
         """
         Specifies the port ID of network. This parameter is mandatory in VPC scenario.  
         Use Vpc.Port to get the port if just know a fixed IP addresses
@@ -854,7 +894,7 @@ class DnatRule(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="privateIp")
-    def private_ip(self) -> pulumi.Output[Optional[str]]:
+    def private_ip(self) -> pulumi.Output[str]:
         """
         Specifies the private IP address of a user. This parameter is mandatory in
         Direct Connect scenario.

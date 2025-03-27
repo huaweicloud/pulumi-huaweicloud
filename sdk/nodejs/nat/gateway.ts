@@ -2,12 +2,14 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
  * Manages a gateway resource of the **public** NAT within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Creating a postpaid NAT gateway
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -17,11 +19,34 @@ import * as utilities from "../utilities";
  * const gatewayName = config.requireObject("gatewayName");
  * const vpcId = config.requireObject("vpcId");
  * const networkId = config.requireObject("networkId");
+ * const gatewaySpecification = config.requireObject("gatewaySpecification");
  * const test = new huaweicloud.nat.Gateway("test", {
  *     description: "test for terraform",
- *     spec: "3",
+ *     spec: gatewaySpecification,
  *     vpcId: vpcId,
  *     subnetId: networkId,
+ * });
+ * ```
+ * ### Creating a prepaid NAT gateway
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const gatewayName = config.requireObject("gatewayName");
+ * const vpcId = config.requireObject("vpcId");
+ * const networkId = config.requireObject("networkId");
+ * const gatewaySpecification = config.requireObject("gatewaySpecification");
+ * const test = new huaweicloud.nat.Gateway("test", {
+ *     description: "test for terraform",
+ *     spec: gatewaySpecification,
+ *     vpcId: vpcId,
+ *     subnetId: networkId,
+ *     chargingMode: "prePaid",
+ *     periodUnit: "month",
+ *     period: 1,
+ *     autoRenew: "true",
  * });
  * ```
  *
@@ -30,8 +55,22 @@ import * as utilities from "../utilities";
  * NAT gateways can be imported using their `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
+ *  $ pulumi import huaweicloud:Nat/gateway:Gateway test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`charging_mode`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_nat_gateway" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  charging_mode, period_unit, period, auto_renew,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Gateway extends pulumi.CustomResource {
     /**
@@ -62,10 +101,39 @@ export class Gateway extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies whether auto-renew is enabled. This parameter is only valid when
+     * `chargingMode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * The order information of the NAT gateway.
+     * When the `chargingMode` is set to **prePaid**, this parameter is available.
+     */
+    public /*out*/ readonly billingInfo!: pulumi.Output<string>;
+    /**
+     * The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+     */
+    public /*out*/ readonly bpsMax!: pulumi.Output<number>;
+    /**
+     * Specifies the charging mode of the NAT gateway.
+     * The valid values are as follows:
+     * + **prePaid**: the yearly/monthly billing mode.
+     * + **postPaid**: the pay-per-use billing mode.
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * The creation time of the NAT gateway.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Specifies the description of the NAT gateway, which contain maximum of `512`
      * characters, and angle brackets (<) and (>) are not allowed.
      */
     public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
+     */
+    public /*out*/ readonly dnatRulesLimit!: pulumi.Output<number>;
     /**
      * Specifies the enterprise project ID of the NAT gateway.  
      * Changing this will create a new resource.
@@ -77,10 +145,44 @@ export class Gateway extends pulumi.CustomResource {
      */
     public readonly name!: pulumi.Output<string>;
     /**
+     * Specifies the IP address used for the NG port of the NAT gateway.
+     * The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+     * If not spacified, it will be automatically allocated.
+     * Changing this will creates a new resource.
+     */
+    public readonly ngportIpAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the charging period of the NAT gateway.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * Specifies the charging period unit of the NAT gateway.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
+    /**
+     * The number of packets that the NAT gateway can receive or send per second.
+     */
+    public /*out*/ readonly ppsMax!: pulumi.Output<number>;
+    /**
      * Specifies the region where the NAT gateway is located.  
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the session configuration of the NAT gateway.
+     * The sessionConf structure is documented below.
+     */
+    public readonly sessionConf!: pulumi.Output<outputs.Nat.GatewaySessionConf>;
+    /**
+     * The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
+     */
+    public /*out*/ readonly snatRulePublicIpLimit!: pulumi.Output<number>;
     /**
      * Specifies the specification of the NAT gateway. The valid values are as follows:
      * + **1**: Small type, which supports up to `10,000` SNAT connections.
@@ -100,7 +202,7 @@ export class Gateway extends pulumi.CustomResource {
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
-     * Specifies the key/value pairs to associate with the NAT geteway.
+     * Specifies the key/value pairs to associate with the NAT gateway.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
@@ -122,10 +224,22 @@ export class Gateway extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as GatewayState | undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["billingInfo"] = state ? state.billingInfo : undefined;
+            resourceInputs["bpsMax"] = state ? state.bpsMax : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
+            resourceInputs["dnatRulesLimit"] = state ? state.dnatRulesLimit : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["ngportIpAddress"] = state ? state.ngportIpAddress : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["ppsMax"] = state ? state.ppsMax : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["sessionConf"] = state ? state.sessionConf : undefined;
+            resourceInputs["snatRulePublicIpLimit"] = state ? state.snatRulePublicIpLimit : undefined;
             resourceInputs["spec"] = state ? state.spec : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
@@ -142,14 +256,26 @@ export class Gateway extends pulumi.CustomResource {
             if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["ngportIpAddress"] = args ? args.ngportIpAddress : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["sessionConf"] = args ? args.sessionConf : undefined;
             resourceInputs["spec"] = args ? args.spec : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["billingInfo"] = undefined /*out*/;
+            resourceInputs["bpsMax"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["dnatRulesLimit"] = undefined /*out*/;
+            resourceInputs["ppsMax"] = undefined /*out*/;
+            resourceInputs["snatRulePublicIpLimit"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -162,10 +288,39 @@ export class Gateway extends pulumi.CustomResource {
  */
 export interface GatewayState {
     /**
+     * Specifies whether auto-renew is enabled. This parameter is only valid when
+     * `chargingMode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * The order information of the NAT gateway.
+     * When the `chargingMode` is set to **prePaid**, this parameter is available.
+     */
+    billingInfo?: pulumi.Input<string>;
+    /**
+     * The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+     */
+    bpsMax?: pulumi.Input<number>;
+    /**
+     * Specifies the charging mode of the NAT gateway.
+     * The valid values are as follows:
+     * + **prePaid**: the yearly/monthly billing mode.
+     * + **postPaid**: the pay-per-use billing mode.
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * The creation time of the NAT gateway.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Specifies the description of the NAT gateway, which contain maximum of `512`
      * characters, and angle brackets (<) and (>) are not allowed.
      */
     description?: pulumi.Input<string>;
+    /**
+     * The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
+     */
+    dnatRulesLimit?: pulumi.Input<number>;
     /**
      * Specifies the enterprise project ID of the NAT gateway.  
      * Changing this will create a new resource.
@@ -177,10 +332,44 @@ export interface GatewayState {
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the IP address used for the NG port of the NAT gateway.
+     * The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+     * If not spacified, it will be automatically allocated.
+     * Changing this will creates a new resource.
+     */
+    ngportIpAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the NAT gateway.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the NAT gateway.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * The number of packets that the NAT gateway can receive or send per second.
+     */
+    ppsMax?: pulumi.Input<number>;
+    /**
      * Specifies the region where the NAT gateway is located.  
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the session configuration of the NAT gateway.
+     * The sessionConf structure is documented below.
+     */
+    sessionConf?: pulumi.Input<inputs.Nat.GatewaySessionConf>;
+    /**
+     * The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
+     */
+    snatRulePublicIpLimit?: pulumi.Input<number>;
     /**
      * Specifies the specification of the NAT gateway. The valid values are as follows:
      * + **1**: Small type, which supports up to `10,000` SNAT connections.
@@ -200,7 +389,7 @@ export interface GatewayState {
      */
     subnetId?: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the NAT geteway.
+     * Specifies the key/value pairs to associate with the NAT gateway.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -214,6 +403,18 @@ export interface GatewayState {
  * The set of arguments for constructing a Gateway resource.
  */
 export interface GatewayArgs {
+    /**
+     * Specifies whether auto-renew is enabled. This parameter is only valid when
+     * `chargingMode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * Specifies the charging mode of the NAT gateway.
+     * The valid values are as follows:
+     * + **prePaid**: the yearly/monthly billing mode.
+     * + **postPaid**: the pay-per-use billing mode.
+     */
+    chargingMode?: pulumi.Input<string>;
     /**
      * Specifies the description of the NAT gateway, which contain maximum of `512`
      * characters, and angle brackets (<) and (>) are not allowed.
@@ -230,10 +431,36 @@ export interface GatewayArgs {
      */
     name?: pulumi.Input<string>;
     /**
+     * Specifies the IP address used for the NG port of the NAT gateway.
+     * The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+     * If not spacified, it will be automatically allocated.
+     * Changing this will creates a new resource.
+     */
+    ngportIpAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the charging period of the NAT gateway.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+     * This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * Specifies the charging period unit of the NAT gateway.
+     * Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+     * Changing this will create a new resource.
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
      * Specifies the region where the NAT gateway is located.  
      * If omitted, the provider-level region will be used. Changing this will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the session configuration of the NAT gateway.
+     * The sessionConf structure is documented below.
+     */
+    sessionConf?: pulumi.Input<inputs.Nat.GatewaySessionConf>;
     /**
      * Specifies the specification of the NAT gateway. The valid values are as follows:
      * + **1**: Small type, which supports up to `10,000` SNAT connections.
@@ -249,7 +476,7 @@ export interface GatewayArgs {
      */
     subnetId: pulumi.Input<string>;
     /**
-     * Specifies the key/value pairs to associate with the NAT geteway.
+     * Specifies the key/value pairs to associate with the NAT gateway.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**

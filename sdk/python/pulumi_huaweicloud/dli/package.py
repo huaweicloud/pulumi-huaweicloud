@@ -14,16 +14,15 @@ __all__ = ['PackageArgs', 'Package']
 @pulumi.input_type
 class PackageArgs:
     def __init__(__self__, *,
-                 group_name: pulumi.Input[str],
                  object_path: pulumi.Input[str],
                  type: pulumi.Input[str],
+                 group_name: Optional[pulumi.Input[str]] = None,
                  is_async: Optional[pulumi.Input[bool]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Package resource.
-        :param pulumi.Input[str] group_name: Specifies the group name which the package belongs to.
-               Changing this parameter will delete the current package and upload a new package.
         :param pulumi.Input[str] object_path: Specifies the OBS storage path where the package is located.
                For example, `https://{bucket_name}.obs.{region}.myhuaweicloud.com/dli/packages/object_file.py`.
                Changing this parameter will delete the current package and upload a new package.
@@ -31,35 +30,29 @@ class PackageArgs:
                + **jar**: `.jar` or jar related files.
                + **pyFile**: `.py` or python related files.
                + **file**: Other user files.
+               + **modelFile**: User AI model files.
+        :param pulumi.Input[str] group_name: Specifies the group name which the package belongs to.
+               Changing this parameter will delete the current package and upload a new package.
         :param pulumi.Input[bool] is_async: Specifies whether to upload resource packages in asynchronous mode.
                The default value is **false**. Changing this parameter will delete the current package and upload a new package.
         :param pulumi.Input[str] owner: Specifies the name of the package owner. The owner must be IAM user.
         :param pulumi.Input[str] region: Specifies the region in which to upload packages.
                If omitted, the provider-level region will be used.
                Changing this parameter will delete the current package and upload a new package.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the package.
         """
-        pulumi.set(__self__, "group_name", group_name)
         pulumi.set(__self__, "object_path", object_path)
         pulumi.set(__self__, "type", type)
+        if group_name is not None:
+            pulumi.set(__self__, "group_name", group_name)
         if is_async is not None:
             pulumi.set(__self__, "is_async", is_async)
         if owner is not None:
             pulumi.set(__self__, "owner", owner)
         if region is not None:
             pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter(name="groupName")
-    def group_name(self) -> pulumi.Input[str]:
-        """
-        Specifies the group name which the package belongs to.
-        Changing this parameter will delete the current package and upload a new package.
-        """
-        return pulumi.get(self, "group_name")
-
-    @group_name.setter
-    def group_name(self, value: pulumi.Input[str]):
-        pulumi.set(self, "group_name", value)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="objectPath")
@@ -83,12 +76,26 @@ class PackageArgs:
         + **jar**: `.jar` or jar related files.
         + **pyFile**: `.py` or python related files.
         + **file**: Other user files.
+        + **modelFile**: User AI model files.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: pulumi.Input[str]):
         pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="groupName")
+    def group_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the group name which the package belongs to.
+        Changing this parameter will delete the current package and upload a new package.
+        """
+        return pulumi.get(self, "group_name")
+
+    @group_name.setter
+    def group_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "group_name", value)
 
     @property
     @pulumi.getter(name="isAsync")
@@ -129,6 +136,18 @@ class PackageArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the package.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _PackageState:
@@ -141,6 +160,7 @@ class _PackageState:
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  updated_at: Optional[pulumi.Input[str]] = None):
         """
@@ -159,11 +179,13 @@ class _PackageState:
                If omitted, the provider-level region will be used.
                Changing this parameter will delete the current package and upload a new package.
         :param pulumi.Input[str] status: Status of a package group to be uploaded.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the package.
         :param pulumi.Input[str] type: Specifies the package type.
                + **jar**: `.jar` or jar related files.
                + **pyFile**: `.py` or python related files.
                + **file**: Other user files.
-        :param pulumi.Input[str] updated_at: The last time when the package configuration update has complated.
+               + **modelFile**: User AI model files.
+        :param pulumi.Input[str] updated_at: The last time when the package configuration update has completed.
         """
         if created_at is not None:
             pulumi.set(__self__, "created_at", created_at)
@@ -181,6 +203,8 @@ class _PackageState:
             pulumi.set(__self__, "region", region)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if type is not None:
             pulumi.set(__self__, "type", type)
         if updated_at is not None:
@@ -290,12 +314,25 @@ class _PackageState:
 
     @property
     @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the package.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
+    @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the package type.
         + **jar**: `.jar` or jar related files.
         + **pyFile**: `.py` or python related files.
         + **file**: Other user files.
+        + **modelFile**: User AI model files.
         """
         return pulumi.get(self, "type")
 
@@ -307,7 +344,7 @@ class _PackageState:
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> Optional[pulumi.Input[str]]:
         """
-        The last time when the package configuration update has complated.
+        The last time when the package configuration update has completed.
         """
         return pulumi.get(self, "updated_at")
 
@@ -326,6 +363,7 @@ class Package(pulumi.CustomResource):
                  object_path: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
@@ -360,10 +398,12 @@ class Package(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to upload packages.
                If omitted, the provider-level region will be used.
                Changing this parameter will delete the current package and upload a new package.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the package.
         :param pulumi.Input[str] type: Specifies the package type.
                + **jar**: `.jar` or jar related files.
                + **pyFile**: `.py` or python related files.
                + **file**: Other user files.
+               + **modelFile**: User AI model files.
         """
         ...
     @overload
@@ -410,6 +450,7 @@ class Package(pulumi.CustomResource):
                  object_path: Optional[pulumi.Input[str]] = None,
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -420,8 +461,6 @@ class Package(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = PackageArgs.__new__(PackageArgs)
 
-            if group_name is None and not opts.urn:
-                raise TypeError("Missing required property 'group_name'")
             __props__.__dict__["group_name"] = group_name
             __props__.__dict__["is_async"] = is_async
             if object_path is None and not opts.urn:
@@ -429,6 +468,7 @@ class Package(pulumi.CustomResource):
             __props__.__dict__["object_path"] = object_path
             __props__.__dict__["owner"] = owner
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             if type is None and not opts.urn:
                 raise TypeError("Missing required property 'type'")
             __props__.__dict__["type"] = type
@@ -454,6 +494,7 @@ class Package(pulumi.CustomResource):
             owner: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             type: Optional[pulumi.Input[str]] = None,
             updated_at: Optional[pulumi.Input[str]] = None) -> 'Package':
         """
@@ -477,11 +518,13 @@ class Package(pulumi.CustomResource):
                If omitted, the provider-level region will be used.
                Changing this parameter will delete the current package and upload a new package.
         :param pulumi.Input[str] status: Status of a package group to be uploaded.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the package.
         :param pulumi.Input[str] type: Specifies the package type.
                + **jar**: `.jar` or jar related files.
                + **pyFile**: `.py` or python related files.
                + **file**: Other user files.
-        :param pulumi.Input[str] updated_at: The last time when the package configuration update has complated.
+               + **modelFile**: User AI model files.
+        :param pulumi.Input[str] updated_at: The last time when the package configuration update has completed.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -495,6 +538,7 @@ class Package(pulumi.CustomResource):
         __props__.__dict__["owner"] = owner
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["type"] = type
         __props__.__dict__["updated_at"] = updated_at
         return Package(resource_name, opts=opts, __props__=__props__)
@@ -509,7 +553,7 @@ class Package(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="groupName")
-    def group_name(self) -> pulumi.Output[str]:
+    def group_name(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the group name which the package belongs to.
         Changing this parameter will delete the current package and upload a new package.
@@ -571,12 +615,21 @@ class Package(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the package.
+        """
+        return pulumi.get(self, "tags")
+
+    @property
+    @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
         Specifies the package type.
         + **jar**: `.jar` or jar related files.
         + **pyFile**: `.py` or python related files.
         + **file**: Other user files.
+        + **modelFile**: User AI model files.
         """
         return pulumi.get(self, "type")
 
@@ -584,7 +637,7 @@ class Package(pulumi.CustomResource):
     @pulumi.getter(name="updatedAt")
     def updated_at(self) -> pulumi.Output[str]:
         """
-        The last time when the package configuration update has complated.
+        The last time when the package configuration update has completed.
         """
         return pulumi.get(self, "updated_at")
 

@@ -17,26 +17,40 @@ class RecordCallbackArgs:
                  domain_name: pulumi.Input[str],
                  types: pulumi.Input[Sequence[pulumi.Input[str]]],
                  url: pulumi.Input[str],
-                 region: Optional[pulumi.Input[str]] = None):
+                 key: Optional[pulumi.Input[str]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 sign_type: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a RecordCallback resource.
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications. The options are as follows:
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications.
+               The valid values are as follows:
                + **RECORD_NEW_FILE_START**: Recording started.
                + **RECORD_FILE_COMPLETE**: Recording file generated.
                + **RECORD_OVER**: Recording completed.
                + **RECORD_FAILED**: Recording failed.
         :param pulumi.Input[str] url: Specifies the callback URL for sending recording notifications, which must start with
                `http://` or `https://`, and cannot contain message headers or parameters.
+        :param pulumi.Input[str] key: Specifies the callback key, which is used for authentication. This parameter is configured
+               to protect user data security. The value can only contain letters and digits.
+               The length cannot be less than `32` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] sign_type: Specifies the sign type.
+               The valid values are as follows:
+               + **HMACSHA256**
+               + **MD5**
         """
         pulumi.set(__self__, "domain_name", domain_name)
         pulumi.set(__self__, "types", types)
         pulumi.set(__self__, "url", url)
+        if key is not None:
+            pulumi.set(__self__, "key", key)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if sign_type is not None:
+            pulumi.set(__self__, "sign_type", sign_type)
 
     @property
     @pulumi.getter(name="domainName")
@@ -55,7 +69,8 @@ class RecordCallbackArgs:
     @pulumi.getter
     def types(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        Specifies the types of recording notifications. The options are as follows:
+        Specifies the types of recording notifications.
+        The valid values are as follows:
         + **RECORD_NEW_FILE_START**: Recording started.
         + **RECORD_FILE_COMPLETE**: Recording file generated.
         + **RECORD_OVER**: Recording completed.
@@ -82,6 +97,20 @@ class RecordCallbackArgs:
 
     @property
     @pulumi.getter
+    def key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the callback key, which is used for authentication. This parameter is configured
+        to protect user data security. The value can only contain letters and digits.
+        The length cannot be less than `32` characters.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the resource.
@@ -93,21 +122,46 @@ class RecordCallbackArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="signType")
+    def sign_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the sign type.
+        The valid values are as follows:
+        + **HMACSHA256**
+        + **MD5**
+        """
+        return pulumi.get(self, "sign_type")
+
+    @sign_type.setter
+    def sign_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sign_type", value)
+
 
 @pulumi.input_type
 class _RecordCallbackState:
     def __init__(__self__, *,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sign_type: Optional[pulumi.Input[str]] = None,
                  types: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  url: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering RecordCallback resources.
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] key: Specifies the callback key, which is used for authentication. This parameter is configured
+               to protect user data security. The value can only contain letters and digits.
+               The length cannot be less than `32` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications. The options are as follows:
+        :param pulumi.Input[str] sign_type: Specifies the sign type.
+               The valid values are as follows:
+               + **HMACSHA256**
+               + **MD5**
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications.
+               The valid values are as follows:
                + **RECORD_NEW_FILE_START**: Recording started.
                + **RECORD_FILE_COMPLETE**: Recording file generated.
                + **RECORD_OVER**: Recording completed.
@@ -117,8 +171,12 @@ class _RecordCallbackState:
         """
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
+        if key is not None:
+            pulumi.set(__self__, "key", key)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if sign_type is not None:
+            pulumi.set(__self__, "sign_type", sign_type)
         if types is not None:
             pulumi.set(__self__, "types", types)
         if url is not None:
@@ -139,6 +197,20 @@ class _RecordCallbackState:
 
     @property
     @pulumi.getter
+    def key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the callback key, which is used for authentication. This parameter is configured
+        to protect user data security. The value can only contain letters and digits.
+        The length cannot be less than `32` characters.
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the resource.
@@ -151,10 +223,26 @@ class _RecordCallbackState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="signType")
+    def sign_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the sign type.
+        The valid values are as follows:
+        + **HMACSHA256**
+        + **MD5**
+        """
+        return pulumi.get(self, "sign_type")
+
+    @sign_type.setter
+    def sign_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sign_type", value)
+
+    @property
     @pulumi.getter
     def types(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the types of recording notifications. The options are as follows:
+        Specifies the types of recording notifications.
+        The valid values are as follows:
         + **RECORD_NEW_FILE_START**: Recording started.
         + **RECORD_FILE_COMPLETE**: Recording file generated.
         + **RECORD_OVER**: Recording completed.
@@ -186,46 +274,56 @@ class RecordCallback(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sign_type: Optional[pulumi.Input[str]] = None,
                  types: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  url: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a callback configuration within HuaweiCloud Live.
+        Manages a callback configuration resource within HuaweiCloud.
 
         > Only one callback configuration can be created for an ingestion domain name.
 
         ## Example Usage
-        ### Create a callback configuration for an ingest domain name
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        ingest_domain_name = config.require_object("ingestDomainName")
-        ingest_domain = huaweicloud.live.Domain("ingestDomain", type="push")
-        callback = huaweicloud.live.RecordCallback("callback",
-            domain_name=ingest_domain_name,
-            url="http://mycallback.com.cn/record_notify",
-            types=["RECORD_NEW_FILE_START"])
-        ```
 
         ## Import
 
-        Callback configurations can be imported using the `id`, e.g.
+        The record callback resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test 55534eaa-533a-419d-9b40-ec427ea7195a
+         $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`key`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_record_callback" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         key,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] key: Specifies the callback key, which is used for authentication. This parameter is configured
+               to protect user data security. The value can only contain letters and digits.
+               The length cannot be less than `32` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications. The options are as follows:
+        :param pulumi.Input[str] sign_type: Specifies the sign type.
+               The valid values are as follows:
+               + **HMACSHA256**
+               + **MD5**
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications.
+               The valid values are as follows:
                + **RECORD_NEW_FILE_START**: Recording started.
                + **RECORD_FILE_COMPLETE**: Recording file generated.
                + **RECORD_OVER**: Recording completed.
@@ -240,33 +338,33 @@ class RecordCallback(pulumi.CustomResource):
                  args: RecordCallbackArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a callback configuration within HuaweiCloud Live.
+        Manages a callback configuration resource within HuaweiCloud.
 
         > Only one callback configuration can be created for an ingestion domain name.
 
         ## Example Usage
-        ### Create a callback configuration for an ingest domain name
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        ingest_domain_name = config.require_object("ingestDomainName")
-        ingest_domain = huaweicloud.live.Domain("ingestDomain", type="push")
-        callback = huaweicloud.live.RecordCallback("callback",
-            domain_name=ingest_domain_name,
-            url="http://mycallback.com.cn/record_notify",
-            types=["RECORD_NEW_FILE_START"])
-        ```
 
         ## Import
 
-        Callback configurations can be imported using the `id`, e.g.
+        The record callback resource can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test 55534eaa-533a-419d-9b40-ec427ea7195a
+         $ pulumi import huaweicloud:Live/recordCallback:RecordCallback test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`key`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_record_callback" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         key,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param RecordCallbackArgs args: The arguments to use to populate this resource's properties.
@@ -284,7 +382,9 @@ class RecordCallback(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 sign_type: Optional[pulumi.Input[str]] = None,
                  types: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  url: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -299,7 +399,9 @@ class RecordCallback(pulumi.CustomResource):
             if domain_name is None and not opts.urn:
                 raise TypeError("Missing required property 'domain_name'")
             __props__.__dict__["domain_name"] = domain_name
+            __props__.__dict__["key"] = key
             __props__.__dict__["region"] = region
+            __props__.__dict__["sign_type"] = sign_type
             if types is None and not opts.urn:
                 raise TypeError("Missing required property 'types'")
             __props__.__dict__["types"] = types
@@ -317,7 +419,9 @@ class RecordCallback(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             domain_name: Optional[pulumi.Input[str]] = None,
+            key: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            sign_type: Optional[pulumi.Input[str]] = None,
             types: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             url: Optional[pulumi.Input[str]] = None) -> 'RecordCallback':
         """
@@ -329,9 +433,17 @@ class RecordCallback(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] domain_name: Specifies the ingest domain name.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] key: Specifies the callback key, which is used for authentication. This parameter is configured
+               to protect user data security. The value can only contain letters and digits.
+               The length cannot be less than `32` characters.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications. The options are as follows:
+        :param pulumi.Input[str] sign_type: Specifies the sign type.
+               The valid values are as follows:
+               + **HMACSHA256**
+               + **MD5**
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] types: Specifies the types of recording notifications.
+               The valid values are as follows:
                + **RECORD_NEW_FILE_START**: Recording started.
                + **RECORD_FILE_COMPLETE**: Recording file generated.
                + **RECORD_OVER**: Recording completed.
@@ -344,7 +456,9 @@ class RecordCallback(pulumi.CustomResource):
         __props__ = _RecordCallbackState.__new__(_RecordCallbackState)
 
         __props__.__dict__["domain_name"] = domain_name
+        __props__.__dict__["key"] = key
         __props__.__dict__["region"] = region
+        __props__.__dict__["sign_type"] = sign_type
         __props__.__dict__["types"] = types
         __props__.__dict__["url"] = url
         return RecordCallback(resource_name, opts=opts, __props__=__props__)
@@ -360,6 +474,16 @@ class RecordCallback(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def key(self) -> pulumi.Output[str]:
+        """
+        Specifies the callback key, which is used for authentication. This parameter is configured
+        to protect user data security. The value can only contain letters and digits.
+        The length cannot be less than `32` characters.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
         Specifies the region in which to create the resource.
@@ -368,10 +492,22 @@ class RecordCallback(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="signType")
+    def sign_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the sign type.
+        The valid values are as follows:
+        + **HMACSHA256**
+        + **MD5**
+        """
+        return pulumi.get(self, "sign_type")
+
+    @property
     @pulumi.getter
     def types(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies the types of recording notifications. The options are as follows:
+        Specifies the types of recording notifications.
+        The valid values are as follows:
         + **RECORD_NEW_FILE_START**: Recording started.
         + **RECORD_FILE_COMPLETE**: Recording file generated.
         + **RECORD_OVER**: Recording completed.

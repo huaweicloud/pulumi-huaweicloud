@@ -11,15 +11,486 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'ActiveStandbyPoolHealthmonitor',
+    'ActiveStandbyPoolMember',
     'IpgroupIpList',
+    'L7policyFixedResponseConfig',
+    'L7policyFixedResponseConfigInsertHeadersConfig',
+    'L7policyFixedResponseConfigInsertHeadersConfigConfig',
+    'L7policyFixedResponseConfigRemoveHeadersConfig',
+    'L7policyFixedResponseConfigRemoveHeadersConfigConfig',
+    'L7policyFixedResponseConfigTrafficLimitConfig',
+    'L7policyRedirectPoolsConfig',
+    'L7policyRedirectPoolsExtendConfig',
+    'L7policyRedirectPoolsExtendConfigInsertHeadersConfig',
+    'L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig',
+    'L7policyRedirectPoolsExtendConfigRemoveHeadersConfig',
+    'L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfig',
+    'L7policyRedirectPoolsExtendConfigRewriteUrlConfig',
+    'L7policyRedirectPoolsExtendConfigTrafficLimitConfig',
+    'L7policyRedirectPoolsStickySessionConfig',
+    'L7policyRedirectUrlConfig',
+    'L7policyRedirectUrlConfigInsertHeadersConfig',
+    'L7policyRedirectUrlConfigInsertHeadersConfigConfig',
+    'L7policyRedirectUrlConfigRemoveHeadersConfig',
+    'L7policyRedirectUrlConfigRemoveHeadersConfigConfig',
+    'L7ruleCondition',
+    'ListenerPortRange',
     'PoolPersistence',
+    'SecurityPolicyListener',
+    'GetActiveStandbyPoolsPoolResult',
+    'GetActiveStandbyPoolsPoolHealthmonitorResult',
+    'GetActiveStandbyPoolsPoolListenerResult',
+    'GetActiveStandbyPoolsPoolLoadbalancerResult',
+    'GetActiveStandbyPoolsPoolMemberResult',
+    'GetAllMembersMemberResult',
+    'GetAllMembersMemberReasonResult',
+    'GetAllMembersMemberStatusResult',
+    'GetAllMembersMemberStatusReasonResult',
+    'GetAvailabilityZonesAvailabilityZoneResult',
+    'GetAvailabilityZonesAvailabilityZoneListResult',
+    'GetFeatureConfigurationsConfigResult',
     'GetFlavorsFlavorResult',
+    'GetIpgroupsIpgroupResult',
+    'GetIpgroupsIpgroupIpListResult',
+    'GetIpgroupsIpgroupListenerResult',
+    'GetL7policiesL7policyResult',
+    'GetL7policiesL7policyFixedResponseConfigResult',
+    'GetL7policiesL7policyRedirectPoolsExtendConfigResult',
+    'GetL7policiesL7policyRedirectPoolsExtendConfigRewriteUrlConfigResult',
+    'GetL7policiesL7policyRedirectUrlConfigResult',
+    'GetL7policiesL7policyRuleResult',
+    'GetL7rulesL7ruleResult',
+    'GetL7rulesL7ruleConditionResult',
+    'GetListenersListenerResult',
+    'GetLoadbalancerFeatureConfigurationsFeatureResult',
+    'GetLoadbalancersLoadbalancerResult',
+    'GetLogtanksLogtankResult',
+    'GetMonitorsMonitorResult',
     'GetPoolsPoolResult',
     'GetPoolsPoolListenerResult',
     'GetPoolsPoolLoadbalancerResult',
     'GetPoolsPoolMemberResult',
     'GetPoolsPoolPersistenceResult',
+    'GetSecurityPoliciesSecurityPolicyResult',
+    'GetSecurityPoliciesSecurityPolicyListenerResult',
 ]
+
+@pulumi.output_type
+class ActiveStandbyPoolHealthmonitor(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "maxRetries":
+            suggest = "max_retries"
+        elif key == "domainName":
+            suggest = "domain_name"
+        elif key == "expectedCodes":
+            suggest = "expected_codes"
+        elif key == "httpMethod":
+            suggest = "http_method"
+        elif key == "maxRetriesDown":
+            suggest = "max_retries_down"
+        elif key == "monitorPort":
+            suggest = "monitor_port"
+        elif key == "urlPath":
+            suggest = "url_path"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ActiveStandbyPoolHealthmonitor. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ActiveStandbyPoolHealthmonitor.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ActiveStandbyPoolHealthmonitor.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 delay: int,
+                 max_retries: int,
+                 timeout: int,
+                 type: str,
+                 domain_name: Optional[str] = None,
+                 expected_codes: Optional[str] = None,
+                 http_method: Optional[str] = None,
+                 id: Optional[str] = None,
+                 max_retries_down: Optional[int] = None,
+                 monitor_port: Optional[int] = None,
+                 name: Optional[str] = None,
+                 url_path: Optional[str] = None):
+        """
+        :param int delay: Specifies the interval between health checks, in seconds. The value range is from
+               `1` to `50`. Changing this parameter will create a new resource.
+        :param int max_retries: Specifies the number of consecutive health checks when the health check
+               result of a backend server changes from **OFFLINE** to **ONLINE**. The value range is from `1` to `10`. Changing
+               this parameter will create a new resource.
+        :param int timeout: Specifies the maximum time required for waiting for a response from the health
+               check, in seconds. It is recommended that you set the value less than that of parameter `delay`. The value range is
+               from `1` to `50`. Changing this parameter will create a new resource.
+        :param str type: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, and **HTTPS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        :param str domain_name: Specifies the domain name that HTTP requests are sent to during the health
+               check. The value can contain only digits, letters, hyphens (-), and periods (.) and must start with a digit or letter.
+               The value is left blank by default, indicating that the virtual IP address of the load balancer is used as the
+               destination address of HTTP requests. This parameter is available only when `type` is set to **HTTP**. The length
+               range of value is from `1` to `100`. Changing this parameter will create a new resource.
+        :param str expected_codes: Specifies the expected HTTP status code. This parameter will take
+               effect only when `type` is set to **HTTP** or **HTTPS**. The default value is 200. Multiple status codes can be
+               queried in the format of expected_codes=xxx&expected_codes=xxx. The length range of value is from `1` to `64`.
+               Value options:
+               + A specific value, for example, **200**
+               + A list of values that are separated with commas (,), for example, **200**, **202**
+               + A value range, for example, **200-204**
+        :param str http_method: Specifies the HTTP method. The value can be **GET**, **HEAD**, **POST**.
+               Default to **GET**. This parameter is available when `type` is set to **HTTP** or **HTTPS**.
+        :param str id: The health check ID.
+        :param int max_retries_down: Specifies the number of consecutive health checks when the health check
+               result of a backend server changes from ONLINE to OFFLINE. The value range is from `1` to `10`. Defaults to `3`.
+               Changing this parameter will create a new resource.
+        :param int monitor_port: Specifies the port used for the health check. If this parameter is left
+               blank, a port of the backend server will be used by default. The value range is from `1` to `65,535`. Changing this
+               parameter will create a new resource.
+        :param str name: Specifies the health check name. The length range of value is from `1` to `255`.
+               Changing this parameter will create a new resource.
+        :param str url_path: Specifies the HTTP request path for the health check. The value must start
+               with a slash (/), and the default value is /. The value can contain letters, digits, hyphens (-), slashes (/),
+               periods (.), percentage signs (%), question marks (?), pound signs (#), ampersand signs (&), and the extended character
+               set **_;~!()*[]@$^:',+**. The length range of value is from `1` to `80`. Changing this parameter will create a new
+               resource.
+        """
+        pulumi.set(__self__, "delay", delay)
+        pulumi.set(__self__, "max_retries", max_retries)
+        pulumi.set(__self__, "timeout", timeout)
+        pulumi.set(__self__, "type", type)
+        if domain_name is not None:
+            pulumi.set(__self__, "domain_name", domain_name)
+        if expected_codes is not None:
+            pulumi.set(__self__, "expected_codes", expected_codes)
+        if http_method is not None:
+            pulumi.set(__self__, "http_method", http_method)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if max_retries_down is not None:
+            pulumi.set(__self__, "max_retries_down", max_retries_down)
+        if monitor_port is not None:
+            pulumi.set(__self__, "monitor_port", monitor_port)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if url_path is not None:
+            pulumi.set(__self__, "url_path", url_path)
+
+    @property
+    @pulumi.getter
+    def delay(self) -> int:
+        """
+        Specifies the interval between health checks, in seconds. The value range is from
+        `1` to `50`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "delay")
+
+    @property
+    @pulumi.getter(name="maxRetries")
+    def max_retries(self) -> int:
+        """
+        Specifies the number of consecutive health checks when the health check
+        result of a backend server changes from **OFFLINE** to **ONLINE**. The value range is from `1` to `10`. Changing
+        this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_retries")
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> int:
+        """
+        Specifies the maximum time required for waiting for a response from the health
+        check, in seconds. It is recommended that you set the value less than that of parameter `delay`. The value range is
+        from `1` to `50`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "timeout")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+        **HTTP**, and **HTTPS**.
+        + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, or **HTTPS**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> Optional[str]:
+        """
+        Specifies the domain name that HTTP requests are sent to during the health
+        check. The value can contain only digits, letters, hyphens (-), and periods (.) and must start with a digit or letter.
+        The value is left blank by default, indicating that the virtual IP address of the load balancer is used as the
+        destination address of HTTP requests. This parameter is available only when `type` is set to **HTTP**. The length
+        range of value is from `1` to `100`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "domain_name")
+
+    @property
+    @pulumi.getter(name="expectedCodes")
+    def expected_codes(self) -> Optional[str]:
+        """
+        Specifies the expected HTTP status code. This parameter will take
+        effect only when `type` is set to **HTTP** or **HTTPS**. The default value is 200. Multiple status codes can be
+        queried in the format of expected_codes=xxx&expected_codes=xxx. The length range of value is from `1` to `64`.
+        Value options:
+        + A specific value, for example, **200**
+        + A list of values that are separated with commas (,), for example, **200**, **202**
+        + A value range, for example, **200-204**
+        """
+        return pulumi.get(self, "expected_codes")
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> Optional[str]:
+        """
+        Specifies the HTTP method. The value can be **GET**, **HEAD**, **POST**.
+        Default to **GET**. This parameter is available when `type` is set to **HTTP** or **HTTPS**.
+        """
+        return pulumi.get(self, "http_method")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> Optional[int]:
+        """
+        Specifies the number of consecutive health checks when the health check
+        result of a backend server changes from ONLINE to OFFLINE. The value range is from `1` to `10`. Defaults to `3`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @property
+    @pulumi.getter(name="monitorPort")
+    def monitor_port(self) -> Optional[int]:
+        """
+        Specifies the port used for the health check. If this parameter is left
+        blank, a port of the backend server will be used by default. The value range is from `1` to `65,535`. Changing this
+        parameter will create a new resource.
+        """
+        return pulumi.get(self, "monitor_port")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the health check name. The length range of value is from `1` to `255`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="urlPath")
+    def url_path(self) -> Optional[str]:
+        """
+        Specifies the HTTP request path for the health check. The value must start
+        with a slash (/), and the default value is /. The value can contain letters, digits, hyphens (-), slashes (/),
+        periods (.), percentage signs (%), question marks (?), pound signs (#), ampersand signs (&), and the extended character
+        set **_;~!()*[]@$^:',+**. The length range of value is from `1` to `80`. Changing this parameter will create a new
+        resource.
+        """
+        return pulumi.get(self, "url_path")
+
+
+@pulumi.output_type
+class ActiveStandbyPoolMember(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "instanceId":
+            suggest = "instance_id"
+        elif key == "ipVersion":
+            suggest = "ip_version"
+        elif key == "memberType":
+            suggest = "member_type"
+        elif key == "operatingStatus":
+            suggest = "operating_status"
+        elif key == "protocolPort":
+            suggest = "protocol_port"
+        elif key == "subnetId":
+            suggest = "subnet_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ActiveStandbyPoolMember. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ActiveStandbyPoolMember.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ActiveStandbyPoolMember.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 address: str,
+                 role: str,
+                 id: Optional[str] = None,
+                 instance_id: Optional[str] = None,
+                 ip_version: Optional[str] = None,
+                 member_type: Optional[str] = None,
+                 name: Optional[str] = None,
+                 operating_status: Optional[str] = None,
+                 protocol_port: Optional[int] = None,
+                 subnet_id: Optional[str] = None):
+        """
+        :param str address: Specifies the private IP address bound to the member.
+               + If `subnet_id` is left blank, IP as a Backend is enabled. In this case, the IP address must be an **IPv4** address.
+               + If `subnet_id` is not left blank, the IP address can be **IPv4** or **IPv6**. It must be in the subnet specified
+               by `subnet_id` and can only be bound to the primary NIC of the backend server.
+        :param str role: Specifies the type of the member. Value options:
+               + **master**: active backend server.
+               + **slave**: standby backend server.
+        :param str id: The health check ID.
+        :param str instance_id: The ID of the ECS used as the member.
+        :param str ip_version: Specifies the IP address version supported by active-standby pool.
+               The value can be **dualstack**, **v6**, or **v4**. Changing this parameter will create a new resource.
+        :param str member_type: The type of the member.
+        :param str name: Specifies the health check name. The length range of value is from `1` to `255`.
+               Changing this parameter will create a new resource.
+        :param str operating_status: The health status of the member.
+        :param int protocol_port: Specifies the port used by the member to receive requests. It is mandatory
+               if `any_port_enable` is **false**, and it does not take effect if `any_port_enable` is set to **true**. The value range
+               is from `1` to `65,535`. Changing this parameter will create a new resource.
+        :param str subnet_id: Specifies the ID of the IPv4 or IPv6 subnet where the member resides.
+               + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+               + If this parameter is not passed, IP as a Backend has been enabled for the load balancer. In this case, IP as backend
+               servers must use private IPv4 addresses, and the protocol of the active-standby pool must be **TCP**, **HTTP**, or
+               **HTTPS**.
+        """
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "role", role)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if instance_id is not None:
+            pulumi.set(__self__, "instance_id", instance_id)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
+        if member_type is not None:
+            pulumi.set(__self__, "member_type", member_type)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if operating_status is not None:
+            pulumi.set(__self__, "operating_status", operating_status)
+        if protocol_port is not None:
+            pulumi.set(__self__, "protocol_port", protocol_port)
+        if subnet_id is not None:
+            pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter
+    def address(self) -> str:
+        """
+        Specifies the private IP address bound to the member.
+        + If `subnet_id` is left blank, IP as a Backend is enabled. In this case, the IP address must be an **IPv4** address.
+        + If `subnet_id` is not left blank, the IP address can be **IPv4** or **IPv6**. It must be in the subnet specified
+        by `subnet_id` and can only be bound to the primary NIC of the backend server.
+        """
+        return pulumi.get(self, "address")
+
+    @property
+    @pulumi.getter
+    def role(self) -> str:
+        """
+        Specifies the type of the member. Value options:
+        + **master**: active backend server.
+        + **slave**: standby backend server.
+        """
+        return pulumi.get(self, "role")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> Optional[str]:
+        """
+        The ID of the ECS used as the member.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[str]:
+        """
+        Specifies the IP address version supported by active-standby pool.
+        The value can be **dualstack**, **v6**, or **v4**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="memberType")
+    def member_type(self) -> Optional[str]:
+        """
+        The type of the member.
+        """
+        return pulumi.get(self, "member_type")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the health check name. The length range of value is from `1` to `255`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> Optional[str]:
+        """
+        The health status of the member.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> Optional[int]:
+        """
+        Specifies the port used by the member to receive requests. It is mandatory
+        if `any_port_enable` is **false**, and it does not take effect if `any_port_enable` is set to **true**. The value range
+        is from `1` to `65,535`. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> Optional[str]:
+        """
+        Specifies the ID of the IPv4 or IPv6 subnet where the member resides.
+        + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+        + If this parameter is not passed, IP as a Backend has been enabled for the load balancer. In this case, IP as backend
+        servers must use private IPv4 addresses, and the protocol of the active-standby pool must be **TCP**, **HTTP**, or
+        **HTTPS**.
+        """
+        return pulumi.get(self, "subnet_id")
+
 
 @pulumi.output_type
 class IpgroupIpList(dict):
@@ -52,6 +523,1230 @@ class IpgroupIpList(dict):
 
 
 @pulumi.output_type
+class L7policyFixedResponseConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "statusCode":
+            suggest = "status_code"
+        elif key == "contentType":
+            suggest = "content_type"
+        elif key == "insertHeadersConfig":
+            suggest = "insert_headers_config"
+        elif key == "messageBody":
+            suggest = "message_body"
+        elif key == "removeHeadersConfig":
+            suggest = "remove_headers_config"
+        elif key == "trafficLimitConfig":
+            suggest = "traffic_limit_config"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyFixedResponseConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyFixedResponseConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyFixedResponseConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 status_code: str,
+                 content_type: Optional[str] = None,
+                 insert_headers_config: Optional['outputs.L7policyFixedResponseConfigInsertHeadersConfig'] = None,
+                 message_body: Optional[str] = None,
+                 remove_headers_config: Optional['outputs.L7policyFixedResponseConfigRemoveHeadersConfig'] = None,
+                 traffic_limit_config: Optional['outputs.L7policyFixedResponseConfigTrafficLimitConfig'] = None):
+        """
+        :param str status_code: The fixed HTTP status code configured in the forwarding rule. The value can be
+               any integer in the range of **200–299**, **400–499**, or **500–599**.
+        :param str content_type: The format of the response body. Value options: **text/plain**, **text/css**,
+               **text/html**, **application/javascript**, or **application/json**. Defaults to: **text/plain**.
+        :param 'L7policyFixedResponseConfigInsertHeadersConfigArgs' insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param str message_body: The content of the response message body.
+        :param 'L7policyFixedResponseConfigRemoveHeadersConfigArgs' remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        :param 'L7policyFixedResponseConfigTrafficLimitConfigArgs' traffic_limit_config: The traffic limit config of the policy.
+               The traffic_limit_config structure is documented below.
+        """
+        pulumi.set(__self__, "status_code", status_code)
+        if content_type is not None:
+            pulumi.set(__self__, "content_type", content_type)
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if message_body is not None:
+            pulumi.set(__self__, "message_body", message_body)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+        if traffic_limit_config is not None:
+            pulumi.set(__self__, "traffic_limit_config", traffic_limit_config)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> str:
+        """
+        The fixed HTTP status code configured in the forwarding rule. The value can be
+        any integer in the range of **200–299**, **400–499**, or **500–599**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> Optional[str]:
+        """
+        The format of the response body. Value options: **text/plain**, **text/css**,
+        **text/html**, **application/javascript**, or **application/json**. Defaults to: **text/plain**.
+        """
+        return pulumi.get(self, "content_type")
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional['outputs.L7policyFixedResponseConfigInsertHeadersConfig']:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @property
+    @pulumi.getter(name="messageBody")
+    def message_body(self) -> Optional[str]:
+        """
+        The content of the response message body.
+        """
+        return pulumi.get(self, "message_body")
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional['outputs.L7policyFixedResponseConfigRemoveHeadersConfig']:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+    @property
+    @pulumi.getter(name="trafficLimitConfig")
+    def traffic_limit_config(self) -> Optional['outputs.L7policyFixedResponseConfigTrafficLimitConfig']:
+        """
+        The traffic limit config of the policy.
+        The traffic_limit_config structure is documented below.
+        """
+        return pulumi.get(self, "traffic_limit_config")
+
+
+@pulumi.output_type
+class L7policyFixedResponseConfigInsertHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyFixedResponseConfigInsertHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyFixedResponseConfigInsertHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyFixedResponseConfigInsertHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyFixedResponseConfigInsertHeadersConfigConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "valueType":
+            suggest = "value_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyFixedResponseConfigInsertHeadersConfigConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyFixedResponseConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyFixedResponseConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 key: str,
+                 value: str,
+                 value_type: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param str value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param str value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> str:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+
+@pulumi.output_type
+class L7policyFixedResponseConfigRemoveHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyFixedResponseConfigRemoveHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyFixedResponseConfigRemoveHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyFixedResponseConfigRemoveHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyFixedResponseConfigRemoveHeadersConfigConfig(dict):
+    def __init__(__self__, *,
+                 key: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+
+@pulumi.output_type
+class L7policyFixedResponseConfigTrafficLimitConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "perSourceIpQps":
+            suggest = "per_source_ip_qps"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyFixedResponseConfigTrafficLimitConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyFixedResponseConfigTrafficLimitConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyFixedResponseConfigTrafficLimitConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 burst: Optional[int] = None,
+                 per_source_ip_qps: Optional[int] = None,
+                 qps: Optional[int] = None):
+        """
+        :param int burst: The qps buffer.  
+               The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+               returned, and requests that allow local burst size increases are supported.
+        :param int per_source_ip_qps: The single source qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+               If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+               If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+               supported, the value should be `0` or empty.
+        :param int qps: The overall qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        if burst is not None:
+            pulumi.set(__self__, "burst", burst)
+        if per_source_ip_qps is not None:
+            pulumi.set(__self__, "per_source_ip_qps", per_source_ip_qps)
+        if qps is not None:
+            pulumi.set(__self__, "qps", qps)
+
+    @property
+    @pulumi.getter
+    def burst(self) -> Optional[int]:
+        """
+        The qps buffer.  
+        The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+        returned, and requests that allow local burst size increases are supported.
+        """
+        return pulumi.get(self, "burst")
+
+    @property
+    @pulumi.getter(name="perSourceIpQps")
+    def per_source_ip_qps(self) -> Optional[int]:
+        """
+        The single source qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+        If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+        supported, the value should be `0` or empty.
+        """
+        return pulumi.get(self, "per_source_ip_qps")
+
+    @property
+    @pulumi.getter
+    def qps(self) -> Optional[int]:
+        """
+        The overall qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        return pulumi.get(self, "qps")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "poolId":
+            suggest = "pool_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectPoolsConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectPoolsConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectPoolsConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 pool_id: str,
+                 weight: Optional[int] = None):
+        """
+        :param str pool_id: The ID of the backend server group.
+        :param int weight: The weight of the backend server group.
+        """
+        pulumi.set(__self__, "pool_id", pool_id)
+        if weight is not None:
+            pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> str:
+        """
+        The ID of the backend server group.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @property
+    @pulumi.getter
+    def weight(self) -> Optional[int]:
+        """
+        The weight of the backend server group.
+        """
+        return pulumi.get(self, "weight")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "insertHeadersConfig":
+            suggest = "insert_headers_config"
+        elif key == "removeHeadersConfig":
+            suggest = "remove_headers_config"
+        elif key == "rewriteUrlConfig":
+            suggest = "rewrite_url_config"
+        elif key == "rewriteUrlEnabled":
+            suggest = "rewrite_url_enabled"
+        elif key == "trafficLimitConfig":
+            suggest = "traffic_limit_config"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectPoolsExtendConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectPoolsExtendConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectPoolsExtendConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 insert_headers_config: Optional['outputs.L7policyRedirectPoolsExtendConfigInsertHeadersConfig'] = None,
+                 remove_headers_config: Optional['outputs.L7policyRedirectPoolsExtendConfigRemoveHeadersConfig'] = None,
+                 rewrite_url_config: Optional['outputs.L7policyRedirectPoolsExtendConfigRewriteUrlConfig'] = None,
+                 rewrite_url_enabled: Optional[bool] = None,
+                 traffic_limit_config: Optional['outputs.L7policyRedirectPoolsExtendConfigTrafficLimitConfig'] = None):
+        """
+        :param 'L7policyRedirectPoolsExtendConfigInsertHeadersConfigArgs' insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param 'L7policyRedirectPoolsExtendConfigRemoveHeadersConfigArgs' remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        :param 'L7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs' rewrite_url_config: The rewrite url config. This parameter is mandatory when `rewrite_url_enabled`
+               is set to **true**.
+               The rewrite_url_config structure is documented below.
+        :param bool rewrite_url_enabled: Whether the rewrite url is enabled.
+        :param 'L7policyRedirectPoolsExtendConfigTrafficLimitConfigArgs' traffic_limit_config: The traffic limit config of the policy.
+               The traffic_limit_config structure is documented below.
+        """
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+        if rewrite_url_config is not None:
+            pulumi.set(__self__, "rewrite_url_config", rewrite_url_config)
+        if rewrite_url_enabled is not None:
+            pulumi.set(__self__, "rewrite_url_enabled", rewrite_url_enabled)
+        if traffic_limit_config is not None:
+            pulumi.set(__self__, "traffic_limit_config", traffic_limit_config)
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional['outputs.L7policyRedirectPoolsExtendConfigInsertHeadersConfig']:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional['outputs.L7policyRedirectPoolsExtendConfigRemoveHeadersConfig']:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+    @property
+    @pulumi.getter(name="rewriteUrlConfig")
+    def rewrite_url_config(self) -> Optional['outputs.L7policyRedirectPoolsExtendConfigRewriteUrlConfig']:
+        """
+        The rewrite url config. This parameter is mandatory when `rewrite_url_enabled`
+        is set to **true**.
+        The rewrite_url_config structure is documented below.
+        """
+        return pulumi.get(self, "rewrite_url_config")
+
+    @property
+    @pulumi.getter(name="rewriteUrlEnabled")
+    def rewrite_url_enabled(self) -> Optional[bool]:
+        """
+        Whether the rewrite url is enabled.
+        """
+        return pulumi.get(self, "rewrite_url_enabled")
+
+    @property
+    @pulumi.getter(name="trafficLimitConfig")
+    def traffic_limit_config(self) -> Optional['outputs.L7policyRedirectPoolsExtendConfigTrafficLimitConfig']:
+        """
+        The traffic limit config of the policy.
+        The traffic_limit_config structure is documented below.
+        """
+        return pulumi.get(self, "traffic_limit_config")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigInsertHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "valueType":
+            suggest = "value_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectPoolsExtendConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 key: str,
+                 value: str,
+                 value_type: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param str value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param str value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> str:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigRemoveHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigRemoveHeadersConfigConfig(dict):
+    def __init__(__self__, *,
+                 key: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigRewriteUrlConfig(dict):
+    def __init__(__self__, *,
+                 host: Optional[str] = None,
+                 path: Optional[str] = None,
+                 query: Optional[str] = None):
+        """
+        :param str host: The host name that requests are redirected to. The value can contain only letters,
+               digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+               that the host of the request will be used.
+        :param str path: The path that requests are redirected to. The value can contain only letters, digits,
+               and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+               Defaults to **${path}**, indicating that the path of the request will be used.
+        :param str query: The query string set in the URL for redirection. The value is case-sensitive and can
+               contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+               the query string of the request will be used.
+               For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+               If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+               URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        if host is not None:
+            pulumi.set(__self__, "host", host)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if query is not None:
+            pulumi.set(__self__, "query", query)
+
+    @property
+    @pulumi.getter
+    def host(self) -> Optional[str]:
+        """
+        The host name that requests are redirected to. The value can contain only letters,
+        digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+        that the host of the request will be used.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[str]:
+        """
+        The path that requests are redirected to. The value can contain only letters, digits,
+        and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+        Defaults to **${path}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "path")
+
+    @property
+    @pulumi.getter
+    def query(self) -> Optional[str]:
+        """
+        The query string set in the URL for redirection. The value is case-sensitive and can
+        contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+        the query string of the request will be used.
+        For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+        If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+        URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        return pulumi.get(self, "query")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsExtendConfigTrafficLimitConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "perSourceIpQps":
+            suggest = "per_source_ip_qps"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectPoolsExtendConfigTrafficLimitConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectPoolsExtendConfigTrafficLimitConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectPoolsExtendConfigTrafficLimitConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 burst: Optional[int] = None,
+                 per_source_ip_qps: Optional[int] = None,
+                 qps: Optional[int] = None):
+        """
+        :param int burst: The qps buffer.  
+               The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+               returned, and requests that allow local burst size increases are supported.
+        :param int per_source_ip_qps: The single source qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+               If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+               If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+               supported, the value should be `0` or empty.
+        :param int qps: The overall qps of the policy.  
+               The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        if burst is not None:
+            pulumi.set(__self__, "burst", burst)
+        if per_source_ip_qps is not None:
+            pulumi.set(__self__, "per_source_ip_qps", per_source_ip_qps)
+        if qps is not None:
+            pulumi.set(__self__, "qps", qps)
+
+    @property
+    @pulumi.getter
+    def burst(self) -> Optional[int]:
+        """
+        The qps buffer.  
+        The valid value is range form `0` to `100,000`. When qps exceeds the limit, 503 will not be
+        returned, and requests that allow local burst size increases are supported.
+        """
+        return pulumi.get(self, "burst")
+
+    @property
+    @pulumi.getter(name="perSourceIpQps")
+    def per_source_ip_qps(self) -> Optional[int]:
+        """
+        The single source qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        If the value of `qps` is not `0`, then the value of `per_source_ip_qps` must less than the value of `qps`.
+        If the `protocol` of the listener that the policy associated with is **QUIC**, then `per_source_ip_qps` is not
+        supported, the value should be `0` or empty.
+        """
+        return pulumi.get(self, "per_source_ip_qps")
+
+    @property
+    @pulumi.getter
+    def qps(self) -> Optional[int]:
+        """
+        The overall qps of the policy.  
+        The valid value is range form `0` to `100,000`, `0` indicates no limit.
+        """
+        return pulumi.get(self, "qps")
+
+
+@pulumi.output_type
+class L7policyRedirectPoolsStickySessionConfig(dict):
+    def __init__(__self__, *,
+                 enable: Optional[bool] = None,
+                 timeout: Optional[int] = None):
+        """
+        :param bool enable: Whether enable config session persistence between backend server groups.
+        :param int timeout: The timeout of the session persistence.
+        """
+        if enable is not None:
+            pulumi.set(__self__, "enable", enable)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
+
+    @property
+    @pulumi.getter
+    def enable(self) -> Optional[bool]:
+        """
+        Whether enable config session persistence between backend server groups.
+        """
+        return pulumi.get(self, "enable")
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> Optional[int]:
+        """
+        The timeout of the session persistence.
+        """
+        return pulumi.get(self, "timeout")
+
+
+@pulumi.output_type
+class L7policyRedirectUrlConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "statusCode":
+            suggest = "status_code"
+        elif key == "insertHeadersConfig":
+            suggest = "insert_headers_config"
+        elif key == "removeHeadersConfig":
+            suggest = "remove_headers_config"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectUrlConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectUrlConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectUrlConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 status_code: str,
+                 host: Optional[str] = None,
+                 insert_headers_config: Optional['outputs.L7policyRedirectUrlConfigInsertHeadersConfig'] = None,
+                 path: Optional[str] = None,
+                 port: Optional[str] = None,
+                 protocol: Optional[str] = None,
+                 query: Optional[str] = None,
+                 remove_headers_config: Optional['outputs.L7policyRedirectUrlConfigRemoveHeadersConfig'] = None):
+        """
+        :param str status_code: The fixed HTTP status code configured in the forwarding rule. The value can be
+               any integer in the range of **200–299**, **400–499**, or **500–599**.
+        :param str host: The host name that requests are redirected to. The value can contain only letters,
+               digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+               that the host of the request will be used.
+        :param 'L7policyRedirectUrlConfigInsertHeadersConfigArgs' insert_headers_config: The header parameters to be added.
+               The insert_headers_config structure is documented below.
+        :param str path: The path that requests are redirected to. The value can contain only letters, digits,
+               and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+               Defaults to **${path}**, indicating that the path of the request will be used.
+        :param str port: The  port that requests are redirected to. Defaults to **${port}**, indicating that
+               the port of the request will be used.
+        :param str protocol: The protocol for redirection. Value options: **HTTP**, **HTTPS**, **${protocol}**.
+               Defaults to **${protocol}**, indicating that the path of the request will be used.
+        :param str query: The query string set in the URL for redirection. The value is case-sensitive and can
+               contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+               the query string of the request will be used.
+               For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+               If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+               URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        :param 'L7policyRedirectUrlConfigRemoveHeadersConfigArgs' remove_headers_config: The header parameters to be removed.
+               The remove_headers_config structure is documented below.
+        """
+        pulumi.set(__self__, "status_code", status_code)
+        if host is not None:
+            pulumi.set(__self__, "host", host)
+        if insert_headers_config is not None:
+            pulumi.set(__self__, "insert_headers_config", insert_headers_config)
+        if path is not None:
+            pulumi.set(__self__, "path", path)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
+        if protocol is not None:
+            pulumi.set(__self__, "protocol", protocol)
+        if query is not None:
+            pulumi.set(__self__, "query", query)
+        if remove_headers_config is not None:
+            pulumi.set(__self__, "remove_headers_config", remove_headers_config)
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> str:
+        """
+        The fixed HTTP status code configured in the forwarding rule. The value can be
+        any integer in the range of **200–299**, **400–499**, or **500–599**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @property
+    @pulumi.getter
+    def host(self) -> Optional[str]:
+        """
+        The host name that requests are redirected to. The value can contain only letters,
+        digits, hyphens (-), and periods (.) and must start with a letter or digit. Defaults to **${host}**, indicating
+        that the host of the request will be used.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter(name="insertHeadersConfig")
+    def insert_headers_config(self) -> Optional['outputs.L7policyRedirectUrlConfigInsertHeadersConfig']:
+        """
+        The header parameters to be added.
+        The insert_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "insert_headers_config")
+
+    @property
+    @pulumi.getter
+    def path(self) -> Optional[str]:
+        """
+        The path that requests are redirected to. The value can contain only letters, digits,
+        and special characters _~';@^- %#&$.*+?,=!:|/()[]{} and must start with a slash (/).
+        Defaults to **${path}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "path")
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[str]:
+        """
+        The  port that requests are redirected to. Defaults to **${port}**, indicating that
+        the port of the request will be used.
+        """
+        return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> Optional[str]:
+        """
+        The protocol for redirection. Value options: **HTTP**, **HTTPS**, **${protocol}**.
+        Defaults to **${protocol}**, indicating that the path of the request will be used.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter
+    def query(self) -> Optional[str]:
+        """
+        The query string set in the URL for redirection. The value is case-sensitive and can
+        contain only letters, digits, and special characters !$&'()*+,-./:;=?@^_\\`. Defaults to **${query}**, indicating that
+        the query string of the request will be used.
+        For example, in the URL `https://www.xxx.com:8080/elb?type=loadbalancer`, **${query}** indicates **type=loadbalancer**.
+        If this parameter is set to **${query}&name=my_name**, the URL will be redirected to
+        URL `https://www.xxx.com:8080/elb?type=loadbalancer&name=my_name`.
+        """
+        return pulumi.get(self, "query")
+
+    @property
+    @pulumi.getter(name="removeHeadersConfig")
+    def remove_headers_config(self) -> Optional['outputs.L7policyRedirectUrlConfigRemoveHeadersConfig']:
+        """
+        The header parameters to be removed.
+        The remove_headers_config structure is documented below.
+        """
+        return pulumi.get(self, "remove_headers_config")
+
+
+@pulumi.output_type
+class L7policyRedirectUrlConfigInsertHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyRedirectUrlConfigInsertHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyRedirectUrlConfigInsertHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyRedirectUrlConfigInsertHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyRedirectUrlConfigInsertHeadersConfigConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "valueType":
+            suggest = "value_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in L7policyRedirectUrlConfigInsertHeadersConfigConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        L7policyRedirectUrlConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        L7policyRedirectUrlConfigInsertHeadersConfigConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 key: str,
+                 value: str,
+                 value_type: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        :param str value: The value of the parameter. The value can contain `1` to `128`, only printable
+               characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+               cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+               **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        :param str value_type: The value type of the parameter. Value options: **USER_DEFINED**,
+               **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+        pulumi.set(__self__, "value_type", value_type)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        The value of the parameter. The value can contain `1` to `128`, only printable
+        characters in the range of ASCII code value 32<=ch<=127, asterisks (*) and question marks (?) are allowed, and it
+        cannot start or end with a space characters. If the value of `value_type` is **SYSTEM_DEFINED**, the value options is:
+        **CLIENT-PORT**, **CLIENT-IP**, **ELB-PROTOCOL**, **ELB-ID**, **ELB-PORT**, **ELB-EIP**, **ELB-VIP**.
+        """
+        return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter(name="valueType")
+    def value_type(self) -> str:
+        """
+        The value type of the parameter. Value options: **USER_DEFINED**,
+        **REFERENCE_HEADER**, **SYSTEM_DEFINED**.
+        """
+        return pulumi.get(self, "value_type")
+
+
+@pulumi.output_type
+class L7policyRedirectUrlConfigRemoveHeadersConfig(dict):
+    def __init__(__self__, *,
+                 configs: Sequence['outputs.L7policyRedirectUrlConfigRemoveHeadersConfigConfig']):
+        """
+        :param Sequence['L7policyRedirectUrlConfigRemoveHeadersConfigConfigArgs'] configs: The list of request header parameters to be removed.
+               The remove_header_configs structure is documented below.
+        """
+        pulumi.set(__self__, "configs", configs)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Sequence['outputs.L7policyRedirectUrlConfigRemoveHeadersConfigConfig']:
+        """
+        The list of request header parameters to be removed.
+        The remove_header_configs structure is documented below.
+        """
+        return pulumi.get(self, "configs")
+
+
+@pulumi.output_type
+class L7policyRedirectUrlConfigRemoveHeadersConfigConfig(dict):
+    def __init__(__self__, *,
+                 key: str):
+        """
+        :param str key: The parameter name of the removed request header. The value can contain `1` to `40`
+               characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+               **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+               **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+               **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+               **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+               **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The parameter name of the removed request header. The value can contain `1` to `40`
+        characters, only a-z, digits, hyphens (-) and underscore (_) are allowed, and it can not be the following characters:
+        **connection**, **upgrade**, **content-length**, **transfer-encoding**, **keep-alive**, **te**, **host**, **cookie**,
+        **remoteip**, **authority**, **x-forwarded-host**, **x-forwarded-for**, **x-forwarded-for-port**,
+        **x-forwarded-tls-certificate-id**, **x-forwarded-tls-protocol**, **x-forwarded-tls-cipher**, **x-forwarded-elb-ip**,
+        **x-forwarded-port**, **x-forwarded-elb-id**, **x-forwarded-elb-vip**, **x-real-ip**, **x-forwarded-proto**,
+        **x-nuwa-trace-ne-in**, **x-nuwa-trace-ne-out**.
+        """
+        return pulumi.get(self, "key")
+
+
+@pulumi.output_type
+class L7ruleCondition(dict):
+    def __init__(__self__, *,
+                 value: str,
+                 key: Optional[str] = None):
+        """
+        :param str value: Specifies the value of the match item.
+               + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+               letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+               If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+               + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+               `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+               slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+               + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+               characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+               An asterisk can match zero or more characters, and a question mark can match 1 character.
+               + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+               and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+               backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+               and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+               more characters, and a question mark can match 1 character.
+               + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+               **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+               + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+               **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
+        :param str key: Specifies the key of match item.
+               + If `type` is set to **HOST_NAME**, **PATH**, **METHOD**, or **SOURCE_IP**, this parameter is left blank.
+               + If `type` is set to **HEADER**, it indicates the name of the HTTP header parameter. It can contain 1 to 40
+               characters, including letters, digits, hyphens (-), and underscores (_).
+               + If `type` is set to **QUERY_STRING**, it indicates the name of the query parameter. It is case-sensitive and can
+               contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>), backslashes (),
+               double quotation marks (" "), pound signs (#), ampersands (&), vertical bars (|), percent signs (%), and tildes (~)
+               are not supported.
+        """
+        pulumi.set(__self__, "value", value)
+        if key is not None:
+            pulumi.set(__self__, "key", key)
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the match item.
+        + If `type` is set to **HOST_NAME**, it indicates the domain name, which can contain 1 to 128 characters, including
+        letters, digits, hyphens (-), periods (.), and asterisks (), and must start with a letter, digit, or asterisk ().
+        If you want to use a wildcard domain name, enter an asterisk (*) as the leftmost label of the domain name.
+        + If `type` is set to **PATH**, it indicates the request path, which can contain 1 to 128 characters. If
+        `compare_type` is set to **STARTS_WITH** or **EQUAL_TO** for the forwarding rule, the value must start with a
+        slash (/) and can contain only letters, digits, and special characters _~';@^-%#&$.*+?,=!:|/()[]{}.
+        + If `type` is set to **HEADER**, it indicates the value of the HTTP header parameter. The value can contain 1 to 128
+        characters. Asterisks (*) and question marks (?)are allowed, but spaces and double quotation marks are not allowed.
+        An asterisk can match zero or more characters, and a question mark can match 1 character.
+        + If `type` is set to **QUERY_STRING**, it indicates the value of the query parameter. The value is case-sensitive
+        and can contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>),
+        backslashes (), double quotation marks (""), pound signs (#), ampersands (&), vertical bars (|), percent signs (%),
+        and tildes (~) are not supported. Asterisks (*)and question marks (?) are allowed. An asterisk can match zero or
+        more characters, and a question mark can match 1 character.
+        + If `type` is set to **METHOD**, it indicates the HTTP method. The value can be **GET**, **PUT**, **POST**,
+        **DELETE**, **PATCH**, **HEAD**, or **OPTIONS**.
+        + If `type` is set to **SOURCE_IP**, it indicates the source IP address of the request. The value is an **IPv4** or
+        **IPv6** CIDR block, for example, 192.168.0.2/32 or 2049::49/64.
+        """
+        return pulumi.get(self, "value")
+
+    @property
+    @pulumi.getter
+    def key(self) -> Optional[str]:
+        """
+        Specifies the key of match item.
+        + If `type` is set to **HOST_NAME**, **PATH**, **METHOD**, or **SOURCE_IP**, this parameter is left blank.
+        + If `type` is set to **HEADER**, it indicates the name of the HTTP header parameter. It can contain 1 to 40
+        characters, including letters, digits, hyphens (-), and underscores (_).
+        + If `type` is set to **QUERY_STRING**, it indicates the name of the query parameter. It is case-sensitive and can
+        contain 1 to 128 characters. Spaces, square brackets ([]), curly brackets ({}), angle brackets (<>), backslashes (),
+        double quotation marks (" "), pound signs (#), ampersands (&), vertical bars (|), percent signs (%), and tildes (~)
+        are not supported.
+        """
+        return pulumi.get(self, "key")
+
+
+@pulumi.output_type
+class ListenerPortRange(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "endPort":
+            suggest = "end_port"
+        elif key == "startPort":
+            suggest = "start_port"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ListenerPortRange. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ListenerPortRange.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ListenerPortRange.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 end_port: int,
+                 start_port: int):
+        """
+        :param int end_port: Specifies the end port. Changing this creates a new listener.
+        :param int start_port: Specifies the start port. Changing this creates a new listener.
+        """
+        pulumi.set(__self__, "end_port", end_port)
+        pulumi.set(__self__, "start_port", start_port)
+
+    @property
+    @pulumi.getter(name="endPort")
+    def end_port(self) -> int:
+        """
+        Specifies the end port. Changing this creates a new listener.
+        """
+        return pulumi.get(self, "end_port")
+
+    @property
+    @pulumi.getter(name="startPort")
+    def start_port(self) -> int:
+        """
+        Specifies the start port. Changing this creates a new listener.
+        """
+        return pulumi.get(self, "start_port")
+
+
+@pulumi.output_type
 class PoolPersistence(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -75,14 +1770,17 @@ class PoolPersistence(dict):
                  cookie_name: Optional[str] = None,
                  timeout: Optional[int] = None):
         """
-        :param str type: The type of persistence mode. The current specification supports SOURCE_IP,
-               HTTP_COOKIE, and APP_COOKIE.
-        :param str cookie_name: The name of the cookie if persistence mode is set appropriately. Required
-               if `type = APP_COOKIE`.
+        :param str type: Specifies the sticky session type. Value options: **SOURCE_IP**,
+               **HTTP_COOKIE**, and **APP_COOKIE**.
+        :param str cookie_name: Specifies the cookie name. The value can contain only letters, digits,
+               hyphens (-), underscores (_), and periods (.). It is required if `type` of `persistence` is set to **APP_COOKIE**.
         :param int timeout: Specifies the sticky session timeout duration in minutes. This parameter is
-               invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
-               + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
-               + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+               invalid when `type` is set to **APP_COOKIE**. The value range varies depending on the protocol of the backend server
+               group:
+               + When the protocol of the backend server group is **TCP** or **UDP**, the value ranges from `1` to `60`, and
+               defaults to `1`.
+               + When the protocol of the backend server group is **HTTP** or **HTTPS**, the value ranges from `1` to `1,440`,
+               and defaults to `1,440`.
         """
         pulumi.set(__self__, "type", type)
         if cookie_name is not None:
@@ -94,8 +1792,8 @@ class PoolPersistence(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        The type of persistence mode. The current specification supports SOURCE_IP,
-        HTTP_COOKIE, and APP_COOKIE.
+        Specifies the sticky session type. Value options: **SOURCE_IP**,
+        **HTTP_COOKIE**, and **APP_COOKIE**.
         """
         return pulumi.get(self, "type")
 
@@ -103,8 +1801,8 @@ class PoolPersistence(dict):
     @pulumi.getter(name="cookieName")
     def cookie_name(self) -> Optional[str]:
         """
-        The name of the cookie if persistence mode is set appropriately. Required
-        if `type = APP_COOKIE`.
+        Specifies the cookie name. The value can contain only letters, digits,
+        hyphens (-), underscores (_), and periods (.). It is required if `type` of `persistence` is set to **APP_COOKIE**.
         """
         return pulumi.get(self, "cookie_name")
 
@@ -113,11 +1811,1059 @@ class PoolPersistence(dict):
     def timeout(self) -> Optional[int]:
         """
         Specifies the sticky session timeout duration in minutes. This parameter is
-        invalid when type is set to APP_COOKIE. The value range varies depending on the protocol of the backend server group:
-        + When the protocol of the backend server group is TCP or UDP, the value ranges from 1 to 60.
-        + When the protocol of the backend server group is HTTP or HTTPS, the value ranges from 1 to 1440.
+        invalid when `type` is set to **APP_COOKIE**. The value range varies depending on the protocol of the backend server
+        group:
+        + When the protocol of the backend server group is **TCP** or **UDP**, the value ranges from `1` to `60`, and
+        defaults to `1`.
+        + When the protocol of the backend server group is **HTTP** or **HTTPS**, the value ranges from `1` to `1,440`,
+        and defaults to `1,440`.
         """
         return pulumi.get(self, "timeout")
+
+
+@pulumi.output_type
+class SecurityPolicyListener(dict):
+    def __init__(__self__, *,
+                 id: Optional[str] = None):
+        """
+        :param str id: The listener id.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The listener id.
+        """
+        return pulumi.get(self, "id")
+
+
+@pulumi.output_type
+class GetActiveStandbyPoolsPoolResult(dict):
+    def __init__(__self__, *,
+                 any_port_enable: bool,
+                 connection_drain_enabled: bool,
+                 connection_drain_timeout: int,
+                 description: str,
+                 healthmonitors: Sequence['outputs.GetActiveStandbyPoolsPoolHealthmonitorResult'],
+                 id: str,
+                 listeners: Sequence['outputs.GetActiveStandbyPoolsPoolListenerResult'],
+                 loadbalancers: Sequence['outputs.GetActiveStandbyPoolsPoolLoadbalancerResult'],
+                 members: Sequence['outputs.GetActiveStandbyPoolsPoolMemberResult'],
+                 name: str,
+                 protocol: str,
+                 type: str,
+                 vpc_id: str):
+        """
+        :param bool any_port_enable: Whether to enable Forward to same Port for a pool.
+        :param bool connection_drain_enabled: Whether to enable delayed logout.
+        :param int connection_drain_timeout: The timeout of the delayed logout in seconds.
+        :param str description: Specifies supplementary information about the active-standby pool.
+        :param Sequence['GetActiveStandbyPoolsPoolHealthmonitorArgs'] healthmonitors: The health check configured for the active-standby pool.
+               The healthmonitor structure is documented below.
+        :param str id: The health check ID.
+        :param Sequence['GetActiveStandbyPoolsPoolListenerArgs'] listeners: The IDs of the listeners with which the active-standby pool is associated.
+               The listeners structure is documented below.
+        :param Sequence['GetActiveStandbyPoolsPoolLoadbalancerArgs'] loadbalancers: The IDs of the load balancers with which the active-standby pool is associated.
+               The loadbalancers structure is documented below.
+        :param Sequence['GetActiveStandbyPoolsPoolMemberArgs'] members: The backend servers in the active-standby pool.
+               The members structure is documented below.
+        :param str name: Specifies the name of the active-standby pool.
+        :param str protocol: Specifies the protocol used by the active-standby pool to receive requests from the
+               load balancer. Value options: **TCP**, **UDP**, **QUIC** or **TLS**.
+        :param str type: Specifies the type of the active-standby pool.
+               The valid values are as follows:
+               + **instance**: Any type of backend servers can be added.
+               + **ip**: Only IP as backend servers can be added.
+        :param str vpc_id: Specifies the ID of the VPC where the active-standby pool works.
+        """
+        pulumi.set(__self__, "any_port_enable", any_port_enable)
+        pulumi.set(__self__, "connection_drain_enabled", connection_drain_enabled)
+        pulumi.set(__self__, "connection_drain_timeout", connection_drain_timeout)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "healthmonitors", healthmonitors)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "listeners", listeners)
+        pulumi.set(__self__, "loadbalancers", loadbalancers)
+        pulumi.set(__self__, "members", members)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="anyPortEnable")
+    def any_port_enable(self) -> bool:
+        """
+        Whether to enable Forward to same Port for a pool.
+        """
+        return pulumi.get(self, "any_port_enable")
+
+    @property
+    @pulumi.getter(name="connectionDrainEnabled")
+    def connection_drain_enabled(self) -> bool:
+        """
+        Whether to enable delayed logout.
+        """
+        return pulumi.get(self, "connection_drain_enabled")
+
+    @property
+    @pulumi.getter(name="connectionDrainTimeout")
+    def connection_drain_timeout(self) -> int:
+        """
+        The timeout of the delayed logout in seconds.
+        """
+        return pulumi.get(self, "connection_drain_timeout")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies supplementary information about the active-standby pool.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def healthmonitors(self) -> Sequence['outputs.GetActiveStandbyPoolsPoolHealthmonitorResult']:
+        """
+        The health check configured for the active-standby pool.
+        The healthmonitor structure is documented below.
+        """
+        return pulumi.get(self, "healthmonitors")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def listeners(self) -> Sequence['outputs.GetActiveStandbyPoolsPoolListenerResult']:
+        """
+        The IDs of the listeners with which the active-standby pool is associated.
+        The listeners structure is documented below.
+        """
+        return pulumi.get(self, "listeners")
+
+    @property
+    @pulumi.getter
+    def loadbalancers(self) -> Sequence['outputs.GetActiveStandbyPoolsPoolLoadbalancerResult']:
+        """
+        The IDs of the load balancers with which the active-standby pool is associated.
+        The loadbalancers structure is documented below.
+        """
+        return pulumi.get(self, "loadbalancers")
+
+    @property
+    @pulumi.getter
+    def members(self) -> Sequence['outputs.GetActiveStandbyPoolsPoolMemberResult']:
+        """
+        The backend servers in the active-standby pool.
+        The members structure is documented below.
+        """
+        return pulumi.get(self, "members")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the active-standby pool.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the protocol used by the active-standby pool to receive requests from the
+        load balancer. Value options: **TCP**, **UDP**, **QUIC** or **TLS**.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of the active-standby pool.
+        The valid values are as follows:
+        + **instance**: Any type of backend servers can be added.
+        + **ip**: Only IP as backend servers can be added.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC where the active-standby pool works.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class GetActiveStandbyPoolsPoolHealthmonitorResult(dict):
+    def __init__(__self__, *,
+                 delay: int,
+                 domain_name: str,
+                 expected_codes: str,
+                 http_method: str,
+                 id: str,
+                 max_retries: int,
+                 max_retries_down: int,
+                 monitor_port: int,
+                 name: str,
+                 timeout: int,
+                 type: str,
+                 url_path: str):
+        """
+        :param int delay: The interval between health checks, in seconds.
+        :param str domain_name: The domain name that HTTP requests are sent to during the health check.
+        :param str expected_codes: The expected HTTP status code.
+        :param str http_method: The HTTP method.
+        :param str id: The health check ID.
+        :param int max_retries: The number of consecutive health checks when the health check result of a backend server changes from
+               **OFFLINE** to **ONLINE**.
+        :param int max_retries_down: The number of consecutive health checks when the health check result of a backend server changes
+               from **ONLINE** to **OFFLINE**.
+        :param int monitor_port: The port used for the health check.
+        :param str name: Specifies the name of the active-standby pool.
+        :param int timeout: The maximum time required for waiting for a response from the health check, in seconds.
+        :param str type: Specifies the type of the active-standby pool.
+               The valid values are as follows:
+               + **instance**: Any type of backend servers can be added.
+               + **ip**: Only IP as backend servers can be added.
+        :param str url_path: The HTTP request path for the health check.
+        """
+        pulumi.set(__self__, "delay", delay)
+        pulumi.set(__self__, "domain_name", domain_name)
+        pulumi.set(__self__, "expected_codes", expected_codes)
+        pulumi.set(__self__, "http_method", http_method)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "max_retries", max_retries)
+        pulumi.set(__self__, "max_retries_down", max_retries_down)
+        pulumi.set(__self__, "monitor_port", monitor_port)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "timeout", timeout)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "url_path", url_path)
+
+    @property
+    @pulumi.getter
+    def delay(self) -> int:
+        """
+        The interval between health checks, in seconds.
+        """
+        return pulumi.get(self, "delay")
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> str:
+        """
+        The domain name that HTTP requests are sent to during the health check.
+        """
+        return pulumi.get(self, "domain_name")
+
+    @property
+    @pulumi.getter(name="expectedCodes")
+    def expected_codes(self) -> str:
+        """
+        The expected HTTP status code.
+        """
+        return pulumi.get(self, "expected_codes")
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> str:
+        """
+        The HTTP method.
+        """
+        return pulumi.get(self, "http_method")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="maxRetries")
+    def max_retries(self) -> int:
+        """
+        The number of consecutive health checks when the health check result of a backend server changes from
+        **OFFLINE** to **ONLINE**.
+        """
+        return pulumi.get(self, "max_retries")
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> int:
+        """
+        The number of consecutive health checks when the health check result of a backend server changes
+        from **ONLINE** to **OFFLINE**.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @property
+    @pulumi.getter(name="monitorPort")
+    def monitor_port(self) -> int:
+        """
+        The port used for the health check.
+        """
+        return pulumi.get(self, "monitor_port")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the active-standby pool.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> int:
+        """
+        The maximum time required for waiting for a response from the health check, in seconds.
+        """
+        return pulumi.get(self, "timeout")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of the active-standby pool.
+        The valid values are as follows:
+        + **instance**: Any type of backend servers can be added.
+        + **ip**: Only IP as backend servers can be added.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="urlPath")
+    def url_path(self) -> str:
+        """
+        The HTTP request path for the health check.
+        """
+        return pulumi.get(self, "url_path")
+
+
+@pulumi.output_type
+class GetActiveStandbyPoolsPoolListenerResult(dict):
+    def __init__(__self__, *,
+                 id: str):
+        """
+        :param str id: The health check ID.
+        """
+        pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+
+@pulumi.output_type
+class GetActiveStandbyPoolsPoolLoadbalancerResult(dict):
+    def __init__(__self__, *,
+                 id: str):
+        """
+        :param str id: The health check ID.
+        """
+        pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+
+@pulumi.output_type
+class GetActiveStandbyPoolsPoolMemberResult(dict):
+    def __init__(__self__, *,
+                 address: str,
+                 id: str,
+                 instance_id: str,
+                 ip_version: str,
+                 member_type: str,
+                 name: str,
+                 operating_status: str,
+                 protocol_port: int,
+                 role: str,
+                 subnet_id: str):
+        """
+        :param str address: The private IP address bound to the member.
+        :param str id: The health check ID.
+        :param str instance_id: The ID of the ECS used as the member.
+        :param str ip_version: The IP version supported by the member.
+        :param str member_type: The type of the member.
+        :param str name: Specifies the name of the active-standby pool.
+        :param str operating_status: The health status of the member.
+        :param int protocol_port: The port used by the member to receive requests.
+        :param str role: The active-standby status of the member.
+        :param str subnet_id: The ID of the IPv4 or IPv6 subnet where the member resides.
+        """
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "instance_id", instance_id)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "member_type", member_type)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "operating_status", operating_status)
+        pulumi.set(__self__, "protocol_port", protocol_port)
+        pulumi.set(__self__, "role", role)
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter
+    def address(self) -> str:
+        """
+        The private IP address bound to the member.
+        """
+        return pulumi.get(self, "address")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="instanceId")
+    def instance_id(self) -> str:
+        """
+        The ID of the ECS used as the member.
+        """
+        return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> str:
+        """
+        The IP version supported by the member.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="memberType")
+    def member_type(self) -> str:
+        """
+        The type of the member.
+        """
+        return pulumi.get(self, "member_type")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the active-standby pool.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> str:
+        """
+        The health status of the member.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> int:
+        """
+        The port used by the member to receive requests.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter
+    def role(self) -> str:
+        """
+        The active-standby status of the member.
+        """
+        return pulumi.get(self, "role")
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        The ID of the IPv4 or IPv6 subnet where the member resides.
+        """
+        return pulumi.get(self, "subnet_id")
+
+
+@pulumi.output_type
+class GetAllMembersMemberResult(dict):
+    def __init__(__self__, *,
+                 address: str,
+                 created_at: str,
+                 id: str,
+                 ip_version: str,
+                 loadbalancer_id: str,
+                 member_type: str,
+                 name: str,
+                 operating_status: str,
+                 pool_id: str,
+                 project_id: str,
+                 protocol_port: int,
+                 reasons: Sequence['outputs.GetAllMembersMemberReasonResult'],
+                 statuses: Sequence['outputs.GetAllMembersMemberStatusResult'],
+                 subnet_cidr_id: str,
+                 updated_at: str,
+                 weight: int):
+        """
+        :param str address: Specifies the IP address of the backend server.
+               Multiple IP addresses can be queried.
+        :param str created_at: Indicates the time when a backend server was added.
+        :param str id: Indicates the backend server ID.
+        :param str ip_version: Specifies the IP address version supported by the backend server group.
+               The value can be **v4** or **v6**.
+               Multiple versions can be queried.
+        :param str loadbalancer_id: Specifies the ID of the load balancer with which the load balancer is associated.
+               Multiple IDs can be queried.
+        :param str member_type: Indicates the type of the backend server.
+        :param str name: Specifies the backend server name.
+               Multiple IDs can be queried.
+        :param str operating_status: Specifies the operating status of the backend server.
+               Value options:
+               + **ONLINE**: The backend server is running normally.
+               + **NO_MONITOR**: No health check is configured for the backend server group to which the backend server belongs.
+               + **OFFLINE**: The cloud server used as the backend server is stopped or does not exist.
+               Multiple statuses can be queried.
+        :param str pool_id: Specifies the ID of the backend server group to which the backend server belongs.
+               Multiple IDs can be queried.
+        :param str project_id: Indicates the ID of the project where the backend server is used.
+        :param int protocol_port: Specifies the port used by the backend servers.
+               Multiple ports can be queried.
+        :param Sequence['GetAllMembersMemberReasonArgs'] reasons: Indicates why health check fails.
+        :param Sequence['GetAllMembersMemberStatusArgs'] statuses: Indicates the health status of the backend server.
+        :param str subnet_cidr_id: Specifies the ID of the subnet where the backend server works.
+               Multiple IDs can be queried.
+        :param str updated_at: Indicates the time when a backend server was updated.
+        :param int weight: Specifies the weight of the backend server.
+               Multiple weights can be queried.
+        """
+        pulumi.set(__self__, "address", address)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ip_version", ip_version)
+        pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
+        pulumi.set(__self__, "member_type", member_type)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "operating_status", operating_status)
+        pulumi.set(__self__, "pool_id", pool_id)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "protocol_port", protocol_port)
+        pulumi.set(__self__, "reasons", reasons)
+        pulumi.set(__self__, "statuses", statuses)
+        pulumi.set(__self__, "subnet_cidr_id", subnet_cidr_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def address(self) -> str:
+        """
+        Specifies the IP address of the backend server.
+        Multiple IP addresses can be queried.
+        """
+        return pulumi.get(self, "address")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Indicates the time when a backend server was added.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Indicates the backend server ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> str:
+        """
+        Specifies the IP address version supported by the backend server group.
+        The value can be **v4** or **v6**.
+        Multiple versions can be queried.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="loadbalancerId")
+    def loadbalancer_id(self) -> str:
+        """
+        Specifies the ID of the load balancer with which the load balancer is associated.
+        Multiple IDs can be queried.
+        """
+        return pulumi.get(self, "loadbalancer_id")
+
+    @property
+    @pulumi.getter(name="memberType")
+    def member_type(self) -> str:
+        """
+        Indicates the type of the backend server.
+        """
+        return pulumi.get(self, "member_type")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the backend server name.
+        Multiple IDs can be queried.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> str:
+        """
+        Specifies the operating status of the backend server.
+        Value options:
+        + **ONLINE**: The backend server is running normally.
+        + **NO_MONITOR**: No health check is configured for the backend server group to which the backend server belongs.
+        + **OFFLINE**: The cloud server used as the backend server is stopped or does not exist.
+        Multiple statuses can be queried.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> str:
+        """
+        Specifies the ID of the backend server group to which the backend server belongs.
+        Multiple IDs can be queried.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        Indicates the ID of the project where the backend server is used.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> int:
+        """
+        Specifies the port used by the backend servers.
+        Multiple ports can be queried.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter
+    def reasons(self) -> Sequence['outputs.GetAllMembersMemberReasonResult']:
+        """
+        Indicates why health check fails.
+        """
+        return pulumi.get(self, "reasons")
+
+    @property
+    @pulumi.getter
+    def statuses(self) -> Sequence['outputs.GetAllMembersMemberStatusResult']:
+        """
+        Indicates the health status of the backend server.
+        """
+        return pulumi.get(self, "statuses")
+
+    @property
+    @pulumi.getter(name="subnetCidrId")
+    def subnet_cidr_id(self) -> str:
+        """
+        Specifies the ID of the subnet where the backend server works.
+        Multiple IDs can be queried.
+        """
+        return pulumi.get(self, "subnet_cidr_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Indicates the time when a backend server was updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter
+    def weight(self) -> int:
+        """
+        Specifies the weight of the backend server.
+        Multiple weights can be queried.
+        """
+        return pulumi.get(self, "weight")
+
+
+@pulumi.output_type
+class GetAllMembersMemberReasonResult(dict):
+    def __init__(__self__, *,
+                 expected_response: str,
+                 healthcheck_response: str,
+                 reason_code: str):
+        """
+        :param str expected_response: Indicates the expected HTTP status code.
+        :param str healthcheck_response: Indicates the returned HTTP status code in the response.
+        :param str reason_code: Indicates the code of the health check failures.
+        """
+        pulumi.set(__self__, "expected_response", expected_response)
+        pulumi.set(__self__, "healthcheck_response", healthcheck_response)
+        pulumi.set(__self__, "reason_code", reason_code)
+
+    @property
+    @pulumi.getter(name="expectedResponse")
+    def expected_response(self) -> str:
+        """
+        Indicates the expected HTTP status code.
+        """
+        return pulumi.get(self, "expected_response")
+
+    @property
+    @pulumi.getter(name="healthcheckResponse")
+    def healthcheck_response(self) -> str:
+        """
+        Indicates the returned HTTP status code in the response.
+        """
+        return pulumi.get(self, "healthcheck_response")
+
+    @property
+    @pulumi.getter(name="reasonCode")
+    def reason_code(self) -> str:
+        """
+        Indicates the code of the health check failures.
+        """
+        return pulumi.get(self, "reason_code")
+
+
+@pulumi.output_type
+class GetAllMembersMemberStatusResult(dict):
+    def __init__(__self__, *,
+                 listener_id: str,
+                 operating_status: str,
+                 reasons: Sequence['outputs.GetAllMembersMemberStatusReasonResult']):
+        """
+        :param str listener_id: Indicates the listener ID.
+        :param str operating_status: Specifies the operating status of the backend server.
+               Value options:
+               + **ONLINE**: The backend server is running normally.
+               + **NO_MONITOR**: No health check is configured for the backend server group to which the backend server belongs.
+               + **OFFLINE**: The cloud server used as the backend server is stopped or does not exist.
+               Multiple statuses can be queried.
+        :param Sequence['GetAllMembersMemberStatusReasonArgs'] reasons: Indicates why health check fails.
+        """
+        pulumi.set(__self__, "listener_id", listener_id)
+        pulumi.set(__self__, "operating_status", operating_status)
+        pulumi.set(__self__, "reasons", reasons)
+
+    @property
+    @pulumi.getter(name="listenerId")
+    def listener_id(self) -> str:
+        """
+        Indicates the listener ID.
+        """
+        return pulumi.get(self, "listener_id")
+
+    @property
+    @pulumi.getter(name="operatingStatus")
+    def operating_status(self) -> str:
+        """
+        Specifies the operating status of the backend server.
+        Value options:
+        + **ONLINE**: The backend server is running normally.
+        + **NO_MONITOR**: No health check is configured for the backend server group to which the backend server belongs.
+        + **OFFLINE**: The cloud server used as the backend server is stopped or does not exist.
+        Multiple statuses can be queried.
+        """
+        return pulumi.get(self, "operating_status")
+
+    @property
+    @pulumi.getter
+    def reasons(self) -> Sequence['outputs.GetAllMembersMemberStatusReasonResult']:
+        """
+        Indicates why health check fails.
+        """
+        return pulumi.get(self, "reasons")
+
+
+@pulumi.output_type
+class GetAllMembersMemberStatusReasonResult(dict):
+    def __init__(__self__, *,
+                 expected_response: str,
+                 healthcheck_response: str,
+                 reason_code: str):
+        """
+        :param str expected_response: Indicates the expected HTTP status code.
+        :param str healthcheck_response: Indicates the returned HTTP status code in the response.
+        :param str reason_code: Indicates the code of the health check failures.
+        """
+        pulumi.set(__self__, "expected_response", expected_response)
+        pulumi.set(__self__, "healthcheck_response", healthcheck_response)
+        pulumi.set(__self__, "reason_code", reason_code)
+
+    @property
+    @pulumi.getter(name="expectedResponse")
+    def expected_response(self) -> str:
+        """
+        Indicates the expected HTTP status code.
+        """
+        return pulumi.get(self, "expected_response")
+
+    @property
+    @pulumi.getter(name="healthcheckResponse")
+    def healthcheck_response(self) -> str:
+        """
+        Indicates the returned HTTP status code in the response.
+        """
+        return pulumi.get(self, "healthcheck_response")
+
+    @property
+    @pulumi.getter(name="reasonCode")
+    def reason_code(self) -> str:
+        """
+        Indicates the code of the health check failures.
+        """
+        return pulumi.get(self, "reason_code")
+
+
+@pulumi.output_type
+class GetAvailabilityZonesAvailabilityZoneResult(dict):
+    def __init__(__self__, *,
+                 lists: Sequence['outputs.GetAvailabilityZonesAvailabilityZoneListResult']):
+        """
+        :param Sequence['GetAvailabilityZonesAvailabilityZoneListArgs'] lists: Indicates the AZs list.
+               The list structure is documented below.
+        """
+        pulumi.set(__self__, "lists", lists)
+
+    @property
+    @pulumi.getter
+    def lists(self) -> Sequence['outputs.GetAvailabilityZonesAvailabilityZoneListResult']:
+        """
+        Indicates the AZs list.
+        The list structure is documented below.
+        """
+        return pulumi.get(self, "lists")
+
+
+@pulumi.output_type
+class GetAvailabilityZonesAvailabilityZoneListResult(dict):
+    def __init__(__self__, *,
+                 category: int,
+                 code: str,
+                 protocols: Sequence[str],
+                 public_border_group: str,
+                 state: str):
+        """
+        :param int category: Indicates the AZ code. The value can be:
+               + **0**: indicates center.
+               + **21**: indicates homezone.
+        :param str code: Indicates the AZ code.
+        :param Sequence[str] protocols: Indicates the type of the flavor that is not sold out. The value can be:
+               + **L4**: indicates the flavor at Layer 4 (flavor for network load balancing).
+               + **L7**: indicates the flavor at Layer 7 (flavor for application load balancing).
+        :param str public_border_group: Specifies the public border group.
+        :param str state: Indicates the AZ status. The value can only be **ACTIVE**.
+        """
+        pulumi.set(__self__, "category", category)
+        pulumi.set(__self__, "code", code)
+        pulumi.set(__self__, "protocols", protocols)
+        pulumi.set(__self__, "public_border_group", public_border_group)
+        pulumi.set(__self__, "state", state)
+
+    @property
+    @pulumi.getter
+    def category(self) -> int:
+        """
+        Indicates the AZ code. The value can be:
+        + **0**: indicates center.
+        + **21**: indicates homezone.
+        """
+        return pulumi.get(self, "category")
+
+    @property
+    @pulumi.getter
+    def code(self) -> str:
+        """
+        Indicates the AZ code.
+        """
+        return pulumi.get(self, "code")
+
+    @property
+    @pulumi.getter
+    def protocols(self) -> Sequence[str]:
+        """
+        Indicates the type of the flavor that is not sold out. The value can be:
+        + **L4**: indicates the flavor at Layer 4 (flavor for network load balancing).
+        + **L7**: indicates the flavor at Layer 7 (flavor for application load balancing).
+        """
+        return pulumi.get(self, "protocols")
+
+    @property
+    @pulumi.getter(name="publicBorderGroup")
+    def public_border_group(self) -> str:
+        """
+        Specifies the public border group.
+        """
+        return pulumi.get(self, "public_border_group")
+
+    @property
+    @pulumi.getter
+    def state(self) -> str:
+        """
+        Indicates the AZ status. The value can only be **ACTIVE**.
+        """
+        return pulumi.get(self, "state")
+
+
+@pulumi.output_type
+class GetFeatureConfigurationsConfigResult(dict):
+    def __init__(__self__, *,
+                 caller: str,
+                 created_at: str,
+                 description: str,
+                 feature: str,
+                 id: str,
+                 service: str,
+                 switch: bool,
+                 type: str,
+                 updated_at: str,
+                 value: str):
+        """
+        :param str caller: Indicates the configuration creator.
+        :param str created_at: Indicates the creation time.
+        :param str description: Indicates the feature configuration description.
+        :param str feature: Specifies the feature name.
+        :param str id: Indicates the ID of the configuration.
+        :param str service: Indicates the service. The value is fixed at **ELB**.
+        :param bool switch: Indicates whether to enable feature configuration.
+               The value can be:
+               + **true**: The feature configuration has taken effect.
+               + **false**: The feature configuration does not take effect.
+        :param str type: Indicates the type of the feature configuration value.
+        :param str updated_at: Indicates the update time.
+        :param str value: Indicates the feature configuration value.
+               For example, the value **true** or **false** indicates that the feature is enabled or disabled.
+               The feature value of the quota is an integer, indicating that the quota is limited.
+        """
+        pulumi.set(__self__, "caller", caller)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "feature", feature)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "service", service)
+        pulumi.set(__self__, "switch", switch)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "updated_at", updated_at)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def caller(self) -> str:
+        """
+        Indicates the configuration creator.
+        """
+        return pulumi.get(self, "caller")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Indicates the creation time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Indicates the feature configuration description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def feature(self) -> str:
+        """
+        Specifies the feature name.
+        """
+        return pulumi.get(self, "feature")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Indicates the ID of the configuration.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def service(self) -> str:
+        """
+        Indicates the service. The value is fixed at **ELB**.
+        """
+        return pulumi.get(self, "service")
+
+    @property
+    @pulumi.getter
+    def switch(self) -> bool:
+        """
+        Indicates whether to enable feature configuration.
+        The value can be:
+        + **true**: The feature configuration has taken effect.
+        + **false**: The feature configuration does not take effect.
+        """
+        return pulumi.get(self, "switch")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Indicates the type of the feature configuration value.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Indicates the update time.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Indicates the feature configuration value.
+        For example, the value **true** or **false** indicates that the feature is enabled or disabled.
+        The feature value of the quota is an integer, indicating that the quota is limited.
+        """
+        return pulumi.get(self, "value")
 
 
 @pulumi.output_type
@@ -135,9 +2881,15 @@ class GetFlavorsFlavorResult(dict):
         :param int cps: Specifies the cps in the flavor.
         :param str id: ID of the flavor.
         :param int max_connections: Specifies the maximum connections in the flavor.
-        :param str name: Name of the flavor.
+        :param str name: Specifies the flavor name.
         :param int qps: Specifies the qps in the L7 flavor.
-        :param str type: Specifies the flavor type. Valid values are L4 and L7.
+        :param str type: Specifies the flavor type. Values options:
+               + **L4**: indicates Layer-4 flavor.
+               + **L7**: indicates Layer-7 flavor.
+               + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+               + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+               + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+               + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
         """
         pulumi.set(__self__, "bandwidth", bandwidth)
         pulumi.set(__self__, "cps", cps)
@@ -183,7 +2935,7 @@ class GetFlavorsFlavorResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Name of the flavor.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "name")
 
@@ -199,14 +2951,1424 @@ class GetFlavorsFlavorResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies the flavor type. Valid values are L4 and L7.
+        Specifies the flavor type. Values options:
+        + **L4**: indicates Layer-4 flavor.
+        + **L7**: indicates Layer-7 flavor.
+        + **L4_elastic**: indicates minimum Layer-4 flavor for elastic scaling.
+        + **L7_elastic**: indicates minimum Layer-7 flavor for elastic scaling.
+        + **L4_elastic_max**: indicates maximum Layer-4 flavor for elastic scaling.
+        + **L7_elastic_max**: indicates maximum Layer-7 flavor for elastic scaling
         """
         return pulumi.get(self, "type")
 
 
 @pulumi.output_type
+class GetIpgroupsIpgroupResult(dict):
+    def __init__(__self__, *,
+                 created_at: str,
+                 description: str,
+                 id: str,
+                 ip_lists: Sequence['outputs.GetIpgroupsIpgroupIpListResult'],
+                 listeners: Sequence['outputs.GetIpgroupsIpgroupListenerResult'],
+                 name: str,
+                 project_id: str,
+                 updated_at: str):
+        """
+        :param str created_at: The time when the IP address group was created.
+        :param str description: Specifies the description of the IP address group.
+        :param str id: The listener ID.
+        :param Sequence['GetIpgroupsIpgroupIpListArgs'] ip_lists: The IP addresses or CIDR blocks in the IP address group. The ip_list structure is
+               documented below.
+        :param Sequence['GetIpgroupsIpgroupListenerArgs'] listeners: The IDs of listeners with which the IP address group is associated. The listeners
+               structure is documented below.
+        :param str name: Specifies the name of the IP address group.
+        :param str project_id: The project ID of the IP address group.
+        :param str updated_at: The time when the IP address group was updated.
+        """
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ip_lists", ip_lists)
+        pulumi.set(__self__, "listeners", listeners)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "project_id", project_id)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the IP address group was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the IP address group.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The listener ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipLists")
+    def ip_lists(self) -> Sequence['outputs.GetIpgroupsIpgroupIpListResult']:
+        """
+        The IP addresses or CIDR blocks in the IP address group. The ip_list structure is
+        documented below.
+        """
+        return pulumi.get(self, "ip_lists")
+
+    @property
+    @pulumi.getter
+    def listeners(self) -> Sequence['outputs.GetIpgroupsIpgroupListenerResult']:
+        """
+        The IDs of listeners with which the IP address group is associated. The listeners
+        structure is documented below.
+        """
+        return pulumi.get(self, "listeners")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the IP address group.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="projectId")
+    def project_id(self) -> str:
+        """
+        The project ID of the IP address group.
+        """
+        return pulumi.get(self, "project_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The time when the IP address group was updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetIpgroupsIpgroupIpListResult(dict):
+    def __init__(__self__, *,
+                 description: str,
+                 ip: str):
+        """
+        :param str description: Specifies the description of the IP address group.
+        :param str ip: The IP addresses.
+        """
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "ip", ip)
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the IP address group.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def ip(self) -> str:
+        """
+        The IP addresses.
+        """
+        return pulumi.get(self, "ip")
+
+
+@pulumi.output_type
+class GetIpgroupsIpgroupListenerResult(dict):
+    def __init__(__self__, *,
+                 id: str):
+        """
+        :param str id: The listener ID.
+        """
+        pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The listener ID.
+        """
+        return pulumi.get(self, "id")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyResult(dict):
+    def __init__(__self__, *,
+                 action: str,
+                 created_at: str,
+                 description: str,
+                 fixed_response_configs: Sequence['outputs.GetL7policiesL7policyFixedResponseConfigResult'],
+                 id: str,
+                 listener_id: str,
+                 name: str,
+                 priority: int,
+                 redirect_listener_id: str,
+                 redirect_pool_id: str,
+                 redirect_pools_extend_configs: Sequence['outputs.GetL7policiesL7policyRedirectPoolsExtendConfigResult'],
+                 redirect_url_configs: Sequence['outputs.GetL7policiesL7policyRedirectUrlConfigResult'],
+                 rules: Sequence['outputs.GetL7policiesL7policyRuleResult'],
+                 updated_at: str):
+        """
+        :param str action: Specifies the requests are forwarded. The value can be one of the following:
+               + **REDIRECT_TO_POOL**: Requests are forwarded to another backend server group.
+               + **REDIRECT_TO_LISTENER**: Requests are redirected to an HTTPS listener.
+               + **REDIRECT_TO_URL**: Requests are redirected to another URL.
+               + **FIXED_RESPONSE**: A fixed response body is returned.
+        :param str created_at: The time when the forwarding policy was created.
+        :param str description: Specifies the supplementary information about the forwarding policy.
+        :param Sequence['GetL7policiesL7policyFixedResponseConfigArgs'] fixed_response_configs: The configuration of the page that will be returned.
+               The fixed_response_config structure is documented below.
+        :param str id: The forwarding rule ID.
+        :param str listener_id: Specifies the ID of the listener to which the forwarding policy is added.
+        :param str name: Specifies the forwarding policy name.
+        :param int priority: Specifies the forwarding policy priority.
+        :param str redirect_listener_id: Specifies the ID of the listener to which requests are redirected.
+        :param str redirect_pool_id: Specifies the ID of the backend server group to which requests will be forwarded.
+        :param Sequence['GetL7policiesL7policyRedirectPoolsExtendConfigArgs'] redirect_pools_extend_configs: The backend server group that the requests are forwarded to.
+               The redirect_pools_extend_config structure is documented below.
+        :param Sequence['GetL7policiesL7policyRedirectUrlConfigArgs'] redirect_url_configs: The URL to which requests are forwarded. The redirect_url_config
+               structure is documented below.
+        :param Sequence['GetL7policiesL7policyRuleArgs'] rules: The forwarding rules in the forwarding policy. The rules structure is documented below.
+        :param str updated_at: The time when the forwarding policy was updated.
+        """
+        pulumi.set(__self__, "action", action)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "fixed_response_configs", fixed_response_configs)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "listener_id", listener_id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "redirect_listener_id", redirect_listener_id)
+        pulumi.set(__self__, "redirect_pool_id", redirect_pool_id)
+        pulumi.set(__self__, "redirect_pools_extend_configs", redirect_pools_extend_configs)
+        pulumi.set(__self__, "redirect_url_configs", redirect_url_configs)
+        pulumi.set(__self__, "rules", rules)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def action(self) -> str:
+        """
+        Specifies the requests are forwarded. The value can be one of the following:
+        + **REDIRECT_TO_POOL**: Requests are forwarded to another backend server group.
+        + **REDIRECT_TO_LISTENER**: Requests are redirected to an HTTPS listener.
+        + **REDIRECT_TO_URL**: Requests are redirected to another URL.
+        + **FIXED_RESPONSE**: A fixed response body is returned.
+        """
+        return pulumi.get(self, "action")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the forwarding policy was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the supplementary information about the forwarding policy.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="fixedResponseConfigs")
+    def fixed_response_configs(self) -> Sequence['outputs.GetL7policiesL7policyFixedResponseConfigResult']:
+        """
+        The configuration of the page that will be returned.
+        The fixed_response_config structure is documented below.
+        """
+        return pulumi.get(self, "fixed_response_configs")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The forwarding rule ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="listenerId")
+    def listener_id(self) -> str:
+        """
+        Specifies the ID of the listener to which the forwarding policy is added.
+        """
+        return pulumi.get(self, "listener_id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the forwarding policy name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def priority(self) -> int:
+        """
+        Specifies the forwarding policy priority.
+        """
+        return pulumi.get(self, "priority")
+
+    @property
+    @pulumi.getter(name="redirectListenerId")
+    def redirect_listener_id(self) -> str:
+        """
+        Specifies the ID of the listener to which requests are redirected.
+        """
+        return pulumi.get(self, "redirect_listener_id")
+
+    @property
+    @pulumi.getter(name="redirectPoolId")
+    def redirect_pool_id(self) -> str:
+        """
+        Specifies the ID of the backend server group to which requests will be forwarded.
+        """
+        return pulumi.get(self, "redirect_pool_id")
+
+    @property
+    @pulumi.getter(name="redirectPoolsExtendConfigs")
+    def redirect_pools_extend_configs(self) -> Sequence['outputs.GetL7policiesL7policyRedirectPoolsExtendConfigResult']:
+        """
+        The backend server group that the requests are forwarded to.
+        The redirect_pools_extend_config structure is documented below.
+        """
+        return pulumi.get(self, "redirect_pools_extend_configs")
+
+    @property
+    @pulumi.getter(name="redirectUrlConfigs")
+    def redirect_url_configs(self) -> Sequence['outputs.GetL7policiesL7policyRedirectUrlConfigResult']:
+        """
+        The URL to which requests are forwarded. The redirect_url_config
+        structure is documented below.
+        """
+        return pulumi.get(self, "redirect_url_configs")
+
+    @property
+    @pulumi.getter
+    def rules(self) -> Sequence['outputs.GetL7policiesL7policyRuleResult']:
+        """
+        The forwarding rules in the forwarding policy. The rules structure is documented below.
+        """
+        return pulumi.get(self, "rules")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The time when the forwarding policy was updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyFixedResponseConfigResult(dict):
+    def __init__(__self__, *,
+                 content_type: str,
+                 message_body: str,
+                 status_code: str):
+        """
+        :param str content_type: The format of the response body.
+        :param str message_body: The content of the response message body.
+        :param str status_code: The status code returned after the requests are redirected.
+        """
+        pulumi.set(__self__, "content_type", content_type)
+        pulumi.set(__self__, "message_body", message_body)
+        pulumi.set(__self__, "status_code", status_code)
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> str:
+        """
+        The format of the response body.
+        """
+        return pulumi.get(self, "content_type")
+
+    @property
+    @pulumi.getter(name="messageBody")
+    def message_body(self) -> str:
+        """
+        The content of the response message body.
+        """
+        return pulumi.get(self, "message_body")
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> str:
+        """
+        The status code returned after the requests are redirected.
+        """
+        return pulumi.get(self, "status_code")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyRedirectPoolsExtendConfigResult(dict):
+    def __init__(__self__, *,
+                 rewrite_url_configs: Sequence['outputs.GetL7policiesL7policyRedirectPoolsExtendConfigRewriteUrlConfigResult'],
+                 rewrite_url_enabled: bool):
+        """
+        :param Sequence['GetL7policiesL7policyRedirectPoolsExtendConfigRewriteUrlConfigArgs'] rewrite_url_configs: The URL for the backend server group that requests are forwarded to.
+               The rewrite_url_config structure is documented below.
+        :param bool rewrite_url_enabled: Whether to enable URL redirection.
+        """
+        pulumi.set(__self__, "rewrite_url_configs", rewrite_url_configs)
+        pulumi.set(__self__, "rewrite_url_enabled", rewrite_url_enabled)
+
+    @property
+    @pulumi.getter(name="rewriteUrlConfigs")
+    def rewrite_url_configs(self) -> Sequence['outputs.GetL7policiesL7policyRedirectPoolsExtendConfigRewriteUrlConfigResult']:
+        """
+        The URL for the backend server group that requests are forwarded to.
+        The rewrite_url_config structure is documented below.
+        """
+        return pulumi.get(self, "rewrite_url_configs")
+
+    @property
+    @pulumi.getter(name="rewriteUrlEnabled")
+    def rewrite_url_enabled(self) -> bool:
+        """
+        Whether to enable URL redirection.
+        """
+        return pulumi.get(self, "rewrite_url_enabled")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyRedirectPoolsExtendConfigRewriteUrlConfigResult(dict):
+    def __init__(__self__, *,
+                 host: str,
+                 path: str,
+                 query: str):
+        """
+        :param str host: The url host.
+        :param str path: The URL path.
+        :param str query: The URL query character string.
+        """
+        pulumi.set(__self__, "host", host)
+        pulumi.set(__self__, "path", path)
+        pulumi.set(__self__, "query", query)
+
+    @property
+    @pulumi.getter
+    def host(self) -> str:
+        """
+        The url host.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter
+    def path(self) -> str:
+        """
+        The URL path.
+        """
+        return pulumi.get(self, "path")
+
+    @property
+    @pulumi.getter
+    def query(self) -> str:
+        """
+        The URL query character string.
+        """
+        return pulumi.get(self, "query")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyRedirectUrlConfigResult(dict):
+    def __init__(__self__, *,
+                 host: str,
+                 path: str,
+                 port: str,
+                 protocol: str,
+                 query: str,
+                 status_code: str):
+        """
+        :param str host: The url host.
+        :param str path: The URL path.
+        :param str port: The port that requests are redirected to.
+        :param str protocol: The protocol for redirection.The value can be **HTTP**, **HTTPS**, or **${protocol}**.
+        :param str query: The URL query character string.
+        :param str status_code: The status code returned after the requests are redirected.
+        """
+        pulumi.set(__self__, "host", host)
+        pulumi.set(__self__, "path", path)
+        pulumi.set(__self__, "port", port)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "query", query)
+        pulumi.set(__self__, "status_code", status_code)
+
+    @property
+    @pulumi.getter
+    def host(self) -> str:
+        """
+        The url host.
+        """
+        return pulumi.get(self, "host")
+
+    @property
+    @pulumi.getter
+    def path(self) -> str:
+        """
+        The URL path.
+        """
+        return pulumi.get(self, "path")
+
+    @property
+    @pulumi.getter
+    def port(self) -> str:
+        """
+        The port that requests are redirected to.
+        """
+        return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        The protocol for redirection.The value can be **HTTP**, **HTTPS**, or **${protocol}**.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter
+    def query(self) -> str:
+        """
+        The URL query character string.
+        """
+        return pulumi.get(self, "query")
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> str:
+        """
+        The status code returned after the requests are redirected.
+        """
+        return pulumi.get(self, "status_code")
+
+
+@pulumi.output_type
+class GetL7policiesL7policyRuleResult(dict):
+    def __init__(__self__, *,
+                 id: str):
+        """
+        :param str id: The forwarding rule ID.
+        """
+        pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The forwarding rule ID.
+        """
+        return pulumi.get(self, "id")
+
+
+@pulumi.output_type
+class GetL7rulesL7ruleResult(dict):
+    def __init__(__self__, *,
+                 compare_type: str,
+                 conditions: Sequence['outputs.GetL7rulesL7ruleConditionResult'],
+                 created_at: str,
+                 id: str,
+                 type: str,
+                 updated_at: str,
+                 value: str):
+        """
+        :param str compare_type: Specifies how requests are matched with the domain names or URL. Values options:
+               **EQUAL_TO**, **REGEX**, **STARTS_WITH**.
+        :param Sequence['GetL7rulesL7ruleConditionArgs'] conditions: The matching conditions of the forwarding rule. The conditions structure is
+               documented below.
+        :param str created_at: The time when the forwarding rule was created.
+        :param str id: The ID of the forwarding policy.
+        :param str type: Specifies the match type. Value options: **HOST_NAME**, **PATH**, **METHOD**, **HEADER**,
+               **QUERY_STRING**, **SOURCE_IP**, **COOKIE**.
+        :param str updated_at: The time when the forwarding rule was updated.
+        :param str value: Specifies the value of the match content.
+        """
+        pulumi.set(__self__, "compare_type", compare_type)
+        pulumi.set(__self__, "conditions", conditions)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "updated_at", updated_at)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter(name="compareType")
+    def compare_type(self) -> str:
+        """
+        Specifies how requests are matched with the domain names or URL. Values options:
+        **EQUAL_TO**, **REGEX**, **STARTS_WITH**.
+        """
+        return pulumi.get(self, "compare_type")
+
+    @property
+    @pulumi.getter
+    def conditions(self) -> Sequence['outputs.GetL7rulesL7ruleConditionResult']:
+        """
+        The matching conditions of the forwarding rule. The conditions structure is
+        documented below.
+        """
+        return pulumi.get(self, "conditions")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the forwarding rule was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The ID of the forwarding policy.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the match type. Value options: **HOST_NAME**, **PATH**, **METHOD**, **HEADER**,
+        **QUERY_STRING**, **SOURCE_IP**, **COOKIE**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The time when the forwarding rule was updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the match content.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class GetL7rulesL7ruleConditionResult(dict):
+    def __init__(__self__, *,
+                 key: str,
+                 value: str):
+        """
+        :param str key: The key of match item.
+        :param str value: Specifies the value of the match content.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> str:
+        """
+        The key of match item.
+        """
+        return pulumi.get(self, "key")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the match content.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class GetListenersListenerResult(dict):
+    def __init__(__self__, *,
+                 advanced_forwarding_enabled: bool,
+                 ca_certificate: str,
+                 default_pool_id: str,
+                 description: str,
+                 forward_eip: bool,
+                 forward_host: bool,
+                 forward_port: bool,
+                 forward_request_port: bool,
+                 http2_enable: bool,
+                 id: str,
+                 idle_timeout: int,
+                 loadbalancer_id: str,
+                 name: str,
+                 protection_reason: str,
+                 protection_status: str,
+                 protocol: str,
+                 protocol_port: int,
+                 request_timeout: int,
+                 response_timeout: int,
+                 server_certificate: str,
+                 sni_certificates: Sequence[str],
+                 tls_ciphers_policy: str):
+        """
+        :param bool advanced_forwarding_enabled: Whether to enable advanced forwarding.
+        :param str ca_certificate: The ID of the CA certificate used by the listener.
+        :param str default_pool_id: The ID of the default backend server group.
+        :param str description: Specifies the description of the ELB listener.
+        :param bool forward_eip: Whether to transparently transmit the load balancer EIP to backend servers.
+        :param bool forward_host: Whether to rewrite the X-Forwarded-Host header.
+        :param bool forward_port: Whether to transparently transmit the listening port of the load balancer to backend servers.
+        :param bool forward_request_port: Whether to transparently transmit the source port of the client to backend servers.
+        :param bool http2_enable: Whether to use HTTP/2 if you want the clients to use HTTP/2 to communicate with the listener.
+        :param str id: The listener ID.
+        :param int idle_timeout: The idle timeout duration, in seconds.
+        :param str loadbalancer_id: Specifies the ID of the load balancer that the listener is added to.
+        :param str name: Specifies the name of the ELB listener.
+        :param str protection_reason: The reason for update protection.
+        :param str protection_status: The protection status for update.
+        :param str protocol: Specifies the protocol of the ELB listener. Value options:
+               **TCP**, **UDP**, **HTTP**, **HTTPS** or **QUIC**.
+        :param int protocol_port: Specifies the port used by the listener.
+        :param int request_timeout: The timeout duration for waiting for a response from a client, in seconds.
+        :param int response_timeout: The timeout duration for waiting for a response from a backend server, in seconds.
+        :param str server_certificate: The ID of the server certificate used by the listener.
+        :param Sequence[str] sni_certificates: The IDs of SNI certificates (server certificates with domain names) used by the listener.
+        :param str tls_ciphers_policy: The security policy used by the listener.
+        """
+        pulumi.set(__self__, "advanced_forwarding_enabled", advanced_forwarding_enabled)
+        pulumi.set(__self__, "ca_certificate", ca_certificate)
+        pulumi.set(__self__, "default_pool_id", default_pool_id)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "forward_eip", forward_eip)
+        pulumi.set(__self__, "forward_host", forward_host)
+        pulumi.set(__self__, "forward_port", forward_port)
+        pulumi.set(__self__, "forward_request_port", forward_request_port)
+        pulumi.set(__self__, "http2_enable", http2_enable)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "idle_timeout", idle_timeout)
+        pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protection_reason", protection_reason)
+        pulumi.set(__self__, "protection_status", protection_status)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "protocol_port", protocol_port)
+        pulumi.set(__self__, "request_timeout", request_timeout)
+        pulumi.set(__self__, "response_timeout", response_timeout)
+        pulumi.set(__self__, "server_certificate", server_certificate)
+        pulumi.set(__self__, "sni_certificates", sni_certificates)
+        pulumi.set(__self__, "tls_ciphers_policy", tls_ciphers_policy)
+
+    @property
+    @pulumi.getter(name="advancedForwardingEnabled")
+    def advanced_forwarding_enabled(self) -> bool:
+        """
+        Whether to enable advanced forwarding.
+        """
+        return pulumi.get(self, "advanced_forwarding_enabled")
+
+    @property
+    @pulumi.getter(name="caCertificate")
+    def ca_certificate(self) -> str:
+        """
+        The ID of the CA certificate used by the listener.
+        """
+        return pulumi.get(self, "ca_certificate")
+
+    @property
+    @pulumi.getter(name="defaultPoolId")
+    def default_pool_id(self) -> str:
+        """
+        The ID of the default backend server group.
+        """
+        return pulumi.get(self, "default_pool_id")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the ELB listener.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="forwardEip")
+    def forward_eip(self) -> bool:
+        """
+        Whether to transparently transmit the load balancer EIP to backend servers.
+        """
+        return pulumi.get(self, "forward_eip")
+
+    @property
+    @pulumi.getter(name="forwardHost")
+    def forward_host(self) -> bool:
+        """
+        Whether to rewrite the X-Forwarded-Host header.
+        """
+        return pulumi.get(self, "forward_host")
+
+    @property
+    @pulumi.getter(name="forwardPort")
+    def forward_port(self) -> bool:
+        """
+        Whether to transparently transmit the listening port of the load balancer to backend servers.
+        """
+        return pulumi.get(self, "forward_port")
+
+    @property
+    @pulumi.getter(name="forwardRequestPort")
+    def forward_request_port(self) -> bool:
+        """
+        Whether to transparently transmit the source port of the client to backend servers.
+        """
+        return pulumi.get(self, "forward_request_port")
+
+    @property
+    @pulumi.getter(name="http2Enable")
+    def http2_enable(self) -> bool:
+        """
+        Whether to use HTTP/2 if you want the clients to use HTTP/2 to communicate with the listener.
+        """
+        return pulumi.get(self, "http2_enable")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The listener ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="idleTimeout")
+    def idle_timeout(self) -> int:
+        """
+        The idle timeout duration, in seconds.
+        """
+        return pulumi.get(self, "idle_timeout")
+
+    @property
+    @pulumi.getter(name="loadbalancerId")
+    def loadbalancer_id(self) -> str:
+        """
+        Specifies the ID of the load balancer that the listener is added to.
+        """
+        return pulumi.get(self, "loadbalancer_id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the ELB listener.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> str:
+        """
+        The reason for update protection.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> str:
+        """
+        The protection status for update.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the protocol of the ELB listener. Value options:
+        **TCP**, **UDP**, **HTTP**, **HTTPS** or **QUIC**.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="protocolPort")
+    def protocol_port(self) -> int:
+        """
+        Specifies the port used by the listener.
+        """
+        return pulumi.get(self, "protocol_port")
+
+    @property
+    @pulumi.getter(name="requestTimeout")
+    def request_timeout(self) -> int:
+        """
+        The timeout duration for waiting for a response from a client, in seconds.
+        """
+        return pulumi.get(self, "request_timeout")
+
+    @property
+    @pulumi.getter(name="responseTimeout")
+    def response_timeout(self) -> int:
+        """
+        The timeout duration for waiting for a response from a backend server, in seconds.
+        """
+        return pulumi.get(self, "response_timeout")
+
+    @property
+    @pulumi.getter(name="serverCertificate")
+    def server_certificate(self) -> str:
+        """
+        The ID of the server certificate used by the listener.
+        """
+        return pulumi.get(self, "server_certificate")
+
+    @property
+    @pulumi.getter(name="sniCertificates")
+    def sni_certificates(self) -> Sequence[str]:
+        """
+        The IDs of SNI certificates (server certificates with domain names) used by the listener.
+        """
+        return pulumi.get(self, "sni_certificates")
+
+    @property
+    @pulumi.getter(name="tlsCiphersPolicy")
+    def tls_ciphers_policy(self) -> str:
+        """
+        The security policy used by the listener.
+        """
+        return pulumi.get(self, "tls_ciphers_policy")
+
+
+@pulumi.output_type
+class GetLoadbalancerFeatureConfigurationsFeatureResult(dict):
+    def __init__(__self__, *,
+                 feature: str,
+                 type: str,
+                 value: str):
+        """
+        :param str feature: Specifies the feature name.
+        :param str type: Specifies the type of the feature configuration value.
+        :param str value: Specifies the feature value.
+               For example, the value **true** or **false** indicates that the feature is enabled or disabled.
+               The feature value of the quota is an integer, indicating that the quota is limited.
+        """
+        pulumi.set(__self__, "feature", feature)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def feature(self) -> str:
+        """
+        Specifies the feature name.
+        """
+        return pulumi.get(self, "feature")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of the feature configuration value.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the feature value.
+        For example, the value **true** or **false** indicates that the feature is enabled or disabled.
+        The feature value of the quota is an integer, indicating that the quota is limited.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class GetLoadbalancersLoadbalancerResult(dict):
+    def __init__(__self__, *,
+                 autoscaling_enabled: bool,
+                 availability_zones: Sequence[str],
+                 backend_subnets: Sequence[str],
+                 cross_vpc_backend: bool,
+                 description: str,
+                 enterprise_project_id: str,
+                 gw_flavor_id: str,
+                 id: str,
+                 ipv4_address: str,
+                 ipv4_port_id: str,
+                 ipv4_subnet_id: str,
+                 ipv6_address: str,
+                 ipv6_network_id: str,
+                 l4_flavor_id: str,
+                 l7_flavor_id: str,
+                 loadbalancer_type: str,
+                 min_l7_flavor_id: str,
+                 name: str,
+                 protection_reason: str,
+                 protection_status: str,
+                 type: str,
+                 vpc_id: str):
+        """
+        :param bool autoscaling_enabled: Whether the current load balancer enables elastic expansion.
+        :param Sequence[str] availability_zones: The list of AZs where the load balancer is created.
+        :param Sequence[str] backend_subnets: Lists the IDs of subnets on the downstream plane.
+        :param bool cross_vpc_backend: Whether to enable IP as a Backend Server.
+        :param str description: Specifies the description of the ELB load balancer.
+        :param str enterprise_project_id: Specifies the enterprise project ID.
+        :param str gw_flavor_id: The flavor ID of the gateway load balancer.
+        :param str id: The load balancer ID.
+        :param str ipv4_address: The private IPv4 address bound to the load balancer.
+        :param str ipv4_port_id: The ID of the port bound to the private IPv4 address of the load balancer.
+        :param str ipv4_subnet_id: Specifies the ID of the IPv4 subnet where the load balancer resides.
+        :param str ipv6_address: The IPv6 address bound to the load balancer.
+        :param str ipv6_network_id: Specifies the ID of the port bound to the IPv6 address of the load balancer.
+        :param str l4_flavor_id: Specifies the ID of a flavor at Layer 4.
+        :param str l7_flavor_id: Specifies the ID of a flavor at Layer 7.
+        :param str loadbalancer_type: The type of the load balancer.
+        :param str min_l7_flavor_id: The minimum seven-layer specification ID (specification type L7_elastic) for elastic expansion
+               and contraction
+        :param str name: Specifies the name of the ELB load balancer.
+        :param str protection_reason: The reason for update protection.
+        :param str protection_status: The protection status for update.
+        :param str type: Specifies whether the load balancer is a dedicated load balancer, Value options:
+               **dedicated**, **share**.
+        :param str vpc_id: Specifies the ID of the VPC where the load balancer resides.
+        """
+        pulumi.set(__self__, "autoscaling_enabled", autoscaling_enabled)
+        pulumi.set(__self__, "availability_zones", availability_zones)
+        pulumi.set(__self__, "backend_subnets", backend_subnets)
+        pulumi.set(__self__, "cross_vpc_backend", cross_vpc_backend)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        pulumi.set(__self__, "gw_flavor_id", gw_flavor_id)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "ipv4_address", ipv4_address)
+        pulumi.set(__self__, "ipv4_port_id", ipv4_port_id)
+        pulumi.set(__self__, "ipv4_subnet_id", ipv4_subnet_id)
+        pulumi.set(__self__, "ipv6_address", ipv6_address)
+        pulumi.set(__self__, "ipv6_network_id", ipv6_network_id)
+        pulumi.set(__self__, "l4_flavor_id", l4_flavor_id)
+        pulumi.set(__self__, "l7_flavor_id", l7_flavor_id)
+        pulumi.set(__self__, "loadbalancer_type", loadbalancer_type)
+        pulumi.set(__self__, "min_l7_flavor_id", min_l7_flavor_id)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protection_reason", protection_reason)
+        pulumi.set(__self__, "protection_status", protection_status)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="autoscalingEnabled")
+    def autoscaling_enabled(self) -> bool:
+        """
+        Whether the current load balancer enables elastic expansion.
+        """
+        return pulumi.get(self, "autoscaling_enabled")
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> Sequence[str]:
+        """
+        The list of AZs where the load balancer is created.
+        """
+        return pulumi.get(self, "availability_zones")
+
+    @property
+    @pulumi.getter(name="backendSubnets")
+    def backend_subnets(self) -> Sequence[str]:
+        """
+        Lists the IDs of subnets on the downstream plane.
+        """
+        return pulumi.get(self, "backend_subnets")
+
+    @property
+    @pulumi.getter(name="crossVpcBackend")
+    def cross_vpc_backend(self) -> bool:
+        """
+        Whether to enable IP as a Backend Server.
+        """
+        return pulumi.get(self, "cross_vpc_backend")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the ELB load balancer.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        Specifies the enterprise project ID.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="gwFlavorId")
+    def gw_flavor_id(self) -> str:
+        """
+        The flavor ID of the gateway load balancer.
+        """
+        return pulumi.get(self, "gw_flavor_id")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The load balancer ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="ipv4Address")
+    def ipv4_address(self) -> str:
+        """
+        The private IPv4 address bound to the load balancer.
+        """
+        return pulumi.get(self, "ipv4_address")
+
+    @property
+    @pulumi.getter(name="ipv4PortId")
+    def ipv4_port_id(self) -> str:
+        """
+        The ID of the port bound to the private IPv4 address of the load balancer.
+        """
+        return pulumi.get(self, "ipv4_port_id")
+
+    @property
+    @pulumi.getter(name="ipv4SubnetId")
+    def ipv4_subnet_id(self) -> str:
+        """
+        Specifies the ID of the IPv4 subnet where the load balancer resides.
+        """
+        return pulumi.get(self, "ipv4_subnet_id")
+
+    @property
+    @pulumi.getter(name="ipv6Address")
+    def ipv6_address(self) -> str:
+        """
+        The IPv6 address bound to the load balancer.
+        """
+        return pulumi.get(self, "ipv6_address")
+
+    @property
+    @pulumi.getter(name="ipv6NetworkId")
+    def ipv6_network_id(self) -> str:
+        """
+        Specifies the ID of the port bound to the IPv6 address of the load balancer.
+        """
+        return pulumi.get(self, "ipv6_network_id")
+
+    @property
+    @pulumi.getter(name="l4FlavorId")
+    def l4_flavor_id(self) -> str:
+        """
+        Specifies the ID of a flavor at Layer 4.
+        """
+        return pulumi.get(self, "l4_flavor_id")
+
+    @property
+    @pulumi.getter(name="l7FlavorId")
+    def l7_flavor_id(self) -> str:
+        """
+        Specifies the ID of a flavor at Layer 7.
+        """
+        return pulumi.get(self, "l7_flavor_id")
+
+    @property
+    @pulumi.getter(name="loadbalancerType")
+    def loadbalancer_type(self) -> str:
+        """
+        The type of the load balancer.
+        """
+        return pulumi.get(self, "loadbalancer_type")
+
+    @property
+    @pulumi.getter(name="minL7FlavorId")
+    def min_l7_flavor_id(self) -> str:
+        """
+        The minimum seven-layer specification ID (specification type L7_elastic) for elastic expansion
+        and contraction
+        """
+        return pulumi.get(self, "min_l7_flavor_id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the ELB load balancer.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> str:
+        """
+        The reason for update protection.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> str:
+        """
+        The protection status for update.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies whether the load balancer is a dedicated load balancer, Value options:
+        **dedicated**, **share**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC where the load balancer resides.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class GetLogtanksLogtankResult(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 loadbalancer_id: str,
+                 log_group_id: str,
+                 log_topic_id: str):
+        """
+        :param str id: The log ID.
+        :param str loadbalancer_id: Specifies the ID of a load balancer
+        :param str log_group_id: Specifies the log group ID.
+        :param str log_topic_id: Specifies the log topic ID.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "loadbalancer_id", loadbalancer_id)
+        pulumi.set(__self__, "log_group_id", log_group_id)
+        pulumi.set(__self__, "log_topic_id", log_topic_id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The log ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="loadbalancerId")
+    def loadbalancer_id(self) -> str:
+        """
+        Specifies the ID of a load balancer
+        """
+        return pulumi.get(self, "loadbalancer_id")
+
+    @property
+    @pulumi.getter(name="logGroupId")
+    def log_group_id(self) -> str:
+        """
+        Specifies the log group ID.
+        """
+        return pulumi.get(self, "log_group_id")
+
+    @property
+    @pulumi.getter(name="logTopicId")
+    def log_topic_id(self) -> str:
+        """
+        Specifies the log topic ID.
+        """
+        return pulumi.get(self, "log_topic_id")
+
+
+@pulumi.output_type
+class GetMonitorsMonitorResult(dict):
+    def __init__(__self__, *,
+                 domain_name: str,
+                 id: str,
+                 interval: int,
+                 max_retries: int,
+                 max_retries_down: int,
+                 name: str,
+                 pool_id: str,
+                 port: int,
+                 protocol: str,
+                 status_code: str,
+                 timeout: int,
+                 url_path: str):
+        """
+        :param str domain_name: Specifies the domain name to which HTTP requests are sent during the health check.
+               The value can be digits, letters, hyphens (-), or periods (.) and must start with a digit or letter.
+        :param str id: The health check ID.
+        :param int interval: Specifies the interval between health checks, in seconds.  
+               The value ranges from `1` to `50`.
+        :param int max_retries: Specifies the number of consecutive health checks when the health check result of a
+               backend server changes from **OFFLINE** to **ONLINE**.
+        :param int max_retries_down: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from **ONLINE** to **OFFLINE**. The value ranges from `1` to `10`.
+        :param str name: Specifies the health check name.
+        :param str pool_id: Specifies the ID of backend server groups for which the health check is configured.
+        :param int port: Specifies the port used for the health check.
+        :param str protocol: Specifies the health check protocol. The value can be **TCP**, **UDP_CONNECT**,
+               **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+        :param str status_code: Specifies the expected HTTP status code. This parameter will take effect only when
+               type is set to **HTTP** or **HTTPS**.Value options:
+               + A specific value, for example, **200**
+               + A list of values that are separated with commas (,), for example, **200**, **202**
+               + A value range, for example, **200**-**204**
+        :param int timeout: Specifies the maximum time required for waiting for a response from the health check, in
+               seconds.
+        :param str url_path: Specifies the HTTP request path for the health check. The value must start with a slash
+               (/), and the default value is **/**. This parameter is available only when type is set to **HTTP**.
+        """
+        pulumi.set(__self__, "domain_name", domain_name)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "interval", interval)
+        pulumi.set(__self__, "max_retries", max_retries)
+        pulumi.set(__self__, "max_retries_down", max_retries_down)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "pool_id", pool_id)
+        pulumi.set(__self__, "port", port)
+        pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "status_code", status_code)
+        pulumi.set(__self__, "timeout", timeout)
+        pulumi.set(__self__, "url_path", url_path)
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> str:
+        """
+        Specifies the domain name to which HTTP requests are sent during the health check.
+        The value can be digits, letters, hyphens (-), or periods (.) and must start with a digit or letter.
+        """
+        return pulumi.get(self, "domain_name")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The health check ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def interval(self) -> int:
+        """
+        Specifies the interval between health checks, in seconds.  
+        The value ranges from `1` to `50`.
+        """
+        return pulumi.get(self, "interval")
+
+    @property
+    @pulumi.getter(name="maxRetries")
+    def max_retries(self) -> int:
+        """
+        Specifies the number of consecutive health checks when the health check result of a
+        backend server changes from **OFFLINE** to **ONLINE**.
+        """
+        return pulumi.get(self, "max_retries")
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> int:
+        """
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from **ONLINE** to **OFFLINE**. The value ranges from `1` to `10`.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the health check name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="poolId")
+    def pool_id(self) -> str:
+        """
+        Specifies the ID of backend server groups for which the health check is configured.
+        """
+        return pulumi.get(self, "pool_id")
+
+    @property
+    @pulumi.getter
+    def port(self) -> int:
+        """
+        Specifies the port used for the health check.
+        """
+        return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter
+    def protocol(self) -> str:
+        """
+        Specifies the health check protocol. The value can be **TCP**, **UDP_CONNECT**,
+        **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+        """
+        return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> str:
+        """
+        Specifies the expected HTTP status code. This parameter will take effect only when
+        type is set to **HTTP** or **HTTPS**.Value options:
+        + A specific value, for example, **200**
+        + A list of values that are separated with commas (,), for example, **200**, **202**
+        + A value range, for example, **200**-**204**
+        """
+        return pulumi.get(self, "status_code")
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> int:
+        """
+        Specifies the maximum time required for waiting for a response from the health check, in
+        seconds.
+        """
+        return pulumi.get(self, "timeout")
+
+    @property
+    @pulumi.getter(name="urlPath")
+    def url_path(self) -> str:
+        """
+        Specifies the HTTP request path for the health check. The value must start with a slash
+        (/), and the default value is **/**. This parameter is available only when type is set to **HTTP**.
+        """
+        return pulumi.get(self, "url_path")
+
+
+@pulumi.output_type
 class GetPoolsPoolResult(dict):
     def __init__(__self__, *,
+                 connection_drain_enabled: bool,
+                 connection_drain_timeout: int,
                  description: str,
                  healthmonitor_id: str,
                  id: str,
@@ -215,24 +4377,44 @@ class GetPoolsPoolResult(dict):
                  listeners: Sequence['outputs.GetPoolsPoolListenerResult'],
                  loadbalancers: Sequence['outputs.GetPoolsPoolLoadbalancerResult'],
                  members: Sequence['outputs.GetPoolsPoolMemberResult'],
+                 minimum_healthy_member_count: int,
                  name: str,
                  persistences: Sequence['outputs.GetPoolsPoolPersistenceResult'],
-                 protocol: str):
+                 protection_reason: str,
+                 protection_status: str,
+                 protocol: str,
+                 slow_start_duration: int,
+                 slow_start_enabled: bool,
+                 type: str,
+                 vpc_id: str):
         """
+        :param bool connection_drain_enabled: Whether to enable delayed logout.
+        :param int connection_drain_timeout: The timeout of the delayed logout in seconds.
         :param str description: Specifies the description of the ELB pool.
         :param str healthmonitor_id: Specifies the health monitor ID of the ELB pool.
         :param str id: The listener, loadbalancer or member ID.
         :param str ip_version: The IP version of the LB pool.
-        :param str lb_method: Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-               or SOURCE_IP.
+        :param str lb_method: Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+               **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
         :param Sequence['GetPoolsPoolListenerArgs'] listeners: The listener list. The object structure is documented below.
         :param Sequence['GetPoolsPoolLoadbalancerArgs'] loadbalancers: The loadbalancer list. The object structure is documented below.
         :param Sequence['GetPoolsPoolMemberArgs'] members: The member list. The object structure is documented below.
+        :param int minimum_healthy_member_count: The minimum healthy member count.
         :param str name: Specifies the name of the ELB pool.
         :param Sequence['GetPoolsPoolPersistenceArgs'] persistences: Indicates whether connections in the same session will be processed by the same pool member or not.
                The object structure is documented below.
-        :param str protocol: Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+        :param str protection_reason: The reason for update protection.
+        :param str protection_status: Specifies the protection status for update.
+               Value options: **nonProtection**, **consoleProtection**.
+        :param str protocol: Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+               **HTTPS**, **QUIC**, **GRPC** or **TLS**.
+        :param int slow_start_duration: The slow start duration, in seconds.
+        :param bool slow_start_enabled: Whether to enable slow start.
+        :param str type: Specifies the type of the backend server group. Value options: **instance**, **ip**.
+        :param str vpc_id: Specifies the ID of the VPC where the backend server group works.
         """
+        pulumi.set(__self__, "connection_drain_enabled", connection_drain_enabled)
+        pulumi.set(__self__, "connection_drain_timeout", connection_drain_timeout)
         pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "healthmonitor_id", healthmonitor_id)
         pulumi.set(__self__, "id", id)
@@ -241,9 +4423,32 @@ class GetPoolsPoolResult(dict):
         pulumi.set(__self__, "listeners", listeners)
         pulumi.set(__self__, "loadbalancers", loadbalancers)
         pulumi.set(__self__, "members", members)
+        pulumi.set(__self__, "minimum_healthy_member_count", minimum_healthy_member_count)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "persistences", persistences)
+        pulumi.set(__self__, "protection_reason", protection_reason)
+        pulumi.set(__self__, "protection_status", protection_status)
         pulumi.set(__self__, "protocol", protocol)
+        pulumi.set(__self__, "slow_start_duration", slow_start_duration)
+        pulumi.set(__self__, "slow_start_enabled", slow_start_enabled)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter(name="connectionDrainEnabled")
+    def connection_drain_enabled(self) -> bool:
+        """
+        Whether to enable delayed logout.
+        """
+        return pulumi.get(self, "connection_drain_enabled")
+
+    @property
+    @pulumi.getter(name="connectionDrainTimeout")
+    def connection_drain_timeout(self) -> int:
+        """
+        The timeout of the delayed logout in seconds.
+        """
+        return pulumi.get(self, "connection_drain_timeout")
 
     @property
     @pulumi.getter
@@ -281,8 +4486,8 @@ class GetPoolsPoolResult(dict):
     @pulumi.getter(name="lbMethod")
     def lb_method(self) -> str:
         """
-        Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-        or SOURCE_IP.
+        Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+        **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
         """
         return pulumi.get(self, "lb_method")
 
@@ -311,6 +4516,14 @@ class GetPoolsPoolResult(dict):
         return pulumi.get(self, "members")
 
     @property
+    @pulumi.getter(name="minimumHealthyMemberCount")
+    def minimum_healthy_member_count(self) -> int:
+        """
+        The minimum healthy member count.
+        """
+        return pulumi.get(self, "minimum_healthy_member_count")
+
+    @property
     @pulumi.getter
     def name(self) -> str:
         """
@@ -328,12 +4541,62 @@ class GetPoolsPoolResult(dict):
         return pulumi.get(self, "persistences")
 
     @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> str:
+        """
+        The reason for update protection.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> str:
+        """
+        Specifies the protection status for update.
+        Value options: **nonProtection**, **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @property
     @pulumi.getter
     def protocol(self) -> str:
         """
-        Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+        Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+        **HTTPS**, **QUIC**, **GRPC** or **TLS**.
         """
         return pulumi.get(self, "protocol")
+
+    @property
+    @pulumi.getter(name="slowStartDuration")
+    def slow_start_duration(self) -> int:
+        """
+        The slow start duration, in seconds.
+        """
+        return pulumi.get(self, "slow_start_duration")
+
+    @property
+    @pulumi.getter(name="slowStartEnabled")
+    def slow_start_enabled(self) -> bool:
+        """
+        Whether to enable slow start.
+        """
+        return pulumi.get(self, "slow_start_enabled")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of the backend server group. Value options: **instance**, **ip**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> str:
+        """
+        Specifies the ID of the VPC where the backend server group works.
+        """
+        return pulumi.get(self, "vpc_id")
 
 
 @pulumi.output_type
@@ -394,12 +4657,15 @@ class GetPoolsPoolMemberResult(dict):
 class GetPoolsPoolPersistenceResult(dict):
     def __init__(__self__, *,
                  cookie_name: str,
+                 timeout: int,
                  type: str):
         """
         :param str cookie_name: The name of the cookie if persistence mode is set appropriately.
-        :param str type: The type of persistence mode.
+        :param int timeout: The stickiness duration, in minutes.
+        :param str type: Specifies the type of the backend server group. Value options: **instance**, **ip**.
         """
         pulumi.set(__self__, "cookie_name", cookie_name)
+        pulumi.set(__self__, "timeout", timeout)
         pulumi.set(__self__, "type", type)
 
     @property
@@ -412,10 +4678,144 @@ class GetPoolsPoolPersistenceResult(dict):
 
     @property
     @pulumi.getter
+    def timeout(self) -> int:
+        """
+        The stickiness duration, in minutes.
+        """
+        return pulumi.get(self, "timeout")
+
+    @property
+    @pulumi.getter
     def type(self) -> str:
         """
-        The type of persistence mode.
+        Specifies the type of the backend server group. Value options: **instance**, **ip**.
         """
         return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class GetSecurityPoliciesSecurityPolicyResult(dict):
+    def __init__(__self__, *,
+                 ciphers: Sequence[str],
+                 created_at: str,
+                 description: str,
+                 id: str,
+                 listeners: Sequence['outputs.GetSecurityPoliciesSecurityPolicyListenerResult'],
+                 name: str,
+                 protocols: Sequence[str],
+                 type: str,
+                 updated_at: str):
+        """
+        :param Sequence[str] ciphers: The cipher suites supported by the security policy.
+        :param str created_at: The time when the custom security policy was created.
+        :param str description: Specifies the description of the security policy.
+        :param str id: The listener ID.
+        :param Sequence['GetSecurityPoliciesSecurityPolicyListenerArgs'] listeners: The IDs of listeners with which the security policy is associated.
+               The listeners structure is documented below.
+        :param str name: Specifies the name of the security policy.
+        :param Sequence[str] protocols: The TLS protocols supported by the security policy.
+        :param str type: Specifies the type of the security policy. Value options: **system**, **custom**.
+        :param str updated_at: The time when the custom security policy was updated.
+        """
+        pulumi.set(__self__, "ciphers", ciphers)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "listeners", listeners)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "protocols", protocols)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter
+    def ciphers(self) -> Sequence[str]:
+        """
+        The cipher suites supported by the security policy.
+        """
+        return pulumi.get(self, "ciphers")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The time when the custom security policy was created.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Specifies the description of the security policy.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The listener ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def listeners(self) -> Sequence['outputs.GetSecurityPoliciesSecurityPolicyListenerResult']:
+        """
+        The IDs of listeners with which the security policy is associated.
+        The listeners structure is documented below.
+        """
+        return pulumi.get(self, "listeners")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the security policy.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def protocols(self) -> Sequence[str]:
+        """
+        The TLS protocols supported by the security policy.
+        """
+        return pulumi.get(self, "protocols")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of the security policy. Value options: **system**, **custom**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The time when the custom security policy was updated.
+        """
+        return pulumi.get(self, "updated_at")
+
+
+@pulumi.output_type
+class GetSecurityPoliciesSecurityPolicyListenerResult(dict):
+    def __init__(__self__, *,
+                 id: str):
+        """
+        :param str id: The listener ID.
+        """
+        pulumi.set(__self__, "id", id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The listener ID.
+        """
+        return pulumi.get(self, "id")
 
 

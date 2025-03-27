@@ -22,6 +22,26 @@ import * as utilities from "../utilities";
  *     smnTopic: topicUrn,
  * });
  * ```
+ * ### Complete Notification and Enable Filtering
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const topicUrn = config.requireObject("topicUrn");
+ * const notify = new huaweicloud.cts.Notification("notify", {
+ *     operationType: "complete",
+ *     smnTopic: topicUrn,
+ *     filter: {
+ *         condition: "AND",
+ *         rules: [
+ *             "code = 200",
+ *             "resource_name = test",
+ *         ],
+ *     },
+ * });
+ * ```
  * ### Customized Notification
  *
  * ```typescript
@@ -46,7 +66,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CTS notifications can be imported using `name`, e.g.
+ * CTS notifications can be imported using `name`, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cts/notification:Notification tracker your_notification
@@ -81,12 +101,25 @@ export class Notification extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+     */
+    public readonly agencyName!: pulumi.Output<string | undefined>;
+    /**
+     * The creation time of the notification.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Specifies whether notification is enabled, defaults to true.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the notification name. The value contains a maximum of 64 characters,
-     * and only letters, digits, underscores(_), and Chinese characters are allowed.
+     * Specifies the filtering rules for notification.
+     * The filter structure is documented below.
+     */
+    public readonly filter!: pulumi.Output<outputs.Cts.NotificationFilter | undefined>;
+    /**
+     * Specifies the notification name. The value contains a maximum of `64` characters,
+     * and only English letters, digits, underscores(_), and Chinese characters are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -101,13 +134,13 @@ export class Notification extends pulumi.CustomResource {
     /**
      * Specifies an array of users. Notifications will be sent when specified users
      * perform specified operations. All users are selected by default.
-     * The object structure is documented below.
+     * The operationUsers structure is documented below.
      */
     public readonly operationUsers!: pulumi.Output<outputs.Cts.NotificationOperationUser[] | undefined>;
     /**
      * Specifies an array of operations that will trigger notifications.
      * For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-     * The object structure is documented below.
+     * The operations structure is documented below.
      */
     public readonly operations!: pulumi.Output<outputs.Cts.NotificationOperation[] | undefined>;
     /**
@@ -137,7 +170,10 @@ export class Notification extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as NotificationState | undefined;
+            resourceInputs["agencyName"] = state ? state.agencyName : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["enabled"] = state ? state.enabled : undefined;
+            resourceInputs["filter"] = state ? state.filter : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["notificationId"] = state ? state.notificationId : undefined;
             resourceInputs["operationType"] = state ? state.operationType : undefined;
@@ -151,13 +187,16 @@ export class Notification extends pulumi.CustomResource {
             if ((!args || args.operationType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'operationType'");
             }
+            resourceInputs["agencyName"] = args ? args.agencyName : undefined;
             resourceInputs["enabled"] = args ? args.enabled : undefined;
+            resourceInputs["filter"] = args ? args.filter : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["operationType"] = args ? args.operationType : undefined;
             resourceInputs["operationUsers"] = args ? args.operationUsers : undefined;
             resourceInputs["operations"] = args ? args.operations : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["smnTopic"] = args ? args.smnTopic : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["notificationId"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
         }
@@ -171,12 +210,25 @@ export class Notification extends pulumi.CustomResource {
  */
 export interface NotificationState {
     /**
+     * Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+     */
+    agencyName?: pulumi.Input<string>;
+    /**
+     * The creation time of the notification.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Specifies whether notification is enabled, defaults to true.
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the notification name. The value contains a maximum of 64 characters,
-     * and only letters, digits, underscores(_), and Chinese characters are allowed.
+     * Specifies the filtering rules for notification.
+     * The filter structure is documented below.
+     */
+    filter?: pulumi.Input<inputs.Cts.NotificationFilter>;
+    /**
+     * Specifies the notification name. The value contains a maximum of `64` characters,
+     * and only English letters, digits, underscores(_), and Chinese characters are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -191,13 +243,13 @@ export interface NotificationState {
     /**
      * Specifies an array of users. Notifications will be sent when specified users
      * perform specified operations. All users are selected by default.
-     * The object structure is documented below.
+     * The operationUsers structure is documented below.
      */
     operationUsers?: pulumi.Input<pulumi.Input<inputs.Cts.NotificationOperationUser>[]>;
     /**
      * Specifies an array of operations that will trigger notifications.
      * For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-     * The object structure is documented below.
+     * The operations structure is documented below.
      */
     operations?: pulumi.Input<pulumi.Input<inputs.Cts.NotificationOperation>[]>;
     /**
@@ -220,12 +272,21 @@ export interface NotificationState {
  */
 export interface NotificationArgs {
     /**
+     * Specifies the cloud service agency name. The value can only be **cts_admin_trust**.
+     */
+    agencyName?: pulumi.Input<string>;
+    /**
      * Specifies whether notification is enabled, defaults to true.
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the notification name. The value contains a maximum of 64 characters,
-     * and only letters, digits, underscores(_), and Chinese characters are allowed.
+     * Specifies the filtering rules for notification.
+     * The filter structure is documented below.
+     */
+    filter?: pulumi.Input<inputs.Cts.NotificationFilter>;
+    /**
+     * Specifies the notification name. The value contains a maximum of `64` characters,
+     * and only English letters, digits, underscores(_), and Chinese characters are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -236,13 +297,13 @@ export interface NotificationArgs {
     /**
      * Specifies an array of users. Notifications will be sent when specified users
      * perform specified operations. All users are selected by default.
-     * The object structure is documented below.
+     * The operationUsers structure is documented below.
      */
     operationUsers?: pulumi.Input<pulumi.Input<inputs.Cts.NotificationOperationUser>[]>;
     /**
      * Specifies an array of operations that will trigger notifications.
      * For details, see [Supported Services and Operations](https://support.huaweicloud.com/intl/en-us/usermanual-cts/cts_03_0022.html).
-     * The object structure is documented below.
+     * The operations structure is documented below.
      */
     operations?: pulumi.Input<pulumi.Input<inputs.Cts.NotificationOperation>[]>;
     /**

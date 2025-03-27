@@ -59,7 +59,7 @@ import (
 //
 // ## Import
 //
-// Organization Permissions can be imported using the `id` (organization name), e.g.
+// Organization Permissions can be imported using the `id` (organization name), e.g. bash
 //
 // ```sh
 //
@@ -77,7 +77,7 @@ type OrganizationPermissions struct {
 	// Specifies the region in which to create the resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The permission informations of current user.
+	// The permission information of current user.
 	SelfPermissions OrganizationPermissionsSelfPermissionArrayOutput `pulumi:"selfPermissions"`
 	// Specifies the users to access to the organization (namespace).
 	// Structure is documented below.
@@ -128,7 +128,7 @@ type organizationPermissionsState struct {
 	// Specifies the region in which to create the resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
-	// The permission informations of current user.
+	// The permission information of current user.
 	SelfPermissions []OrganizationPermissionsSelfPermission `pulumi:"selfPermissions"`
 	// Specifies the users to access to the organization (namespace).
 	// Structure is documented below.
@@ -144,7 +144,7 @@ type OrganizationPermissionsState struct {
 	// Specifies the region in which to create the resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
-	// The permission informations of current user.
+	// The permission information of current user.
 	SelfPermissions OrganizationPermissionsSelfPermissionArrayInput
 	// Specifies the users to access to the organization (namespace).
 	// Structure is documented below.
@@ -284,7 +284,7 @@ func (o OrganizationPermissionsOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *OrganizationPermissions) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The permission informations of current user.
+// The permission information of current user.
 func (o OrganizationPermissionsOutput) SelfPermissions() OrganizationPermissionsSelfPermissionArrayOutput {
 	return o.ApplyT(func(v *OrganizationPermissions) OrganizationPermissionsSelfPermissionArrayOutput {
 		return v.SelfPermissions

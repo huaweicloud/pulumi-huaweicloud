@@ -51,7 +51,7 @@ import (
 //
 // ## Import
 //
-// ELB whitelist can be imported using the whitelist ID, e.g.
+// ELB whitelist can be imported using the whitelist ID, e.g. bash
 //
 // ```sh
 //

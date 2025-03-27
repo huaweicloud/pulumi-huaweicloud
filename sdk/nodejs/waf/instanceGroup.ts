@@ -4,28 +4,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
-/**
- * Manages WAF instance groups within HuaweiCloud. The groups are used to bind the ELB instance to the ELB mode WAF.
- *
- * ## Example Usage
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const vpcId = config.requireObject("vpcId");
- * const group1 = new huaweicloud.waf.InstanceGroup("group1", {vpcId: vpcId});
- * ```
- *
- * ## Import
- *
- * The instance group can be imported using the ID, e.g.
- *
- * ```sh
- *  $ pulumi import huaweicloud:Waf/instanceGroup:InstanceGroup group_1 0be1e69d-1987-4d9c-9dc5-fc7eed592398
- * ```
- */
 export class InstanceGroup extends pulumi.CustomResource {
     /**
      * Get an existing InstanceGroup resource's state with the given name, ID, and optional extra
@@ -54,47 +32,15 @@ export class InstanceGroup extends pulumi.CustomResource {
         return obj['__pulumiType'] === InstanceGroup.__pulumiType;
     }
 
-    /**
-     * The body limit of the forwarding policy.
-     */
     public /*out*/ readonly bodyLimit!: pulumi.Output<number>;
-    /**
-     * The time for connection timeout in the forwarding policy.
-     */
     public /*out*/ readonly connectionTimeout!: pulumi.Output<number>;
-    /**
-     * Specifies the description of the instance group.
-     */
     public readonly description!: pulumi.Output<string | undefined>;
-    /**
-     * The header limit of the forwarding policy.
-     */
     public /*out*/ readonly headerLimit!: pulumi.Output<number>;
-    /**
-     * The IDs of the ELB instances that has been bound to the instance group.
-     */
     public /*out*/ readonly loadBalancers!: pulumi.Output<string[]>;
-    /**
-     * Specifies the instance group name.
-     * The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-     */
     public readonly name!: pulumi.Output<string>;
-    /**
-     * The time for reading timeout in the forwarding policy.
-     */
     public /*out*/ readonly readTimeout!: pulumi.Output<number>;
-    /**
-     * The region in which to create the instance group.
-     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-     */
     public readonly region!: pulumi.Output<string>;
-    /**
-     * Specifies the id of the VPC that the WAF dedicated instances belongs to.
-     */
     public readonly vpcId!: pulumi.Output<string>;
-    /**
-     * The time for writing timeout in the forwarding policy.
-     */
     public /*out*/ readonly writeTimeout!: pulumi.Output<number>;
 
     /**
@@ -145,47 +91,15 @@ export class InstanceGroup extends pulumi.CustomResource {
  * Input properties used for looking up and filtering InstanceGroup resources.
  */
 export interface InstanceGroupState {
-    /**
-     * The body limit of the forwarding policy.
-     */
     bodyLimit?: pulumi.Input<number>;
-    /**
-     * The time for connection timeout in the forwarding policy.
-     */
     connectionTimeout?: pulumi.Input<number>;
-    /**
-     * Specifies the description of the instance group.
-     */
     description?: pulumi.Input<string>;
-    /**
-     * The header limit of the forwarding policy.
-     */
     headerLimit?: pulumi.Input<number>;
-    /**
-     * The IDs of the ELB instances that has been bound to the instance group.
-     */
     loadBalancers?: pulumi.Input<pulumi.Input<string>[]>;
-    /**
-     * Specifies the instance group name.
-     * The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-     */
     name?: pulumi.Input<string>;
-    /**
-     * The time for reading timeout in the forwarding policy.
-     */
     readTimeout?: pulumi.Input<number>;
-    /**
-     * The region in which to create the instance group.
-     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-     */
     region?: pulumi.Input<string>;
-    /**
-     * Specifies the id of the VPC that the WAF dedicated instances belongs to.
-     */
     vpcId?: pulumi.Input<string>;
-    /**
-     * The time for writing timeout in the forwarding policy.
-     */
     writeTimeout?: pulumi.Input<number>;
 }
 
@@ -193,22 +107,8 @@ export interface InstanceGroupState {
  * The set of arguments for constructing a InstanceGroup resource.
  */
 export interface InstanceGroupArgs {
-    /**
-     * Specifies the description of the instance group.
-     */
     description?: pulumi.Input<string>;
-    /**
-     * Specifies the instance group name.
-     * The maximum length is 64 characters. Only letters, digits and underscores (_) are allowed.
-     */
     name?: pulumi.Input<string>;
-    /**
-     * The region in which to create the instance group.
-     * If omitted, the provider-level region will be used. Changing this setting will create a new resource.
-     */
     region?: pulumi.Input<string>;
-    /**
-     * Specifies the id of the VPC that the WAF dedicated instances belongs to.
-     */
     vpcId: pulumi.Input<string>;
 }

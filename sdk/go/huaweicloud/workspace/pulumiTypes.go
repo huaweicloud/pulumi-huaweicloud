@@ -178,7 +178,6 @@ func (o DesktopDataVolumeArrayOutput) Index(i pulumi.IntInput) DesktopDataVolume
 
 type DesktopNic struct {
 	// Specifies the network ID of subnet resource.
-	// Changing this will create a new resource.
 	NetworkId string `pulumi:"networkId"`
 }
 
@@ -195,7 +194,6 @@ type DesktopNicInput interface {
 
 type DesktopNicArgs struct {
 	// Specifies the network ID of subnet resource.
-	// Changing this will create a new resource.
 	NetworkId pulumi.StringInput `pulumi:"networkId"`
 }
 
@@ -251,7 +249,6 @@ func (o DesktopNicOutput) ToDesktopNicOutputWithContext(ctx context.Context) Des
 }
 
 // Specifies the network ID of subnet resource.
-// Changing this will create a new resource.
 func (o DesktopNicOutput) NetworkId() pulumi.StringOutput {
 	return o.ApplyT(func(v DesktopNic) string { return v.NetworkId }).(pulumi.StringOutput)
 }
@@ -1078,6 +1075,327 @@ func (o ServiceInfrastructureSecurityGroupArrayOutput) Index(i pulumi.IntInput) 
 	}).(ServiceInfrastructureSecurityGroupOutput)
 }
 
+type ServiceOtpConfigInfo struct {
+	// Specifies the auxiliary authentication server access account.
+	AppId *string `pulumi:"appId"`
+	// Specifies the authentication service access password.
+	AppSecret *string `pulumi:"appSecret"`
+	// Specifies the authentication service access mode.
+	// + **INTERNET**: Indicates internet access.
+	// + **DEDICATED**: Indicates dedicated access.
+	// + **SYSTEM_DEFAULT**: Indicates system default.
+	AuthServerAccessMode *string `pulumi:"authServerAccessMode"`
+	// Specifies the auxiliary authentication server address.
+	AuthUrl *string `pulumi:"authUrl"`
+	// Specifies the PEM format certificate content.
+	CertContent *string `pulumi:"certContent"`
+	// Specifies whether to enable auxiliary authentication.
+	Enable bool `pulumi:"enable"`
+	// Specifies the verification code receiving mode.
+	// + **VMFA**: Indicates virtual MFA device.
+	// + **HMFA**: Indicates hardware MFA device.
+	ReceiveMode string `pulumi:"receiveMode"`
+	// Specifies authentication application object.
+	// + **INTERNET**: Indicates Internet access. Optional only when ruleType is **ACCESS_MODE**.
+	// + **PRIVATE**: Indicates dedicated line access. Optional only when ruleType is **ACCESS_MODE**.
+	Rule *string `pulumi:"rule"`
+	// Specifies authentication application object type.
+	// + **ACCESS_MODE**: Indicates access type.
+	RuleType *string `pulumi:"ruleType"`
+}
+
+// ServiceOtpConfigInfoInput is an input type that accepts ServiceOtpConfigInfoArgs and ServiceOtpConfigInfoOutput values.
+// You can construct a concrete instance of `ServiceOtpConfigInfoInput` via:
+//
+//	ServiceOtpConfigInfoArgs{...}
+type ServiceOtpConfigInfoInput interface {
+	pulumi.Input
+
+	ToServiceOtpConfigInfoOutput() ServiceOtpConfigInfoOutput
+	ToServiceOtpConfigInfoOutputWithContext(context.Context) ServiceOtpConfigInfoOutput
+}
+
+type ServiceOtpConfigInfoArgs struct {
+	// Specifies the auxiliary authentication server access account.
+	AppId pulumi.StringPtrInput `pulumi:"appId"`
+	// Specifies the authentication service access password.
+	AppSecret pulumi.StringPtrInput `pulumi:"appSecret"`
+	// Specifies the authentication service access mode.
+	// + **INTERNET**: Indicates internet access.
+	// + **DEDICATED**: Indicates dedicated access.
+	// + **SYSTEM_DEFAULT**: Indicates system default.
+	AuthServerAccessMode pulumi.StringPtrInput `pulumi:"authServerAccessMode"`
+	// Specifies the auxiliary authentication server address.
+	AuthUrl pulumi.StringPtrInput `pulumi:"authUrl"`
+	// Specifies the PEM format certificate content.
+	CertContent pulumi.StringPtrInput `pulumi:"certContent"`
+	// Specifies whether to enable auxiliary authentication.
+	Enable pulumi.BoolInput `pulumi:"enable"`
+	// Specifies the verification code receiving mode.
+	// + **VMFA**: Indicates virtual MFA device.
+	// + **HMFA**: Indicates hardware MFA device.
+	ReceiveMode pulumi.StringInput `pulumi:"receiveMode"`
+	// Specifies authentication application object.
+	// + **INTERNET**: Indicates Internet access. Optional only when ruleType is **ACCESS_MODE**.
+	// + **PRIVATE**: Indicates dedicated line access. Optional only when ruleType is **ACCESS_MODE**.
+	Rule pulumi.StringPtrInput `pulumi:"rule"`
+	// Specifies authentication application object type.
+	// + **ACCESS_MODE**: Indicates access type.
+	RuleType pulumi.StringPtrInput `pulumi:"ruleType"`
+}
+
+func (ServiceOtpConfigInfoArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*ServiceOtpConfigInfo)(nil)).Elem()
+}
+
+func (i ServiceOtpConfigInfoArgs) ToServiceOtpConfigInfoOutput() ServiceOtpConfigInfoOutput {
+	return i.ToServiceOtpConfigInfoOutputWithContext(context.Background())
+}
+
+func (i ServiceOtpConfigInfoArgs) ToServiceOtpConfigInfoOutputWithContext(ctx context.Context) ServiceOtpConfigInfoOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ServiceOtpConfigInfoOutput)
+}
+
+func (i ServiceOtpConfigInfoArgs) ToServiceOtpConfigInfoPtrOutput() ServiceOtpConfigInfoPtrOutput {
+	return i.ToServiceOtpConfigInfoPtrOutputWithContext(context.Background())
+}
+
+func (i ServiceOtpConfigInfoArgs) ToServiceOtpConfigInfoPtrOutputWithContext(ctx context.Context) ServiceOtpConfigInfoPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ServiceOtpConfigInfoOutput).ToServiceOtpConfigInfoPtrOutputWithContext(ctx)
+}
+
+// ServiceOtpConfigInfoPtrInput is an input type that accepts ServiceOtpConfigInfoArgs, ServiceOtpConfigInfoPtr and ServiceOtpConfigInfoPtrOutput values.
+// You can construct a concrete instance of `ServiceOtpConfigInfoPtrInput` via:
+//
+//	        ServiceOtpConfigInfoArgs{...}
+//
+//	or:
+//
+//	        nil
+type ServiceOtpConfigInfoPtrInput interface {
+	pulumi.Input
+
+	ToServiceOtpConfigInfoPtrOutput() ServiceOtpConfigInfoPtrOutput
+	ToServiceOtpConfigInfoPtrOutputWithContext(context.Context) ServiceOtpConfigInfoPtrOutput
+}
+
+type serviceOtpConfigInfoPtrType ServiceOtpConfigInfoArgs
+
+func ServiceOtpConfigInfoPtr(v *ServiceOtpConfigInfoArgs) ServiceOtpConfigInfoPtrInput {
+	return (*serviceOtpConfigInfoPtrType)(v)
+}
+
+func (*serviceOtpConfigInfoPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**ServiceOtpConfigInfo)(nil)).Elem()
+}
+
+func (i *serviceOtpConfigInfoPtrType) ToServiceOtpConfigInfoPtrOutput() ServiceOtpConfigInfoPtrOutput {
+	return i.ToServiceOtpConfigInfoPtrOutputWithContext(context.Background())
+}
+
+func (i *serviceOtpConfigInfoPtrType) ToServiceOtpConfigInfoPtrOutputWithContext(ctx context.Context) ServiceOtpConfigInfoPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(ServiceOtpConfigInfoPtrOutput)
+}
+
+type ServiceOtpConfigInfoOutput struct{ *pulumi.OutputState }
+
+func (ServiceOtpConfigInfoOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*ServiceOtpConfigInfo)(nil)).Elem()
+}
+
+func (o ServiceOtpConfigInfoOutput) ToServiceOtpConfigInfoOutput() ServiceOtpConfigInfoOutput {
+	return o
+}
+
+func (o ServiceOtpConfigInfoOutput) ToServiceOtpConfigInfoOutputWithContext(ctx context.Context) ServiceOtpConfigInfoOutput {
+	return o
+}
+
+func (o ServiceOtpConfigInfoOutput) ToServiceOtpConfigInfoPtrOutput() ServiceOtpConfigInfoPtrOutput {
+	return o.ToServiceOtpConfigInfoPtrOutputWithContext(context.Background())
+}
+
+func (o ServiceOtpConfigInfoOutput) ToServiceOtpConfigInfoPtrOutputWithContext(ctx context.Context) ServiceOtpConfigInfoPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v ServiceOtpConfigInfo) *ServiceOtpConfigInfo {
+		return &v
+	}).(ServiceOtpConfigInfoPtrOutput)
+}
+
+// Specifies the auxiliary authentication server access account.
+func (o ServiceOtpConfigInfoOutput) AppId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.AppId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication service access password.
+func (o ServiceOtpConfigInfoOutput) AppSecret() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.AppSecret }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication service access mode.
+// + **INTERNET**: Indicates internet access.
+// + **DEDICATED**: Indicates dedicated access.
+// + **SYSTEM_DEFAULT**: Indicates system default.
+func (o ServiceOtpConfigInfoOutput) AuthServerAccessMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.AuthServerAccessMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the auxiliary authentication server address.
+func (o ServiceOtpConfigInfoOutput) AuthUrl() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.AuthUrl }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the PEM format certificate content.
+func (o ServiceOtpConfigInfoOutput) CertContent() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.CertContent }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable auxiliary authentication.
+func (o ServiceOtpConfigInfoOutput) Enable() pulumi.BoolOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) bool { return v.Enable }).(pulumi.BoolOutput)
+}
+
+// Specifies the verification code receiving mode.
+// + **VMFA**: Indicates virtual MFA device.
+// + **HMFA**: Indicates hardware MFA device.
+func (o ServiceOtpConfigInfoOutput) ReceiveMode() pulumi.StringOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) string { return v.ReceiveMode }).(pulumi.StringOutput)
+}
+
+// Specifies authentication application object.
+// + **INTERNET**: Indicates Internet access. Optional only when ruleType is **ACCESS_MODE**.
+// + **PRIVATE**: Indicates dedicated line access. Optional only when ruleType is **ACCESS_MODE**.
+func (o ServiceOtpConfigInfoOutput) Rule() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.Rule }).(pulumi.StringPtrOutput)
+}
+
+// Specifies authentication application object type.
+// + **ACCESS_MODE**: Indicates access type.
+func (o ServiceOtpConfigInfoOutput) RuleType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ServiceOtpConfigInfo) *string { return v.RuleType }).(pulumi.StringPtrOutput)
+}
+
+type ServiceOtpConfigInfoPtrOutput struct{ *pulumi.OutputState }
+
+func (ServiceOtpConfigInfoPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**ServiceOtpConfigInfo)(nil)).Elem()
+}
+
+func (o ServiceOtpConfigInfoPtrOutput) ToServiceOtpConfigInfoPtrOutput() ServiceOtpConfigInfoPtrOutput {
+	return o
+}
+
+func (o ServiceOtpConfigInfoPtrOutput) ToServiceOtpConfigInfoPtrOutputWithContext(ctx context.Context) ServiceOtpConfigInfoPtrOutput {
+	return o
+}
+
+func (o ServiceOtpConfigInfoPtrOutput) Elem() ServiceOtpConfigInfoOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) ServiceOtpConfigInfo {
+		if v != nil {
+			return *v
+		}
+		var ret ServiceOtpConfigInfo
+		return ret
+	}).(ServiceOtpConfigInfoOutput)
+}
+
+// Specifies the auxiliary authentication server access account.
+func (o ServiceOtpConfigInfoPtrOutput) AppId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AppId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication service access password.
+func (o ServiceOtpConfigInfoPtrOutput) AppSecret() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AppSecret
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the authentication service access mode.
+// + **INTERNET**: Indicates internet access.
+// + **DEDICATED**: Indicates dedicated access.
+// + **SYSTEM_DEFAULT**: Indicates system default.
+func (o ServiceOtpConfigInfoPtrOutput) AuthServerAccessMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AuthServerAccessMode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the auxiliary authentication server address.
+func (o ServiceOtpConfigInfoPtrOutput) AuthUrl() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AuthUrl
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the PEM format certificate content.
+func (o ServiceOtpConfigInfoPtrOutput) CertContent() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.CertContent
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to enable auxiliary authentication.
+func (o ServiceOtpConfigInfoPtrOutput) Enable() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *bool {
+		if v == nil {
+			return nil
+		}
+		return &v.Enable
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the verification code receiving mode.
+// + **VMFA**: Indicates virtual MFA device.
+// + **HMFA**: Indicates hardware MFA device.
+func (o ServiceOtpConfigInfoPtrOutput) ReceiveMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.ReceiveMode
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies authentication application object.
+// + **INTERNET**: Indicates Internet access. Optional only when ruleType is **ACCESS_MODE**.
+// + **PRIVATE**: Indicates dedicated line access. Optional only when ruleType is **ACCESS_MODE**.
+func (o ServiceOtpConfigInfoPtrOutput) Rule() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Rule
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies authentication application object type.
+// + **ACCESS_MODE**: Indicates access type.
+func (o ServiceOtpConfigInfoPtrOutput) RuleType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ServiceOtpConfigInfo) *string {
+		if v == nil {
+			return nil
+		}
+		return v.RuleType
+	}).(pulumi.StringPtrOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*DesktopDataVolumeInput)(nil)).Elem(), DesktopDataVolumeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*DesktopDataVolumeArrayInput)(nil)).Elem(), DesktopDataVolumeArray{})
@@ -1091,6 +1409,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*ServiceDesktopSecurityGroupArrayInput)(nil)).Elem(), ServiceDesktopSecurityGroupArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ServiceInfrastructureSecurityGroupInput)(nil)).Elem(), ServiceInfrastructureSecurityGroupArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*ServiceInfrastructureSecurityGroupArrayInput)(nil)).Elem(), ServiceInfrastructureSecurityGroupArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ServiceOtpConfigInfoInput)(nil)).Elem(), ServiceOtpConfigInfoArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*ServiceOtpConfigInfoPtrInput)(nil)).Elem(), ServiceOtpConfigInfoArgs{})
 	pulumi.RegisterOutputType(DesktopDataVolumeOutput{})
 	pulumi.RegisterOutputType(DesktopDataVolumeArrayOutput{})
 	pulumi.RegisterOutputType(DesktopNicOutput{})
@@ -1103,4 +1423,6 @@ func init() {
 	pulumi.RegisterOutputType(ServiceDesktopSecurityGroupArrayOutput{})
 	pulumi.RegisterOutputType(ServiceInfrastructureSecurityGroupOutput{})
 	pulumi.RegisterOutputType(ServiceInfrastructureSecurityGroupArrayOutput{})
+	pulumi.RegisterOutputType(ServiceOtpConfigInfoOutput{})
+	pulumi.RegisterOutputType(ServiceOtpConfigInfoPtrOutput{})
 }

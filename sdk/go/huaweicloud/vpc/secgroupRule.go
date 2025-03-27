@@ -48,6 +48,40 @@ import (
 //	}
 //
 // ```
+// ### Create an egress rule that opens TCP port 8080 with port range parameters
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
+//			_, err := Vpc.NewSecgroupRule(ctx, "test", &Vpc.SecgroupRuleArgs{
+//				SecurityGroupId: pulumi.Any(securityGroupId),
+//				Direction:       pulumi.String("egress"),
+//				Ethertype:       pulumi.String("IPv4"),
+//				Protocol:        pulumi.String("tcp"),
+//				PortRangeMin:    pulumi.Int(8080),
+//				PortRangeMax:    pulumi.Int(8080),
+//				RemoteIpPrefix:  pulumi.String("0.0.0.0/0"),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 // ### Create an ingress rule that enable the remote address group and open some TCP ports
 //
 // ```go
@@ -93,10 +127,55 @@ import (
 //	}
 //
 // ```
+// ### Create an egress rule that enable the remote address group and open some TCP ports
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			groupName := cfg.RequireObject("groupName")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
+//			testAddressGroup, err := Vpc.NewAddressGroup(ctx, "testAddressGroup", &Vpc.AddressGroupArgs{
+//				Addresses: pulumi.StringArray{
+//					pulumi.String("192.168.10.12"),
+//					pulumi.String("192.168.11.0-192.168.11.240"),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			_, err = Vpc.NewSecgroupRule(ctx, "testSecgroupRule", &Vpc.SecgroupRuleArgs{
+//				SecurityGroupId:      pulumi.Any(securityGroupId),
+//				Direction:            pulumi.String("egress"),
+//				Action:               pulumi.String("allow"),
+//				Ethertype:            pulumi.String("IPv4"),
+//				Ports:                pulumi.String("80,500,600-800"),
+//				Protocol:             pulumi.String("tcp"),
+//				Priority:             pulumi.Int(5),
+//				RemoteAddressGroupId: testAddressGroup.ID(),
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 //
 // ## Import
 //
-// Security Group Rules can be imported using the `id`, e.g.
+// Security Group Rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -129,11 +208,11 @@ type SecgroupRule struct {
 	// This parameter and `ports` are alternative.
 	PortRangeMin pulumi.IntOutput `pulumi:"portRangeMin"`
 	// Specifies the allowed port value range, which supports single port (80),
-	// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+	// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 	// Changing this creates a new security group rule.
 	Ports pulumi.StringOutput `pulumi:"ports"`
 	// Specifies the priority number.
-	// The valid value is range from **1** to **100**. The default value is **1**.
+	// The valid value is range from `1` to `100`. The default value is `1`.
 	// This parameter is not used with `portRangeMin` and `portRangeMax`.
 	// Changing this creates a new security group rule.
 	Priority pulumi.IntOutput `pulumi:"priority"`
@@ -152,7 +231,8 @@ type SecgroupRule struct {
 	// group rule.
 	RemoteGroupId pulumi.StringOutput `pulumi:"remoteGroupId"`
 	// Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-	// 192.168.0.0/16). Changing this creates a new security group rule.
+	// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+	// Changing this creates a new security group rule.
 	RemoteIpPrefix pulumi.StringOutput `pulumi:"remoteIpPrefix"`
 	// Specifies the security group ID the rule should belong to. Changing
 	// this creates a new security group rule.
@@ -221,11 +301,11 @@ type secgroupRuleState struct {
 	// This parameter and `ports` are alternative.
 	PortRangeMin *int `pulumi:"portRangeMin"`
 	// Specifies the allowed port value range, which supports single port (80),
-	// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+	// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 	// Changing this creates a new security group rule.
 	Ports *string `pulumi:"ports"`
 	// Specifies the priority number.
-	// The valid value is range from **1** to **100**. The default value is **1**.
+	// The valid value is range from `1` to `100`. The default value is `1`.
 	// This parameter is not used with `portRangeMin` and `portRangeMax`.
 	// Changing this creates a new security group rule.
 	Priority *int `pulumi:"priority"`
@@ -244,7 +324,8 @@ type secgroupRuleState struct {
 	// group rule.
 	RemoteGroupId *string `pulumi:"remoteGroupId"`
 	// Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-	// 192.168.0.0/16). Changing this creates a new security group rule.
+	// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+	// Changing this creates a new security group rule.
 	RemoteIpPrefix *string `pulumi:"remoteIpPrefix"`
 	// Specifies the security group ID the rule should belong to. Changing
 	// this creates a new security group rule.
@@ -275,11 +356,11 @@ type SecgroupRuleState struct {
 	// This parameter and `ports` are alternative.
 	PortRangeMin pulumi.IntPtrInput
 	// Specifies the allowed port value range, which supports single port (80),
-	// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+	// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 	// Changing this creates a new security group rule.
 	Ports pulumi.StringPtrInput
 	// Specifies the priority number.
-	// The valid value is range from **1** to **100**. The default value is **1**.
+	// The valid value is range from `1` to `100`. The default value is `1`.
 	// This parameter is not used with `portRangeMin` and `portRangeMax`.
 	// Changing this creates a new security group rule.
 	Priority pulumi.IntPtrInput
@@ -298,7 +379,8 @@ type SecgroupRuleState struct {
 	// group rule.
 	RemoteGroupId pulumi.StringPtrInput
 	// Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-	// 192.168.0.0/16). Changing this creates a new security group rule.
+	// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+	// Changing this creates a new security group rule.
 	RemoteIpPrefix pulumi.StringPtrInput
 	// Specifies the security group ID the rule should belong to. Changing
 	// this creates a new security group rule.
@@ -333,11 +415,11 @@ type secgroupRuleArgs struct {
 	// This parameter and `ports` are alternative.
 	PortRangeMin *int `pulumi:"portRangeMin"`
 	// Specifies the allowed port value range, which supports single port (80),
-	// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+	// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 	// Changing this creates a new security group rule.
 	Ports *string `pulumi:"ports"`
 	// Specifies the priority number.
-	// The valid value is range from **1** to **100**. The default value is **1**.
+	// The valid value is range from `1` to `100`. The default value is `1`.
 	// This parameter is not used with `portRangeMin` and `portRangeMax`.
 	// Changing this creates a new security group rule.
 	Priority *int `pulumi:"priority"`
@@ -356,7 +438,8 @@ type secgroupRuleArgs struct {
 	// group rule.
 	RemoteGroupId *string `pulumi:"remoteGroupId"`
 	// Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-	// 192.168.0.0/16). Changing this creates a new security group rule.
+	// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+	// Changing this creates a new security group rule.
 	RemoteIpPrefix *string `pulumi:"remoteIpPrefix"`
 	// Specifies the security group ID the rule should belong to. Changing
 	// this creates a new security group rule.
@@ -388,11 +471,11 @@ type SecgroupRuleArgs struct {
 	// This parameter and `ports` are alternative.
 	PortRangeMin pulumi.IntPtrInput
 	// Specifies the allowed port value range, which supports single port (80),
-	// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+	// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 	// Changing this creates a new security group rule.
 	Ports pulumi.StringPtrInput
 	// Specifies the priority number.
-	// The valid value is range from **1** to **100**. The default value is **1**.
+	// The valid value is range from `1` to `100`. The default value is `1`.
 	// This parameter is not used with `portRangeMin` and `portRangeMax`.
 	// Changing this creates a new security group rule.
 	Priority pulumi.IntPtrInput
@@ -411,7 +494,8 @@ type SecgroupRuleArgs struct {
 	// group rule.
 	RemoteGroupId pulumi.StringPtrInput
 	// Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-	// 192.168.0.0/16). Changing this creates a new security group rule.
+	// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+	// Changing this creates a new security group rule.
 	RemoteIpPrefix pulumi.StringPtrInput
 	// Specifies the security group ID the rule should belong to. Changing
 	// this creates a new security group rule.
@@ -546,14 +630,14 @@ func (o SecgroupRuleOutput) PortRangeMin() pulumi.IntOutput {
 }
 
 // Specifies the allowed port value range, which supports single port (80),
-// continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+// continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
 // Changing this creates a new security group rule.
 func (o SecgroupRuleOutput) Ports() pulumi.StringOutput {
 	return o.ApplyT(func(v *SecgroupRule) pulumi.StringOutput { return v.Ports }).(pulumi.StringOutput)
 }
 
 // Specifies the priority number.
-// The valid value is range from **1** to **100**. The default value is **1**.
+// The valid value is range from `1` to `100`. The default value is `1`.
 // This parameter is not used with `portRangeMin` and `portRangeMax`.
 // Changing this creates a new security group rule.
 func (o SecgroupRuleOutput) Priority() pulumi.IntOutput {
@@ -587,7 +671,8 @@ func (o SecgroupRuleOutput) RemoteGroupId() pulumi.StringOutput {
 }
 
 // Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-// 192.168.0.0/16). Changing this creates a new security group rule.
+// 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+// Changing this creates a new security group rule.
 func (o SecgroupRuleOutput) RemoteIpPrefix() pulumi.StringOutput {
 	return o.ApplyT(func(v *SecgroupRule) pulumi.StringOutput { return v.RemoteIpPrefix }).(pulumi.StringOutput)
 }

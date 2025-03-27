@@ -63,7 +63,7 @@ class ClusterBackupStrategy(dict):
         """
         :param str start_time: Specifies the time when a snapshot is automatically created everyday. Snapshots can
                only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-               format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+               format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
                and "01:00 GMT+08:00".
         :param str agency: Specifies the IAM agency used to access OBS.
         :param str backup_path: Specifies the storage path of the snapshot in the OBS bucket.
@@ -71,8 +71,7 @@ class ClusterBackupStrategy(dict):
                bucket, only the OBS bucket is used and cannot be changed.
         :param int keep_days: Specifies the number of days to retain the generated snapshots. Snapshots are reserved
                for seven days by default.
-        :param str prefix: Specifies the prefix of the snapshot that is automatically created. The default value
-               is "snapshot".
+        :param str prefix: Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
         """
         pulumi.set(__self__, "start_time", start_time)
         if agency is not None:
@@ -92,7 +91,7 @@ class ClusterBackupStrategy(dict):
         """
         Specifies the time when a snapshot is automatically created everyday. Snapshots can
         only be created on the hour. The time format is the time followed by the time zone, specifically, **HH:mm z**. In the
-        format, HH:mm refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
+        format, **HH:mm** refers to the hour time and z refers to the time zone. For example, "00:00 GMT+08:00"
         and "01:00 GMT+08:00".
         """
         return pulumi.get(self, "start_time")
@@ -135,8 +134,7 @@ class ClusterBackupStrategy(dict):
     @pulumi.getter
     def prefix(self) -> Optional[str]:
         """
-        Specifies the prefix of the snapshot that is automatically created. The default value
-        is "snapshot".
+        Specifies the prefix of the snapshot that is automatically created. Defaults to **snapshot**.
         """
         return pulumi.get(self, "prefix")
 
@@ -148,6 +146,8 @@ class ClusterClientNodeConfig(dict):
         suggest = None
         if key == "instanceNumber":
             suggest = "instance_number"
+        elif key == "shrinkNodeIds":
+            suggest = "shrink_node_ids"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ClusterClientNodeConfig. Access the value via the '{suggest}' property getter instead.")
@@ -163,30 +163,28 @@ class ClusterClientNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
-                 volume: 'outputs.ClusterClientNodeConfigVolume'):
+                 volume: 'outputs.ClusterClientNodeConfigVolume',
+                 shrink_node_ids: Optional[Sequence[str]] = None):
         """
-        :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-               40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-               to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-               to 10240 GB. Changing this parameter will create a new resource.
+        :param str flavor: Specifies the flavor name.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `master_node_config`, The value range is 3 to 10.
-               + When it is `client_node_config`, The value range is 1 to 32.
+               + When it is `master_node_config`, The value range is `3` to `10`.
+               + When it is `client_node_config`, The value range is `1` to `32`.
         :param 'ClusterClientNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
+        :param Sequence[str] shrink_node_ids: Specifies the node IDs that needs to be scaled down.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
         pulumi.set(__self__, "volume", volume)
+        if shrink_node_ids is not None:
+            pulumi.set(__self__, "shrink_node_ids", shrink_node_ids)
 
     @property
     @pulumi.getter
     def flavor(self) -> str:
         """
-        Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-        40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-        to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-        to 10240 GB. Changing this parameter will create a new resource.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "flavor")
 
@@ -195,8 +193,8 @@ class ClusterClientNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `master_node_config`, The value range is 3 to 10.
-        + When it is `client_node_config`, The value range is 1 to 32.
+        + When it is `master_node_config`, The value range is `3` to `10`.
+        + When it is `client_node_config`, The value range is `1` to `32`.
         """
         return pulumi.get(self, "instance_number")
 
@@ -208,6 +206,14 @@ class ClusterClientNodeConfig(dict):
         The volume structure is documented below.
         """
         return pulumi.get(self, "volume")
+
+    @property
+    @pulumi.getter(name="shrinkNodeIds")
+    def shrink_node_ids(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the node IDs that needs to be scaled down.
+        """
+        return pulumi.get(self, "shrink_node_ids")
 
 
 @pulumi.output_type
@@ -233,8 +239,7 @@ class ClusterClientNodeConfigVolume(dict):
                  size: int,
                  volume_type: str):
         """
-        :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-               Changing this parameter will create a new resource.
+        :param int size: Specifies the volume size in **GB**, which must be a multiple of `10`.
         :param str volume_type: Specifies the volume type. Value options are as follows:
                + **COMMON**: Common I/O. The SATA disk is used.
                + **HIGH**: High I/O. The SAS disk is used.
@@ -247,8 +252,7 @@ class ClusterClientNodeConfigVolume(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the volume size in GB, which must be a multiple of 10.
-        Changing this parameter will create a new resource.
+        Specifies the volume size in **GB**, which must be a multiple of `10`.
         """
         return pulumi.get(self, "size")
 
@@ -271,6 +275,8 @@ class ClusterColdNodeConfig(dict):
         suggest = None
         if key == "instanceNumber":
             suggest = "instance_number"
+        elif key == "shrinkNodeIds":
+            suggest = "shrink_node_ids"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ClusterColdNodeConfig. Access the value via the '{suggest}' property getter instead.")
@@ -286,20 +292,21 @@ class ClusterColdNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
+                 shrink_node_ids: Optional[Sequence[str]] = None,
                  volume: Optional['outputs.ClusterColdNodeConfigVolume'] = None):
         """
-        :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-               40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-               to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-               to 10240 GB. Changing this parameter will create a new resource.
+        :param str flavor: Specifies the flavor name.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `master_node_config`, The value range is 3 to 10.
-               + When it is `client_node_config`, The value range is 1 to 32.
+               + When it is `master_node_config`, The value range is `3` to `10`.
+               + When it is `client_node_config`, The value range is `1` to `32`.
+        :param Sequence[str] shrink_node_ids: Specifies the node IDs that needs to be scaled down.
         :param 'ClusterColdNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
+        if shrink_node_ids is not None:
+            pulumi.set(__self__, "shrink_node_ids", shrink_node_ids)
         if volume is not None:
             pulumi.set(__self__, "volume", volume)
 
@@ -307,10 +314,7 @@ class ClusterColdNodeConfig(dict):
     @pulumi.getter
     def flavor(self) -> str:
         """
-        Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-        40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-        to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-        to 10240 GB. Changing this parameter will create a new resource.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "flavor")
 
@@ -319,10 +323,18 @@ class ClusterColdNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `master_node_config`, The value range is 3 to 10.
-        + When it is `client_node_config`, The value range is 1 to 32.
+        + When it is `master_node_config`, The value range is `3` to `10`.
+        + When it is `client_node_config`, The value range is `1` to `32`.
         """
         return pulumi.get(self, "instance_number")
+
+    @property
+    @pulumi.getter(name="shrinkNodeIds")
+    def shrink_node_ids(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the node IDs that needs to be scaled down.
+        """
+        return pulumi.get(self, "shrink_node_ids")
 
     @property
     @pulumi.getter
@@ -357,8 +369,7 @@ class ClusterColdNodeConfigVolume(dict):
                  size: int,
                  volume_type: str):
         """
-        :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-               Changing this parameter will create a new resource.
+        :param int size: Specifies the volume size in **GB**, which must be a multiple of `10`.
         :param str volume_type: Specifies the volume type. Value options are as follows:
                + **COMMON**: Common I/O. The SATA disk is used.
                + **HIGH**: High I/O. The SAS disk is used.
@@ -371,8 +382,7 @@ class ClusterColdNodeConfigVolume(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the volume size in GB, which must be a multiple of 10.
-        Changing this parameter will create a new resource.
+        Specifies the volume size in **GB**, which must be a multiple of `10`.
         """
         return pulumi.get(self, "size")
 
@@ -395,6 +405,8 @@ class ClusterEssNodeConfig(dict):
         suggest = None
         if key == "instanceNumber":
             suggest = "instance_number"
+        elif key == "shrinkNodeIds":
+            suggest = "shrink_node_ids"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ClusterEssNodeConfig. Access the value via the '{suggest}' property getter instead.")
@@ -410,20 +422,21 @@ class ClusterEssNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
+                 shrink_node_ids: Optional[Sequence[str]] = None,
                  volume: Optional['outputs.ClusterEssNodeConfigVolume'] = None):
         """
-        :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-               40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-               to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-               to 10240 GB. Changing this parameter will create a new resource.
+        :param str flavor: Specifies the flavor name.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `master_node_config`, The value range is 3 to 10.
-               + When it is `client_node_config`, The value range is 1 to 32.
+               + When it is `master_node_config`, The value range is `3` to `10`.
+               + When it is `client_node_config`, The value range is `1` to `32`.
+        :param Sequence[str] shrink_node_ids: Specifies the node IDs that needs to be scaled down.
         :param 'ClusterEssNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
+        if shrink_node_ids is not None:
+            pulumi.set(__self__, "shrink_node_ids", shrink_node_ids)
         if volume is not None:
             pulumi.set(__self__, "volume", volume)
 
@@ -431,10 +444,7 @@ class ClusterEssNodeConfig(dict):
     @pulumi.getter
     def flavor(self) -> str:
         """
-        Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-        40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-        to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-        to 10240 GB. Changing this parameter will create a new resource.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "flavor")
 
@@ -443,10 +453,18 @@ class ClusterEssNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `master_node_config`, The value range is 3 to 10.
-        + When it is `client_node_config`, The value range is 1 to 32.
+        + When it is `master_node_config`, The value range is `3` to `10`.
+        + When it is `client_node_config`, The value range is `1` to `32`.
         """
         return pulumi.get(self, "instance_number")
+
+    @property
+    @pulumi.getter(name="shrinkNodeIds")
+    def shrink_node_ids(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the node IDs that needs to be scaled down.
+        """
+        return pulumi.get(self, "shrink_node_ids")
 
     @property
     @pulumi.getter
@@ -481,8 +499,7 @@ class ClusterEssNodeConfigVolume(dict):
                  size: int,
                  volume_type: str):
         """
-        :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-               Changing this parameter will create a new resource.
+        :param int size: Specifies the volume size in **GB**, which must be a multiple of `10`.
         :param str volume_type: Specifies the volume type. Value options are as follows:
                + **COMMON**: Common I/O. The SATA disk is used.
                + **HIGH**: High I/O. The SAS disk is used.
@@ -495,8 +512,7 @@ class ClusterEssNodeConfigVolume(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the volume size in GB, which must be a multiple of 10.
-        Changing this parameter will create a new resource.
+        Specifies the volume size in **GB**, which must be a multiple of `10`.
         """
         return pulumi.get(self, "size")
 
@@ -587,6 +603,8 @@ class ClusterMasterNodeConfig(dict):
         suggest = None
         if key == "instanceNumber":
             suggest = "instance_number"
+        elif key == "shrinkNodeIds":
+            suggest = "shrink_node_ids"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in ClusterMasterNodeConfig. Access the value via the '{suggest}' property getter instead.")
@@ -602,30 +620,28 @@ class ClusterMasterNodeConfig(dict):
     def __init__(__self__, *,
                  flavor: str,
                  instance_number: int,
-                 volume: 'outputs.ClusterMasterNodeConfigVolume'):
+                 volume: 'outputs.ClusterMasterNodeConfigVolume',
+                 shrink_node_ids: Optional[Sequence[str]] = None):
         """
-        :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-               40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-               to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-               to 10240 GB. Changing this parameter will create a new resource.
+        :param str flavor: Specifies the flavor name.
         :param int instance_number: Specifies the number of cluster instances.
-               + When it is `master_node_config`, The value range is 3 to 10.
-               + When it is `client_node_config`, The value range is 1 to 32.
+               + When it is `master_node_config`, The value range is `3` to `10`.
+               + When it is `client_node_config`, The value range is `1` to `32`.
         :param 'ClusterMasterNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
+        :param Sequence[str] shrink_node_ids: Specifies the node IDs that needs to be scaled down.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "instance_number", instance_number)
         pulumi.set(__self__, "volume", volume)
+        if shrink_node_ids is not None:
+            pulumi.set(__self__, "shrink_node_ids", shrink_node_ids)
 
     @property
     @pulumi.getter
     def flavor(self) -> str:
         """
-        Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-        40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-        to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-        to 10240 GB. Changing this parameter will create a new resource.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "flavor")
 
@@ -634,8 +650,8 @@ class ClusterMasterNodeConfig(dict):
     def instance_number(self) -> int:
         """
         Specifies the number of cluster instances.
-        + When it is `master_node_config`, The value range is 3 to 10.
-        + When it is `client_node_config`, The value range is 1 to 32.
+        + When it is `master_node_config`, The value range is `3` to `10`.
+        + When it is `client_node_config`, The value range is `1` to `32`.
         """
         return pulumi.get(self, "instance_number")
 
@@ -647,6 +663,14 @@ class ClusterMasterNodeConfig(dict):
         The volume structure is documented below.
         """
         return pulumi.get(self, "volume")
+
+    @property
+    @pulumi.getter(name="shrinkNodeIds")
+    def shrink_node_ids(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the node IDs that needs to be scaled down.
+        """
+        return pulumi.get(self, "shrink_node_ids")
 
 
 @pulumi.output_type
@@ -672,8 +696,7 @@ class ClusterMasterNodeConfigVolume(dict):
                  size: int,
                  volume_type: str):
         """
-        :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-               Changing this parameter will create a new resource.
+        :param int size: Specifies the volume size in **GB**, which must be a multiple of `10`.
         :param str volume_type: Specifies the volume type. Value options are as follows:
                + **COMMON**: Common I/O. The SATA disk is used.
                + **HIGH**: High I/O. The SAS disk is used.
@@ -686,8 +709,7 @@ class ClusterMasterNodeConfigVolume(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the volume size in GB, which must be a multiple of 10.
-        Changing this parameter will create a new resource.
+        Specifies the volume size in **GB**, which must be a multiple of `10`.
         """
         return pulumi.get(self, "size")
 
@@ -710,6 +732,8 @@ class ClusterNode(dict):
         suggest = None
         if key == "availabilityZone":
             suggest = "availability_zone"
+        elif key == "resourceId":
+            suggest = "resource_id"
         elif key == "specCode":
             suggest = "spec_code"
 
@@ -727,7 +751,9 @@ class ClusterNode(dict):
     def __init__(__self__, *,
                  availability_zone: Optional[str] = None,
                  id: Optional[str] = None,
+                 ip: Optional[str] = None,
                  name: Optional[str] = None,
+                 resource_id: Optional[str] = None,
                  spec_code: Optional[str] = None,
                  status: Optional[str] = None,
                  type: Optional[str] = None):
@@ -736,22 +762,31 @@ class ClusterNode(dict):
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
         :param str id: Instance ID.
-        :param str name: Specifies the cluster name. It contains 4 to 32 characters.
+        :param str ip: Instance IP address.
+        :param str name: Specifies the cluster name. It contains `4` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
+        :param str resource_id: The resource ID of this instance.
         :param str spec_code: Instance specification code.
         :param str status: Instance status.
         :param str type: Node type. The options are as follows:
+               + **ess-master:** Indicates a master node.
+               + **ess-client:** Indicates a client node.
+               + **ess-cold:** Indicates a cold data node.
+               + **ess indicates:** Indicates a data node.
         """
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if id is not None:
             pulumi.set(__self__, "id", id)
+        if ip is not None:
+            pulumi.set(__self__, "ip", ip)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if resource_id is not None:
+            pulumi.set(__self__, "resource_id", resource_id)
         if spec_code is not None:
             pulumi.set(__self__, "spec_code", spec_code)
         if status is not None:
@@ -767,8 +802,7 @@ class ClusterNode(dict):
         Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
         than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
         distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-        between node quantity in any two AZs is 1 at most.
-        Changing this parameter will create a new resource.
+        between node quantity in any two AZs is **1** at most.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -782,13 +816,29 @@ class ClusterNode(dict):
 
     @property
     @pulumi.getter
+    def ip(self) -> Optional[str]:
+        """
+        Instance IP address.
+        """
+        return pulumi.get(self, "ip")
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the cluster name. It contains 4 to 32 characters.
+        Specifies the cluster name. It contains `4` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="resourceId")
+    def resource_id(self) -> Optional[str]:
+        """
+        The resource ID of this instance.
+        """
+        return pulumi.get(self, "resource_id")
 
     @property
     @pulumi.getter(name="specCode")
@@ -811,6 +861,10 @@ class ClusterNode(dict):
     def type(self) -> Optional[str]:
         """
         Node type. The options are as follows:
+        + **ess-master:** Indicates a master node.
+        + **ess-client:** Indicates a client node.
+        + **ess-cold:** Indicates a cold data node.
+        + **ess indicates:** Indicates a data node.
         """
         return pulumi.get(self, "type")
 
@@ -846,12 +900,8 @@ class ClusterNodeConfig(dict):
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
-        :param str flavor: Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-               40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-               to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-               to 10240 GB. Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
+        :param str flavor: Specifies the flavor name.
         :param 'ClusterNodeConfigVolumeArgs' volume: Specifies the information about the volume.
                The volume structure is documented below.
         """
@@ -868,8 +918,7 @@ class ClusterNodeConfig(dict):
         Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
         than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
         distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-        between node quantity in any two AZs is 1 at most.
-        Changing this parameter will create a new resource.
+        between node quantity in any two AZs is **1** at most.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -877,10 +926,7 @@ class ClusterNodeConfig(dict):
     @pulumi.getter
     def flavor(self) -> str:
         """
-        Specifies the flavor name. For example: value range of flavor ess.spec-2u8g:
-        40 GB to 800 GB, value range of flavor ess.spec-4u16g: 40 GB to 1600 GB, value range of flavor ess.spec-8u32g: 80 GB
-        to 3200 GB, value range of flavor ess.spec-16u64g: 100 GB to 6400 GB, value range of flavor ess.spec-32u128g: 100 GB
-        to 10240 GB. Changing this parameter will create a new resource.
+        Specifies the flavor name.
         """
         return pulumi.get(self, "flavor")
 
@@ -927,10 +973,11 @@ class ClusterNodeConfigNetworkInfo(dict):
                  subnet_id: str,
                  vpc_id: str):
         """
-        :param str security_group_id: Specifies Security group ID.
+        :param str security_group_id: Specifies the security group ID.
+        :param str subnet_id: Specifies the Subnet ID.
                Changing this parameter will create a new resource.
-        :param str subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
-        :param str vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
+        :param str vpc_id: Specifies the VPC ID.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "subnet_id", subnet_id)
@@ -940,8 +987,7 @@ class ClusterNodeConfigNetworkInfo(dict):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> str:
         """
-        Specifies Security group ID.
-        Changing this parameter will create a new resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -949,7 +995,8 @@ class ClusterNodeConfigNetworkInfo(dict):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> str:
         """
-        Specifies the Subnet ID. Changing this parameter will create a new resource.
+        Specifies the Subnet ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -957,7 +1004,8 @@ class ClusterNodeConfigNetworkInfo(dict):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> str:
         """
-        Specifies the VPC ID. Changing this parameter will create a new resource.
+        Specifies the VPC ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -985,8 +1033,7 @@ class ClusterNodeConfigVolume(dict):
                  size: int,
                  volume_type: str):
         """
-        :param int size: Specifies the volume size in GB, which must be a multiple of 10.
-               Changing this parameter will create a new resource.
+        :param int size: Specifies the volume size in **GB**, which must be a multiple of `10`.
         :param str volume_type: Specifies the volume type. Value options are as follows:
                + **COMMON**: Common I/O. The SATA disk is used.
                + **HIGH**: High I/O. The SAS disk is used.
@@ -999,8 +1046,7 @@ class ClusterNodeConfigVolume(dict):
     @pulumi.getter
     def size(self) -> int:
         """
-        Specifies the volume size in GB, which must be a multiple of 10.
-        Changing this parameter will create a new resource.
+        Specifies the volume size in **GB**, which must be a multiple of `10`.
         """
         return pulumi.get(self, "size")
 
@@ -1134,6 +1180,7 @@ class ClusterVpcepEndpoint(dict):
 @pulumi.output_type
 class GetFlavorsFlavorResult(dict):
     def __init__(__self__, *,
+                 availability_zones: str,
                  disk_range: str,
                  id: str,
                  memory: int,
@@ -1143,6 +1190,7 @@ class GetFlavorsFlavorResult(dict):
                  vcpus: int,
                  version: str):
         """
+        :param str availability_zones: The valid availability zones for current flavor.
         :param str disk_range: The disk capacity range of an instance, in GB.
         :param str id: The ID of CSS flavor.
         :param int memory: Specifies the memory size(GB) in the CSS flavor.
@@ -1155,6 +1203,7 @@ class GetFlavorsFlavorResult(dict):
         :param str version: Specifies the engine version. The options are `5.5.1`, `6.2.3`, `6.5.4`, `7.1.1`,
                `7.6.2` and `7.9.3`.
         """
+        pulumi.set(__self__, "availability_zones", availability_zones)
         pulumi.set(__self__, "disk_range", disk_range)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "memory", memory)
@@ -1163,6 +1212,14 @@ class GetFlavorsFlavorResult(dict):
         pulumi.set(__self__, "type", type)
         pulumi.set(__self__, "vcpus", vcpus)
         pulumi.set(__self__, "version", version)
+
+    @property
+    @pulumi.getter(name="availabilityZones")
+    def availability_zones(self) -> str:
+        """
+        The valid availability zones for current flavor.
+        """
+        return pulumi.get(self, "availability_zones")
 
     @property
     @pulumi.getter(name="diskRange")

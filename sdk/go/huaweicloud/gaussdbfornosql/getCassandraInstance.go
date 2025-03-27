@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get available HuaweiCloud gaussdb cassandra instance.
+// Use this data source to get available HuaweiCloud GeminiDB Cassandra instance.
 //
 // ## Example Usage
 //

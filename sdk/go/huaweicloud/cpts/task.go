@@ -46,7 +46,7 @@ import (
 //
 // ## Import
 //
-// Tasks can be imported using the `id`, e.g.
+// Tasks can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -54,7 +54,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cpts_task" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cpts_task" "test" {
 //
 //	...
 //
@@ -70,14 +70,14 @@ import (
 type Task struct {
 	pulumi.CustomResourceState
 
-	// Specifies benchmark concurrency of the task, the value range is 0 to
-	// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+	// Specifies benchmark concurrency of the task, the value range is `0` to
+	// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 	// `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 	BenchmarkConcurrency pulumi.IntPtrOutput `pulumi:"benchmarkConcurrency"`
 	// Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
 	// is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
 	ClusterId pulumi.IntPtrOutput `pulumi:"clusterId"`
-	// Specifies the name of the task, which can contain a maximum of 42 characters.
+	// Specifies the name of the task, which can contain a maximum of `42` characters.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies whether to enable the task or stop the task. The options are as follows:
 	// + **enable**: Starting the pressure test task.
@@ -128,14 +128,14 @@ func GetTask(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Task resources.
 type taskState struct {
-	// Specifies benchmark concurrency of the task, the value range is 0 to
-	// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+	// Specifies benchmark concurrency of the task, the value range is `0` to
+	// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 	// `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 	BenchmarkConcurrency *int `pulumi:"benchmarkConcurrency"`
 	// Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
 	// is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
 	ClusterId *int `pulumi:"clusterId"`
-	// Specifies the name of the task, which can contain a maximum of 42 characters.
+	// Specifies the name of the task, which can contain a maximum of `42` characters.
 	Name *string `pulumi:"name"`
 	// Specifies whether to enable the task or stop the task. The options are as follows:
 	// + **enable**: Starting the pressure test task.
@@ -154,14 +154,14 @@ type taskState struct {
 }
 
 type TaskState struct {
-	// Specifies benchmark concurrency of the task, the value range is 0 to
-	// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+	// Specifies benchmark concurrency of the task, the value range is `0` to
+	// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 	// `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 	BenchmarkConcurrency pulumi.IntPtrInput
 	// Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
 	// is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
 	ClusterId pulumi.IntPtrInput
-	// Specifies the name of the task, which can contain a maximum of 42 characters.
+	// Specifies the name of the task, which can contain a maximum of `42` characters.
 	Name pulumi.StringPtrInput
 	// Specifies whether to enable the task or stop the task. The options are as follows:
 	// + **enable**: Starting the pressure test task.
@@ -184,14 +184,14 @@ func (TaskState) ElementType() reflect.Type {
 }
 
 type taskArgs struct {
-	// Specifies benchmark concurrency of the task, the value range is 0 to
-	// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+	// Specifies benchmark concurrency of the task, the value range is `0` to
+	// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 	// `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 	BenchmarkConcurrency *int `pulumi:"benchmarkConcurrency"`
 	// Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
 	// is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
 	ClusterId *int `pulumi:"clusterId"`
-	// Specifies the name of the task, which can contain a maximum of 42 characters.
+	// Specifies the name of the task, which can contain a maximum of `42` characters.
 	Name *string `pulumi:"name"`
 	// Specifies whether to enable the task or stop the task. The options are as follows:
 	// + **enable**: Starting the pressure test task.
@@ -207,14 +207,14 @@ type taskArgs struct {
 
 // The set of arguments for constructing a Task resource.
 type TaskArgs struct {
-	// Specifies benchmark concurrency of the task, the value range is 0 to
-	// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+	// Specifies benchmark concurrency of the task, the value range is `0` to
+	// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 	// `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 	BenchmarkConcurrency pulumi.IntPtrInput
 	// Specifies a cluster ID of the CPTS resource group. If the number of concurrent users
 	// is less than 1000, you can use a shared resource group for testing and do not have to create a resource group.
 	ClusterId pulumi.IntPtrInput
-	// Specifies the name of the task, which can contain a maximum of 42 characters.
+	// Specifies the name of the task, which can contain a maximum of `42` characters.
 	Name pulumi.StringPtrInput
 	// Specifies whether to enable the task or stop the task. The options are as follows:
 	// + **enable**: Starting the pressure test task.
@@ -315,8 +315,8 @@ func (o TaskOutput) ToTaskOutputWithContext(ctx context.Context) TaskOutput {
 	return o
 }
 
-// Specifies benchmark concurrency of the task, the value range is 0 to
-// 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+// Specifies benchmark concurrency of the task, the value range is `0` to
+// `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
 // `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
 func (o TaskOutput) BenchmarkConcurrency() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Task) pulumi.IntPtrOutput { return v.BenchmarkConcurrency }).(pulumi.IntPtrOutput)
@@ -328,7 +328,7 @@ func (o TaskOutput) ClusterId() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Task) pulumi.IntPtrOutput { return v.ClusterId }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the name of the task, which can contain a maximum of 42 characters.
+// Specifies the name of the task, which can contain a maximum of `42` characters.
 func (o TaskOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Task) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

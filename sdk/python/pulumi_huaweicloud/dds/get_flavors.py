@@ -22,10 +22,13 @@ class GetFlavorsResult:
     """
     A collection of values returned by getFlavors.
     """
-    def __init__(__self__, engine_name=None, flavors=None, id=None, memory=None, region=None, type=None, vcpus=None):
+    def __init__(__self__, engine_name=None, engine_version=None, flavors=None, id=None, memory=None, region=None, type=None, vcpus=None):
         if engine_name and not isinstance(engine_name, str):
             raise TypeError("Expected argument 'engine_name' to be a str")
         pulumi.set(__self__, "engine_name", engine_name)
+        if engine_version and not isinstance(engine_version, str):
+            raise TypeError("Expected argument 'engine_version' to be a str")
+        pulumi.set(__self__, "engine_version", engine_version)
         if flavors and not isinstance(flavors, list):
             raise TypeError("Expected argument 'flavors' to be a list")
         pulumi.set(__self__, "flavors", flavors)
@@ -48,7 +51,15 @@ class GetFlavorsResult:
     @property
     @pulumi.getter(name="engineName")
     def engine_name(self) -> str:
+        """
+        Indicates the engine name.
+        """
         return pulumi.get(self, "engine_name")
+
+    @property
+    @pulumi.getter(name="engineVersion")
+    def engine_version(self) -> Optional[str]:
+        return pulumi.get(self, "engine_version")
 
     @property
     @pulumi.getter
@@ -70,7 +81,7 @@ class GetFlavorsResult:
     @pulumi.getter
     def memory(self) -> Optional[str]:
         """
-        See `memory` above.
+        Indicates the memory size in GB.
         """
         return pulumi.get(self, "memory")
 
@@ -83,7 +94,7 @@ class GetFlavorsResult:
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        See `type` above.
+        Indicates the type of the flavor.
         """
         return pulumi.get(self, "type")
 
@@ -91,7 +102,7 @@ class GetFlavorsResult:
     @pulumi.getter
     def vcpus(self) -> Optional[str]:
         """
-        See `vcpus` above.
+        Indicates the number of vCPUs.
         """
         return pulumi.get(self, "vcpus")
 
@@ -103,6 +114,7 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
             yield self
         return GetFlavorsResult(
             engine_name=self.engine_name,
+            engine_version=self.engine_version,
             flavors=self.flavors,
             id=self.id,
             memory=self.memory,
@@ -112,6 +124,7 @@ class AwaitableGetFlavorsResult(GetFlavorsResult):
 
 
 def get_flavors(engine_name: Optional[str] = None,
+                engine_version: Optional[str] = None,
                 memory: Optional[str] = None,
                 region: Optional[str] = None,
                 type: Optional[str] = None,
@@ -131,17 +144,18 @@ def get_flavors(engine_name: Optional[str] = None,
     ```
 
 
-    :param str engine_name: Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-           supported.
-    :param str memory: Specifies the ram of the dds flavor in GB.
+    :param str engine_name: Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
+    :param str engine_version: Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+    :param str memory: Specifies the memory size in GB.
     :param str region: Specifies the region in which to obtain the flavors. If omitted,
            the provider-level region will be used.
-    :param str type: Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-           are supported.
-    :param str vcpus: Specifies the vcpus of the dds flavor.
+    :param str type: Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+           **replica**, **single** and **readonly**.
+    :param str vcpus: Specifies the number of vCPUs.
     """
     __args__ = dict()
     __args__['engineName'] = engine_name
+    __args__['engineVersion'] = engine_version
     __args__['memory'] = memory
     __args__['region'] = region
     __args__['type'] = type
@@ -151,6 +165,7 @@ def get_flavors(engine_name: Optional[str] = None,
 
     return AwaitableGetFlavorsResult(
         engine_name=__ret__.engine_name,
+        engine_version=__ret__.engine_version,
         flavors=__ret__.flavors,
         id=__ret__.id,
         memory=__ret__.memory,
@@ -161,6 +176,7 @@ def get_flavors(engine_name: Optional[str] = None,
 
 @_utilities.lift_output_func(get_flavors)
 def get_flavors_output(engine_name: Optional[pulumi.Input[str]] = None,
+                       engine_version: Optional[pulumi.Input[Optional[str]]] = None,
                        memory: Optional[pulumi.Input[Optional[str]]] = None,
                        region: Optional[pulumi.Input[Optional[str]]] = None,
                        type: Optional[pulumi.Input[Optional[str]]] = None,
@@ -180,13 +196,13 @@ def get_flavors_output(engine_name: Optional[pulumi.Input[str]] = None,
     ```
 
 
-    :param str engine_name: Specifies the engine name of the dds, "DDS-Community" and "DDS-Enhanced" are
-           supported.
-    :param str memory: Specifies the ram of the dds flavor in GB.
+    :param str engine_name: Specifies the engine name. Value options: **DDS-Community** and **DDS-Enhanced**.
+    :param str engine_version: Specifies the DB version number. Value options: **3.4**, **4.0**, **4.2** and **4.4**.
+    :param str memory: Specifies the memory size in GB.
     :param str region: Specifies the region in which to obtain the flavors. If omitted,
            the provider-level region will be used.
-    :param str type: Specifies the type of the dds falvor. "mongos", "shard", "config", "replica" and "single"
-           are supported.
-    :param str vcpus: Specifies the vcpus of the dds flavor.
+    :param str type: Specifies the type of the flavor. Value options: **mongos**, **shard**, **config**,
+           **replica**, **single** and **readonly**.
+    :param str vcpus: Specifies the number of vCPUs.
     """
     ...

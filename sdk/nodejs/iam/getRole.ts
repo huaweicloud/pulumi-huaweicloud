@@ -35,12 +35,12 @@ export function getRole(args?: GetRoleArgs, opts?: pulumi.InvokeOptions): Promis
 export interface GetRoleArgs {
     /**
      * Specifies the display name of the role displayed on the console.
-     * Required if `name` is empty.
+     * It is recommended to use this parameter instead of `name` and required if `name` is not specified.
      */
     displayName?: string;
     /**
      * Specifies the name of the role for internal use.
-     * Required if `displayName` is empty.
+     * It's required if `displayName` is not specified.
      */
     name?: string;
 }
@@ -83,12 +83,12 @@ export function getRoleOutput(args?: GetRoleOutputArgs, opts?: pulumi.InvokeOpti
 export interface GetRoleOutputArgs {
     /**
      * Specifies the display name of the role displayed on the console.
-     * Required if `name` is empty.
+     * It is recommended to use this parameter instead of `name` and required if `name` is not specified.
      */
     displayName?: pulumi.Input<string>;
     /**
      * Specifies the name of the role for internal use.
-     * Required if `displayName` is empty.
+     * It's required if `displayName` is not specified.
      */
     name?: pulumi.Input<string>;
 }

@@ -8,12 +8,114 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
 
 __all__ = [
+    'JobAlarmNotify',
     'JobDestinationDb',
+    'JobDestinationDbKafkaSecurityConfig',
     'JobLimitSpeed',
+    'JobPolicyConfig',
+    'JobPublicIpList',
     'JobSourceDb',
+    'JobSourceDbKafkaSecurityConfig',
+    'JobTable',
 ]
+
+@pulumi.output_type
+class JobAlarmNotify(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "topicUrn":
+            suggest = "topic_urn"
+        elif key == "delayTime":
+            suggest = "delay_time"
+        elif key == "rpoDelay":
+            suggest = "rpo_delay"
+        elif key == "rtoDelay":
+            suggest = "rto_delay"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobAlarmNotify. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobAlarmNotify.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobAlarmNotify.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 topic_urn: str,
+                 delay_time: Optional[int] = None,
+                 rpo_delay: Optional[int] = None,
+                 rto_delay: Optional[int] = None):
+        """
+        :param str topic_urn: Specifies the SMN topic URN which is subscribed.
+        :param int delay_time: Specifies the Delay threshold between the source and destination database,
+               in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+               the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+               available only for **full+incremental** tasks.
+        :param int rpo_delay: Specifies the RPO delay threshold, in seconds.  
+               Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+               If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+               minutes, DRS will notify specified recipients.
+        :param int rto_delay: Specifies the RTO delay threshold, in seconds.  
+               Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+               If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+               DRS will notify specified recipients.
+        """
+        pulumi.set(__self__, "topic_urn", topic_urn)
+        if delay_time is not None:
+            pulumi.set(__self__, "delay_time", delay_time)
+        if rpo_delay is not None:
+            pulumi.set(__self__, "rpo_delay", rpo_delay)
+        if rto_delay is not None:
+            pulumi.set(__self__, "rto_delay", rto_delay)
+
+    @property
+    @pulumi.getter(name="topicUrn")
+    def topic_urn(self) -> str:
+        """
+        Specifies the SMN topic URN which is subscribed.
+        """
+        return pulumi.get(self, "topic_urn")
+
+    @property
+    @pulumi.getter(name="delayTime")
+    def delay_time(self) -> Optional[int]:
+        """
+        Specifies the Delay threshold between the source and destination database,
+        in seconds. Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient. If
+        the delay exceeds a specified value and lasts for 6 minutes, DRS will notify specified recipients. This option is
+        available only for **full+incremental** tasks.
+        """
+        return pulumi.get(self, "delay_time")
+
+    @property
+    @pulumi.getter(name="rpoDelay")
+    def rpo_delay(self) -> Optional[int]:
+        """
+        Specifies the RPO delay threshold, in seconds.  
+        Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+        If the RPO delay between the service database and the DRS instance exceeds a specified value and lasts for `6`
+        minutes, DRS will notify specified recipients.
+        """
+        return pulumi.get(self, "rpo_delay")
+
+    @property
+    @pulumi.getter(name="rtoDelay")
+    def rto_delay(self) -> Optional[int]:
+        """
+        Specifies the RTO delay threshold, in seconds.  
+        Value ranges from `1` to `3,600`. Default is `0` and no notifications will be sent to recipient.
+        If the RTO delay between the DRS instance and the DR database exceeds a specified value and lasts for `6` minutes,
+        DRS will notify specified recipients.
+        """
+        return pulumi.get(self, "rto_delay")
+
 
 @pulumi.output_type
 class JobDestinationDb(dict):
@@ -24,6 +126,10 @@ class JobDestinationDb(dict):
             suggest = "engine_type"
         elif key == "instanceId":
             suggest = "instance_id"
+        elif key == "kafkaSecurityConfig":
+            suggest = "kafka_security_config"
+        elif key == "securityGroupId":
+            suggest = "security_group_id"
         elif key == "sslCertCheckSum":
             suggest = "ssl_cert_check_sum"
         elif key == "sslCertKey":
@@ -36,6 +142,8 @@ class JobDestinationDb(dict):
             suggest = "ssl_enabled"
         elif key == "subnetId":
             suggest = "subnet_id"
+        elif key == "vpcId":
+            suggest = "vpc_id"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in JobDestinationDb. Access the value via the '{suggest}' property getter instead.")
@@ -51,57 +159,72 @@ class JobDestinationDb(dict):
     def __init__(__self__, *,
                  engine_type: str,
                  ip: str,
-                 password: str,
-                 port: int,
-                 user: str,
                  instance_id: Optional[str] = None,
+                 kafka_security_config: Optional['outputs.JobDestinationDbKafkaSecurityConfig'] = None,
                  name: Optional[str] = None,
+                 password: Optional[str] = None,
+                 port: Optional[int] = None,
                  region: Optional[str] = None,
+                 security_group_id: Optional[str] = None,
                  ssl_cert_check_sum: Optional[str] = None,
                  ssl_cert_key: Optional[str] = None,
                  ssl_cert_name: Optional[str] = None,
                  ssl_cert_password: Optional[str] = None,
                  ssl_enabled: Optional[bool] = None,
-                 subnet_id: Optional[str] = None):
+                 subnet_id: Optional[str] = None,
+                 user: Optional[str] = None,
+                 vpc_id: Optional[str] = None):
         """
         :param str engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param str ip: Specifies the IP of database. Changing this parameter will create a new resource.
+        :param str instance_id: Specifies the instance id of database when it is a RDS database.
+               Changing this parameter will create a new resource.
+        :param 'JobDestinationDbKafkaSecurityConfigArgs' kafka_security_config: Specifies the kafka security authentication info.
+               Changing this parameter will create a new resource.
+               The kafka_security_config structure is documented below.
+        :param str name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param str password: Specifies the password of database.
                Changing this parameter will create a new resource.
         :param int port: Specifies the port of database. Changing this parameter will create a new resource.
-        :param str user: Specifies the user name of database.
-               Changing this parameter will create a new resource.
-        :param str instance_id: Specifies the instance id of database when it is a RDS database.
-               Changing this parameter will create a new resource.
-        :param str name: Specifies the name of database.
-               Changing this parameter will create a new resource.
         :param str region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
+        :param str security_group_id: The security group ID to which the databese instance belongs.
         :param str ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_key: Specifies the SSL certificate content, encrypted with base64.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_name: Specifies SSL certificate name.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_password: Specifies SSL certificate password. It is mandatory when
-               `ssl_enabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+               `ssl_enabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
         :param bool ssl_enabled: Specifies whether to enable SSL connection.
                Changing this parameter will create a new resource.
         :param str subnet_id: Specifies subnet ID of database when it is a RDS database.
-               It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+               It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        :param str user: Specifies the user name of database.
+               Changing this parameter will create a new resource.
+        :param str vpc_id: Specifies vpc ID of database.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine_type", engine_type)
         pulumi.set(__self__, "ip", ip)
-        pulumi.set(__self__, "password", password)
-        pulumi.set(__self__, "port", port)
-        pulumi.set(__self__, "user", user)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if kafka_security_config is not None:
+            pulumi.set(__self__, "kafka_security_config", kafka_security_config)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
         if ssl_cert_check_sum is not None:
             pulumi.set(__self__, "ssl_cert_check_sum", ssl_cert_check_sum)
         if ssl_cert_key is not None:
@@ -114,13 +237,18 @@ class JobDestinationDb(dict):
             pulumi.set(__self__, "ssl_enabled", ssl_enabled)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if user is not None:
+            pulumi.set(__self__, "user", user)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
     @pulumi.getter(name="engineType")
     def engine_type(self) -> str:
         """
         Specifies the engine type of database. Changing this parameter will
-        create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+        create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+        **kafka**, **postgresql**.
         """
         return pulumi.get(self, "engine_type")
 
@@ -133,32 +261,6 @@ class JobDestinationDb(dict):
         return pulumi.get(self, "ip")
 
     @property
-    @pulumi.getter
-    def password(self) -> str:
-        """
-        Specifies the password of database.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "password")
-
-    @property
-    @pulumi.getter
-    def port(self) -> int:
-        """
-        Specifies the port of database. Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "port")
-
-    @property
-    @pulumi.getter
-    def user(self) -> str:
-        """
-        Specifies the user name of database.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "user")
-
-    @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[str]:
         """
@@ -166,6 +268,16 @@ class JobDestinationDb(dict):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="kafkaSecurityConfig")
+    def kafka_security_config(self) -> Optional['outputs.JobDestinationDbKafkaSecurityConfig']:
+        """
+        Specifies the kafka security authentication info.
+        Changing this parameter will create a new resource.
+        The kafka_security_config structure is documented below.
+        """
+        return pulumi.get(self, "kafka_security_config")
 
     @property
     @pulumi.getter
@@ -178,6 +290,23 @@ class JobDestinationDb(dict):
 
     @property
     @pulumi.getter
+    def password(self) -> Optional[str]:
+        """
+        Specifies the password of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "password")
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[int]:
+        """
+        Specifies the port of database. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[str]:
         """
         Specifies the region which the database belongs when it is a RDS database.
@@ -186,11 +315,19 @@ class JobDestinationDb(dict):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> Optional[str]:
+        """
+        The security group ID to which the databese instance belongs.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @property
     @pulumi.getter(name="sslCertCheckSum")
     def ssl_cert_check_sum(self) -> Optional[str]:
         """
         Specifies the checksum of SSL certificate content.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_check_sum")
 
@@ -199,7 +336,7 @@ class JobDestinationDb(dict):
     def ssl_cert_key(self) -> Optional[str]:
         """
         Specifies the SSL certificate content, encrypted with base64.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_key")
 
@@ -208,7 +345,7 @@ class JobDestinationDb(dict):
     def ssl_cert_name(self) -> Optional[str]:
         """
         Specifies SSL certificate name.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_name")
 
@@ -217,7 +354,7 @@ class JobDestinationDb(dict):
     def ssl_cert_password(self) -> Optional[str]:
         """
         Specifies SSL certificate password. It is mandatory when
-        `ssl_enabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+        `ssl_enabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_password")
 
@@ -235,9 +372,275 @@ class JobDestinationDb(dict):
     def subnet_id(self) -> Optional[str]:
         """
         Specifies subnet ID of database when it is a RDS database.
-        It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+        It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def user(self) -> Optional[str]:
+        """
+        Specifies the user name of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "user")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[str]:
+        """
+        Specifies vpc ID of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class JobDestinationDbKafkaSecurityConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "delegationTokens":
+            suggest = "delegation_tokens"
+        elif key == "enableKeyStore":
+            suggest = "enable_key_store"
+        elif key == "endpointAlgorithm":
+            suggest = "endpoint_algorithm"
+        elif key == "keyPassword":
+            suggest = "key_password"
+        elif key == "keyStoreKey":
+            suggest = "key_store_key"
+        elif key == "keyStoreKeyName":
+            suggest = "key_store_key_name"
+        elif key == "keyStorePassword":
+            suggest = "key_store_password"
+        elif key == "saslMechanism":
+            suggest = "sasl_mechanism"
+        elif key == "setPrivateKeyPassword":
+            suggest = "set_private_key_password"
+        elif key == "trustStoreKey":
+            suggest = "trust_store_key"
+        elif key == "trustStoreKeyName":
+            suggest = "trust_store_key_name"
+        elif key == "trustStorePassword":
+            suggest = "trust_store_password"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobDestinationDbKafkaSecurityConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobDestinationDbKafkaSecurityConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobDestinationDbKafkaSecurityConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 delegation_tokens: Optional[bool] = None,
+                 enable_key_store: Optional[bool] = None,
+                 endpoint_algorithm: Optional[str] = None,
+                 key_password: Optional[str] = None,
+                 key_store_key: Optional[str] = None,
+                 key_store_key_name: Optional[str] = None,
+                 key_store_password: Optional[str] = None,
+                 sasl_mechanism: Optional[str] = None,
+                 set_private_key_password: Optional[bool] = None,
+                 trust_store_key: Optional[str] = None,
+                 trust_store_key_name: Optional[str] = None,
+                 trust_store_password: Optional[str] = None,
+                 type: Optional[str] = None):
+        """
+        :param bool delegation_tokens: Specifies whether to use token authentication. It is valid only when
+               the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+               or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+        :param bool enable_key_store: Specifies Whether to enable two-way SSL authentication.
+               Defaults to false. Changing this parameter will create a new resource.
+        :param str endpoint_algorithm: Specifies the host name endpoint identification algorithm, which
+               specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+               If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+               **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+        :param str key_password: Specifies the keystore private key password. It is mandatory when
+               two-way SSL authentication is enabled and `set_private_key_password` is set to **true**.
+               Changing this parameter will create a new resource.
+        :param str key_store_key: Specifies the keystore certificate. It is mandatory when two-way SSL
+               authentication is enabled. Changing this parameter will create a new resource.
+        :param str key_store_key_name: Specifies the keystore certificate name. It is mandatory when
+               two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+        :param str key_store_password: Specifies the keystore certificate password. It is mandatory when
+               a password is set for the keystore certificate. Changing this parameter will create a new resource.
+        :param str sasl_mechanism: Specifies the SASL mechanism used for client connection.
+               The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+               Changing this parameter will create a new resource.
+        :param bool set_private_key_password: Specifies whether to set the keystore private key password.
+               Defaults to false. Changing this parameter will create a new resource.
+        :param str trust_store_key: Specifies the value of the security certificate after Base64 transcoding.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str trust_store_key_name: Specifies the certificate name.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str trust_store_password: Specifies the certificate password.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        """
+        if delegation_tokens is not None:
+            pulumi.set(__self__, "delegation_tokens", delegation_tokens)
+        if enable_key_store is not None:
+            pulumi.set(__self__, "enable_key_store", enable_key_store)
+        if endpoint_algorithm is not None:
+            pulumi.set(__self__, "endpoint_algorithm", endpoint_algorithm)
+        if key_password is not None:
+            pulumi.set(__self__, "key_password", key_password)
+        if key_store_key is not None:
+            pulumi.set(__self__, "key_store_key", key_store_key)
+        if key_store_key_name is not None:
+            pulumi.set(__self__, "key_store_key_name", key_store_key_name)
+        if key_store_password is not None:
+            pulumi.set(__self__, "key_store_password", key_store_password)
+        if sasl_mechanism is not None:
+            pulumi.set(__self__, "sasl_mechanism", sasl_mechanism)
+        if set_private_key_password is not None:
+            pulumi.set(__self__, "set_private_key_password", set_private_key_password)
+        if trust_store_key is not None:
+            pulumi.set(__self__, "trust_store_key", trust_store_key)
+        if trust_store_key_name is not None:
+            pulumi.set(__self__, "trust_store_key_name", trust_store_key_name)
+        if trust_store_password is not None:
+            pulumi.set(__self__, "trust_store_password", trust_store_password)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter(name="delegationTokens")
+    def delegation_tokens(self) -> Optional[bool]:
+        """
+        Specifies whether to use token authentication. It is valid only when
+        the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+        or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "delegation_tokens")
+
+    @property
+    @pulumi.getter(name="enableKeyStore")
+    def enable_key_store(self) -> Optional[bool]:
+        """
+        Specifies Whether to enable two-way SSL authentication.
+        Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enable_key_store")
+
+    @property
+    @pulumi.getter(name="endpointAlgorithm")
+    def endpoint_algorithm(self) -> Optional[str]:
+        """
+        Specifies the host name endpoint identification algorithm, which
+        specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+        If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+        **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "endpoint_algorithm")
+
+    @property
+    @pulumi.getter(name="keyPassword")
+    def key_password(self) -> Optional[str]:
+        """
+        Specifies the keystore private key password. It is mandatory when
+        two-way SSL authentication is enabled and `set_private_key_password` is set to **true**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_password")
+
+    @property
+    @pulumi.getter(name="keyStoreKey")
+    def key_store_key(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate. It is mandatory when two-way SSL
+        authentication is enabled. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_key")
+
+    @property
+    @pulumi.getter(name="keyStoreKeyName")
+    def key_store_key_name(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate name. It is mandatory when
+        two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_key_name")
+
+    @property
+    @pulumi.getter(name="keyStorePassword")
+    def key_store_password(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate password. It is mandatory when
+        a password is set for the keystore certificate. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_password")
+
+    @property
+    @pulumi.getter(name="saslMechanism")
+    def sasl_mechanism(self) -> Optional[str]:
+        """
+        Specifies the SASL mechanism used for client connection.
+        The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "sasl_mechanism")
+
+    @property
+    @pulumi.getter(name="setPrivateKeyPassword")
+    def set_private_key_password(self) -> Optional[bool]:
+        """
+        Specifies whether to set the keystore private key password.
+        Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "set_private_key_password")
+
+    @property
+    @pulumi.getter(name="trustStoreKey")
+    def trust_store_key(self) -> Optional[str]:
+        """
+        Specifies the value of the security certificate after Base64 transcoding.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_key")
+
+    @property
+    @pulumi.getter(name="trustStoreKeyName")
+    def trust_store_key_name(self) -> Optional[str]:
+        """
+        Specifies the certificate name.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_key_name")
+
+    @property
+    @pulumi.getter(name="trustStorePassword")
+    def trust_store_password(self) -> Optional[str]:
+        """
+        Specifies the certificate password.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_password")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
+        """
+        return pulumi.get(self, "type")
 
 
 @pulumi.output_type
@@ -267,11 +670,11 @@ class JobLimitSpeed(dict):
                  start_time: str):
         """
         :param str end_time: Specifies the time to end speed limit, this time is UTC time. The input must
-               end at 59 minutes, the format is `hh:mm`, for example: 15:59. Changing this parameter will create a new resource.
-        :param str speed: Specifies the transmission speed, the value range is 1 to 9999, unit: `MB/s`.
+               end at 59 minutes, the format is **hh:mm**, for example: 15:59. Changing this parameter will create a new resource.
+        :param str speed: Specifies the transmission speed, the value range is 1 to 9999, unit: **MB/s**.
                Changing this parameter will create a new resource.
         :param str start_time: Specifies the time to start speed limit, this time is UTC time. The start
-               time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+               time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
                is two digits, for example: 01:00. Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "end_time", end_time)
@@ -283,7 +686,7 @@ class JobLimitSpeed(dict):
     def end_time(self) -> str:
         """
         Specifies the time to end speed limit, this time is UTC time. The input must
-        end at 59 minutes, the format is `hh:mm`, for example: 15:59. Changing this parameter will create a new resource.
+        end at 59 minutes, the format is **hh:mm**, for example: 15:59. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "end_time")
 
@@ -291,7 +694,7 @@ class JobLimitSpeed(dict):
     @pulumi.getter
     def speed(self) -> str:
         """
-        Specifies the transmission speed, the value range is 1 to 9999, unit: `MB/s`.
+        Specifies the transmission speed, the value range is 1 to 9999, unit: **MB/s**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "speed")
@@ -301,10 +704,387 @@ class JobLimitSpeed(dict):
     def start_time(self) -> str:
         """
         Specifies the time to start speed limit, this time is UTC time. The start
-        time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+        time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
         is two digits, for example: 01:00. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "start_time")
+
+
+@pulumi.output_type
+class JobPolicyConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "conflictPolicy":
+            suggest = "conflict_policy"
+        elif key == "exportSnapshot":
+            suggest = "export_snapshot"
+        elif key == "fileAndPosition":
+            suggest = "file_and_position"
+        elif key == "filterDdlPolicy":
+            suggest = "filter_ddl_policy"
+        elif key == "gtidSet":
+            suggest = "gtid_set"
+        elif key == "indexTrans":
+            suggest = "index_trans"
+        elif key == "isFillMaterializedView":
+            suggest = "is_fill_materialized_view"
+        elif key == "kafkaDataFormat":
+            suggest = "kafka_data_format"
+        elif key == "partitionPolicy":
+            suggest = "partition_policy"
+        elif key == "partitionsNum":
+            suggest = "partitions_num"
+        elif key == "replicationFactor":
+            suggest = "replication_factor"
+        elif key == "slotName":
+            suggest = "slot_name"
+        elif key == "topicNameFormat":
+            suggest = "topic_name_format"
+        elif key == "topicPolicy":
+            suggest = "topic_policy"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobPolicyConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobPolicyConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobPolicyConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 conflict_policy: Optional[str] = None,
+                 export_snapshot: Optional[bool] = None,
+                 file_and_position: Optional[str] = None,
+                 filter_ddl_policy: Optional[str] = None,
+                 gtid_set: Optional[str] = None,
+                 index_trans: Optional[bool] = None,
+                 is_fill_materialized_view: Optional[bool] = None,
+                 kafka_data_format: Optional[str] = None,
+                 partition_policy: Optional[str] = None,
+                 partitions_num: Optional[str] = None,
+                 replication_factor: Optional[str] = None,
+                 slot_name: Optional[str] = None,
+                 topic: Optional[str] = None,
+                 topic_name_format: Optional[str] = None,
+                 topic_policy: Optional[str] = None):
+        """
+        :param str conflict_policy: Specifies the incremental conflict policy.
+        :param bool export_snapshot: Specifies Whether to export data in snapshot mode in the PostgreSQL
+               full migration or synchronization phase. Defaults to **false**.
+               Changing this parameter will create a new resource.
+        :param str file_and_position: Specifies the file and position, The value is in the format of
+               **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+        :param str filter_ddl_policy: Specifies the DDL filtering policy. Valid value is **drop_database**.
+               For MySQL synchronization, this parameter can only be set to **drop_database**.
+               Changing this parameter will create a new resource.
+        :param str gtid_set: Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+               characters and the following special characters are not allowed: < > & " ' / \\\\.
+               Changing this parameter will create a new resource.
+        :param bool index_trans: Specifies the object synchronization scope, indicating whether to
+               synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+               indexes are synchronized. Changing this parameter will create a new resource.
+        :param bool is_fill_materialized_view: Specifies whether to fill the materialized view in the
+               PostgreSQL full migration or synchronization phase. Defaults to **false**.
+               Changing this parameter will create a new resource.
+        :param str kafka_data_format: Specifies the data format delivered to Kafka.
+               Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+               + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+               + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+        :param str partition_policy: Specifies the policy for synchronizing topics to the Kafka partitions.
+               It is mandatory when the destination database is Kafka.
+               + Valid values are as follows:
+               - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+               - **1**: Topics are synchronized to partition 0.
+               - **2**: Partitions are identified by the hash values of the primary key.
+               - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+               - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+        :param str partitions_num: Specifies the number of partitions. The value ranges from **1** to
+               **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+               Defaults to **1**. Changing this parameter will create a new resource.
+        :param str replication_factor: Specifies the number of replicas. The value ranges from **1** to
+               **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+               Defaults to **1**. Changing this parameter will create a new resource.
+        :param str slot_name: Specifies the replication slot name. It is mandatory for primary and standby
+               tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+        :param str topic: Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+               is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+        :param str topic_name_format: Specifies the topic name format.
+               Valid value are as follows:
+               + If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+               Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+               table name. Defaults to **$database$-$tablename$**.
+               + If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+               characters are regarded as constants. Defaults to **$database$**.
+               + If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+               as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+               indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+        :param str topic_policy: Specifies the topic synchronization policy. It is mandatory when
+               destination database is Kafka.
+               + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+               - **0**: A specified topic.
+               - **1**: Auto-generated topics.
+        """
+        if conflict_policy is not None:
+            pulumi.set(__self__, "conflict_policy", conflict_policy)
+        if export_snapshot is not None:
+            pulumi.set(__self__, "export_snapshot", export_snapshot)
+        if file_and_position is not None:
+            pulumi.set(__self__, "file_and_position", file_and_position)
+        if filter_ddl_policy is not None:
+            pulumi.set(__self__, "filter_ddl_policy", filter_ddl_policy)
+        if gtid_set is not None:
+            pulumi.set(__self__, "gtid_set", gtid_set)
+        if index_trans is not None:
+            pulumi.set(__self__, "index_trans", index_trans)
+        if is_fill_materialized_view is not None:
+            pulumi.set(__self__, "is_fill_materialized_view", is_fill_materialized_view)
+        if kafka_data_format is not None:
+            pulumi.set(__self__, "kafka_data_format", kafka_data_format)
+        if partition_policy is not None:
+            pulumi.set(__self__, "partition_policy", partition_policy)
+        if partitions_num is not None:
+            pulumi.set(__self__, "partitions_num", partitions_num)
+        if replication_factor is not None:
+            pulumi.set(__self__, "replication_factor", replication_factor)
+        if slot_name is not None:
+            pulumi.set(__self__, "slot_name", slot_name)
+        if topic is not None:
+            pulumi.set(__self__, "topic", topic)
+        if topic_name_format is not None:
+            pulumi.set(__self__, "topic_name_format", topic_name_format)
+        if topic_policy is not None:
+            pulumi.set(__self__, "topic_policy", topic_policy)
+
+    @property
+    @pulumi.getter(name="conflictPolicy")
+    def conflict_policy(self) -> Optional[str]:
+        """
+        Specifies the incremental conflict policy.
+        """
+        return pulumi.get(self, "conflict_policy")
+
+    @property
+    @pulumi.getter(name="exportSnapshot")
+    def export_snapshot(self) -> Optional[bool]:
+        """
+        Specifies Whether to export data in snapshot mode in the PostgreSQL
+        full migration or synchronization phase. Defaults to **false**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "export_snapshot")
+
+    @property
+    @pulumi.getter(name="fileAndPosition")
+    def file_and_position(self) -> Optional[str]:
+        """
+        Specifies the file and position, The value is in the format of
+        **File_name.file_number:Event_position**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "file_and_position")
+
+    @property
+    @pulumi.getter(name="filterDdlPolicy")
+    def filter_ddl_policy(self) -> Optional[str]:
+        """
+        Specifies the DDL filtering policy. Valid value is **drop_database**.
+        For MySQL synchronization, this parameter can only be set to **drop_database**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "filter_ddl_policy")
+
+    @property
+    @pulumi.getter(name="gtidSet")
+    def gtid_set(self) -> Optional[str]:
+        """
+        Specifies the gtid set. Enter a maximum of 2048 characters. Chinese
+        characters and the following special characters are not allowed: < > & " ' / \\\\.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "gtid_set")
+
+    @property
+    @pulumi.getter(name="indexTrans")
+    def index_trans(self) -> Optional[bool]:
+        """
+        Specifies the object synchronization scope, indicating whether to
+        synchronize normal indexes. If it's **true**, all indexes will be synchronized, otherwise, only primary key or unique
+        indexes are synchronized. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "index_trans")
+
+    @property
+    @pulumi.getter(name="isFillMaterializedView")
+    def is_fill_materialized_view(self) -> Optional[bool]:
+        """
+        Specifies whether to fill the materialized view in the
+        PostgreSQL full migration or synchronization phase. Defaults to **false**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "is_fill_materialized_view")
+
+    @property
+    @pulumi.getter(name="kafkaDataFormat")
+    def kafka_data_format(self) -> Optional[str]:
+        """
+        Specifies the data format delivered to Kafka.
+        Valid values are **json**, **avro** and **json_c**. Defaults to **json**.
+        + The value can be **json** and **json_c** for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka.
+        + The value can be **json** and **avro** for synchronization from GaussDB Primary/Standby to Kafka.
+        """
+        return pulumi.get(self, "kafka_data_format")
+
+    @property
+    @pulumi.getter(name="partitionPolicy")
+    def partition_policy(self) -> Optional[str]:
+        """
+        Specifies the policy for synchronizing topics to the Kafka partitions.
+        It is mandatory when the destination database is Kafka.
+        + Valid values are as follows:
+        - **0**: Partitions are differentiated by the hash values of *database_name.schema_name.table_name*.
+        - **1**: Topics are synchronized to partition 0.
+        - **2**: Partitions are identified by the hash values of the primary key.
+        - **3**: Partitions are differentiated by the hash values of *database_name.schema_name*.
+        - **5**: Partitions are differentiated by the hash values of non-primary-key columns
+        """
+        return pulumi.get(self, "partition_policy")
+
+    @property
+    @pulumi.getter(name="partitionsNum")
+    def partitions_num(self) -> Optional[str]:
+        """
+        Specifies the number of partitions. The value ranges from **1** to
+        **2147483647**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+        Defaults to **1**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "partitions_num")
+
+    @property
+    @pulumi.getter(name="replicationFactor")
+    def replication_factor(self) -> Optional[str]:
+        """
+        Specifies the number of replicas. The value ranges from **1** to
+        **32767**. It can be specified if `policy_config.0.topic_policy` is set to **1**, **2**, or **3**.
+        Defaults to **1**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "replication_factor")
+
+    @property
+    @pulumi.getter(name="slotName")
+    def slot_name(self) -> Optional[str]:
+        """
+        Specifies the replication slot name. It is mandatory for primary and standby
+        tasks from GaussDB Primary/Standby to Kafka. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "slot_name")
+
+    @property
+    @pulumi.getter
+    def topic(self) -> Optional[str]:
+        """
+        Specifies the topic name. It is mandatory when `policy_config.0.topic_policy`
+        is set to **0**. Ensure that the topic exists. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "topic")
+
+    @property
+    @pulumi.getter(name="topicNameFormat")
+    def topic_name_format(self) -> Optional[str]:
+        """
+        Specifies the topic name format.
+        Valid value are as follows:
+        + If `policy_config.0.topic_policy` is set to **1**, the topic name supports the database and table names as variables.
+        Other characters are considered as constants. Replace **$database$** with the database name and **$tablename$** with the
+        table name. Defaults to **$database$-$tablename$**.
+        + If `policy_config.0.topic_policy` is set to **2**, the topic name supports the database name as a variable. Other
+        characters are regarded as constants. Defaults to **$database$**.
+        + If `policy_config.0.topic_policy` is set to **3**, the topic name supports the names of database, schema, and table
+        as variables. Other characters are considered as constants. **$database$** indicates the database name, **$schema$**
+        indicates the schema name, and **$tablename$** indicates the table name. The default value is **$database$-$schema$-$tablename$**.
+        """
+        return pulumi.get(self, "topic_name_format")
+
+    @property
+    @pulumi.getter(name="topicPolicy")
+    def topic_policy(self) -> Optional[str]:
+        """
+        Specifies the topic synchronization policy. It is mandatory when
+        destination database is Kafka.
+        + Values for synchronization from MySQL to Kafka and from GaussDB(for MySQL) to Kafka:
+        - **0**: A specified topic.
+        - **1**: Auto-generated topics.
+        """
+        return pulumi.get(self, "topic_policy")
+
+
+@pulumi.output_type
+class JobPublicIpList(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "publicIp":
+            suggest = "public_ip"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobPublicIpList. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobPublicIpList.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobPublicIpList.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 id: str,
+                 public_ip: str,
+                 type: str):
+        """
+        :param str id: Specifies the ID of a specified EIP.
+               Changing this parameter will create a new resource.
+        :param str public_ip: Specifies public IP.
+               Changing this parameter will create a new resource.
+        :param str type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "public_ip", public_ip)
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Specifies the ID of a specified EIP.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> str:
+        """
+        Specifies public IP.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
+        """
+        return pulumi.get(self, "type")
 
 
 @pulumi.output_type
@@ -316,6 +1096,10 @@ class JobSourceDb(dict):
             suggest = "engine_type"
         elif key == "instanceId":
             suggest = "instance_id"
+        elif key == "kafkaSecurityConfig":
+            suggest = "kafka_security_config"
+        elif key == "securityGroupId":
+            suggest = "security_group_id"
         elif key == "sslCertCheckSum":
             suggest = "ssl_cert_check_sum"
         elif key == "sslCertKey":
@@ -328,6 +1112,8 @@ class JobSourceDb(dict):
             suggest = "ssl_enabled"
         elif key == "subnetId":
             suggest = "subnet_id"
+        elif key == "vpcId":
+            suggest = "vpc_id"
 
         if suggest:
             pulumi.log.warn(f"Key '{key}' not found in JobSourceDb. Access the value via the '{suggest}' property getter instead.")
@@ -343,57 +1129,72 @@ class JobSourceDb(dict):
     def __init__(__self__, *,
                  engine_type: str,
                  ip: str,
-                 password: str,
-                 port: int,
-                 user: str,
                  instance_id: Optional[str] = None,
+                 kafka_security_config: Optional['outputs.JobSourceDbKafkaSecurityConfig'] = None,
                  name: Optional[str] = None,
+                 password: Optional[str] = None,
+                 port: Optional[int] = None,
                  region: Optional[str] = None,
+                 security_group_id: Optional[str] = None,
                  ssl_cert_check_sum: Optional[str] = None,
                  ssl_cert_key: Optional[str] = None,
                  ssl_cert_name: Optional[str] = None,
                  ssl_cert_password: Optional[str] = None,
                  ssl_enabled: Optional[bool] = None,
-                 subnet_id: Optional[str] = None):
+                 subnet_id: Optional[str] = None,
+                 user: Optional[str] = None,
+                 vpc_id: Optional[str] = None):
         """
         :param str engine_type: Specifies the engine type of database. Changing this parameter will
-               create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+               create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+               **kafka**, **postgresql**.
         :param str ip: Specifies the IP of database. Changing this parameter will create a new resource.
+        :param str instance_id: Specifies the instance id of database when it is a RDS database.
+               Changing this parameter will create a new resource.
+        :param 'JobSourceDbKafkaSecurityConfigArgs' kafka_security_config: Specifies the kafka security authentication info.
+               Changing this parameter will create a new resource.
+               The kafka_security_config structure is documented below.
+        :param str name: Specifies the name of database.
+               Changing this parameter will create a new resource.
         :param str password: Specifies the password of database.
                Changing this parameter will create a new resource.
         :param int port: Specifies the port of database. Changing this parameter will create a new resource.
-        :param str user: Specifies the user name of database.
-               Changing this parameter will create a new resource.
-        :param str instance_id: Specifies the instance id of database when it is a RDS database.
-               Changing this parameter will create a new resource.
-        :param str name: Specifies the name of database.
-               Changing this parameter will create a new resource.
         :param str region: Specifies the region which the database belongs when it is a RDS database.
                Changing this parameter will create a new resource.
+        :param str security_group_id: The security group ID to which the databese instance belongs.
         :param str ssl_cert_check_sum: Specifies the checksum of SSL certificate content.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_key: Specifies the SSL certificate content, encrypted with base64.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_name: Specifies SSL certificate name.
-               It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+               It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         :param str ssl_cert_password: Specifies SSL certificate password. It is mandatory when
-               `ssl_enabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+               `ssl_enabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
         :param bool ssl_enabled: Specifies whether to enable SSL connection.
                Changing this parameter will create a new resource.
         :param str subnet_id: Specifies subnet ID of database when it is a RDS database.
-               It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+               It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+        :param str user: Specifies the user name of database.
+               Changing this parameter will create a new resource.
+        :param str vpc_id: Specifies vpc ID of database.
+               Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "engine_type", engine_type)
         pulumi.set(__self__, "ip", ip)
-        pulumi.set(__self__, "password", password)
-        pulumi.set(__self__, "port", port)
-        pulumi.set(__self__, "user", user)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if kafka_security_config is not None:
+            pulumi.set(__self__, "kafka_security_config", kafka_security_config)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
         if ssl_cert_check_sum is not None:
             pulumi.set(__self__, "ssl_cert_check_sum", ssl_cert_check_sum)
         if ssl_cert_key is not None:
@@ -406,13 +1207,18 @@ class JobSourceDb(dict):
             pulumi.set(__self__, "ssl_enabled", ssl_enabled)
         if subnet_id is not None:
             pulumi.set(__self__, "subnet_id", subnet_id)
+        if user is not None:
+            pulumi.set(__self__, "user", user)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
     @pulumi.getter(name="engineType")
     def engine_type(self) -> str:
         """
         Specifies the engine type of database. Changing this parameter will
-        create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+        create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+        **kafka**, **postgresql**.
         """
         return pulumi.get(self, "engine_type")
 
@@ -425,32 +1231,6 @@ class JobSourceDb(dict):
         return pulumi.get(self, "ip")
 
     @property
-    @pulumi.getter
-    def password(self) -> str:
-        """
-        Specifies the password of database.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "password")
-
-    @property
-    @pulumi.getter
-    def port(self) -> int:
-        """
-        Specifies the port of database. Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "port")
-
-    @property
-    @pulumi.getter
-    def user(self) -> str:
-        """
-        Specifies the user name of database.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "user")
-
-    @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[str]:
         """
@@ -458,6 +1238,16 @@ class JobSourceDb(dict):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="kafkaSecurityConfig")
+    def kafka_security_config(self) -> Optional['outputs.JobSourceDbKafkaSecurityConfig']:
+        """
+        Specifies the kafka security authentication info.
+        Changing this parameter will create a new resource.
+        The kafka_security_config structure is documented below.
+        """
+        return pulumi.get(self, "kafka_security_config")
 
     @property
     @pulumi.getter
@@ -470,6 +1260,23 @@ class JobSourceDb(dict):
 
     @property
     @pulumi.getter
+    def password(self) -> Optional[str]:
+        """
+        Specifies the password of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "password")
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[int]:
+        """
+        Specifies the port of database. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter
     def region(self) -> Optional[str]:
         """
         Specifies the region which the database belongs when it is a RDS database.
@@ -478,11 +1285,19 @@ class JobSourceDb(dict):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> Optional[str]:
+        """
+        The security group ID to which the databese instance belongs.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @property
     @pulumi.getter(name="sslCertCheckSum")
     def ssl_cert_check_sum(self) -> Optional[str]:
         """
         Specifies the checksum of SSL certificate content.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_check_sum")
 
@@ -491,7 +1306,7 @@ class JobSourceDb(dict):
     def ssl_cert_key(self) -> Optional[str]:
         """
         Specifies the SSL certificate content, encrypted with base64.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_key")
 
@@ -500,7 +1315,7 @@ class JobSourceDb(dict):
     def ssl_cert_name(self) -> Optional[str]:
         """
         Specifies SSL certificate name.
-        It is mandatory when `ssl_enabled` is `true`. Changing this parameter will create a new resource.
+        It is mandatory when `ssl_enabled` is **true**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_name")
 
@@ -509,7 +1324,7 @@ class JobSourceDb(dict):
     def ssl_cert_password(self) -> Optional[str]:
         """
         Specifies SSL certificate password. It is mandatory when
-        `ssl_enabled` is `true` and the certificate file suffix is `.p12`. Changing this parameter will create a new resource.
+        `ssl_enabled` is **true** and the certificate file suffix is **.p12**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "ssl_cert_password")
 
@@ -527,8 +1342,320 @@ class JobSourceDb(dict):
     def subnet_id(self) -> Optional[str]:
         """
         Specifies subnet ID of database when it is a RDS database.
-        It is mandatory when `direction` is `down`. Changing this parameter will create a new resource.
+        It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
+
+    @property
+    @pulumi.getter
+    def user(self) -> Optional[str]:
+        """
+        Specifies the user name of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "user")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[str]:
+        """
+        Specifies vpc ID of database.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class JobSourceDbKafkaSecurityConfig(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "delegationTokens":
+            suggest = "delegation_tokens"
+        elif key == "enableKeyStore":
+            suggest = "enable_key_store"
+        elif key == "endpointAlgorithm":
+            suggest = "endpoint_algorithm"
+        elif key == "keyPassword":
+            suggest = "key_password"
+        elif key == "keyStoreKey":
+            suggest = "key_store_key"
+        elif key == "keyStoreKeyName":
+            suggest = "key_store_key_name"
+        elif key == "keyStorePassword":
+            suggest = "key_store_password"
+        elif key == "saslMechanism":
+            suggest = "sasl_mechanism"
+        elif key == "setPrivateKeyPassword":
+            suggest = "set_private_key_password"
+        elif key == "trustStoreKey":
+            suggest = "trust_store_key"
+        elif key == "trustStoreKeyName":
+            suggest = "trust_store_key_name"
+        elif key == "trustStorePassword":
+            suggest = "trust_store_password"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobSourceDbKafkaSecurityConfig. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobSourceDbKafkaSecurityConfig.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobSourceDbKafkaSecurityConfig.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 delegation_tokens: Optional[bool] = None,
+                 enable_key_store: Optional[bool] = None,
+                 endpoint_algorithm: Optional[str] = None,
+                 key_password: Optional[str] = None,
+                 key_store_key: Optional[str] = None,
+                 key_store_key_name: Optional[str] = None,
+                 key_store_password: Optional[str] = None,
+                 sasl_mechanism: Optional[str] = None,
+                 set_private_key_password: Optional[bool] = None,
+                 trust_store_key: Optional[str] = None,
+                 trust_store_key_name: Optional[str] = None,
+                 trust_store_password: Optional[str] = None,
+                 type: Optional[str] = None):
+        """
+        :param bool delegation_tokens: Specifies whether to use token authentication. It is valid only when
+               the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+               or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+        :param bool enable_key_store: Specifies Whether to enable two-way SSL authentication.
+               Defaults to false. Changing this parameter will create a new resource.
+        :param str endpoint_algorithm: Specifies the host name endpoint identification algorithm, which
+               specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+               If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+               **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+        :param str key_password: Specifies the keystore private key password. It is mandatory when
+               two-way SSL authentication is enabled and `set_private_key_password` is set to **true**.
+               Changing this parameter will create a new resource.
+        :param str key_store_key: Specifies the keystore certificate. It is mandatory when two-way SSL
+               authentication is enabled. Changing this parameter will create a new resource.
+        :param str key_store_key_name: Specifies the keystore certificate name. It is mandatory when
+               two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+        :param str key_store_password: Specifies the keystore certificate password. It is mandatory when
+               a password is set for the keystore certificate. Changing this parameter will create a new resource.
+        :param str sasl_mechanism: Specifies the SASL mechanism used for client connection.
+               The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+               Changing this parameter will create a new resource.
+        :param bool set_private_key_password: Specifies whether to set the keystore private key password.
+               Defaults to false. Changing this parameter will create a new resource.
+        :param str trust_store_key: Specifies the value of the security certificate after Base64 transcoding.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str trust_store_key_name: Specifies the certificate name.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str trust_store_password: Specifies the certificate password.
+               It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+               Changing this parameter will create a new resource.
+        :param str type: Specifies the type of a task with an EIP bound.
+               Valid values are **master** and **slave**.
+               + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+               + In other cases, the value is fixed to **master**.
+        """
+        if delegation_tokens is not None:
+            pulumi.set(__self__, "delegation_tokens", delegation_tokens)
+        if enable_key_store is not None:
+            pulumi.set(__self__, "enable_key_store", enable_key_store)
+        if endpoint_algorithm is not None:
+            pulumi.set(__self__, "endpoint_algorithm", endpoint_algorithm)
+        if key_password is not None:
+            pulumi.set(__self__, "key_password", key_password)
+        if key_store_key is not None:
+            pulumi.set(__self__, "key_store_key", key_store_key)
+        if key_store_key_name is not None:
+            pulumi.set(__self__, "key_store_key_name", key_store_key_name)
+        if key_store_password is not None:
+            pulumi.set(__self__, "key_store_password", key_store_password)
+        if sasl_mechanism is not None:
+            pulumi.set(__self__, "sasl_mechanism", sasl_mechanism)
+        if set_private_key_password is not None:
+            pulumi.set(__self__, "set_private_key_password", set_private_key_password)
+        if trust_store_key is not None:
+            pulumi.set(__self__, "trust_store_key", trust_store_key)
+        if trust_store_key_name is not None:
+            pulumi.set(__self__, "trust_store_key_name", trust_store_key_name)
+        if trust_store_password is not None:
+            pulumi.set(__self__, "trust_store_password", trust_store_password)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter(name="delegationTokens")
+    def delegation_tokens(self) -> Optional[bool]:
+        """
+        Specifies whether to use token authentication. It is valid only when
+        the security protocol is set to **SASL_SSL** or **SASL_PLAINTEXT** and the SASL mechanism is set to **SCRAM-SHA-256**
+        or **SCRAM-SHA-512**. Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "delegation_tokens")
+
+    @property
+    @pulumi.getter(name="enableKeyStore")
+    def enable_key_store(self) -> Optional[bool]:
+        """
+        Specifies Whether to enable two-way SSL authentication.
+        Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enable_key_store")
+
+    @property
+    @pulumi.getter(name="endpointAlgorithm")
+    def endpoint_algorithm(self) -> Optional[str]:
+        """
+        Specifies the host name endpoint identification algorithm, which
+        specifies the endpoint identification algorithm for verifying the server host name using the server certificate.
+        If it is not specified, host name verification is disabled. The corresponding field for Kafka is
+        **ssl.endpoint.identification.algorithm**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "endpoint_algorithm")
+
+    @property
+    @pulumi.getter(name="keyPassword")
+    def key_password(self) -> Optional[str]:
+        """
+        Specifies the keystore private key password. It is mandatory when
+        two-way SSL authentication is enabled and `set_private_key_password` is set to **true**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_password")
+
+    @property
+    @pulumi.getter(name="keyStoreKey")
+    def key_store_key(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate. It is mandatory when two-way SSL
+        authentication is enabled. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_key")
+
+    @property
+    @pulumi.getter(name="keyStoreKeyName")
+    def key_store_key_name(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate name. It is mandatory when
+        two-way SSL authentication is enabled. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_key_name")
+
+    @property
+    @pulumi.getter(name="keyStorePassword")
+    def key_store_password(self) -> Optional[str]:
+        """
+        Specifies the keystore certificate password. It is mandatory when
+        a password is set for the keystore certificate. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "key_store_password")
+
+    @property
+    @pulumi.getter(name="saslMechanism")
+    def sasl_mechanism(self) -> Optional[str]:
+        """
+        Specifies the SASL mechanism used for client connection.
+        The value can be **GSSAPI**, **PLAIN**, **SCRAM-SHA-256**, **SCRAM-SHA-512**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "sasl_mechanism")
+
+    @property
+    @pulumi.getter(name="setPrivateKeyPassword")
+    def set_private_key_password(self) -> Optional[bool]:
+        """
+        Specifies whether to set the keystore private key password.
+        Defaults to false. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "set_private_key_password")
+
+    @property
+    @pulumi.getter(name="trustStoreKey")
+    def trust_store_key(self) -> Optional[str]:
+        """
+        Specifies the value of the security certificate after Base64 transcoding.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_key")
+
+    @property
+    @pulumi.getter(name="trustStoreKeyName")
+    def trust_store_key_name(self) -> Optional[str]:
+        """
+        Specifies the certificate name.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_key_name")
+
+    @property
+    @pulumi.getter(name="trustStorePassword")
+    def trust_store_password(self) -> Optional[str]:
+        """
+        Specifies the certificate password.
+        It is mandatory when the security protocol is set to **SSL** or **SASL_SSL**.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "trust_store_password")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        Specifies the type of a task with an EIP bound.
+        Valid values are **master** and **slave**.
+        + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+        + In other cases, the value is fixed to **master**.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class JobTable(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "tableNames":
+            suggest = "table_names"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in JobTable. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        JobTable.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        JobTable.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 database: str,
+                 table_names: Sequence[str]):
+        """
+        :param str database: Specifies the name of database to which the tables belong.
+        :param Sequence[str] table_names: Specifies the names of table which belong to a same datebase.
+        """
+        pulumi.set(__self__, "database", database)
+        pulumi.set(__self__, "table_names", table_names)
+
+    @property
+    @pulumi.getter
+    def database(self) -> str:
+        """
+        Specifies the name of database to which the tables belong.
+        """
+        return pulumi.get(self, "database")
+
+    @property
+    @pulumi.getter(name="tableNames")
+    def table_names(self) -> Sequence[str]:
+        """
+        Specifies the names of table which belong to a same datebase.
+        """
+        return pulumi.get(self, "table_names")
 
 

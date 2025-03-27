@@ -19,6 +19,7 @@ class MicroserviceArgs:
                  version: pulumi.Input[str],
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  environment: Optional[pulumi.Input[str]] = None,
                  level: Optional[pulumi.Input[str]] = None,
@@ -27,20 +28,24 @@ class MicroserviceArgs:
         The set of arguments for constructing a Microservice resource.
         :param pulumi.Input[str] app_name: Specifies the name of the dedicated microservice application.
                Changing this will create a new microservice.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[str] version: Specifies the version of the dedicated microservice.
                Changing this will create a new microservice.
-        :param pulumi.Input[str] admin_pass: Specifies the account password.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_pass: Specifies the account password for **RBAC** login.
                The password format must meet the following conditions:
                + Must be `8` to `32` characters long.
                + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
                (-~!@#%^*_=+?$&()|<>{}[]).
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
-        :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_user: Specifies the account name for **RBAC** login.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
                The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
@@ -61,6 +66,8 @@ class MicroserviceArgs:
             pulumi.set(__self__, "admin_pass", admin_pass)
         if admin_user is not None:
             pulumi.set(__self__, "admin_user", admin_user)
+        if auth_address is not None:
+            pulumi.set(__self__, "auth_address", auth_address)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if environment is not None:
@@ -87,8 +94,10 @@ class MicroserviceArgs:
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> pulumi.Input[str]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice.
+        Specifies the address that used to access engine and manages
+        microservice.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 
@@ -113,8 +122,7 @@ class MicroserviceArgs:
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the account password.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account password for **RBAC** login.
         The password format must meet the following conditions:
         + Must be `8` to `32` characters long.
         + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -132,14 +140,28 @@ class MicroserviceArgs:
     @pulumi.getter(name="adminUser")
     def admin_user(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the account name. The initial account name is **root**.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account name for **RBAC** login.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "admin_user")
 
     @admin_user.setter
     def admin_user(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "admin_user", value)
+
+    @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @auth_address.setter
+    def auth_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_address", value)
 
     @property
     @pulumi.getter
@@ -204,6 +226,7 @@ class _MicroserviceState:
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
                  app_name: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  environment: Optional[pulumi.Input[str]] = None,
@@ -213,20 +236,24 @@ class _MicroserviceState:
                  version: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Microservice resources.
-        :param pulumi.Input[str] admin_pass: Specifies the account password.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_pass: Specifies the account password for **RBAC** login.
                The password format must meet the following conditions:
                + Must be `8` to `32` characters long.
                + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
                (-~!@#%^*_=+?$&()|<>{}[]).
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
-        :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_user: Specifies the account name for **RBAC** login.
+               Changing this will create a new resource.
         :param pulumi.Input[str] app_name: Specifies the name of the dedicated microservice application.
                Changing this will create a new microservice.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
                The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
@@ -249,6 +276,8 @@ class _MicroserviceState:
             pulumi.set(__self__, "admin_user", admin_user)
         if app_name is not None:
             pulumi.set(__self__, "app_name", app_name)
+        if auth_address is not None:
+            pulumi.set(__self__, "auth_address", auth_address)
         if connect_address is not None:
             pulumi.set(__self__, "connect_address", connect_address)
         if description is not None:
@@ -268,8 +297,7 @@ class _MicroserviceState:
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the account password.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account password for **RBAC** login.
         The password format must meet the following conditions:
         + Must be `8` to `32` characters long.
         + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -287,8 +315,8 @@ class _MicroserviceState:
     @pulumi.getter(name="adminUser")
     def admin_user(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the account name. The initial account name is **root**.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account name for **RBAC** login.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "admin_user")
 
@@ -310,11 +338,27 @@ class _MicroserviceState:
         pulumi.set(self, "app_name", value)
 
     @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @auth_address.setter
+    def auth_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auth_address", value)
+
+    @property
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice.
+        Specifies the address that used to access engine and manages
+        microservice.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 
@@ -412,6 +456,7 @@ class Microservice(pulumi.CustomResource):
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
                  app_name: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  environment: Optional[pulumi.Input[str]] = None,
@@ -422,76 +467,74 @@ class Microservice(pulumi.CustomResource):
         """
         Manages a dedicated microservice resource within HuaweiCloud.
 
-        > When deleting a microservice, all instances under it will also be deleted together.
+        > 1. Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+        >       table.
+        >       <br/> 2. When deleting a microservice, all instances under it will also be deleted together.
 
         ## Example Usage
-        ### Create a microservice in an engine with RBAC authentication disabled
+        ## Appendix
 
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
+        <a name="microservice_default_engine_access_rules"></a>
+        Security group rules required to access the engine:
+        (Remote is not the minimum range and can be adjusted according to business needs)
 
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        service_name = config.require_object("serviceName")
-        app_name = config.require_object("appName")
-        test = huaweicloud.cse.Microservice("test",
-            connect_address=engine_conn_addr,
-            version="1.0.0",
-            environment="development",
-            app_name=app_name)
-        ```
-        ### Create a microservice in an engine with RBAC authentication enabled
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        service_name = config.require_object("serviceName")
-        app_name = config.require_object("appName")
-        test = huaweicloud.cse.Microservice("test",
-            connect_address=engine_conn_addr,
-            version="1.0.0",
-            environment="development",
-            app_name=app_name,
-            admin_user="root",
-            admin_pass="Huawei!123")
-        ```
+        | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+        | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+        | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+        | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 
         ## Import
 
-        Microservices can be imported using related `connect_address` and their `id`, separated by a slash (/), e.g.
+        Microservices can be imported using related `auth_address`, `connect_address` and their `id`, separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>
         ```
 
-         If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+         If you enabled the **RBAC** authorization, you also need to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>/<admin_user>/<admin_pass>
         ```
 
-         The single quotes can help you solve the problem of special characters reporting errors on bash.
+         The single quotes (') or backslashes (\\\\) can help you solve the problem of special characters reporting errors on bash. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test\\!123
+        ```
+
+         bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+        ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] admin_pass: Specifies the account password.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_pass: Specifies the account password for **RBAC** login.
                The password format must meet the following conditions:
                + Must be `8` to `32` characters long.
                + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
                (-~!@#%^*_=+?$&()|<>{}[]).
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
-        :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_user: Specifies the account name for **RBAC** login.
+               Changing this will create a new resource.
         :param pulumi.Input[str] app_name: Specifies the name of the dedicated microservice application.
                Changing this will create a new microservice.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
                The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
@@ -516,59 +559,53 @@ class Microservice(pulumi.CustomResource):
         """
         Manages a dedicated microservice resource within HuaweiCloud.
 
-        > When deleting a microservice, all instances under it will also be deleted together.
+        > 1. Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+        >       table.
+        >       <br/> 2. When deleting a microservice, all instances under it will also be deleted together.
 
         ## Example Usage
-        ### Create a microservice in an engine with RBAC authentication disabled
+        ## Appendix
 
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
+        <a name="microservice_default_engine_access_rules"></a>
+        Security group rules required to access the engine:
+        (Remote is not the minimum range and can be adjusted according to business needs)
 
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        service_name = config.require_object("serviceName")
-        app_name = config.require_object("appName")
-        test = huaweicloud.cse.Microservice("test",
-            connect_address=engine_conn_addr,
-            version="1.0.0",
-            environment="development",
-            app_name=app_name)
-        ```
-        ### Create a microservice in an engine with RBAC authentication enabled
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        config = pulumi.Config()
-        engine_conn_addr = config.require_object("engineConnAddr")
-        service_name = config.require_object("serviceName")
-        app_name = config.require_object("appName")
-        test = huaweicloud.cse.Microservice("test",
-            connect_address=engine_conn_addr,
-            version="1.0.0",
-            environment="development",
-            app_name=app_name,
-            admin_user="root",
-            admin_pass="Huawei!123")
-        ```
+        | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+        | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+        | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+        | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+        | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+        | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
 
         ## Import
 
-        Microservices can be imported using related `connect_address` and their `id`, separated by a slash (/), e.g.
+        Microservices can be imported using related `auth_address`, `connect_address` and their `id`, separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>
         ```
 
-         If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+         If you enabled the **RBAC** authorization, you also need to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test <auth_address>/<connect_address>/<id>/<admin_user>/<admin_pass>
         ```
 
-         The single quotes can help you solve the problem of special characters reporting errors on bash.
+         The single quotes (') or backslashes (\\\\) can help you solve the problem of special characters reporting errors on bash. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test\\!123
+        ```
+
+         bash
+
+        ```sh
+         $ pulumi import huaweicloud:Cse/microservice:Microservice test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/root/Test!123'
+        ```
 
         :param str resource_name: The name of the resource.
         :param MicroserviceArgs args: The arguments to use to populate this resource's properties.
@@ -588,6 +625,7 @@ class Microservice(pulumi.CustomResource):
                  admin_pass: Optional[pulumi.Input[str]] = None,
                  admin_user: Optional[pulumi.Input[str]] = None,
                  app_name: Optional[pulumi.Input[str]] = None,
+                 auth_address: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  environment: Optional[pulumi.Input[str]] = None,
@@ -608,6 +646,7 @@ class Microservice(pulumi.CustomResource):
             if app_name is None and not opts.urn:
                 raise TypeError("Missing required property 'app_name'")
             __props__.__dict__["app_name"] = app_name
+            __props__.__dict__["auth_address"] = auth_address
             if connect_address is None and not opts.urn:
                 raise TypeError("Missing required property 'connect_address'")
             __props__.__dict__["connect_address"] = connect_address
@@ -632,6 +671,7 @@ class Microservice(pulumi.CustomResource):
             admin_pass: Optional[pulumi.Input[str]] = None,
             admin_user: Optional[pulumi.Input[str]] = None,
             app_name: Optional[pulumi.Input[str]] = None,
+            auth_address: Optional[pulumi.Input[str]] = None,
             connect_address: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             environment: Optional[pulumi.Input[str]] = None,
@@ -646,20 +686,24 @@ class Microservice(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] admin_pass: Specifies the account password.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_pass: Specifies the account password for **RBAC** login.
                The password format must meet the following conditions:
                + Must be `8` to `32` characters long.
                + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
                (-~!@#%^*_=+?$&()|<>{}[]).
                + Cannot be the account name or account name spelled backwards.
                + The password can only start with a letter.
-        :param pulumi.Input[str] admin_user: Specifies the account name. The initial account name is **root**.
-               Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        :param pulumi.Input[str] admin_user: Specifies the account name for **RBAC** login.
+               Changing this will create a new resource.
         :param pulumi.Input[str] app_name: Specifies the name of the dedicated microservice application.
                Changing this will create a new microservice.
-        :param pulumi.Input[str] connect_address: Specifies the connection address of service registry center for the
-               specified dedicated CSE engine. Changing this will create a new microservice.
+        :param pulumi.Input[str] auth_address: Specifies the address that used to request the access token.  
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] connect_address: Specifies the address that used to access engine and manages
+               microservice.
+               Usually is the connection address of service center.
+               Changing this will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the dedicated microservice.
                The description can contain a maximum of `256` characters.
                Changing this will create a new microservice.
@@ -683,6 +727,7 @@ class Microservice(pulumi.CustomResource):
         __props__.__dict__["admin_pass"] = admin_pass
         __props__.__dict__["admin_user"] = admin_user
         __props__.__dict__["app_name"] = app_name
+        __props__.__dict__["auth_address"] = auth_address
         __props__.__dict__["connect_address"] = connect_address
         __props__.__dict__["description"] = description
         __props__.__dict__["environment"] = environment
@@ -696,8 +741,7 @@ class Microservice(pulumi.CustomResource):
     @pulumi.getter(name="adminPass")
     def admin_pass(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the account password.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account password for **RBAC** login.
         The password format must meet the following conditions:
         + Must be `8` to `32` characters long.
         + A password must contain at least one digit, one uppercase letter, one lowercase letter, and one special character
@@ -711,8 +755,8 @@ class Microservice(pulumi.CustomResource):
     @pulumi.getter(name="adminUser")
     def admin_user(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the account name. The initial account name is **root**.
-        Required if the `auth_type` of engine is **RBAC**. Changing this will create a new microservice.
+        Specifies the account name for **RBAC** login.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "admin_user")
 
@@ -726,11 +770,23 @@ class Microservice(pulumi.CustomResource):
         return pulumi.get(self, "app_name")
 
     @property
+    @pulumi.getter(name="authAddress")
+    def auth_address(self) -> pulumi.Output[str]:
+        """
+        Specifies the address that used to request the access token.  
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "auth_address")
+
+    @property
     @pulumi.getter(name="connectAddress")
     def connect_address(self) -> pulumi.Output[str]:
         """
-        Specifies the connection address of service registry center for the
-        specified dedicated CSE engine. Changing this will create a new microservice.
+        Specifies the address that used to access engine and manages
+        microservice.
+        Usually is the connection address of service center.
+        Changing this will create a new resource.
         """
         return pulumi.get(self, "connect_address")
 

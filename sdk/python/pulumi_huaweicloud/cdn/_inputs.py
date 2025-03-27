@@ -13,13 +13,39 @@ __all__ = [
     'DomainCacheSettingsArgs',
     'DomainCacheSettingsRuleArgs',
     'DomainConfigsArgs',
+    'DomainConfigsAccessAreaFilterArgs',
+    'DomainConfigsBrowserCacheRuleArgs',
+    'DomainConfigsBrowserCacheRuleConditionArgs',
     'DomainConfigsCacheUrlParameterFilterArgs',
+    'DomainConfigsClientCertArgs',
     'DomainConfigsCompressArgs',
+    'DomainConfigsErrorCodeCachArgs',
+    'DomainConfigsErrorCodeRedirectRuleArgs',
+    'DomainConfigsFlexibleOriginArgs',
+    'DomainConfigsFlexibleOriginBackSourcesArgs',
     'DomainConfigsForceRedirectArgs',
+    'DomainConfigsHstsArgs',
     'DomainConfigsHttpResponseHeaderArgs',
     'DomainConfigsHttpsSettingsArgs',
+    'DomainConfigsIpFilterArgs',
+    'DomainConfigsIpFrequencyLimitArgs',
+    'DomainConfigsOriginRequestUrlRewriteArgs',
+    'DomainConfigsQuicArgs',
+    'DomainConfigsRefererArgs',
+    'DomainConfigsRemoteAuthArgs',
+    'DomainConfigsRemoteAuthRemoteAuthRulesArgs',
+    'DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs',
+    'DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs',
+    'DomainConfigsRequestLimitRuleArgs',
+    'DomainConfigsRequestUrlRewriteArgs',
+    'DomainConfigsRequestUrlRewriteConditionArgs',
     'DomainConfigsRetrievalRequestHeaderArgs',
+    'DomainConfigsSniArgs',
     'DomainConfigsUrlSigningArgs',
+    'DomainConfigsUrlSigningInheritConfigArgs',
+    'DomainConfigsUserAgentFilterArgs',
+    'DomainConfigsVideoSeekArgs',
+    'DomainConfigsWebsocketArgs',
     'DomainSourceArgs',
 ]
 
@@ -29,9 +55,9 @@ class DomainCacheSettingsArgs:
                  follow_origin: Optional[pulumi.Input[bool]] = None,
                  rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainCacheSettingsRuleArgs']]]] = None):
         """
-        :param pulumi.Input[bool] follow_origin: Specifies whether to enable origin cache control.
+        :param pulumi.Input[bool] follow_origin: Specifies whether to enable origin cache control. Defaults to **false**.
         :param pulumi.Input[Sequence[pulumi.Input['DomainCacheSettingsRuleArgs']]] rules: Specifies the cache rules, which overwrite the previous rule configurations.
-               Blank rules are reset to default rules. The object structure is documented below.
+               Blank rules are reset to default rules. The rules structure is documented below.
         """
         if follow_origin is not None:
             pulumi.set(__self__, "follow_origin", follow_origin)
@@ -42,7 +68,7 @@ class DomainCacheSettingsArgs:
     @pulumi.getter(name="followOrigin")
     def follow_origin(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable origin cache control.
+        Specifies whether to enable origin cache control. Defaults to **false**.
         """
         return pulumi.get(self, "follow_origin")
 
@@ -55,7 +81,7 @@ class DomainCacheSettingsArgs:
     def rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainCacheSettingsRuleArgs']]]]:
         """
         Specifies the cache rules, which overwrite the previous rule configurations.
-        Blank rules are reset to default rules. The object structure is documented below.
+        Blank rules are reset to default rules. The rules structure is documented below.
         """
         return pulumi.get(self, "rules")
 
@@ -67,28 +93,47 @@ class DomainCacheSettingsArgs:
 @pulumi.input_type
 class DomainCacheSettingsRuleArgs:
     def __init__(__self__, *,
-                 rule_type: pulumi.Input[int],
+                 rule_type: pulumi.Input[str],
                  content: Optional[pulumi.Input[str]] = None,
                  priority: Optional[pulumi.Input[int]] = None,
                  ttl: Optional[pulumi.Input[int]] = None,
-                 ttl_type: Optional[pulumi.Input[int]] = None):
+                 ttl_type: Optional[pulumi.Input[str]] = None,
+                 url_parameter_type: Optional[pulumi.Input[str]] = None,
+                 url_parameter_value: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[int] rule_type: Specifies the rule type. Possible value are:
-               **0**: All types of files are matched. It is the default value.
-               **1**: Files are matched based on their suffixes.
-               **2**: Files are matched based on their directories.
-               **3**: Files are matched based on their full paths.
-        :param pulumi.Input[str] content: Specifies the content that matches `rule_type`. If `rule_type` is set to **0**,
-               this parameter is empty. If `rule_type` is set to **1**, the value of this parameter is a list of file name
+        :param pulumi.Input[str] rule_type: Specifies the rule type. Possible value are:
+               + **all**: All types of files are matched. It is the default value. The cloud will create a cache rule with **all**
+               rule type by default.
+               + **file_extension**: Files are matched based on their suffixes.
+               + **catalog**: Files are matched based on their directories.
+               + **full_path**: Files are matched based on their full paths.
+               + **home_page**: Files are matched based on their homepage.
+        :param pulumi.Input[str] content: Specifies the content that matches `rule_type`.
+               + If `rule_type` is set to **all** or **home_page**, keep this parameter empty.
+               + If `rule_type` is set to **file_extension**, the value of this parameter is a list of file name
                extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
-               for example, .jpg;.zip;.exe. If `rule_type` is set to **2**, the value of this parameter is a list of directories.
-               A directory starts with a slash (/). Directories are separated by semicolons (;), for example,
-               /test/folder01;/test/folder02.
+               for example, `.jpg;.zip;.exe`. Up to 20 file types are supported.
+               + If `rule_type` is set to **catalog**, the value of this parameter is a list of directories. A directory starts with
+               a slash (/). Directories are separated by semicolons (;), for example, `/test/folder01;/test/folder02`.
+               Up to 20 directories are supported.
+               + If `rule_type` is set to **full_path**, the value must start with a slash (/) and cannot end with an asterisk.
+               Example: `/test/index.html` or `/test/*.jpg`
         :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
                A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
         :param pulumi.Input[int] ttl: Specifies the cache age. The maximum cache age is 365 days.
-        :param pulumi.Input[int] ttl_type: Specifies the unit of the cache age. Possible values: **1** (second), **2** (minute),
-               **3** (hour), and **4** (day).
+        :param pulumi.Input[str] ttl_type: Specifies the unit of the cache age. Possible values:
+               + **s**: Second
+               + **m**: Minute
+               + **h**: Hour
+               + **d**: Day
+        :param pulumi.Input[str] url_parameter_type: Specifies the URL parameter types. Valid values are as follows:
+               + **del_params**: Ignore specific URL parameters.
+               + **reserve_params**: Retain specific URL parameters.
+               + **ignore_url_params**: Ignore all URL parameters.
+               + **full_url**: Retain all URL parameters.
+        :param pulumi.Input[str] url_parameter_value: Specifies the URL parameter values, which are separated by commas (,).
+               Up to 10 parameters can be set.
+               This parameter is mandatory when `url_parameter_type` is set to **del_params** or **reserve_params**.
         """
         pulumi.set(__self__, "rule_type", rule_type)
         if content is not None:
@@ -99,33 +144,43 @@ class DomainCacheSettingsRuleArgs:
             pulumi.set(__self__, "ttl", ttl)
         if ttl_type is not None:
             pulumi.set(__self__, "ttl_type", ttl_type)
+        if url_parameter_type is not None:
+            pulumi.set(__self__, "url_parameter_type", url_parameter_type)
+        if url_parameter_value is not None:
+            pulumi.set(__self__, "url_parameter_value", url_parameter_value)
 
     @property
     @pulumi.getter(name="ruleType")
-    def rule_type(self) -> pulumi.Input[int]:
+    def rule_type(self) -> pulumi.Input[str]:
         """
         Specifies the rule type. Possible value are:
-        **0**: All types of files are matched. It is the default value.
-        **1**: Files are matched based on their suffixes.
-        **2**: Files are matched based on their directories.
-        **3**: Files are matched based on their full paths.
+        + **all**: All types of files are matched. It is the default value. The cloud will create a cache rule with **all**
+        rule type by default.
+        + **file_extension**: Files are matched based on their suffixes.
+        + **catalog**: Files are matched based on their directories.
+        + **full_path**: Files are matched based on their full paths.
+        + **home_page**: Files are matched based on their homepage.
         """
         return pulumi.get(self, "rule_type")
 
     @rule_type.setter
-    def rule_type(self, value: pulumi.Input[int]):
+    def rule_type(self, value: pulumi.Input[str]):
         pulumi.set(self, "rule_type", value)
 
     @property
     @pulumi.getter
     def content(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the content that matches `rule_type`. If `rule_type` is set to **0**,
-        this parameter is empty. If `rule_type` is set to **1**, the value of this parameter is a list of file name
+        Specifies the content that matches `rule_type`.
+        + If `rule_type` is set to **all** or **home_page**, keep this parameter empty.
+        + If `rule_type` is set to **file_extension**, the value of this parameter is a list of file name
         extensions. A file name extension starts with a period (.). File name extensions are separated by semicolons (;),
-        for example, .jpg;.zip;.exe. If `rule_type` is set to **2**, the value of this parameter is a list of directories.
-        A directory starts with a slash (/). Directories are separated by semicolons (;), for example,
-        /test/folder01;/test/folder02.
+        for example, `.jpg;.zip;.exe`. Up to 20 file types are supported.
+        + If `rule_type` is set to **catalog**, the value of this parameter is a list of directories. A directory starts with
+        a slash (/). Directories are separated by semicolons (;), for example, `/test/folder01;/test/folder02`.
+        Up to 20 directories are supported.
+        + If `rule_type` is set to **full_path**, the value must start with a slash (/) and cannot end with an asterisk.
+        Example: `/test/index.html` or `/test/*.jpg`
         """
         return pulumi.get(self, "content")
 
@@ -160,81 +215,252 @@ class DomainCacheSettingsRuleArgs:
 
     @property
     @pulumi.getter(name="ttlType")
-    def ttl_type(self) -> Optional[pulumi.Input[int]]:
+    def ttl_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the unit of the cache age. Possible values: **1** (second), **2** (minute),
-        **3** (hour), and **4** (day).
+        Specifies the unit of the cache age. Possible values:
+        + **s**: Second
+        + **m**: Minute
+        + **h**: Hour
+        + **d**: Day
         """
         return pulumi.get(self, "ttl_type")
 
     @ttl_type.setter
-    def ttl_type(self, value: Optional[pulumi.Input[int]]):
+    def ttl_type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ttl_type", value)
+
+    @property
+    @pulumi.getter(name="urlParameterType")
+    def url_parameter_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URL parameter types. Valid values are as follows:
+        + **del_params**: Ignore specific URL parameters.
+        + **reserve_params**: Retain specific URL parameters.
+        + **ignore_url_params**: Ignore all URL parameters.
+        + **full_url**: Retain all URL parameters.
+        """
+        return pulumi.get(self, "url_parameter_type")
+
+    @url_parameter_type.setter
+    def url_parameter_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "url_parameter_type", value)
+
+    @property
+    @pulumi.getter(name="urlParameterValue")
+    def url_parameter_value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URL parameter values, which are separated by commas (,).
+        Up to 10 parameters can be set.
+        This parameter is mandatory when `url_parameter_type` is set to **del_params** or **reserve_params**.
+        """
+        return pulumi.get(self, "url_parameter_value")
+
+    @url_parameter_value.setter
+    def url_parameter_value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "url_parameter_value", value)
 
 
 @pulumi.input_type
 class DomainConfigsArgs:
     def __init__(__self__, *,
+                 access_area_filters: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsAccessAreaFilterArgs']]]] = None,
+                 browser_cache_rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsBrowserCacheRuleArgs']]]] = None,
                  cache_url_parameter_filter: Optional[pulumi.Input['DomainConfigsCacheUrlParameterFilterArgs']] = None,
+                 client_cert: Optional[pulumi.Input['DomainConfigsClientCertArgs']] = None,
                  compress: Optional[pulumi.Input['DomainConfigsCompressArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 error_code_caches: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeCachArgs']]]] = None,
+                 error_code_redirect_rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeRedirectRuleArgs']]]] = None,
+                 flexible_origins: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsFlexibleOriginArgs']]]] = None,
                  force_redirect: Optional[pulumi.Input['DomainConfigsForceRedirectArgs']] = None,
+                 hsts: Optional[pulumi.Input['DomainConfigsHstsArgs']] = None,
                  http_response_headers: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsHttpResponseHeaderArgs']]]] = None,
                  https_settings: Optional[pulumi.Input['DomainConfigsHttpsSettingsArgs']] = None,
+                 ip_filter: Optional[pulumi.Input['DomainConfigsIpFilterArgs']] = None,
+                 ip_frequency_limit: Optional[pulumi.Input['DomainConfigsIpFrequencyLimitArgs']] = None,
                  ipv6_enable: Optional[pulumi.Input[bool]] = None,
+                 origin_follow302_status: Optional[pulumi.Input[str]] = None,
                  origin_protocol: Optional[pulumi.Input[str]] = None,
+                 origin_receive_timeout: Optional[pulumi.Input[int]] = None,
+                 origin_request_url_rewrites: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsOriginRequestUrlRewriteArgs']]]] = None,
+                 quic: Optional[pulumi.Input['DomainConfigsQuicArgs']] = None,
                  range_based_retrieval_enabled: Optional[pulumi.Input[bool]] = None,
+                 referer: Optional[pulumi.Input['DomainConfigsRefererArgs']] = None,
+                 remote_auth: Optional[pulumi.Input['DomainConfigsRemoteAuthArgs']] = None,
+                 request_limit_rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestLimitRuleArgs']]]] = None,
+                 request_url_rewrites: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestUrlRewriteArgs']]]] = None,
                  retrieval_request_headers: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRetrievalRequestHeaderArgs']]]] = None,
-                 url_signing: Optional[pulumi.Input['DomainConfigsUrlSigningArgs']] = None):
+                 slice_etag_status: Optional[pulumi.Input[str]] = None,
+                 sni: Optional[pulumi.Input['DomainConfigsSniArgs']] = None,
+                 url_signing: Optional[pulumi.Input['DomainConfigsUrlSigningArgs']] = None,
+                 user_agent_filter: Optional[pulumi.Input['DomainConfigsUserAgentFilterArgs']] = None,
+                 video_seek: Optional[pulumi.Input['DomainConfigsVideoSeekArgs']] = None,
+                 websocket: Optional[pulumi.Input['DomainConfigsWebsocketArgs']] = None):
         """
-        :param pulumi.Input['DomainConfigsCacheUrlParameterFilterArgs'] cache_url_parameter_filter: Specifies the settings for caching URL parameters.
-               The object structure is documented below.
-        :param pulumi.Input['DomainConfigsCompressArgs'] compress: Specifies the smart compression. The object structure
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsAccessAreaFilterArgs']]] access_area_filters: Specifies the geographic access control rules.
+               The access_area_filter structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsBrowserCacheRuleArgs']]] browser_cache_rules: Specifies the browser cache expiration settings.
+               The browser_cache_rules structure is documented below.
+        :param pulumi.Input['DomainConfigsClientCertArgs'] client_cert: Specifies the client certificate configuration.
+               The client_cert structure is documented below.
+        :param pulumi.Input['DomainConfigsCompressArgs'] compress: Specifies the smart compression. The compress structure
                is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the domain. The value contains up to `200` characters.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeCachArgs']]] error_code_caches: Specifies the status code cache TTL.
+               The error_code_cache structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeRedirectRuleArgs']]] error_code_redirect_rules: Specifies the custom error pages.
+               The error_code_redirect_rules structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsFlexibleOriginArgs']]] flexible_origins: Specifies the advanced origin rules.
+               The flexible_origin structure is documented below.
         :param pulumi.Input['DomainConfigsForceRedirectArgs'] force_redirect: Specifies the force redirect.
-               The object structure is documented below.
+               The force_redirect structure is documented below.
+        :param pulumi.Input['DomainConfigsHstsArgs'] hsts: Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+               your server, improving access security. The hsts structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsHttpResponseHeaderArgs']]] http_response_headers: Specifies the HTTP response header settings.
-               The object structure is documented below.
-        :param pulumi.Input['DomainConfigsHttpsSettingsArgs'] https_settings: Specifies the certificate configuration. The object
+               The http_response_header structure is documented below.
+        :param pulumi.Input['DomainConfigsHttpsSettingsArgs'] https_settings: Specifies the certificate configuration. The https_settings
                structure is documented below.
+        :param pulumi.Input['DomainConfigsIpFilterArgs'] ip_filter: Specifies the IP address blacklist or whitelist.
+               The ip_filter structure is documented below.
+        :param pulumi.Input['DomainConfigsIpFrequencyLimitArgs'] ip_frequency_limit: Specifies the IP access frequency limit.
+               The ip_frequency_limit structure is documented below.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether to enable IPv6.
+        :param pulumi.Input[str] origin_follow302_status: Specifies whether to enable redirection from the origin.
+               Valid values are as follows:
+               + **on**: Enable.
+               + **off**: Disable.
         :param pulumi.Input[str] origin_protocol: Specifies the content retrieval protocol. Possible values:
-               + **follow**: same as user requests.
+               + **follow**: Same as user requests.
                + **http**: HTTP, which is the default value.
                + **https**: HTTPS.
+        :param pulumi.Input[int] origin_receive_timeout: Specifies the origin response timeout.
+               The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsOriginRequestUrlRewriteArgs']]] origin_request_url_rewrites: Specifies the rules of rewriting origin request URLs.
+               The origin_request_url_rewrite structure is documented below.
+        :param pulumi.Input['DomainConfigsQuicArgs'] quic: Specifies the QUIC protocol. The quic structure is documented below.
         :param pulumi.Input[bool] range_based_retrieval_enabled: Specifies whether to enable range-based retrieval.
+        :param pulumi.Input['DomainConfigsRefererArgs'] referer: Specifies the referer validation. The referer structure is documented below.
+        :param pulumi.Input['DomainConfigsRemoteAuthArgs'] remote_auth: Specifies the remote authentication settings.
+               The remote_auth structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestLimitRuleArgs']]] request_limit_rules: Specifies the request rate limiting rules.
+               The request_limit_rules structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestUrlRewriteArgs']]] request_url_rewrites: Specifies the request url rewrite settings. Set access URL rewrite rules to
+               redirect user requests to the URLs of cached resources.
+               The request_url_rewrite structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsRetrievalRequestHeaderArgs']]] retrieval_request_headers: Specifies the retrieval request header settings.
-               The object structure is documented below.
+               The retrieval_request_header structure is documented below.
+        :param pulumi.Input[str] slice_etag_status: Specifies whether ETag is verified during origin pull.
+               Valid values are as follows:
+               + **on**: Enable.
+               + **off**: Disable.
+        :param pulumi.Input['DomainConfigsSniArgs'] sni: Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+               CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+               The sni structure is documented below.
         :param pulumi.Input['DomainConfigsUrlSigningArgs'] url_signing: Specifies the URL signing.
-               The object structure is documented below.
+               The url_signing structure is documented below.
+        :param pulumi.Input['DomainConfigsUserAgentFilterArgs'] user_agent_filter: Specifies the User-Agent blacklist or whitelist settings.
+               The user_agent_filter structure is documented below.
+        :param pulumi.Input['DomainConfigsVideoSeekArgs'] video_seek: Specifies the video seek settings. The video_seek structure
+               is documented below.
+        :param pulumi.Input['DomainConfigsWebsocketArgs'] websocket: Specifies the websocket settings. This field can only be configured if `type` is
+               set to **wholeSite**. The websocket structure is documented below.
         """
+        if access_area_filters is not None:
+            pulumi.set(__self__, "access_area_filters", access_area_filters)
+        if browser_cache_rules is not None:
+            pulumi.set(__self__, "browser_cache_rules", browser_cache_rules)
         if cache_url_parameter_filter is not None:
             pulumi.set(__self__, "cache_url_parameter_filter", cache_url_parameter_filter)
+        if client_cert is not None:
+            pulumi.set(__self__, "client_cert", client_cert)
         if compress is not None:
             pulumi.set(__self__, "compress", compress)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if error_code_caches is not None:
+            pulumi.set(__self__, "error_code_caches", error_code_caches)
+        if error_code_redirect_rules is not None:
+            pulumi.set(__self__, "error_code_redirect_rules", error_code_redirect_rules)
+        if flexible_origins is not None:
+            pulumi.set(__self__, "flexible_origins", flexible_origins)
         if force_redirect is not None:
             pulumi.set(__self__, "force_redirect", force_redirect)
+        if hsts is not None:
+            pulumi.set(__self__, "hsts", hsts)
         if http_response_headers is not None:
             pulumi.set(__self__, "http_response_headers", http_response_headers)
         if https_settings is not None:
             pulumi.set(__self__, "https_settings", https_settings)
+        if ip_filter is not None:
+            pulumi.set(__self__, "ip_filter", ip_filter)
+        if ip_frequency_limit is not None:
+            pulumi.set(__self__, "ip_frequency_limit", ip_frequency_limit)
         if ipv6_enable is not None:
             pulumi.set(__self__, "ipv6_enable", ipv6_enable)
+        if origin_follow302_status is not None:
+            pulumi.set(__self__, "origin_follow302_status", origin_follow302_status)
         if origin_protocol is not None:
             pulumi.set(__self__, "origin_protocol", origin_protocol)
+        if origin_receive_timeout is not None:
+            pulumi.set(__self__, "origin_receive_timeout", origin_receive_timeout)
+        if origin_request_url_rewrites is not None:
+            pulumi.set(__self__, "origin_request_url_rewrites", origin_request_url_rewrites)
+        if quic is not None:
+            pulumi.set(__self__, "quic", quic)
         if range_based_retrieval_enabled is not None:
             pulumi.set(__self__, "range_based_retrieval_enabled", range_based_retrieval_enabled)
+        if referer is not None:
+            pulumi.set(__self__, "referer", referer)
+        if remote_auth is not None:
+            pulumi.set(__self__, "remote_auth", remote_auth)
+        if request_limit_rules is not None:
+            pulumi.set(__self__, "request_limit_rules", request_limit_rules)
+        if request_url_rewrites is not None:
+            pulumi.set(__self__, "request_url_rewrites", request_url_rewrites)
         if retrieval_request_headers is not None:
             pulumi.set(__self__, "retrieval_request_headers", retrieval_request_headers)
+        if slice_etag_status is not None:
+            pulumi.set(__self__, "slice_etag_status", slice_etag_status)
+        if sni is not None:
+            pulumi.set(__self__, "sni", sni)
         if url_signing is not None:
             pulumi.set(__self__, "url_signing", url_signing)
+        if user_agent_filter is not None:
+            pulumi.set(__self__, "user_agent_filter", user_agent_filter)
+        if video_seek is not None:
+            pulumi.set(__self__, "video_seek", video_seek)
+        if websocket is not None:
+            pulumi.set(__self__, "websocket", websocket)
+
+    @property
+    @pulumi.getter(name="accessAreaFilters")
+    def access_area_filters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsAccessAreaFilterArgs']]]]:
+        """
+        Specifies the geographic access control rules.
+        The access_area_filter structure is documented below.
+        """
+        return pulumi.get(self, "access_area_filters")
+
+    @access_area_filters.setter
+    def access_area_filters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsAccessAreaFilterArgs']]]]):
+        pulumi.set(self, "access_area_filters", value)
+
+    @property
+    @pulumi.getter(name="browserCacheRules")
+    def browser_cache_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsBrowserCacheRuleArgs']]]]:
+        """
+        Specifies the browser cache expiration settings.
+        The browser_cache_rules structure is documented below.
+        """
+        return pulumi.get(self, "browser_cache_rules")
+
+    @browser_cache_rules.setter
+    def browser_cache_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsBrowserCacheRuleArgs']]]]):
+        pulumi.set(self, "browser_cache_rules", value)
 
     @property
     @pulumi.getter(name="cacheUrlParameterFilter")
     def cache_url_parameter_filter(self) -> Optional[pulumi.Input['DomainConfigsCacheUrlParameterFilterArgs']]:
-        """
-        Specifies the settings for caching URL parameters.
-        The object structure is documented below.
-        """
         return pulumi.get(self, "cache_url_parameter_filter")
 
     @cache_url_parameter_filter.setter
@@ -242,10 +468,23 @@ class DomainConfigsArgs:
         pulumi.set(self, "cache_url_parameter_filter", value)
 
     @property
+    @pulumi.getter(name="clientCert")
+    def client_cert(self) -> Optional[pulumi.Input['DomainConfigsClientCertArgs']]:
+        """
+        Specifies the client certificate configuration.
+        The client_cert structure is documented below.
+        """
+        return pulumi.get(self, "client_cert")
+
+    @client_cert.setter
+    def client_cert(self, value: Optional[pulumi.Input['DomainConfigsClientCertArgs']]):
+        pulumi.set(self, "client_cert", value)
+
+    @property
     @pulumi.getter
     def compress(self) -> Optional[pulumi.Input['DomainConfigsCompressArgs']]:
         """
-        Specifies the smart compression. The object structure
+        Specifies the smart compression. The compress structure
         is documented below.
         """
         return pulumi.get(self, "compress")
@@ -255,11 +494,62 @@ class DomainConfigsArgs:
         pulumi.set(self, "compress", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the domain. The value contains up to `200` characters.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="errorCodeCaches")
+    def error_code_caches(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeCachArgs']]]]:
+        """
+        Specifies the status code cache TTL.
+        The error_code_cache structure is documented below.
+        """
+        return pulumi.get(self, "error_code_caches")
+
+    @error_code_caches.setter
+    def error_code_caches(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeCachArgs']]]]):
+        pulumi.set(self, "error_code_caches", value)
+
+    @property
+    @pulumi.getter(name="errorCodeRedirectRules")
+    def error_code_redirect_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeRedirectRuleArgs']]]]:
+        """
+        Specifies the custom error pages.
+        The error_code_redirect_rules structure is documented below.
+        """
+        return pulumi.get(self, "error_code_redirect_rules")
+
+    @error_code_redirect_rules.setter
+    def error_code_redirect_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsErrorCodeRedirectRuleArgs']]]]):
+        pulumi.set(self, "error_code_redirect_rules", value)
+
+    @property
+    @pulumi.getter(name="flexibleOrigins")
+    def flexible_origins(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsFlexibleOriginArgs']]]]:
+        """
+        Specifies the advanced origin rules.
+        The flexible_origin structure is documented below.
+        """
+        return pulumi.get(self, "flexible_origins")
+
+    @flexible_origins.setter
+    def flexible_origins(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsFlexibleOriginArgs']]]]):
+        pulumi.set(self, "flexible_origins", value)
+
+    @property
     @pulumi.getter(name="forceRedirect")
     def force_redirect(self) -> Optional[pulumi.Input['DomainConfigsForceRedirectArgs']]:
         """
         Specifies the force redirect.
-        The object structure is documented below.
+        The force_redirect structure is documented below.
         """
         return pulumi.get(self, "force_redirect")
 
@@ -268,11 +558,24 @@ class DomainConfigsArgs:
         pulumi.set(self, "force_redirect", value)
 
     @property
+    @pulumi.getter
+    def hsts(self) -> Optional[pulumi.Input['DomainConfigsHstsArgs']]:
+        """
+        Specifies the HSTS settings. HSTS forces clients (such as browsers) to use HTTPS to access
+        your server, improving access security. The hsts structure is documented below.
+        """
+        return pulumi.get(self, "hsts")
+
+    @hsts.setter
+    def hsts(self, value: Optional[pulumi.Input['DomainConfigsHstsArgs']]):
+        pulumi.set(self, "hsts", value)
+
+    @property
     @pulumi.getter(name="httpResponseHeaders")
     def http_response_headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsHttpResponseHeaderArgs']]]]:
         """
         Specifies the HTTP response header settings.
-        The object structure is documented below.
+        The http_response_header structure is documented below.
         """
         return pulumi.get(self, "http_response_headers")
 
@@ -284,7 +587,7 @@ class DomainConfigsArgs:
     @pulumi.getter(name="httpsSettings")
     def https_settings(self) -> Optional[pulumi.Input['DomainConfigsHttpsSettingsArgs']]:
         """
-        Specifies the certificate configuration. The object
+        Specifies the certificate configuration. The https_settings
         structure is documented below.
         """
         return pulumi.get(self, "https_settings")
@@ -292,6 +595,32 @@ class DomainConfigsArgs:
     @https_settings.setter
     def https_settings(self, value: Optional[pulumi.Input['DomainConfigsHttpsSettingsArgs']]):
         pulumi.set(self, "https_settings", value)
+
+    @property
+    @pulumi.getter(name="ipFilter")
+    def ip_filter(self) -> Optional[pulumi.Input['DomainConfigsIpFilterArgs']]:
+        """
+        Specifies the IP address blacklist or whitelist.
+        The ip_filter structure is documented below.
+        """
+        return pulumi.get(self, "ip_filter")
+
+    @ip_filter.setter
+    def ip_filter(self, value: Optional[pulumi.Input['DomainConfigsIpFilterArgs']]):
+        pulumi.set(self, "ip_filter", value)
+
+    @property
+    @pulumi.getter(name="ipFrequencyLimit")
+    def ip_frequency_limit(self) -> Optional[pulumi.Input['DomainConfigsIpFrequencyLimitArgs']]:
+        """
+        Specifies the IP access frequency limit.
+        The ip_frequency_limit structure is documented below.
+        """
+        return pulumi.get(self, "ip_frequency_limit")
+
+    @ip_frequency_limit.setter
+    def ip_frequency_limit(self, value: Optional[pulumi.Input['DomainConfigsIpFrequencyLimitArgs']]):
+        pulumi.set(self, "ip_frequency_limit", value)
 
     @property
     @pulumi.getter(name="ipv6Enable")
@@ -306,11 +635,26 @@ class DomainConfigsArgs:
         pulumi.set(self, "ipv6_enable", value)
 
     @property
+    @pulumi.getter(name="originFollow302Status")
+    def origin_follow302_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable redirection from the origin.
+        Valid values are as follows:
+        + **on**: Enable.
+        + **off**: Disable.
+        """
+        return pulumi.get(self, "origin_follow302_status")
+
+    @origin_follow302_status.setter
+    def origin_follow302_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "origin_follow302_status", value)
+
+    @property
     @pulumi.getter(name="originProtocol")
     def origin_protocol(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the content retrieval protocol. Possible values:
-        + **follow**: same as user requests.
+        + **follow**: Same as user requests.
         + **http**: HTTP, which is the default value.
         + **https**: HTTPS.
         """
@@ -319,6 +663,44 @@ class DomainConfigsArgs:
     @origin_protocol.setter
     def origin_protocol(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "origin_protocol", value)
+
+    @property
+    @pulumi.getter(name="originReceiveTimeout")
+    def origin_receive_timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the origin response timeout.
+        The value ranges from `5` to `60`, in seconds. Defaults to `30`.
+        """
+        return pulumi.get(self, "origin_receive_timeout")
+
+    @origin_receive_timeout.setter
+    def origin_receive_timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "origin_receive_timeout", value)
+
+    @property
+    @pulumi.getter(name="originRequestUrlRewrites")
+    def origin_request_url_rewrites(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsOriginRequestUrlRewriteArgs']]]]:
+        """
+        Specifies the rules of rewriting origin request URLs.
+        The origin_request_url_rewrite structure is documented below.
+        """
+        return pulumi.get(self, "origin_request_url_rewrites")
+
+    @origin_request_url_rewrites.setter
+    def origin_request_url_rewrites(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsOriginRequestUrlRewriteArgs']]]]):
+        pulumi.set(self, "origin_request_url_rewrites", value)
+
+    @property
+    @pulumi.getter
+    def quic(self) -> Optional[pulumi.Input['DomainConfigsQuicArgs']]:
+        """
+        Specifies the QUIC protocol. The quic structure is documented below.
+        """
+        return pulumi.get(self, "quic")
+
+    @quic.setter
+    def quic(self, value: Optional[pulumi.Input['DomainConfigsQuicArgs']]):
+        pulumi.set(self, "quic", value)
 
     @property
     @pulumi.getter(name="rangeBasedRetrievalEnabled")
@@ -333,11 +715,63 @@ class DomainConfigsArgs:
         pulumi.set(self, "range_based_retrieval_enabled", value)
 
     @property
+    @pulumi.getter
+    def referer(self) -> Optional[pulumi.Input['DomainConfigsRefererArgs']]:
+        """
+        Specifies the referer validation. The referer structure is documented below.
+        """
+        return pulumi.get(self, "referer")
+
+    @referer.setter
+    def referer(self, value: Optional[pulumi.Input['DomainConfigsRefererArgs']]):
+        pulumi.set(self, "referer", value)
+
+    @property
+    @pulumi.getter(name="remoteAuth")
+    def remote_auth(self) -> Optional[pulumi.Input['DomainConfigsRemoteAuthArgs']]:
+        """
+        Specifies the remote authentication settings.
+        The remote_auth structure is documented below.
+        """
+        return pulumi.get(self, "remote_auth")
+
+    @remote_auth.setter
+    def remote_auth(self, value: Optional[pulumi.Input['DomainConfigsRemoteAuthArgs']]):
+        pulumi.set(self, "remote_auth", value)
+
+    @property
+    @pulumi.getter(name="requestLimitRules")
+    def request_limit_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestLimitRuleArgs']]]]:
+        """
+        Specifies the request rate limiting rules.
+        The request_limit_rules structure is documented below.
+        """
+        return pulumi.get(self, "request_limit_rules")
+
+    @request_limit_rules.setter
+    def request_limit_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestLimitRuleArgs']]]]):
+        pulumi.set(self, "request_limit_rules", value)
+
+    @property
+    @pulumi.getter(name="requestUrlRewrites")
+    def request_url_rewrites(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestUrlRewriteArgs']]]]:
+        """
+        Specifies the request url rewrite settings. Set access URL rewrite rules to
+        redirect user requests to the URLs of cached resources.
+        The request_url_rewrite structure is documented below.
+        """
+        return pulumi.get(self, "request_url_rewrites")
+
+    @request_url_rewrites.setter
+    def request_url_rewrites(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRequestUrlRewriteArgs']]]]):
+        pulumi.set(self, "request_url_rewrites", value)
+
+    @property
     @pulumi.getter(name="retrievalRequestHeaders")
     def retrieval_request_headers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRetrievalRequestHeaderArgs']]]]:
         """
         Specifies the retrieval request header settings.
-        The object structure is documented below.
+        The retrieval_request_header structure is documented below.
         """
         return pulumi.get(self, "retrieval_request_headers")
 
@@ -346,17 +780,371 @@ class DomainConfigsArgs:
         pulumi.set(self, "retrieval_request_headers", value)
 
     @property
+    @pulumi.getter(name="sliceEtagStatus")
+    def slice_etag_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether ETag is verified during origin pull.
+        Valid values are as follows:
+        + **on**: Enable.
+        + **off**: Disable.
+        """
+        return pulumi.get(self, "slice_etag_status")
+
+    @slice_etag_status.setter
+    def slice_etag_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "slice_etag_status", value)
+
+    @property
+    @pulumi.getter
+    def sni(self) -> Optional[pulumi.Input['DomainConfigsSniArgs']]:
+        """
+        Specifies the origin SNI settings. If your origin server is bound to multiple domains and
+        CDN visits the origin server using HTTPS, set the Server Name Indication (SNI) to specify the domain to be accessed.
+        The sni structure is documented below.
+        """
+        return pulumi.get(self, "sni")
+
+    @sni.setter
+    def sni(self, value: Optional[pulumi.Input['DomainConfigsSniArgs']]):
+        pulumi.set(self, "sni", value)
+
+    @property
     @pulumi.getter(name="urlSigning")
     def url_signing(self) -> Optional[pulumi.Input['DomainConfigsUrlSigningArgs']]:
         """
         Specifies the URL signing.
-        The object structure is documented below.
+        The url_signing structure is documented below.
         """
         return pulumi.get(self, "url_signing")
 
     @url_signing.setter
     def url_signing(self, value: Optional[pulumi.Input['DomainConfigsUrlSigningArgs']]):
         pulumi.set(self, "url_signing", value)
+
+    @property
+    @pulumi.getter(name="userAgentFilter")
+    def user_agent_filter(self) -> Optional[pulumi.Input['DomainConfigsUserAgentFilterArgs']]:
+        """
+        Specifies the User-Agent blacklist or whitelist settings.
+        The user_agent_filter structure is documented below.
+        """
+        return pulumi.get(self, "user_agent_filter")
+
+    @user_agent_filter.setter
+    def user_agent_filter(self, value: Optional[pulumi.Input['DomainConfigsUserAgentFilterArgs']]):
+        pulumi.set(self, "user_agent_filter", value)
+
+    @property
+    @pulumi.getter(name="videoSeek")
+    def video_seek(self) -> Optional[pulumi.Input['DomainConfigsVideoSeekArgs']]:
+        """
+        Specifies the video seek settings. The video_seek structure
+        is documented below.
+        """
+        return pulumi.get(self, "video_seek")
+
+    @video_seek.setter
+    def video_seek(self, value: Optional[pulumi.Input['DomainConfigsVideoSeekArgs']]):
+        pulumi.set(self, "video_seek", value)
+
+    @property
+    @pulumi.getter
+    def websocket(self) -> Optional[pulumi.Input['DomainConfigsWebsocketArgs']]:
+        """
+        Specifies the websocket settings. This field can only be configured if `type` is
+        set to **wholeSite**. The websocket structure is documented below.
+        """
+        return pulumi.get(self, "websocket")
+
+    @websocket.setter
+    def websocket(self, value: Optional[pulumi.Input['DomainConfigsWebsocketArgs']]):
+        pulumi.set(self, "websocket", value)
+
+
+@pulumi.input_type
+class DomainConfigsAccessAreaFilterArgs:
+    def __init__(__self__, *,
+                 area: pulumi.Input[str],
+                 content_type: pulumi.Input[str],
+                 type: pulumi.Input[str],
+                 content_value: Optional[pulumi.Input[str]] = None,
+                 exception_ip: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] area: Specifies the areas, separated by commas.
+               Please refer to [Geographical Location Codes](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0090.html).
+        :param pulumi.Input[str] content_type: Specifies the content type. Valid values are:
+               + **all**: The rule takes effect for all files.
+               + **file_directory**: The rule takes effect for resources in the specified directory.
+               + **file_path**: The rule takes effect for resources corresponding to the path.
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] content_value: Specifies the content value. The use of this field has the following restrictions:
+               + When `content_type` is set to **all**, make this parameter is empty or not passed.
+               + When `content_type` is set to **file_directory**, the value must start with a slash (/) and multiple directories
+               are separated by commas (,), for example, **/test/folder01,/test/folder02**. Up to `100` directories can be entered.
+               + When `content_type` is set to **file_path**, the value must start with a slash (/) or wildcard (\\*). Up to two
+               wildcards (\\*) are allowed and they cannot be consecutive. Multiple paths are separated by commas (,),
+               for example, **/test/a.txt,/test/b.txt**. Up to `100` paths can be entered.
+        :param pulumi.Input[str] exception_ip: Specifies the IP addresses exception in access control, separated by commas.
+        """
+        pulumi.set(__self__, "area", area)
+        pulumi.set(__self__, "content_type", content_type)
+        pulumi.set(__self__, "type", type)
+        if content_value is not None:
+            pulumi.set(__self__, "content_value", content_value)
+        if exception_ip is not None:
+            pulumi.set(__self__, "exception_ip", exception_ip)
+
+    @property
+    @pulumi.getter
+    def area(self) -> pulumi.Input[str]:
+        """
+        Specifies the areas, separated by commas.
+        Please refer to [Geographical Location Codes](https://support.huaweicloud.com/intl/en-us/api-cdn/cdn_02_0090.html).
+        """
+        return pulumi.get(self, "area")
+
+    @area.setter
+    def area(self, value: pulumi.Input[str]):
+        pulumi.set(self, "area", value)
+
+    @property
+    @pulumi.getter(name="contentType")
+    def content_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the content type. Valid values are:
+        + **all**: The rule takes effect for all files.
+        + **file_directory**: The rule takes effect for resources in the specified directory.
+        + **file_path**: The rule takes effect for resources corresponding to the path.
+        """
+        return pulumi.get(self, "content_type")
+
+    @content_type.setter
+    def content_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "content_type", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="contentValue")
+    def content_value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the content value. The use of this field has the following restrictions:
+        + When `content_type` is set to **all**, make this parameter is empty or not passed.
+        + When `content_type` is set to **file_directory**, the value must start with a slash (/) and multiple directories
+        are separated by commas (,), for example, **/test/folder01,/test/folder02**. Up to `100` directories can be entered.
+        + When `content_type` is set to **file_path**, the value must start with a slash (/) or wildcard (\\*). Up to two
+        wildcards (\\*) are allowed and they cannot be consecutive. Multiple paths are separated by commas (,),
+        for example, **/test/a.txt,/test/b.txt**. Up to `100` paths can be entered.
+        """
+        return pulumi.get(self, "content_value")
+
+    @content_value.setter
+    def content_value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "content_value", value)
+
+    @property
+    @pulumi.getter(name="exceptionIp")
+    def exception_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP addresses exception in access control, separated by commas.
+        """
+        return pulumi.get(self, "exception_ip")
+
+    @exception_ip.setter
+    def exception_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "exception_ip", value)
+
+
+@pulumi.input_type
+class DomainConfigsBrowserCacheRuleArgs:
+    def __init__(__self__, *,
+                 cache_type: pulumi.Input[str],
+                 condition: pulumi.Input['DomainConfigsBrowserCacheRuleConditionArgs'],
+                 ttl: Optional[pulumi.Input[int]] = None,
+                 ttl_unit: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] cache_type: Specifies the cache validation type. Valid values are:
+               + **follow_origin**: Follow the origin site's cache policy, i.e. the Cache-Control header settings.
+               + **ttl**: The browser cache follows the expiration time set by the current rules.
+               + **never**: The browser does not cache resources.
+        :param pulumi.Input['DomainConfigsBrowserCacheRuleConditionArgs'] condition: Specifies matching condition.
+               The condition structure is documented below.
+        :param pulumi.Input[int] ttl: Specifies the cache age. The maximum cache age is 365 days.
+        :param pulumi.Input[str] ttl_unit: Specifies the cache expiration time unit. Valid values are:
+               + **s**: seconds.
+               + **m**: minutes.
+               + **h**: hours.
+               + **d**: days.
+        """
+        pulumi.set(__self__, "cache_type", cache_type)
+        pulumi.set(__self__, "condition", condition)
+        if ttl is not None:
+            pulumi.set(__self__, "ttl", ttl)
+        if ttl_unit is not None:
+            pulumi.set(__self__, "ttl_unit", ttl_unit)
+
+    @property
+    @pulumi.getter(name="cacheType")
+    def cache_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the cache validation type. Valid values are:
+        + **follow_origin**: Follow the origin site's cache policy, i.e. the Cache-Control header settings.
+        + **ttl**: The browser cache follows the expiration time set by the current rules.
+        + **never**: The browser does not cache resources.
+        """
+        return pulumi.get(self, "cache_type")
+
+    @cache_type.setter
+    def cache_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "cache_type", value)
+
+    @property
+    @pulumi.getter
+    def condition(self) -> pulumi.Input['DomainConfigsBrowserCacheRuleConditionArgs']:
+        """
+        Specifies matching condition.
+        The condition structure is documented below.
+        """
+        return pulumi.get(self, "condition")
+
+    @condition.setter
+    def condition(self, value: pulumi.Input['DomainConfigsBrowserCacheRuleConditionArgs']):
+        pulumi.set(self, "condition", value)
+
+    @property
+    @pulumi.getter
+    def ttl(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the cache age. The maximum cache age is 365 days.
+        """
+        return pulumi.get(self, "ttl")
+
+    @ttl.setter
+    def ttl(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "ttl", value)
+
+    @property
+    @pulumi.getter(name="ttlUnit")
+    def ttl_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cache expiration time unit. Valid values are:
+        + **s**: seconds.
+        + **m**: minutes.
+        + **h**: hours.
+        + **d**: days.
+        """
+        return pulumi.get(self, "ttl_unit")
+
+    @ttl_unit.setter
+    def ttl_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ttl_unit", value)
+
+
+@pulumi.input_type
+class DomainConfigsBrowserCacheRuleConditionArgs:
+    def __init__(__self__, *,
+                 match_type: pulumi.Input[str],
+                 priority: pulumi.Input[int],
+                 match_value: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
+               A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        :param pulumi.Input[str] match_value: Specifies the cache match settings.
+               + When `match_type` is set to **all**, this field does not need to be configured.
+               + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+               value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+               not exceed `20`.
+               + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+               be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+               exceed `20`.
+               + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+               It supports matching specific files in the specified directory or files with a wildcard "*".
+               The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+               single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+               + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        pulumi.set(__self__, "match_type", match_type)
+        pulumi.set(__self__, "priority", priority)
+        if match_value is not None:
+            pulumi.set(__self__, "match_value", match_value)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter
+    def priority(self) -> pulumi.Input[int]:
+        """
+        Specifies the priority weight of this rule. The default value is 1.
+        A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        """
+        return pulumi.get(self, "priority")
+
+    @priority.setter
+    def priority(self, value: pulumi.Input[int]):
+        pulumi.set(self, "priority", value)
+
+    @property
+    @pulumi.getter(name="matchValue")
+    def match_value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cache match settings.
+        + When `match_type` is set to **all**, this field does not need to be configured.
+        + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+        value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+        not exceed `20`.
+        + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+        be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+        exceed `20`.
+        + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+        It supports matching specific files in the specified directory or files with a wildcard "*".
+        The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+        single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+        + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        return pulumi.get(self, "match_value")
+
+    @match_value.setter
+    def match_value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "match_value", value)
 
 
 @pulumi.input_type
@@ -365,12 +1153,15 @@ class DomainConfigsCacheUrlParameterFilterArgs:
                  type: Optional[pulumi.Input[str]] = None,
                  value: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
-        :param pulumi.Input[str] value: Specifies the parameter values. Multiple values are separated by semicolons (;).
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         if type is not None:
             pulumi.set(__self__, "type", type)
@@ -381,11 +1172,11 @@ class DomainConfigsCacheUrlParameterFilterArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
@@ -397,7 +1188,10 @@ class DomainConfigsCacheUrlParameterFilterArgs:
     @pulumi.getter
     def value(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the parameter values. Multiple values are separated by semicolons (;).
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         return pulumi.get(self, "value")
 
@@ -407,20 +1201,92 @@ class DomainConfigsCacheUrlParameterFilterArgs:
 
 
 @pulumi.input_type
+class DomainConfigsClientCertArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 hosts: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
+                 trusted_cert: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] hosts: Specifies the domain name specified in the client CA certificate.
+        :param pulumi.Input[str] trusted_cert: Specifies the client CA certificate content, only supports PEM format.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if hosts is not None:
+            pulumi.set(__self__, "hosts", hosts)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+        if trusted_cert is not None:
+            pulumi.set(__self__, "trusted_cert", trusted_cert)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter
+    def hosts(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the domain name specified in the client CA certificate.
+        """
+        return pulumi.get(self, "hosts")
+
+    @hosts.setter
+    def hosts(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "hosts", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter(name="trustedCert")
+    def trusted_cert(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the client CA certificate content, only supports PEM format.
+        """
+        return pulumi.get(self, "trusted_cert")
+
+    @trusted_cert.setter
+    def trusted_cert(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "trusted_cert", value)
+
+
+@pulumi.input_type
 class DomainConfigsCompressArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[bool],
+                 file_type: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[bool] enabled: Specifies the whether to enable force redirect or smart compression.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] file_type: Specifies the formats of files to be compressed. Enter up to 200 characters.
+               Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+               Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         pulumi.set(__self__, "enabled", enabled)
+        if file_type is not None:
+            pulumi.set(__self__, "file_type", file_type)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if type is not None:
@@ -430,13 +1296,27 @@ class DomainConfigsCompressArgs:
     @pulumi.getter
     def enabled(self) -> pulumi.Input[bool]:
         """
-        Specifies the whether to enable force redirect or smart compression.
+        Specifies whether to enable client cert settings.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
     def enabled(self, value: pulumi.Input[bool]):
         pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="fileType")
+    def file_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the formats of files to be compressed. Enter up to 200 characters.
+        Multiple formats are separated by commas (,). Each format contains up to 50 characters.
+        Defaults to **.js,.html,.css,.xml,.json,.shtml,.htm**.
+        """
+        return pulumi.get(self, "file_type")
+
+    @file_type.setter
+    def file_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "file_type", value)
 
     @property
     @pulumi.getter
@@ -451,11 +1331,11 @@ class DomainConfigsCompressArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
@@ -465,20 +1345,313 @@ class DomainConfigsCompressArgs:
 
 
 @pulumi.input_type
+class DomainConfigsErrorCodeCachArgs:
+    def __init__(__self__, *,
+                 code: pulumi.Input[int],
+                 ttl: pulumi.Input[int]):
+        """
+        :param pulumi.Input[int] code: Specifies the error code. Valid values are: **301**, **302**, **400**, **403**, **404**,
+               **405**, **414**, **500**, **501**, **502**, **503**, and **504**.
+        :param pulumi.Input[int] ttl: Specifies the cache age. The maximum cache age is 365 days.
+        """
+        pulumi.set(__self__, "code", code)
+        pulumi.set(__self__, "ttl", ttl)
+
+    @property
+    @pulumi.getter
+    def code(self) -> pulumi.Input[int]:
+        """
+        Specifies the error code. Valid values are: **301**, **302**, **400**, **403**, **404**,
+        **405**, **414**, **500**, **501**, **502**, **503**, and **504**.
+        """
+        return pulumi.get(self, "code")
+
+    @code.setter
+    def code(self, value: pulumi.Input[int]):
+        pulumi.set(self, "code", value)
+
+    @property
+    @pulumi.getter
+    def ttl(self) -> pulumi.Input[int]:
+        """
+        Specifies the cache age. The maximum cache age is 365 days.
+        """
+        return pulumi.get(self, "ttl")
+
+    @ttl.setter
+    def ttl(self, value: pulumi.Input[int]):
+        pulumi.set(self, "ttl", value)
+
+
+@pulumi.input_type
+class DomainConfigsErrorCodeRedirectRuleArgs:
+    def __init__(__self__, *,
+                 error_code: pulumi.Input[int],
+                 target_code: pulumi.Input[int],
+                 target_link: pulumi.Input[str]):
+        """
+        :param pulumi.Input[int] error_code: Specifies the redirect unique error code. Valid values are: **400**, **403**, **404**,
+               **405**, **414**, **416**, **451**, **500**, **501**, **502**, **503**, and **504**.
+        :param pulumi.Input[int] target_code: Specifies the redirect status code. The value can be **301** or **302**.
+        :param pulumi.Input[str] target_link: Specifies the destination URL. The value must start with **http://** or **https://**.
+               For example: `http://www.example.com`.
+        """
+        pulumi.set(__self__, "error_code", error_code)
+        pulumi.set(__self__, "target_code", target_code)
+        pulumi.set(__self__, "target_link", target_link)
+
+    @property
+    @pulumi.getter(name="errorCode")
+    def error_code(self) -> pulumi.Input[int]:
+        """
+        Specifies the redirect unique error code. Valid values are: **400**, **403**, **404**,
+        **405**, **414**, **416**, **451**, **500**, **501**, **502**, **503**, and **504**.
+        """
+        return pulumi.get(self, "error_code")
+
+    @error_code.setter
+    def error_code(self, value: pulumi.Input[int]):
+        pulumi.set(self, "error_code", value)
+
+    @property
+    @pulumi.getter(name="targetCode")
+    def target_code(self) -> pulumi.Input[int]:
+        """
+        Specifies the redirect status code. The value can be **301** or **302**.
+        """
+        return pulumi.get(self, "target_code")
+
+    @target_code.setter
+    def target_code(self, value: pulumi.Input[int]):
+        pulumi.set(self, "target_code", value)
+
+    @property
+    @pulumi.getter(name="targetLink")
+    def target_link(self) -> pulumi.Input[str]:
+        """
+        Specifies the destination URL. The value must start with **http://** or **https://**.
+        For example: `http://www.example.com`.
+        """
+        return pulumi.get(self, "target_link")
+
+    @target_link.setter
+    def target_link(self, value: pulumi.Input[str]):
+        pulumi.set(self, "target_link", value)
+
+
+@pulumi.input_type
+class DomainConfigsFlexibleOriginArgs:
+    def __init__(__self__, *,
+                 back_sources: pulumi.Input['DomainConfigsFlexibleOriginBackSourcesArgs'],
+                 match_type: pulumi.Input[str],
+                 priority: pulumi.Input[int],
+                 match_pattern: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input['DomainConfigsFlexibleOriginBackSourcesArgs'] back_sources: Specifies the back source information. The length of this array field cannot exceed `1`.
+               The back_sources structure is documented below.
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
+               A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        :param pulumi.Input[str] match_pattern: Specifies the URI match rule. The usage rules are as follows:
+               + When `match_type` is set to **all**, set this field to empty.
+               + When `match_type` is set to **file_extension**, the value of this field should start with a period (.).
+               Enter up to 20 file name extensions and use semicolons (;) to separate them. Example: **.jpg;.zip;.exe**.
+               + When `match_type` is set to **file_path**, the value of this field should start with a slash (/).
+               Enter up to 20 paths and use semicolons (;) to separate them. Example: **/test/folder01;/test/folder02**.
+        """
+        pulumi.set(__self__, "back_sources", back_sources)
+        pulumi.set(__self__, "match_type", match_type)
+        pulumi.set(__self__, "priority", priority)
+        if match_pattern is not None:
+            pulumi.set(__self__, "match_pattern", match_pattern)
+
+    @property
+    @pulumi.getter(name="backSources")
+    def back_sources(self) -> pulumi.Input['DomainConfigsFlexibleOriginBackSourcesArgs']:
+        """
+        Specifies the back source information. The length of this array field cannot exceed `1`.
+        The back_sources structure is documented below.
+        """
+        return pulumi.get(self, "back_sources")
+
+    @back_sources.setter
+    def back_sources(self, value: pulumi.Input['DomainConfigsFlexibleOriginBackSourcesArgs']):
+        pulumi.set(self, "back_sources", value)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter
+    def priority(self) -> pulumi.Input[int]:
+        """
+        Specifies the priority weight of this rule. The default value is 1.
+        A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        """
+        return pulumi.get(self, "priority")
+
+    @priority.setter
+    def priority(self, value: pulumi.Input[int]):
+        pulumi.set(self, "priority", value)
+
+    @property
+    @pulumi.getter(name="matchPattern")
+    def match_pattern(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URI match rule. The usage rules are as follows:
+        + When `match_type` is set to **all**, set this field to empty.
+        + When `match_type` is set to **file_extension**, the value of this field should start with a period (.).
+        Enter up to 20 file name extensions and use semicolons (;) to separate them. Example: **.jpg;.zip;.exe**.
+        + When `match_type` is set to **file_path**, the value of this field should start with a slash (/).
+        Enter up to 20 paths and use semicolons (;) to separate them. Example: **/test/folder01;/test/folder02**.
+        """
+        return pulumi.get(self, "match_pattern")
+
+    @match_pattern.setter
+    def match_pattern(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "match_pattern", value)
+
+
+@pulumi.input_type
+class DomainConfigsFlexibleOriginBackSourcesArgs:
+    def __init__(__self__, *,
+                 ip_or_domain: pulumi.Input[str],
+                 sources_type: pulumi.Input[str],
+                 http_port: Optional[pulumi.Input[int]] = None,
+                 https_port: Optional[pulumi.Input[int]] = None,
+                 obs_bucket_type: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] ip_or_domain: Specifies the IP address or domain name of the origin server.
+               + When `sources_type` is set to **ipaddr**, the value of this field can only be set to a valid IPv4 or Ipv6 address.
+               + When `sources_type` is set to **domain**, the value of this field can only be set to a domain name.
+               + When `sources_type` is set to **obs_bucket**, the value of this field can only be set to an OBS bucket access
+               domain name.
+        :param pulumi.Input[str] sources_type: Specifies the origin server type. Valid values are as follows:
+               + **ipaddr**: IP address.
+               + **domain**: Domain name.
+               + **obs_bucket**: OBS bucket.
+        :param pulumi.Input[int] http_port: Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+        :param pulumi.Input[int] https_port: Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+        :param pulumi.Input[str] obs_bucket_type: Specifies the OBS bucket type. Valid values are **private** and **public**.
+               This field is required when `sources_type` is set to **obs_bucket**.
+        """
+        pulumi.set(__self__, "ip_or_domain", ip_or_domain)
+        pulumi.set(__self__, "sources_type", sources_type)
+        if http_port is not None:
+            pulumi.set(__self__, "http_port", http_port)
+        if https_port is not None:
+            pulumi.set(__self__, "https_port", https_port)
+        if obs_bucket_type is not None:
+            pulumi.set(__self__, "obs_bucket_type", obs_bucket_type)
+
+    @property
+    @pulumi.getter(name="ipOrDomain")
+    def ip_or_domain(self) -> pulumi.Input[str]:
+        """
+        Specifies the IP address or domain name of the origin server.
+        + When `sources_type` is set to **ipaddr**, the value of this field can only be set to a valid IPv4 or Ipv6 address.
+        + When `sources_type` is set to **domain**, the value of this field can only be set to a domain name.
+        + When `sources_type` is set to **obs_bucket**, the value of this field can only be set to an OBS bucket access
+        domain name.
+        """
+        return pulumi.get(self, "ip_or_domain")
+
+    @ip_or_domain.setter
+    def ip_or_domain(self, value: pulumi.Input[str]):
+        pulumi.set(self, "ip_or_domain", value)
+
+    @property
+    @pulumi.getter(name="sourcesType")
+    def sources_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the origin server type. Valid values are as follows:
+        + **ipaddr**: IP address.
+        + **domain**: Domain name.
+        + **obs_bucket**: OBS bucket.
+        """
+        return pulumi.get(self, "sources_type")
+
+    @sources_type.setter
+    def sources_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "sources_type", value)
+
+    @property
+    @pulumi.getter(name="httpPort")
+    def http_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+        """
+        return pulumi.get(self, "http_port")
+
+    @http_port.setter
+    def http_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "http_port", value)
+
+    @property
+    @pulumi.getter(name="httpsPort")
+    def https_port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+        """
+        return pulumi.get(self, "https_port")
+
+    @https_port.setter
+    def https_port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "https_port", value)
+
+    @property
+    @pulumi.getter(name="obsBucketType")
+    def obs_bucket_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the OBS bucket type. Valid values are **private** and **public**.
+        This field is required when `sources_type` is set to **obs_bucket**.
+        """
+        return pulumi.get(self, "obs_bucket_type")
+
+    @obs_bucket_type.setter
+    def obs_bucket_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "obs_bucket_type", value)
+
+
+@pulumi.input_type
 class DomainConfigsForceRedirectArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[bool],
+                 redirect_code: Optional[pulumi.Input[int]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[bool] enabled: Specifies the whether to enable force redirect or smart compression.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[int] redirect_code: Specifies the force redirect status code. Valid values are: **301** and **302**.
+               Defaults to **302**.
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         pulumi.set(__self__, "enabled", enabled)
+        if redirect_code is not None:
+            pulumi.set(__self__, "redirect_code", redirect_code)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if type is not None:
@@ -488,13 +1661,26 @@ class DomainConfigsForceRedirectArgs:
     @pulumi.getter
     def enabled(self) -> pulumi.Input[bool]:
         """
-        Specifies the whether to enable force redirect or smart compression.
+        Specifies whether to enable client cert settings.
         """
         return pulumi.get(self, "enabled")
 
     @enabled.setter
     def enabled(self, value: pulumi.Input[bool]):
         pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="redirectCode")
+    def redirect_code(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the force redirect status code. Valid values are: **301** and **302**.
+        Defaults to **302**.
+        """
+        return pulumi.get(self, "redirect_code")
+
+    @redirect_code.setter
+    def redirect_code(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "redirect_code", value)
 
     @property
     @pulumi.getter
@@ -509,17 +1695,77 @@ class DomainConfigsForceRedirectArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
+
+
+@pulumi.input_type
+class DomainConfigsHstsArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 include_subdomains: Optional[pulumi.Input[str]] = None,
+                 max_age: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] include_subdomains: Specifies whether subdomain names are included.
+               The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+        :param pulumi.Input[int] max_age: Specifies the expiration time, which means the TTL of the response header
+               `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+               This field is required when enable HSTS settings.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if include_subdomains is not None:
+            pulumi.set(__self__, "include_subdomains", include_subdomains)
+        if max_age is not None:
+            pulumi.set(__self__, "max_age", max_age)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="includeSubdomains")
+    def include_subdomains(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether subdomain names are included.
+        The options are **on** (included) and **off** (not included). This field is required when enable HSTS settings.
+        """
+        return pulumi.get(self, "include_subdomains")
+
+    @include_subdomains.setter
+    def include_subdomains(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "include_subdomains", value)
+
+    @property
+    @pulumi.getter(name="maxAge")
+    def max_age(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the expiration time, which means the TTL of the response header
+        `Strict-Transport-Security` on the client. The value ranges from `0` to `63,072,000`. The unit is second.
+        This field is required when enable HSTS settings.
+        """
+        return pulumi.get(self, "max_age")
+
+    @max_age.setter
+    def max_age(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_age", value)
 
 
 @pulumi.input_type
@@ -529,9 +1775,15 @@ class DomainConfigsHttpResponseHeaderArgs:
                  name: pulumi.Input[str],
                  value: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] action: Specifies the operation type of request or response
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] value: Specifies the parameter values. Multiple values are separated by semicolons (;).
+        :param pulumi.Input[str] action: Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "name", name)
@@ -542,7 +1794,7 @@ class DomainConfigsHttpResponseHeaderArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input[str]:
         """
-        Specifies the operation type of request or response
+        Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
         """
         return pulumi.get(self, "action")
 
@@ -554,7 +1806,10 @@ class DomainConfigsHttpResponseHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
-        Specifies the request or response header.
+        Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+        **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+        **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+        and hyphens (-), and starts with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -566,7 +1821,10 @@ class DomainConfigsHttpResponseHeaderArgs:
     @pulumi.getter
     def value(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the parameter values. Multiple values are separated by semicolons (;).
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         return pulumi.get(self, "value")
 
@@ -581,28 +1839,42 @@ class DomainConfigsHttpsSettingsArgs:
                  certificate_body: Optional[pulumi.Input[str]] = None,
                  certificate_name: Optional[pulumi.Input[str]] = None,
                  certificate_source: Optional[pulumi.Input[int]] = None,
+                 certificate_type: Optional[pulumi.Input[str]] = None,
                  http2_enabled: Optional[pulumi.Input[bool]] = None,
                  http2_status: Optional[pulumi.Input[str]] = None,
                  https_enabled: Optional[pulumi.Input[bool]] = None,
                  https_status: Optional[pulumi.Input[str]] = None,
+                 ocsp_stapling_status: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
+                 scm_certificate_id: Optional[pulumi.Input[str]] = None,
                  tls_version: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] certificate_body: Specifies the content of the certificate used by the HTTPS protocol.
                This parameter is mandatory when a certificate is configured. The value is in PEM format.
-        :param pulumi.Input[str] certificate_name: Specifies the certificate name. The value contains 3 to 32 characters.
+               This field is required when `certificate_source` is set to `0`.
+        :param pulumi.Input[str] certificate_name: Specifies the certificate name. The value contains `3` to `32` characters.
                This parameter is mandatory when a certificate is configured.
-        :param pulumi.Input[int] certificate_source: Specifies the certificate type. Possible values are:
-               + **1**: Huawei-managed certificate.
-               + **0**: your own certificate.
-        :param pulumi.Input[bool] http2_enabled: Specifies whether HTTP/2 is used.
-        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS.
+        :param pulumi.Input[int] certificate_source: Specifies the certificate source. Valid values are:
+               + `0`: Your own certificate.
+               + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
+        :param pulumi.Input[str] certificate_type: Specifies the certificate type. Currently, only **server** is supported, which
+               means international certificate. Defaults to **server**.
+        :param pulumi.Input[bool] http2_enabled: Specifies whether HTTP/2 is used. Defaults to **false**.
+               When `https_enabled` is set to **false**, this parameter does not take effect.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to **false**.
+        :param pulumi.Input[str] ocsp_stapling_status: Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+               Valid values are as follows:
+               + **on**: Enable.
+               + **off**: Disable.
         :param pulumi.Input[str] private_key: Specifies the private key used by the HTTPS protocol. This parameter is mandatory
                when a certificate is configured. The value is in PEM format.
+               This field is required when `certificate_source` is set to `0`.
+        :param pulumi.Input[str] scm_certificate_id: Specifies the SCM certificate ID.
+               This field is required when `certificate_source` is set to `2`.
         :param pulumi.Input[str] tls_version: Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-               **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-               a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-               for example, **TLSv1.1,TLSv1.2**.
+               **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+               enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+               separate versions, for example, **TLSv1.1,TLSv1.2**.
         """
         if certificate_body is not None:
             pulumi.set(__self__, "certificate_body", certificate_body)
@@ -610,6 +1882,8 @@ class DomainConfigsHttpsSettingsArgs:
             pulumi.set(__self__, "certificate_name", certificate_name)
         if certificate_source is not None:
             pulumi.set(__self__, "certificate_source", certificate_source)
+        if certificate_type is not None:
+            pulumi.set(__self__, "certificate_type", certificate_type)
         if http2_enabled is not None:
             pulumi.set(__self__, "http2_enabled", http2_enabled)
         if http2_status is not None:
@@ -618,8 +1892,12 @@ class DomainConfigsHttpsSettingsArgs:
             pulumi.set(__self__, "https_enabled", https_enabled)
         if https_status is not None:
             pulumi.set(__self__, "https_status", https_status)
+        if ocsp_stapling_status is not None:
+            pulumi.set(__self__, "ocsp_stapling_status", ocsp_stapling_status)
         if private_key is not None:
             pulumi.set(__self__, "private_key", private_key)
+        if scm_certificate_id is not None:
+            pulumi.set(__self__, "scm_certificate_id", scm_certificate_id)
         if tls_version is not None:
             pulumi.set(__self__, "tls_version", tls_version)
 
@@ -629,6 +1907,7 @@ class DomainConfigsHttpsSettingsArgs:
         """
         Specifies the content of the certificate used by the HTTPS protocol.
         This parameter is mandatory when a certificate is configured. The value is in PEM format.
+        This field is required when `certificate_source` is set to `0`.
         """
         return pulumi.get(self, "certificate_body")
 
@@ -640,7 +1919,7 @@ class DomainConfigsHttpsSettingsArgs:
     @pulumi.getter(name="certificateName")
     def certificate_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the certificate name. The value contains 3 to 32 characters.
+        Specifies the certificate name. The value contains `3` to `32` characters.
         This parameter is mandatory when a certificate is configured.
         """
         return pulumi.get(self, "certificate_name")
@@ -653,9 +1932,9 @@ class DomainConfigsHttpsSettingsArgs:
     @pulumi.getter(name="certificateSource")
     def certificate_source(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the certificate type. Possible values are:
-        + **1**: Huawei-managed certificate.
-        + **0**: your own certificate.
+        Specifies the certificate source. Valid values are:
+        + `0`: Your own certificate.
+        + `2`: SCM certificate. Please enable SCM delegation authorization to access SCM service.
         """
         return pulumi.get(self, "certificate_source")
 
@@ -664,10 +1943,24 @@ class DomainConfigsHttpsSettingsArgs:
         pulumi.set(self, "certificate_source", value)
 
     @property
+    @pulumi.getter(name="certificateType")
+    def certificate_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the certificate type. Currently, only **server** is supported, which
+        means international certificate. Defaults to **server**.
+        """
+        return pulumi.get(self, "certificate_type")
+
+    @certificate_type.setter
+    def certificate_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "certificate_type", value)
+
+    @property
     @pulumi.getter(name="http2Enabled")
     def http2_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether HTTP/2 is used.
+        Specifies whether HTTP/2 is used. Defaults to **false**.
+        When `https_enabled` is set to **false**, this parameter does not take effect.
         """
         return pulumi.get(self, "http2_enabled")
 
@@ -688,7 +1981,7 @@ class DomainConfigsHttpsSettingsArgs:
     @pulumi.getter(name="httpsEnabled")
     def https_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable HTTPS.
+        Specifies whether to enable HTTPS. Defaults to **false**.
         """
         return pulumi.get(self, "https_enabled")
 
@@ -706,11 +1999,27 @@ class DomainConfigsHttpsSettingsArgs:
         pulumi.set(self, "https_status", value)
 
     @property
+    @pulumi.getter(name="ocspStaplingStatus")
+    def ocsp_stapling_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether online certificate status protocol (OCSP) stapling is enabled.
+        Valid values are as follows:
+        + **on**: Enable.
+        + **off**: Disable.
+        """
+        return pulumi.get(self, "ocsp_stapling_status")
+
+    @ocsp_stapling_status.setter
+    def ocsp_stapling_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ocsp_stapling_status", value)
+
+    @property
     @pulumi.getter(name="privateKey")
     def private_key(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the private key used by the HTTPS protocol. This parameter is mandatory
         when a certificate is configured. The value is in PEM format.
+        This field is required when `certificate_source` is set to `0`.
         """
         return pulumi.get(self, "private_key")
 
@@ -719,13 +2028,26 @@ class DomainConfigsHttpsSettingsArgs:
         pulumi.set(self, "private_key", value)
 
     @property
+    @pulumi.getter(name="scmCertificateId")
+    def scm_certificate_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the SCM certificate ID.
+        This field is required when `certificate_source` is set to `2`.
+        """
+        return pulumi.get(self, "scm_certificate_id")
+
+    @scm_certificate_id.setter
+    def scm_certificate_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "scm_certificate_id", value)
+
+    @property
     @pulumi.getter(name="tlsVersion")
     def tls_version(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the transport Layer Security (TLS). Currently, **TLSv1.0**,
-        **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, all versions are enabled. You can enable
-        a single version or consecutive versions. To enable multiple versions, use commas (,) to separate versions,
-        for example, **TLSv1.1,TLSv1.2**.
+        **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are supported. By default, **TLSv1.1**, **TLSv1.2**, and **TLSv1.3** are
+        enabled. You can enable a single version or consecutive versions. To enable multiple versions, use commas (,) to
+        separate versions, for example, **TLSv1.1,TLSv1.2**.
         """
         return pulumi.get(self, "tls_version")
 
@@ -735,15 +2057,1107 @@ class DomainConfigsHttpsSettingsArgs:
 
 
 @pulumi.input_type
+class DomainConfigsIpFilterArgs:
+    def __init__(__self__, *,
+                 type: pulumi.Input[str],
+                 value: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        pulumi.set(__self__, "type", type)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class DomainConfigsIpFrequencyLimitArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 qps: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[int] qps: Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+               This field is required when enable IP access frequency.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if qps is not None:
+            pulumi.set(__self__, "qps", qps)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter
+    def qps(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the access threshold, in times/second. The value ranges from `1` to `100,000`.
+        This field is required when enable IP access frequency.
+        """
+        return pulumi.get(self, "qps")
+
+    @qps.setter
+    def qps(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "qps", value)
+
+
+@pulumi.input_type
+class DomainConfigsOriginRequestUrlRewriteArgs:
+    def __init__(__self__, *,
+                 match_type: pulumi.Input[str],
+                 priority: pulumi.Input[int],
+                 target_url: pulumi.Input[str],
+                 source_url: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
+               A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        :param pulumi.Input[str] target_url: Specifies a URI starts with a slash (/) and does not contain `http://`, `https://`,
+               or the domain name. The value contains up to `256` characters. The nth wildcard (*) field can be substituted with
+               `$n`, where n = 1, 2, 3..., for example, `/newtest/$1/$2.jpg`.
+        :param pulumi.Input[str] source_url: Specifies the URI to be rewritten. The URI starts with a slash (/) and does not
+               contain `http://`, `https://`, or the domain name. The value contains up to `512` characters.
+               Wildcards (*) are supported, for example, `/test/*/*.mp4`. This field is invalid when `match_type` is set to **all**.
+        """
+        pulumi.set(__self__, "match_type", match_type)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "target_url", target_url)
+        if source_url is not None:
+            pulumi.set(__self__, "source_url", source_url)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter
+    def priority(self) -> pulumi.Input[int]:
+        """
+        Specifies the priority weight of this rule. The default value is 1.
+        A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        """
+        return pulumi.get(self, "priority")
+
+    @priority.setter
+    def priority(self, value: pulumi.Input[int]):
+        pulumi.set(self, "priority", value)
+
+    @property
+    @pulumi.getter(name="targetUrl")
+    def target_url(self) -> pulumi.Input[str]:
+        """
+        Specifies a URI starts with a slash (/) and does not contain `http://`, `https://`,
+        or the domain name. The value contains up to `256` characters. The nth wildcard (*) field can be substituted with
+        `$n`, where n = 1, 2, 3..., for example, `/newtest/$1/$2.jpg`.
+        """
+        return pulumi.get(self, "target_url")
+
+    @target_url.setter
+    def target_url(self, value: pulumi.Input[str]):
+        pulumi.set(self, "target_url", value)
+
+    @property
+    @pulumi.getter(name="sourceUrl")
+    def source_url(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URI to be rewritten. The URI starts with a slash (/) and does not
+        contain `http://`, `https://`, or the domain name. The value contains up to `512` characters.
+        Wildcards (*) are supported, for example, `/test/*/*.mp4`. This field is invalid when `match_type` is set to **all**.
+        """
+        return pulumi.get(self, "source_url")
+
+    @source_url.setter
+    def source_url(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "source_url", value)
+
+
+@pulumi.input_type
+class DomainConfigsQuicArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool]):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+
+@pulumi.input_type
+class DomainConfigsRefererArgs:
+    def __init__(__self__, *,
+                 type: pulumi.Input[str],
+                 include_empty: Optional[pulumi.Input[bool]] = None,
+                 value: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[bool] include_empty: Specifies whether empty user agents are included.
+               A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+               A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+               Possible values: **true** (included) and **false** (excluded).
+               The default value is **false** for a blacklist and **true** for a whitelist.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        pulumi.set(__self__, "type", type)
+        if include_empty is not None:
+            pulumi.set(__self__, "include_empty", include_empty)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="includeEmpty")
+    def include_empty(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether empty user agents are included.
+        A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+        A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+        Possible values: **true** (included) and **false** (excluded).
+        The default value is **false** for a blacklist and **true** for a whitelist.
+        """
+        return pulumi.get(self, "include_empty")
+
+    @include_empty.setter
+    def include_empty(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "include_empty", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class DomainConfigsRemoteAuthArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 remote_auth_rules: Optional[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesArgs']] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesArgs'] remote_auth_rules: Specifies the remote authentication settings. The length of this array field
+               cannot exceed `1`. The remote_auth_rules structure is documented below.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if remote_auth_rules is not None:
+            pulumi.set(__self__, "remote_auth_rules", remote_auth_rules)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="remoteAuthRules")
+    def remote_auth_rules(self) -> Optional[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesArgs']]:
+        """
+        Specifies the remote authentication settings. The length of this array field
+        cannot exceed `1`. The remote_auth_rules structure is documented below.
+        """
+        return pulumi.get(self, "remote_auth_rules")
+
+    @remote_auth_rules.setter
+    def remote_auth_rules(self, value: Optional[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesArgs']]):
+        pulumi.set(self, "remote_auth_rules", value)
+
+
+@pulumi.input_type
+class DomainConfigsRemoteAuthRemoteAuthRulesArgs:
+    def __init__(__self__, *,
+                 auth_failed_status: pulumi.Input[str],
+                 auth_server: pulumi.Input[str],
+                 auth_success_status: pulumi.Input[str],
+                 file_type_setting: pulumi.Input[str],
+                 request_method: pulumi.Input[str],
+                 reserve_args_setting: pulumi.Input[str],
+                 reserve_headers_setting: pulumi.Input[str],
+                 response_status: pulumi.Input[str],
+                 timeout: pulumi.Input[int],
+                 timeout_action: pulumi.Input[str],
+                 add_custom_args_rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs']]]] = None,
+                 add_custom_headers_rules: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs']]]] = None,
+                 reserve_args: Optional[pulumi.Input[str]] = None,
+                 reserve_headers: Optional[pulumi.Input[str]] = None,
+                 specified_file_type: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] auth_failed_status: Specifies the status code returned by the remote authentication server
+               to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+        :param pulumi.Input[str] auth_server: Specifies the address of a reachable server. The address must include **http://** or
+               **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+               acceleration domain name added on CDN.
+        :param pulumi.Input[str] auth_success_status: Specifies the status code returned by the remote authentication server
+               to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+        :param pulumi.Input[str] file_type_setting: Specifies the authentication file type settings. Valid values are:
+               + **all**: Requests for all files are authenticated.
+               + **specific_file**: Requests for files of specific types are authenticated.
+        :param pulumi.Input[str] request_method: Specifies the request method supported by the authentication server. Valid values
+               are **GET**, **POST**, and **HEAD**.
+        :param pulumi.Input[str] reserve_args_setting: Specifies the parameters that need to be authenticated in user requests.
+               Valid values are as follows:
+               + **reserve_all_args**: Retain all URL parameters.
+               + **reserve_specific_args**: Retain specified URL parameters.
+               + **ignore_all_args**: Ignore all URL parameters.
+        :param pulumi.Input[str] reserve_headers_setting: Specifies the headers to be authenticated in user requests.
+               Valid values are as follows:
+               + **reserve_all_headers**: Retain all request headers.
+               + **reserve_specific_headers**: Retain specified request headers.
+               + **ignore_all_headers**: Ignore all request headers.
+        :param pulumi.Input[str] response_status: Specifies the status code returned by CDN nodes to users when authentication
+               is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+        :param pulumi.Input[int] timeout: Specifies the duration from the time when a CDN node forwards an authentication request
+               to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+               ranging from `50` to `3,000`. The unit is millisecond.
+        :param pulumi.Input[str] timeout_action: Specifies the action of the CDN nodes to process user requests after the
+               authentication timeout. Valid values are as follows:
+               + **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+               + **forbid**: The user request is rejected after the authentication times out and the configured status code is
+               returned to the user.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs']]] add_custom_args_rules: Specifies the URL validation parameters.
+               The add_custom_args_rules structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs']]] add_custom_headers_rules: Specifies the request header authentication parameters.
+               The add_custom_headers_rules structure is documented below.
+        :param pulumi.Input[str] reserve_args: Specifies the reserve args. Multiple args are separated by vertical bars (|).
+               For example: **key1|key2**. This parameter is mandatory when `reserve_args_setting` is set to **reserve_specific_args**.
+               In other cases, this parameter is left blank.
+        :param pulumi.Input[str] reserve_headers: Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+               For example: **key1|key2**. This parameter is mandatory when `reserve_headers_setting` is set to **reserve_specific_headers**.
+               In other cases, this parameter is left blank.
+        :param pulumi.Input[str] specified_file_type: Specifies the specific file types. The value contains letters and digits.
+               The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+               by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `file_type_setting` is set to
+               **specific_file**. In other cases, this parameter is left blank.
+        """
+        pulumi.set(__self__, "auth_failed_status", auth_failed_status)
+        pulumi.set(__self__, "auth_server", auth_server)
+        pulumi.set(__self__, "auth_success_status", auth_success_status)
+        pulumi.set(__self__, "file_type_setting", file_type_setting)
+        pulumi.set(__self__, "request_method", request_method)
+        pulumi.set(__self__, "reserve_args_setting", reserve_args_setting)
+        pulumi.set(__self__, "reserve_headers_setting", reserve_headers_setting)
+        pulumi.set(__self__, "response_status", response_status)
+        pulumi.set(__self__, "timeout", timeout)
+        pulumi.set(__self__, "timeout_action", timeout_action)
+        if add_custom_args_rules is not None:
+            pulumi.set(__self__, "add_custom_args_rules", add_custom_args_rules)
+        if add_custom_headers_rules is not None:
+            pulumi.set(__self__, "add_custom_headers_rules", add_custom_headers_rules)
+        if reserve_args is not None:
+            pulumi.set(__self__, "reserve_args", reserve_args)
+        if reserve_headers is not None:
+            pulumi.set(__self__, "reserve_headers", reserve_headers)
+        if specified_file_type is not None:
+            pulumi.set(__self__, "specified_file_type", specified_file_type)
+
+    @property
+    @pulumi.getter(name="authFailedStatus")
+    def auth_failed_status(self) -> pulumi.Input[str]:
+        """
+        Specifies the status code returned by the remote authentication server
+        to CDN nodes when authentication is failed. Value range: **4xx** and **5xx**.
+        """
+        return pulumi.get(self, "auth_failed_status")
+
+    @auth_failed_status.setter
+    def auth_failed_status(self, value: pulumi.Input[str]):
+        pulumi.set(self, "auth_failed_status", value)
+
+    @property
+    @pulumi.getter(name="authServer")
+    def auth_server(self) -> pulumi.Input[str]:
+        """
+        Specifies the address of a reachable server. The address must include **http://** or
+        **https://**. The address cannot be a local address such as **localhost** or **127.0.0.1**. The address cannot be an
+        acceleration domain name added on CDN.
+        """
+        return pulumi.get(self, "auth_server")
+
+    @auth_server.setter
+    def auth_server(self, value: pulumi.Input[str]):
+        pulumi.set(self, "auth_server", value)
+
+    @property
+    @pulumi.getter(name="authSuccessStatus")
+    def auth_success_status(self) -> pulumi.Input[str]:
+        """
+        Specifies the status code returned by the remote authentication server
+        to CDN nodes when authentication is successful. Value range: **2xx** and **3xx**.
+        """
+        return pulumi.get(self, "auth_success_status")
+
+    @auth_success_status.setter
+    def auth_success_status(self, value: pulumi.Input[str]):
+        pulumi.set(self, "auth_success_status", value)
+
+    @property
+    @pulumi.getter(name="fileTypeSetting")
+    def file_type_setting(self) -> pulumi.Input[str]:
+        """
+        Specifies the authentication file type settings. Valid values are:
+        + **all**: Requests for all files are authenticated.
+        + **specific_file**: Requests for files of specific types are authenticated.
+        """
+        return pulumi.get(self, "file_type_setting")
+
+    @file_type_setting.setter
+    def file_type_setting(self, value: pulumi.Input[str]):
+        pulumi.set(self, "file_type_setting", value)
+
+    @property
+    @pulumi.getter(name="requestMethod")
+    def request_method(self) -> pulumi.Input[str]:
+        """
+        Specifies the request method supported by the authentication server. Valid values
+        are **GET**, **POST**, and **HEAD**.
+        """
+        return pulumi.get(self, "request_method")
+
+    @request_method.setter
+    def request_method(self, value: pulumi.Input[str]):
+        pulumi.set(self, "request_method", value)
+
+    @property
+    @pulumi.getter(name="reserveArgsSetting")
+    def reserve_args_setting(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameters that need to be authenticated in user requests.
+        Valid values are as follows:
+        + **reserve_all_args**: Retain all URL parameters.
+        + **reserve_specific_args**: Retain specified URL parameters.
+        + **ignore_all_args**: Ignore all URL parameters.
+        """
+        return pulumi.get(self, "reserve_args_setting")
+
+    @reserve_args_setting.setter
+    def reserve_args_setting(self, value: pulumi.Input[str]):
+        pulumi.set(self, "reserve_args_setting", value)
+
+    @property
+    @pulumi.getter(name="reserveHeadersSetting")
+    def reserve_headers_setting(self) -> pulumi.Input[str]:
+        """
+        Specifies the headers to be authenticated in user requests.
+        Valid values are as follows:
+        + **reserve_all_headers**: Retain all request headers.
+        + **reserve_specific_headers**: Retain specified request headers.
+        + **ignore_all_headers**: Ignore all request headers.
+        """
+        return pulumi.get(self, "reserve_headers_setting")
+
+    @reserve_headers_setting.setter
+    def reserve_headers_setting(self, value: pulumi.Input[str]):
+        pulumi.set(self, "reserve_headers_setting", value)
+
+    @property
+    @pulumi.getter(name="responseStatus")
+    def response_status(self) -> pulumi.Input[str]:
+        """
+        Specifies the status code returned by CDN nodes to users when authentication
+        is failed. Value range: **2xx**, **3xx**, **4xx**, and **5xx**.
+        """
+        return pulumi.get(self, "response_status")
+
+    @response_status.setter
+    def response_status(self, value: pulumi.Input[str]):
+        pulumi.set(self, "response_status", value)
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> pulumi.Input[int]:
+        """
+        Specifies the duration from the time when a CDN node forwards an authentication request
+        to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+        ranging from `50` to `3,000`. The unit is millisecond.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: pulumi.Input[int]):
+        pulumi.set(self, "timeout", value)
+
+    @property
+    @pulumi.getter(name="timeoutAction")
+    def timeout_action(self) -> pulumi.Input[str]:
+        """
+        Specifies the action of the CDN nodes to process user requests after the
+        authentication timeout. Valid values are as follows:
+        + **pass**: The user request is allowed and the corresponding resource is returned after the authentication times out.
+        + **forbid**: The user request is rejected after the authentication times out and the configured status code is
+        returned to the user.
+        """
+        return pulumi.get(self, "timeout_action")
+
+    @timeout_action.setter
+    def timeout_action(self, value: pulumi.Input[str]):
+        pulumi.set(self, "timeout_action", value)
+
+    @property
+    @pulumi.getter(name="addCustomArgsRules")
+    def add_custom_args_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs']]]]:
+        """
+        Specifies the URL validation parameters.
+        The add_custom_args_rules structure is documented below.
+        """
+        return pulumi.get(self, "add_custom_args_rules")
+
+    @add_custom_args_rules.setter
+    def add_custom_args_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs']]]]):
+        pulumi.set(self, "add_custom_args_rules", value)
+
+    @property
+    @pulumi.getter(name="addCustomHeadersRules")
+    def add_custom_headers_rules(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs']]]]:
+        """
+        Specifies the request header authentication parameters.
+        The add_custom_headers_rules structure is documented below.
+        """
+        return pulumi.get(self, "add_custom_headers_rules")
+
+    @add_custom_headers_rules.setter
+    def add_custom_headers_rules(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs']]]]):
+        pulumi.set(self, "add_custom_headers_rules", value)
+
+    @property
+    @pulumi.getter(name="reserveArgs")
+    def reserve_args(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the reserve args. Multiple args are separated by vertical bars (|).
+        For example: **key1|key2**. This parameter is mandatory when `reserve_args_setting` is set to **reserve_specific_args**.
+        In other cases, this parameter is left blank.
+        """
+        return pulumi.get(self, "reserve_args")
+
+    @reserve_args.setter
+    def reserve_args(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "reserve_args", value)
+
+    @property
+    @pulumi.getter(name="reserveHeaders")
+    def reserve_headers(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the reserve headers. Multiple headers are separated by vertical bars (|).
+        For example: **key1|key2**. This parameter is mandatory when `reserve_headers_setting` is set to **reserve_specific_headers**.
+        In other cases, this parameter is left blank.
+        """
+        return pulumi.get(self, "reserve_headers")
+
+    @reserve_headers.setter
+    def reserve_headers(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "reserve_headers", value)
+
+    @property
+    @pulumi.getter(name="specifiedFileType")
+    def specified_file_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the specific file types. The value contains letters and digits.
+        The value contains up to `512` characters. File types are not case-sensitive, and multiple file types are separated
+        by vertical bars (|). For example: **jpg|MP4**. This parameter is mandatory when `file_type_setting` is set to
+        **specific_file**. In other cases, this parameter is left blank.
+        """
+        return pulumi.get(self, "specified_file_type")
+
+    @specified_file_type.setter
+    def specified_file_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "specified_file_type", value)
+
+
+@pulumi.input_type
+class DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 type: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: Specifies the parameter key. The value contains up to `256` characters. The value can be
+               composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter key. The value contains up to `256` characters. The value can be
+        composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class DomainConfigsRemoteAuthRemoteAuthRulesAddCustomHeadersRuleArgs:
+    def __init__(__self__, *,
+                 key: pulumi.Input[str],
+                 type: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] key: Specifies the parameter key. The value contains up to `256` characters. The value can be
+               composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        pulumi.set(__self__, "key", key)
+        pulumi.set(__self__, "type", type)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def key(self) -> pulumi.Input[str]:
+        """
+        Specifies the parameter key. The value contains up to `256` characters. The value can be
+        composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+        """
+        return pulumi.get(self, "key")
+
+    @key.setter
+    def key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class DomainConfigsRequestLimitRuleArgs:
+    def __init__(__self__, *,
+                 limit_rate_after: pulumi.Input[int],
+                 limit_rate_value: pulumi.Input[int],
+                 match_type: pulumi.Input[str],
+                 priority: pulumi.Input[int],
+                 type: pulumi.Input[str],
+                 match_value: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[int] limit_rate_after: Specifies the rate limiting condition. Unit: byte.
+               The value ranges from `0` to `1,073,741,824`.
+        :param pulumi.Input[int] limit_rate_value: Specifies the rate limiting value, in bit/s.
+               The value ranges from `0` to `104,857,600`.
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
+               A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] match_value: Specifies the cache match settings.
+               + When `match_type` is set to **all**, this field does not need to be configured.
+               + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+               value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+               not exceed `20`.
+               + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+               be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+               exceed `20`.
+               + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+               It supports matching specific files in the specified directory or files with a wildcard "*".
+               The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+               single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+               + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        pulumi.set(__self__, "limit_rate_after", limit_rate_after)
+        pulumi.set(__self__, "limit_rate_value", limit_rate_value)
+        pulumi.set(__self__, "match_type", match_type)
+        pulumi.set(__self__, "priority", priority)
+        pulumi.set(__self__, "type", type)
+        if match_value is not None:
+            pulumi.set(__self__, "match_value", match_value)
+
+    @property
+    @pulumi.getter(name="limitRateAfter")
+    def limit_rate_after(self) -> pulumi.Input[int]:
+        """
+        Specifies the rate limiting condition. Unit: byte.
+        The value ranges from `0` to `1,073,741,824`.
+        """
+        return pulumi.get(self, "limit_rate_after")
+
+    @limit_rate_after.setter
+    def limit_rate_after(self, value: pulumi.Input[int]):
+        pulumi.set(self, "limit_rate_after", value)
+
+    @property
+    @pulumi.getter(name="limitRateValue")
+    def limit_rate_value(self) -> pulumi.Input[int]:
+        """
+        Specifies the rate limiting value, in bit/s.
+        The value ranges from `0` to `104,857,600`.
+        """
+        return pulumi.get(self, "limit_rate_value")
+
+    @limit_rate_value.setter
+    def limit_rate_value(self, value: pulumi.Input[int]):
+        pulumi.set(self, "limit_rate_value", value)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter
+    def priority(self) -> pulumi.Input[int]:
+        """
+        Specifies the priority weight of this rule. The default value is 1.
+        A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        """
+        return pulumi.get(self, "priority")
+
+    @priority.setter
+    def priority(self, value: pulumi.Input[int]):
+        pulumi.set(self, "priority", value)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="matchValue")
+    def match_value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cache match settings.
+        + When `match_type` is set to **all**, this field does not need to be configured.
+        + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+        value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+        not exceed `20`.
+        + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+        be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+        exceed `20`.
+        + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+        It supports matching specific files in the specified directory or files with a wildcard "*".
+        The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+        single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+        + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        return pulumi.get(self, "match_value")
+
+    @match_value.setter
+    def match_value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "match_value", value)
+
+
+@pulumi.input_type
+class DomainConfigsRequestUrlRewriteArgs:
+    def __init__(__self__, *,
+                 condition: pulumi.Input['DomainConfigsRequestUrlRewriteConditionArgs'],
+                 execution_mode: pulumi.Input[str],
+                 redirect_url: pulumi.Input[str],
+                 redirect_host: Optional[pulumi.Input[str]] = None,
+                 redirect_status_code: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input['DomainConfigsRequestUrlRewriteConditionArgs'] condition: Specifies matching condition.
+               The condition structure is documented below.
+        :param pulumi.Input[str] execution_mode: Specifies the execution mode. Valid values are:
+               + **redirect**: If the requested URL matches the current rule, the request will be redirected to the target path.
+               After the current rule is executed, if there are other configured rules, the remaining rules will continue to be matched.
+               + **break**: If the requested URL matches the current rule, the request will be rewritten to the target path.
+               After the current rule is executed, if there are other configured rules, the remaining rules will no longer be matched.
+               The redirection host and redirection status code are not supported at this time, and the status code `200` is returned.
+        :param pulumi.Input[str] redirect_url: Specifies the redirect URL. The redirected URL starts with a forward slash (/)
+               and does not contain the http:// header or domain name. Example: **/test/index.html**.
+        :param pulumi.Input[str] redirect_host: Specifies the domain name to redirect client requests.
+        :param pulumi.Input[int] redirect_status_code: Specifies the redirect status code. Supports `301`, `302`, `303`, and `307`.
+        """
+        pulumi.set(__self__, "condition", condition)
+        pulumi.set(__self__, "execution_mode", execution_mode)
+        pulumi.set(__self__, "redirect_url", redirect_url)
+        if redirect_host is not None:
+            pulumi.set(__self__, "redirect_host", redirect_host)
+        if redirect_status_code is not None:
+            pulumi.set(__self__, "redirect_status_code", redirect_status_code)
+
+    @property
+    @pulumi.getter
+    def condition(self) -> pulumi.Input['DomainConfigsRequestUrlRewriteConditionArgs']:
+        """
+        Specifies matching condition.
+        The condition structure is documented below.
+        """
+        return pulumi.get(self, "condition")
+
+    @condition.setter
+    def condition(self, value: pulumi.Input['DomainConfigsRequestUrlRewriteConditionArgs']):
+        pulumi.set(self, "condition", value)
+
+    @property
+    @pulumi.getter(name="executionMode")
+    def execution_mode(self) -> pulumi.Input[str]:
+        """
+        Specifies the execution mode. Valid values are:
+        + **redirect**: If the requested URL matches the current rule, the request will be redirected to the target path.
+        After the current rule is executed, if there are other configured rules, the remaining rules will continue to be matched.
+        + **break**: If the requested URL matches the current rule, the request will be rewritten to the target path.
+        After the current rule is executed, if there are other configured rules, the remaining rules will no longer be matched.
+        The redirection host and redirection status code are not supported at this time, and the status code `200` is returned.
+        """
+        return pulumi.get(self, "execution_mode")
+
+    @execution_mode.setter
+    def execution_mode(self, value: pulumi.Input[str]):
+        pulumi.set(self, "execution_mode", value)
+
+    @property
+    @pulumi.getter(name="redirectUrl")
+    def redirect_url(self) -> pulumi.Input[str]:
+        """
+        Specifies the redirect URL. The redirected URL starts with a forward slash (/)
+        and does not contain the http:// header or domain name. Example: **/test/index.html**.
+        """
+        return pulumi.get(self, "redirect_url")
+
+    @redirect_url.setter
+    def redirect_url(self, value: pulumi.Input[str]):
+        pulumi.set(self, "redirect_url", value)
+
+    @property
+    @pulumi.getter(name="redirectHost")
+    def redirect_host(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the domain name to redirect client requests.
+        """
+        return pulumi.get(self, "redirect_host")
+
+    @redirect_host.setter
+    def redirect_host(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_host", value)
+
+    @property
+    @pulumi.getter(name="redirectStatusCode")
+    def redirect_status_code(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the redirect status code. Supports `301`, `302`, `303`, and `307`.
+        """
+        return pulumi.get(self, "redirect_status_code")
+
+    @redirect_status_code.setter
+    def redirect_status_code(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "redirect_status_code", value)
+
+
+@pulumi.input_type
+class DomainConfigsRequestUrlRewriteConditionArgs:
+    def __init__(__self__, *,
+                 match_type: pulumi.Input[str],
+                 priority: pulumi.Input[int],
+                 match_value: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[int] priority: Specifies the priority weight of this rule. The default value is 1.
+               A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        :param pulumi.Input[str] match_value: Specifies the cache match settings.
+               + When `match_type` is set to **all**, this field does not need to be configured.
+               + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+               value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+               not exceed `20`.
+               + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+               be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+               exceed `20`.
+               + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+               It supports matching specific files in the specified directory or files with a wildcard "*".
+               The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+               single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+               + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        pulumi.set(__self__, "match_type", match_type)
+        pulumi.set(__self__, "priority", priority)
+        if match_value is not None:
+            pulumi.set(__self__, "match_value", match_value)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter
+    def priority(self) -> pulumi.Input[int]:
+        """
+        Specifies the priority weight of this rule. The default value is 1.
+        A larger value indicates a higher priority. The value ranges from 1 to 100. The weight values must be unique.
+        """
+        return pulumi.get(self, "priority")
+
+    @priority.setter
+    def priority(self, value: pulumi.Input[int]):
+        pulumi.set(self, "priority", value)
+
+    @property
+    @pulumi.getter(name="matchValue")
+    def match_value(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cache match settings.
+        + When `match_type` is set to **all**, this field does not need to be configured.
+        + When `match_type` is set to **file_extension**, this field value is the file suffix. The first character of the
+        value is "." and separated by "," such as **.jpg,.zip,.exe**. The total number of file name suffixes entered should
+        not exceed `20`.
+        + When `match_type` is set to **catalog**, the value of this field is a directory. The value must start with "/" and
+        be separated by "," such as **/test/folder01,/test/folder02**. The total number of directory paths entered must not
+        exceed `20`.
+        + When `match_type` is set to **full_path**, the value of this field is a full path. The value must start with "/".
+        It supports matching specific files in the specified directory or files with a wildcard "*".
+        The position of "*" must be after the last "/" and cannot end with "*". Only one full path can be configured in a
+        single full path cache rule, such as **/test/index.html** or ***/test/*.jpg**.
+        + When `match_type` is set to **home_page**, this field does not need to be configured.
+        """
+        return pulumi.get(self, "match_value")
+
+    @match_value.setter
+    def match_value(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "match_value", value)
+
+
+@pulumi.input_type
 class DomainConfigsRetrievalRequestHeaderArgs:
     def __init__(__self__, *,
                  action: pulumi.Input[str],
                  name: pulumi.Input[str],
                  value: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[str] action: Specifies the operation type of request or response
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] value: Specifies the parameter values. Multiple values are separated by semicolons (;).
+        :param pulumi.Input[str] action: Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] value: Specifies the IP address blacklist or whitelist. This field is required when `type` is
+               set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+               by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+               Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         pulumi.set(__self__, "action", action)
         pulumi.set(__self__, "name", name)
@@ -754,7 +3168,7 @@ class DomainConfigsRetrievalRequestHeaderArgs:
     @pulumi.getter
     def action(self) -> pulumi.Input[str]:
         """
-        Specifies the operation type of request or response
+        Specifies the operation type of the HTTP response header. The value can be **set** or **delete**.
         """
         return pulumi.get(self, "action")
 
@@ -766,7 +3180,10 @@ class DomainConfigsRetrievalRequestHeaderArgs:
     @pulumi.getter
     def name(self) -> pulumi.Input[str]:
         """
-        Specifies the request or response header.
+        Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+        **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+        **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+        and hyphens (-), and starts with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -778,7 +3195,10 @@ class DomainConfigsRetrievalRequestHeaderArgs:
     @pulumi.getter
     def value(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the parameter values. Multiple values are separated by semicolons (;).
+        Specifies the IP address blacklist or whitelist. This field is required when `type` is
+        set to **black** or **white**. A list contains up to `500` IP addresses and IP address segments, which are separated
+        by commas (,). IPv6 addresses are supported. Duplicate IP addresses and IP address segments will be removed.
+        Addresses with wildcard characters are not supported, for example, `192.168.0.*`.
         """
         return pulumi.get(self, "value")
 
@@ -788,33 +3208,117 @@ class DomainConfigsRetrievalRequestHeaderArgs:
 
 
 @pulumi.input_type
+class DomainConfigsSniArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 server_name: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] server_name: Specifies the origin server domain name that the CDN node needs to access when
+               returning to the source.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if server_name is not None:
+            pulumi.set(__self__, "server_name", server_name)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="serverName")
+    def server_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the origin server domain name that the CDN node needs to access when
+        returning to the source.
+        """
+        return pulumi.get(self, "server_name")
+
+    @server_name.setter
+    def server_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "server_name", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
 class DomainConfigsUrlSigningArgs:
     def __init__(__self__, *,
                  enabled: pulumi.Input[bool],
+                 backup_key: Optional[pulumi.Input[str]] = None,
                  expire_time: Optional[pulumi.Input[int]] = None,
+                 inherit_config: Optional[pulumi.Input['DomainConfigsUrlSigningInheritConfigArgs']] = None,
                  key: Optional[pulumi.Input[str]] = None,
+                 match_type: Optional[pulumi.Input[str]] = None,
+                 sign_arg: Optional[pulumi.Input[str]] = None,
+                 sign_method: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  time_format: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
-        :param pulumi.Input[bool] enabled: Specifies the whether to enable force redirect or smart compression.
-        :param pulumi.Input[int] expire_time: Specifies the expiration time. The value ranges from **0** to **31536000**,
-               in seconds.
-        :param pulumi.Input[str] key: Specifies the authentication key contains 6 to 32 characters, including letters and digits.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] backup_key: Specifies the standby authentication key contains `16` to `32` characters,
+               including letters and digits.
+        :param pulumi.Input[int] expire_time: Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
+        :param pulumi.Input['DomainConfigsUrlSigningInheritConfigArgs'] inherit_config: Specifies the details of the authentication inheritance.
+               The inherit_config structure is documented below.
+        :param pulumi.Input[str] key: Specifies the parameter key. The value contains up to `256` characters. The value can be
+               composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
+        :param pulumi.Input[str] match_type: Specifies the match type. Valid values are:
+               + **all**: Match all files.
+               + **file_extension**: Match by file suffix.
+               + **catalog**: Match by directory.
+               + **full_path**: Full path matching.
+               + **home_page**: Match by homepage.
+        :param pulumi.Input[str] sign_arg: Specifies the authentication parameters. The default value is **auth_key**.
+               The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+               The value can not start with a digit.
+        :param pulumi.Input[str] sign_method: Specifies the encryption algorithm type for URL authentication.
+               The default value is **md5**. The valid values are as following:
+               + **md5**
+               + **sha256**
         :param pulumi.Input[str] time_format: Specifies the time format. Possible values are:
                **dec**: Decimal, can be used in Method A, Method B and Method C2.
                **hex**: Hexadecimal, can be used in Method C1 and Method C2.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         pulumi.set(__self__, "enabled", enabled)
+        if backup_key is not None:
+            pulumi.set(__self__, "backup_key", backup_key)
         if expire_time is not None:
             pulumi.set(__self__, "expire_time", expire_time)
+        if inherit_config is not None:
+            pulumi.set(__self__, "inherit_config", inherit_config)
         if key is not None:
             pulumi.set(__self__, "key", key)
+        if match_type is not None:
+            pulumi.set(__self__, "match_type", match_type)
+        if sign_arg is not None:
+            pulumi.set(__self__, "sign_arg", sign_arg)
+        if sign_method is not None:
+            pulumi.set(__self__, "sign_method", sign_method)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if time_format is not None:
@@ -826,7 +3330,7 @@ class DomainConfigsUrlSigningArgs:
     @pulumi.getter
     def enabled(self) -> pulumi.Input[bool]:
         """
-        Specifies the whether to enable force redirect or smart compression.
+        Specifies whether to enable client cert settings.
         """
         return pulumi.get(self, "enabled")
 
@@ -835,11 +3339,23 @@ class DomainConfigsUrlSigningArgs:
         pulumi.set(self, "enabled", value)
 
     @property
+    @pulumi.getter(name="backupKey")
+    def backup_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the standby authentication key contains `16` to `32` characters,
+        including letters and digits.
+        """
+        return pulumi.get(self, "backup_key")
+
+    @backup_key.setter
+    def backup_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "backup_key", value)
+
+    @property
     @pulumi.getter(name="expireTime")
     def expire_time(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the expiration time. The value ranges from **0** to **31536000**,
-        in seconds.
+        Specifies the expiration time. The value ranges from `0` to `31536000`, in seconds.
         """
         return pulumi.get(self, "expire_time")
 
@@ -848,16 +3364,76 @@ class DomainConfigsUrlSigningArgs:
         pulumi.set(self, "expire_time", value)
 
     @property
+    @pulumi.getter(name="inheritConfig")
+    def inherit_config(self) -> Optional[pulumi.Input['DomainConfigsUrlSigningInheritConfigArgs']]:
+        """
+        Specifies the details of the authentication inheritance.
+        The inherit_config structure is documented below.
+        """
+        return pulumi.get(self, "inherit_config")
+
+    @inherit_config.setter
+    def inherit_config(self, value: Optional[pulumi.Input['DomainConfigsUrlSigningInheritConfigArgs']]):
+        pulumi.set(self, "inherit_config", value)
+
+    @property
     @pulumi.getter
     def key(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the authentication key contains 6 to 32 characters, including letters and digits.
+        Specifies the parameter key. The value contains up to `256` characters. The value can be
+        composed of digits, uppercase letters, lowercase letters, and special characters (._-*#%|+^@?=).
         """
         return pulumi.get(self, "key")
 
     @key.setter
     def key(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "key", value)
+
+    @property
+    @pulumi.getter(name="matchType")
+    def match_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the match type. Valid values are:
+        + **all**: Match all files.
+        + **file_extension**: Match by file suffix.
+        + **catalog**: Match by directory.
+        + **full_path**: Full path matching.
+        + **home_page**: Match by homepage.
+        """
+        return pulumi.get(self, "match_type")
+
+    @match_type.setter
+    def match_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "match_type", value)
+
+    @property
+    @pulumi.getter(name="signArg")
+    def sign_arg(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the authentication parameters. The default value is **auth_key**.
+        The valid length is limited from `1` to `100` characters, only letters, digits, and underscores (_) are allowed.
+        The value can not start with a digit.
+        """
+        return pulumi.get(self, "sign_arg")
+
+    @sign_arg.setter
+    def sign_arg(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sign_arg", value)
+
+    @property
+    @pulumi.getter(name="signMethod")
+    def sign_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encryption algorithm type for URL authentication.
+        The default value is **md5**. The valid values are as following:
+        + **md5**
+        + **sha256**
+        """
+        return pulumi.get(self, "sign_method")
+
+    @sign_method.setter
+    def sign_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "sign_method", value)
 
     @property
     @pulumi.getter
@@ -886,17 +3462,281 @@ class DomainConfigsUrlSigningArgs:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
     @type.setter
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
+
+
+@pulumi.input_type
+class DomainConfigsUrlSigningInheritConfigArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 inherit_time_type: Optional[pulumi.Input[str]] = None,
+                 inherit_type: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[str] inherit_time_type: Specifies the time type that inherits authentication settings.
+               The valid values are as follows:
+               + **sys_time**: The current system time.
+               + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+        :param pulumi.Input[str] inherit_type: Specifies the authentication inheritance configuration.
+               The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if inherit_time_type is not None:
+            pulumi.set(__self__, "inherit_time_type", inherit_time_type)
+        if inherit_type is not None:
+            pulumi.set(__self__, "inherit_type", inherit_type)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="inheritTimeType")
+    def inherit_time_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time type that inherits authentication settings.
+        The valid values are as follows:
+        + **sys_time**: The current system time.
+        + **parent_url_time**: The time when a user accesses the M3U8/MPD file.
+        """
+        return pulumi.get(self, "inherit_time_type")
+
+    @inherit_time_type.setter
+    def inherit_time_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "inherit_time_type", value)
+
+    @property
+    @pulumi.getter(name="inheritType")
+    def inherit_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the authentication inheritance configuration.
+        The valid values are **m3u8** and **mpd**. Separate multiple values with commas (,). e.g. **m3u8,mpd**.
+        """
+        return pulumi.get(self, "inherit_type")
+
+    @inherit_type.setter
+    def inherit_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "inherit_type", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
+class DomainConfigsUserAgentFilterArgs:
+    def __init__(__self__, *,
+                 type: pulumi.Input[str],
+                 include_empty: Optional[pulumi.Input[str]] = None,
+                 ua_lists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
+        """
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input[str] include_empty: Specifies whether empty user agents are included.
+               A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+               A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+               Possible values: **true** (included) and **false** (excluded).
+               The default value is **false** for a blacklist and **true** for a whitelist.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] ua_lists: Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+               is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+        """
+        pulumi.set(__self__, "type", type)
+        if include_empty is not None:
+            pulumi.set(__self__, "include_empty", include_empty)
+        if ua_lists is not None:
+            pulumi.set(__self__, "ua_lists", ua_lists)
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Input[str]:
+        """
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "type", value)
+
+    @property
+    @pulumi.getter(name="includeEmpty")
+    def include_empty(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether empty user agents are included.
+        A User-Agent blacklist including empty user agents indicates that requests without a user agent are rejected.
+        A User-Agent whitelist including empty user agents indicates that requests without a user agent are accepted.
+        Possible values: **true** (included) and **false** (excluded).
+        The default value is **false** for a blacklist and **true** for a whitelist.
+        """
+        return pulumi.get(self, "include_empty")
+
+    @include_empty.setter
+    def include_empty(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "include_empty", value)
+
+    @property
+    @pulumi.getter(name="uaLists")
+    def ua_lists(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the User-Agent blacklist or whitelist. This parameter is required when `type`
+        is set to **black** or **white**. Up to `10` rules can be configured. A rule contains up to `100` characters.
+        """
+        return pulumi.get(self, "ua_lists")
+
+    @ua_lists.setter
+    def ua_lists(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "ua_lists", value)
+
+
+@pulumi.input_type
+class DomainConfigsVideoSeekArgs:
+    def __init__(__self__, *,
+                 enable_video_seek: pulumi.Input[bool],
+                 enable_flv_by_time_seek: Optional[pulumi.Input[bool]] = None,
+                 end_parameter: Optional[pulumi.Input[str]] = None,
+                 start_parameter: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[bool] enable_video_seek: Specifies the video seek status. **true**: enabled; **false**: disabled.
+        :param pulumi.Input[bool] enable_flv_by_time_seek: Specifies the time-based `FLV` seek status.
+               **true**: enabled; **false**: disabled. Defaults to **false**.
+        :param pulumi.Input[str] end_parameter: Specifies the video playback end parameter in user request URLs.
+               The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+        :param pulumi.Input[str] start_parameter: Specifies the video playback start parameter in user request URLs.
+               The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+        """
+        pulumi.set(__self__, "enable_video_seek", enable_video_seek)
+        if enable_flv_by_time_seek is not None:
+            pulumi.set(__self__, "enable_flv_by_time_seek", enable_flv_by_time_seek)
+        if end_parameter is not None:
+            pulumi.set(__self__, "end_parameter", end_parameter)
+        if start_parameter is not None:
+            pulumi.set(__self__, "start_parameter", start_parameter)
+
+    @property
+    @pulumi.getter(name="enableVideoSeek")
+    def enable_video_seek(self) -> pulumi.Input[bool]:
+        """
+        Specifies the video seek status. **true**: enabled; **false**: disabled.
+        """
+        return pulumi.get(self, "enable_video_seek")
+
+    @enable_video_seek.setter
+    def enable_video_seek(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enable_video_seek", value)
+
+    @property
+    @pulumi.getter(name="enableFlvByTimeSeek")
+    def enable_flv_by_time_seek(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the time-based `FLV` seek status.
+        **true**: enabled; **false**: disabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "enable_flv_by_time_seek")
+
+    @enable_flv_by_time_seek.setter
+    def enable_flv_by_time_seek(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_flv_by_time_seek", value)
+
+    @property
+    @pulumi.getter(name="endParameter")
+    def end_parameter(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the video playback end parameter in user request URLs.
+        The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+        """
+        return pulumi.get(self, "end_parameter")
+
+    @end_parameter.setter
+    def end_parameter(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "end_parameter", value)
+
+    @property
+    @pulumi.getter(name="startParameter")
+    def start_parameter(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the video playback start parameter in user request URLs.
+        The value contains up to `64` characters. Only letters, digits, and underscores (_) are allowed.
+        """
+        return pulumi.get(self, "start_parameter")
+
+    @start_parameter.setter
+    def start_parameter(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "start_parameter", value)
+
+
+@pulumi.input_type
+class DomainConfigsWebsocketArgs:
+    def __init__(__self__, *,
+                 enabled: pulumi.Input[bool],
+                 timeout: Optional[pulumi.Input[int]] = None):
+        """
+        :param pulumi.Input[bool] enabled: Specifies whether to enable client cert settings.
+        :param pulumi.Input[int] timeout: Specifies the duration from the time when a CDN node forwards an authentication request
+               to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+               ranging from `50` to `3,000`. The unit is millisecond.
+        """
+        pulumi.set(__self__, "enabled", enabled)
+        if timeout is not None:
+            pulumi.set(__self__, "timeout", timeout)
+
+    @property
+    @pulumi.getter
+    def enabled(self) -> pulumi.Input[bool]:
+        """
+        Specifies whether to enable client cert settings.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: pulumi.Input[bool]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter
+    def timeout(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the duration from the time when a CDN node forwards an authentication request
+        to the time when the CDN node receives the result returned by the remote authentication server. Enter `0` or a value
+        ranging from `50` to `3,000`. The unit is millisecond.
+        """
+        return pulumi.get(self, "timeout")
+
+    @timeout.setter
+    def timeout(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "timeout", value)
 
 
 @pulumi.input_type
@@ -907,18 +3747,34 @@ class DomainSourceArgs:
                  active: Optional[pulumi.Input[int]] = None,
                  http_port: Optional[pulumi.Input[int]] = None,
                  https_port: Optional[pulumi.Input[int]] = None,
+                 obs_bucket_type: Optional[pulumi.Input[str]] = None,
                  obs_web_hosting_enabled: Optional[pulumi.Input[bool]] = None,
-                 retrieval_host: Optional[pulumi.Input[str]] = None):
+                 retrieval_host: Optional[pulumi.Input[str]] = None,
+                 weight: Optional[pulumi.Input[int]] = None):
         """
-        :param pulumi.Input[str] origin: The domain name or IP address of the origin server.
-        :param pulumi.Input[str] origin_type: The origin server type. The valid values are 'ipaddr', 'domain', and 'obs_bucket'.
-        :param pulumi.Input[int] active: Whether an origin server is active or standby (1: active; 0: standby). The default value is
-               1.
-        :param pulumi.Input[int] http_port: Specifies the HTTP port. Default value: **80**.
-        :param pulumi.Input[int] https_port: Specifies the HTTPS port. Default value: **443**.
-        :param pulumi.Input[bool] obs_web_hosting_enabled: Whether to enable static website hosting for the OBS bucket.
-               This parameter is mandatory when the `origin_type` is **obs_bucket**.
-        :param pulumi.Input[str] retrieval_host: Specifies the retrieval host. The default value is the acceleration domain name.
+        :param pulumi.Input[str] origin: Specifies the unique domain name or IP address of the origin server.
+               + If `origin_type` is set to **ipaddr**, this field can only be set to IPv4 address.
+               + If `origin_type` is set to **domain**, this field can only be set to domain name.
+               + If `origin_type` is set to **obs_bucket**, this field can only be set to OBS bucket domain name. The OBS bucket
+               domain name must end with `.myhuaweicloud.com` or `.myhuaweicloud.cn`.
+        :param pulumi.Input[str] origin_type: Specifies the origin server type. The valid values are as follows:
+               + **ipaddr**: Origin server IP address.
+               + **domain**: Origin server domain name.
+               + **obs_bucket**: OBS bucket domain name.
+        :param pulumi.Input[int] active: Specifies whether the origin server is primary or standby. Valid values are as follows:
+               + **1**: Primary.
+               + **0**: Standby.
+        :param pulumi.Input[int] http_port: Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
+        :param pulumi.Input[int] https_port: Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
+        :param pulumi.Input[str] obs_bucket_type: Specifies the OBS bucket type. Valid values are **private** and **public**.
+               This field is required when `sources_type` is set to **obs_bucket**.
+        :param pulumi.Input[bool] obs_web_hosting_enabled: Specifies whether to enable static website hosting for the OBS bucket.
+               This parameter is valid only when the `origin_type` is set to **obs_bucket**. Defaults to **false**.
+        :param pulumi.Input[str] retrieval_host: Specifies the retrieval host. Things to note when using this field are as follows:
+               + If `origin_type` is set to **ipaddr** or **domain**, the acceleration domain name will be used by default.
+               + If `origin_type` is set to **obs_bucket**, the bucket's domain name will be used by default.
+        :param pulumi.Input[int] weight: Specifies the weight. The value ranges from `1` to `100`. Defaults to `50`.
+               A larger value indicates a larger number of times that content is pulled from this IP address.
         """
         pulumi.set(__self__, "origin", origin)
         pulumi.set(__self__, "origin_type", origin_type)
@@ -928,16 +3784,24 @@ class DomainSourceArgs:
             pulumi.set(__self__, "http_port", http_port)
         if https_port is not None:
             pulumi.set(__self__, "https_port", https_port)
+        if obs_bucket_type is not None:
+            pulumi.set(__self__, "obs_bucket_type", obs_bucket_type)
         if obs_web_hosting_enabled is not None:
             pulumi.set(__self__, "obs_web_hosting_enabled", obs_web_hosting_enabled)
         if retrieval_host is not None:
             pulumi.set(__self__, "retrieval_host", retrieval_host)
+        if weight is not None:
+            pulumi.set(__self__, "weight", weight)
 
     @property
     @pulumi.getter
     def origin(self) -> pulumi.Input[str]:
         """
-        The domain name or IP address of the origin server.
+        Specifies the unique domain name or IP address of the origin server.
+        + If `origin_type` is set to **ipaddr**, this field can only be set to IPv4 address.
+        + If `origin_type` is set to **domain**, this field can only be set to domain name.
+        + If `origin_type` is set to **obs_bucket**, this field can only be set to OBS bucket domain name. The OBS bucket
+        domain name must end with `.myhuaweicloud.com` or `.myhuaweicloud.cn`.
         """
         return pulumi.get(self, "origin")
 
@@ -949,7 +3813,10 @@ class DomainSourceArgs:
     @pulumi.getter(name="originType")
     def origin_type(self) -> pulumi.Input[str]:
         """
-        The origin server type. The valid values are 'ipaddr', 'domain', and 'obs_bucket'.
+        Specifies the origin server type. The valid values are as follows:
+        + **ipaddr**: Origin server IP address.
+        + **domain**: Origin server domain name.
+        + **obs_bucket**: OBS bucket domain name.
         """
         return pulumi.get(self, "origin_type")
 
@@ -961,8 +3828,9 @@ class DomainSourceArgs:
     @pulumi.getter
     def active(self) -> Optional[pulumi.Input[int]]:
         """
-        Whether an origin server is active or standby (1: active; 0: standby). The default value is
-        1.
+        Specifies whether the origin server is primary or standby. Valid values are as follows:
+        + **1**: Primary.
+        + **0**: Standby.
         """
         return pulumi.get(self, "active")
 
@@ -974,7 +3842,7 @@ class DomainSourceArgs:
     @pulumi.getter(name="httpPort")
     def http_port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HTTP port. Default value: **80**.
+        Specifies the HTTP port, ranging from `1` to `65,535`. Defaults to **80**.
         """
         return pulumi.get(self, "http_port")
 
@@ -986,7 +3854,7 @@ class DomainSourceArgs:
     @pulumi.getter(name="httpsPort")
     def https_port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HTTPS port. Default value: **443**.
+        Specifies the HTTPS port, ranging from `1` to `65,535`. Defaults to **443**.
         """
         return pulumi.get(self, "https_port")
 
@@ -995,11 +3863,24 @@ class DomainSourceArgs:
         pulumi.set(self, "https_port", value)
 
     @property
+    @pulumi.getter(name="obsBucketType")
+    def obs_bucket_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the OBS bucket type. Valid values are **private** and **public**.
+        This field is required when `sources_type` is set to **obs_bucket**.
+        """
+        return pulumi.get(self, "obs_bucket_type")
+
+    @obs_bucket_type.setter
+    def obs_bucket_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "obs_bucket_type", value)
+
+    @property
     @pulumi.getter(name="obsWebHostingEnabled")
     def obs_web_hosting_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Whether to enable static website hosting for the OBS bucket.
-        This parameter is mandatory when the `origin_type` is **obs_bucket**.
+        Specifies whether to enable static website hosting for the OBS bucket.
+        This parameter is valid only when the `origin_type` is set to **obs_bucket**. Defaults to **false**.
         """
         return pulumi.get(self, "obs_web_hosting_enabled")
 
@@ -1011,12 +3892,27 @@ class DomainSourceArgs:
     @pulumi.getter(name="retrievalHost")
     def retrieval_host(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the retrieval host. The default value is the acceleration domain name.
+        Specifies the retrieval host. Things to note when using this field are as follows:
+        + If `origin_type` is set to **ipaddr** or **domain**, the acceleration domain name will be used by default.
+        + If `origin_type` is set to **obs_bucket**, the bucket's domain name will be used by default.
         """
         return pulumi.get(self, "retrieval_host")
 
     @retrieval_host.setter
     def retrieval_host(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "retrieval_host", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the weight. The value ranges from `1` to `100`. Defaults to `50`.
+        A larger value indicates a larger number of times that content is pulled from this IP address.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "weight", value)
 
 

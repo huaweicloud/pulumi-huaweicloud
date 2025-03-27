@@ -149,7 +149,7 @@ class GetTurbosTurboResult(dict):
         :param bool enhanced: Whether the SFS turbo file system is enhanced.
         :param str enterprise_project_id: The enterprise project ID of the SFS turbo file system.
         :param str export_location: The mount point of the SFS turbo file system.
-        :param str id: The resource ID of the SFS turbo file system.
+        :param str id: The data source ID of the SFS turbo file system.
         :param str name: Specifies the name of the SFS turbo file system.
         :param str security_group_id: The ID of the security group to which the SFS turbo belongs.
         :param str share_proto: Specifies the protocol of the SFS turbo file system. The valid value is **NFS**.
@@ -229,7 +229,7 @@ class GetTurbosTurboResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The resource ID of the SFS turbo file system.
+        The data source ID of the SFS turbo file system.
         """
         return pulumi.get(self, "id")
 

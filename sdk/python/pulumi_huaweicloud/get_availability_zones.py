@@ -80,6 +80,9 @@ def get_availability_zones(region: Optional[str] = None,
     """
     ## # get_availability_zones
 
+    layout: "huaweicloud"
+    page_title: "HuaweiCloud: get_availability_zones"
+    description: ""
     Use this data source to get a list of availability zones from HuaweiCloud
 
     ## Example Usage
@@ -116,6 +119,9 @@ def get_availability_zones_output(region: Optional[pulumi.Input[Optional[str]]] 
     """
     ## # get_availability_zones
 
+    layout: "huaweicloud"
+    page_title: "HuaweiCloud: get_availability_zones"
+    description: ""
     Use this data source to get a list of availability zones from HuaweiCloud
 
     ## Example Usage

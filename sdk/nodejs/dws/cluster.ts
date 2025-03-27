@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a DWS cluster resource within HuaweiCloud.
+ * Manages a GaussDB(DWS) cluster resource within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -27,24 +27,29 @@ import * as utilities from "../utilities";
  *     version: dwsClusterVersion,
  *     nodeType: "dws.m3.xlarge",
  *     numberOfNode: 3,
+ *     numberOfCn: 3,
  *     availabilityZone: availabilityZone,
  *     userName: userName,
  *     userPwd: userPwd,
  *     vpcId: vpcId,
  *     networkId: networkId,
  *     securityGroupId: secgroup.id,
+ *     volume: {
+ *         type: "SSD",
+ *         capacity: "300",
+ *     },
  * });
  * ```
  *
  * ## Import
  *
- * Cluster can be imported using the following format
+ * The resource can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Dws/cluster:Cluster test 47ad727e-9dcc-4833-bde0-bb298607c719
+ *  $ pulumi import huaweicloud:Dws/cluster:Cluster test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_dws_cluster" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`user_pwd`, `number_of_cn`, `kms_key_id`, `volume`, `dss_pool_id`, `logical_cluster_enable`, `lts_enable`, `force_backup`. It is generally recommended running `terraform plan` after importing a cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_dws_cluster" "test" {
  *
  *  ...
  *
@@ -52,7 +57,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id
+ *  user_pwd, number_of_cn, kms_key_id, volume, dss_pool_id, logical_cluster_enable, lts_enable, `force_backup`,
  *
  *  ]
  *
@@ -88,7 +93,8 @@ export class Cluster extends pulumi.CustomResource {
 
     /**
      * The availability zone in which to create the cluster instance.
-     * Changing this parameter will create a new resource.
+     * If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+     * Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
@@ -97,10 +103,23 @@ export class Cluster extends pulumi.CustomResource {
      */
     public /*out*/ readonly created!: pulumi.Output<string>;
     /**
+     * Specifies the description of the cluster.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
+    /**
      * Dedicated storage pool ID.
      * Changing this parameter will create a new resource.
      */
     public readonly dssPoolId!: pulumi.Output<string>;
+    /**
+     * Specifies the ID of the ELB load balancer.
+     */
+    public readonly elbId!: pulumi.Output<string | undefined>;
+    /**
+     * The ELB information bound to the cluster.
+     * The elb structure is documented below.
+     */
+    public /*out*/ readonly elbs!: pulumi.Output<outputs.Dws.ClusterElb[]>;
     /**
      * Private network connection information about the cluster.
      * The Endpoint structure is documented below.
@@ -108,9 +127,14 @@ export class Cluster extends pulumi.CustomResource {
     public /*out*/ readonly endpoints!: pulumi.Output<outputs.Dws.ClusterEndpoint[]>;
     /**
      * The enterprise project ID.
-     * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specified whether to automatically execute snapshot when shrinking the number of nodes.
+     * The default value is **true**.
+     * This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+     */
+    public readonly forceBackup!: pulumi.Output<boolean | undefined>;
     /**
      * The number of latest manual snapshots that need to be
      * retained when deleting the cluster.
@@ -121,6 +145,15 @@ export class Cluster extends pulumi.CustomResource {
      * Changing this parameter will create a new resource.
      */
     public readonly kmsKeyId!: pulumi.Output<string>;
+    /**
+     * Specifies whether to enable logical cluster. The switch needs to be turned
+     * on before creating a logical cluster.
+     */
+    public readonly logicalClusterEnable!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies whether to enable LTS. The default value is **false**.
+     */
+    public readonly ltsEnable!: pulumi.Output<boolean | undefined>;
     /**
      * Cluster maintenance window.
      * The MaintainWindow structure is documented below.
@@ -145,13 +178,14 @@ export class Cluster extends pulumi.CustomResource {
     public readonly nodeType!: pulumi.Output<string>;
     /**
      * The number of CN.  
-     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20.
+     * This parameter must be used together with `version`.
      * Changing this parameter will create a new resource.
      */
     public readonly numberOfCn!: pulumi.Output<number | undefined>;
     /**
      * Number of nodes in a cluster.  
-     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+     * The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     public readonly numberOfNode!: pulumi.Output<number>;
     /**
@@ -160,7 +194,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly port!: pulumi.Output<number | undefined>;
     /**
-     * List of private network IP addresses.
+     * The private IP address of the ELB load balancer.
      */
     public /*out*/ readonly privateIps!: pulumi.Output<string[]>;
     /**
@@ -182,7 +216,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The security group ID.
+     * Specifies the security group ID of the cluster.
      * Changing this parameter will create a new resource.
      */
     public readonly securityGroupId!: pulumi.Output<string>;
@@ -215,9 +249,8 @@ export class Cluster extends pulumi.CustomResource {
     public /*out*/ readonly subStatus!: pulumi.Output<string>;
     /**
      * The key/value pairs to associate with the cluster.
-     * Changing this parameter will create a new resource.
      */
-    public readonly tags!: pulumi.Output<{[key: string]: string}>;
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Cluster management task.  
      * The value can be one of the following:
@@ -255,11 +288,14 @@ export class Cluster extends pulumi.CustomResource {
     public readonly userPwd!: pulumi.Output<string>;
     /**
      * The cluster version.
+     * [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
      * Changing this parameter will create a new resource.
      */
     public readonly version!: pulumi.Output<string>;
     /**
      * The information about the volume.
+     * Changing this parameter will create a new resource.
+     * For local disks, this parameter can not be specified.
      */
     public readonly volume!: pulumi.Output<outputs.Dws.ClusterVolume>;
     /**
@@ -283,11 +319,17 @@ export class Cluster extends pulumi.CustomResource {
             const state = argsOrState as ClusterState | undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["created"] = state ? state.created : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["dssPoolId"] = state ? state.dssPoolId : undefined;
+            resourceInputs["elbId"] = state ? state.elbId : undefined;
+            resourceInputs["elbs"] = state ? state.elbs : undefined;
             resourceInputs["endpoints"] = state ? state.endpoints : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["forceBackup"] = state ? state.forceBackup : undefined;
             resourceInputs["keepLastManualSnapshot"] = state ? state.keepLastManualSnapshot : undefined;
             resourceInputs["kmsKeyId"] = state ? state.kmsKeyId : undefined;
+            resourceInputs["logicalClusterEnable"] = state ? state.logicalClusterEnable : undefined;
+            resourceInputs["ltsEnable"] = state ? state.ltsEnable : undefined;
             resourceInputs["maintainWindows"] = state ? state.maintainWindows : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
@@ -338,10 +380,15 @@ export class Cluster extends pulumi.CustomResource {
                 throw new Error("Missing required property 'vpcId'");
             }
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["dssPoolId"] = args ? args.dssPoolId : undefined;
+            resourceInputs["elbId"] = args ? args.elbId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["forceBackup"] = args ? args.forceBackup : undefined;
             resourceInputs["keepLastManualSnapshot"] = args ? args.keepLastManualSnapshot : undefined;
             resourceInputs["kmsKeyId"] = args ? args.kmsKeyId : undefined;
+            resourceInputs["logicalClusterEnable"] = args ? args.logicalClusterEnable : undefined;
+            resourceInputs["ltsEnable"] = args ? args.ltsEnable : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
             resourceInputs["nodeType"] = args ? args.nodeType : undefined;
@@ -358,6 +405,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["volume"] = args ? args.volume : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["created"] = undefined /*out*/;
+            resourceInputs["elbs"] = undefined /*out*/;
             resourceInputs["endpoints"] = undefined /*out*/;
             resourceInputs["maintainWindows"] = undefined /*out*/;
             resourceInputs["privateIps"] = undefined /*out*/;
@@ -379,7 +427,8 @@ export class Cluster extends pulumi.CustomResource {
 export interface ClusterState {
     /**
      * The availability zone in which to create the cluster instance.
-     * Changing this parameter will create a new resource.
+     * If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+     * Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
@@ -388,10 +437,23 @@ export interface ClusterState {
      */
     created?: pulumi.Input<string>;
     /**
+     * Specifies the description of the cluster.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Dedicated storage pool ID.
      * Changing this parameter will create a new resource.
      */
     dssPoolId?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the ELB load balancer.
+     */
+    elbId?: pulumi.Input<string>;
+    /**
+     * The ELB information bound to the cluster.
+     * The elb structure is documented below.
+     */
+    elbs?: pulumi.Input<pulumi.Input<inputs.Dws.ClusterElb>[]>;
     /**
      * Private network connection information about the cluster.
      * The Endpoint structure is documented below.
@@ -399,9 +461,14 @@ export interface ClusterState {
     endpoints?: pulumi.Input<pulumi.Input<inputs.Dws.ClusterEndpoint>[]>;
     /**
      * The enterprise project ID.
-     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specified whether to automatically execute snapshot when shrinking the number of nodes.
+     * The default value is **true**.
+     * This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+     */
+    forceBackup?: pulumi.Input<boolean>;
     /**
      * The number of latest manual snapshots that need to be
      * retained when deleting the cluster.
@@ -412,6 +479,15 @@ export interface ClusterState {
      * Changing this parameter will create a new resource.
      */
     kmsKeyId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable logical cluster. The switch needs to be turned
+     * on before creating a logical cluster.
+     */
+    logicalClusterEnable?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable LTS. The default value is **false**.
+     */
+    ltsEnable?: pulumi.Input<boolean>;
     /**
      * Cluster maintenance window.
      * The MaintainWindow structure is documented below.
@@ -436,13 +512,14 @@ export interface ClusterState {
     nodeType?: pulumi.Input<string>;
     /**
      * The number of CN.  
-     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20.
+     * This parameter must be used together with `version`.
      * Changing this parameter will create a new resource.
      */
     numberOfCn?: pulumi.Input<number>;
     /**
      * Number of nodes in a cluster.  
-     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+     * The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     numberOfNode?: pulumi.Input<number>;
     /**
@@ -451,7 +528,7 @@ export interface ClusterState {
      */
     port?: pulumi.Input<number>;
     /**
-     * List of private network IP addresses.
+     * The private IP address of the ELB load balancer.
      */
     privateIps?: pulumi.Input<pulumi.Input<string>[]>;
     /**
@@ -473,7 +550,7 @@ export interface ClusterState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The security group ID.
+     * Specifies the security group ID of the cluster.
      * Changing this parameter will create a new resource.
      */
     securityGroupId?: pulumi.Input<string>;
@@ -506,7 +583,6 @@ export interface ClusterState {
     subStatus?: pulumi.Input<string>;
     /**
      * The key/value pairs to associate with the cluster.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -546,11 +622,14 @@ export interface ClusterState {
     userPwd?: pulumi.Input<string>;
     /**
      * The cluster version.
+     * [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
      * Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
     /**
      * The information about the volume.
+     * Changing this parameter will create a new resource.
+     * For local disks, this parameter can not be specified.
      */
     volume?: pulumi.Input<inputs.Dws.ClusterVolume>;
     /**
@@ -566,19 +645,33 @@ export interface ClusterState {
 export interface ClusterArgs {
     /**
      * The availability zone in which to create the cluster instance.
-     * Changing this parameter will create a new resource.
+     * If there are multiple available zones, separate by commas, e.g. **cn-north-4a,cn-north-4b,cn-north-4g**.
+     * Currently, multi-AZ clusters only support selecting `3` AZs. Changing this parameter will create a new resource.
      */
     availabilityZone: pulumi.Input<string>;
+    /**
+     * Specifies the description of the cluster.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Dedicated storage pool ID.
      * Changing this parameter will create a new resource.
      */
     dssPoolId?: pulumi.Input<string>;
     /**
+     * Specifies the ID of the ELB load balancer.
+     */
+    elbId?: pulumi.Input<string>;
+    /**
      * The enterprise project ID.
-     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specified whether to automatically execute snapshot when shrinking the number of nodes.
+     * The default value is **true**.
+     * This parameter is required and available only when scaling-in the `numberOfNode` parameter value.
+     */
+    forceBackup?: pulumi.Input<boolean>;
     /**
      * The number of latest manual snapshots that need to be
      * retained when deleting the cluster.
@@ -589,6 +682,15 @@ export interface ClusterArgs {
      * Changing this parameter will create a new resource.
      */
     kmsKeyId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to enable logical cluster. The switch needs to be turned
+     * on before creating a logical cluster.
+     */
+    logicalClusterEnable?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable LTS. The default value is **false**.
+     */
+    ltsEnable?: pulumi.Input<boolean>;
     /**
      * Cluster name, which must be unique and contains 4 to 64 characters, which
      * consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
@@ -608,13 +710,14 @@ export interface ClusterArgs {
     nodeType: pulumi.Input<string>;
     /**
      * The number of CN.  
-     * The value ranges from 2 to **number_of_node**, the maximum value is 20. Defaults to 3.
+     * The value ranges from 2 to **number_of_node**, the maximum value is 20.
+     * This parameter must be used together with `version`.
      * Changing this parameter will create a new resource.
      */
     numberOfCn?: pulumi.Input<number>;
     /**
      * Number of nodes in a cluster.  
-     * The value ranges from 3 to 32 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
+     * The value ranges from 3 to 256 in cluster mode. The value of stream warehouse(stand-alone mode) is 1.
      */
     numberOfNode: pulumi.Input<number>;
     /**
@@ -632,13 +735,12 @@ export interface ClusterArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The security group ID.
+     * Specifies the security group ID of the cluster.
      * Changing this parameter will create a new resource.
      */
     securityGroupId: pulumi.Input<string>;
     /**
      * The key/value pairs to associate with the cluster.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -657,11 +759,14 @@ export interface ClusterArgs {
     userPwd: pulumi.Input<string>;
     /**
      * The cluster version.
+     * [For details](https://support.huaweicloud.com/intl/en-us/bulletin-dws/dws_12_0000.html).
      * Changing this parameter will create a new resource.
      */
     version?: pulumi.Input<string>;
     /**
      * The information about the volume.
+     * Changing this parameter will create a new resource.
+     * For local disks, this parameter can not be specified.
      */
     volume?: pulumi.Input<inputs.Dws.ClusterVolume>;
     /**

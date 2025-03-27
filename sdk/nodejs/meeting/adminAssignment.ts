@@ -27,16 +27,16 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The assignment relationships can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import an administrator assignment and authenticated by account.
+ * The assignment relationships can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import an administrator assignment and authenticated by account. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+ *  $ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test <id>/<account_name>/<account_password>
  * ```
  *
- *  Import an administrator assignment and authenticated by `APP ID`/`APP Key`.
+ *  Import an administrator assignment and authenticated by `APP ID`/`APP Key`. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+ *  $ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
  * ```
  *
  *  For this resource, the `corp_id` and `user_id` are never used, you can omit them but the slashes cannot be missing.
@@ -71,7 +71,7 @@ export class AdminAssignment extends pulumi.CustomResource {
 
     /**
      * Specifies the user account to be assigned the administrator role.
-     * The value can contain **1** to **64** characters.
+     * The value can contain `1` to `64` characters.
      * Changing this parameter will create a new resource.
      */
     public readonly account!: pulumi.Output<string>;
@@ -136,7 +136,7 @@ export class AdminAssignment extends pulumi.CustomResource {
 export interface AdminAssignmentState {
     /**
      * Specifies the user account to be assigned the administrator role.
-     * The value can contain **1** to **64** characters.
+     * The value can contain `1` to `64` characters.
      * Changing this parameter will create a new resource.
      */
     account?: pulumi.Input<string>;
@@ -168,7 +168,7 @@ export interface AdminAssignmentState {
 export interface AdminAssignmentArgs {
     /**
      * Specifies the user account to be assigned the administrator role.
-     * The value can contain **1** to **64** characters.
+     * The value can contain `1` to `64` characters.
      * Changing this parameter will create a new resource.
      */
     account: pulumi.Input<string>;

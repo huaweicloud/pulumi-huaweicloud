@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['KafkaTopicArgs', 'KafkaTopic']
 
@@ -17,7 +19,10 @@ class KafkaTopicArgs:
                  instance_id: pulumi.Input[str],
                  partitions: pulumi.Input[int],
                  aging_time: Optional[pulumi.Input[int]] = None,
+                 configs: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 new_partition_brokers: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  replicas: Optional[pulumi.Input[int]] = None,
                  sync_flushing: Optional[pulumi.Input[bool]] = None,
@@ -26,15 +31,17 @@ class KafkaTopicArgs:
         The set of arguments for constructing a KafkaTopic resource.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the topic belongs.
                Changing this creates a new resource.
-        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from 1 to 100.
-        :param pulumi.Input[int] aging_time: Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
-        :param pulumi.Input[str] name: Specifies the name of the topic. The name starts with a letter, consists of 4 to
-               64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-               resource.
+        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from `1` to `200`.
+        :param pulumi.Input[int] aging_time: Specifies the aging time in hours.
+               The value ranges from `1` to `720` and defaults to `72`.
+        :param pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]] configs: Specifies the other topic configurations.
+        :param pulumi.Input[str] description: Specifies the description of topic.
+        :param pulumi.Input[str] name: Specifies the configuration name.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] new_partition_brokers: Specifies the integers list of brokers for new partitions.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka topic resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[int] replicas: Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-               Changing this creates a new resource.
+        :param pulumi.Input[int] replicas: Specifies the replica number.
+               The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         :param pulumi.Input[bool] sync_flushing: Whether or not to enable synchronous flushing.
         :param pulumi.Input[bool] sync_replication: Whether or not to enable synchronous replication.
         """
@@ -42,8 +49,14 @@ class KafkaTopicArgs:
         pulumi.set(__self__, "partitions", partitions)
         if aging_time is not None:
             pulumi.set(__self__, "aging_time", aging_time)
+        if configs is not None:
+            pulumi.set(__self__, "configs", configs)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if new_partition_brokers is not None:
+            pulumi.set(__self__, "new_partition_brokers", new_partition_brokers)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if replicas is not None:
@@ -70,7 +83,7 @@ class KafkaTopicArgs:
     @pulumi.getter
     def partitions(self) -> pulumi.Input[int]:
         """
-        Specifies the partition number. The value ranges from 1 to 100.
+        Specifies the partition number. The value ranges from `1` to `200`.
         """
         return pulumi.get(self, "partitions")
 
@@ -82,7 +95,8 @@ class KafkaTopicArgs:
     @pulumi.getter(name="agingTime")
     def aging_time(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        Specifies the aging time in hours.
+        The value ranges from `1` to `720` and defaults to `72`.
         """
         return pulumi.get(self, "aging_time")
 
@@ -92,17 +106,51 @@ class KafkaTopicArgs:
 
     @property
     @pulumi.getter
+    def configs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]]:
+        """
+        Specifies the other topic configurations.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]]):
+        pulumi.set(self, "configs", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of topic.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the topic. The name starts with a letter, consists of 4 to
-        64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-        resource.
+        Specifies the configuration name.
         """
         return pulumi.get(self, "name")
 
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="newPartitionBrokers")
+    def new_partition_brokers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]:
+        """
+        Specifies the integers list of brokers for new partitions.
+        """
+        return pulumi.get(self, "new_partition_brokers")
+
+    @new_partition_brokers.setter
+    def new_partition_brokers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]):
+        pulumi.set(self, "new_partition_brokers", value)
 
     @property
     @pulumi.getter
@@ -121,8 +169,8 @@ class KafkaTopicArgs:
     @pulumi.getter
     def replicas(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-        Changing this creates a new resource.
+        Specifies the replica number.
+        The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         """
         return pulumi.get(self, "replicas")
 
@@ -159,37 +207,58 @@ class KafkaTopicArgs:
 class _KafkaTopicState:
     def __init__(__self__, *,
                  aging_time: Optional[pulumi.Input[int]] = None,
+                 configs: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 new_partition_brokers: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
                  partitions: Optional[pulumi.Input[int]] = None,
+                 policies_only: Optional[pulumi.Input[bool]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  replicas: Optional[pulumi.Input[int]] = None,
                  sync_flushing: Optional[pulumi.Input[bool]] = None,
-                 sync_replication: Optional[pulumi.Input[bool]] = None):
+                 sync_replication: Optional[pulumi.Input[bool]] = None,
+                 type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering KafkaTopic resources.
-        :param pulumi.Input[int] aging_time: Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        :param pulumi.Input[int] aging_time: Specifies the aging time in hours.
+               The value ranges from `1` to `720` and defaults to `72`.
+        :param pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]] configs: Specifies the other topic configurations.
+        :param pulumi.Input[str] created_at: Indicates the topic create time.
+        :param pulumi.Input[str] description: Specifies the description of topic.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the topic belongs.
                Changing this creates a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the topic. The name starts with a letter, consists of 4 to
-               64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-               resource.
-        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from 1 to 100.
+        :param pulumi.Input[str] name: Specifies the configuration name.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] new_partition_brokers: Specifies the integers list of brokers for new partitions.
+        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from `1` to `200`.
+        :param pulumi.Input[bool] policies_only: Indicates whether this policy is the default policy.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka topic resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[int] replicas: Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-               Changing this creates a new resource.
+        :param pulumi.Input[int] replicas: Specifies the replica number.
+               The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         :param pulumi.Input[bool] sync_flushing: Whether or not to enable synchronous flushing.
         :param pulumi.Input[bool] sync_replication: Whether or not to enable synchronous replication.
+        :param pulumi.Input[str] type: Indicates the topic type.
         """
         if aging_time is not None:
             pulumi.set(__self__, "aging_time", aging_time)
+        if configs is not None:
+            pulumi.set(__self__, "configs", configs)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if new_partition_brokers is not None:
+            pulumi.set(__self__, "new_partition_brokers", new_partition_brokers)
         if partitions is not None:
             pulumi.set(__self__, "partitions", partitions)
+        if policies_only is not None:
+            pulumi.set(__self__, "policies_only", policies_only)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if replicas is not None:
@@ -198,18 +267,57 @@ class _KafkaTopicState:
             pulumi.set(__self__, "sync_flushing", sync_flushing)
         if sync_replication is not None:
             pulumi.set(__self__, "sync_replication", sync_replication)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
 
     @property
     @pulumi.getter(name="agingTime")
     def aging_time(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        Specifies the aging time in hours.
+        The value ranges from `1` to `720` and defaults to `72`.
         """
         return pulumi.get(self, "aging_time")
 
     @aging_time.setter
     def aging_time(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "aging_time", value)
+
+    @property
+    @pulumi.getter
+    def configs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]]:
+        """
+        Specifies the other topic configurations.
+        """
+        return pulumi.get(self, "configs")
+
+    @configs.setter
+    def configs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['KafkaTopicConfigArgs']]]]):
+        pulumi.set(self, "configs", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the topic create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of topic.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="instanceId")
@@ -228,9 +336,7 @@ class _KafkaTopicState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the topic. The name starts with a letter, consists of 4 to
-        64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-        resource.
+        Specifies the configuration name.
         """
         return pulumi.get(self, "name")
 
@@ -239,16 +345,40 @@ class _KafkaTopicState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="newPartitionBrokers")
+    def new_partition_brokers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]:
+        """
+        Specifies the integers list of brokers for new partitions.
+        """
+        return pulumi.get(self, "new_partition_brokers")
+
+    @new_partition_brokers.setter
+    def new_partition_brokers(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]]):
+        pulumi.set(self, "new_partition_brokers", value)
+
+    @property
     @pulumi.getter
     def partitions(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the partition number. The value ranges from 1 to 100.
+        Specifies the partition number. The value ranges from `1` to `200`.
         """
         return pulumi.get(self, "partitions")
 
     @partitions.setter
     def partitions(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "partitions", value)
+
+    @property
+    @pulumi.getter(name="policiesOnly")
+    def policies_only(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether this policy is the default policy.
+        """
+        return pulumi.get(self, "policies_only")
+
+    @policies_only.setter
+    def policies_only(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "policies_only", value)
 
     @property
     @pulumi.getter
@@ -267,8 +397,8 @@ class _KafkaTopicState:
     @pulumi.getter
     def replicas(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-        Changing this creates a new resource.
+        Specifies the replica number.
+        The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         """
         return pulumi.get(self, "replicas")
 
@@ -300,6 +430,18 @@ class _KafkaTopicState:
     def sync_replication(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "sync_replication", value)
 
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the topic type.
+        """
+        return pulumi.get(self, "type")
+
+    @type.setter
+    def type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "type", value)
+
 
 class KafkaTopic(pulumi.CustomResource):
     @overload
@@ -307,8 +449,11 @@ class KafkaTopic(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aging_time: Optional[pulumi.Input[int]] = None,
+                 configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaTopicConfigArgs']]]]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 new_partition_brokers: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
                  partitions: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  replicas: Optional[pulumi.Input[int]] = None,
@@ -341,17 +486,19 @@ class KafkaTopic(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] aging_time: Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        :param pulumi.Input[int] aging_time: Specifies the aging time in hours.
+               The value ranges from `1` to `720` and defaults to `72`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaTopicConfigArgs']]]] configs: Specifies the other topic configurations.
+        :param pulumi.Input[str] description: Specifies the description of topic.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the topic belongs.
                Changing this creates a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the topic. The name starts with a letter, consists of 4 to
-               64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-               resource.
-        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from 1 to 100.
+        :param pulumi.Input[str] name: Specifies the configuration name.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] new_partition_brokers: Specifies the integers list of brokers for new partitions.
+        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from `1` to `200`.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka topic resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[int] replicas: Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-               Changing this creates a new resource.
+        :param pulumi.Input[int] replicas: Specifies the replica number.
+               The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         :param pulumi.Input[bool] sync_flushing: Whether or not to enable synchronous flushing.
         :param pulumi.Input[bool] sync_replication: Whether or not to enable synchronous replication.
         """
@@ -401,8 +548,11 @@ class KafkaTopic(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  aging_time: Optional[pulumi.Input[int]] = None,
+                 configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaTopicConfigArgs']]]]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 new_partition_brokers: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
                  partitions: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  replicas: Optional[pulumi.Input[int]] = None,
@@ -418,10 +568,13 @@ class KafkaTopic(pulumi.CustomResource):
             __props__ = KafkaTopicArgs.__new__(KafkaTopicArgs)
 
             __props__.__dict__["aging_time"] = aging_time
+            __props__.__dict__["configs"] = configs
+            __props__.__dict__["description"] = description
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["new_partition_brokers"] = new_partition_brokers
             if partitions is None and not opts.urn:
                 raise TypeError("Missing required property 'partitions'")
             __props__.__dict__["partitions"] = partitions
@@ -429,6 +582,9 @@ class KafkaTopic(pulumi.CustomResource):
             __props__.__dict__["replicas"] = replicas
             __props__.__dict__["sync_flushing"] = sync_flushing
             __props__.__dict__["sync_replication"] = sync_replication
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["policies_only"] = None
+            __props__.__dict__["type"] = None
         super(KafkaTopic, __self__).__init__(
             'huaweicloud:Dms/kafkaTopic:KafkaTopic',
             resource_name,
@@ -440,13 +596,19 @@ class KafkaTopic(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             aging_time: Optional[pulumi.Input[int]] = None,
+            configs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaTopicConfigArgs']]]]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            new_partition_brokers: Optional[pulumi.Input[Sequence[pulumi.Input[int]]]] = None,
             partitions: Optional[pulumi.Input[int]] = None,
+            policies_only: Optional[pulumi.Input[bool]] = None,
             region: Optional[pulumi.Input[str]] = None,
             replicas: Optional[pulumi.Input[int]] = None,
             sync_flushing: Optional[pulumi.Input[bool]] = None,
-            sync_replication: Optional[pulumi.Input[bool]] = None) -> 'KafkaTopic':
+            sync_replication: Optional[pulumi.Input[bool]] = None,
+            type: Optional[pulumi.Input[str]] = None) -> 'KafkaTopic':
         """
         Get an existing KafkaTopic resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -454,41 +616,77 @@ class KafkaTopic(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] aging_time: Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        :param pulumi.Input[int] aging_time: Specifies the aging time in hours.
+               The value ranges from `1` to `720` and defaults to `72`.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['KafkaTopicConfigArgs']]]] configs: Specifies the other topic configurations.
+        :param pulumi.Input[str] created_at: Indicates the topic create time.
+        :param pulumi.Input[str] description: Specifies the description of topic.
         :param pulumi.Input[str] instance_id: Specifies the ID of the DMS kafka instance to which the topic belongs.
                Changing this creates a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the topic. The name starts with a letter, consists of 4 to
-               64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-               resource.
-        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from 1 to 100.
+        :param pulumi.Input[str] name: Specifies the configuration name.
+        :param pulumi.Input[Sequence[pulumi.Input[int]]] new_partition_brokers: Specifies the integers list of brokers for new partitions.
+        :param pulumi.Input[int] partitions: Specifies the partition number. The value ranges from `1` to `200`.
+        :param pulumi.Input[bool] policies_only: Indicates whether this policy is the default policy.
         :param pulumi.Input[str] region: The region in which to create the DMS kafka topic resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
-        :param pulumi.Input[int] replicas: Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-               Changing this creates a new resource.
+        :param pulumi.Input[int] replicas: Specifies the replica number.
+               The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         :param pulumi.Input[bool] sync_flushing: Whether or not to enable synchronous flushing.
         :param pulumi.Input[bool] sync_replication: Whether or not to enable synchronous replication.
+        :param pulumi.Input[str] type: Indicates the topic type.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _KafkaTopicState.__new__(_KafkaTopicState)
 
         __props__.__dict__["aging_time"] = aging_time
+        __props__.__dict__["configs"] = configs
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["description"] = description
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["new_partition_brokers"] = new_partition_brokers
         __props__.__dict__["partitions"] = partitions
+        __props__.__dict__["policies_only"] = policies_only
         __props__.__dict__["region"] = region
         __props__.__dict__["replicas"] = replicas
         __props__.__dict__["sync_flushing"] = sync_flushing
         __props__.__dict__["sync_replication"] = sync_replication
+        __props__.__dict__["type"] = type
         return KafkaTopic(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter(name="agingTime")
     def aging_time(self) -> pulumi.Output[int]:
         """
-        Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+        Specifies the aging time in hours.
+        The value ranges from `1` to `720` and defaults to `72`.
         """
         return pulumi.get(self, "aging_time")
+
+    @property
+    @pulumi.getter
+    def configs(self) -> pulumi.Output[Sequence['outputs.KafkaTopicConfig']]:
+        """
+        Specifies the other topic configurations.
+        """
+        return pulumi.get(self, "configs")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the topic create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of topic.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="instanceId")
@@ -503,19 +701,33 @@ class KafkaTopic(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the topic. The name starts with a letter, consists of 4 to
-        64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-        resource.
+        Specifies the configuration name.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="newPartitionBrokers")
+    def new_partition_brokers(self) -> pulumi.Output[Optional[Sequence[int]]]:
+        """
+        Specifies the integers list of brokers for new partitions.
+        """
+        return pulumi.get(self, "new_partition_brokers")
 
     @property
     @pulumi.getter
     def partitions(self) -> pulumi.Output[int]:
         """
-        Specifies the partition number. The value ranges from 1 to 100.
+        Specifies the partition number. The value ranges from `1` to `200`.
         """
         return pulumi.get(self, "partitions")
+
+    @property
+    @pulumi.getter(name="policiesOnly")
+    def policies_only(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether this policy is the default policy.
+        """
+        return pulumi.get(self, "policies_only")
 
     @property
     @pulumi.getter
@@ -530,8 +742,8 @@ class KafkaTopic(pulumi.CustomResource):
     @pulumi.getter
     def replicas(self) -> pulumi.Output[int]:
         """
-        Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-        Changing this creates a new resource.
+        Specifies the replica number.
+        The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
         """
         return pulumi.get(self, "replicas")
 
@@ -550,4 +762,12 @@ class KafkaTopic(pulumi.CustomResource):
         Whether or not to enable synchronous replication.
         """
         return pulumi.get(self, "sync_replication")
+
+    @property
+    @pulumi.getter
+    def type(self) -> pulumi.Output[str]:
+        """
+        Indicates the topic type.
+        """
+        return pulumi.get(self, "type")
 

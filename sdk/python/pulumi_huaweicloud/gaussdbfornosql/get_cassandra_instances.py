@@ -111,7 +111,7 @@ def get_cassandra_instances(name: Optional[str] = None,
                             vpc_id: Optional[str] = None,
                             opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCassandraInstancesResult:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra instances.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra instances.
 
     ## Example Usage
 
@@ -153,7 +153,7 @@ def get_cassandra_instances_output(name: Optional[pulumi.Input[Optional[str]]] =
                                    vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                                    opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCassandraInstancesResult]:
     """
-    Use this data source to get available HuaweiCloud gaussdb cassandra instances.
+    Use this data source to get available HuaweiCloud GeminiDB Cassandra instances.
 
     ## Example Usage
 

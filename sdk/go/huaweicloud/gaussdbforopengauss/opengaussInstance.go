@@ -11,22 +11,41 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB OpenGauss instance management within HuaweiCoud.
+// GaussDB OpenGauss instance management within HuaweiCould.
 //
 // ## Example Usage
 //
 // ## Import
 //
-// OpenGaussDB instance can be imported using the `id`, e.g.
+// OpenGaussDB instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
+//	$ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes include`password`, `ha.0.mode`, `ha.0.instance_mode`, `configuration_id`, `disk_encryption_id`, `enable_force_switch`, `enable_single_float_ip`, `parameters`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a GaussDB OpenGauss instance. You can then decide if changes should be applied to the GaussDB OpenGauss instance, or the resource definition should be updated to align with the GaussDB OpenGauss instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_opengauss_instance" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	password, configuration_id, disk_encryption_id, enable_force_switch, enable_single_float_ip, parameters, period_unit,
+//
+//	period, auto_renew,
+//
+//	]
+//
+//	} }
 type OpengaussInstance struct {
 	pulumi.CustomResourceState
 
+	// Specifies the advanced features.
+	// The advanceFeatures structure is documented below.
+	AdvanceFeatures OpengaussInstanceAdvanceFeatureArrayOutput `pulumi:"advanceFeatures"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
@@ -34,8 +53,10 @@ type OpengaussInstance struct {
 	// different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy.
-	// The object structure is documented below.
+	// The backupStrategy structure is documented below.
 	BackupStrategy OpengaussInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
+	// Indicates whether the host load is balanced due to a primary/standby switchover.
+	BalanceStatus pulumi.BoolOutput `pulumi:"balanceStatus"`
 	// Specifies the charging mode of opengauss instance.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
@@ -44,22 +65,38 @@ type OpengaussInstance struct {
 	// Specifies the parameter template ID.
 	// Changing this parameter will create a new resource.
 	ConfigurationId pulumi.StringPtrOutput `pulumi:"configurationId"`
-	// Specifies the coordinator number. Values: 1~9. The default value is 3.
+	// Specifies the coordinator number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	// The value must not be greater than twice value of `shardingNum`.
 	CoordinatorNum pulumi.IntPtrOutput `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
-	// The object structure is documented below.
+	// The datastore structure is documented below.
 	// Changing this parameter will create a new resource.
 	Datastore OpengaussInstanceDatastoreOutput `pulumi:"datastore"`
 	// Indicates the default username.
 	DbUserName pulumi.StringOutput `pulumi:"dbUserName"`
+	// Specifies the key ID for disk encryption.
+	// Changing this parameter will create a new resource.
+	DiskEncryptionId pulumi.StringPtrOutput `pulumi:"diskEncryptionId"`
+	// Specifies whether to forcibly promote a standby node to primary.
+	// Defaults to **false**. Changing this parameter will create a new resource.
+	EnableForceSwitch pulumi.BoolPtrOutput `pulumi:"enableForceSwitch"`
+	// Specifies whether to enable single floating IP address policy,
+	// which is only suitable for primary/standby instances. Value options:
+	// + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+	//   primary/standby fail over occurs, the floating IP address does not change.
+	// + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+	//   fail over occurs, the floating IP addresses change.
+	EnableSingleFloatIp pulumi.BoolPtrOutput `pulumi:"enableSingleFloatIp"`
 	// Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
 	Endpoints pulumi.StringArrayOutput `pulumi:"endpoints"`
 	// Specifies the enterprise project ID.
-	// Changing this parameter will create a new resource.
-	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
-	// Specifies the instance specifications. Please reference the API docs for valid
-	// options. Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Indicates whether error log collection is enabled. The value can be:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	ErrorLogSwitchStatus pulumi.StringOutput `pulumi:"errorLogSwitchStatus"`
+	// Specifies the instance specifications.
 	Flavor pulumi.StringOutput `pulumi:"flavor"`
 	// Specifies whether to import the instance with the given configuration instead of
 	// creation. If specified, try to import the instance instead of creation if the instance already existed.
@@ -70,12 +107,22 @@ type OpengaussInstance struct {
 	Ha OpengaussInstanceHaOutput `pulumi:"ha"`
 	// Indicates the maintenance window.
 	MaintenanceWindow pulumi.StringOutput `pulumi:"maintenanceWindow"`
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the port for MySQL compatibility. Value range: **0** or
+	// **1024** to **39989**.
+	// + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+	//   **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+	//   **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+	//   **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+	//   **[Database port, Database port + 10]**.
+	// + If the value is **0**, the MySQL compatibility port is disabled.
+	MysqlCompatibilityPort pulumi.StringOutput `pulumi:"mysqlCompatibilityPort"`
+	// Specifies the name of the advance feature.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes OpengaussInstanceNodeArrayOutput `pulumi:"nodes"`
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters OpengaussInstanceParameterArrayOutput `pulumi:"parameters"`
 	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
 	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -101,7 +148,7 @@ type OpengaussInstance struct {
 	// Specifies the region in which to create the instance.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The replica number. The valid values are **2** and **3**, defaults to **3**.
+	// The replica number. The valid values are `2` and `3`, defaults to `3`.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrOutput `pulumi:"replicaNum"`
@@ -109,9 +156,9 @@ type OpengaussInstance struct {
 	// If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
 	// includes the `100` ports starting with the database port.
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
-	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3.
+	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
+	// Specifies the sharding number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	ShardingNum pulumi.IntPtrOutput `pulumi:"shardingNum"`
 	// Indicates the node status.
 	Status pulumi.StringOutput `pulumi:"status"`
@@ -120,6 +167,8 @@ type OpengaussInstance struct {
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 	// Indicates the switch strategy.
 	SwitchStrategy pulumi.StringOutput `pulumi:"switchStrategy"`
+	// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the time zone. Defaults to **UTC+08:00**.
 	// Changing this parameter will create a new resource.
 	TimeZone pulumi.StringPtrOutput `pulumi:"timeZone"`
@@ -185,6 +234,9 @@ func GetOpengaussInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering OpengaussInstance resources.
 type opengaussInstanceState struct {
+	// Specifies the advanced features.
+	// The advanceFeatures structure is documented below.
+	AdvanceFeatures []OpengaussInstanceAdvanceFeature `pulumi:"advanceFeatures"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
@@ -192,8 +244,10 @@ type opengaussInstanceState struct {
 	// different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy.
-	// The object structure is documented below.
+	// The backupStrategy structure is documented below.
 	BackupStrategy *OpengaussInstanceBackupStrategy `pulumi:"backupStrategy"`
+	// Indicates whether the host load is balanced due to a primary/standby switchover.
+	BalanceStatus *bool `pulumi:"balanceStatus"`
 	// Specifies the charging mode of opengauss instance.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
@@ -202,22 +256,38 @@ type opengaussInstanceState struct {
 	// Specifies the parameter template ID.
 	// Changing this parameter will create a new resource.
 	ConfigurationId *string `pulumi:"configurationId"`
-	// Specifies the coordinator number. Values: 1~9. The default value is 3.
+	// Specifies the coordinator number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	// The value must not be greater than twice value of `shardingNum`.
 	CoordinatorNum *int `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
-	// The object structure is documented below.
+	// The datastore structure is documented below.
 	// Changing this parameter will create a new resource.
 	Datastore *OpengaussInstanceDatastore `pulumi:"datastore"`
 	// Indicates the default username.
 	DbUserName *string `pulumi:"dbUserName"`
+	// Specifies the key ID for disk encryption.
+	// Changing this parameter will create a new resource.
+	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
+	// Specifies whether to forcibly promote a standby node to primary.
+	// Defaults to **false**. Changing this parameter will create a new resource.
+	EnableForceSwitch *bool `pulumi:"enableForceSwitch"`
+	// Specifies whether to enable single floating IP address policy,
+	// which is only suitable for primary/standby instances. Value options:
+	// + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+	//   primary/standby fail over occurs, the floating IP address does not change.
+	// + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+	//   fail over occurs, the floating IP addresses change.
+	EnableSingleFloatIp *bool `pulumi:"enableSingleFloatIp"`
 	// Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
 	Endpoints []string `pulumi:"endpoints"`
 	// Specifies the enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the instance specifications. Please reference the API docs for valid
-	// options. Changing this parameter will create a new resource.
+	// Indicates whether error log collection is enabled. The value can be:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	ErrorLogSwitchStatus *string `pulumi:"errorLogSwitchStatus"`
+	// Specifies the instance specifications.
 	Flavor *string `pulumi:"flavor"`
 	// Specifies whether to import the instance with the given configuration instead of
 	// creation. If specified, try to import the instance instead of creation if the instance already existed.
@@ -228,12 +298,22 @@ type opengaussInstanceState struct {
 	Ha *OpengaussInstanceHa `pulumi:"ha"`
 	// Indicates the maintenance window.
 	MaintenanceWindow *string `pulumi:"maintenanceWindow"`
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the port for MySQL compatibility. Value range: **0** or
+	// **1024** to **39989**.
+	// + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+	//   **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+	//   **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+	//   **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+	//   **[Database port, Database port + 10]**.
+	// + If the value is **0**, the MySQL compatibility port is disabled.
+	MysqlCompatibilityPort *string `pulumi:"mysqlCompatibilityPort"`
+	// Specifies the name of the advance feature.
 	Name *string `pulumi:"name"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []OpengaussInstanceNode `pulumi:"nodes"`
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters []OpengaussInstanceParameter `pulumi:"parameters"`
 	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
 	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -259,7 +339,7 @@ type opengaussInstanceState struct {
 	// Specifies the region in which to create the instance.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The replica number. The valid values are **2** and **3**, defaults to **3**.
+	// The replica number. The valid values are `2` and `3`, defaults to `3`.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 	// Changing this parameter will create a new resource.
 	ReplicaNum *int `pulumi:"replicaNum"`
@@ -268,8 +348,8 @@ type opengaussInstanceState struct {
 	// includes the `100` ports starting with the database port.
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId *string `pulumi:"securityGroupId"`
-	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3.
+	// Specifies the sharding number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	ShardingNum *int `pulumi:"shardingNum"`
 	// Indicates the node status.
 	Status *string `pulumi:"status"`
@@ -278,6 +358,8 @@ type opengaussInstanceState struct {
 	SubnetId *string `pulumi:"subnetId"`
 	// Indicates the switch strategy.
 	SwitchStrategy *string `pulumi:"switchStrategy"`
+	// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the time zone. Defaults to **UTC+08:00**.
 	// Changing this parameter will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
@@ -293,6 +375,9 @@ type opengaussInstanceState struct {
 }
 
 type OpengaussInstanceState struct {
+	// Specifies the advanced features.
+	// The advanceFeatures structure is documented below.
+	AdvanceFeatures OpengaussInstanceAdvanceFeatureArrayInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
@@ -300,8 +385,10 @@ type OpengaussInstanceState struct {
 	// different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy.
-	// The object structure is documented below.
+	// The backupStrategy structure is documented below.
 	BackupStrategy OpengaussInstanceBackupStrategyPtrInput
+	// Indicates whether the host load is balanced due to a primary/standby switchover.
+	BalanceStatus pulumi.BoolPtrInput
 	// Specifies the charging mode of opengauss instance.
 	// The valid values are as follows:
 	// + **prePaid**: the yearly/monthly billing mode.
@@ -310,22 +397,38 @@ type OpengaussInstanceState struct {
 	// Specifies the parameter template ID.
 	// Changing this parameter will create a new resource.
 	ConfigurationId pulumi.StringPtrInput
-	// Specifies the coordinator number. Values: 1~9. The default value is 3.
+	// Specifies the coordinator number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	// The value must not be greater than twice value of `shardingNum`.
 	CoordinatorNum pulumi.IntPtrInput
 	// Specifies the datastore information.
-	// The object structure is documented below.
+	// The datastore structure is documented below.
 	// Changing this parameter will create a new resource.
 	Datastore OpengaussInstanceDatastorePtrInput
 	// Indicates the default username.
 	DbUserName pulumi.StringPtrInput
+	// Specifies the key ID for disk encryption.
+	// Changing this parameter will create a new resource.
+	DiskEncryptionId pulumi.StringPtrInput
+	// Specifies whether to forcibly promote a standby node to primary.
+	// Defaults to **false**. Changing this parameter will create a new resource.
+	EnableForceSwitch pulumi.BoolPtrInput
+	// Specifies whether to enable single floating IP address policy,
+	// which is only suitable for primary/standby instances. Value options:
+	// + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+	//   primary/standby fail over occurs, the floating IP address does not change.
+	// + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+	//   fail over occurs, the floating IP addresses change.
+	EnableSingleFloatIp pulumi.BoolPtrInput
 	// Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
 	Endpoints pulumi.StringArrayInput
 	// Specifies the enterprise project ID.
-	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the instance specifications. Please reference the API docs for valid
-	// options. Changing this parameter will create a new resource.
+	// Indicates whether error log collection is enabled. The value can be:
+	// + **ON**: enabled
+	// + **OFF**: disabled
+	ErrorLogSwitchStatus pulumi.StringPtrInput
+	// Specifies the instance specifications.
 	Flavor pulumi.StringPtrInput
 	// Specifies whether to import the instance with the given configuration instead of
 	// creation. If specified, try to import the instance instead of creation if the instance already existed.
@@ -336,12 +439,22 @@ type OpengaussInstanceState struct {
 	Ha OpengaussInstanceHaPtrInput
 	// Indicates the maintenance window.
 	MaintenanceWindow pulumi.StringPtrInput
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the port for MySQL compatibility. Value range: **0** or
+	// **1024** to **39989**.
+	// + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+	//   **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+	//   **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+	//   **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+	//   **[Database port, Database port + 10]**.
+	// + If the value is **0**, the MySQL compatibility port is disabled.
+	MysqlCompatibilityPort pulumi.StringPtrInput
+	// Specifies the name of the advance feature.
 	Name pulumi.StringPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes OpengaussInstanceNodeArrayInput
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters OpengaussInstanceParameterArrayInput
 	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
 	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -367,7 +480,7 @@ type OpengaussInstanceState struct {
 	// Specifies the region in which to create the instance.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The replica number. The valid values are **2** and **3**, defaults to **3**.
+	// The replica number. The valid values are `2` and `3`, defaults to `3`.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrInput
@@ -376,8 +489,8 @@ type OpengaussInstanceState struct {
 	// includes the `100` ports starting with the database port.
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId pulumi.StringPtrInput
-	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3.
+	// Specifies the sharding number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	ShardingNum pulumi.IntPtrInput
 	// Indicates the node status.
 	Status pulumi.StringPtrInput
@@ -386,6 +499,8 @@ type OpengaussInstanceState struct {
 	SubnetId pulumi.StringPtrInput
 	// Indicates the switch strategy.
 	SwitchStrategy pulumi.StringPtrInput
+	// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+	Tags pulumi.StringMapInput
 	// Specifies the time zone. Defaults to **UTC+08:00**.
 	// Changing this parameter will create a new resource.
 	TimeZone pulumi.StringPtrInput
@@ -405,6 +520,9 @@ func (OpengaussInstanceState) ElementType() reflect.Type {
 }
 
 type opengaussInstanceArgs struct {
+	// Specifies the advanced features.
+	// The advanceFeatures structure is documented below.
+	AdvanceFeatures []OpengaussInstanceAdvanceFeature `pulumi:"advanceFeatures"`
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
@@ -412,7 +530,7 @@ type opengaussInstanceArgs struct {
 	// different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy.
-	// The object structure is documented below.
+	// The backupStrategy structure is documented below.
 	BackupStrategy *OpengaussInstanceBackupStrategy `pulumi:"backupStrategy"`
 	// Specifies the charging mode of opengauss instance.
 	// The valid values are as follows:
@@ -422,18 +540,30 @@ type opengaussInstanceArgs struct {
 	// Specifies the parameter template ID.
 	// Changing this parameter will create a new resource.
 	ConfigurationId *string `pulumi:"configurationId"`
-	// Specifies the coordinator number. Values: 1~9. The default value is 3.
+	// Specifies the coordinator number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	// The value must not be greater than twice value of `shardingNum`.
 	CoordinatorNum *int `pulumi:"coordinatorNum"`
 	// Specifies the datastore information.
-	// The object structure is documented below.
+	// The datastore structure is documented below.
 	// Changing this parameter will create a new resource.
 	Datastore *OpengaussInstanceDatastore `pulumi:"datastore"`
-	// Specifies the enterprise project ID.
+	// Specifies the key ID for disk encryption.
 	// Changing this parameter will create a new resource.
+	DiskEncryptionId *string `pulumi:"diskEncryptionId"`
+	// Specifies whether to forcibly promote a standby node to primary.
+	// Defaults to **false**. Changing this parameter will create a new resource.
+	EnableForceSwitch *bool `pulumi:"enableForceSwitch"`
+	// Specifies whether to enable single floating IP address policy,
+	// which is only suitable for primary/standby instances. Value options:
+	// + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+	//   primary/standby fail over occurs, the floating IP address does not change.
+	// + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+	//   fail over occurs, the floating IP addresses change.
+	EnableSingleFloatIp *bool `pulumi:"enableSingleFloatIp"`
+	// Specifies the enterprise project ID.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
-	// Specifies the instance specifications. Please reference the API docs for valid
-	// options. Changing this parameter will create a new resource.
+	// Specifies the instance specifications.
 	Flavor string `pulumi:"flavor"`
 	// Specifies whether to import the instance with the given configuration instead of
 	// creation. If specified, try to import the instance instead of creation if the instance already existed.
@@ -442,10 +572,20 @@ type opengaussInstanceArgs struct {
 	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	Ha OpengaussInstanceHa `pulumi:"ha"`
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the port for MySQL compatibility. Value range: **0** or
+	// **1024** to **39989**.
+	// + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+	//   **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+	//   **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+	//   **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+	//   **[Database port, Database port + 10]**.
+	// + If the value is **0**, the MySQL compatibility port is disabled.
+	MysqlCompatibilityPort *string `pulumi:"mysqlCompatibilityPort"`
+	// Specifies the name of the advance feature.
 	Name *string `pulumi:"name"`
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters []OpengaussInstanceParameter `pulumi:"parameters"`
 	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
 	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -467,7 +607,7 @@ type opengaussInstanceArgs struct {
 	// Specifies the region in which to create the instance.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// The replica number. The valid values are **2** and **3**, defaults to **3**.
+	// The replica number. The valid values are `2` and `3`, defaults to `3`.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 	// Changing this parameter will create a new resource.
 	ReplicaNum *int `pulumi:"replicaNum"`
@@ -476,12 +616,14 @@ type opengaussInstanceArgs struct {
 	// includes the `100` ports starting with the database port.
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId *string `pulumi:"securityGroupId"`
-	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3.
+	// Specifies the sharding number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	ShardingNum *int `pulumi:"shardingNum"`
 	// Specifies the network ID of VPC subnet to which the instance belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId string `pulumi:"subnetId"`
+	// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the time zone. Defaults to **UTC+08:00**.
 	// Changing this parameter will create a new resource.
 	TimeZone *string `pulumi:"timeZone"`
@@ -495,6 +637,9 @@ type opengaussInstanceArgs struct {
 
 // The set of arguments for constructing a OpengaussInstance resource.
 type OpengaussInstanceArgs struct {
+	// Specifies the advanced features.
+	// The advanceFeatures structure is documented below.
+	AdvanceFeatures OpengaussInstanceAdvanceFeatureArrayInput
 	// Specifies whether auto renew is enabled.
 	// Valid values are **true** and **false**. Defaults to **false**.
 	AutoRenew pulumi.StringPtrInput
@@ -502,7 +647,7 @@ type OpengaussInstanceArgs struct {
 	// different az like **cn-north-4a,cn-north-4a,cn-north-4a**. Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy.
-	// The object structure is documented below.
+	// The backupStrategy structure is documented below.
 	BackupStrategy OpengaussInstanceBackupStrategyPtrInput
 	// Specifies the charging mode of opengauss instance.
 	// The valid values are as follows:
@@ -512,18 +657,30 @@ type OpengaussInstanceArgs struct {
 	// Specifies the parameter template ID.
 	// Changing this parameter will create a new resource.
 	ConfigurationId pulumi.StringPtrInput
-	// Specifies the coordinator number. Values: 1~9. The default value is 3.
+	// Specifies the coordinator number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	// The value must not be greater than twice value of `shardingNum`.
 	CoordinatorNum pulumi.IntPtrInput
 	// Specifies the datastore information.
-	// The object structure is documented below.
+	// The datastore structure is documented below.
 	// Changing this parameter will create a new resource.
 	Datastore OpengaussInstanceDatastorePtrInput
-	// Specifies the enterprise project ID.
+	// Specifies the key ID for disk encryption.
 	// Changing this parameter will create a new resource.
+	DiskEncryptionId pulumi.StringPtrInput
+	// Specifies whether to forcibly promote a standby node to primary.
+	// Defaults to **false**. Changing this parameter will create a new resource.
+	EnableForceSwitch pulumi.BoolPtrInput
+	// Specifies whether to enable single floating IP address policy,
+	// which is only suitable for primary/standby instances. Value options:
+	// + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+	//   primary/standby fail over occurs, the floating IP address does not change.
+	// + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+	//   fail over occurs, the floating IP addresses change.
+	EnableSingleFloatIp pulumi.BoolPtrInput
+	// Specifies the enterprise project ID.
 	EnterpriseProjectId pulumi.StringPtrInput
-	// Specifies the instance specifications. Please reference the API docs for valid
-	// options. Changing this parameter will create a new resource.
+	// Specifies the instance specifications.
 	Flavor pulumi.StringInput
 	// Specifies whether to import the instance with the given configuration instead of
 	// creation. If specified, try to import the instance instead of creation if the instance already existed.
@@ -532,10 +689,20 @@ type OpengaussInstanceArgs struct {
 	// The object structure is documented below.
 	// Changing this parameter will create a new resource.
 	Ha OpengaussInstanceHaInput
-	// Specifies the instance name, which can be the same as an existing instance name.
-	// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-	// letters, digits, hyphens (-), and underscores (_).
+	// Specifies the port for MySQL compatibility. Value range: **0** or
+	// **1024** to **39989**.
+	// + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+	//   **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+	//   **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+	//   **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+	//   **[Database port, Database port + 10]**.
+	// + If the value is **0**, the MySQL compatibility port is disabled.
+	MysqlCompatibilityPort pulumi.StringPtrInput
+	// Specifies the name of the advance feature.
 	Name pulumi.StringPtrInput
+	// Specifies an array of one or more parameters to be set to the instance after launched.
+	// The parameters structure is documented below.
+	Parameters OpengaussInstanceParameterArrayInput
 	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
 	// to enter a strong password to improve security, preventing security risks such as brute force cracking.
@@ -557,7 +724,7 @@ type OpengaussInstanceArgs struct {
 	// Specifies the region in which to create the instance.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// The replica number. The valid values are **2** and **3**, defaults to **3**.
+	// The replica number. The valid values are `2` and `3`, defaults to `3`.
 	// Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 	// Changing this parameter will create a new resource.
 	ReplicaNum pulumi.IntPtrInput
@@ -566,12 +733,14 @@ type OpengaussInstanceArgs struct {
 	// includes the `100` ports starting with the database port.
 	// (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
 	SecurityGroupId pulumi.StringPtrInput
-	// Specifies the sharding number. The valid value is range form `1` to `9`.
-	// The default value is 3.
+	// Specifies the sharding number.\
+	// The valid value is range form `1` to `9`. The default value is `3`.
 	ShardingNum pulumi.IntPtrInput
 	// Specifies the network ID of VPC subnet to which the instance belongs.
 	// Changing this parameter will create a new resource.
 	SubnetId pulumi.StringInput
+	// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+	Tags pulumi.StringMapInput
 	// Specifies the time zone. Defaults to **UTC+08:00**.
 	// Changing this parameter will create a new resource.
 	TimeZone pulumi.StringPtrInput
@@ -670,6 +839,12 @@ func (o OpengaussInstanceOutput) ToOpengaussInstanceOutputWithContext(ctx contex
 	return o
 }
 
+// Specifies the advanced features.
+// The advanceFeatures structure is documented below.
+func (o OpengaussInstanceOutput) AdvanceFeatures() OpengaussInstanceAdvanceFeatureArrayOutput {
+	return o.ApplyT(func(v *OpengaussInstance) OpengaussInstanceAdvanceFeatureArrayOutput { return v.AdvanceFeatures }).(OpengaussInstanceAdvanceFeatureArrayOutput)
+}
+
 // Specifies whether auto renew is enabled.
 // Valid values are **true** and **false**. Defaults to **false**.
 func (o OpengaussInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
@@ -683,9 +858,14 @@ func (o OpengaussInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 }
 
 // Specifies the advanced backup policy.
-// The object structure is documented below.
+// The backupStrategy structure is documented below.
 func (o OpengaussInstanceOutput) BackupStrategy() OpengaussInstanceBackupStrategyOutput {
 	return o.ApplyT(func(v *OpengaussInstance) OpengaussInstanceBackupStrategyOutput { return v.BackupStrategy }).(OpengaussInstanceBackupStrategyOutput)
+}
+
+// Indicates whether the host load is balanced due to a primary/standby switchover.
+func (o OpengaussInstanceOutput) BalanceStatus() pulumi.BoolOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.BoolOutput { return v.BalanceStatus }).(pulumi.BoolOutput)
 }
 
 // Specifies the charging mode of opengauss instance.
@@ -702,14 +882,15 @@ func (o OpengaussInstanceOutput) ConfigurationId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringPtrOutput { return v.ConfigurationId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the coordinator number. Values: 1~9. The default value is 3.
+// Specifies the coordinator number.\
+// The valid value is range form `1` to `9`. The default value is `3`.
 // The value must not be greater than twice value of `shardingNum`.
 func (o OpengaussInstanceOutput) CoordinatorNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.IntPtrOutput { return v.CoordinatorNum }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the datastore information.
-// The object structure is documented below.
+// The datastore structure is documented below.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceOutput) Datastore() OpengaussInstanceDatastoreOutput {
 	return o.ApplyT(func(v *OpengaussInstance) OpengaussInstanceDatastoreOutput { return v.Datastore }).(OpengaussInstanceDatastoreOutput)
@@ -720,19 +901,46 @@ func (o OpengaussInstanceOutput) DbUserName() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.DbUserName }).(pulumi.StringOutput)
 }
 
+// Specifies the key ID for disk encryption.
+// Changing this parameter will create a new resource.
+func (o OpengaussInstanceOutput) DiskEncryptionId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringPtrOutput { return v.DiskEncryptionId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether to forcibly promote a standby node to primary.
+// Defaults to **false**. Changing this parameter will create a new resource.
+func (o OpengaussInstanceOutput) EnableForceSwitch() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.BoolPtrOutput { return v.EnableForceSwitch }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies whether to enable single floating IP address policy,
+// which is only suitable for primary/standby instances. Value options:
+//   - **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+//     primary/standby fail over occurs, the floating IP address does not change.
+//   - **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+//     fail over occurs, the floating IP addresses change.
+func (o OpengaussInstanceOutput) EnableSingleFloatIp() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.BoolPtrOutput { return v.EnableSingleFloatIp }).(pulumi.BoolPtrOutput)
+}
+
 // Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
 func (o OpengaussInstanceOutput) Endpoints() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringArrayOutput { return v.Endpoints }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the enterprise project ID.
-// Changing this parameter will create a new resource.
-func (o OpengaussInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
+func (o OpengaussInstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
 
-// Specifies the instance specifications. Please reference the API docs for valid
-// options. Changing this parameter will create a new resource.
+// Indicates whether error log collection is enabled. The value can be:
+// + **ON**: enabled
+// + **OFF**: disabled
+func (o OpengaussInstanceOutput) ErrorLogSwitchStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.ErrorLogSwitchStatus }).(pulumi.StringOutput)
+}
+
+// Specifies the instance specifications.
 func (o OpengaussInstanceOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.Flavor }).(pulumi.StringOutput)
 }
@@ -755,9 +963,19 @@ func (o OpengaussInstanceOutput) MaintenanceWindow() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.MaintenanceWindow }).(pulumi.StringOutput)
 }
 
-// Specifies the instance name, which can be the same as an existing instance name.
-// The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-// letters, digits, hyphens (-), and underscores (_).
+// Specifies the port for MySQL compatibility. Value range: **0** or
+// **1024** to **39989**.
+//   - The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+//     **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+//     **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+//     **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+//     **[Database port, Database port + 10]**.
+//   - If the value is **0**, the MySQL compatibility port is disabled.
+func (o OpengaussInstanceOutput) MysqlCompatibilityPort() pulumi.StringOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.MysqlCompatibilityPort }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the advance feature.
 func (o OpengaussInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
@@ -765,6 +983,12 @@ func (o OpengaussInstanceOutput) Name() pulumi.StringOutput {
 // Indicates the instance nodes information. Structure is documented below.
 func (o OpengaussInstanceOutput) Nodes() OpengaussInstanceNodeArrayOutput {
 	return o.ApplyT(func(v *OpengaussInstance) OpengaussInstanceNodeArrayOutput { return v.Nodes }).(OpengaussInstanceNodeArrayOutput)
+}
+
+// Specifies an array of one or more parameters to be set to the instance after launched.
+// The parameters structure is documented below.
+func (o OpengaussInstanceOutput) Parameters() OpengaussInstanceParameterArrayOutput {
+	return o.ApplyT(func(v *OpengaussInstance) OpengaussInstanceParameterArrayOutput { return v.Parameters }).(OpengaussInstanceParameterArrayOutput)
 }
 
 // Specifies the database password. The value must be `8` to `32` characters in length,
@@ -813,7 +1037,7 @@ func (o OpengaussInstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The replica number. The valid values are **2** and **3**, defaults to **3**.
+// The replica number. The valid values are `2` and `3`, defaults to `3`.
 // Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
 // Changing this parameter will create a new resource.
 func (o OpengaussInstanceOutput) ReplicaNum() pulumi.IntPtrOutput {
@@ -824,12 +1048,12 @@ func (o OpengaussInstanceOutput) ReplicaNum() pulumi.IntPtrOutput {
 // If the `port` parameter is specified, please ensure that the TCP ports in the inbound rule of security group
 // includes the `100` ports starting with the database port.
 // (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
-func (o OpengaussInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringPtrOutput { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
+func (o OpengaussInstanceOutput) SecurityGroupId() pulumi.StringOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
 }
 
-// Specifies the sharding number. The valid value is range form `1` to `9`.
-// The default value is 3.
+// Specifies the sharding number.\
+// The valid value is range form `1` to `9`. The default value is `3`.
 func (o OpengaussInstanceOutput) ShardingNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.IntPtrOutput { return v.ShardingNum }).(pulumi.IntPtrOutput)
 }
@@ -848,6 +1072,11 @@ func (o OpengaussInstanceOutput) SubnetId() pulumi.StringOutput {
 // Indicates the switch strategy.
 func (o OpengaussInstanceOutput) SwitchStrategy() pulumi.StringOutput {
 	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringOutput { return v.SwitchStrategy }).(pulumi.StringOutput)
+}
+
+// Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+func (o OpengaussInstanceOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *OpengaussInstance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // Specifies the time zone. Defaults to **UTC+08:00**.

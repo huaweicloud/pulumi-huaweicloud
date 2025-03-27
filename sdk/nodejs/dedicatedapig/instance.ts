@@ -2,6 +2,7 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
@@ -19,7 +20,6 @@ import * as utilities from "../utilities";
  * const vpcId = config.requireObject("vpcId");
  * const subnetId = config.requireObject("subnetId");
  * const securityGroupId = config.requireObject("securityGroupId");
- * const eipId = config.requireObject("eipId");
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
  * const testInstance = new huaweicloud.dedicatedapig.Instance("testInstance", {
@@ -31,17 +31,19 @@ import * as utilities from "../utilities";
  *     maintainBegin: "06:00:00",
  *     description: "Created by script",
  *     bandwidthSize: 3,
- *     eipId: eipId,
  *     availableZones: [
  *         testAvailabilityZones.then(testAvailabilityZones => testAvailabilityZones.names?[0]),
  *         testAvailabilityZones.then(testAvailabilityZones => testAvailabilityZones.names?[1]),
  *     ],
+ *     tags: {
+ *         foo: "bar",
+ *     },
  * });
  * ```
  *
  * ## Import
  *
- * Dedicated instances can be imported by their `id`, e.g.
+ * Dedicated instances can be imported by their `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:DedicatedApig/instance:Instance test de379eed30aa4d31a84f426ea3c7ef4e
@@ -102,6 +104,11 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
+     * Specified the list of the instance custom ingress ports.
+     * The customIngressPorts structure is documented below.
+     */
+    public readonly customIngressPorts!: pulumi.Output<outputs.DedicatedApig.InstanceCustomIngressPort[] | undefined>;
+    /**
      * Specifies the description of the dedicated instance.  
      * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
@@ -124,13 +131,12 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly egressAddress!: pulumi.Output<string>;
     /**
-     * Specifies the EIP ID associated with the dedicated instance.
+     * The EIP ID associated with the dedicated instance.
      */
     public readonly eipId!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project ID to which the dedicated
-     * instance belongs.
-     * This parameter is required for enterprise users. Changing this will create a new resource.
+     * instance belongs. This parameter is required for enterprise users.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -138,15 +144,25 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly ingressAddress!: pulumi.Output<string>;
     /**
+     * Specifies the ingress bandwidth billing type of the dedicated instance.
+     * The valid values are as follows:
+     * + **bandwidth**: Billed by bandwidth.
+     * + **traffic**: Billed by traffic.
+     */
+    public readonly ingressBandwidthChargingMode!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the ingress bandwidth size of the dedicated instance.  
+     * The minimum value is `5`
+     */
+    public readonly ingressBandwidthSize!: pulumi.Output<number | undefined>;
+    /**
      * Specifies whether public access with an IPv6 address is supported.  
      * Changing this will create a new resource.
      */
     public readonly ipv6Enable!: pulumi.Output<boolean>;
     /**
-     * Specifies the provider type of load balancer used by the
-     * dedicated instance.
-     * The valid values are as follows:
-     * + **lvs**: Linux virtual server.
+     * The type of load balancer used by the dedicated instance.  
+     * The valid value is as follows:
      * + **elb**: Elastic load balance.
      */
     public readonly loadbalancerProvider!: pulumi.Output<string>;
@@ -177,7 +193,9 @@ export class Instance extends pulumi.CustomResource {
      */
     public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Status of the dedicated instance.
+     * The current status of the custom ingress port.
+     * + **normal**
+     * + **abnormal**
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
@@ -190,6 +208,10 @@ export class Instance extends pulumi.CustomResource {
      */
     public /*out*/ readonly supportedFeatures!: pulumi.Output<string[]>;
     /**
+     * Specifies the key/value pairs to associate with the dedicated instance.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
      * Specifies the ID of the VPC used to create the dedicated instance.  
      * Changing this will create a new resource.
      */
@@ -198,6 +220,20 @@ export class Instance extends pulumi.CustomResource {
      * The ingress private IP address of the VPC.
      */
     public /*out*/ readonly vpcIngressAddress!: pulumi.Output<string>;
+    /**
+     * The address (full name) of the VPC endpoint service, in the
+     * "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+     * generates a name in the "{region}.apig.{service_id}" format.
+     */
+    public /*out*/ readonly vpcepServiceAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the name of the VPC endpoint service.
+     * It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+     * If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+     * If this parameter is specified, the system automatically generates a name in the
+     * "{region}.{vpcep_service_name}.{service_id}" format.
+     */
+    public readonly vpcepServiceName!: pulumi.Output<string>;
 
     /**
      * Create a Instance resource with the given unique name, arguments, and options.
@@ -217,12 +253,15 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["bandwidthSize"] = state ? state.bandwidthSize : undefined;
             resourceInputs["createTime"] = state ? state.createTime : undefined;
             resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["customIngressPorts"] = state ? state.customIngressPorts : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["edition"] = state ? state.edition : undefined;
             resourceInputs["egressAddress"] = state ? state.egressAddress : undefined;
             resourceInputs["eipId"] = state ? state.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["ingressAddress"] = state ? state.ingressAddress : undefined;
+            resourceInputs["ingressBandwidthChargingMode"] = state ? state.ingressBandwidthChargingMode : undefined;
+            resourceInputs["ingressBandwidthSize"] = state ? state.ingressBandwidthSize : undefined;
             resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
             resourceInputs["loadbalancerProvider"] = state ? state.loadbalancerProvider : undefined;
             resourceInputs["maintainBegin"] = state ? state.maintainBegin : undefined;
@@ -233,8 +272,11 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["supportedFeatures"] = state ? state.supportedFeatures : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
             resourceInputs["vpcIngressAddress"] = state ? state.vpcIngressAddress : undefined;
+            resourceInputs["vpcepServiceAddress"] = state ? state.vpcepServiceAddress : undefined;
+            resourceInputs["vpcepServiceName"] = state ? state.vpcepServiceName : undefined;
         } else {
             const args = argsOrState as InstanceArgs | undefined;
             if ((!args || args.edition === undefined) && !opts.urn) {
@@ -252,10 +294,13 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["availabilityZones"] = args ? args.availabilityZones : undefined;
             resourceInputs["availableZones"] = args ? args.availableZones : undefined;
             resourceInputs["bandwidthSize"] = args ? args.bandwidthSize : undefined;
+            resourceInputs["customIngressPorts"] = args ? args.customIngressPorts : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["edition"] = args ? args.edition : undefined;
             resourceInputs["eipId"] = args ? args.eipId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["ingressBandwidthChargingMode"] = args ? args.ingressBandwidthChargingMode : undefined;
+            resourceInputs["ingressBandwidthSize"] = args ? args.ingressBandwidthSize : undefined;
             resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["loadbalancerProvider"] = args ? args.loadbalancerProvider : undefined;
             resourceInputs["maintainBegin"] = args ? args.maintainBegin : undefined;
@@ -263,7 +308,9 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["vpcepServiceName"] = args ? args.vpcepServiceName : undefined;
             resourceInputs["createTime"] = undefined /*out*/;
             resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["egressAddress"] = undefined /*out*/;
@@ -272,6 +319,7 @@ export class Instance extends pulumi.CustomResource {
             resourceInputs["status"] = undefined /*out*/;
             resourceInputs["supportedFeatures"] = undefined /*out*/;
             resourceInputs["vpcIngressAddress"] = undefined /*out*/;
+            resourceInputs["vpcepServiceAddress"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Instance.__pulumiType, name, resourceInputs, opts);
@@ -309,6 +357,11 @@ export interface InstanceState {
      */
     createdAt?: pulumi.Input<string>;
     /**
+     * Specified the list of the instance custom ingress ports.
+     * The customIngressPorts structure is documented below.
+     */
+    customIngressPorts?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.InstanceCustomIngressPort>[]>;
+    /**
      * Specifies the description of the dedicated instance.  
      * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
@@ -331,13 +384,12 @@ export interface InstanceState {
      */
     egressAddress?: pulumi.Input<string>;
     /**
-     * Specifies the EIP ID associated with the dedicated instance.
+     * The EIP ID associated with the dedicated instance.
      */
     eipId?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID to which the dedicated
-     * instance belongs.
-     * This parameter is required for enterprise users. Changing this will create a new resource.
+     * instance belongs. This parameter is required for enterprise users.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -345,15 +397,25 @@ export interface InstanceState {
      */
     ingressAddress?: pulumi.Input<string>;
     /**
+     * Specifies the ingress bandwidth billing type of the dedicated instance.
+     * The valid values are as follows:
+     * + **bandwidth**: Billed by bandwidth.
+     * + **traffic**: Billed by traffic.
+     */
+    ingressBandwidthChargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the ingress bandwidth size of the dedicated instance.  
+     * The minimum value is `5`
+     */
+    ingressBandwidthSize?: pulumi.Input<number>;
+    /**
      * Specifies whether public access with an IPv6 address is supported.  
      * Changing this will create a new resource.
      */
     ipv6Enable?: pulumi.Input<boolean>;
     /**
-     * Specifies the provider type of load balancer used by the
-     * dedicated instance.
-     * The valid values are as follows:
-     * + **lvs**: Linux virtual server.
+     * The type of load balancer used by the dedicated instance.  
+     * The valid value is as follows:
      * + **elb**: Elastic load balance.
      */
     loadbalancerProvider?: pulumi.Input<string>;
@@ -384,7 +446,9 @@ export interface InstanceState {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Status of the dedicated instance.
+     * The current status of the custom ingress port.
+     * + **normal**
+     * + **abnormal**
      */
     status?: pulumi.Input<string>;
     /**
@@ -397,6 +461,10 @@ export interface InstanceState {
      */
     supportedFeatures?: pulumi.Input<pulumi.Input<string>[]>;
     /**
+     * Specifies the key/value pairs to associate with the dedicated instance.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * Specifies the ID of the VPC used to create the dedicated instance.  
      * Changing this will create a new resource.
      */
@@ -405,6 +473,20 @@ export interface InstanceState {
      * The ingress private IP address of the VPC.
      */
     vpcIngressAddress?: pulumi.Input<string>;
+    /**
+     * The address (full name) of the VPC endpoint service, in the
+     * "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+     * generates a name in the "{region}.apig.{service_id}" format.
+     */
+    vpcepServiceAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the VPC endpoint service.
+     * It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+     * If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+     * If this parameter is specified, the system automatically generates a name in the
+     * "{region}.{vpcep_service_name}.{service_id}" format.
+     */
+    vpcepServiceName?: pulumi.Input<string>;
 }
 
 /**
@@ -428,6 +510,11 @@ export interface InstanceArgs {
      */
     bandwidthSize?: pulumi.Input<number>;
     /**
+     * Specified the list of the instance custom ingress ports.
+     * The customIngressPorts structure is documented below.
+     */
+    customIngressPorts?: pulumi.Input<pulumi.Input<inputs.DedicatedApig.InstanceCustomIngressPort>[]>;
+    /**
      * Specifies the description of the dedicated instance.  
      * The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
      */
@@ -446,25 +533,34 @@ export interface InstanceArgs {
      */
     edition: pulumi.Input<string>;
     /**
-     * Specifies the EIP ID associated with the dedicated instance.
+     * The EIP ID associated with the dedicated instance.
      */
     eipId?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID to which the dedicated
-     * instance belongs.
-     * This parameter is required for enterprise users. Changing this will create a new resource.
+     * instance belongs. This parameter is required for enterprise users.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the ingress bandwidth billing type of the dedicated instance.
+     * The valid values are as follows:
+     * + **bandwidth**: Billed by bandwidth.
+     * + **traffic**: Billed by traffic.
+     */
+    ingressBandwidthChargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the ingress bandwidth size of the dedicated instance.  
+     * The minimum value is `5`
+     */
+    ingressBandwidthSize?: pulumi.Input<number>;
     /**
      * Specifies whether public access with an IPv6 address is supported.  
      * Changing this will create a new resource.
      */
     ipv6Enable?: pulumi.Input<boolean>;
     /**
-     * Specifies the provider type of load balancer used by the
-     * dedicated instance.
-     * The valid values are as follows:
-     * + **lvs**: Linux virtual server.
+     * The type of load balancer used by the dedicated instance.  
+     * The valid value is as follows:
      * + **elb**: Elastic load balance.
      */
     loadbalancerProvider?: pulumi.Input<string>;
@@ -496,8 +592,20 @@ export interface InstanceArgs {
      */
     subnetId: pulumi.Input<string>;
     /**
+     * Specifies the key/value pairs to associate with the dedicated instance.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * Specifies the ID of the VPC used to create the dedicated instance.  
      * Changing this will create a new resource.
      */
     vpcId: pulumi.Input<string>;
+    /**
+     * Specifies the name of the VPC endpoint service.
+     * It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+     * If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+     * If this parameter is specified, the system automatically generates a name in the
+     * "{region}.{vpcep_service_name}.{service_id}" format.
+     */
+    vpcepServiceName?: pulumi.Input<string>;
 }

@@ -50,7 +50,7 @@ import (
 //
 // ## Import
 //
-// Parameter groups can be imported using the `id`, e.g.
+// Parameter groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -63,6 +63,8 @@ type Parametergroup struct {
 	// Indicates the parameter configuration defined by users based on the default parameters
 	// groups.
 	ConfigurationParameters ParametergroupConfigurationParameterArrayOutput `pulumi:"configurationParameters"`
+	// The creation time, in UTC format.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Database object. The database object structure is documented below. Changing
 	// this creates a new parameter group.
 	Datastore ParametergroupDatastoreOutput `pulumi:"datastore"`
@@ -74,6 +76,8 @@ type Parametergroup struct {
 	// The region in which to create the RDS parameter group. If omitted, the
 	// provider-level region will be used. Changing this creates a new parameter group.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// The last update time, in UTC format.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
 	Values pulumi.StringMapOutput `pulumi:"values"`
@@ -115,6 +119,8 @@ type parametergroupState struct {
 	// Indicates the parameter configuration defined by users based on the default parameters
 	// groups.
 	ConfigurationParameters []ParametergroupConfigurationParameter `pulumi:"configurationParameters"`
+	// The creation time, in UTC format.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Database object. The database object structure is documented below. Changing
 	// this creates a new parameter group.
 	Datastore *ParametergroupDatastore `pulumi:"datastore"`
@@ -126,6 +132,8 @@ type parametergroupState struct {
 	// The region in which to create the RDS parameter group. If omitted, the
 	// provider-level region will be used. Changing this creates a new parameter group.
 	Region *string `pulumi:"region"`
+	// The last update time, in UTC format.
+	UpdatedAt *string `pulumi:"updatedAt"`
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
 	Values map[string]string `pulumi:"values"`
@@ -135,6 +143,8 @@ type ParametergroupState struct {
 	// Indicates the parameter configuration defined by users based on the default parameters
 	// groups.
 	ConfigurationParameters ParametergroupConfigurationParameterArrayInput
+	// The creation time, in UTC format.
+	CreatedAt pulumi.StringPtrInput
 	// Database object. The database object structure is documented below. Changing
 	// this creates a new parameter group.
 	Datastore ParametergroupDatastorePtrInput
@@ -146,6 +156,8 @@ type ParametergroupState struct {
 	// The region in which to create the RDS parameter group. If omitted, the
 	// provider-level region will be used. Changing this creates a new parameter group.
 	Region pulumi.StringPtrInput
+	// The last update time, in UTC format.
+	UpdatedAt pulumi.StringPtrInput
 	// Parameter group values key/value pairs defined by users based on the default parameter
 	// groups.
 	Values pulumi.StringMapInput
@@ -285,6 +297,11 @@ func (o ParametergroupOutput) ConfigurationParameters() ParametergroupConfigurat
 	}).(ParametergroupConfigurationParameterArrayOutput)
 }
 
+// The creation time, in UTC format.
+func (o ParametergroupOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Parametergroup) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
 // Database object. The database object structure is documented below. Changing
 // this creates a new parameter group.
 func (o ParametergroupOutput) Datastore() ParametergroupDatastoreOutput {
@@ -306,6 +323,11 @@ func (o ParametergroupOutput) Name() pulumi.StringOutput {
 // provider-level region will be used. Changing this creates a new parameter group.
 func (o ParametergroupOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Parametergroup) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// The last update time, in UTC format.
+func (o ParametergroupOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Parametergroup) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 // Parameter group values key/value pairs defined by users based on the default parameter

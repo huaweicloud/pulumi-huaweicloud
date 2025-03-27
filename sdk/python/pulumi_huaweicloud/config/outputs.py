@@ -17,9 +17,12 @@ __all__ = [
 class AssumeRole(dict):
     def __init__(__self__, *,
                  agency_name: str,
-                 domain_name: str):
+                 domain_name: str,
+                 domain_id: Optional[str] = None):
         pulumi.set(__self__, "agency_name", agency_name)
         pulumi.set(__self__, "domain_name", domain_name)
+        if domain_id is not None:
+            pulumi.set(__self__, "domain_id", domain_id)
 
     @property
     @pulumi.getter(name="agencyName")
@@ -30,5 +33,10 @@ class AssumeRole(dict):
     @pulumi.getter(name="domainName")
     def domain_name(self) -> str:
         return pulumi.get(self, "domain_name")
+
+    @property
+    @pulumi.getter(name="domainId")
+    def domain_id(self) -> Optional[str]:
+        return pulumi.get(self, "domain_id")
 
 

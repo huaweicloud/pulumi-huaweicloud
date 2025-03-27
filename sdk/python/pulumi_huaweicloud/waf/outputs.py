@@ -11,17 +11,233 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'DedicatedDomainConnectionProtection',
+    'DedicatedDomainCustomPage',
     'DedicatedDomainServer',
+    'DedicatedDomainTimeoutSettings',
+    'DedicatedDomainTrafficMark',
+    'DomainCustomPage',
     'DomainServer',
+    'DomainTimeoutSettings',
+    'DomainTrafficMark',
+    'PolicyBindHost',
     'PolicyOption',
     'GetDedicatedInstancesInstanceResult',
     'GetInstanceGroupsGroupResult',
     'GetInstanceGroupsGroupDedicatedInstanceResult',
     'GetInstanceGroupsGroupDomainNameResult',
     'GetPoliciesPolicyResult',
+    'GetPoliciesPolicyBindHostResult',
     'GetPoliciesPolicyOptionResult',
     'GetReferenceTablesTableResult',
 ]
+
+@pulumi.output_type
+class DedicatedDomainConnectionProtection(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "errorPercentage":
+            suggest = "error_percentage"
+        elif key == "errorThreshold":
+            suggest = "error_threshold"
+        elif key == "initialDowntime":
+            suggest = "initial_downtime"
+        elif key == "multiplierForConsecutiveBreakdowns":
+            suggest = "multiplier_for_consecutive_breakdowns"
+        elif key == "pendingUrlRequestThreshold":
+            suggest = "pending_url_request_threshold"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DedicatedDomainConnectionProtection. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DedicatedDomainConnectionProtection.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DedicatedDomainConnectionProtection.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 duration: Optional[int] = None,
+                 error_percentage: Optional[float] = None,
+                 error_threshold: Optional[int] = None,
+                 initial_downtime: Optional[int] = None,
+                 multiplier_for_consecutive_breakdowns: Optional[int] = None,
+                 pending_url_request_threshold: Optional[int] = None,
+                 status: Optional[bool] = None):
+        """
+        :param int duration: Specifies the protection duration (s) for connection protection. During this period, WAF
+               stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+        :param float error_percentage: Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+               when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+        :param int error_threshold: Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+               from `0` to `2,147,483,647`.
+        :param int initial_downtime: Specifies the breakdown duration (s) when the breakdown is triggered for the first
+               time. Valid value ranges from `0` to `2,147,483,647`.
+        :param int multiplier_for_consecutive_breakdowns: Specifies the maximum multiplier for consecutive breakdowns
+               that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+               For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+               protection is triggered for the second time, the website downtime is 360s (180s X 2).
+               If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+               The breakdowns are calculated every one hour.
+        :param int pending_url_request_threshold: Specifies the pending URL request threshold. Connection protection
+               is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+               `2,147,483,647`.
+        :param bool status: Specifies whether to enable connection protection. Defaults to **false**.
+        """
+        if duration is not None:
+            pulumi.set(__self__, "duration", duration)
+        if error_percentage is not None:
+            pulumi.set(__self__, "error_percentage", error_percentage)
+        if error_threshold is not None:
+            pulumi.set(__self__, "error_threshold", error_threshold)
+        if initial_downtime is not None:
+            pulumi.set(__self__, "initial_downtime", initial_downtime)
+        if multiplier_for_consecutive_breakdowns is not None:
+            pulumi.set(__self__, "multiplier_for_consecutive_breakdowns", multiplier_for_consecutive_breakdowns)
+        if pending_url_request_threshold is not None:
+            pulumi.set(__self__, "pending_url_request_threshold", pending_url_request_threshold)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter
+    def duration(self) -> Optional[int]:
+        """
+        Specifies the protection duration (s) for connection protection. During this period, WAF
+        stops forwarding website requests. Valid value ranges from `0` to `2,147,483,647`.
+        """
+        return pulumi.get(self, "duration")
+
+    @property
+    @pulumi.getter(name="errorPercentage")
+    def error_percentage(self) -> Optional[float]:
+        """
+        Specifies the `502`/`504` error percentage. A breakdown protection is triggered
+        when the `502`/`504` error threshold and percentage threshold have been reached. Valid value ranges from `0` to `99`.
+        """
+        return pulumi.get(self, "error_percentage")
+
+    @property
+    @pulumi.getter(name="errorThreshold")
+    def error_threshold(self) -> Optional[int]:
+        """
+        Specifies the `502`/`504` error threshold for every 30 seconds. Valid value ranges
+        from `0` to `2,147,483,647`.
+        """
+        return pulumi.get(self, "error_threshold")
+
+    @property
+    @pulumi.getter(name="initialDowntime")
+    def initial_downtime(self) -> Optional[int]:
+        """
+        Specifies the breakdown duration (s) when the breakdown is triggered for the first
+        time. Valid value ranges from `0` to `2,147,483,647`.
+        """
+        return pulumi.get(self, "initial_downtime")
+
+    @property
+    @pulumi.getter(name="multiplierForConsecutiveBreakdowns")
+    def multiplier_for_consecutive_breakdowns(self) -> Optional[int]:
+        """
+        Specifies the maximum multiplier for consecutive breakdowns
+        that occur within an hour. Valid value ranges from `0` to `2,147,483,647`.
+        For example: Assume that you set the initial downtime to `180s` and the maximum multiplier to `3`. If the breakdown
+        protection is triggered for the second time, the website downtime is 360s (180s X 2).
+        If the breakdown protection is triggered for the third or fourth time, the website downtime is 540s (180s x 3).
+        The breakdowns are calculated every one hour.
+        """
+        return pulumi.get(self, "multiplier_for_consecutive_breakdowns")
+
+    @property
+    @pulumi.getter(name="pendingUrlRequestThreshold")
+    def pending_url_request_threshold(self) -> Optional[int]:
+        """
+        Specifies the pending URL request threshold. Connection protection
+        is triggered when the number of read URL requests reaches the threshold you configure. Valid value ranges from `0` to
+        `2,147,483,647`.
+        """
+        return pulumi.get(self, "pending_url_request_threshold")
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[bool]:
+        """
+        Specifies whether to enable connection protection. Defaults to **false**.
+        """
+        return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class DedicatedDomainCustomPage(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "blockPageType":
+            suggest = "block_page_type"
+        elif key == "httpReturnCode":
+            suggest = "http_return_code"
+        elif key == "pageContent":
+            suggest = "page_content"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DedicatedDomainCustomPage. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DedicatedDomainCustomPage.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DedicatedDomainCustomPage.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 block_page_type: str,
+                 http_return_code: str,
+                 page_content: str):
+        """
+        :param str block_page_type: Specifies the content type of the custom alarm page.
+               The value can be **text/html**, **text/xml** or **application/json**.
+        :param str http_return_code: Specifies the HTTP return code.
+               The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+        :param str page_content: Specifies the page content. The page content based on the selected page type.
+               The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+               can be available.
+        """
+        pulumi.set(__self__, "block_page_type", block_page_type)
+        pulumi.set(__self__, "http_return_code", http_return_code)
+        pulumi.set(__self__, "page_content", page_content)
+
+    @property
+    @pulumi.getter(name="blockPageType")
+    def block_page_type(self) -> str:
+        """
+        Specifies the content type of the custom alarm page.
+        The value can be **text/html**, **text/xml** or **application/json**.
+        """
+        return pulumi.get(self, "block_page_type")
+
+    @property
+    @pulumi.getter(name="httpReturnCode")
+    def http_return_code(self) -> str:
+        """
+        Specifies the HTTP return code.
+        The value can be a positive integer in the range of `200`-`599` except `408`, `444` and `499`.
+        """
+        return pulumi.get(self, "http_return_code")
+
+    @property
+    @pulumi.getter(name="pageContent")
+    def page_content(self) -> str:
+        """
+        Specifies the page content. The page content based on the selected page type.
+        The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+        can be available.
+        """
+        return pulumi.get(self, "page_content")
+
 
 @pulumi.output_type
 class DedicatedDomainServer(dict):
@@ -54,17 +270,17 @@ class DedicatedDomainServer(dict):
                  type: str,
                  vpc_id: str):
         """
-        :param str address: IP address or domain name of the web server that the client accesses. For
-               example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
-        :param str client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
-               Changing this creates a new service.
-        :param int port: Port number used by the web server. The value ranges from 0 to 65535. Changing this
-               creates a new service.
-        :param str server_protocol: Protocol used by WAF to forward client requests to the server. The
-               options include `HTTP` and `HTTPS`. Changing this creates a new service.
-        :param str type: Server network type, IPv4 or IPv6. Valid values are: `ipv4` and `ipv6`. Changing
-               this creates a new service.
-        :param str vpc_id: The id of the vpc used by the server. Changing this creates a service.
+        :param str address: Specifies the IP address or domain name of the web server accessed by the
+               client. For example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
+        :param str client_protocol: Specifies the protocol type of the client. The options include **HTTP**
+               and **HTTPS**. Changing this creates a new service.
+        :param int port: Specifies the port number used by the web server. The value ranges from `0` to
+               `65,535`. Changing this creates a new service.
+        :param str server_protocol: Specifies the protocol used by WAF to forward client requests to the
+               server. The valid values are **HTTP** and **HTTPS**. Changing this creates a new service.
+        :param str type: Specifies the server network type, IPv4 or IPv6.
+               Valid values are **ipv4** and **ipv6**. Changing this creates a new service.
+        :param str vpc_id: Specifies the ID of the VPC used by the server. Changing this creates a service.
         """
         pulumi.set(__self__, "address", address)
         pulumi.set(__self__, "client_protocol", client_protocol)
@@ -77,8 +293,8 @@ class DedicatedDomainServer(dict):
     @pulumi.getter
     def address(self) -> str:
         """
-        IP address or domain name of the web server that the client accesses. For
-        example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
+        Specifies the IP address or domain name of the web server accessed by the
+        client. For example, `192.168.1.1` or `www.example.com`. Changing this creates a new service.
         """
         return pulumi.get(self, "address")
 
@@ -86,8 +302,8 @@ class DedicatedDomainServer(dict):
     @pulumi.getter(name="clientProtocol")
     def client_protocol(self) -> str:
         """
-        Protocol type of the client. The options include `HTTP` and `HTTPS`.
-        Changing this creates a new service.
+        Specifies the protocol type of the client. The options include **HTTP**
+        and **HTTPS**. Changing this creates a new service.
         """
         return pulumi.get(self, "client_protocol")
 
@@ -95,8 +311,8 @@ class DedicatedDomainServer(dict):
     @pulumi.getter
     def port(self) -> int:
         """
-        Port number used by the web server. The value ranges from 0 to 65535. Changing this
-        creates a new service.
+        Specifies the port number used by the web server. The value ranges from `0` to
+        `65,535`. Changing this creates a new service.
         """
         return pulumi.get(self, "port")
 
@@ -104,8 +320,8 @@ class DedicatedDomainServer(dict):
     @pulumi.getter(name="serverProtocol")
     def server_protocol(self) -> str:
         """
-        Protocol used by WAF to forward client requests to the server. The
-        options include `HTTP` and `HTTPS`. Changing this creates a new service.
+        Specifies the protocol used by WAF to forward client requests to the
+        server. The valid values are **HTTP** and **HTTPS**. Changing this creates a new service.
         """
         return pulumi.get(self, "server_protocol")
 
@@ -113,8 +329,8 @@ class DedicatedDomainServer(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Server network type, IPv4 or IPv6. Valid values are: `ipv4` and `ipv6`. Changing
-        this creates a new service.
+        Specifies the server network type, IPv4 or IPv6.
+        Valid values are **ipv4** and **ipv6**. Changing this creates a new service.
         """
         return pulumi.get(self, "type")
 
@@ -122,9 +338,230 @@ class DedicatedDomainServer(dict):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> str:
         """
-        The id of the vpc used by the server. Changing this creates a service.
+        Specifies the ID of the VPC used by the server. Changing this creates a service.
         """
         return pulumi.get(self, "vpc_id")
+
+
+@pulumi.output_type
+class DedicatedDomainTimeoutSettings(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "connectionTimeout":
+            suggest = "connection_timeout"
+        elif key == "readTimeout":
+            suggest = "read_timeout"
+        elif key == "writeTimeout":
+            suggest = "write_timeout"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DedicatedDomainTimeoutSettings. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DedicatedDomainTimeoutSettings.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DedicatedDomainTimeoutSettings.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 connection_timeout: Optional[int] = None,
+                 read_timeout: Optional[int] = None,
+                 write_timeout: Optional[int] = None):
+        """
+        :param int connection_timeout: Specifies the timeout for WAF to connect to the origin server. The unit is second.
+               Valid value ranges from `0` to `180`.
+        :param int read_timeout: Specifies the timeout for WAF to receive responses from the origin server.
+               The unit is second. Valid value ranges from `0` to `3,600`.
+        :param int write_timeout: Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+               Valid value ranges from `0` to `3,600`.
+        """
+        if connection_timeout is not None:
+            pulumi.set(__self__, "connection_timeout", connection_timeout)
+        if read_timeout is not None:
+            pulumi.set(__self__, "read_timeout", read_timeout)
+        if write_timeout is not None:
+            pulumi.set(__self__, "write_timeout", write_timeout)
+
+    @property
+    @pulumi.getter(name="connectionTimeout")
+    def connection_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to connect to the origin server. The unit is second.
+        Valid value ranges from `0` to `180`.
+        """
+        return pulumi.get(self, "connection_timeout")
+
+    @property
+    @pulumi.getter(name="readTimeout")
+    def read_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to receive responses from the origin server.
+        The unit is second. Valid value ranges from `0` to `3,600`.
+        """
+        return pulumi.get(self, "read_timeout")
+
+    @property
+    @pulumi.getter(name="writeTimeout")
+    def write_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+        Valid value ranges from `0` to `3,600`.
+        """
+        return pulumi.get(self, "write_timeout")
+
+
+@pulumi.output_type
+class DedicatedDomainTrafficMark(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipTags":
+            suggest = "ip_tags"
+        elif key == "sessionTag":
+            suggest = "session_tag"
+        elif key == "userTag":
+            suggest = "user_tag"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DedicatedDomainTrafficMark. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DedicatedDomainTrafficMark.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DedicatedDomainTrafficMark.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ip_tags: Optional[Sequence[str]] = None,
+                 session_tag: Optional[str] = None,
+                 user_tag: Optional[str] = None):
+        """
+        :param Sequence[str] ip_tags: Specifies the IP tags. HTTP request header field of the original client IP address.
+               This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+               configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+               address list in order. Note:
+               + If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+               + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+               `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+        :param str session_tag: Specifies the session tag. This tag is used by known attack source rules to block
+               malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+               requests based on cookie attributes.
+        :param str user_tag: Specifies the user tag. This tag is used by known attack source rules to block malicious
+               attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+        """
+        if ip_tags is not None:
+            pulumi.set(__self__, "ip_tags", ip_tags)
+        if session_tag is not None:
+            pulumi.set(__self__, "session_tag", session_tag)
+        if user_tag is not None:
+            pulumi.set(__self__, "user_tag", user_tag)
+
+    @property
+    @pulumi.getter(name="ipTags")
+    def ip_tags(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the IP tags. HTTP request header field of the original client IP address.
+        This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+        configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+        address list in order. Note:
+        + If you want to use a TCP connection IP address as the client IP address, set IP Tag to `$remote_addr`.
+        + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the `cdn-src-ip`,
+        `x-real-ip`, `x-forwarded-for` and `$remote_addr` fields in sequence to read the client IP address.
+        """
+        return pulumi.get(self, "ip_tags")
+
+    @property
+    @pulumi.getter(name="sessionTag")
+    def session_tag(self) -> Optional[str]:
+        """
+        Specifies the session tag. This tag is used by known attack source rules to block
+        malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+        requests based on cookie attributes.
+        """
+        return pulumi.get(self, "session_tag")
+
+    @property
+    @pulumi.getter(name="userTag")
+    def user_tag(self) -> Optional[str]:
+        """
+        Specifies the user tag. This tag is used by known attack source rules to block malicious
+        attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+        """
+        return pulumi.get(self, "user_tag")
+
+
+@pulumi.output_type
+class DomainCustomPage(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "blockPageType":
+            suggest = "block_page_type"
+        elif key == "httpReturnCode":
+            suggest = "http_return_code"
+        elif key == "pageContent":
+            suggest = "page_content"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DomainCustomPage. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DomainCustomPage.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DomainCustomPage.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 block_page_type: str,
+                 http_return_code: str,
+                 page_content: str):
+        """
+        :param str block_page_type: Specifies the content type of the custom alarm page.
+               The value can be **text/html**, **text/xml** or **application/json**.
+        :param str http_return_code: Specifies the HTTP return code.
+               The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+        :param str page_content: Specifies the page content. The page content based on the selected page type.
+               The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+               can be available.
+        """
+        pulumi.set(__self__, "block_page_type", block_page_type)
+        pulumi.set(__self__, "http_return_code", http_return_code)
+        pulumi.set(__self__, "page_content", page_content)
+
+    @property
+    @pulumi.getter(name="blockPageType")
+    def block_page_type(self) -> str:
+        """
+        Specifies the content type of the custom alarm page.
+        The value can be **text/html**, **text/xml** or **application/json**.
+        """
+        return pulumi.get(self, "block_page_type")
+
+    @property
+    @pulumi.getter(name="httpReturnCode")
+    def http_return_code(self) -> str:
+        """
+        Specifies the HTTP return code.
+        The value can be a positive integer in the range of `200` to `599` except `408`, `444` and `499`.
+        """
+        return pulumi.get(self, "http_return_code")
+
+    @property
+    @pulumi.getter(name="pageContent")
+    def page_content(self) -> str:
+        """
+        Specifies the page content. The page content based on the selected page type.
+        The available **${waf_event_id}** in the page content indicates an event ID, and only one **${waf_event_id}** variable
+        can be available.
+        """
+        return pulumi.get(self, "page_content")
 
 
 @pulumi.output_type
@@ -152,26 +589,37 @@ class DomainServer(dict):
                  address: str,
                  client_protocol: str,
                  port: int,
-                 server_protocol: str):
+                 server_protocol: str,
+                 type: Optional[str] = None,
+                 weight: Optional[int] = None):
         """
-        :param str address: IP address or domain name of the web server that the client accesses. For example,
-               `192.168.1.1` or `www.a.com`.
-        :param str client_protocol: Protocol type of the client. The options include `HTTP` and `HTTPS`.
-        :param int port: Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
-        :param str server_protocol: Protocol used by WAF to forward client requests to the server. The options
-               include `HTTP` and `HTTPS`.
+        :param str address: Specifies the IP address or domain name of the web server that the client accesses.
+        :param str client_protocol: Specifies the protocol type of the client. The options include **HTTP** and **HTTPS**.
+        :param int port: Specifies the port number used by the web server. The value ranges from `0` to `65,535`,
+               for example, `8,080`.
+        :param str server_protocol: Specifies the protocol used by WAF to forward client requests to the server.
+               The options include **HTTP** and **HTTPS**.
+        :param str type: Specifies the server network type. Valid values are: **ipv4** and **ipv6**.
+               + When this field is set to **ipv4**, `address` must be set to an IPv4 address.
+               + When this field is set to **ipv6**, `address` must be set to an IPv6 address.
+        :param int weight: Specifies the load balancing algorithm will assign requests to the origin
+               site according to this weight.
+               Defaults to `1`.
         """
         pulumi.set(__self__, "address", address)
         pulumi.set(__self__, "client_protocol", client_protocol)
         pulumi.set(__self__, "port", port)
         pulumi.set(__self__, "server_protocol", server_protocol)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+        if weight is not None:
+            pulumi.set(__self__, "weight", weight)
 
     @property
     @pulumi.getter
     def address(self) -> str:
         """
-        IP address or domain name of the web server that the client accesses. For example,
-        `192.168.1.1` or `www.a.com`.
+        Specifies the IP address or domain name of the web server that the client accesses.
         """
         return pulumi.get(self, "address")
 
@@ -179,7 +627,7 @@ class DomainServer(dict):
     @pulumi.getter(name="clientProtocol")
     def client_protocol(self) -> str:
         """
-        Protocol type of the client. The options include `HTTP` and `HTTPS`.
+        Specifies the protocol type of the client. The options include **HTTP** and **HTTPS**.
         """
         return pulumi.get(self, "client_protocol")
 
@@ -187,7 +635,8 @@ class DomainServer(dict):
     @pulumi.getter
     def port(self) -> int:
         """
-        Port number used by the web server. The value ranges from 0 to 65535, for example, 8080.
+        Specifies the port number used by the web server. The value ranges from `0` to `65,535`,
+        for example, `8,080`.
         """
         return pulumi.get(self, "port")
 
@@ -195,10 +644,260 @@ class DomainServer(dict):
     @pulumi.getter(name="serverProtocol")
     def server_protocol(self) -> str:
         """
-        Protocol used by WAF to forward client requests to the server. The options
-        include `HTTP` and `HTTPS`.
+        Specifies the protocol used by WAF to forward client requests to the server.
+        The options include **HTTP** and **HTTPS**.
         """
         return pulumi.get(self, "server_protocol")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        Specifies the server network type. Valid values are: **ipv4** and **ipv6**.
+        + When this field is set to **ipv4**, `address` must be set to an IPv4 address.
+        + When this field is set to **ipv6**, `address` must be set to an IPv6 address.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter
+    def weight(self) -> Optional[int]:
+        """
+        Specifies the load balancing algorithm will assign requests to the origin
+        site according to this weight.
+        Defaults to `1`.
+        """
+        return pulumi.get(self, "weight")
+
+
+@pulumi.output_type
+class DomainTimeoutSettings(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "connectionTimeout":
+            suggest = "connection_timeout"
+        elif key == "readTimeout":
+            suggest = "read_timeout"
+        elif key == "writeTimeout":
+            suggest = "write_timeout"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DomainTimeoutSettings. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DomainTimeoutSettings.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DomainTimeoutSettings.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 connection_timeout: Optional[int] = None,
+                 read_timeout: Optional[int] = None,
+                 write_timeout: Optional[int] = None):
+        """
+        :param int connection_timeout: Specifies the timeout for WAF to connect to the origin server. The unit is second.
+               Valid value ranges from `0` to `180`.
+        :param int read_timeout: Specifies the timeout for WAF to receive responses from the origin server.
+               The unit is second. Valid value ranges from `0` to `3,600`.
+        :param int write_timeout: Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+               Valid value ranges from `0` to `3,600`.
+        """
+        if connection_timeout is not None:
+            pulumi.set(__self__, "connection_timeout", connection_timeout)
+        if read_timeout is not None:
+            pulumi.set(__self__, "read_timeout", read_timeout)
+        if write_timeout is not None:
+            pulumi.set(__self__, "write_timeout", write_timeout)
+
+    @property
+    @pulumi.getter(name="connectionTimeout")
+    def connection_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to connect to the origin server. The unit is second.
+        Valid value ranges from `0` to `180`.
+        """
+        return pulumi.get(self, "connection_timeout")
+
+    @property
+    @pulumi.getter(name="readTimeout")
+    def read_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to receive responses from the origin server.
+        The unit is second. Valid value ranges from `0` to `3,600`.
+        """
+        return pulumi.get(self, "read_timeout")
+
+    @property
+    @pulumi.getter(name="writeTimeout")
+    def write_timeout(self) -> Optional[int]:
+        """
+        Specifies the timeout for WAF to send requests to the origin server. The unit is second.
+        Valid value ranges from `0` to `3,600`.
+        """
+        return pulumi.get(self, "write_timeout")
+
+
+@pulumi.output_type
+class DomainTrafficMark(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "ipTags":
+            suggest = "ip_tags"
+        elif key == "sessionTag":
+            suggest = "session_tag"
+        elif key == "userTag":
+            suggest = "user_tag"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in DomainTrafficMark. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        DomainTrafficMark.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        DomainTrafficMark.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 ip_tags: Optional[Sequence[str]] = None,
+                 session_tag: Optional[str] = None,
+                 user_tag: Optional[str] = None):
+        """
+        :param Sequence[str] ip_tags: Specifies the IP tags. HTTP request header field of the original client IP address.
+               This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+               configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+               address list in order. Note:
+               + If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+               + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+               **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+               + When the website setting `proxy` is configured as **false**, this field does not take effect,
+               and the client IP is only obtained through the `$remote_addr` field.
+        :param str session_tag: Specifies the session tag. This tag is used by known attack source rules to block
+               malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+               requests based on cookie attributes.
+        :param str user_tag: Specifies the user tag. This tag is used by known attack source rules to block malicious
+               attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+        """
+        if ip_tags is not None:
+            pulumi.set(__self__, "ip_tags", ip_tags)
+        if session_tag is not None:
+            pulumi.set(__self__, "session_tag", session_tag)
+        if user_tag is not None:
+            pulumi.set(__self__, "user_tag", user_tag)
+
+    @property
+    @pulumi.getter(name="ipTags")
+    def ip_tags(self) -> Optional[Sequence[str]]:
+        """
+        Specifies the IP tags. HTTP request header field of the original client IP address.
+        This field is used to store the real IP address of the client. After the configuration, WAF preferentially reads the
+        configured field to obtain the real IP address of the client. If multiple fields are configured, WAF reads the IP
+        address list in order. Note:
+        + If you want to use a TCP connection IP address as the client IP address, set IP Tag to **$remote_addr**.
+        + If WAF does not obtain the real IP address of a client from fields you configure, WAF reads the **cdn-src-ip**,
+        **x-real-ip**, **x-forwarded-for** and **$remote_addr** fields in sequence to read the client IP address.
+        + When the website setting `proxy` is configured as **false**, this field does not take effect,
+        and the client IP is only obtained through the `$remote_addr` field.
+        """
+        return pulumi.get(self, "ip_tags")
+
+    @property
+    @pulumi.getter(name="sessionTag")
+    def session_tag(self) -> Optional[str]:
+        """
+        Specifies the session tag. This tag is used by known attack source rules to block
+        malicious attacks based on cookie attributes. This parameter must be configured in known attack source rules to block
+        requests based on cookie attributes.
+        """
+        return pulumi.get(self, "session_tag")
+
+    @property
+    @pulumi.getter(name="userTag")
+    def user_tag(self) -> Optional[str]:
+        """
+        Specifies the user tag. This tag is used by known attack source rules to block malicious
+        attacks based on params attributes. This parameter must be configured to block requests based on the params attributes.
+        """
+        return pulumi.get(self, "user_tag")
+
+
+@pulumi.output_type
+class PolicyBindHost(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "wafType":
+            suggest = "waf_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in PolicyBindHost. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        PolicyBindHost.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        PolicyBindHost.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 hostname: Optional[str] = None,
+                 id: Optional[str] = None,
+                 mode: Optional[str] = None,
+                 waf_type: Optional[str] = None):
+        """
+        :param str hostname: The domain name.
+        :param str id: The domain name ID.
+        :param str mode: The special domain name mode. This attribute is only valid for dedicated mode.
+        :param str waf_type: The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+               cloud WAF or **premium** for dedicated WAF instances.
+        """
+        if hostname is not None:
+            pulumi.set(__self__, "hostname", hostname)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if mode is not None:
+            pulumi.set(__self__, "mode", mode)
+        if waf_type is not None:
+            pulumi.set(__self__, "waf_type", waf_type)
+
+    @property
+    @pulumi.getter
+    def hostname(self) -> Optional[str]:
+        """
+        The domain name.
+        """
+        return pulumi.get(self, "hostname")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        The domain name ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def mode(self) -> Optional[str]:
+        """
+        The special domain name mode. This attribute is only valid for dedicated mode.
+        """
+        return pulumi.get(self, "mode")
+
+    @property
+    @pulumi.getter(name="wafType")
+    def waf_type(self) -> Optional[str]:
+        """
+        The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+        cloud WAF or **premium** for dedicated WAF instances.
+        """
+        return pulumi.get(self, "waf_type")
 
 
 @pulumi.output_type
@@ -206,8 +905,12 @@ class PolicyOption(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "basicWebProtection":
+        if key == "antiCrawler":
+            suggest = "anti_crawler"
+        elif key == "basicWebProtection":
             suggest = "basic_web_protection"
+        elif key == "botEnable":
+            suggest = "bot_enable"
         elif key == "ccAttackProtection":
             suggest = "cc_attack_protection"
         elif key == "crawlerEngine":
@@ -224,6 +927,12 @@ class PolicyOption(dict):
             suggest = "false_alarm_masking"
         elif key == "generalCheck":
             suggest = "general_check"
+        elif key == "geolocationAccessControl":
+            suggest = "geolocation_access_control"
+        elif key == "informationLeakagePrevention":
+            suggest = "information_leakage_prevention"
+        elif key == "knownAttackSource":
+            suggest = "known_attack_source"
         elif key == "preciseProtection":
             suggest = "precise_protection"
         elif key == "webTamperProtection":
@@ -241,8 +950,10 @@ class PolicyOption(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 anti_crawler: Optional[bool] = None,
                  basic_web_protection: Optional[bool] = None,
                  blacklist: Optional[bool] = None,
+                 bot_enable: Optional[bool] = None,
                  cc_attack_protection: Optional[bool] = None,
                  crawler: Optional[bool] = None,
                  crawler_engine: Optional[bool] = None,
@@ -252,29 +963,47 @@ class PolicyOption(dict):
                  data_masking: Optional[bool] = None,
                  false_alarm_masking: Optional[bool] = None,
                  general_check: Optional[bool] = None,
+                 geolocation_access_control: Optional[bool] = None,
+                 information_leakage_prevention: Optional[bool] = None,
+                 known_attack_source: Optional[bool] = None,
                  precise_protection: Optional[bool] = None,
                  web_tamper_protection: Optional[bool] = None,
                  webshell: Optional[bool] = None):
         """
-        :param bool basic_web_protection: Indicates whether Basic Web Protection is enabled.
-        :param bool blacklist: Indicates whether Blacklist and Whitelist is enabled.
-        :param bool cc_attack_protection: Indicates whether CC Attack Protection is enabled.
-        :param bool crawler: Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-        :param bool crawler_engine: Indicates whether the Search Engine switch in Basic Web Protection is enabled.
-        :param bool crawler_other: Indicates whether detection of other crawlers in Basic Web Protection is enabled.
-        :param bool crawler_scanner: Indicates whether the Scanner switch in Basic Web Protection is enabled.
-        :param bool crawler_script: Indicates whether the Script Tool switch in Basic Web Protection is enabled.
-        :param bool data_masking: Indicates whether Data Masking is enabled.
-        :param bool false_alarm_masking: Indicates whether False Alarm Masking is enabled.
-        :param bool general_check: Indicates whether General Check in Basic Web Protection is enabled.
-        :param bool precise_protection: Indicates whether Precise Protection is enabled.
-        :param bool web_tamper_protection: Indicates whether Web Tamper Protection is enabled.
-        :param bool webshell: Indicates whether webshell detection in Basic Web Protection is enabled.
+        :param bool anti_crawler: Specifies whether the javascript anti-crawler is enabled. Defaults to **false**.
+        :param bool basic_web_protection: Specifies whether basic web protection is enabled. Defaults to **false**.
+        :param bool blacklist: Specifies whether the blacklist and whitelist protection is enabled.
+               Defaults to **false**.
+        :param bool bot_enable: Specifies whether the anti-crawler protection is enabled. Defaults to **false**.
+        :param bool cc_attack_protection: Specifies whether the cc attack protection rules are enabled.
+               Defaults to **false**.
+        :param bool crawler_engine: Specifies whether the search engine is enabled. Defaults to **false**.
+        :param bool crawler_other: Specifies whether other crawler check is enabled. Defaults to **false**.
+        :param bool crawler_scanner: Specifies whether the anti-crawler detection is enabled. Defaults to **false**.
+        :param bool crawler_script: Specifies whether the script tool is enabled. Defaults to **false**.
+        :param bool data_masking: Specifies whether data masking is enabled. Defaults to **false**.
+        :param bool false_alarm_masking: Specifies whether false alarm masking is enabled. Defaults to **false**.
+        :param bool general_check: Specifies whether the general check in basic web protection is enabled.
+               Defaults to **false**.
+        :param bool geolocation_access_control: Specifies whether the geolocation access control is enabled.
+               Defaults to **false**.
+        :param bool information_leakage_prevention: Specifies whether the information leakage prevention is enabled.
+               Defaults to **false**.
+        :param bool known_attack_source: Specifies whether the known attack source is enabled. Defaults to **false**.
+        :param bool precise_protection: Specifies whether the precise protection is enabled. Defaults to **false**.
+        :param bool web_tamper_protection: Specifies whether the web tamper protection is enabled.
+               Defaults to **false**.
+        :param bool webshell: Specifies whether the web shell detection in basic web protection is enabled.
+               Defaults to **false**.
         """
+        if anti_crawler is not None:
+            pulumi.set(__self__, "anti_crawler", anti_crawler)
         if basic_web_protection is not None:
             pulumi.set(__self__, "basic_web_protection", basic_web_protection)
         if blacklist is not None:
             pulumi.set(__self__, "blacklist", blacklist)
+        if bot_enable is not None:
+            pulumi.set(__self__, "bot_enable", bot_enable)
         if cc_attack_protection is not None:
             pulumi.set(__self__, "cc_attack_protection", cc_attack_protection)
         if crawler is not None:
@@ -293,6 +1022,12 @@ class PolicyOption(dict):
             pulumi.set(__self__, "false_alarm_masking", false_alarm_masking)
         if general_check is not None:
             pulumi.set(__self__, "general_check", general_check)
+        if geolocation_access_control is not None:
+            pulumi.set(__self__, "geolocation_access_control", geolocation_access_control)
+        if information_leakage_prevention is not None:
+            pulumi.set(__self__, "information_leakage_prevention", information_leakage_prevention)
+        if known_attack_source is not None:
+            pulumi.set(__self__, "known_attack_source", known_attack_source)
         if precise_protection is not None:
             pulumi.set(__self__, "precise_protection", precise_protection)
         if web_tamper_protection is not None:
@@ -301,10 +1036,18 @@ class PolicyOption(dict):
             pulumi.set(__self__, "webshell", webshell)
 
     @property
+    @pulumi.getter(name="antiCrawler")
+    def anti_crawler(self) -> Optional[bool]:
+        """
+        Specifies whether the javascript anti-crawler is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "anti_crawler")
+
+    @property
     @pulumi.getter(name="basicWebProtection")
     def basic_web_protection(self) -> Optional[bool]:
         """
-        Indicates whether Basic Web Protection is enabled.
+        Specifies whether basic web protection is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "basic_web_protection")
 
@@ -312,31 +1055,38 @@ class PolicyOption(dict):
     @pulumi.getter
     def blacklist(self) -> Optional[bool]:
         """
-        Indicates whether Blacklist and Whitelist is enabled.
+        Specifies whether the blacklist and whitelist protection is enabled.
+        Defaults to **false**.
         """
         return pulumi.get(self, "blacklist")
+
+    @property
+    @pulumi.getter(name="botEnable")
+    def bot_enable(self) -> Optional[bool]:
+        """
+        Specifies whether the anti-crawler protection is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "bot_enable")
 
     @property
     @pulumi.getter(name="ccAttackProtection")
     def cc_attack_protection(self) -> Optional[bool]:
         """
-        Indicates whether CC Attack Protection is enabled.
+        Specifies whether the cc attack protection rules are enabled.
+        Defaults to **false**.
         """
         return pulumi.get(self, "cc_attack_protection")
 
     @property
     @pulumi.getter
     def crawler(self) -> Optional[bool]:
-        """
-        Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-        """
         return pulumi.get(self, "crawler")
 
     @property
     @pulumi.getter(name="crawlerEngine")
     def crawler_engine(self) -> Optional[bool]:
         """
-        Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+        Specifies whether the search engine is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "crawler_engine")
 
@@ -344,7 +1094,7 @@ class PolicyOption(dict):
     @pulumi.getter(name="crawlerOther")
     def crawler_other(self) -> Optional[bool]:
         """
-        Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+        Specifies whether other crawler check is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "crawler_other")
 
@@ -352,7 +1102,7 @@ class PolicyOption(dict):
     @pulumi.getter(name="crawlerScanner")
     def crawler_scanner(self) -> Optional[bool]:
         """
-        Indicates whether the Scanner switch in Basic Web Protection is enabled.
+        Specifies whether the anti-crawler detection is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "crawler_scanner")
 
@@ -360,7 +1110,7 @@ class PolicyOption(dict):
     @pulumi.getter(name="crawlerScript")
     def crawler_script(self) -> Optional[bool]:
         """
-        Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+        Specifies whether the script tool is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "crawler_script")
 
@@ -368,7 +1118,7 @@ class PolicyOption(dict):
     @pulumi.getter(name="dataMasking")
     def data_masking(self) -> Optional[bool]:
         """
-        Indicates whether Data Masking is enabled.
+        Specifies whether data masking is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "data_masking")
 
@@ -376,7 +1126,7 @@ class PolicyOption(dict):
     @pulumi.getter(name="falseAlarmMasking")
     def false_alarm_masking(self) -> Optional[bool]:
         """
-        Indicates whether False Alarm Masking is enabled.
+        Specifies whether false alarm masking is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "false_alarm_masking")
 
@@ -384,15 +1134,42 @@ class PolicyOption(dict):
     @pulumi.getter(name="generalCheck")
     def general_check(self) -> Optional[bool]:
         """
-        Indicates whether General Check in Basic Web Protection is enabled.
+        Specifies whether the general check in basic web protection is enabled.
+        Defaults to **false**.
         """
         return pulumi.get(self, "general_check")
+
+    @property
+    @pulumi.getter(name="geolocationAccessControl")
+    def geolocation_access_control(self) -> Optional[bool]:
+        """
+        Specifies whether the geolocation access control is enabled.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "geolocation_access_control")
+
+    @property
+    @pulumi.getter(name="informationLeakagePrevention")
+    def information_leakage_prevention(self) -> Optional[bool]:
+        """
+        Specifies whether the information leakage prevention is enabled.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "information_leakage_prevention")
+
+    @property
+    @pulumi.getter(name="knownAttackSource")
+    def known_attack_source(self) -> Optional[bool]:
+        """
+        Specifies whether the known attack source is enabled. Defaults to **false**.
+        """
+        return pulumi.get(self, "known_attack_source")
 
     @property
     @pulumi.getter(name="preciseProtection")
     def precise_protection(self) -> Optional[bool]:
         """
-        Indicates whether Precise Protection is enabled.
+        Specifies whether the precise protection is enabled. Defaults to **false**.
         """
         return pulumi.get(self, "precise_protection")
 
@@ -400,7 +1177,8 @@ class PolicyOption(dict):
     @pulumi.getter(name="webTamperProtection")
     def web_tamper_protection(self) -> Optional[bool]:
         """
-        Indicates whether Web Tamper Protection is enabled.
+        Specifies whether the web tamper protection is enabled.
+        Defaults to **false**.
         """
         return pulumi.get(self, "web_tamper_protection")
 
@@ -408,7 +1186,8 @@ class PolicyOption(dict):
     @pulumi.getter
     def webshell(self) -> Optional[bool]:
         """
-        Indicates whether webshell detection in Basic Web Protection is enabled.
+        Specifies whether the web shell detection in basic web protection is enabled.
+        Defaults to **false**.
         """
         return pulumi.get(self, "webshell")
 
@@ -432,19 +1211,18 @@ class GetDedicatedInstancesInstanceResult(dict):
                  vpc_id: str):
         """
         :param int access_status: The access status of the instance. `0`: inaccessible, `1`: accessible.
-        :param str available_zone: The available zone names for the WAF dedicated instances.
-        :param str cpu_architecture: The ECS cpu architecture of WAF dedicated instance.
+        :param str available_zone: The available zone name of the WAF dedicated instance.
+        :param str cpu_architecture: The ECS CPU architecture of WAF dedicated instance.
         :param str ecs_flavor: The flavor of the ECS used by the WAF instance.
-        :param str group_id: The instance group ID used by the WAF dedicated instance in ELB mode.
-        :param str id: The id of WAF dedicated instance.
-        :param str name: The name of WAF dedicated instance.
+        :param str id: Specifies the ID of WAF dedicated instance.
+        :param str name: Specifies the name of WAF dedicated instance.
         :param int run_status: The running status of the instance. Values are:
-        :param Sequence[str] security_groups: The security group of the instance. This is an array of security group ids.
-        :param str server_id: The service of the instance.
-        :param str service_ip: The service ip of the instance.
-        :param str subnet_id: The subnet id of WAF dedicated instance VPC.
-        :param int upgradable: The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
-        :param str vpc_id: The VPC id of WAF dedicated instance.
+        :param Sequence[str] security_groups: The security group of the instance. This is an array of security group IDs.
+        :param str server_id: The ID of the ECS hosting the dedicated engine.
+        :param str service_ip: The service plane IP address of the dedicated WAF instance.
+        :param str subnet_id: The subnet ID of WAF dedicated instance VPC.
+        :param int upgradable: Whether the dedicated WAF instance can be upgraded. `0`: Cannot be upgraded; `1`: Can be upgraded.
+        :param str vpc_id: The VPC ID of WAF dedicated instance.
         """
         pulumi.set(__self__, "access_status", access_status)
         pulumi.set(__self__, "available_zone", available_zone)
@@ -473,7 +1251,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="availableZone")
     def available_zone(self) -> str:
         """
-        The available zone names for the WAF dedicated instances.
+        The available zone name of the WAF dedicated instance.
         """
         return pulumi.get(self, "available_zone")
 
@@ -481,7 +1259,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="cpuArchitecture")
     def cpu_architecture(self) -> str:
         """
-        The ECS cpu architecture of WAF dedicated instance.
+        The ECS CPU architecture of WAF dedicated instance.
         """
         return pulumi.get(self, "cpu_architecture")
 
@@ -496,16 +1274,13 @@ class GetDedicatedInstancesInstanceResult(dict):
     @property
     @pulumi.getter(name="groupId")
     def group_id(self) -> str:
-        """
-        The instance group ID used by the WAF dedicated instance in ELB mode.
-        """
         return pulumi.get(self, "group_id")
 
     @property
     @pulumi.getter
     def id(self) -> str:
         """
-        The id of WAF dedicated instance.
+        Specifies the ID of WAF dedicated instance.
         """
         return pulumi.get(self, "id")
 
@@ -513,7 +1288,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        The name of WAF dedicated instance.
+        Specifies the name of WAF dedicated instance.
         """
         return pulumi.get(self, "name")
 
@@ -529,7 +1304,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="securityGroups")
     def security_groups(self) -> Sequence[str]:
         """
-        The security group of the instance. This is an array of security group ids.
+        The security group of the instance. This is an array of security group IDs.
         """
         return pulumi.get(self, "security_groups")
 
@@ -537,7 +1312,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="serverId")
     def server_id(self) -> str:
         """
-        The service of the instance.
+        The ID of the ECS hosting the dedicated engine.
         """
         return pulumi.get(self, "server_id")
 
@@ -545,7 +1320,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="serviceIp")
     def service_ip(self) -> str:
         """
-        The service ip of the instance.
+        The service plane IP address of the dedicated WAF instance.
         """
         return pulumi.get(self, "service_ip")
 
@@ -553,7 +1328,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> str:
         """
-        The subnet id of WAF dedicated instance VPC.
+        The subnet ID of WAF dedicated instance VPC.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -561,7 +1336,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter
     def upgradable(self) -> int:
         """
-        The instance is to support upgrades. `0`: Cannot be upgraded, `1`: Can be upgraded.
+        Whether the dedicated WAF instance can be upgraded. `0`: Cannot be upgraded; `1`: Can be upgraded.
         """
         return pulumi.get(self, "upgradable")
 
@@ -569,7 +1344,7 @@ class GetDedicatedInstancesInstanceResult(dict):
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> str:
         """
-        The VPC id of WAF dedicated instance.
+        The VPC ID of WAF dedicated instance.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -589,20 +1364,6 @@ class GetInstanceGroupsGroupResult(dict):
                  region: str,
                  vpc_id: str,
                  write_timeout: int):
-        """
-        :param int body_limit: The body limit of the forwarding policy.
-        :param int connection_timeout: The time for connection timeout in the forwarding policy.
-        :param str description: Description of the instance group.
-        :param int header_limit: The header limit of the forwarding policy.
-        :param Sequence[str] load_balancers: The IDs of the ELB instances that has been bound to the instance group.
-        :param str name: The name of WAF instance group used for matching.
-               The value is not case-sensitive and supports fuzzy matching.
-        :param int read_timeout: The time for reading timeout in the forwarding policy.
-        :param str region: The region in which to obtain the WAF instance groups.
-               If omitted, the provider-level region will be used.
-        :param str vpc_id: The id of the VPC that the WAF dedicated instances belongs to.
-        :param int write_timeout: The time for writing timeout in the forwarding policy.
-        """
         pulumi.set(__self__, "body_limit", body_limit)
         pulumi.set(__self__, "connection_timeout", connection_timeout)
         pulumi.set(__self__, "dedicated_instances", dedicated_instances)
@@ -619,17 +1380,11 @@ class GetInstanceGroupsGroupResult(dict):
     @property
     @pulumi.getter(name="bodyLimit")
     def body_limit(self) -> int:
-        """
-        The body limit of the forwarding policy.
-        """
         return pulumi.get(self, "body_limit")
 
     @property
     @pulumi.getter(name="connectionTimeout")
     def connection_timeout(self) -> int:
-        """
-        The time for connection timeout in the forwarding policy.
-        """
         return pulumi.get(self, "connection_timeout")
 
     @property
@@ -640,9 +1395,6 @@ class GetInstanceGroupsGroupResult(dict):
     @property
     @pulumi.getter
     def description(self) -> str:
-        """
-        Description of the instance group.
-        """
         return pulumi.get(self, "description")
 
     @property
@@ -653,59 +1405,36 @@ class GetInstanceGroupsGroupResult(dict):
     @property
     @pulumi.getter(name="headerLimit")
     def header_limit(self) -> int:
-        """
-        The header limit of the forwarding policy.
-        """
         return pulumi.get(self, "header_limit")
 
     @property
     @pulumi.getter(name="loadBalancers")
     def load_balancers(self) -> Sequence[str]:
-        """
-        The IDs of the ELB instances that has been bound to the instance group.
-        """
         return pulumi.get(self, "load_balancers")
 
     @property
     @pulumi.getter
     def name(self) -> str:
-        """
-        The name of WAF instance group used for matching.
-        The value is not case-sensitive and supports fuzzy matching.
-        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter(name="readTimeout")
     def read_timeout(self) -> int:
-        """
-        The time for reading timeout in the forwarding policy.
-        """
         return pulumi.get(self, "read_timeout")
 
     @property
     @pulumi.getter
     def region(self) -> str:
-        """
-        The region in which to obtain the WAF instance groups.
-        If omitted, the provider-level region will be used.
-        """
         return pulumi.get(self, "region")
 
     @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> str:
-        """
-        The id of the VPC that the WAF dedicated instances belongs to.
-        """
         return pulumi.get(self, "vpc_id")
 
     @property
     @pulumi.getter(name="writeTimeout")
     def write_timeout(self) -> int:
-        """
-        The time for writing timeout in the forwarding policy.
-        """
         return pulumi.get(self, "write_timeout")
 
 
@@ -714,10 +1443,6 @@ class GetInstanceGroupsGroupDedicatedInstanceResult(dict):
     def __init__(__self__, *,
                  id: str,
                  name: str):
-        """
-        :param str name: The name of WAF instance group used for matching.
-               The value is not case-sensitive and supports fuzzy matching.
-        """
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "name", name)
 
@@ -729,10 +1454,6 @@ class GetInstanceGroupsGroupDedicatedInstanceResult(dict):
     @property
     @pulumi.getter
     def name(self) -> str:
-        """
-        The name of WAF instance group used for matching.
-        The value is not case-sensitive and supports fuzzy matching.
-        """
         return pulumi.get(self, "name")
 
 
@@ -741,10 +1462,6 @@ class GetInstanceGroupsGroupDomainNameResult(dict):
     def __init__(__self__, *,
                  id: str,
                  name: str):
-        """
-        :param str name: The name of WAF instance group used for matching.
-               The value is not case-sensitive and supports fuzzy matching.
-        """
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "name", name)
 
@@ -756,63 +1473,104 @@ class GetInstanceGroupsGroupDomainNameResult(dict):
     @property
     @pulumi.getter
     def name(self) -> str:
-        """
-        The name of WAF instance group used for matching.
-        The value is not case-sensitive and supports fuzzy matching.
-        """
         return pulumi.get(self, "name")
 
 
 @pulumi.output_type
 class GetPoliciesPolicyResult(dict):
     def __init__(__self__, *,
+                 bind_hosts: Sequence['outputs.GetPoliciesPolicyBindHostResult'],
+                 deep_inspection: bool,
                  full_detection: bool,
+                 header_inspection: bool,
                  id: str,
                  level: int,
                  name: str,
                  options: Sequence['outputs.GetPoliciesPolicyOptionResult'],
-                 protection_mode: str):
+                 protection_mode: str,
+                 robot_action: str,
+                 shiro_decryption_check: bool):
         """
-        :param bool full_detection: The detection mode in Precise Protection.
-               + `true`: full detection. Full detection finishes all threat detections before blocking requests that meet Precise
-               Protection specified conditions.
-               + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-               meets Precise Protection specified conditions.
-        :param str id: The WAF Policy ID.
-        :param int level: Specifies the protection level. Valid values are:
-               + `1`: low
-               + `2`: medium
-               + `3`: high
-        :param str name: Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+        :param Sequence['GetPoliciesPolicyBindHostArgs'] bind_hosts: The protection switches. The object structure is documented below.
+        :param bool deep_inspection: The deep inspection in basic web protection.
+        :param bool full_detection: The detection mode in precise protection.
+               + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+               checks and blocks the request immediately.
+               + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+               request immediately. Instead, it blocks the requests until other checks are finished.
+        :param bool header_inspection: The header inspection in basic web protection.
+        :param str id: The domain name ID.
+        :param int level: The protection level. Valid values are:
+               + **1**: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+               false alarms have been reported, this value is recommended.
+               + **2**: Medium. This protection level meets web protection requirements in most scenarios.
+               + **3**: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+               complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+               and Druid SQL injection attacks.
+        :param str name: Specifies the policy name used for matching. The value is case-sensitive and supports
+               fuzzy matching.
         :param Sequence['GetPoliciesPolicyOptionArgs'] options: The protection switches. The options object structure is documented below.
-        :param str protection_mode: Specifies the protective action after a rule is matched. Valid values are:
-               + `block`: WAF blocks and logs detected attacks.
-               + `log`: WAF logs detected attacks only.
+        :param str protection_mode: The protective action after a rule is matched. Valid values are:
+               + **block**: WAF blocks and logs detected attacks.
+               + **log**: WAF logs detected attacks only.
+        :param str robot_action: The protective actions for each rule in anti-crawler protection. Valid values are:
+               + **block**: WAF blocks discovered attacks.
+               + **log**: WAF only logs discovered attacks.
+        :param bool shiro_decryption_check: The shiro decryption check in basic web protection.
         """
+        pulumi.set(__self__, "bind_hosts", bind_hosts)
+        pulumi.set(__self__, "deep_inspection", deep_inspection)
         pulumi.set(__self__, "full_detection", full_detection)
+        pulumi.set(__self__, "header_inspection", header_inspection)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "level", level)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "options", options)
         pulumi.set(__self__, "protection_mode", protection_mode)
+        pulumi.set(__self__, "robot_action", robot_action)
+        pulumi.set(__self__, "shiro_decryption_check", shiro_decryption_check)
+
+    @property
+    @pulumi.getter(name="bindHosts")
+    def bind_hosts(self) -> Sequence['outputs.GetPoliciesPolicyBindHostResult']:
+        """
+        The protection switches. The object structure is documented below.
+        """
+        return pulumi.get(self, "bind_hosts")
+
+    @property
+    @pulumi.getter(name="deepInspection")
+    def deep_inspection(self) -> bool:
+        """
+        The deep inspection in basic web protection.
+        """
+        return pulumi.get(self, "deep_inspection")
 
     @property
     @pulumi.getter(name="fullDetection")
     def full_detection(self) -> bool:
         """
-        The detection mode in Precise Protection.
-        + `true`: full detection. Full detection finishes all threat detections before blocking requests that meet Precise
-        Protection specified conditions.
-        + `false`: instant detection. Instant detection immediately ends threat detection after blocking a request that
-        meets Precise Protection specified conditions.
+        The detection mode in precise protection.
+        + **false**: Instant detection. When a request hits the blocking conditions in precise protection, WAF terminates
+        checks and blocks the request immediately.
+        + **true**: Full detection. If a request hits the blocking conditions in precise protection, WAF does not block the
+        request immediately. Instead, it blocks the requests until other checks are finished.
         """
         return pulumi.get(self, "full_detection")
+
+    @property
+    @pulumi.getter(name="headerInspection")
+    def header_inspection(self) -> bool:
+        """
+        The header inspection in basic web protection.
+        """
+        return pulumi.get(self, "header_inspection")
 
     @property
     @pulumi.getter
     def id(self) -> str:
         """
-        The WAF Policy ID.
+        The domain name ID.
         """
         return pulumi.get(self, "id")
 
@@ -820,10 +1578,13 @@ class GetPoliciesPolicyResult(dict):
     @pulumi.getter
     def level(self) -> int:
         """
-        Specifies the protection level. Valid values are:
-        + `1`: low
-        + `2`: medium
-        + `3`: high
+        The protection level. Valid values are:
+        + **1**: Low. At this protection level, WAF blocks only requests with obvious attack features. If a large number of
+        false alarms have been reported, this value is recommended.
+        + **2**: Medium. This protection level meets web protection requirements in most scenarios.
+        + **3**: High. At this protection level, WAF provides the finest granular protection and can intercept attacks with
+        complex bypass features, such as Jolokia cyberattacks, common gateway interface (CGI) vulnerability detection,
+        and Druid SQL injection attacks.
         """
         return pulumi.get(self, "level")
 
@@ -831,7 +1592,8 @@ class GetPoliciesPolicyResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Policy name used for matching. The value is case sensitive and supports fuzzy matching.
+        Specifies the policy name used for matching. The value is case-sensitive and supports
+        fuzzy matching.
         """
         return pulumi.get(self, "name")
 
@@ -847,18 +1609,91 @@ class GetPoliciesPolicyResult(dict):
     @pulumi.getter(name="protectionMode")
     def protection_mode(self) -> str:
         """
-        Specifies the protective action after a rule is matched. Valid values are:
-        + `block`: WAF blocks and logs detected attacks.
-        + `log`: WAF logs detected attacks only.
+        The protective action after a rule is matched. Valid values are:
+        + **block**: WAF blocks and logs detected attacks.
+        + **log**: WAF logs detected attacks only.
         """
         return pulumi.get(self, "protection_mode")
+
+    @property
+    @pulumi.getter(name="robotAction")
+    def robot_action(self) -> str:
+        """
+        The protective actions for each rule in anti-crawler protection. Valid values are:
+        + **block**: WAF blocks discovered attacks.
+        + **log**: WAF only logs discovered attacks.
+        """
+        return pulumi.get(self, "robot_action")
+
+    @property
+    @pulumi.getter(name="shiroDecryptionCheck")
+    def shiro_decryption_check(self) -> bool:
+        """
+        The shiro decryption check in basic web protection.
+        """
+        return pulumi.get(self, "shiro_decryption_check")
+
+
+@pulumi.output_type
+class GetPoliciesPolicyBindHostResult(dict):
+    def __init__(__self__, *,
+                 hostname: str,
+                 id: str,
+                 mode: str,
+                 waf_type: str):
+        """
+        :param str hostname: The domain name.
+        :param str id: The domain name ID.
+        :param str mode: The special domain name mode. This attribute is only valid for dedicated mode.
+        :param str waf_type: The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+               cloud WAF or **premium** for dedicated WAF instances.
+        """
+        pulumi.set(__self__, "hostname", hostname)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "mode", mode)
+        pulumi.set(__self__, "waf_type", waf_type)
+
+    @property
+    @pulumi.getter
+    def hostname(self) -> str:
+        """
+        The domain name.
+        """
+        return pulumi.get(self, "hostname")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The domain name ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def mode(self) -> str:
+        """
+        The special domain name mode. This attribute is only valid for dedicated mode.
+        """
+        return pulumi.get(self, "mode")
+
+    @property
+    @pulumi.getter(name="wafType")
+    def waf_type(self) -> str:
+        """
+        The deployment mode of WAF instance that is used for the domain name. The value can be **cloud** for
+        cloud WAF or **premium** for dedicated WAF instances.
+        """
+        return pulumi.get(self, "waf_type")
 
 
 @pulumi.output_type
 class GetPoliciesPolicyOptionResult(dict):
     def __init__(__self__, *,
+                 anti_crawler: bool,
                  basic_web_protection: bool,
                  blacklist: bool,
+                 bot_enable: bool,
                  cc_attack_protection: bool,
                  crawler: bool,
                  crawler_engine: bool,
@@ -868,27 +1703,36 @@ class GetPoliciesPolicyOptionResult(dict):
                  data_masking: bool,
                  false_alarm_masking: bool,
                  general_check: bool,
+                 geolocation_access_control: bool,
+                 information_leakage_prevention: bool,
+                 known_attack_source: bool,
                  precise_protection: bool,
                  web_tamper_protection: bool,
                  webshell: bool):
         """
+        :param bool anti_crawler: Indicates whether the javascript anti-crawler is enabled.
         :param bool basic_web_protection: Indicates whether Basic Web Protection is enabled.
-        :param bool blacklist: Indicates whether Blacklist and Whitelist is enabled.
-        :param bool cc_attack_protection: Indicates whether CC Attack Protection is enabled.
-        :param bool crawler: Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-        :param bool crawler_engine: Indicates whether the Search Engine switch in Basic Web Protection is enabled.
-        :param bool crawler_other: Indicates whether detection of other crawlers in Basic Web Protection is enabled.
-        :param bool crawler_scanner: Indicates whether the Scanner switch in Basic Web Protection is enabled.
-        :param bool crawler_script: Indicates whether the Script Tool switch in Basic Web Protection is enabled.
-        :param bool data_masking: Indicates whether Data Masking is enabled.
-        :param bool false_alarm_masking: Indicates whether False Alarm Masking is enabled.
+        :param bool blacklist: Indicates whether the blacklist and whitelist protection is enabled.
+        :param bool bot_enable: Indicates whether the anti-crawler protection is enabled.
+        :param bool cc_attack_protection: Indicates whether the cc attack protection rules are enabled.
+        :param bool crawler_engine: Indicates whether the search engine is enabled.
+        :param bool crawler_other: Indicates whether other crawler check is enabled.
+        :param bool crawler_scanner: Indicates whether the anti-crawler detection is enabled.
+        :param bool crawler_script: Indicates whether the script tool is enabled.
+        :param bool data_masking: Indicates whether data masking is enabled.
+        :param bool false_alarm_masking: Indicates whether false alarm masking is enabled.
         :param bool general_check: Indicates whether General Check in Basic Web Protection is enabled.
-        :param bool precise_protection: Indicates whether Precise Protection is enabled.
-        :param bool web_tamper_protection: Indicates whether Web Tamper Protection is enabled.
-        :param bool webshell: Indicates whether webshell detection in Basic Web Protection is enabled.
+        :param bool geolocation_access_control: Indicates whether the geolocation access control is enabled.
+        :param bool information_leakage_prevention: Indicates whether the information leakage prevention is enabled.
+        :param bool known_attack_source: Indicates whether the known attack source is enabled.
+        :param bool precise_protection: Indicates whether the precise protection is enabled.
+        :param bool web_tamper_protection: Indicates whether the web tamper protection is enabled.
+        :param bool webshell: Indicates whether the web shell detection in basic web protection is enabled.
         """
+        pulumi.set(__self__, "anti_crawler", anti_crawler)
         pulumi.set(__self__, "basic_web_protection", basic_web_protection)
         pulumi.set(__self__, "blacklist", blacklist)
+        pulumi.set(__self__, "bot_enable", bot_enable)
         pulumi.set(__self__, "cc_attack_protection", cc_attack_protection)
         pulumi.set(__self__, "crawler", crawler)
         pulumi.set(__self__, "crawler_engine", crawler_engine)
@@ -898,9 +1742,20 @@ class GetPoliciesPolicyOptionResult(dict):
         pulumi.set(__self__, "data_masking", data_masking)
         pulumi.set(__self__, "false_alarm_masking", false_alarm_masking)
         pulumi.set(__self__, "general_check", general_check)
+        pulumi.set(__self__, "geolocation_access_control", geolocation_access_control)
+        pulumi.set(__self__, "information_leakage_prevention", information_leakage_prevention)
+        pulumi.set(__self__, "known_attack_source", known_attack_source)
         pulumi.set(__self__, "precise_protection", precise_protection)
         pulumi.set(__self__, "web_tamper_protection", web_tamper_protection)
         pulumi.set(__self__, "webshell", webshell)
+
+    @property
+    @pulumi.getter(name="antiCrawler")
+    def anti_crawler(self) -> bool:
+        """
+        Indicates whether the javascript anti-crawler is enabled.
+        """
+        return pulumi.get(self, "anti_crawler")
 
     @property
     @pulumi.getter(name="basicWebProtection")
@@ -914,31 +1769,36 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter
     def blacklist(self) -> bool:
         """
-        Indicates whether Blacklist and Whitelist is enabled.
+        Indicates whether the blacklist and whitelist protection is enabled.
         """
         return pulumi.get(self, "blacklist")
+
+    @property
+    @pulumi.getter(name="botEnable")
+    def bot_enable(self) -> bool:
+        """
+        Indicates whether the anti-crawler protection is enabled.
+        """
+        return pulumi.get(self, "bot_enable")
 
     @property
     @pulumi.getter(name="ccAttackProtection")
     def cc_attack_protection(self) -> bool:
         """
-        Indicates whether CC Attack Protection is enabled.
+        Indicates whether the cc attack protection rules are enabled.
         """
         return pulumi.get(self, "cc_attack_protection")
 
     @property
     @pulumi.getter
     def crawler(self) -> bool:
-        """
-        Indicates whether the master crawler detection switch in Basic Web Protection is enabled.
-        """
         return pulumi.get(self, "crawler")
 
     @property
     @pulumi.getter(name="crawlerEngine")
     def crawler_engine(self) -> bool:
         """
-        Indicates whether the Search Engine switch in Basic Web Protection is enabled.
+        Indicates whether the search engine is enabled.
         """
         return pulumi.get(self, "crawler_engine")
 
@@ -946,7 +1806,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="crawlerOther")
     def crawler_other(self) -> bool:
         """
-        Indicates whether detection of other crawlers in Basic Web Protection is enabled.
+        Indicates whether other crawler check is enabled.
         """
         return pulumi.get(self, "crawler_other")
 
@@ -954,7 +1814,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="crawlerScanner")
     def crawler_scanner(self) -> bool:
         """
-        Indicates whether the Scanner switch in Basic Web Protection is enabled.
+        Indicates whether the anti-crawler detection is enabled.
         """
         return pulumi.get(self, "crawler_scanner")
 
@@ -962,7 +1822,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="crawlerScript")
     def crawler_script(self) -> bool:
         """
-        Indicates whether the Script Tool switch in Basic Web Protection is enabled.
+        Indicates whether the script tool is enabled.
         """
         return pulumi.get(self, "crawler_script")
 
@@ -970,7 +1830,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="dataMasking")
     def data_masking(self) -> bool:
         """
-        Indicates whether Data Masking is enabled.
+        Indicates whether data masking is enabled.
         """
         return pulumi.get(self, "data_masking")
 
@@ -978,7 +1838,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="falseAlarmMasking")
     def false_alarm_masking(self) -> bool:
         """
-        Indicates whether False Alarm Masking is enabled.
+        Indicates whether false alarm masking is enabled.
         """
         return pulumi.get(self, "false_alarm_masking")
 
@@ -991,10 +1851,34 @@ class GetPoliciesPolicyOptionResult(dict):
         return pulumi.get(self, "general_check")
 
     @property
+    @pulumi.getter(name="geolocationAccessControl")
+    def geolocation_access_control(self) -> bool:
+        """
+        Indicates whether the geolocation access control is enabled.
+        """
+        return pulumi.get(self, "geolocation_access_control")
+
+    @property
+    @pulumi.getter(name="informationLeakagePrevention")
+    def information_leakage_prevention(self) -> bool:
+        """
+        Indicates whether the information leakage prevention is enabled.
+        """
+        return pulumi.get(self, "information_leakage_prevention")
+
+    @property
+    @pulumi.getter(name="knownAttackSource")
+    def known_attack_source(self) -> bool:
+        """
+        Indicates whether the known attack source is enabled.
+        """
+        return pulumi.get(self, "known_attack_source")
+
+    @property
     @pulumi.getter(name="preciseProtection")
     def precise_protection(self) -> bool:
         """
-        Indicates whether Precise Protection is enabled.
+        Indicates whether the precise protection is enabled.
         """
         return pulumi.get(self, "precise_protection")
 
@@ -1002,7 +1886,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter(name="webTamperProtection")
     def web_tamper_protection(self) -> bool:
         """
-        Indicates whether Web Tamper Protection is enabled.
+        Indicates whether the web tamper protection is enabled.
         """
         return pulumi.get(self, "web_tamper_protection")
 
@@ -1010,7 +1894,7 @@ class GetPoliciesPolicyOptionResult(dict):
     @pulumi.getter
     def webshell(self) -> bool:
         """
-        Indicates whether webshell detection in Basic Web Protection is enabled.
+        Indicates whether the web shell detection in basic web protection is enabled.
         """
         return pulumi.get(self, "webshell")
 
@@ -1028,8 +1912,8 @@ class GetReferenceTablesTableResult(dict):
         :param Sequence[str] conditions: The conditions of the reference table.
         :param str creation_time: The server time when reference table was created.
         :param str description: The description of the reference table.
-        :param str id: The id of the reference table.
-        :param str name: The name of the reference table. The value is case sensitive and matches exactly.
+        :param str id: The ID of the reference table.
+        :param str name: Specifies the name of the reference table. The value is case-sensitive and matches exactly.
         :param str type: The type of the reference table, The options are: `url`, `user-agent`, `ip`, `params`, `cookie`, `referer`
                and `header`.
         """
@@ -1068,7 +1952,7 @@ class GetReferenceTablesTableResult(dict):
     @pulumi.getter
     def id(self) -> str:
         """
-        The id of the reference table.
+        The ID of the reference table.
         """
         return pulumi.get(self, "id")
 
@@ -1076,7 +1960,7 @@ class GetReferenceTablesTableResult(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        The name of the reference table. The value is case sensitive and matches exactly.
+        Specifies the name of the reference table. The value is case-sensitive and matches exactly.
         """
         return pulumi.get(self, "name")
 

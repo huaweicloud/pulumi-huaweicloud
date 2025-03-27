@@ -27,13 +27,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The template can be imported using the `id`, e.g.
+ * The template can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vod/watermarkTemplate:WatermarkTemplate test 81ac58796e25842ee2e90a904aa8a719
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. resource "huaweicloud_vod_watermark_template" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`image_file`. It is generally recommended running `terraform plan` after importing a watermark template. You can then decide if changes should be applied to the watermark template, or the resource definition should be updated to align with the watermark template. Also you can ignore changes as below. hcl resource "huaweicloud_vod_watermark_template" "test" {
  *
  *  ...
  *
@@ -109,7 +109,7 @@ export class WatermarkTemplate extends pulumi.CustomResource {
      */
     public /*out*/ readonly imageUrl!: pulumi.Output<string>;
     /**
-     * Specifies the template name, which contains a maximum of 128 characters.
+     * Specifies the template name, which contains a maximum of `128` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -242,7 +242,7 @@ export interface WatermarkTemplateState {
      */
     imageUrl?: pulumi.Input<string>;
     /**
-     * Specifies the template name, which contains a maximum of 128 characters.
+     * Specifies the template name, which contains a maximum of `128` characters.
      */
     name?: pulumi.Input<string>;
     /**
@@ -317,7 +317,7 @@ export interface WatermarkTemplateArgs {
      */
     imageType: pulumi.Input<string>;
     /**
-     * Specifies the template name, which contains a maximum of 128 characters.
+     * Specifies the template name, which contains a maximum of `128` characters.
      */
     name?: pulumi.Input<string>;
     /**

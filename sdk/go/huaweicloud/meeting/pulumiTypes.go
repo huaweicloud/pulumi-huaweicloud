@@ -19,7 +19,7 @@ type ConferenceConfiguration struct {
 	// + **2**: Users within the enterprise.
 	// + **3**: The invited user.
 	CallinRestriction *int `pulumi:"callinRestriction"`
-	// Specifies the guest password (pure number which is 4 to 16 digits long).
+	// Specifies the guest password (pure number which is `4` to `16` digits long).
 	GuestPassword *string `pulumi:"guestPassword"`
 	// Specifies whether the soft terminal is automatically muted when the guest joins the
 	// conference.
@@ -63,7 +63,7 @@ type ConferenceConfigurationArgs struct {
 	// + **2**: Users within the enterprise.
 	// + **3**: The invited user.
 	CallinRestriction pulumi.IntPtrInput `pulumi:"callinRestriction"`
-	// Specifies the guest password (pure number which is 4 to 16 digits long).
+	// Specifies the guest password (pure number which is `4` to `16` digits long).
 	GuestPassword pulumi.StringPtrInput `pulumi:"guestPassword"`
 	// Specifies whether the soft terminal is automatically muted when the guest joins the
 	// conference.
@@ -178,7 +178,7 @@ func (o ConferenceConfigurationOutput) CallinRestriction() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ConferenceConfiguration) *int { return v.CallinRestriction }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the guest password (pure number which is 4 to 16 digits long).
+// Specifies the guest password (pure number which is `4` to `16` digits long).
 func (o ConferenceConfigurationOutput) GuestPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConferenceConfiguration) *string { return v.GuestPassword }).(pulumi.StringPtrOutput)
 }
@@ -275,7 +275,7 @@ func (o ConferenceConfigurationPtrOutput) CallinRestriction() pulumi.IntPtrOutpu
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the guest password (pure number which is 4 to 16 digits long).
+// Specifies the guest password (pure number which is `4` to `16` digits long).
 func (o ConferenceConfigurationPtrOutput) GuestPassword() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConferenceConfiguration) *string {
 		if v == nil {
@@ -386,7 +386,7 @@ type ConferenceCycleParams struct {
 	Interval *int `pulumi:"interval"`
 	// Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
 	// For different `cycle` types, the value range of elements are as follows:
-	// + **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+	// + **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
 	// + **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
 	//   value means the end of the month.
 	Points []int `pulumi:"points"`
@@ -426,7 +426,7 @@ type ConferenceCycleParamsArgs struct {
 	Interval pulumi.IntPtrInput `pulumi:"interval"`
 	// Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
 	// For different `cycle` types, the value range of elements are as follows:
-	// + **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+	// + **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
 	// + **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
 	//   value means the end of the month.
 	Points pulumi.IntArrayInput `pulumi:"points"`
@@ -540,7 +540,7 @@ func (o ConferenceCycleParamsOutput) Interval() pulumi.IntPtrOutput {
 
 // Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
 // For different `cycle` types, the value range of elements are as follows:
-//   - **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+//   - **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
 //   - **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
 //     value means the end of the month.
 func (o ConferenceCycleParamsOutput) Points() pulumi.IntArrayOutput {
@@ -623,7 +623,7 @@ func (o ConferenceCycleParamsPtrOutput) Interval() pulumi.IntPtrOutput {
 
 // Specifies the conference point in the cycle. Only valid by **Week** and **Month**.
 // For different `cycle` types, the value range of elements are as follows:
-//   - **Week**: The valid value is range from `0` to `6`. The **0** means Sunday, **6** means Saturday.
+//   - **Week**: The valid value is range from `0` to `6`. The `0` means Sunday, `6` means Saturday.
 //   - **Month**: The valid range for the elements is `1` to `31`. If the value does not exist in the current month, the
 //     value means the end of the month.
 func (o ConferenceCycleParamsPtrOutput) Points() pulumi.IntArrayOutput {
@@ -778,7 +778,8 @@ type ConferenceParticipant struct {
 	// + **0**: No mute.
 	// + **1**: Mute.
 	IsMute *int `pulumi:"isMute"`
-	// Specifies the attendee name or nickname.
+	// Specifies the attendee name or nickname.\
+	// The valid length is limited from `1` to `96`.
 	Name *string `pulumi:"name"`
 	// Specifies the SIP or TEL number, maximum of 127 characters.
 	Phone *string `pulumi:"phone"`
@@ -825,7 +826,8 @@ type ConferenceParticipantArgs struct {
 	// + **0**: No mute.
 	// + **1**: Mute.
 	IsMute pulumi.IntPtrInput `pulumi:"isMute"`
-	// Specifies the attendee name or nickname.
+	// Specifies the attendee name or nickname.\
+	// The valid length is limited from `1` to `96`.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Specifies the SIP or TEL number, maximum of 127 characters.
 	Phone pulumi.StringPtrInput `pulumi:"phone"`
@@ -923,7 +925,8 @@ func (o ConferenceParticipantOutput) IsMute() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ConferenceParticipant) *int { return v.IsMute }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the attendee name or nickname.
+// Specifies the attendee name or nickname.\
+// The valid length is limited from `1` to `96`.
 func (o ConferenceParticipantOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConferenceParticipant) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -999,9 +1002,9 @@ type ConferenceSubconference struct {
 	// + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
 	MediaTypes []string `pulumi:"mediaTypes"`
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType *int `pulumi:"recordAuthType"`
 	// Specifies the conference start time (UTC time).
 	// The time format is `YYYY-MM-DD hh:mm`, e.g. `2006-01-02 15:04`.
@@ -1042,9 +1045,9 @@ type ConferenceSubconferenceArgs struct {
 	// + **Data**: Multimedia (If omitted, the system configuration will determines whether to automatically add **Data**).
 	MediaTypes pulumi.StringArrayInput `pulumi:"mediaTypes"`
 	// Specifies the recording authentication method.
-	// **0**: Viewable/downloadable via link.
-	// **1**: Enterprise users can watch/download.
-	// **2**: Attendees can watch/download.
+	// + **0**: Viewable/downloadable via link.
+	// + **1**: Enterprise users can watch/download.
+	// + **2**: Attendees can watch/download.
 	RecordAuthType pulumi.IntPtrInput `pulumi:"recordAuthType"`
 	// Specifies the conference start time (UTC time).
 	// The time format is `YYYY-MM-DD hh:mm`, e.g. `2006-01-02 15:04`.
@@ -1136,9 +1139,9 @@ func (o ConferenceSubconferenceOutput) MediaTypes() pulumi.StringArrayOutput {
 }
 
 // Specifies the recording authentication method.
-// **0**: Viewable/downloadable via link.
-// **1**: Enterprise users can watch/download.
-// **2**: Attendees can watch/download.
+// + **0**: Viewable/downloadable via link.
+// + **1**: Enterprise users can watch/download.
+// + **2**: Attendees can watch/download.
 func (o ConferenceSubconferenceOutput) RecordAuthType() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v ConferenceSubconference) *int { return v.RecordAuthType }).(pulumi.IntPtrOutput)
 }

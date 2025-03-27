@@ -379,7 +379,7 @@ class VpcSubnet(pulumi.CustomResource):
 
         ## Import
 
-        IEC vpc subnet can be imported using the `id`, e.g.
+        IEC vpc subnet can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vpcSubnet:VpcSubnet subnet_demo 51be9f2b-5a3b-406a-9271-36f0c929fbcc
@@ -432,7 +432,7 @@ class VpcSubnet(pulumi.CustomResource):
 
         ## Import
 
-        IEC vpc subnet can be imported using the `id`, e.g.
+        IEC vpc subnet can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Iec/vpcSubnet:VpcSubnet subnet_demo 51be9f2b-5a3b-406a-9271-36f0c929fbcc

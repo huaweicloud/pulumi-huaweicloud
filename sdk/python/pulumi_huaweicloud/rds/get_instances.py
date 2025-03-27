@@ -159,13 +159,15 @@ def get_instances(datastore_type: Optional[str] = None,
     ```
 
 
-    :param str datastore_type: Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+    :param str datastore_type: Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+           **SQLServer** and **MariaDB**.
     :param str enterprise_project_id: Specifies the enterprise project id.
     :param str name: Specifies the name of the instance.
     :param str region: The region in which to obtain the instances. If omitted, the provider-level region will
            be used.
     :param str subnet_id: Specifies the network ID of a subnet.
-    :param str type: Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+    :param str type: Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+           and **Enterprise**.
     :param str vpc_id: Specifies the VPC ID.
     """
     __args__ = dict()
@@ -213,13 +215,15 @@ def get_instances_output(datastore_type: Optional[pulumi.Input[Optional[str]]] =
     ```
 
 
-    :param str datastore_type: Specifies the type of the database. Valid values are: MySQL, PostgreSQL, and SQLServer.
+    :param str datastore_type: Specifies the type of the database. Valid values are **MySQL**, **PostgreSQL**,
+           **SQLServer** and **MariaDB**.
     :param str enterprise_project_id: Specifies the enterprise project id.
     :param str name: Specifies the name of the instance.
     :param str region: The region in which to obtain the instances. If omitted, the provider-level region will
            be used.
     :param str subnet_id: Specifies the network ID of a subnet.
-    :param str type: Specifies the type of the instance. Valid values are: Single, Ha, Replica, and Enterprise.
+    :param str type: Specifies the type of the instance. Valid values are **Single**, **Ha**, **Replica**,
+           and **Enterprise**.
     :param str vpc_id: Specifies the VPC ID.
     """
     ...

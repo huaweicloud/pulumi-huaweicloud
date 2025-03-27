@@ -94,7 +94,7 @@ def get_engine_versions(region: Optional[str] = None,
     :param str region: The region in which to obtain the RDS engine versions.
            If omitted, the provider-level region will be used.
     :param str type: Specifies the RDS engine type.
-           The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+           The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
     """
     __args__ = dict()
     __args__['region'] = region
@@ -129,6 +129,6 @@ def get_engine_versions_output(region: Optional[pulumi.Input[Optional[str]]] = N
     :param str region: The region in which to obtain the RDS engine versions.
            If omitted, the provider-level region will be used.
     :param str type: Specifies the RDS engine type.
-           The valid values are **MySQL**, **PostgreSQL** and **SQLServer**, default to **MySQL**.
+           The valid values are **MySQL**, **PostgreSQL**, **SQLServer** and **MariaDB**, default to **MySQL**.
     """
     ...

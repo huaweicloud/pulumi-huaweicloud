@@ -10,34 +10,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get a list of WAF instance groups.
-//
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			_, err := Waf.GetInstanceGroups(ctx, &waf.GetInstanceGroupsArgs{
-//				Name: pulumi.StringRef("example_name"),
-//			}, nil)
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 func GetInstanceGroups(ctx *pulumi.Context, args *GetInstanceGroupsArgs, opts ...pulumi.InvokeOption) (*GetInstanceGroupsResult, error) {
 	opts = pkgInvokeDefaultOpts(opts)
 	var rv GetInstanceGroupsResult
@@ -50,28 +22,19 @@ func GetInstanceGroups(ctx *pulumi.Context, args *GetInstanceGroupsArgs, opts ..
 
 // A collection of arguments for invoking getInstanceGroups.
 type GetInstanceGroupsArgs struct {
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
-	Name *string `pulumi:"name"`
-	// The region in which to obtain the WAF instance groups.
-	// If omitted, the provider-level region will be used.
+	Name   *string `pulumi:"name"`
 	Region *string `pulumi:"region"`
-	// The id of the VPC that the WAF dedicated instances belongs to.
-	VpcId *string `pulumi:"vpcId"`
+	VpcId  *string `pulumi:"vpcId"`
 }
 
 // A collection of values returned by getInstanceGroups.
 type GetInstanceGroupsResult struct {
-	// A list of WAF instance groups.
 	Groups []GetInstanceGroupsGroup `pulumi:"groups"`
 	// The provider-assigned unique ID for this managed resource.
-	Id string `pulumi:"id"`
-	// The instance group name.
-	Name *string `pulumi:"name"`
-	// The region in which to create the instance group.
-	Region string `pulumi:"region"`
-	// The id of the VPC that the WAF dedicated instances belongs to.
-	VpcId *string `pulumi:"vpcId"`
+	Id     string  `pulumi:"id"`
+	Name   *string `pulumi:"name"`
+	Region string  `pulumi:"region"`
+	VpcId  *string `pulumi:"vpcId"`
 }
 
 func GetInstanceGroupsOutput(ctx *pulumi.Context, args GetInstanceGroupsOutputArgs, opts ...pulumi.InvokeOption) GetInstanceGroupsResultOutput {
@@ -89,14 +52,9 @@ func GetInstanceGroupsOutput(ctx *pulumi.Context, args GetInstanceGroupsOutputAr
 
 // A collection of arguments for invoking getInstanceGroups.
 type GetInstanceGroupsOutputArgs struct {
-	// The name of WAF instance group used for matching.
-	// The value is not case-sensitive and supports fuzzy matching.
-	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The region in which to obtain the WAF instance groups.
-	// If omitted, the provider-level region will be used.
+	Name   pulumi.StringPtrInput `pulumi:"name"`
 	Region pulumi.StringPtrInput `pulumi:"region"`
-	// The id of the VPC that the WAF dedicated instances belongs to.
-	VpcId pulumi.StringPtrInput `pulumi:"vpcId"`
+	VpcId  pulumi.StringPtrInput `pulumi:"vpcId"`
 }
 
 func (GetInstanceGroupsOutputArgs) ElementType() reflect.Type {
@@ -118,7 +76,6 @@ func (o GetInstanceGroupsResultOutput) ToGetInstanceGroupsResultOutputWithContex
 	return o
 }
 
-// A list of WAF instance groups.
 func (o GetInstanceGroupsResultOutput) Groups() GetInstanceGroupsGroupArrayOutput {
 	return o.ApplyT(func(v GetInstanceGroupsResult) []GetInstanceGroupsGroup { return v.Groups }).(GetInstanceGroupsGroupArrayOutput)
 }
@@ -128,17 +85,14 @@ func (o GetInstanceGroupsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The instance group name.
 func (o GetInstanceGroupsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetInstanceGroupsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
 
-// The region in which to create the instance group.
 func (o GetInstanceGroupsResultOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v GetInstanceGroupsResult) string { return v.Region }).(pulumi.StringOutput)
 }
 
-// The id of the VPC that the WAF dedicated instances belongs to.
 func (o GetInstanceGroupsResultOutput) VpcId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetInstanceGroupsResult) *string { return v.VpcId }).(pulumi.StringPtrOutput)
 }

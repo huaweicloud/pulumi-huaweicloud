@@ -41,29 +41,61 @@ import (
 //
 // ## Import
 //
-// Shared Bandwidths can be imported using the `id`, e.g.
+// Shared Bandwidths can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
 //	$ pulumi import huaweicloud:Vpc/bandwidth:Bandwidth bandwidth_1 7117d38e-4c8f-4624-a505-bd96b97d024c
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a Shared Bandwidth. You can ignore changes as below. hcl resource "huaweicloud_vpc_bandwidth" "bandwidth_1" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	period_unit, period, auto_renew,
+//
+//	]
+//
+//	} }
 type Bandwidth struct {
 	pulumi.CustomResourceState
 
-	// Indicates the bandwidth type.
+	// Specifies whether auto renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
+	// Specifies the bandwidth type.
+	// Valid values are **share** and **edgeshare**. Default is **share**.
 	BandwidthType pulumi.StringOutput `pulumi:"bandwidthType"`
 	// Specifies whether the billing is based on bandwidth or
 	// 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 	// The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-	// Changing this creates a new bandwidth.
 	ChargeMode pulumi.StringOutput `pulumi:"chargeMode"`
+	// Specifies the charging mode of the Shared Bandwidth.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
+	// Indicates the bandwidth create time.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the enterprise project id of the Shared Bandwidth.
 	// Changing this creates a new bandwidth.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the bandwidth name. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the charging period of the Shared Bandwidth.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrOutput `pulumi:"period"`
+	// Specifies the charging period unit of the Shared Bandwidth.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
+	// Specifies the site is center of border.
+	// Valid values are **center** and the name of the border site. Default is **center**.
+	PublicBorderGroup pulumi.StringOutput `pulumi:"publicBorderGroup"`
 	// An array of EIPs that use the bandwidth. The object includes the following:
 	Publicips BandwidthPublicipArrayOutput `pulumi:"publicips"`
 	// Specifies the region in which to create the Shared Bandwidth.
@@ -71,10 +103,14 @@ type Bandwidth struct {
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Indicates whether the bandwidth is shared or dedicated.
 	ShareType pulumi.StringOutput `pulumi:"shareType"`
-	// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// Specifies the size of the Shared Bandwidth.
+	// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 	Size pulumi.IntOutput `pulumi:"size"`
 	// Indicates the bandwidth status.
 	Status pulumi.StringOutput `pulumi:"status"`
+	// Indicates the bandwidth update time.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
 // NewBandwidth registers a new resource with the given unique name, arguments, and options.
@@ -110,19 +146,37 @@ func GetBandwidth(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Bandwidth resources.
 type bandwidthState struct {
-	// Indicates the bandwidth type.
+	// Specifies whether auto renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the bandwidth type.
+	// Valid values are **share** and **edgeshare**. Default is **share**.
 	BandwidthType *string `pulumi:"bandwidthType"`
 	// Specifies whether the billing is based on bandwidth or
 	// 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 	// The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-	// Changing this creates a new bandwidth.
 	ChargeMode *string `pulumi:"chargeMode"`
+	// Specifies the charging mode of the Shared Bandwidth.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode *string `pulumi:"chargingMode"`
+	// Indicates the bandwidth create time.
+	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the enterprise project id of the Shared Bandwidth.
 	// Changing this creates a new bandwidth.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the bandwidth name. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the Shared Bandwidth.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the Shared Bandwidth.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the site is center of border.
+	// Valid values are **center** and the name of the border site. Default is **center**.
+	PublicBorderGroup *string `pulumi:"publicBorderGroup"`
 	// An array of EIPs that use the bandwidth. The object includes the following:
 	Publicips []BandwidthPublicip `pulumi:"publicips"`
 	// Specifies the region in which to create the Shared Bandwidth.
@@ -130,26 +184,48 @@ type bandwidthState struct {
 	Region *string `pulumi:"region"`
 	// Indicates whether the bandwidth is shared or dedicated.
 	ShareType *string `pulumi:"shareType"`
-	// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// Specifies the size of the Shared Bandwidth.
+	// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 	Size *int `pulumi:"size"`
 	// Indicates the bandwidth status.
 	Status *string `pulumi:"status"`
+	// Indicates the bandwidth update time.
+	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type BandwidthState struct {
-	// Indicates the bandwidth type.
+	// Specifies whether auto renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrInput
+	// Specifies the bandwidth type.
+	// Valid values are **share** and **edgeshare**. Default is **share**.
 	BandwidthType pulumi.StringPtrInput
 	// Specifies whether the billing is based on bandwidth or
 	// 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 	// The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-	// Changing this creates a new bandwidth.
 	ChargeMode pulumi.StringPtrInput
+	// Specifies the charging mode of the Shared Bandwidth.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringPtrInput
+	// Indicates the bandwidth create time.
+	CreatedAt pulumi.StringPtrInput
 	// Specifies the enterprise project id of the Shared Bandwidth.
 	// Changing this creates a new bandwidth.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the bandwidth name. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the Shared Bandwidth.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the Shared Bandwidth.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the site is center of border.
+	// Valid values are **center** and the name of the border site. Default is **center**.
+	PublicBorderGroup pulumi.StringPtrInput
 	// An array of EIPs that use the bandwidth. The object includes the following:
 	Publicips BandwidthPublicipArrayInput
 	// Specifies the region in which to create the Shared Bandwidth.
@@ -157,10 +233,14 @@ type BandwidthState struct {
 	Region pulumi.StringPtrInput
 	// Indicates whether the bandwidth is shared or dedicated.
 	ShareType pulumi.StringPtrInput
-	// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// Specifies the size of the Shared Bandwidth.
+	// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 	Size pulumi.IntPtrInput
 	// Indicates the bandwidth status.
 	Status pulumi.StringPtrInput
+	// Indicates the bandwidth update time.
+	UpdatedAt pulumi.StringPtrInput
 }
 
 func (BandwidthState) ElementType() reflect.Type {
@@ -168,41 +248,81 @@ func (BandwidthState) ElementType() reflect.Type {
 }
 
 type bandwidthArgs struct {
+	// Specifies whether auto renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew *string `pulumi:"autoRenew"`
+	// Specifies the bandwidth type.
+	// Valid values are **share** and **edgeshare**. Default is **share**.
+	BandwidthType *string `pulumi:"bandwidthType"`
 	// Specifies whether the billing is based on bandwidth or
 	// 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 	// The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-	// Changing this creates a new bandwidth.
 	ChargeMode *string `pulumi:"chargeMode"`
+	// Specifies the charging mode of the Shared Bandwidth.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the enterprise project id of the Shared Bandwidth.
 	// Changing this creates a new bandwidth.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the bandwidth name. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
+	// Specifies the charging period of the Shared Bandwidth.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period *int `pulumi:"period"`
+	// Specifies the charging period unit of the Shared Bandwidth.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit *string `pulumi:"periodUnit"`
+	// Specifies the site is center of border.
+	// Valid values are **center** and the name of the border site. Default is **center**.
+	PublicBorderGroup *string `pulumi:"publicBorderGroup"`
 	// Specifies the region in which to create the Shared Bandwidth.
 	// If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
 	Region *string `pulumi:"region"`
-	// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// Specifies the size of the Shared Bandwidth.
+	// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 	Size int `pulumi:"size"`
 }
 
 // The set of arguments for constructing a Bandwidth resource.
 type BandwidthArgs struct {
+	// Specifies whether auto renew is enabled.
+	// Valid values are **true** and **false**. Defaults to **false**.
+	AutoRenew pulumi.StringPtrInput
+	// Specifies the bandwidth type.
+	// Valid values are **share** and **edgeshare**. Default is **share**.
+	BandwidthType pulumi.StringPtrInput
 	// Specifies whether the billing is based on bandwidth or
 	// 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 	// The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-	// Changing this creates a new bandwidth.
 	ChargeMode pulumi.StringPtrInput
+	// Specifies the charging mode of the Shared Bandwidth.
+	// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+	ChargingMode pulumi.StringPtrInput
 	// Specifies the enterprise project id of the Shared Bandwidth.
 	// Changing this creates a new bandwidth.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the bandwidth name. The value is a string of 1 to 64 characters that
 	// can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
+	// Specifies the charging period of the Shared Bandwidth.
+	// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+	// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	Period pulumi.IntPtrInput
+	// Specifies the charging period unit of the Shared Bandwidth.
+	// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	PeriodUnit pulumi.StringPtrInput
+	// Specifies the site is center of border.
+	// Valid values are **center** and the name of the border site. Default is **center**.
+	PublicBorderGroup pulumi.StringPtrInput
 	// Specifies the region in which to create the Shared Bandwidth.
 	// If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
 	Region pulumi.StringPtrInput
-	// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// Specifies the size of the Shared Bandwidth.
+	// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+	// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 	Size pulumi.IntInput
 }
 
@@ -293,7 +413,14 @@ func (o BandwidthOutput) ToBandwidthOutputWithContext(ctx context.Context) Bandw
 	return o
 }
 
-// Indicates the bandwidth type.
+// Specifies whether auto renew is enabled.
+// Valid values are **true** and **false**. Defaults to **false**.
+func (o BandwidthOutput) AutoRenew() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the bandwidth type.
+// Valid values are **share** and **edgeshare**. Default is **share**.
 func (o BandwidthOutput) BandwidthType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.BandwidthType }).(pulumi.StringOutput)
 }
@@ -301,9 +428,19 @@ func (o BandwidthOutput) BandwidthType() pulumi.StringOutput {
 // Specifies whether the billing is based on bandwidth or
 // 95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
 // The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-// Changing this creates a new bandwidth.
 func (o BandwidthOutput) ChargeMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.ChargeMode }).(pulumi.StringOutput)
+}
+
+// Specifies the charging mode of the Shared Bandwidth.
+// The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+func (o BandwidthOutput) ChargingMode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
+}
+
+// Indicates the bandwidth create time.
+func (o BandwidthOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the enterprise project id of the Shared Bandwidth.
@@ -316,6 +453,25 @@ func (o BandwidthOutput) EnterpriseProjectId() pulumi.StringOutput {
 // can contain letters, digits, underscores (_), hyphens (-), and periods (.).
 func (o BandwidthOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the charging period of the Shared Bandwidth.
+// + If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+// + If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+func (o BandwidthOutput) Period() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the charging period unit of the Shared Bandwidth.
+// Valid values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**.
+func (o BandwidthOutput) PeriodUnit() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the site is center of border.
+// Valid values are **center** and the name of the border site. Default is **center**.
+func (o BandwidthOutput) PublicBorderGroup() pulumi.StringOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.PublicBorderGroup }).(pulumi.StringOutput)
 }
 
 // An array of EIPs that use the bandwidth. The object includes the following:
@@ -334,7 +490,9 @@ func (o BandwidthOutput) ShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.ShareType }).(pulumi.StringOutput)
 }
 
-// Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+// Specifies the size of the Shared Bandwidth.
+// If `chargeMode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+// If `chargeMode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
 func (o BandwidthOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.IntOutput { return v.Size }).(pulumi.IntOutput)
 }
@@ -342,6 +500,11 @@ func (o BandwidthOutput) Size() pulumi.IntOutput {
 // Indicates the bandwidth status.
 func (o BandwidthOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
+// Indicates the bandwidth update time.
+func (o BandwidthOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Bandwidth) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 type BandwidthArrayOutput struct{ *pulumi.OutputState }

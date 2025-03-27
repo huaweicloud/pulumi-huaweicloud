@@ -247,10 +247,10 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
+        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
+         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -293,10 +293,10 @@ class Environment(pulumi.CustomResource):
 
         ## Import
 
-        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
+        Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
+         $ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance_id>/<name>
         ```
 
         :param str resource_name: The name of the resource.

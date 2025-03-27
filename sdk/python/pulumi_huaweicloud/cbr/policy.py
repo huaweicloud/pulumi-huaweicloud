@@ -41,14 +41,12 @@ class PolicyArgs:
                mandatory for cross-region replication. Required if `protection_type` is **replication**.
         :param pulumi.Input[str] destination_region: Specifies the name of the replication destination region, which is mandatory
                for cross-region replication. Required if `protection_type` is **replication**.
-        :param pulumi.Input[bool] enable_acceleration: Specifies whether to enable the acceleration function to shorten
-               the replication time for cross-region.
-               Changing this will create a new policy.
+        :param pulumi.Input[bool] enable_acceleration: Whether to enable the acceleration function to shorten the replication time for cross-region
         :param pulumi.Input[bool] enabled: Specifies whether to enable the policy. Default to **true**.
         :param pulumi.Input['PolicyLongTermRetentionArgs'] long_term_retention: Specifies the long-term retention rules, which is an advanced options of
                the `backup_quantity`. The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the policy name.  
-               This parameter can contain a maximum of 64
+               This parameter can contain a maximum of `64`
                characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region where the policy is located. If omitted, the
                provider-level region will be used. Changing this will create a new policy.
@@ -150,9 +148,7 @@ class PolicyArgs:
     @pulumi.getter(name="enableAcceleration")
     def enable_acceleration(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the acceleration function to shorten
-        the replication time for cross-region.
-        Changing this will create a new policy.
+        Whether to enable the acceleration function to shorten the replication time for cross-region
         """
         return pulumi.get(self, "enable_acceleration")
 
@@ -190,7 +186,7 @@ class PolicyArgs:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the policy name.  
-        This parameter can contain a maximum of 64
+        This parameter can contain a maximum of `64`
         characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -264,14 +260,12 @@ class _PolicyState:
                mandatory for cross-region replication. Required if `protection_type` is **replication**.
         :param pulumi.Input[str] destination_region: Specifies the name of the replication destination region, which is mandatory
                for cross-region replication. Required if `protection_type` is **replication**.
-        :param pulumi.Input[bool] enable_acceleration: Specifies whether to enable the acceleration function to shorten
-               the replication time for cross-region.
-               Changing this will create a new policy.
+        :param pulumi.Input[bool] enable_acceleration: Whether to enable the acceleration function to shorten the replication time for cross-region
         :param pulumi.Input[bool] enabled: Specifies whether to enable the policy. Default to **true**.
         :param pulumi.Input['PolicyLongTermRetentionArgs'] long_term_retention: Specifies the long-term retention rules, which is an advanced options of
                the `backup_quantity`. The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the policy name.  
-               This parameter can contain a maximum of 64
+               This parameter can contain a maximum of `64`
                characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region where the policy is located. If omitted, the
                provider-level region will be used. Changing this will create a new policy.
@@ -364,9 +358,7 @@ class _PolicyState:
     @pulumi.getter(name="enableAcceleration")
     def enable_acceleration(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the acceleration function to shorten
-        the replication time for cross-region.
-        Changing this will create a new policy.
+        Whether to enable the acceleration function to shorten the replication time for cross-region
         """
         return pulumi.get(self, "enable_acceleration")
 
@@ -404,7 +396,7 @@ class _PolicyState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the policy name.  
-        This parameter can contain a maximum of 64
+        This parameter can contain a maximum of `64`
         characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         """
         return pulumi.get(self, "name")
@@ -486,31 +478,63 @@ class Policy(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a CBR Policy resource within Huaweicloud.
+        Manages a backup policy for backing up vault objects within HuaweiCloud.
 
         ## Example Usage
+        ### Create a backup policy (weekly backup)
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        policy_name = config.require_object("policyName")
+        test = huaweicloud.cbr.Policy("test",
+            type="backup",
+            time_period=20,
+            time_zone="UTC+08:00",
+            long_term_retention=huaweicloud.cbr.PolicyLongTermRetentionArgs(
+                daily=10,
+                weekly=10,
+                monthly=1,
+                full_backup_interval=-1,
+            ),
+            backup_cycle=huaweicloud.cbr.PolicyBackupCycleArgs(
+                days="SA,SU",
+                execution_times=[
+                    "08:00",
+                    "20:00",
+                ],
+            ))
+        ```
+        ### Create a replication policy (periodic backup)
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        policy_name = config.require_object("policyName")
+        destination_region = config.require_object("destinationRegion")
+        destination_project_id = config.require_object("destinationProjectId")
+        test = huaweicloud.cbr.Policy("test",
+            type="replication",
+            destination_region=destination_region,
+            destination_project_id=destination_project_id,
+            backup_quantity=20,
+            backup_cycle=huaweicloud.cbr.PolicyBackupCycleArgs(
+                interval=5,
+                execution_times=["21:00"],
+            ))
+        ```
 
         ## Import
 
-        Policies can be imported by their `id`. For example,
+        Policies can be imported by their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
+         $ pulumi import huaweicloud:Cbr/policy:Policy test <id>
         ```
-
-         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
-
-         ...
-
-         lifecycle {
-
-         ignore_changes = [
-
-         enable_acceleration,
-
-         ]
-
-         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
@@ -522,14 +546,12 @@ class Policy(pulumi.CustomResource):
                mandatory for cross-region replication. Required if `protection_type` is **replication**.
         :param pulumi.Input[str] destination_region: Specifies the name of the replication destination region, which is mandatory
                for cross-region replication. Required if `protection_type` is **replication**.
-        :param pulumi.Input[bool] enable_acceleration: Specifies whether to enable the acceleration function to shorten
-               the replication time for cross-region.
-               Changing this will create a new policy.
+        :param pulumi.Input[bool] enable_acceleration: Whether to enable the acceleration function to shorten the replication time for cross-region
         :param pulumi.Input[bool] enabled: Specifies whether to enable the policy. Default to **true**.
         :param pulumi.Input[pulumi.InputType['PolicyLongTermRetentionArgs']] long_term_retention: Specifies the long-term retention rules, which is an advanced options of
                the `backup_quantity`. The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the policy name.  
-               This parameter can contain a maximum of 64
+               This parameter can contain a maximum of `64`
                characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region where the policy is located. If omitted, the
                provider-level region will be used. Changing this will create a new policy.
@@ -548,31 +570,63 @@ class Policy(pulumi.CustomResource):
                  args: PolicyArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a CBR Policy resource within Huaweicloud.
+        Manages a backup policy for backing up vault objects within HuaweiCloud.
 
         ## Example Usage
+        ### Create a backup policy (weekly backup)
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        policy_name = config.require_object("policyName")
+        test = huaweicloud.cbr.Policy("test",
+            type="backup",
+            time_period=20,
+            time_zone="UTC+08:00",
+            long_term_retention=huaweicloud.cbr.PolicyLongTermRetentionArgs(
+                daily=10,
+                weekly=10,
+                monthly=1,
+                full_backup_interval=-1,
+            ),
+            backup_cycle=huaweicloud.cbr.PolicyBackupCycleArgs(
+                days="SA,SU",
+                execution_times=[
+                    "08:00",
+                    "20:00",
+                ],
+            ))
+        ```
+        ### Create a replication policy (periodic backup)
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        policy_name = config.require_object("policyName")
+        destination_region = config.require_object("destinationRegion")
+        destination_project_id = config.require_object("destinationProjectId")
+        test = huaweicloud.cbr.Policy("test",
+            type="replication",
+            destination_region=destination_region,
+            destination_project_id=destination_project_id,
+            backup_quantity=20,
+            backup_cycle=huaweicloud.cbr.PolicyBackupCycleArgs(
+                interval=5,
+                execution_times=["21:00"],
+            ))
+        ```
 
         ## Import
 
-        Policies can be imported by their `id`. For example,
+        Policies can be imported by their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cbr/policy:Policy test 4d2c2939-774f-42ef-ab15-e5b126b11ace
+         $ pulumi import huaweicloud:Cbr/policy:Policy test <id>
         ```
-
-         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`enable_acceleration`. It is generally recommended running `terraform plan` after importing a policy. You can then decide if changes should be applied to the policy, or the resource definition should be updated to align with the policy. Also you can ignore changes as below. resource "huaweicloud_cbr_policy" "test" {
-
-         ...
-
-         lifecycle {
-
-         ignore_changes = [
-
-         enable_acceleration,
-
-         ]
-
-         } }
 
         :param str resource_name: The name of the resource.
         :param PolicyArgs args: The arguments to use to populate this resource's properties.
@@ -663,14 +717,12 @@ class Policy(pulumi.CustomResource):
                mandatory for cross-region replication. Required if `protection_type` is **replication**.
         :param pulumi.Input[str] destination_region: Specifies the name of the replication destination region, which is mandatory
                for cross-region replication. Required if `protection_type` is **replication**.
-        :param pulumi.Input[bool] enable_acceleration: Specifies whether to enable the acceleration function to shorten
-               the replication time for cross-region.
-               Changing this will create a new policy.
+        :param pulumi.Input[bool] enable_acceleration: Whether to enable the acceleration function to shorten the replication time for cross-region
         :param pulumi.Input[bool] enabled: Specifies whether to enable the policy. Default to **true**.
         :param pulumi.Input[pulumi.InputType['PolicyLongTermRetentionArgs']] long_term_retention: Specifies the long-term retention rules, which is an advanced options of
                the `backup_quantity`. The object structure is documented below.
         :param pulumi.Input[str] name: Specifies the policy name.  
-               This parameter can contain a maximum of 64
+               This parameter can contain a maximum of `64`
                characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region where the policy is located. If omitted, the
                provider-level region will be used. Changing this will create a new policy.
@@ -740,9 +792,7 @@ class Policy(pulumi.CustomResource):
     @pulumi.getter(name="enableAcceleration")
     def enable_acceleration(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether to enable the acceleration function to shorten
-        the replication time for cross-region.
-        Changing this will create a new policy.
+        Whether to enable the acceleration function to shorten the replication time for cross-region
         """
         return pulumi.get(self, "enable_acceleration")
 
@@ -768,7 +818,7 @@ class Policy(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies the policy name.  
-        This parameter can contain a maximum of 64
+        This parameter can contain a maximum of `64`
         characters, which may consist of chinese characters, letters, digits, underscores(_) and hyphens (-).
         """
         return pulumi.get(self, "name")

@@ -13,11 +13,13 @@ import (
 
 // Manages a Workspace desktop resource within HuaweiCloud.
 //
+// > **NOTE:** Before creating Workspace desktop, ensure that the Workspace service has been registered.
+//
 // ## Example Usage
 //
 // ## Import
 //
-// Desktops can be imported using the `id`, e.g.
+// Desktops can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -25,7 +27,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`nic` and `user_email`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. resource "huaweicloud_workspace_desktop" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`user_email`, `delete_user`, `image_type`, `vpc_id`, `power_action`, `power_action_type` and `email_notification`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_desktop" "test" {
 //
 //	...
 //
@@ -33,7 +35,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	user_email, nic,
+//	user_email, delete_user, image_type, vpc_id, power_action, power_action_type, email_notification,
 //
 //	]
 //
@@ -54,10 +56,11 @@ type Desktop struct {
 	// operations.
 	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrOutput `pulumi:"emailNotification"`
+	// Specifies the enterprise project ID of the desktop.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
 	// Specifies the image ID to create the desktop.
-	// Changing this will create a new resource.
 	ImageId pulumi.StringOutput `pulumi:"imageId"`
 	// Specifies the image type. The valid values are as follows:
 	// + **market**: The market image.
@@ -70,8 +73,16 @@ type Desktop struct {
 	// Changing this will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the NIC information corresponding to the desktop.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The object structure is documented below.
 	Nics DesktopNicArrayOutput `pulumi:"nics"`
+	// Specifies the power action to be done for the desktop.
+	// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+	PowerAction pulumi.StringOutput `pulumi:"powerAction"`
+	// Specifies the power action mechanisms for the desktop.
+	// The valid values are as follows:
+	// + **SOFT**: Normal operation.
+	// + **HARD**: Forced operation.
+	PowerActionType pulumi.StringPtrOutput `pulumi:"powerActionType"`
 	// The region in which to create the Workspace desktop resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -82,8 +93,9 @@ type Desktop struct {
 	// In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
 	// Changing this will create a new resource.
 	SecurityGroups pulumi.StringArrayOutput `pulumi:"securityGroups"`
+	// The current status of the desktop.
+	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the key/value pairs of the desktop.
-	// Changing this will create a new resource.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the user email.
 	// Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
@@ -172,10 +184,11 @@ type desktopState struct {
 	// operations.
 	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification *bool `pulumi:"emailNotification"`
+	// Specifies the enterprise project ID of the desktop.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of desktop.
 	FlavorId *string `pulumi:"flavorId"`
 	// Specifies the image ID to create the desktop.
-	// Changing this will create a new resource.
 	ImageId *string `pulumi:"imageId"`
 	// Specifies the image type. The valid values are as follows:
 	// + **market**: The market image.
@@ -188,8 +201,16 @@ type desktopState struct {
 	// Changing this will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the NIC information corresponding to the desktop.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The object structure is documented below.
 	Nics []DesktopNic `pulumi:"nics"`
+	// Specifies the power action to be done for the desktop.
+	// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+	PowerAction *string `pulumi:"powerAction"`
+	// Specifies the power action mechanisms for the desktop.
+	// The valid values are as follows:
+	// + **SOFT**: Normal operation.
+	// + **HARD**: Forced operation.
+	PowerActionType *string `pulumi:"powerActionType"`
 	// The region in which to create the Workspace desktop resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -200,8 +221,9 @@ type desktopState struct {
 	// In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
 	// Changing this will create a new resource.
 	SecurityGroups []string `pulumi:"securityGroups"`
+	// The current status of the desktop.
+	Status *string `pulumi:"status"`
 	// Specifies the key/value pairs of the desktop.
-	// Changing this will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the user email.
 	// Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
@@ -237,10 +259,11 @@ type DesktopState struct {
 	// operations.
 	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrInput
+	// Specifies the enterprise project ID of the desktop.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringPtrInput
 	// Specifies the image ID to create the desktop.
-	// Changing this will create a new resource.
 	ImageId pulumi.StringPtrInput
 	// Specifies the image type. The valid values are as follows:
 	// + **market**: The market image.
@@ -253,8 +276,16 @@ type DesktopState struct {
 	// Changing this will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the NIC information corresponding to the desktop.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The object structure is documented below.
 	Nics DesktopNicArrayInput
+	// Specifies the power action to be done for the desktop.
+	// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+	PowerAction pulumi.StringPtrInput
+	// Specifies the power action mechanisms for the desktop.
+	// The valid values are as follows:
+	// + **SOFT**: Normal operation.
+	// + **HARD**: Forced operation.
+	PowerActionType pulumi.StringPtrInput
 	// The region in which to create the Workspace desktop resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -265,8 +296,9 @@ type DesktopState struct {
 	// In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
 	// Changing this will create a new resource.
 	SecurityGroups pulumi.StringArrayInput
+	// The current status of the desktop.
+	Status pulumi.StringPtrInput
 	// Specifies the key/value pairs of the desktop.
-	// Changing this will create a new resource.
 	Tags pulumi.StringMapInput
 	// Specifies the user email.
 	// Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
@@ -306,10 +338,11 @@ type desktopArgs struct {
 	// operations.
 	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification *bool `pulumi:"emailNotification"`
+	// Specifies the enterprise project ID of the desktop.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of desktop.
 	FlavorId string `pulumi:"flavorId"`
 	// Specifies the image ID to create the desktop.
-	// Changing this will create a new resource.
 	ImageId string `pulumi:"imageId"`
 	// Specifies the image type. The valid values are as follows:
 	// + **market**: The market image.
@@ -322,8 +355,16 @@ type desktopArgs struct {
 	// Changing this will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the NIC information corresponding to the desktop.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The object structure is documented below.
 	Nics []DesktopNic `pulumi:"nics"`
+	// Specifies the power action to be done for the desktop.
+	// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+	PowerAction *string `pulumi:"powerAction"`
+	// Specifies the power action mechanisms for the desktop.
+	// The valid values are as follows:
+	// + **SOFT**: Normal operation.
+	// + **HARD**: Forced operation.
+	PowerActionType *string `pulumi:"powerActionType"`
 	// The region in which to create the Workspace desktop resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -335,7 +376,6 @@ type desktopArgs struct {
 	// Changing this will create a new resource.
 	SecurityGroups []string `pulumi:"securityGroups"`
 	// Specifies the key/value pairs of the desktop.
-	// Changing this will create a new resource.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the user email.
 	// Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
@@ -372,10 +412,11 @@ type DesktopArgs struct {
 	// operations.
 	// Defaults to **false**. Changing this will create a new resource.
 	EmailNotification pulumi.BoolPtrInput
+	// Specifies the enterprise project ID of the desktop.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavor ID of desktop.
 	FlavorId pulumi.StringInput
 	// Specifies the image ID to create the desktop.
-	// Changing this will create a new resource.
 	ImageId pulumi.StringInput
 	// Specifies the image type. The valid values are as follows:
 	// + **market**: The market image.
@@ -388,8 +429,16 @@ type DesktopArgs struct {
 	// Changing this will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the NIC information corresponding to the desktop.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The object structure is documented below.
 	Nics DesktopNicArrayInput
+	// Specifies the power action to be done for the desktop.
+	// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+	PowerAction pulumi.StringPtrInput
+	// Specifies the power action mechanisms for the desktop.
+	// The valid values are as follows:
+	// + **SOFT**: Normal operation.
+	// + **HARD**: Forced operation.
+	PowerActionType pulumi.StringPtrInput
 	// The region in which to create the Workspace desktop resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -401,7 +450,6 @@ type DesktopArgs struct {
 	// Changing this will create a new resource.
 	SecurityGroups pulumi.StringArrayInput
 	// Specifies the key/value pairs of the desktop.
-	// Changing this will create a new resource.
 	Tags pulumi.StringMapInput
 	// Specifies the user email.
 	// Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
@@ -535,13 +583,17 @@ func (o DesktopOutput) EmailNotification() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.BoolPtrOutput { return v.EmailNotification }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the enterprise project ID of the desktop.
+func (o DesktopOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Desktop) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
 // Specifies the flavor ID of desktop.
 func (o DesktopOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.StringOutput { return v.FlavorId }).(pulumi.StringOutput)
 }
 
 // Specifies the image ID to create the desktop.
-// Changing this will create a new resource.
 func (o DesktopOutput) ImageId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.StringOutput { return v.ImageId }).(pulumi.StringOutput)
 }
@@ -563,9 +615,23 @@ func (o DesktopOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies the NIC information corresponding to the desktop.
-// The object structure is documented below. Changing this will create a new resource.
+// The object structure is documented below.
 func (o DesktopOutput) Nics() DesktopNicArrayOutput {
 	return o.ApplyT(func(v *Desktop) DesktopNicArrayOutput { return v.Nics }).(DesktopNicArrayOutput)
+}
+
+// Specifies the power action to be done for the desktop.
+// The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+func (o DesktopOutput) PowerAction() pulumi.StringOutput {
+	return o.ApplyT(func(v *Desktop) pulumi.StringOutput { return v.PowerAction }).(pulumi.StringOutput)
+}
+
+// Specifies the power action mechanisms for the desktop.
+// The valid values are as follows:
+// + **SOFT**: Normal operation.
+// + **HARD**: Forced operation.
+func (o DesktopOutput) PowerActionType() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Desktop) pulumi.StringPtrOutput { return v.PowerActionType }).(pulumi.StringPtrOutput)
 }
 
 // The region in which to create the Workspace desktop resource.
@@ -587,8 +653,12 @@ func (o DesktopOutput) SecurityGroups() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.StringArrayOutput { return v.SecurityGroups }).(pulumi.StringArrayOutput)
 }
 
+// The current status of the desktop.
+func (o DesktopOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v *Desktop) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
+}
+
 // Specifies the key/value pairs of the desktop.
-// Changing this will create a new resource.
 func (o DesktopOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Desktop) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }

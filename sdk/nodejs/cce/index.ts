@@ -6,9 +6,17 @@ import * as utilities from "../utilities";
 
 // Export members:
 export * from "./addon";
+export * from "./chart";
 export * from "./cluster";
+export * from "./clusterCertificateRevoke";
+export * from "./clusterLogConfig";
+export * from "./clusterUpgrade";
 export * from "./getAddonTemplate";
+export * from "./getAddons";
+export * from "./getCharts";
 export * from "./getCluster";
+export * from "./getClusterCertificates";
+export * from "./getClusterConfigurations";
 export * from "./getClusters";
 export * from "./getNode";
 export * from "./getNodePool";
@@ -17,15 +25,25 @@ export * from "./namespace";
 export * from "./node";
 export * from "./nodeAttach";
 export * from "./nodePool";
+export * from "./nodePoolNodesAdd";
+export * from "./nodePoolScale";
+export * from "./nodeSync";
 export * from "./pvc";
 
 // Import resources to register:
 import { Addon } from "./addon";
+import { Chart } from "./chart";
 import { Cluster } from "./cluster";
+import { ClusterCertificateRevoke } from "./clusterCertificateRevoke";
+import { ClusterLogConfig } from "./clusterLogConfig";
+import { ClusterUpgrade } from "./clusterUpgrade";
 import { Namespace } from "./namespace";
 import { Node } from "./node";
 import { NodeAttach } from "./nodeAttach";
 import { NodePool } from "./nodePool";
+import { NodePoolNodesAdd } from "./nodePoolNodesAdd";
+import { NodePoolScale } from "./nodePoolScale";
+import { NodeSync } from "./nodeSync";
 import { Pvc } from "./pvc";
 
 const _module = {
@@ -34,8 +52,16 @@ const _module = {
         switch (type) {
             case "huaweicloud:Cce/addon:Addon":
                 return new Addon(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/chart:Chart":
+                return new Chart(name, <any>undefined, { urn })
             case "huaweicloud:Cce/cluster:Cluster":
                 return new Cluster(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/clusterCertificateRevoke:ClusterCertificateRevoke":
+                return new ClusterCertificateRevoke(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/clusterLogConfig:ClusterLogConfig":
+                return new ClusterLogConfig(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/clusterUpgrade:ClusterUpgrade":
+                return new ClusterUpgrade(name, <any>undefined, { urn })
             case "huaweicloud:Cce/namespace:Namespace":
                 return new Namespace(name, <any>undefined, { urn })
             case "huaweicloud:Cce/node:Node":
@@ -44,6 +70,12 @@ const _module = {
                 return new NodeAttach(name, <any>undefined, { urn })
             case "huaweicloud:Cce/nodePool:NodePool":
                 return new NodePool(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/nodePoolNodesAdd:NodePoolNodesAdd":
+                return new NodePoolNodesAdd(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/nodePoolScale:NodePoolScale":
+                return new NodePoolScale(name, <any>undefined, { urn })
+            case "huaweicloud:Cce/nodeSync:NodeSync":
+                return new NodeSync(name, <any>undefined, { urn })
             case "huaweicloud:Cce/pvc:Pvc":
                 return new Pvc(name, <any>undefined, { urn })
             default:
@@ -52,9 +84,16 @@ const _module = {
     },
 };
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/addon", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/chart", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/cluster", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/clusterCertificateRevoke", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/clusterLogConfig", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/clusterUpgrade", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/namespace", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/node", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/nodeAttach", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/nodePool", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/nodePoolNodesAdd", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/nodePoolScale", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Cce/nodeSync", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Cce/pvc", _module)

@@ -23,16 +23,78 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 	switch typ {
 	case "huaweicloud:Rds/account:Account":
 		r = &Account{}
+	case "huaweicloud:Rds/backup:Backup":
+		r = &Backup{}
+	case "huaweicloud:Rds/crossRegionBackupStrategy:CrossRegionBackupStrategy":
+		r = &CrossRegionBackupStrategy{}
 	case "huaweicloud:Rds/database:Database":
 		r = &Database{}
+	case "huaweicloud:Rds/databaseLogsShrinking:DatabaseLogsShrinking":
+		r = &DatabaseLogsShrinking{}
 	case "huaweicloud:Rds/database_privilege:Database_privilege":
 		r = &Database_privilege{}
+	case "huaweicloud:Rds/extendLogLink:ExtendLogLink":
+		r = &ExtendLogLink{}
 	case "huaweicloud:Rds/instance:Instance":
 		r = &Instance{}
+	case "huaweicloud:Rds/instanceEipAssociate:InstanceEipAssociate":
+		r = &InstanceEipAssociate{}
+	case "huaweicloud:Rds/instantTaskDelete:InstantTaskDelete":
+		r = &InstantTaskDelete{}
+	case "huaweicloud:Rds/ltsLog:LtsLog":
+		r = &LtsLog{}
+	case "huaweicloud:Rds/mysqlAccount:MysqlAccount":
+		r = &MysqlAccount{}
+	case "huaweicloud:Rds/mysqlBinlog:MysqlBinlog":
+		r = &MysqlBinlog{}
+	case "huaweicloud:Rds/mysqlDatabase:MysqlDatabase":
+		r = &MysqlDatabase{}
+	case "huaweicloud:Rds/mysqlDatabasePrivilege:MysqlDatabasePrivilege":
+		r = &MysqlDatabasePrivilege{}
+	case "huaweicloud:Rds/mysqlDatabaseTableRestore:MysqlDatabaseTableRestore":
+		r = &MysqlDatabaseTableRestore{}
+	case "huaweicloud:Rds/mysqlProxy:MysqlProxy":
+		r = &MysqlProxy{}
+	case "huaweicloud:Rds/mysqlProxyRestart:MysqlProxyRestart":
+		r = &MysqlProxyRestart{}
 	case "huaweicloud:Rds/parametergroup:Parametergroup":
 		r = &Parametergroup{}
+	case "huaweicloud:Rds/pgAccount:PgAccount":
+		r = &PgAccount{}
+	case "huaweicloud:Rds/pgAccountPrivileges:PgAccountPrivileges":
+		r = &PgAccountPrivileges{}
+	case "huaweicloud:Rds/pgAccountRoles:PgAccountRoles":
+		r = &PgAccountRoles{}
+	case "huaweicloud:Rds/pgDatabase:PgDatabase":
+		r = &PgDatabase{}
+	case "huaweicloud:Rds/pgDatabasePrivilege:PgDatabasePrivilege":
+		r = &PgDatabasePrivilege{}
+	case "huaweicloud:Rds/pgHba:PgHba":
+		r = &PgHba{}
+	case "huaweicloud:Rds/pgPlugin:PgPlugin":
+		r = &PgPlugin{}
+	case "huaweicloud:Rds/pgPluginParameter:PgPluginParameter":
+		r = &PgPluginParameter{}
+	case "huaweicloud:Rds/pgPluginUpdate:PgPluginUpdate":
+		r = &PgPluginUpdate{}
+	case "huaweicloud:Rds/pgSqlLimit:PgSqlLimit":
+		r = &PgSqlLimit{}
+	case "huaweicloud:Rds/primaryStandbySwitch:PrimaryStandbySwitch":
+		r = &PrimaryStandbySwitch{}
 	case "huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance":
 		r = &ReadReplicaInstance{}
+	case "huaweicloud:Rds/restore:Restore":
+		r = &Restore{}
+	case "huaweicloud:Rds/sqlAudit:SqlAudit":
+		r = &SqlAudit{}
+	case "huaweicloud:Rds/sqlserverAccount:SqlserverAccount":
+		r = &SqlserverAccount{}
+	case "huaweicloud:Rds/sqlserverDatabase:SqlserverDatabase":
+		r = &SqlserverDatabase{}
+	case "huaweicloud:Rds/sqlserverDatabaseCopy:SqlserverDatabaseCopy":
+		r = &SqlserverDatabaseCopy{}
+	case "huaweicloud:Rds/sqlserverDatabasePrivilege:SqlserverDatabasePrivilege":
+		r = &SqlserverDatabasePrivilege{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
 	}
@@ -53,7 +115,22 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Rds/backup",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/crossRegionBackupStrategy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Rds/database",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/databaseLogsShrinking",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
@@ -63,7 +140,62 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Rds/extendLogLink",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Rds/instance",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/instanceEipAssociate",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/instantTaskDelete",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/ltsLog",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlAccount",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlBinlog",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlDatabase",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlDatabasePrivilege",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlDatabaseTableRestore",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlProxy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/mysqlProxyRestart",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
@@ -73,7 +205,92 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Rds/pgAccount",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgAccountPrivileges",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgAccountRoles",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgDatabase",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgDatabasePrivilege",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgHba",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgPlugin",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgPluginParameter",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgPluginUpdate",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/pgSqlLimit",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/primaryStandbySwitch",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Rds/readReplicaInstance",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/restore",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/sqlAudit",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/sqlserverAccount",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/sqlserverDatabase",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/sqlserverDatabaseCopy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Rds/sqlserverDatabasePrivilege",
 		&module{version},
 	)
 }

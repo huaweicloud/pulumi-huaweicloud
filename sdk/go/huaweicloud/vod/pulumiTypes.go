@@ -15,20 +15,20 @@ type MediaAssetThumbnail struct {
 	// + **0**: adaptive (maintain the original aspect ratio).
 	// + **1**: 16:9.
 	AspectRatio *int `pulumi:"aspectRatio"`
-	// Specifies the number of screenshots as the cover. Defaults to: **1**.
+	// Specifies the number of screenshots as the cover. Defaults to `1`.
 	// Changing this creates a new resource.
 	CoverPosition *int `pulumi:"coverPosition"`
 	// Specifies an array of time points of screenshot. Required when `type` is **dots**.
 	// Changing this creates a new resource.
 	Dots []int `pulumi:"dots"`
-	// Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-	// Defaults to: **1**. Changing this creates a new resource.
+	// Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+	// Defaults to: `1`. Changing this creates a new resource.
 	Format *int `pulumi:"format"`
 	// Specifies the size of the longest side of the screenshot. Unit: pixel.
 	// The width dimension is calculated by scaling the dimension proportional to the original video pixels.
 	// Changing this creates a new resource.
 	MaxLength *int `pulumi:"maxLength"`
-	// Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+	// Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
 	// Required when `type` is **time**. Changing this creates a new resource.
 	Time *int `pulumi:"time"`
 	// Specifies the screenshot type. Valid values are: **time** and **dots**.
@@ -52,20 +52,20 @@ type MediaAssetThumbnailArgs struct {
 	// + **0**: adaptive (maintain the original aspect ratio).
 	// + **1**: 16:9.
 	AspectRatio pulumi.IntPtrInput `pulumi:"aspectRatio"`
-	// Specifies the number of screenshots as the cover. Defaults to: **1**.
+	// Specifies the number of screenshots as the cover. Defaults to `1`.
 	// Changing this creates a new resource.
 	CoverPosition pulumi.IntPtrInput `pulumi:"coverPosition"`
 	// Specifies an array of time points of screenshot. Required when `type` is **dots**.
 	// Changing this creates a new resource.
 	Dots pulumi.IntArrayInput `pulumi:"dots"`
-	// Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-	// Defaults to: **1**. Changing this creates a new resource.
+	// Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+	// Defaults to: `1`. Changing this creates a new resource.
 	Format pulumi.IntPtrInput `pulumi:"format"`
 	// Specifies the size of the longest side of the screenshot. Unit: pixel.
 	// The width dimension is calculated by scaling the dimension proportional to the original video pixels.
 	// Changing this creates a new resource.
 	MaxLength pulumi.IntPtrInput `pulumi:"maxLength"`
-	// Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+	// Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
 	// Required when `type` is **time**. Changing this creates a new resource.
 	Time pulumi.IntPtrInput `pulumi:"time"`
 	// Specifies the screenshot type. Valid values are: **time** and **dots**.
@@ -157,7 +157,7 @@ func (o MediaAssetThumbnailOutput) AspectRatio() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) *int { return v.AspectRatio }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the number of screenshots as the cover. Defaults to: **1**.
+// Specifies the number of screenshots as the cover. Defaults to `1`.
 // Changing this creates a new resource.
 func (o MediaAssetThumbnailOutput) CoverPosition() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) *int { return v.CoverPosition }).(pulumi.IntPtrOutput)
@@ -169,8 +169,8 @@ func (o MediaAssetThumbnailOutput) Dots() pulumi.IntArrayOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) []int { return v.Dots }).(pulumi.IntArrayOutput)
 }
 
-// Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-// Defaults to: **1**. Changing this creates a new resource.
+// Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+// Defaults to: `1`. Changing this creates a new resource.
 func (o MediaAssetThumbnailOutput) Format() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) *int { return v.Format }).(pulumi.IntPtrOutput)
 }
@@ -182,7 +182,7 @@ func (o MediaAssetThumbnailOutput) MaxLength() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) *int { return v.MaxLength }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+// Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
 // Required when `type` is **time**. Changing this creates a new resource.
 func (o MediaAssetThumbnailOutput) Time() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MediaAssetThumbnail) *int { return v.Time }).(pulumi.IntPtrOutput)
@@ -230,7 +230,7 @@ func (o MediaAssetThumbnailPtrOutput) AspectRatio() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the number of screenshots as the cover. Defaults to: **1**.
+// Specifies the number of screenshots as the cover. Defaults to `1`.
 // Changing this creates a new resource.
 func (o MediaAssetThumbnailPtrOutput) CoverPosition() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MediaAssetThumbnail) *int {
@@ -252,8 +252,8 @@ func (o MediaAssetThumbnailPtrOutput) Dots() pulumi.IntArrayOutput {
 	}).(pulumi.IntArrayOutput)
 }
 
-// Specifies the screenshot file format. Currently, only **1** (jpg) is supported.
-// Defaults to: **1**. Changing this creates a new resource.
+// Specifies the screenshot file format. Currently, only `1` (jpg) is supported.
+// Defaults to: `1`. Changing this creates a new resource.
 func (o MediaAssetThumbnailPtrOutput) Format() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MediaAssetThumbnail) *int {
 		if v == nil {
@@ -275,7 +275,7 @@ func (o MediaAssetThumbnailPtrOutput) MaxLength() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the screenshot time interval (unit: second). The value range is 1 to 12.
+// Specifies the screenshot time interval (unit: second). The value range is `1` to `12`.
 // Required when `type` is **time**. Changing this creates a new resource.
 func (o MediaAssetThumbnailPtrOutput) Time() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MediaAssetThumbnail) *int {
@@ -422,8 +422,8 @@ func (o TranscodingTemplateGroupQualityInfoArrayOutput) Index(i pulumi.IntInput)
 }
 
 type TranscodingTemplateGroupQualityInfoAudio struct {
-	// Specifies the audio bitrate. The value can be **0** or range from
-	// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+	// Specifies the audio bitrate. The value can be `0` or range from
+	// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 	Bitrate *int `pulumi:"bitrate"`
 	// Specifies the audio channels. The value can be:
 	// + **1**: Mono
@@ -451,8 +451,8 @@ type TranscodingTemplateGroupQualityInfoAudioInput interface {
 }
 
 type TranscodingTemplateGroupQualityInfoAudioArgs struct {
-	// Specifies the audio bitrate. The value can be **0** or range from
-	// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+	// Specifies the audio bitrate. The value can be `0` or range from
+	// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
 	// Specifies the audio channels. The value can be:
 	// + **1**: Mono
@@ -545,8 +545,8 @@ func (o TranscodingTemplateGroupQualityInfoAudioOutput) ToTranscodingTemplateGro
 	}).(TranscodingTemplateGroupQualityInfoAudioPtrOutput)
 }
 
-// Specifies the audio bitrate. The value can be **0** or range from
-// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+// Specifies the audio bitrate. The value can be `0` or range from
+// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 func (o TranscodingTemplateGroupQualityInfoAudioOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoAudio) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
@@ -593,8 +593,8 @@ func (o TranscodingTemplateGroupQualityInfoAudioPtrOutput) Elem() TranscodingTem
 	}).(TranscodingTemplateGroupQualityInfoAudioOutput)
 }
 
-// Specifies the audio bitrate. The value can be **0** or range from
-// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+// Specifies the audio bitrate. The value can be `0` or range from
+// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 func (o TranscodingTemplateGroupQualityInfoAudioPtrOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupQualityInfoAudio) *int {
 		if v == nil {
@@ -633,21 +633,20 @@ func (o TranscodingTemplateGroupQualityInfoAudioPtrOutput) SampleRate() pulumi.I
 }
 
 type TranscodingTemplateGroupQualityInfoVideo struct {
-	// Specifies the audio bitrate. The value can be **0** or range from
-	// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+	// Specifies the audio bitrate. The value can be `0` or range from
+	// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 	Bitrate *int `pulumi:"bitrate"`
-	// Specifies the video frame rate. The value ranges from **1** to **75**.
-	// Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-	// untransocded video.
+	// Specifies the video frame rate. The value ranges from `1` to `75`.
+	// Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
 	FrameRate *int `pulumi:"frameRate"`
-	// Specifies the video height. The value can be **0** or range from **128** to **2160**.
-	// Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
+	// Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+	// Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
 	Height *int `pulumi:"height"`
 	// Specifies the video quality.
 	// The value can be: **4K**, **2K**, **FHD**, **SD**, **LD** and **HD**.
 	Quality string `pulumi:"quality"`
-	// Specifies the video width. The value can be **0** or range from **128** to **3840**.
-	// Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+	// Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+	// Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
 	Width *int `pulumi:"width"`
 }
 
@@ -663,21 +662,20 @@ type TranscodingTemplateGroupQualityInfoVideoInput interface {
 }
 
 type TranscodingTemplateGroupQualityInfoVideoArgs struct {
-	// Specifies the audio bitrate. The value can be **0** or range from
-	// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+	// Specifies the audio bitrate. The value can be `0` or range from
+	// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
-	// Specifies the video frame rate. The value ranges from **1** to **75**.
-	// Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-	// untransocded video.
+	// Specifies the video frame rate. The value ranges from `1` to `75`.
+	// Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
 	FrameRate pulumi.IntPtrInput `pulumi:"frameRate"`
-	// Specifies the video height. The value can be **0** or range from **128** to **2160**.
-	// Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
+	// Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+	// Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
 	Height pulumi.IntPtrInput `pulumi:"height"`
 	// Specifies the video quality.
 	// The value can be: **4K**, **2K**, **FHD**, **SD**, **LD** and **HD**.
 	Quality pulumi.StringInput `pulumi:"quality"`
-	// Specifies the video width. The value can be **0** or range from **128** to **3840**.
-	// Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+	// Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+	// Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
 	Width pulumi.IntPtrInput `pulumi:"width"`
 }
 
@@ -758,21 +756,20 @@ func (o TranscodingTemplateGroupQualityInfoVideoOutput) ToTranscodingTemplateGro
 	}).(TranscodingTemplateGroupQualityInfoVideoPtrOutput)
 }
 
-// Specifies the audio bitrate. The value can be **0** or range from
-// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+// Specifies the audio bitrate. The value can be `0` or range from
+// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 func (o TranscodingTemplateGroupQualityInfoVideoOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoVideo) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video frame rate. The value ranges from **1** to **75**.
-// Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-// untransocded video.
+// Specifies the video frame rate. The value ranges from `1` to `75`.
+// Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
 func (o TranscodingTemplateGroupQualityInfoVideoOutput) FrameRate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoVideo) *int { return v.FrameRate }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video height. The value can be **0** or range from **128** to **2160**.
-// Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
+// Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+// Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
 func (o TranscodingTemplateGroupQualityInfoVideoOutput) Height() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoVideo) *int { return v.Height }).(pulumi.IntPtrOutput)
 }
@@ -783,8 +780,8 @@ func (o TranscodingTemplateGroupQualityInfoVideoOutput) Quality() pulumi.StringO
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoVideo) string { return v.Quality }).(pulumi.StringOutput)
 }
 
-// Specifies the video width. The value can be **0** or range from **128** to **3840**.
-// Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+// Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+// Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
 func (o TranscodingTemplateGroupQualityInfoVideoOutput) Width() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupQualityInfoVideo) *int { return v.Width }).(pulumi.IntPtrOutput)
 }
@@ -813,8 +810,8 @@ func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Elem() TranscodingTem
 	}).(TranscodingTemplateGroupQualityInfoVideoOutput)
 }
 
-// Specifies the audio bitrate. The value can be **0** or range from
-// **8** to **1000**. Defaults to: **0**. If set to **0**, the output audio will be produced at the recommended bitrate.
+// Specifies the audio bitrate. The value can be `0` or range from
+// `8` to `1,000`. Defaults to `0`. If set to `0`, the output audio will be produced at the recommended bitrate.
 func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupQualityInfoVideo) *int {
 		if v == nil {
@@ -824,9 +821,8 @@ func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Bitrate() pulumi.IntP
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video frame rate. The value ranges from **1** to **75**.
-// Defaults to: **1**. If set to **1**, the frame rate of the transcoded video is the same as that of the
-// untransocded video.
+// Specifies the video frame rate. The value ranges from `1` to `75`.
+// Defaults to `1`. If set to `1`, the frame rate of the transcoded video is the same as that of the untransocded video.
 func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) FrameRate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupQualityInfoVideo) *int {
 		if v == nil {
@@ -836,8 +832,8 @@ func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) FrameRate() pulumi.In
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video height. The value can be **0** or range from **128** to **2160**.
-// Defaults to: **0**. If set to **0**, the system will automatically adjust the `height` according to the `width`.
+// Specifies the video height. The value can be `0` or range from `128` to `2,160`.
+// Defaults to `0`. If set to `0`, the system will automatically adjust the `height` according to the `width`.
 func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Height() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupQualityInfoVideo) *int {
 		if v == nil {
@@ -858,8 +854,8 @@ func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Quality() pulumi.Stri
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the video width. The value can be **0** or range from **128** to **3840**.
-// Defaults to: **0**. If set to **0**, the system will automatically adjust the `width` according to the `height`.
+// Specifies the video width. The value can be `0` or range from `128` to `3,840`.
+// Defaults to `0`. If set to `0`, the system will automatically adjust the `width` according to the `height`.
 func (o TranscodingTemplateGroupQualityInfoVideoPtrOutput) Width() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupQualityInfoVideo) *int {
 		if v == nil {

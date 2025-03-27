@@ -45,7 +45,7 @@ import (
 //
 // ## Import
 //
-// CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.
+// # CCE namespace can be imported using the cluster ID and namespace name separated by a slash, e.g.bash
 //
 // ```sh
 //
@@ -66,15 +66,15 @@ type Namespace struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new namespace resource.
 	Labels pulumi.StringMapOutput `pulumi:"labels"`
-	// Specifies the unique name of the namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-	// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-	// Exactly one of `name` or `prefix` must be provided.
-	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies a prefix used by the server to generate a unique name.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+	// Specifies the unique name of the namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 	// hyphens (-), and must start and end with lowercase letters and digits.
-	// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+	// Changing this will create a new namespace resource.
+	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies a prefix used by the server to generate a unique name.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new namespace resource.
 	Prefix pulumi.StringPtrOutput `pulumi:"prefix"`
 	// Specifies the region in which to create the namespace resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
@@ -127,15 +127,15 @@ type namespaceState struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new namespace resource.
 	Labels map[string]string `pulumi:"labels"`
-	// Specifies the unique name of the namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-	// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-	// Exactly one of `name` or `prefix` must be provided.
-	Name *string `pulumi:"name"`
-	// Specifies a prefix used by the server to generate a unique name.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+	// Specifies the unique name of the namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 	// hyphens (-), and must start and end with lowercase letters and digits.
-	// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+	// Changing this will create a new namespace resource.
+	Name *string `pulumi:"name"`
+	// Specifies a prefix used by the server to generate a unique name.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new namespace resource.
 	Prefix *string `pulumi:"prefix"`
 	// Specifies the region in which to create the namespace resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
@@ -156,15 +156,15 @@ type NamespaceState struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new namespace resource.
 	Labels pulumi.StringMapInput
-	// Specifies the unique name of the namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-	// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-	// Exactly one of `name` or `prefix` must be provided.
-	Name pulumi.StringPtrInput
-	// Specifies a prefix used by the server to generate a unique name.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+	// Specifies the unique name of the namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 	// hyphens (-), and must start and end with lowercase letters and digits.
-	// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+	// Changing this will create a new namespace resource.
+	Name pulumi.StringPtrInput
+	// Specifies a prefix used by the server to generate a unique name.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new namespace resource.
 	Prefix pulumi.StringPtrInput
 	// Specifies the region in which to create the namespace resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
@@ -187,15 +187,15 @@ type namespaceArgs struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new namespace resource.
 	Labels map[string]string `pulumi:"labels"`
-	// Specifies the unique name of the namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-	// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-	// Exactly one of `name` or `prefix` must be provided.
-	Name *string `pulumi:"name"`
-	// Specifies a prefix used by the server to generate a unique name.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+	// Specifies the unique name of the namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 	// hyphens (-), and must start and end with lowercase letters and digits.
-	// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+	// Changing this will create a new namespace resource.
+	Name *string `pulumi:"name"`
+	// Specifies a prefix used by the server to generate a unique name.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new namespace resource.
 	Prefix *string `pulumi:"prefix"`
 	// Specifies the region in which to create the namespace resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
@@ -213,15 +213,15 @@ type NamespaceArgs struct {
 	// Specifies the map of string keys and values for labels.
 	// Changing this will create a new namespace resource.
 	Labels pulumi.StringMapInput
-	// Specifies the unique name of the namespace.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-	// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-	// Exactly one of `name` or `prefix` must be provided.
-	Name pulumi.StringPtrInput
-	// Specifies a prefix used by the server to generate a unique name.
-	// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+	// Specifies the unique name of the namespace.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 	// hyphens (-), and must start and end with lowercase letters and digits.
-	// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+	// Changing this will create a new namespace resource.
+	Name pulumi.StringPtrInput
+	// Specifies a prefix used by the server to generate a unique name.\
+	// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+	// hyphens (-), and must start and end with lowercase letters and digits.
+	// Changing this will create a new namespace resource.
 	Prefix pulumi.StringPtrInput
 	// Specifies the region in which to create the namespace resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new namespace resource.
@@ -338,18 +338,18 @@ func (o NamespaceOutput) Labels() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringMapOutput { return v.Labels }).(pulumi.StringMapOutput)
 }
 
-// Specifies the unique name of the namespace.
-// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-),
-// and must start and end with lowercase letters and digits. Changing this will create a new namespace resource.
-// Exactly one of `name` or `prefix` must be provided.
+// Specifies the unique name of the namespace.\
+// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+// hyphens (-), and must start and end with lowercase letters and digits.
+// Changing this will create a new namespace resource.
 func (o NamespaceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies a prefix used by the server to generate a unique name.
-// This parameter can contain a maximum of 63 characters, which may consist of lowercase letters, digits and
+// Specifies a prefix used by the server to generate a unique name.\
+// This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
 // hyphens (-), and must start and end with lowercase letters and digits.
-// Changing this will create a new namespace resource. Exactly one of `name` or `prefix` must be provided.
+// Changing this will create a new namespace resource.
 func (o NamespaceOutput) Prefix() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Namespace) pulumi.StringPtrOutput { return v.Prefix }).(pulumi.StringPtrOutput)
 }

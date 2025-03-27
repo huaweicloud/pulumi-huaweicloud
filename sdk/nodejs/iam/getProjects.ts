@@ -6,9 +6,9 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to query the project list within HuaweiCloud.
+ * Use this data source to query the IAM project list within HuaweiCloud.
  *
- * > You *must* have IAM read privileges to use this data source.
+ * > **NOTE:** You *must* have IAM read privileges to use this data source.
  *
  * ## Example Usage
  * ### Obtain project information by name
@@ -49,7 +49,7 @@ export function getProjects(args?: GetProjectsArgs, opts?: pulumi.InvokeOptions)
  */
 export interface GetProjectsArgs {
     /**
-     * Specifies the project name to query.
+     * Specifies the IAM project name to query.
      */
     name?: string;
 }
@@ -63,7 +63,7 @@ export interface GetProjectsResult {
      */
     readonly id: string;
     /**
-     * The project name.
+     * The IAM project name.
      */
     readonly name?: string;
     /**
@@ -81,7 +81,7 @@ export function getProjectsOutput(args?: GetProjectsOutputArgs, opts?: pulumi.In
  */
 export interface GetProjectsOutputArgs {
     /**
-     * Specifies the project name to query.
+     * Specifies the IAM project name to query.
      */
     name?: pulumi.Input<string>;
 }

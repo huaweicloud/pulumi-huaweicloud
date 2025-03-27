@@ -14,49 +14,37 @@ __all__ = ['NetworkArgs', 'Network']
 @pulumi.input_type
 class NetworkArgs:
     def __init__(__self__, *,
-                 availability_zone: pulumi.Input[str],
                  namespace: pulumi.Input[str],
                  network_id: pulumi.Input[str],
                  security_group_id: pulumi.Input[str],
+                 availability_zone: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Network resource.
-        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the CCI network
-               belongs. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your cloud container instances
                into different group. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] network_id: Specifies a network ID of the VPC subnet which the CCI network belongs to.
                Changing this will create a new CCI network resource.
         :param pulumi.Input[str] security_group_id: Specifies a security group ID to which the CCI network belongs to.
                Changing this will create a new CCI network resource.
+        :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the CCI network
+               belongs. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] name: Specifies an unique name of the CCI network resource.
-               The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+               The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
                The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the CCI network.
                If omitted, the provider-level region will be used. Changing this will create a new CCI network resource.
         """
-        pulumi.set(__self__, "availability_zone", availability_zone)
         pulumi.set(__self__, "namespace", namespace)
         pulumi.set(__self__, "network_id", network_id)
         pulumi.set(__self__, "security_group_id", security_group_id)
+        if availability_zone is not None:
+            pulumi.set(__self__, "availability_zone", availability_zone)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
-
-    @property
-    @pulumi.getter(name="availabilityZone")
-    def availability_zone(self) -> pulumi.Input[str]:
-        """
-        Specifies the availability zone (AZ) to which the CCI network
-        belongs. Changing this will create a new CCI network resource.
-        """
-        return pulumi.get(self, "availability_zone")
-
-    @availability_zone.setter
-    def availability_zone(self, value: pulumi.Input[str]):
-        pulumi.set(self, "availability_zone", value)
 
     @property
     @pulumi.getter
@@ -98,11 +86,24 @@ class NetworkArgs:
         pulumi.set(self, "security_group_id", value)
 
     @property
+    @pulumi.getter(name="availabilityZone")
+    def availability_zone(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the availability zone (AZ) to which the CCI network
+        belongs. Changing this will create a new CCI network resource.
+        """
+        return pulumi.get(self, "availability_zone")
+
+    @availability_zone.setter
+    def availability_zone(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "availability_zone", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies an unique name of the CCI network resource.
-        The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+        The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
         The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         """
         return pulumi.get(self, "name")
@@ -144,7 +145,7 @@ class _NetworkState:
                belongs. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] cidr: The network segment on which the subnet resides.
         :param pulumi.Input[str] name: Specifies an unique name of the CCI network resource.
-               The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+               The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
                The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your cloud container instances
                into different group. Changing this will create a new CCI network resource.
@@ -209,7 +210,7 @@ class _NetworkState:
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies an unique name of the CCI network resource.
-        The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+        The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
         The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         """
         return pulumi.get(self, "name")
@@ -333,9 +334,7 @@ class Network(pulumi.CustomResource):
         network_name = config.require_object("networkName")
         vpc_network_id = config.require_object("vpcNetworkId")
         security_group_id = config.require_object("securityGroupId")
-        test_availability_zones = huaweicloud.get_availability_zones()
-        test_network = huaweicloud.cci.Network("testNetwork",
-            availability_zone=test_availability_zones.names[0],
+        test = huaweicloud.cci.Network("test",
             namespace=namespace_name,
             network_id=vpc_network_id,
             security_group_id=security_group_id)
@@ -343,7 +342,7 @@ class Network(pulumi.CustomResource):
 
         ## Import
 
-        Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.
+        Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/network:Network test <namespace>/<id>
@@ -354,7 +353,7 @@ class Network(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the CCI network
                belongs. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] name: Specifies an unique name of the CCI network resource.
-               The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+               The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
                The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your cloud container instances
                into different group. Changing this will create a new CCI network resource.
@@ -385,9 +384,7 @@ class Network(pulumi.CustomResource):
         network_name = config.require_object("networkName")
         vpc_network_id = config.require_object("vpcNetworkId")
         security_group_id = config.require_object("securityGroupId")
-        test_availability_zones = huaweicloud.get_availability_zones()
-        test_network = huaweicloud.cci.Network("testNetwork",
-            availability_zone=test_availability_zones.names[0],
+        test = huaweicloud.cci.Network("test",
             namespace=namespace_name,
             network_id=vpc_network_id,
             security_group_id=security_group_id)
@@ -395,7 +392,7 @@ class Network(pulumi.CustomResource):
 
         ## Import
 
-        Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.
+        Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Cci/network:Network test <namespace>/<id>
@@ -431,8 +428,6 @@ class Network(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = NetworkArgs.__new__(NetworkArgs)
 
-            if availability_zone is None and not opts.urn:
-                raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
             __props__.__dict__["name"] = name
             if namespace is None and not opts.urn:
@@ -480,7 +475,7 @@ class Network(pulumi.CustomResource):
                belongs. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] cidr: The network segment on which the subnet resides.
         :param pulumi.Input[str] name: Specifies an unique name of the CCI network resource.
-               The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+               The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
                The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         :param pulumi.Input[str] namespace: Specifies the namespace to logically divide your cloud container instances
                into different group. Changing this will create a new CCI network resource.
@@ -512,7 +507,7 @@ class Network(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="availabilityZone")
-    def availability_zone(self) -> pulumi.Output[str]:
+    def availability_zone(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the availability zone (AZ) to which the CCI network
         belongs. Changing this will create a new CCI network resource.
@@ -532,7 +527,7 @@ class Network(pulumi.CustomResource):
     def name(self) -> pulumi.Output[str]:
         """
         Specifies an unique name of the CCI network resource.
-        The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+        The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
         The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
         """
         return pulumi.get(self, "name")

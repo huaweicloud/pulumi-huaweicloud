@@ -15,22 +15,22 @@ import (
 //
 // ## Import
 //
-// Subnets can be imported using the subnet `Network ID`, e.g.
+// Subnets can be imported using the subnet `Network ID`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Vpc/subnet:Subnet huaweicloud_vpc_subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
+//	$ pulumi import huaweicloud:Vpc/subnet:Subnet subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
 //
 // ```
 type Subnet struct {
 	pulumi.CustomResourceState
 
 	// Specifies the availability zone (AZ) to which the subnet belongs.
-	// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+	// The value must be an existing AZ in the system. Changing this creates a new subnet.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-	// new Subnet.
+	// new subnet.
 	Cidr pulumi.StringOutput `pulumi:"cidr"`
 	// Specifies supplementary information about the subnet. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
@@ -46,7 +46,7 @@ type Subnet struct {
 	// address 2.
 	DnsLists pulumi.StringArrayOutput `pulumi:"dnsLists"`
 	// Specifies the gateway of the subnet. The value must be a valid IP address
-	// in the subnet segment. Changing this creates a new Subnet.
+	// in the subnet segment. Changing this creates a new subnet.
 	GatewayIp pulumi.StringOutput `pulumi:"gatewayIp"`
 	// The ID of the IPv4 subnet (Native OpenStack API).
 	Ipv4SubnetId pulumi.StringOutput `pulumi:"ipv4SubnetId"`
@@ -68,8 +68,8 @@ type Subnet struct {
 	// Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
 	// IP address.
 	PrimaryDns pulumi.StringOutput `pulumi:"primaryDns"`
-	// Specifies tThe region in which to create the vpc subnet. If omitted, the
-	// provider-level region will be used. Changing this creates a new Subnet.
+	// Specifies the region in which to create the vpc subnet. If omitted, the
+	// provider-level region will be used. Changing this creates a new subnet.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
 	// IP address.
@@ -79,7 +79,7 @@ type Subnet struct {
 	// The key/value pairs to associate with the subnet.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-	// a new Subnet.
+	// a new subnet.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
 }
 
@@ -123,11 +123,11 @@ func GetSubnet(ctx *pulumi.Context,
 // Input properties used for looking up and filtering Subnet resources.
 type subnetState struct {
 	// Specifies the availability zone (AZ) to which the subnet belongs.
-	// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+	// The value must be an existing AZ in the system. Changing this creates a new subnet.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-	// new Subnet.
+	// new subnet.
 	Cidr *string `pulumi:"cidr"`
 	// Specifies supplementary information about the subnet. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
@@ -143,7 +143,7 @@ type subnetState struct {
 	// address 2.
 	DnsLists []string `pulumi:"dnsLists"`
 	// Specifies the gateway of the subnet. The value must be a valid IP address
-	// in the subnet segment. Changing this creates a new Subnet.
+	// in the subnet segment. Changing this creates a new subnet.
 	GatewayIp *string `pulumi:"gatewayIp"`
 	// The ID of the IPv4 subnet (Native OpenStack API).
 	Ipv4SubnetId *string `pulumi:"ipv4SubnetId"`
@@ -165,8 +165,8 @@ type subnetState struct {
 	// Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
 	// IP address.
 	PrimaryDns *string `pulumi:"primaryDns"`
-	// Specifies tThe region in which to create the vpc subnet. If omitted, the
-	// provider-level region will be used. Changing this creates a new Subnet.
+	// Specifies the region in which to create the vpc subnet. If omitted, the
+	// provider-level region will be used. Changing this creates a new subnet.
 	Region *string `pulumi:"region"`
 	// Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
 	// IP address.
@@ -176,17 +176,17 @@ type subnetState struct {
 	// The key/value pairs to associate with the subnet.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-	// a new Subnet.
+	// a new subnet.
 	VpcId *string `pulumi:"vpcId"`
 }
 
 type SubnetState struct {
 	// Specifies the availability zone (AZ) to which the subnet belongs.
-	// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+	// The value must be an existing AZ in the system. Changing this creates a new subnet.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-	// new Subnet.
+	// new subnet.
 	Cidr pulumi.StringPtrInput
 	// Specifies supplementary information about the subnet. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
@@ -202,7 +202,7 @@ type SubnetState struct {
 	// address 2.
 	DnsLists pulumi.StringArrayInput
 	// Specifies the gateway of the subnet. The value must be a valid IP address
-	// in the subnet segment. Changing this creates a new Subnet.
+	// in the subnet segment. Changing this creates a new subnet.
 	GatewayIp pulumi.StringPtrInput
 	// The ID of the IPv4 subnet (Native OpenStack API).
 	Ipv4SubnetId pulumi.StringPtrInput
@@ -224,8 +224,8 @@ type SubnetState struct {
 	// Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
 	// IP address.
 	PrimaryDns pulumi.StringPtrInput
-	// Specifies tThe region in which to create the vpc subnet. If omitted, the
-	// provider-level region will be used. Changing this creates a new Subnet.
+	// Specifies the region in which to create the vpc subnet. If omitted, the
+	// provider-level region will be used. Changing this creates a new subnet.
 	Region pulumi.StringPtrInput
 	// Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
 	// IP address.
@@ -235,7 +235,7 @@ type SubnetState struct {
 	// The key/value pairs to associate with the subnet.
 	Tags pulumi.StringMapInput
 	// Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-	// a new Subnet.
+	// a new subnet.
 	VpcId pulumi.StringPtrInput
 }
 
@@ -245,11 +245,11 @@ func (SubnetState) ElementType() reflect.Type {
 
 type subnetArgs struct {
 	// Specifies the availability zone (AZ) to which the subnet belongs.
-	// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+	// The value must be an existing AZ in the system. Changing this creates a new subnet.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-	// new Subnet.
+	// new subnet.
 	Cidr string `pulumi:"cidr"`
 	// Specifies supplementary information about the subnet. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
@@ -265,7 +265,7 @@ type subnetArgs struct {
 	// address 2.
 	DnsLists []string `pulumi:"dnsLists"`
 	// Specifies the gateway of the subnet. The value must be a valid IP address
-	// in the subnet segment. Changing this creates a new Subnet.
+	// in the subnet segment. Changing this creates a new subnet.
 	GatewayIp string `pulumi:"gatewayIp"`
 	// Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
 	Ipv6Enable *bool `pulumi:"ipv6Enable"`
@@ -279,8 +279,8 @@ type subnetArgs struct {
 	// Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
 	// IP address.
 	PrimaryDns *string `pulumi:"primaryDns"`
-	// Specifies tThe region in which to create the vpc subnet. If omitted, the
-	// provider-level region will be used. Changing this creates a new Subnet.
+	// Specifies the region in which to create the vpc subnet. If omitted, the
+	// provider-level region will be used. Changing this creates a new subnet.
 	Region *string `pulumi:"region"`
 	// Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
 	// IP address.
@@ -288,18 +288,18 @@ type subnetArgs struct {
 	// The key/value pairs to associate with the subnet.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-	// a new Subnet.
+	// a new subnet.
 	VpcId string `pulumi:"vpcId"`
 }
 
 // The set of arguments for constructing a Subnet resource.
 type SubnetArgs struct {
 	// Specifies the availability zone (AZ) to which the subnet belongs.
-	// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+	// The value must be an existing AZ in the system. Changing this creates a new subnet.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the network segment on which the subnet resides. The value must be in
 	// CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-	// new Subnet.
+	// new subnet.
 	Cidr pulumi.StringInput
 	// Specifies supplementary information about the subnet. The value is a string of
 	// no more than 255 characters and cannot contain angle brackets (< or >).
@@ -315,7 +315,7 @@ type SubnetArgs struct {
 	// address 2.
 	DnsLists pulumi.StringArrayInput
 	// Specifies the gateway of the subnet. The value must be a valid IP address
-	// in the subnet segment. Changing this creates a new Subnet.
+	// in the subnet segment. Changing this creates a new subnet.
 	GatewayIp pulumi.StringInput
 	// Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
 	Ipv6Enable pulumi.BoolPtrInput
@@ -329,8 +329,8 @@ type SubnetArgs struct {
 	// Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
 	// IP address.
 	PrimaryDns pulumi.StringPtrInput
-	// Specifies tThe region in which to create the vpc subnet. If omitted, the
-	// provider-level region will be used. Changing this creates a new Subnet.
+	// Specifies the region in which to create the vpc subnet. If omitted, the
+	// provider-level region will be used. Changing this creates a new subnet.
 	Region pulumi.StringPtrInput
 	// Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
 	// IP address.
@@ -338,7 +338,7 @@ type SubnetArgs struct {
 	// The key/value pairs to associate with the subnet.
 	Tags pulumi.StringMapInput
 	// Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-	// a new Subnet.
+	// a new subnet.
 	VpcId pulumi.StringInput
 }
 
@@ -430,14 +430,14 @@ func (o SubnetOutput) ToSubnetOutputWithContext(ctx context.Context) SubnetOutpu
 }
 
 // Specifies the availability zone (AZ) to which the subnet belongs.
-// The value must be an existing AZ in the system. Changing this creates a new Subnet.
+// The value must be an existing AZ in the system. Changing this creates a new subnet.
 func (o SubnetOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
 // Specifies the network segment on which the subnet resides. The value must be in
 // CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-// new Subnet.
+// new subnet.
 func (o SubnetOutput) Cidr() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.Cidr }).(pulumi.StringOutput)
 }
@@ -468,7 +468,7 @@ func (o SubnetOutput) DnsLists() pulumi.StringArrayOutput {
 }
 
 // Specifies the gateway of the subnet. The value must be a valid IP address
-// in the subnet segment. Changing this creates a new Subnet.
+// in the subnet segment. Changing this creates a new subnet.
 func (o SubnetOutput) GatewayIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.GatewayIp }).(pulumi.StringOutput)
 }
@@ -517,8 +517,8 @@ func (o SubnetOutput) PrimaryDns() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.PrimaryDns }).(pulumi.StringOutput)
 }
 
-// Specifies tThe region in which to create the vpc subnet. If omitted, the
-// provider-level region will be used. Changing this creates a new Subnet.
+// Specifies the region in which to create the vpc subnet. If omitted, the
+// provider-level region will be used. Changing this creates a new subnet.
 func (o SubnetOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
@@ -540,7 +540,7 @@ func (o SubnetOutput) Tags() pulumi.StringMapOutput {
 }
 
 // Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-// a new Subnet.
+// a new subnet.
 func (o SubnetOutput) VpcId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Subnet) pulumi.StringOutput { return v.VpcId }).(pulumi.StringOutput)
 }

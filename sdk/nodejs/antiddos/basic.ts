@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g.
+ * Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:AntiDDos/basic:Basic antiddos_1 c5256d47-8f9e-4ae7-9943-6e77e3d8bd2d
@@ -78,6 +78,11 @@ export class Basic extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
+     * Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+     * notification. When the value is empty, it means turning off the alarm notification.
+     */
+    public readonly topicUrn!: pulumi.Output<string | undefined>;
+    /**
      * Specifies the traffic cleaning threshold in Mbps.
      * The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
      */
@@ -100,6 +105,7 @@ export class Basic extends pulumi.CustomResource {
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["topicUrn"] = state ? state.topicUrn : undefined;
             resourceInputs["trafficThreshold"] = state ? state.trafficThreshold : undefined;
         } else {
             const args = argsOrState as BasicArgs | undefined;
@@ -111,6 +117,7 @@ export class Basic extends pulumi.CustomResource {
             }
             resourceInputs["eipId"] = args ? args.eipId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["topicUrn"] = args ? args.topicUrn : undefined;
             resourceInputs["trafficThreshold"] = args ? args.trafficThreshold : undefined;
             resourceInputs["publicIp"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
@@ -142,6 +149,11 @@ export interface BasicState {
      */
     status?: pulumi.Input<string>;
     /**
+     * Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+     * notification. When the value is empty, it means turning off the alarm notification.
+     */
+    topicUrn?: pulumi.Input<string>;
+    /**
      * Specifies the traffic cleaning threshold in Mbps.
      * The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
      */
@@ -161,6 +173,11 @@ export interface BasicArgs {
      * If omitted, the provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+     * notification. When the value is empty, it means turning off the alarm notification.
+     */
+    topicUrn?: pulumi.Input<string>;
     /**
      * Specifies the traffic cleaning threshold in Mbps.
      * The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.

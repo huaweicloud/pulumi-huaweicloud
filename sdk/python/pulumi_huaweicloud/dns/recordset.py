@@ -27,25 +27,29 @@ class RecordsetArgs:
                  weight: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a Recordset resource.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies an array of DNS records. The value rules vary depending on the record set type.
-        :param pulumi.Input[str] type: Specifies the type of the record set.
-               Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
-        :param pulumi.Input[str] zone_id: Specifies the zone ID.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies the list of the records of the record set.  
+               The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
+        :param pulumi.Input[str] type: Specifies the type of the record set.  
+               + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+               + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
+        :param pulumi.Input[str] zone_id: Specifies the ID of the zone to which the record set belongs.  
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the record set.
-        :param pulumi.Input[str] line_id: Specifies the resolution line ID.
+        :param pulumi.Input[str] line_id: Specifies the resolution line ID.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the record set.
+        :param pulumi.Input[str] name: Specifies the name of the record set.  
                The name suffixed with a zone name, which is a complete host name ended with a dot.
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: Specifies the status of the record set.
-               Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS recordset.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 1–2147483647. The default value is 300.
+        :param pulumi.Input[str] status: Specifies the status of the record set, defaults to **ENABLE**.  
+               The valid values are as follows:
+               + **ENABLE**
+               + **DISABLE**
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS record set.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).  
+               The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
         :param pulumi.Input[int] weight: Specifies the weight of the record set.
-               Only public zone support. The value range is 0–1000.
+               Only public zone support. The valid value is range from `1` to `1,000`.
         """
         pulumi.set(__self__, "records", records)
         pulumi.set(__self__, "type", type)
@@ -71,7 +75,8 @@ class RecordsetArgs:
     @pulumi.getter
     def records(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        Specifies an array of DNS records. The value rules vary depending on the record set type.
+        Specifies the list of the records of the record set.  
+        The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         """
         return pulumi.get(self, "records")
 
@@ -83,8 +88,9 @@ class RecordsetArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the type of the record set.
-        Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        Specifies the type of the record set.  
+        + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+        + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         """
         return pulumi.get(self, "type")
 
@@ -96,7 +102,7 @@ class RecordsetArgs:
     @pulumi.getter(name="zoneId")
     def zone_id(self) -> pulumi.Input[str]:
         """
-        Specifies the zone ID.
+        Specifies the ID of the zone to which the record set belongs.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "zone_id")
@@ -121,7 +127,7 @@ class RecordsetArgs:
     @pulumi.getter(name="lineId")
     def line_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the resolution line ID.
+        Specifies the resolution line ID.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -134,7 +140,7 @@ class RecordsetArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the record set.
+        Specifies the name of the record set.  
         The name suffixed with a zone name, which is a complete host name ended with a dot.
         """
         return pulumi.get(self, "name")
@@ -160,8 +166,10 @@ class RecordsetArgs:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the status of the record set.
-        Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+        Specifies the status of the record set, defaults to **ENABLE**.  
+        The valid values are as follows:
+        + **ENABLE**
+        + **DISABLE**
         """
         return pulumi.get(self, "status")
 
@@ -173,7 +181,7 @@ class RecordsetArgs:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the DNS recordset.
+        Specifies the key/value pairs to associate with the DNS record set.
         """
         return pulumi.get(self, "tags")
 
@@ -185,8 +193,8 @@ class RecordsetArgs:
     @pulumi.getter
     def ttl(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 1–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds).  
+        The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
         """
         return pulumi.get(self, "ttl")
 
@@ -199,7 +207,7 @@ class RecordsetArgs:
     def weight(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the weight of the record set.
-        Only public zone support. The value range is 0–1000.
+        Only public zone support. The valid value is range from `1` to `1,000`.
         """
         return pulumi.get(self, "weight")
 
@@ -222,29 +230,37 @@ class _RecordsetState:
                  type: Optional[pulumi.Input[str]] = None,
                  weight: Optional[pulumi.Input[int]] = None,
                  zone_id: Optional[pulumi.Input[str]] = None,
-                 zone_name: Optional[pulumi.Input[str]] = None):
+                 zone_name: Optional[pulumi.Input[str]] = None,
+                 zone_type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Recordset resources.
         :param pulumi.Input[str] description: Specifies the description of the record set.
-        :param pulumi.Input[str] line_id: Specifies the resolution line ID.
+        :param pulumi.Input[str] line_id: Specifies the resolution line ID.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the record set.
+        :param pulumi.Input[str] name: Specifies the name of the record set.  
                The name suffixed with a zone name, which is a complete host name ended with a dot.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies an array of DNS records. The value rules vary depending on the record set type.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies the list of the records of the record set.  
+               The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: Specifies the status of the record set.
-               Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS recordset.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 1–2147483647. The default value is 300.
-        :param pulumi.Input[str] type: Specifies the type of the record set.
-               Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        :param pulumi.Input[str] status: Specifies the status of the record set, defaults to **ENABLE**.  
+               The valid values are as follows:
+               + **ENABLE**
+               + **DISABLE**
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS record set.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).  
+               The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
+        :param pulumi.Input[str] type: Specifies the type of the record set.  
+               + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+               + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         :param pulumi.Input[int] weight: Specifies the weight of the record set.
-               Only public zone support. The value range is 0–1000.
-        :param pulumi.Input[str] zone_id: Specifies the zone ID.
+               Only public zone support. The valid value is range from `1` to `1,000`.
+        :param pulumi.Input[str] zone_id: Specifies the ID of the zone to which the record set belongs.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] zone_name: The zone name of the record set.
+        :param pulumi.Input[str] zone_name: The name of the zone to which the record set belongs.
+        :param pulumi.Input[str] zone_type: The type of the zone to which the record set belongs.
+               + **public**
+               + **private**
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -270,6 +286,8 @@ class _RecordsetState:
             pulumi.set(__self__, "zone_id", zone_id)
         if zone_name is not None:
             pulumi.set(__self__, "zone_name", zone_name)
+        if zone_type is not None:
+            pulumi.set(__self__, "zone_type", zone_type)
 
     @property
     @pulumi.getter
@@ -287,7 +305,7 @@ class _RecordsetState:
     @pulumi.getter(name="lineId")
     def line_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the resolution line ID.
+        Specifies the resolution line ID.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -300,7 +318,7 @@ class _RecordsetState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the record set.
+        Specifies the name of the record set.  
         The name suffixed with a zone name, which is a complete host name ended with a dot.
         """
         return pulumi.get(self, "name")
@@ -313,7 +331,8 @@ class _RecordsetState:
     @pulumi.getter
     def records(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies an array of DNS records. The value rules vary depending on the record set type.
+        Specifies the list of the records of the record set.  
+        The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         """
         return pulumi.get(self, "records")
 
@@ -338,8 +357,10 @@ class _RecordsetState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the status of the record set.
-        Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+        Specifies the status of the record set, defaults to **ENABLE**.  
+        The valid values are as follows:
+        + **ENABLE**
+        + **DISABLE**
         """
         return pulumi.get(self, "status")
 
@@ -351,7 +372,7 @@ class _RecordsetState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the DNS recordset.
+        Specifies the key/value pairs to associate with the DNS record set.
         """
         return pulumi.get(self, "tags")
 
@@ -363,8 +384,8 @@ class _RecordsetState:
     @pulumi.getter
     def ttl(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 1–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds).  
+        The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
         """
         return pulumi.get(self, "ttl")
 
@@ -376,8 +397,9 @@ class _RecordsetState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the type of the record set.
-        Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        Specifies the type of the record set.  
+        + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+        + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         """
         return pulumi.get(self, "type")
 
@@ -390,7 +412,7 @@ class _RecordsetState:
     def weight(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the weight of the record set.
-        Only public zone support. The value range is 0–1000.
+        Only public zone support. The valid value is range from `1` to `1,000`.
         """
         return pulumi.get(self, "weight")
 
@@ -402,7 +424,7 @@ class _RecordsetState:
     @pulumi.getter(name="zoneId")
     def zone_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the zone ID.
+        Specifies the ID of the zone to which the record set belongs.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "zone_id")
@@ -415,13 +437,27 @@ class _RecordsetState:
     @pulumi.getter(name="zoneName")
     def zone_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The zone name of the record set.
+        The name of the zone to which the record set belongs.
         """
         return pulumi.get(self, "zone_name")
 
     @zone_name.setter
     def zone_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "zone_name", value)
+
+    @property
+    @pulumi.getter(name="zoneType")
+    def zone_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        The type of the zone to which the record set belongs.
+        + **public**
+        + **private**
+        """
+        return pulumi.get(self, "zone_type")
+
+    @zone_type.setter
+    def zone_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "zone_type", value)
 
 
 class Recordset(pulumi.CustomResource):
@@ -445,21 +481,20 @@ class Recordset(pulumi.CustomResource):
         Manages a DNS record set resource within HuaweiCloud.
 
         ## Example Usage
-        ### Record Set with Multi-line
+        ### Record Set with Public Zone
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a zone",
-            ttl=6000,
-            zone_type="public")
+        config = pulumi.Config()
+        public_zone_id = config.require_object("publicZoneId")
+        public_recordset_name = config.require_object("publicRecordsetName")
+        description = config.require_object("description")
         test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
+            zone_id=public_zone_id,
             type="A",
-            description="a recordset description",
+            description=description,
             status="ENABLE",
             ttl=300,
             records=["10.1.0.0"],
@@ -470,38 +505,19 @@ class Recordset(pulumi.CustomResource):
                 "key2": "value2",
             })
         ```
-        ### Record Set with Public Zone
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a public zone",
-            ttl=6000,
-            zone_type="public")
-        test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
-            description="An example record set",
-            ttl=3000,
-            type="A",
-            records=["10.0.0.1"])
-        ```
         ### Record Set with Private Zone
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a private zone",
-            ttl=6000,
-            zone_type="private")
+        config = pulumi.Config()
+        private_zone_id = config.require_object("privateZoneId")
+        private_recordset_name = config.require_object("privateRecordsetName")
+        description = config.require_object("description")
         test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
-            description="An example record set",
+            zone_id=private_zone_id,
+            description=description,
             ttl=3000,
             type="A",
             records=["10.0.0.1"])
@@ -509,32 +525,36 @@ class Recordset(pulumi.CustomResource):
 
         ## Import
 
-        The DNS recordset can be imported using `zone_id`, `recordset_id`, separated by slashes, e.g. bash
+        The DNS recordset can be imported using `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dns/recordset:Recordset test <zone_id>/<recordset_id>
+         $ pulumi import huaweicloud:Dns/recordset:Recordset test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the record set.
-        :param pulumi.Input[str] line_id: Specifies the resolution line ID.
+        :param pulumi.Input[str] line_id: Specifies the resolution line ID.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the record set.
+        :param pulumi.Input[str] name: Specifies the name of the record set.  
                The name suffixed with a zone name, which is a complete host name ended with a dot.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies an array of DNS records. The value rules vary depending on the record set type.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies the list of the records of the record set.  
+               The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: Specifies the status of the record set.
-               Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS recordset.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 1–2147483647. The default value is 300.
-        :param pulumi.Input[str] type: Specifies the type of the record set.
-               Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        :param pulumi.Input[str] status: Specifies the status of the record set, defaults to **ENABLE**.  
+               The valid values are as follows:
+               + **ENABLE**
+               + **DISABLE**
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS record set.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).  
+               The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
+        :param pulumi.Input[str] type: Specifies the type of the record set.  
+               + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+               + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         :param pulumi.Input[int] weight: Specifies the weight of the record set.
-               Only public zone support. The value range is 0–1000.
-        :param pulumi.Input[str] zone_id: Specifies the zone ID.
+               Only public zone support. The valid value is range from `1` to `1,000`.
+        :param pulumi.Input[str] zone_id: Specifies the ID of the zone to which the record set belongs.  
                Changing this parameter will create a new resource.
         """
         ...
@@ -547,21 +567,20 @@ class Recordset(pulumi.CustomResource):
         Manages a DNS record set resource within HuaweiCloud.
 
         ## Example Usage
-        ### Record Set with Multi-line
+        ### Record Set with Public Zone
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a zone",
-            ttl=6000,
-            zone_type="public")
+        config = pulumi.Config()
+        public_zone_id = config.require_object("publicZoneId")
+        public_recordset_name = config.require_object("publicRecordsetName")
+        description = config.require_object("description")
         test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
+            zone_id=public_zone_id,
             type="A",
-            description="a recordset description",
+            description=description,
             status="ENABLE",
             ttl=300,
             records=["10.1.0.0"],
@@ -572,38 +591,19 @@ class Recordset(pulumi.CustomResource):
                 "key2": "value2",
             })
         ```
-        ### Record Set with Public Zone
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a public zone",
-            ttl=6000,
-            zone_type="public")
-        test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
-            description="An example record set",
-            ttl=3000,
-            type="A",
-            records=["10.0.0.1"])
-        ```
         ### Record Set with Private Zone
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        example_zone = huaweicloud.dns.Zone("exampleZone",
-            email="email2@example.com",
-            description="a private zone",
-            ttl=6000,
-            zone_type="private")
+        config = pulumi.Config()
+        private_zone_id = config.require_object("privateZoneId")
+        private_recordset_name = config.require_object("privateRecordsetName")
+        description = config.require_object("description")
         test = huaweicloud.dns.Recordset("test",
-            zone_id=example_zone.id,
-            description="An example record set",
+            zone_id=private_zone_id,
+            description=description,
             ttl=3000,
             type="A",
             records=["10.0.0.1"])
@@ -611,10 +611,10 @@ class Recordset(pulumi.CustomResource):
 
         ## Import
 
-        The DNS recordset can be imported using `zone_id`, `recordset_id`, separated by slashes, e.g. bash
+        The DNS recordset can be imported using `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dns/recordset:Recordset test <zone_id>/<recordset_id>
+         $ pulumi import huaweicloud:Dns/recordset:Recordset test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -670,6 +670,7 @@ class Recordset(pulumi.CustomResource):
                 raise TypeError("Missing required property 'zone_id'")
             __props__.__dict__["zone_id"] = zone_id
             __props__.__dict__["zone_name"] = None
+            __props__.__dict__["zone_type"] = None
         super(Recordset, __self__).__init__(
             'huaweicloud:Dns/recordset:Recordset',
             resource_name,
@@ -691,7 +692,8 @@ class Recordset(pulumi.CustomResource):
             type: Optional[pulumi.Input[str]] = None,
             weight: Optional[pulumi.Input[int]] = None,
             zone_id: Optional[pulumi.Input[str]] = None,
-            zone_name: Optional[pulumi.Input[str]] = None) -> 'Recordset':
+            zone_name: Optional[pulumi.Input[str]] = None,
+            zone_type: Optional[pulumi.Input[str]] = None) -> 'Recordset':
         """
         Get an existing Recordset resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -700,25 +702,32 @@ class Recordset(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the record set.
-        :param pulumi.Input[str] line_id: Specifies the resolution line ID.
+        :param pulumi.Input[str] line_id: Specifies the resolution line ID.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the name of the record set.
+        :param pulumi.Input[str] name: Specifies the name of the record set.  
                The name suffixed with a zone name, which is a complete host name ended with a dot.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies an array of DNS records. The value rules vary depending on the record set type.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] records: Specifies the list of the records of the record set.  
+               The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         :param pulumi.Input[str] region: Specifies the region in which to create the resource.
                If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] status: Specifies the status of the record set.
-               Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS recordset.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 1–2147483647. The default value is 300.
-        :param pulumi.Input[str] type: Specifies the type of the record set.
-               Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        :param pulumi.Input[str] status: Specifies the status of the record set, defaults to **ENABLE**.  
+               The valid values are as follows:
+               + **ENABLE**
+               + **DISABLE**
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the DNS record set.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).  
+               The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
+        :param pulumi.Input[str] type: Specifies the type of the record set.  
+               + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+               + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         :param pulumi.Input[int] weight: Specifies the weight of the record set.
-               Only public zone support. The value range is 0–1000.
-        :param pulumi.Input[str] zone_id: Specifies the zone ID.
+               Only public zone support. The valid value is range from `1` to `1,000`.
+        :param pulumi.Input[str] zone_id: Specifies the ID of the zone to which the record set belongs.  
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] zone_name: The zone name of the record set.
+        :param pulumi.Input[str] zone_name: The name of the zone to which the record set belongs.
+        :param pulumi.Input[str] zone_type: The type of the zone to which the record set belongs.
+               + **public**
+               + **private**
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -736,6 +745,7 @@ class Recordset(pulumi.CustomResource):
         __props__.__dict__["weight"] = weight
         __props__.__dict__["zone_id"] = zone_id
         __props__.__dict__["zone_name"] = zone_name
+        __props__.__dict__["zone_type"] = zone_type
         return Recordset(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -750,7 +760,7 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter(name="lineId")
     def line_id(self) -> pulumi.Output[str]:
         """
-        Specifies the resolution line ID.
+        Specifies the resolution line ID.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "line_id")
@@ -759,7 +769,7 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the record set.
+        Specifies the name of the record set.  
         The name suffixed with a zone name, which is a complete host name ended with a dot.
         """
         return pulumi.get(self, "name")
@@ -768,7 +778,8 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def records(self) -> pulumi.Output[Sequence[str]]:
         """
-        Specifies an array of DNS records. The value rules vary depending on the record set type.
+        Specifies the list of the records of the record set.  
+        The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
         """
         return pulumi.get(self, "records")
 
@@ -785,8 +796,10 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the status of the record set.
-        Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+        Specifies the status of the record set, defaults to **ENABLE**.  
+        The valid values are as follows:
+        + **ENABLE**
+        + **DISABLE**
         """
         return pulumi.get(self, "status")
 
@@ -794,7 +807,7 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Specifies the key/value pairs to associate with the DNS recordset.
+        Specifies the key/value pairs to associate with the DNS record set.
         """
         return pulumi.get(self, "tags")
 
@@ -802,8 +815,8 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def ttl(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 1–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds).  
+        The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
         """
         return pulumi.get(self, "ttl")
 
@@ -811,8 +824,9 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the type of the record set.
-        Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+        Specifies the type of the record set.  
+        + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+        + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
         """
         return pulumi.get(self, "type")
 
@@ -821,7 +835,7 @@ class Recordset(pulumi.CustomResource):
     def weight(self) -> pulumi.Output[int]:
         """
         Specifies the weight of the record set.
-        Only public zone support. The value range is 0–1000.
+        Only public zone support. The valid value is range from `1` to `1,000`.
         """
         return pulumi.get(self, "weight")
 
@@ -829,7 +843,7 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter(name="zoneId")
     def zone_id(self) -> pulumi.Output[str]:
         """
-        Specifies the zone ID.
+        Specifies the ID of the zone to which the record set belongs.  
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "zone_id")
@@ -838,7 +852,17 @@ class Recordset(pulumi.CustomResource):
     @pulumi.getter(name="zoneName")
     def zone_name(self) -> pulumi.Output[str]:
         """
-        The zone name of the record set.
+        The name of the zone to which the record set belongs.
         """
         return pulumi.get(self, "zone_name")
+
+    @property
+    @pulumi.getter(name="zoneType")
+    def zone_type(self) -> pulumi.Output[str]:
+        """
+        The type of the zone to which the record set belongs.
+        + **public**
+        + **private**
+        """
+        return pulumi.get(self, "zone_type")
 

@@ -8,6 +8,13 @@ import * as utilities from "../utilities";
 /**
  * Manages an IoTDA data forwarding rule within HuaweiCloud.
  *
+ * > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+ * endpoint in `provider` block.
+ * You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+ * to view the HTTPS application access address. An example of the access address might be
+ * **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+ * `provider` block as follows:
+ *
  * ## Example Usage
  *
  * ```typescript
@@ -49,13 +56,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Data forwarding rules can be imported using the `id`, e.g.
+ * Data forwarding rules can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:IoTDA/dataforwardingRule:DataforwardingRule test 10022532f4f94f26b01daa1e424853e1
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attrubutes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
  *
  *  ...
  *
@@ -99,16 +106,16 @@ export class DataforwardingRule extends pulumi.CustomResource {
 
     /**
      * Specifies the description of data forwarding rule. The description contains
-     * a maximum of 256 characters.
+     * a maximum of `256` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies whether to enable the data forwarding rule. Defaults to `false`.
+     * Specifies whether to enable the data forwarding rule. Defaults to **false**.
      * Can not enable without `targets`.
      */
     public readonly enabled!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+     * Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
      * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
@@ -118,7 +125,7 @@ export class DataforwardingRule extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+     * Specifies the SQL SELECT statement which contains a maximum of `500` characters.
      */
     public readonly select!: pulumi.Output<string | undefined>;
     /**
@@ -148,7 +155,7 @@ export class DataforwardingRule extends pulumi.CustomResource {
      */
     public readonly trigger!: pulumi.Output<string>;
     /**
-     * Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+     * Specifies the SQL WHERE statement which contains a maximum of `500` characters.
      */
     public readonly where!: pulumi.Output<string | undefined>;
 
@@ -200,16 +207,16 @@ export class DataforwardingRule extends pulumi.CustomResource {
 export interface DataforwardingRuleState {
     /**
      * Specifies the description of data forwarding rule. The description contains
-     * a maximum of 256 characters.
+     * a maximum of `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the data forwarding rule. Defaults to `false`.
+     * Specifies whether to enable the data forwarding rule. Defaults to **false**.
      * Can not enable without `targets`.
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+     * Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
      * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
@@ -219,7 +226,7 @@ export interface DataforwardingRuleState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+     * Specifies the SQL SELECT statement which contains a maximum of `500` characters.
      */
     select?: pulumi.Input<string>;
     /**
@@ -249,7 +256,7 @@ export interface DataforwardingRuleState {
      */
     trigger?: pulumi.Input<string>;
     /**
-     * Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+     * Specifies the SQL WHERE statement which contains a maximum of `500` characters.
      */
     where?: pulumi.Input<string>;
 }
@@ -260,16 +267,16 @@ export interface DataforwardingRuleState {
 export interface DataforwardingRuleArgs {
     /**
      * Specifies the description of data forwarding rule. The description contains
-     * a maximum of 256 characters.
+     * a maximum of `256` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable the data forwarding rule. Defaults to `false`.
+     * Specifies whether to enable the data forwarding rule. Defaults to **false**.
      * Can not enable without `targets`.
      */
     enabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+     * Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
      * Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
      * allowed: `?'#().,&%@!`.
      */
@@ -279,7 +286,7 @@ export interface DataforwardingRuleArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+     * Specifies the SQL SELECT statement which contains a maximum of `500` characters.
      */
     select?: pulumi.Input<string>;
     /**
@@ -309,7 +316,7 @@ export interface DataforwardingRuleArgs {
      */
     trigger: pulumi.Input<string>;
     /**
-     * Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+     * Specifies the SQL WHERE statement which contains a maximum of `500` characters.
      */
     where?: pulumi.Input<string>;
 }

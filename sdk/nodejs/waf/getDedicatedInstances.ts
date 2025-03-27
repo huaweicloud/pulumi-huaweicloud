@@ -16,7 +16,7 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const instanceName = config.requireObject("instanceName");
- * const instances = huaweicloud.Waf.getDedicatedInstances({
+ * const test = huaweicloud.Waf.getDedicatedInstances({
  *     name: instanceName,
  * });
  * ```
@@ -41,19 +41,20 @@ export function getDedicatedInstances(args?: GetDedicatedInstancesArgs, opts?: p
  */
 export interface GetDedicatedInstancesArgs {
     /**
-     * The enterprise project ID of WAF dedicated instance.
+     * Specifies the enterprise project ID of WAF dedicated instance.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: string;
     /**
-     * The id of WAF dedicated instance.
+     * Specifies the ID of WAF dedicated instance.
      */
     id?: string;
     /**
-     * The name of WAF dedicated instance.
+     * Specifies the name of WAF dedicated instance.
      */
     name?: string;
     /**
-     * The region in which to query the WAF dedicated instance.
+     * Specifies the region in which to query the WAF dedicated instance.
      * If omitted, the provider-level region will be used.
      */
     region?: string;
@@ -69,7 +70,7 @@ export interface GetDedicatedInstancesResult {
      */
     readonly id: string;
     /**
-     * An array of available WAF dedicated instances.
+     * The WAF dedicated instances list.
      */
     readonly instances: outputs.Waf.GetDedicatedInstancesInstance[];
     /**
@@ -88,19 +89,20 @@ export function getDedicatedInstancesOutput(args?: GetDedicatedInstancesOutputAr
  */
 export interface GetDedicatedInstancesOutputArgs {
     /**
-     * The enterprise project ID of WAF dedicated instance.
+     * Specifies the enterprise project ID of WAF dedicated instance.
+     * For enterprise users, if omitted, default enterprise project will be used.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * The id of WAF dedicated instance.
+     * Specifies the ID of WAF dedicated instance.
      */
     id?: pulumi.Input<string>;
     /**
-     * The name of WAF dedicated instance.
+     * Specifies the name of WAF dedicated instance.
      */
     name?: pulumi.Input<string>;
     /**
-     * The region in which to query the WAF dedicated instance.
+     * Specifies the region in which to query the WAF dedicated instance.
      * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;

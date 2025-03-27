@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get available HuaweiCloud gaussdb cassandra instance.
+ * Use this data source to get available HuaweiCloud GeminiDB Cassandra instance.
  *
  * ## Example Usage
  *

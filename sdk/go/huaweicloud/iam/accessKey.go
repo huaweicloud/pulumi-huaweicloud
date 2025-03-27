@@ -24,14 +24,17 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Iam"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			user1Password := cfg.RequireObject("user1Password")
 //			user1, err := Iam.NewUser(ctx, "user1", &Iam.UserArgs{
 //				Description: pulumi.String("A user"),
-//				Password:    pulumi.String("password123!"),
+//				Password:    pulumi.Any(user1Password),
 //			})
 //			if err != nil {
 //				return err

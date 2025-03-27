@@ -37,11 +37,11 @@ class TranscodingTemplateGroupArgs:
                the HLS encryption key URL. When `auto_encrypt` is **true**, the `output_format` must be **HLS**.
                Defaults to: **false**.
         :param pulumi.Input[str] description: Specifies the description of the template group.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-               and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+               and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         :param pulumi.Input[bool] is_default: Specifies whether to use this group as default group. Defaults to: **false**.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD. Defaults to: **false**.
-        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of 1 to 128
+        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of `1` to `128`
                characters that can consist of letters, digits and underscores (_).
         :param pulumi.Input[str] region: Specifies the region in which to create the resource. If omitted, the
                provider-level region will be used. Changing this creates a new resource.
@@ -127,8 +127,8 @@ class TranscodingTemplateGroupArgs:
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-        and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+        and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         """
         return pulumi.get(self, "hls_segment_duration")
 
@@ -164,7 +164,7 @@ class TranscodingTemplateGroupArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the template group. The value can be a string of 1 to 128
+        Specifies the name of the template group. The value can be a string of `1` to `128`
         characters that can consist of letters, digits and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -235,11 +235,11 @@ class _TranscodingTemplateGroupState:
                the HLS encryption key URL. When `auto_encrypt` is **true**, the `output_format` must be **HLS**.
                Defaults to: **false**.
         :param pulumi.Input[str] description: Specifies the description of the template group.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-               and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+               and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         :param pulumi.Input[bool] is_default: Specifies whether to use this group as default group. Defaults to: **false**.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD. Defaults to: **false**.
-        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of 1 to 128
+        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of `1` to `128`
                characters that can consist of letters, digits and underscores (_).
         :param pulumi.Input[Sequence[pulumi.Input['TranscodingTemplateGroupQualityInfoArgs']]] quality_infos: Specifies the quality info list of the template group.
                The object structure is documented below.
@@ -318,8 +318,8 @@ class _TranscodingTemplateGroupState:
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-        and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+        and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         """
         return pulumi.get(self, "hls_segment_duration")
 
@@ -355,7 +355,7 @@ class _TranscodingTemplateGroupState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of the template group. The value can be a string of 1 to 128
+        Specifies the name of the template group. The value can be a string of `1` to `128`
         characters that can consist of letters, digits and underscores (_).
         """
         return pulumi.get(self, "name")
@@ -479,7 +479,7 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
 
         ## Import
 
-        VOD transcoding template groups can be imported using the `id`, e.g.
+        VOD transcoding template groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/transcodingTemplateGroup:TranscodingTemplateGroup test 589e49809bb84447a759f6fa9aa19949
@@ -493,11 +493,11 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
                the HLS encryption key URL. When `auto_encrypt` is **true**, the `output_format` must be **HLS**.
                Defaults to: **false**.
         :param pulumi.Input[str] description: Specifies the description of the template group.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-               and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+               and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         :param pulumi.Input[bool] is_default: Specifies whether to use this group as default group. Defaults to: **false**.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD. Defaults to: **false**.
-        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of 1 to 128
+        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of `1` to `128`
                characters that can consist of letters, digits and underscores (_).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateGroupQualityInfoArgs']]]] quality_infos: Specifies the quality info list of the template group.
                The object structure is documented below.
@@ -547,7 +547,7 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
 
         ## Import
 
-        VOD transcoding template groups can be imported using the `id`, e.g.
+        VOD transcoding template groups can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vod/transcodingTemplateGroup:TranscodingTemplateGroup test 589e49809bb84447a759f6fa9aa19949
@@ -637,11 +637,11 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
                the HLS encryption key URL. When `auto_encrypt` is **true**, the `output_format` must be **HLS**.
                Defaults to: **false**.
         :param pulumi.Input[str] description: Specifies the description of the template group.
-        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-               and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        :param pulumi.Input[int] hls_segment_duration: Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+               and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         :param pulumi.Input[bool] is_default: Specifies whether to use this group as default group. Defaults to: **false**.
         :param pulumi.Input[bool] low_bitrate_hd: Specifies whether to enable low bitrate HD. Defaults to: **false**.
-        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of 1 to 128
+        :param pulumi.Input[str] name: Specifies the name of the template group. The value can be a string of `1` to `128`
                characters that can consist of letters, digits and underscores (_).
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['TranscodingTemplateGroupQualityInfoArgs']]]] quality_infos: Specifies the quality info list of the template group.
                The object structure is documented below.
@@ -701,8 +701,8 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
     @pulumi.getter(name="hlsSegmentDuration")
     def hls_segment_duration(self) -> pulumi.Output[int]:
         """
-        Specifies the HLS segment duration. The value can be: **2**, **3**, **5**
-        and **10**. Defaults to: **5**. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
+        Specifies the HLS segment duration. The value can be: `2`, `3`, `5`
+        and `10`. Defaults to: `5`. This parameter is used only when `output_format` is set to **HLS** or **DASH_HLS**.
         """
         return pulumi.get(self, "hls_segment_duration")
 
@@ -726,7 +726,7 @@ class TranscodingTemplateGroup(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of the template group. The value can be a string of 1 to 128
+        Specifies the name of the template group. The value can be a string of `1` to `128`
         characters that can consist of letters, digits and underscores (_).
         """
         return pulumi.get(self, "name")

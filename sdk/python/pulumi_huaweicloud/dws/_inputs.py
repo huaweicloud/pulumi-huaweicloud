@@ -10,12 +10,138 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'ClusterElbArgs',
     'ClusterEndpointArgs',
     'ClusterMaintainWindowArgs',
     'ClusterPublicEndpointArgs',
     'ClusterPublicIpArgs',
     'ClusterVolumeArgs',
 ]
+
+@pulumi.input_type
+class ClusterElbArgs:
+    def __init__(__self__, *,
+                 id: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 private_endpoint: Optional[pulumi.Input[str]] = None,
+                 private_ip: Optional[pulumi.Input[str]] = None,
+                 private_ip_v6: Optional[pulumi.Input[str]] = None,
+                 public_ip: Optional[pulumi.Input[str]] = None,
+                 vpc_id: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] id: The ID of the ELB load balancer.
+        :param pulumi.Input[str] name: Cluster name, which must be unique and contains 4 to 64 characters, which
+               consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+               Changing this creates a new cluster resource.
+        :param pulumi.Input[str] private_endpoint: The private endpoint of the ELB load balancer.
+        :param pulumi.Input[str] private_ip: The private IP address of the ELB load balancer.
+        :param pulumi.Input[str] private_ip_v6: The IPv6 address of the ELB load balancer.
+        :param pulumi.Input[str] public_ip: The information about public IP.
+        :param pulumi.Input[str] vpc_id: The VPC ID.
+               Changing this parameter will create a new resource.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if private_endpoint is not None:
+            pulumi.set(__self__, "private_endpoint", private_endpoint)
+        if private_ip is not None:
+            pulumi.set(__self__, "private_ip", private_ip)
+        if private_ip_v6 is not None:
+            pulumi.set(__self__, "private_ip_v6", private_ip_v6)
+        if public_ip is not None:
+            pulumi.set(__self__, "public_ip", public_ip)
+        if vpc_id is not None:
+            pulumi.set(__self__, "vpc_id", vpc_id)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The ID of the ELB load balancer.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Cluster name, which must be unique and contains 4 to 64 characters, which
+        consist of letters, digits, hyphens(-), or underscores(_) only and must start with a letter.
+        Changing this creates a new cluster resource.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter(name="privateEndpoint")
+    def private_endpoint(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private endpoint of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_endpoint")
+
+    @private_endpoint.setter
+    def private_endpoint(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_endpoint", value)
+
+    @property
+    @pulumi.getter(name="privateIp")
+    def private_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        The private IP address of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_ip")
+
+    @private_ip.setter
+    def private_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_ip", value)
+
+    @property
+    @pulumi.getter(name="privateIpV6")
+    def private_ip_v6(self) -> Optional[pulumi.Input[str]]:
+        """
+        The IPv6 address of the ELB load balancer.
+        """
+        return pulumi.get(self, "private_ip_v6")
+
+    @private_ip_v6.setter
+    def private_ip_v6(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_ip_v6", value)
+
+    @property
+    @pulumi.getter(name="publicIp")
+    def public_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        The information about public IP.
+        """
+        return pulumi.get(self, "public_ip")
+
+    @public_ip.setter
+    def public_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip", value)
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The VPC ID.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "vpc_id")
+
+    @vpc_id.setter
+    def vpc_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "vpc_id", value)
+
 
 @pulumi.input_type
 class ClusterEndpointArgs:
@@ -203,10 +329,9 @@ class ClusterVolumeArgs:
         """
         :param pulumi.Input[str] capacity: The capacity size, in GB.
         :param pulumi.Input[str] type: The volume type. Value options are as follows:
-               + **SATA**: Common I/O. The SATA disk is used.
-               + **SAS**: High I/O. The SAS disk is used.
                + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-               The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+               + **SAS**: High I/O. The SAS disk is used.
+               + **SATA**: Common I/O. The SATA disk is used.
         """
         if capacity is not None:
             pulumi.set(__self__, "capacity", capacity)
@@ -230,10 +355,9 @@ class ClusterVolumeArgs:
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         The volume type. Value options are as follows:
-        + **SATA**: Common I/O. The SATA disk is used.
-        + **SAS**: High I/O. The SAS disk is used.
         + **SSD**: Ultra-high I/O. The solid-state drive (SSD) is used.
-        The valid value are **auto_assign**, **not_use**, and **bind_existing**. Defaults to **not_use**.
+        + **SAS**: High I/O. The SAS disk is used.
+        + **SATA**: Common I/O. The SATA disk is used.
         """
         return pulumi.get(self, "type")
 

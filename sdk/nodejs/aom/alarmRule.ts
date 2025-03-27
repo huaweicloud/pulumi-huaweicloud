@@ -34,10 +34,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * AOM alarm rules can be imported using the `id`, e.g.
+ * AOM alarm rules can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule 966746116613832710
+ *  $ pulumi import huaweicloud:Aom/alarmRule:AlarmRule alarm_rule <id>
  * ```
  */
 export class AlarmRule extends pulumi.CustomResource {
@@ -83,9 +83,9 @@ export class AlarmRule extends pulumi.CustomResource {
      */
     public /*out*/ readonly alarmEnabled!: pulumi.Output<boolean>;
     /**
-     * Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+     * Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-     * The default value is **2**.
+     * The default value is `2`.
      */
     public readonly alarmLevel!: pulumi.Output<number | undefined>;
     /**
@@ -95,7 +95,7 @@ export class AlarmRule extends pulumi.CustomResource {
     public readonly comparisonOperator!: pulumi.Output<string>;
     /**
      * Specifies the description of the alarm rule.
-     * The value can be a string of 0 to 1000 characters.
+     * The value can be a string of `0` to `1,000` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -105,7 +105,7 @@ export class AlarmRule extends pulumi.CustomResource {
     public readonly dimensions!: pulumi.Output<outputs.Aom.AlarmRuleDimension[]>;
     /**
      * Specifies the alarm checking evaluation periods.
-     * The value can be **1**, **2**, **3**, **4** and **5**.
+     * The value can be `1`, `2`, `3`, `4` and `5`.
      */
     public readonly evaluationPeriods!: pulumi.Output<number>;
     /**
@@ -158,7 +158,9 @@ export class AlarmRule extends pulumi.CustomResource {
      */
     public readonly threshold!: pulumi.Output<string>;
     /**
-     * Specifies the data unit. Changing this creates a new resource.
+     * Specifies the data unit.  
+     * The valid value is range from `1` to `32`.
+     * Changing this creates a new resource.
      */
     public readonly unit!: pulumi.Output<string>;
 
@@ -269,9 +271,9 @@ export interface AlarmRuleState {
      */
     alarmEnabled?: pulumi.Input<boolean>;
     /**
-     * Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+     * Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-     * The default value is **2**.
+     * The default value is `2`.
      */
     alarmLevel?: pulumi.Input<number>;
     /**
@@ -281,7 +283,7 @@ export interface AlarmRuleState {
     comparisonOperator?: pulumi.Input<string>;
     /**
      * Specifies the description of the alarm rule.
-     * The value can be a string of 0 to 1000 characters.
+     * The value can be a string of `0` to `1,000` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -291,7 +293,7 @@ export interface AlarmRuleState {
     dimensions?: pulumi.Input<pulumi.Input<inputs.Aom.AlarmRuleDimension>[]>;
     /**
      * Specifies the alarm checking evaluation periods.
-     * The value can be **1**, **2**, **3**, **4** and **5**.
+     * The value can be `1`, `2`, `3`, `4` and `5`.
      */
     evaluationPeriods?: pulumi.Input<number>;
     /**
@@ -344,7 +346,9 @@ export interface AlarmRuleState {
      */
     threshold?: pulumi.Input<string>;
     /**
-     * Specifies the data unit. Changing this creates a new resource.
+     * Specifies the data unit.  
+     * The valid value is range from `1` to `32`.
+     * Changing this creates a new resource.
      */
     unit?: pulumi.Input<string>;
 }
@@ -364,9 +368,9 @@ export interface AlarmRuleArgs {
      */
     alarmActions?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the alarm severity. The value can be **1**, **2**, **3** or **4**,
+     * Specifies the alarm severity. The value can be `1`, `2`, `3` or `4`,
      * which indicates *critical*, *major*, *minor*, and *informational*, respectively.
-     * The default value is **2**.
+     * The default value is `2`.
      */
     alarmLevel?: pulumi.Input<number>;
     /**
@@ -376,7 +380,7 @@ export interface AlarmRuleArgs {
     comparisonOperator: pulumi.Input<string>;
     /**
      * Specifies the description of the alarm rule.
-     * The value can be a string of 0 to 1000 characters.
+     * The value can be a string of `0` to `1,000` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -386,7 +390,7 @@ export interface AlarmRuleArgs {
     dimensions: pulumi.Input<pulumi.Input<inputs.Aom.AlarmRuleDimension>[]>;
     /**
      * Specifies the alarm checking evaluation periods.
-     * The value can be **1**, **2**, **3**, **4** and **5**.
+     * The value can be `1`, `2`, `3`, `4` and `5`.
      */
     evaluationPeriods: pulumi.Input<number>;
     /**
@@ -431,7 +435,9 @@ export interface AlarmRuleArgs {
      */
     threshold: pulumi.Input<string>;
     /**
-     * Specifies the data unit. Changing this creates a new resource.
+     * Specifies the data unit.  
+     * The valid value is range from `1` to `32`.
+     * Changing this creates a new resource.
      */
     unit: pulumi.Input<string>;
 }

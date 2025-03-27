@@ -26,10 +26,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * ELB member can be imported using the pool ID and member ID separated by a slash, e.g.
+ * ELB member can be imported using the `pool_id` and `id` separated by a slash, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:DedicatedElb/member:Member member_1 e0bd694a-abbe-450e-b329-0931fd1cc5eb/4086b0c9-b18c-4d1c-b6b8-4c56c3ad2a9e
+ *  $ pulumi import huaweicloud:DedicatedElb/member:Member member_1 <pool_id>/<id>
  * ```
  */
 export class Member extends pulumi.CustomResource {
@@ -74,8 +74,9 @@ export class Member extends pulumi.CustomResource {
      */
     public readonly poolId!: pulumi.Output<string>;
     /**
-     * The port on which to listen for client traffic. Changing this creates a
-     * new member.
+     * The port on which to listen for client traffic. It must be set to `0`
+     * for gateway load balancers with IP backend server groups associated. It can be left blank because it does not take
+     * effect if `anyPortEnable` is set to **true** for a backend server group. Changing this creates a new member.
      */
     public readonly protocolPort!: pulumi.Output<number>;
     /**
@@ -86,6 +87,8 @@ export class Member extends pulumi.CustomResource {
     /**
      * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
      * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + This parameter must be specified for gateway load balancers. The subnet of the backend server must be in the same
+     * VPC as that of the load balancer, and it must be different from the subnet of the load balancer.
      * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
      * In this case, cross-VPC backend servers must use private IPv4 addresses,
      * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
@@ -126,9 +129,6 @@ export class Member extends pulumi.CustomResource {
             if ((!args || args.poolId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'poolId'");
             }
-            if ((!args || args.protocolPort === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'protocolPort'");
-            }
             resourceInputs["address"] = args ? args.address : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["poolId"] = args ? args.poolId : undefined;
@@ -160,8 +160,9 @@ export interface MemberState {
      */
     poolId?: pulumi.Input<string>;
     /**
-     * The port on which to listen for client traffic. Changing this creates a
-     * new member.
+     * The port on which to listen for client traffic. It must be set to `0`
+     * for gateway load balancers with IP backend server groups associated. It can be left blank because it does not take
+     * effect if `anyPortEnable` is set to **true** for a backend server group. Changing this creates a new member.
      */
     protocolPort?: pulumi.Input<number>;
     /**
@@ -172,6 +173,8 @@ export interface MemberState {
     /**
      * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
      * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + This parameter must be specified for gateway load balancers. The subnet of the backend server must be in the same
+     * VPC as that of the load balancer, and it must be different from the subnet of the load balancer.
      * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
      * In this case, cross-VPC backend servers must use private IPv4 addresses,
      * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.
@@ -203,10 +206,11 @@ export interface MemberArgs {
      */
     poolId: pulumi.Input<string>;
     /**
-     * The port on which to listen for client traffic. Changing this creates a
-     * new member.
+     * The port on which to listen for client traffic. It must be set to `0`
+     * for gateway load balancers with IP backend server groups associated. It can be left blank because it does not take
+     * effect if `anyPortEnable` is set to **true** for a backend server group. Changing this creates a new member.
      */
-    protocolPort: pulumi.Input<number>;
+    protocolPort?: pulumi.Input<number>;
     /**
      * The region in which to create the ELB member resource. If omitted, the the
      * provider-level region will be used. Changing this creates a new member.
@@ -215,6 +219,8 @@ export interface MemberArgs {
     /**
      * The **IPv4 or IPv6 subnet ID** of the subnet in which to access the member.
      * + The IPv4 or IPv6 subnet must be in the same VPC as the subnet of the load balancer.
+     * + This parameter must be specified for gateway load balancers. The subnet of the backend server must be in the same
+     * VPC as that of the load balancer, and it must be different from the subnet of the load balancer.
      * + If this parameter is not specified, **cross-VPC backend** has been enabled for the load balancer.
      * In this case, cross-VPC backend servers must use private IPv4 addresses,
      * and the protocol of the backend server group must be TCP, HTTP, or HTTPS.

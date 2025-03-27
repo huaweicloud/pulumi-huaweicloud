@@ -8,7 +8,8 @@ import * as utilities from "../utilities";
 /**
  * Provides a CCE cluster resource.
  *
- * ## Basic Usage
+ * ## Example Usage
+ * ### Basic Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -29,8 +30,7 @@ import * as utilities from "../utilities";
  *     containerNetworkType: "overlay_l2",
  * });
  * ```
- *
- * ## Cluster With Eip
+ * ### Cluster With EIP
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -65,6 +65,56 @@ import * as utilities from "../utilities";
  *     eip: myeip.address,
  * });
  * ```
+ * ### CCE HA Cluster
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vpcId = config.requireObject("vpcId");
+ * const subnetId = config.requireObject("subnetId");
+ * const cluster = new huaweicloud.cce.Cluster("cluster", {
+ *     flavorId: "cce.s2.small",
+ *     vpcId: vpcId,
+ *     subnetId: subnetId,
+ *     containerNetworkType: "overlay_l2",
+ *     masters: [
+ *         {
+ *             availabilityZone: "cn-north-4a",
+ *         },
+ *         {
+ *             availabilityZone: "cn-north-4b",
+ *         },
+ *         {
+ *             availabilityZone: "cn-north-4c",
+ *         },
+ *     ],
+ * });
+ * ```
+ * ### Cluster with Component Configurations
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vpcId = config.requireObject("vpcId");
+ * const subnetId = config.requireObject("subnetId");
+ * const cluster = new huaweicloud.cce.Cluster("cluster", {
+ *     flavorId: "cce.s1.small",
+ *     vpcId: vpcId,
+ *     subnetId: subnetId,
+ *     containerNetworkType: "overlay_l2",
+ *     componentConfigurations: [{
+ *         name: "kube-apiserver",
+ *         configurations: JSON.stringify([{
+ *             name: "default-not-ready-toleration-seconds",
+ *             value: "100",
+ *         }]),
+ *     }],
+ * });
+ * ```
  *
  * ## Import
  *
@@ -74,7 +124,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Cce/cluster:Cluster huaweicloud_cce_cluster.cluster_1 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_efs`, `delete_eni`, `delete_evs`, `delete_net`, `delete_obs`, `delete_sfs` and `delete_all`. It is generally recommended running `terraform plan` after importing an CCE cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. resource "huaweicloud_cce_cluster" "cluster_1" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_efs`, `delete_eni`, `delete_evs`, `delete_net`, `delete_obs`, `delete_sfs` and `delete_all`. It is generally recommended running `terraform plan` after importing an CCE cluster. You can then decide if changes should be applied to the cluster, or the resource definition should be updated to align with the cluster. Also you can ignore changes as below. hcl resource "huaweicloud_cce_cluster" "cluster_1" {
  *
  *  ...
  *
@@ -117,6 +167,11 @@ export class Cluster extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies the display name of a cluster. The value of `alias` cannot be the same as the `name`
+     * and display names of other clusters.
+     */
+    public readonly alias!: pulumi.Output<string>;
+    /**
      * schema: Internal
      */
     public readonly annotations!: pulumi.Output<{[key: string]: string} | undefined>;
@@ -157,6 +212,10 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly billingMode!: pulumi.Output<number>;
     /**
+     * The category of the cluster. The value can be **CCE** and **Turbo**.
+     */
+    public /*out*/ readonly category!: pulumi.Output<string>;
+    /**
      * The certificate clusters. Structure is documented below.
      */
     public /*out*/ readonly certificateClusters!: pulumi.Output<outputs.Cce.ClusterCertificateCluster[]>;
@@ -177,14 +236,21 @@ export class Cluster extends pulumi.CustomResource {
     public readonly clusterType!: pulumi.Output<string | undefined>;
     /**
      * Specifies the cluster version, defaults to the latest supported
-     * version. Changing this parameter will create a new cluster resource.
+     * version. Changing this parameter will not upgrade the cluster. If you want to upgrade the cluster, please use
+     * resource `huaweicloud.Cce.ClusterUpgrade`. After upgrading cluster successfully, you can update this parameter
+     * to avoid unexpected changing plan.
      */
     public readonly clusterVersion!: pulumi.Output<string>;
+    /**
+     * Specifies the kubernetes component configurations.
+     * For details, see [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-cce/cce_10_0213.html).
+     * The object structure is documented below.
+     */
+    public readonly componentConfigurations!: pulumi.Output<outputs.Cce.ClusterComponentConfiguration[] | undefined>;
     /**
      * Specifies the container network segments.
      * In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
      * segments, separated with comma (,). In other situations, only the first segment takes effect.
-     * Changing this parameter will create a new cluster resource.
      */
     public readonly containerNetworkCidr!: pulumi.Output<string>;
     /**
@@ -197,6 +263,10 @@ export class Cluster extends pulumi.CustomResource {
      * ELB and containers to provide high performance.
      */
     public readonly containerNetworkType!: pulumi.Output<string>;
+    /**
+     * Specifies the custom san to add to certificate (array of string).
+     */
+    public readonly customSans!: pulumi.Output<string[]>;
     /**
      * Specified whether to delete all associated storage resources when deleting the CCE
      * cluster. valid values are **true**, **try** and **false**. Default is **false**.
@@ -254,17 +324,20 @@ export class Cluster extends pulumi.CustomResource {
     public readonly eniSubnetId!: pulumi.Output<string>;
     /**
      * The enterprise project ID of the CCE cluster.
-     * Changing this parameter will create a new cluster resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new cluster resource.
+     * schema: Internal
      */
     public readonly extendParam!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the cluster specifications.
+     * Specifies the extended parameter.
+     * The object structure is documented below.
      * Changing this parameter will create a new cluster resource.
+     */
+    public readonly extendParams!: pulumi.Output<outputs.Cce.ClusterExtendParam[] | undefined>;
+    /**
+     * Specifies the cluster specifications.
      * Possible values:
      * + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
      * + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
@@ -285,6 +358,11 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly highwaySubnetId!: pulumi.Output<string>;
     /**
+     * Specifies whether to enable IPv6 in the cluster.
+     * Changing this parameter will create a new cluster resource.
+     */
+    public readonly ipv6Enable!: pulumi.Output<boolean>;
+    /**
      * Raw Kubernetes config to be used by kubectl and other compatible tools.
      */
     public /*out*/ readonly kubeConfigRaw!: pulumi.Output<string>;
@@ -292,11 +370,20 @@ export class Cluster extends pulumi.CustomResource {
      * Specifies the service forwarding mode.
      * Changing this parameter will create a new cluster resource. Two modes are available:
      */
-    public readonly kubeProxyMode!: pulumi.Output<string | undefined>;
+    public readonly kubeProxyMode!: pulumi.Output<string>;
     /**
      * schema: Internal
      */
     public readonly labels!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
+     * Specified whether to delete LTS resources when deleting the CCE cluster.
+     * Valid values are:
+     * + **Delete_Log_Group**: Delete the log group, ignore it if it fails, and continue with the subsequent process.
+     * + **Delete_Master_Log_Stream**: Delete the the log stream, ignore it if it fails, and continue the subsequent process.
+     * The default option.
+     * + **Retain**: Skip the deletion process.
+     */
+    public readonly ltsReclaimPolicy!: pulumi.Output<string | undefined>;
     /**
      * Specifies the advanced configuration of master nodes.
      * The object structure is documented below.
@@ -309,8 +396,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly multiAz!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the cluster name.
-     * Changing this parameter will create a new cluster resource.
+     * Specifies the component name.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -356,8 +442,11 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
+     * Whether Istio is supported in the cluster.
+     */
+    public readonly supportIstio!: pulumi.Output<boolean>;
+    /**
      * Specifies the tags of the CCE cluster, key/value pair format.
-     * Changing this parameter will create a new cluster resource.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
@@ -379,6 +468,7 @@ export class Cluster extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as ClusterState | undefined;
+            resourceInputs["alias"] = state ? state.alias : undefined;
             resourceInputs["annotations"] = state ? state.annotations : undefined;
             resourceInputs["authenticatingProxyCa"] = state ? state.authenticatingProxyCa : undefined;
             resourceInputs["authenticatingProxyCert"] = state ? state.authenticatingProxyCert : undefined;
@@ -387,13 +477,16 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["autoPay"] = state ? state.autoPay : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["billingMode"] = state ? state.billingMode : undefined;
+            resourceInputs["category"] = state ? state.category : undefined;
             resourceInputs["certificateClusters"] = state ? state.certificateClusters : undefined;
             resourceInputs["certificateUsers"] = state ? state.certificateUsers : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["clusterType"] = state ? state.clusterType : undefined;
             resourceInputs["clusterVersion"] = state ? state.clusterVersion : undefined;
+            resourceInputs["componentConfigurations"] = state ? state.componentConfigurations : undefined;
             resourceInputs["containerNetworkCidr"] = state ? state.containerNetworkCidr : undefined;
             resourceInputs["containerNetworkType"] = state ? state.containerNetworkType : undefined;
+            resourceInputs["customSans"] = state ? state.customSans : undefined;
             resourceInputs["deleteAll"] = state ? state.deleteAll : undefined;
             resourceInputs["deleteEfs"] = state ? state.deleteEfs : undefined;
             resourceInputs["deleteEni"] = state ? state.deleteEni : undefined;
@@ -408,12 +501,15 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["eniSubnetId"] = state ? state.eniSubnetId : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["extendParam"] = state ? state.extendParam : undefined;
+            resourceInputs["extendParams"] = state ? state.extendParams : undefined;
             resourceInputs["flavorId"] = state ? state.flavorId : undefined;
             resourceInputs["hibernate"] = state ? state.hibernate : undefined;
             resourceInputs["highwaySubnetId"] = state ? state.highwaySubnetId : undefined;
+            resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
             resourceInputs["kubeConfigRaw"] = state ? state.kubeConfigRaw : undefined;
             resourceInputs["kubeProxyMode"] = state ? state.kubeProxyMode : undefined;
             resourceInputs["labels"] = state ? state.labels : undefined;
+            resourceInputs["ltsReclaimPolicy"] = state ? state.ltsReclaimPolicy : undefined;
             resourceInputs["masters"] = state ? state.masters : undefined;
             resourceInputs["multiAz"] = state ? state.multiAz : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -424,6 +520,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["serviceNetworkCidr"] = state ? state.serviceNetworkCidr : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
+            resourceInputs["supportIstio"] = state ? state.supportIstio : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
@@ -440,6 +537,7 @@ export class Cluster extends pulumi.CustomResource {
             if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
+            resourceInputs["alias"] = args ? args.alias : undefined;
             resourceInputs["annotations"] = args ? args.annotations : undefined;
             resourceInputs["authenticatingProxyCa"] = args ? args.authenticatingProxyCa : undefined;
             resourceInputs["authenticatingProxyCert"] = args ? args.authenticatingProxyCert : undefined;
@@ -451,8 +549,10 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["clusterType"] = args ? args.clusterType : undefined;
             resourceInputs["clusterVersion"] = args ? args.clusterVersion : undefined;
+            resourceInputs["componentConfigurations"] = args ? args.componentConfigurations : undefined;
             resourceInputs["containerNetworkCidr"] = args ? args.containerNetworkCidr : undefined;
             resourceInputs["containerNetworkType"] = args ? args.containerNetworkType : undefined;
+            resourceInputs["customSans"] = args ? args.customSans : undefined;
             resourceInputs["deleteAll"] = args ? args.deleteAll : undefined;
             resourceInputs["deleteEfs"] = args ? args.deleteEfs : undefined;
             resourceInputs["deleteEni"] = args ? args.deleteEni : undefined;
@@ -467,11 +567,14 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["eniSubnetId"] = args ? args.eniSubnetId : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["extendParam"] = args ? args.extendParam : undefined;
+            resourceInputs["extendParams"] = args ? args.extendParams : undefined;
             resourceInputs["flavorId"] = args ? args.flavorId : undefined;
             resourceInputs["hibernate"] = args ? args.hibernate : undefined;
             resourceInputs["highwaySubnetId"] = args ? args.highwaySubnetId : undefined;
+            resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["kubeProxyMode"] = args ? args.kubeProxyMode : undefined;
             resourceInputs["labels"] = args ? args.labels : undefined;
+            resourceInputs["ltsReclaimPolicy"] = args ? args.ltsReclaimPolicy : undefined;
             resourceInputs["masters"] = args ? args.masters : undefined;
             resourceInputs["multiAz"] = args ? args.multiAz : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
@@ -481,8 +584,10 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
             resourceInputs["serviceNetworkCidr"] = args ? args.serviceNetworkCidr : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["supportIstio"] = args ? args.supportIstio : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["category"] = undefined /*out*/;
             resourceInputs["certificateClusters"] = undefined /*out*/;
             resourceInputs["certificateUsers"] = undefined /*out*/;
             resourceInputs["kubeConfigRaw"] = undefined /*out*/;
@@ -497,6 +602,11 @@ export class Cluster extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Cluster resources.
  */
 export interface ClusterState {
+    /**
+     * Specifies the display name of a cluster. The value of `alias` cannot be the same as the `name`
+     * and display names of other clusters.
+     */
+    alias?: pulumi.Input<string>;
     /**
      * schema: Internal
      */
@@ -538,6 +648,10 @@ export interface ClusterState {
      */
     billingMode?: pulumi.Input<number>;
     /**
+     * The category of the cluster. The value can be **CCE** and **Turbo**.
+     */
+    category?: pulumi.Input<string>;
+    /**
      * The certificate clusters. Structure is documented below.
      */
     certificateClusters?: pulumi.Input<pulumi.Input<inputs.Cce.ClusterCertificateCluster>[]>;
@@ -558,14 +672,21 @@ export interface ClusterState {
     clusterType?: pulumi.Input<string>;
     /**
      * Specifies the cluster version, defaults to the latest supported
-     * version. Changing this parameter will create a new cluster resource.
+     * version. Changing this parameter will not upgrade the cluster. If you want to upgrade the cluster, please use
+     * resource `huaweicloud.Cce.ClusterUpgrade`. After upgrading cluster successfully, you can update this parameter
+     * to avoid unexpected changing plan.
      */
     clusterVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the kubernetes component configurations.
+     * For details, see [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-cce/cce_10_0213.html).
+     * The object structure is documented below.
+     */
+    componentConfigurations?: pulumi.Input<pulumi.Input<inputs.Cce.ClusterComponentConfiguration>[]>;
     /**
      * Specifies the container network segments.
      * In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
      * segments, separated with comma (,). In other situations, only the first segment takes effect.
-     * Changing this parameter will create a new cluster resource.
      */
     containerNetworkCidr?: pulumi.Input<string>;
     /**
@@ -578,6 +699,10 @@ export interface ClusterState {
      * ELB and containers to provide high performance.
      */
     containerNetworkType?: pulumi.Input<string>;
+    /**
+     * Specifies the custom san to add to certificate (array of string).
+     */
+    customSans?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specified whether to delete all associated storage resources when deleting the CCE
      * cluster. valid values are **true**, **try** and **false**. Default is **false**.
@@ -635,17 +760,20 @@ export interface ClusterState {
     eniSubnetId?: pulumi.Input<string>;
     /**
      * The enterprise project ID of the CCE cluster.
-     * Changing this parameter will create a new cluster resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new cluster resource.
+     * schema: Internal
      */
     extendParam?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the cluster specifications.
+     * Specifies the extended parameter.
+     * The object structure is documented below.
      * Changing this parameter will create a new cluster resource.
+     */
+    extendParams?: pulumi.Input<pulumi.Input<inputs.Cce.ClusterExtendParam>[]>;
+    /**
+     * Specifies the cluster specifications.
      * Possible values:
      * + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
      * + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
@@ -666,6 +794,11 @@ export interface ClusterState {
      */
     highwaySubnetId?: pulumi.Input<string>;
     /**
+     * Specifies whether to enable IPv6 in the cluster.
+     * Changing this parameter will create a new cluster resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
      * Raw Kubernetes config to be used by kubectl and other compatible tools.
      */
     kubeConfigRaw?: pulumi.Input<string>;
@@ -679,6 +812,15 @@ export interface ClusterState {
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
+     * Specified whether to delete LTS resources when deleting the CCE cluster.
+     * Valid values are:
+     * + **Delete_Log_Group**: Delete the log group, ignore it if it fails, and continue with the subsequent process.
+     * + **Delete_Master_Log_Stream**: Delete the the log stream, ignore it if it fails, and continue the subsequent process.
+     * The default option.
+     * + **Retain**: Skip the deletion process.
+     */
+    ltsReclaimPolicy?: pulumi.Input<string>;
+    /**
      * Specifies the advanced configuration of master nodes.
      * The object structure is documented below.
      * This parameter and `multiAz` are alternative. Changing this parameter will create a new cluster resource.
@@ -690,8 +832,7 @@ export interface ClusterState {
      */
     multiAz?: pulumi.Input<boolean>;
     /**
-     * Specifies the cluster name.
-     * Changing this parameter will create a new cluster resource.
+     * Specifies the component name.
      */
     name?: pulumi.Input<string>;
     /**
@@ -737,8 +878,11 @@ export interface ClusterState {
      */
     subnetId?: pulumi.Input<string>;
     /**
+     * Whether Istio is supported in the cluster.
+     */
+    supportIstio?: pulumi.Input<boolean>;
+    /**
      * Specifies the tags of the CCE cluster, key/value pair format.
-     * Changing this parameter will create a new cluster resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
@@ -752,6 +896,11 @@ export interface ClusterState {
  * The set of arguments for constructing a Cluster resource.
  */
 export interface ClusterArgs {
+    /**
+     * Specifies the display name of a cluster. The value of `alias` cannot be the same as the `name`
+     * and display names of other clusters.
+     */
+    alias?: pulumi.Input<string>;
     /**
      * schema: Internal
      */
@@ -805,14 +954,21 @@ export interface ClusterArgs {
     clusterType?: pulumi.Input<string>;
     /**
      * Specifies the cluster version, defaults to the latest supported
-     * version. Changing this parameter will create a new cluster resource.
+     * version. Changing this parameter will not upgrade the cluster. If you want to upgrade the cluster, please use
+     * resource `huaweicloud.Cce.ClusterUpgrade`. After upgrading cluster successfully, you can update this parameter
+     * to avoid unexpected changing plan.
      */
     clusterVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the kubernetes component configurations.
+     * For details, see [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-cce/cce_10_0213.html).
+     * The object structure is documented below.
+     */
+    componentConfigurations?: pulumi.Input<pulumi.Input<inputs.Cce.ClusterComponentConfiguration>[]>;
     /**
      * Specifies the container network segments.
      * In clusters of v1.21 and later, when the `containerNetworkType` is **vpc-router**, you can add multiple container
      * segments, separated with comma (,). In other situations, only the first segment takes effect.
-     * Changing this parameter will create a new cluster resource.
      */
     containerNetworkCidr?: pulumi.Input<string>;
     /**
@@ -825,6 +981,10 @@ export interface ClusterArgs {
      * ELB and containers to provide high performance.
      */
     containerNetworkType: pulumi.Input<string>;
+    /**
+     * Specifies the custom san to add to certificate (array of string).
+     */
+    customSans?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specified whether to delete all associated storage resources when deleting the CCE
      * cluster. valid values are **true**, **try** and **false**. Default is **false**.
@@ -882,17 +1042,20 @@ export interface ClusterArgs {
     eniSubnetId?: pulumi.Input<string>;
     /**
      * The enterprise project ID of the CCE cluster.
-     * Changing this parameter will create a new cluster resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the extended parameter.
-     * Changing this parameter will create a new cluster resource.
+     * schema: Internal
      */
     extendParam?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the cluster specifications.
+     * Specifies the extended parameter.
+     * The object structure is documented below.
      * Changing this parameter will create a new cluster resource.
+     */
+    extendParams?: pulumi.Input<pulumi.Input<inputs.Cce.ClusterExtendParam>[]>;
+    /**
+     * Specifies the cluster specifications.
      * Possible values:
      * + **cce.s1.small**: small-scale single cluster (up to 50 nodes).
      * + **cce.s1.medium**: medium-scale single cluster (up to 200 nodes).
@@ -913,6 +1076,11 @@ export interface ClusterArgs {
      */
     highwaySubnetId?: pulumi.Input<string>;
     /**
+     * Specifies whether to enable IPv6 in the cluster.
+     * Changing this parameter will create a new cluster resource.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
      * Specifies the service forwarding mode.
      * Changing this parameter will create a new cluster resource. Two modes are available:
      */
@@ -921,6 +1089,15 @@ export interface ClusterArgs {
      * schema: Internal
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specified whether to delete LTS resources when deleting the CCE cluster.
+     * Valid values are:
+     * + **Delete_Log_Group**: Delete the log group, ignore it if it fails, and continue with the subsequent process.
+     * + **Delete_Master_Log_Stream**: Delete the the log stream, ignore it if it fails, and continue the subsequent process.
+     * The default option.
+     * + **Retain**: Skip the deletion process.
+     */
+    ltsReclaimPolicy?: pulumi.Input<string>;
     /**
      * Specifies the advanced configuration of master nodes.
      * The object structure is documented below.
@@ -933,8 +1110,7 @@ export interface ClusterArgs {
      */
     multiAz?: pulumi.Input<boolean>;
     /**
-     * Specifies the cluster name.
-     * Changing this parameter will create a new cluster resource.
+     * Specifies the component name.
      */
     name?: pulumi.Input<string>;
     /**
@@ -976,8 +1152,11 @@ export interface ClusterArgs {
      */
     subnetId: pulumi.Input<string>;
     /**
+     * Whether Istio is supported in the cluster.
+     */
+    supportIstio?: pulumi.Input<boolean>;
+    /**
      * Specifies the tags of the CCE cluster, key/value pair format.
-     * Changing this parameter will create a new cluster resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**

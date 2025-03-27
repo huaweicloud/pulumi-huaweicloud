@@ -86,32 +86,32 @@ export interface GetVpcsArgs {
  */
 export interface GetVpcsResult {
     /**
-     * Indicates the cidr block of the VPC.
+     * The cidr block of the VPC.
      */
     readonly cidr?: string;
     /**
-     * Indicates the the enterprise project ID of the VPC.
+     * The the enterprise project ID of the VPC.
      */
     readonly enterpriseProjectId?: string;
     /**
-     * Indicates the ID of the VPC.
+     * The ID of the VPC.
      */
     readonly id: string;
     /**
-     * Indicates the name of the VPC.
+     * The name of the VPC.
      */
     readonly name?: string;
     readonly region: string;
     /**
-     * Indicates the current status of the VPC.
+     * The current status of the VPC.
      */
     readonly status?: string;
     /**
-     * Indicates the key/value pairs which associated with the VPC.
+     * The key/value pairs which associated with the VPC.
      */
     readonly tags?: {[key: string]: string};
     /**
-     * Indicates a list of all VPCs found. Structure is documented below.
+     * The list of all VPCs found. Structure is documented below.
      */
     readonly vpcs: outputs.Vpc.GetVpcsVpc[];
 }

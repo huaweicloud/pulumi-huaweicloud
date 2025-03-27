@@ -52,7 +52,7 @@ export interface GetKeyArgs {
      */
     defaultKeyFlag?: string;
     /**
-     * - ID of a user domain for the key. Changing this gets a new key.
+     * The ID of a user domain for the key. Changing this gets a new key.
      */
     domainId?: string;
     /**
@@ -146,7 +146,7 @@ export interface GetKeyOutputArgs {
      */
     defaultKeyFlag?: pulumi.Input<string>;
     /**
-     * - ID of a user domain for the key. Changing this gets a new key.
+     * The ID of a user domain for the key. Changing this gets a new key.
      */
     domainId?: pulumi.Input<string>;
     /**

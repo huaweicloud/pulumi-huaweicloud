@@ -26,6 +26,24 @@ import * as utilities from "../utilities";
  *     remoteIpPrefix: "0.0.0.0/0",
  * });
  * ```
+ * ### Create an egress rule that opens TCP port 8080 with port range parameters
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const securityGroupId = config.requireObject("securityGroupId");
+ * const test = new huaweicloud.vpc.SecgroupRule("test", {
+ *     securityGroupId: securityGroupId,
+ *     direction: "egress",
+ *     ethertype: "IPv4",
+ *     protocol: "tcp",
+ *     portRangeMin: 8080,
+ *     portRangeMax: 8080,
+ *     remoteIpPrefix: "0.0.0.0/0",
+ * });
+ * ```
  * ### Create an ingress rule that enable the remote address group and open some TCP ports
  *
  * ```typescript
@@ -50,10 +68,34 @@ import * as utilities from "../utilities";
  *     remoteAddressGroupId: testAddressGroup.id,
  * });
  * ```
+ * ### Create an egress rule that enable the remote address group and open some TCP ports
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const groupName = config.requireObject("groupName");
+ * const securityGroupId = config.requireObject("securityGroupId");
+ * const testAddressGroup = new huaweicloud.vpc.AddressGroup("testAddressGroup", {addresses: [
+ *     "192.168.10.12",
+ *     "192.168.11.0-192.168.11.240",
+ * ]});
+ * const testSecgroupRule = new huaweicloud.vpc.SecgroupRule("testSecgroupRule", {
+ *     securityGroupId: securityGroupId,
+ *     direction: "egress",
+ *     action: "allow",
+ *     ethertype: "IPv4",
+ *     ports: "80,500,600-800",
+ *     protocol: "tcp",
+ *     priority: 5,
+ *     remoteAddressGroupId: testAddressGroup.id,
+ * });
+ * ```
  *
  * ## Import
  *
- * Security Group Rules can be imported using the `id`, e.g.
+ * Security Group Rules can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vpc/secgroupRule:SecgroupRule secgroup_rule_1 aeb68ee3-6e9d-4256-955c-9584a6212745
@@ -123,13 +165,13 @@ export class SecgroupRule extends pulumi.CustomResource {
     public readonly portRangeMin!: pulumi.Output<number>;
     /**
      * Specifies the allowed port value range, which supports single port (80),
-     * continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+     * continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
      * Changing this creates a new security group rule.
      */
     public readonly ports!: pulumi.Output<string>;
     /**
      * Specifies the priority number.
-     * The valid value is range from **1** to **100**. The default value is **1**.
+     * The valid value is range from `1` to `100`. The default value is `1`.
      * This parameter is not used with `portRangeMin` and `portRangeMax`.
      * Changing this creates a new security group rule.
      */
@@ -158,7 +200,8 @@ export class SecgroupRule extends pulumi.CustomResource {
     public readonly remoteGroupId!: pulumi.Output<string>;
     /**
      * Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-     * 192.168.0.0/16). Changing this creates a new security group rule.
+     * 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+     * Changing this creates a new security group rule.
      */
     public readonly remoteIpPrefix!: pulumi.Output<string>;
     /**
@@ -265,13 +308,13 @@ export interface SecgroupRuleState {
     portRangeMin?: pulumi.Input<number>;
     /**
      * Specifies the allowed port value range, which supports single port (80),
-     * continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+     * continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
      * Changing this creates a new security group rule.
      */
     ports?: pulumi.Input<string>;
     /**
      * Specifies the priority number.
-     * The valid value is range from **1** to **100**. The default value is **1**.
+     * The valid value is range from `1` to `100`. The default value is `1`.
      * This parameter is not used with `portRangeMin` and `portRangeMax`.
      * Changing this creates a new security group rule.
      */
@@ -300,7 +343,8 @@ export interface SecgroupRuleState {
     remoteGroupId?: pulumi.Input<string>;
     /**
      * Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-     * 192.168.0.0/16). Changing this creates a new security group rule.
+     * 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+     * Changing this creates a new security group rule.
      */
     remoteIpPrefix?: pulumi.Input<string>;
     /**
@@ -350,13 +394,13 @@ export interface SecgroupRuleArgs {
     portRangeMin?: pulumi.Input<number>;
     /**
      * Specifies the allowed port value range, which supports single port (80),
-     * continuous port (1-30) and discontinous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
+     * continuous port (1-30) and discontinuous port (22, 3389, 80) The valid port values is range form `1` to `65,535`.
      * Changing this creates a new security group rule.
      */
     ports?: pulumi.Input<string>;
     /**
      * Specifies the priority number.
-     * The valid value is range from **1** to **100**. The default value is **1**.
+     * The valid value is range from `1` to `100`. The default value is `1`.
      * This parameter is not used with `portRangeMin` and `portRangeMax`.
      * Changing this creates a new security group rule.
      */
@@ -385,7 +429,8 @@ export interface SecgroupRuleArgs {
     remoteGroupId?: pulumi.Input<string>;
     /**
      * Specifies the remote CIDR, the value needs to be a valid CIDR (i.e.
-     * 192.168.0.0/16). Changing this creates a new security group rule.
+     * 192.168.0.0/16). If not specified, the empty value means all IP addresses, which is same as the value `0.0.0.0/0`.
+     * Changing this creates a new security group rule.
      */
     remoteIpPrefix?: pulumi.Input<string>;
     /**

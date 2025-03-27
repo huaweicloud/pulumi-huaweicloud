@@ -16,6 +16,8 @@ class InterfaceAttachArgs:
     def __init__(__self__, *,
                  instance_id: pulumi.Input[str],
                  fixed_ip: Optional[pulumi.Input[str]] = None,
+                 ipv6_bandwidth_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -24,7 +26,9 @@ class InterfaceAttachArgs:
         """
         The set of arguments for constructing a InterfaceAttach resource.
         :param pulumi.Input[str] instance_id: The ID of the Instance to attach the Port or Network to.
-        :param pulumi.Input[str] fixed_ip: An IP address to assosciate with the port.
+        :param pulumi.Input[str] fixed_ip: An IP address to associate with the port.
+        :param pulumi.Input[str] ipv6_bandwidth_id: Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        :param pulumi.Input[bool] ipv6_enable: Specifies if the NIC supporting IPv6 or not.
         :param pulumi.Input[str] network_id: The ID of the Network to attach to an Instance. A port will be created
                automatically.
                This option and `port_id` are mutually exclusive.
@@ -41,6 +45,10 @@ class InterfaceAttachArgs:
         pulumi.set(__self__, "instance_id", instance_id)
         if fixed_ip is not None:
             pulumi.set(__self__, "fixed_ip", fixed_ip)
+        if ipv6_bandwidth_id is not None:
+            pulumi.set(__self__, "ipv6_bandwidth_id", ipv6_bandwidth_id)
+        if ipv6_enable is not None:
+            pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if port_id is not None:
@@ -68,13 +76,37 @@ class InterfaceAttachArgs:
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        An IP address to assosciate with the port.
+        An IP address to associate with the port.
         """
         return pulumi.get(self, "fixed_ip")
 
     @fixed_ip.setter
     def fixed_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "fixed_ip", value)
+
+    @property
+    @pulumi.getter(name="ipv6BandwidthId")
+    def ipv6_bandwidth_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        """
+        return pulumi.get(self, "ipv6_bandwidth_id")
+
+    @ipv6_bandwidth_id.setter
+    def ipv6_bandwidth_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ipv6_bandwidth_id", value)
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies if the NIC supporting IPv6 or not.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @ipv6_enable.setter
+    def ipv6_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ipv6_enable", value)
 
     @property
     @pulumi.getter(name="networkId")
@@ -148,7 +180,10 @@ class InterfaceAttachArgs:
 class _InterfaceAttachState:
     def __init__(__self__, *,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
+                 fixed_ipv6: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_bandwidth_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  mac: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
@@ -157,8 +192,11 @@ class _InterfaceAttachState:
                  source_dest_check: Optional[pulumi.Input[bool]] = None):
         """
         Input properties used for looking up and filtering InterfaceAttach resources.
-        :param pulumi.Input[str] fixed_ip: An IP address to assosciate with the port.
+        :param pulumi.Input[str] fixed_ip: An IP address to associate with the port.
+        :param pulumi.Input[str] fixed_ipv6: The IPv6 address.
         :param pulumi.Input[str] instance_id: The ID of the Instance to attach the Port or Network to.
+        :param pulumi.Input[str] ipv6_bandwidth_id: Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        :param pulumi.Input[bool] ipv6_enable: Specifies if the NIC supporting IPv6 or not.
         :param pulumi.Input[str] mac: The MAC address of the NIC.
         :param pulumi.Input[str] network_id: The ID of the Network to attach to an Instance. A port will be created
                automatically.
@@ -175,8 +213,14 @@ class _InterfaceAttachState:
         """
         if fixed_ip is not None:
             pulumi.set(__self__, "fixed_ip", fixed_ip)
+        if fixed_ipv6 is not None:
+            pulumi.set(__self__, "fixed_ipv6", fixed_ipv6)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
+        if ipv6_bandwidth_id is not None:
+            pulumi.set(__self__, "ipv6_bandwidth_id", ipv6_bandwidth_id)
+        if ipv6_enable is not None:
+            pulumi.set(__self__, "ipv6_enable", ipv6_enable)
         if mac is not None:
             pulumi.set(__self__, "mac", mac)
         if network_id is not None:
@@ -194,13 +238,25 @@ class _InterfaceAttachState:
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        An IP address to assosciate with the port.
+        An IP address to associate with the port.
         """
         return pulumi.get(self, "fixed_ip")
 
     @fixed_ip.setter
     def fixed_ip(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "fixed_ip", value)
+
+    @property
+    @pulumi.getter(name="fixedIpv6")
+    def fixed_ipv6(self) -> Optional[pulumi.Input[str]]:
+        """
+        The IPv6 address.
+        """
+        return pulumi.get(self, "fixed_ipv6")
+
+    @fixed_ipv6.setter
+    def fixed_ipv6(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "fixed_ipv6", value)
 
     @property
     @pulumi.getter(name="instanceId")
@@ -213,6 +269,30 @@ class _InterfaceAttachState:
     @instance_id.setter
     def instance_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "instance_id", value)
+
+    @property
+    @pulumi.getter(name="ipv6BandwidthId")
+    def ipv6_bandwidth_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        """
+        return pulumi.get(self, "ipv6_bandwidth_id")
+
+    @ipv6_bandwidth_id.setter
+    def ipv6_bandwidth_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ipv6_bandwidth_id", value)
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies if the NIC supporting IPv6 or not.
+        """
+        return pulumi.get(self, "ipv6_enable")
+
+    @ipv6_enable.setter
+    def ipv6_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ipv6_enable", value)
 
     @property
     @pulumi.getter
@@ -301,6 +381,8 @@ class InterfaceAttach(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_bandwidth_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -323,6 +405,21 @@ class InterfaceAttach(pulumi.CustomResource):
         test = huaweicloud.ecs.InterfaceAttach("test",
             instance_id=instance_id,
             network_id=network_id)
+        ```
+        ### Attach a port (under the specified network) to the ECS instance and use the custom security groups
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        instance_id = config.require_object("instanceId")
+        network_id = config.require_object("networkId")
+        security_group_ids = config.require_object("securityGroupIds")
+        test = huaweicloud.ecs.InterfaceAttach("test",
+            instance_id=instance_id,
+            network_id=network_id,
+            security_group_ids=security_group_ids)
         ```
         ### Attach a custom port to the ECS instance
 
@@ -359,8 +456,10 @@ class InterfaceAttach(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] fixed_ip: An IP address to assosciate with the port.
+        :param pulumi.Input[str] fixed_ip: An IP address to associate with the port.
         :param pulumi.Input[str] instance_id: The ID of the Instance to attach the Port or Network to.
+        :param pulumi.Input[str] ipv6_bandwidth_id: Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        :param pulumi.Input[bool] ipv6_enable: Specifies if the NIC supporting IPv6 or not.
         :param pulumi.Input[str] network_id: The ID of the Network to attach to an Instance. A port will be created
                automatically.
                This option and `port_id` are mutually exclusive.
@@ -396,6 +495,21 @@ class InterfaceAttach(pulumi.CustomResource):
         test = huaweicloud.ecs.InterfaceAttach("test",
             instance_id=instance_id,
             network_id=network_id)
+        ```
+        ### Attach a port (under the specified network) to the ECS instance and use the custom security groups
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        instance_id = config.require_object("instanceId")
+        network_id = config.require_object("networkId")
+        security_group_ids = config.require_object("securityGroupIds")
+        test = huaweicloud.ecs.InterfaceAttach("test",
+            instance_id=instance_id,
+            network_id=network_id,
+            security_group_ids=security_group_ids)
         ```
         ### Attach a custom port to the ECS instance
 
@@ -447,6 +561,8 @@ class InterfaceAttach(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  fixed_ip: Optional[pulumi.Input[str]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_bandwidth_id: Optional[pulumi.Input[str]] = None,
+                 ipv6_enable: Optional[pulumi.Input[bool]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  port_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -465,11 +581,14 @@ class InterfaceAttach(pulumi.CustomResource):
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
+            __props__.__dict__["ipv6_bandwidth_id"] = ipv6_bandwidth_id
+            __props__.__dict__["ipv6_enable"] = ipv6_enable
             __props__.__dict__["network_id"] = network_id
             __props__.__dict__["port_id"] = port_id
             __props__.__dict__["region"] = region
             __props__.__dict__["security_group_ids"] = security_group_ids
             __props__.__dict__["source_dest_check"] = source_dest_check
+            __props__.__dict__["fixed_ipv6"] = None
             __props__.__dict__["mac"] = None
         super(InterfaceAttach, __self__).__init__(
             'huaweicloud:Ecs/interfaceAttach:InterfaceAttach',
@@ -482,7 +601,10 @@ class InterfaceAttach(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             fixed_ip: Optional[pulumi.Input[str]] = None,
+            fixed_ipv6: Optional[pulumi.Input[str]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
+            ipv6_bandwidth_id: Optional[pulumi.Input[str]] = None,
+            ipv6_enable: Optional[pulumi.Input[bool]] = None,
             mac: Optional[pulumi.Input[str]] = None,
             network_id: Optional[pulumi.Input[str]] = None,
             port_id: Optional[pulumi.Input[str]] = None,
@@ -496,8 +618,11 @@ class InterfaceAttach(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] fixed_ip: An IP address to assosciate with the port.
+        :param pulumi.Input[str] fixed_ip: An IP address to associate with the port.
+        :param pulumi.Input[str] fixed_ipv6: The IPv6 address.
         :param pulumi.Input[str] instance_id: The ID of the Instance to attach the Port or Network to.
+        :param pulumi.Input[str] ipv6_bandwidth_id: Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        :param pulumi.Input[bool] ipv6_enable: Specifies if the NIC supporting IPv6 or not.
         :param pulumi.Input[str] mac: The MAC address of the NIC.
         :param pulumi.Input[str] network_id: The ID of the Network to attach to an Instance. A port will be created
                automatically.
@@ -517,7 +642,10 @@ class InterfaceAttach(pulumi.CustomResource):
         __props__ = _InterfaceAttachState.__new__(_InterfaceAttachState)
 
         __props__.__dict__["fixed_ip"] = fixed_ip
+        __props__.__dict__["fixed_ipv6"] = fixed_ipv6
         __props__.__dict__["instance_id"] = instance_id
+        __props__.__dict__["ipv6_bandwidth_id"] = ipv6_bandwidth_id
+        __props__.__dict__["ipv6_enable"] = ipv6_enable
         __props__.__dict__["mac"] = mac
         __props__.__dict__["network_id"] = network_id
         __props__.__dict__["port_id"] = port_id
@@ -530,9 +658,17 @@ class InterfaceAttach(pulumi.CustomResource):
     @pulumi.getter(name="fixedIp")
     def fixed_ip(self) -> pulumi.Output[str]:
         """
-        An IP address to assosciate with the port.
+        An IP address to associate with the port.
         """
         return pulumi.get(self, "fixed_ip")
+
+    @property
+    @pulumi.getter(name="fixedIpv6")
+    def fixed_ipv6(self) -> pulumi.Output[str]:
+        """
+        The IPv6 address.
+        """
+        return pulumi.get(self, "fixed_ipv6")
 
     @property
     @pulumi.getter(name="instanceId")
@@ -541,6 +677,22 @@ class InterfaceAttach(pulumi.CustomResource):
         The ID of the Instance to attach the Port or Network to.
         """
         return pulumi.get(self, "instance_id")
+
+    @property
+    @pulumi.getter(name="ipv6BandwidthId")
+    def ipv6_bandwidth_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the shared bandwidth ID to which the IPv6 NIC attaches.
+        """
+        return pulumi.get(self, "ipv6_bandwidth_id")
+
+    @property
+    @pulumi.getter(name="ipv6Enable")
+    def ipv6_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies if the NIC supporting IPv6 or not.
+        """
+        return pulumi.get(self, "ipv6_enable")
 
     @property
     @pulumi.getter

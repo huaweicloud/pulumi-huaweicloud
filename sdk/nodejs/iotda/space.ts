@@ -11,21 +11,32 @@ import * as utilities from "../utilities";
  * configuration capabilities at the service layer. Resources (such as products and devices) must be created on
  * a resource space.
  *
+ * > The **basic** edition instance does not support updating the resource.
+ *
+ * > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify
+ *   the IoTDA service endpoint in `provider` block.
+ *   You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+ *   to view the HTTPS application access address. An example of the access address might be
+ *   *9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com*, then you need to configure the
+ *   `provider` block as follows:
+ *
  * ## Example Usage
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
+ * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const space = new huaweicloud.IoTDA.Space("space", {});
+ * const config = new pulumi.Config();
+ * const name = config.requireObject("name");
+ * const test = new huaweicloud.iotda.Space("test", {});
  * ```
  *
  * ## Import
  *
- * Spaces can be imported using the `id`, e.g.
+ * The resource can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:IoTDA/space:Space test 10022532f4f94f26b01daa1e424853e1
+ *  $ pulumi import huaweicloud:IoTDA/space:Space test <id>
  * ```
  */
 export class Space extends pulumi.CustomResource {
@@ -62,9 +73,8 @@ export class Space extends pulumi.CustomResource {
      */
     public /*out*/ readonly isDefault!: pulumi.Output<boolean>;
     /**
-     * Specifies the space name. The name contains a maximum of 64 characters.
+     * Specifies the space name. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-     * Changing this parameter will create a new resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -110,9 +120,8 @@ export interface SpaceState {
      */
     isDefault?: pulumi.Input<boolean>;
     /**
-     * Specifies the space name. The name contains a maximum of 64 characters.
+     * Specifies the space name. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -127,9 +136,8 @@ export interface SpaceState {
  */
 export interface SpaceArgs {
     /**
-     * Specifies the space name. The name contains a maximum of 64 characters.
+     * Specifies the space name. The name contains a maximum of `64` characters.
      * Only letters, digits, hyphens (-), underscore (_) and the following special characters are allowed: `?'#().,&%@!`.
-     * Changing this parameter will create a new resource.
      */
     name?: pulumi.Input<string>;
     /**

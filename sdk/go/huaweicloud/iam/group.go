@@ -10,9 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a User Group resource within HuaweiCloud IAM service.
+// Manages an IAM user group resource within HuaweiCloud.
 //
-// Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+// > **NOTE:** You *must* have admin privileges to use this resource.
 //
 // ## Example Usage
 //
@@ -42,7 +42,7 @@ import (
 //
 // ## Import
 //
-// Groups can be imported using the `id`, e.g.
+// Groups can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -54,7 +54,7 @@ type Group struct {
 
 	// Specifies the description of the group.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the name of the group.The length is less than or equal to 64 bytes.
+	// Specifies the name of the group. The length is less than or equal to 64 bytes.
 	Name pulumi.StringOutput `pulumi:"name"`
 }
 
@@ -90,14 +90,14 @@ func GetGroup(ctx *pulumi.Context,
 type groupState struct {
 	// Specifies the description of the group.
 	Description *string `pulumi:"description"`
-	// Specifies the name of the group.The length is less than or equal to 64 bytes.
+	// Specifies the name of the group. The length is less than or equal to 64 bytes.
 	Name *string `pulumi:"name"`
 }
 
 type GroupState struct {
 	// Specifies the description of the group.
 	Description pulumi.StringPtrInput
-	// Specifies the name of the group.The length is less than or equal to 64 bytes.
+	// Specifies the name of the group. The length is less than or equal to 64 bytes.
 	Name pulumi.StringPtrInput
 }
 
@@ -108,7 +108,7 @@ func (GroupState) ElementType() reflect.Type {
 type groupArgs struct {
 	// Specifies the description of the group.
 	Description *string `pulumi:"description"`
-	// Specifies the name of the group.The length is less than or equal to 64 bytes.
+	// Specifies the name of the group. The length is less than or equal to 64 bytes.
 	Name *string `pulumi:"name"`
 }
 
@@ -116,7 +116,7 @@ type groupArgs struct {
 type GroupArgs struct {
 	// Specifies the description of the group.
 	Description pulumi.StringPtrInput
-	// Specifies the name of the group.The length is less than or equal to 64 bytes.
+	// Specifies the name of the group. The length is less than or equal to 64 bytes.
 	Name pulumi.StringPtrInput
 }
 
@@ -212,7 +212,7 @@ func (o GroupOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of the group.The length is less than or equal to 64 bytes.
+// Specifies the name of the group. The length is less than or equal to 64 bytes.
 func (o GroupOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Group) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

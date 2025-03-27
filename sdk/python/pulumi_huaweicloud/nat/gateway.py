@@ -8,6 +8,8 @@ import pulumi
 import pulumi.runtime
 from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
+from . import outputs
+from ._inputs import *
 
 __all__ = ['GatewayArgs', 'Gateway']
 
@@ -17,10 +19,16 @@ class GatewayArgs:
                  spec: pulumi.Input[str],
                  subnet_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ngport_ip_address: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 session_conf: Optional[pulumi.Input['GatewaySessionConfArgs']] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Gateway resource.
@@ -34,27 +42,59 @@ class GatewayArgs:
                Changing this will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
                Changing this will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. This parameter is only valid when
+               `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the NAT gateway.
+               The valid values are as follows:
+               + **prePaid**: the yearly/monthly billing mode.
+               + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
                characters, and angle brackets (<) and (>) are not allowed.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the NAT gateway name.  
                The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] ngport_ip_address: Specifies the IP address used for the NG port of the NAT gateway.
+               The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+               If not spacified, it will be automatically allocated.
+               Changing this will creates a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the NAT gateway.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the NAT gateway.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input['GatewaySessionConfArgs'] session_conf: Specifies the session configuration of the NAT gateway.
+               The session_conf structure is documented below.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT gateway.
         """
         pulumi.set(__self__, "spec", spec)
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if ngport_ip_address is not None:
+            pulumi.set(__self__, "ngport_ip_address", ngport_ip_address)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if session_conf is not None:
+            pulumi.set(__self__, "session_conf", session_conf)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -102,6 +142,34 @@ class GatewayArgs:
         pulumi.set(self, "vpc_id", value)
 
     @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto-renew is enabled. This parameter is only valid when
+        `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the NAT gateway.
+        The valid values are as follows:
+        + **prePaid**: the yearly/monthly billing mode.
+        + **postPaid**: the pay-per-use billing mode.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -141,6 +209,51 @@ class GatewayArgs:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="ngportIpAddress")
+    def ngport_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP address used for the NG port of the NAT gateway.
+        The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+        If not spacified, it will be automatically allocated.
+        Changing this will creates a new resource.
+        """
+        return pulumi.get(self, "ngport_ip_address")
+
+    @ngport_ip_address.setter
+    def ngport_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ngport_ip_address", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the NAT gateway.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the NAT gateway.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -154,10 +267,23 @@ class GatewayArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="sessionConf")
+    def session_conf(self) -> Optional[pulumi.Input['GatewaySessionConfArgs']]:
+        """
+        Specifies the session configuration of the NAT gateway.
+        The session_conf structure is documented below.
+        """
+        return pulumi.get(self, "session_conf")
+
+    @session_conf.setter
+    def session_conf(self, value: Optional[pulumi.Input['GatewaySessionConfArgs']]):
+        pulumi.set(self, "session_conf", value)
+
+    @property
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the NAT geteway.
+        Specifies the key/value pairs to associate with the NAT gateway.
         """
         return pulumi.get(self, "tags")
 
@@ -169,10 +295,22 @@ class GatewayArgs:
 @pulumi.input_type
 class _GatewayState:
     def __init__(__self__, *,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 billing_info: Optional[pulumi.Input[str]] = None,
+                 bps_max: Optional[pulumi.Input[int]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 dnat_rules_limit: Optional[pulumi.Input[int]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ngport_ip_address: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 pps_max: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 session_conf: Optional[pulumi.Input['GatewaySessionConfArgs']] = None,
+                 snat_rule_public_ip_limit: Optional[pulumi.Input[int]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
@@ -180,14 +318,41 @@ class _GatewayState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Gateway resources.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. This parameter is only valid when
+               `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] billing_info: The order information of the NAT gateway.
+               When the `charging_mode` is set to **prePaid**, this parameter is available.
+        :param pulumi.Input[int] bps_max: The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the NAT gateway.
+               The valid values are as follows:
+               + **prePaid**: the yearly/monthly billing mode.
+               + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] created_at: The creation time of the NAT gateway.
         :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
                characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[int] dnat_rules_limit: The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the NAT gateway name.  
                The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] ngport_ip_address: Specifies the IP address used for the NG port of the NAT gateway.
+               The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+               If not spacified, it will be automatically allocated.
+               Changing this will creates a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the NAT gateway.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the NAT gateway.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[int] pps_max: The number of packets that the NAT gateway can receive or send per second.
         :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input['GatewaySessionConfArgs'] session_conf: Specifies the session configuration of the NAT gateway.
+               The session_conf structure is documented below.
+        :param pulumi.Input[int] snat_rule_public_ip_limit: The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
         :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
                + **1**: Small type, which supports up to `10,000` SNAT connections.
                + **2**: Medium type, which supports up to `50,000` SNAT connections.
@@ -197,18 +362,42 @@ class _GatewayState:
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
                DVR) of the NAT gateway.
                Changing this will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT gateway.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
                Changing this will create a new resource.
         """
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if billing_info is not None:
+            pulumi.set(__self__, "billing_info", billing_info)
+        if bps_max is not None:
+            pulumi.set(__self__, "bps_max", bps_max)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if dnat_rules_limit is not None:
+            pulumi.set(__self__, "dnat_rules_limit", dnat_rules_limit)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if ngport_ip_address is not None:
+            pulumi.set(__self__, "ngport_ip_address", ngport_ip_address)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if pps_max is not None:
+            pulumi.set(__self__, "pps_max", pps_max)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if session_conf is not None:
+            pulumi.set(__self__, "session_conf", session_conf)
+        if snat_rule_public_ip_limit is not None:
+            pulumi.set(__self__, "snat_rule_public_ip_limit", snat_rule_public_ip_limit)
         if spec is not None:
             pulumi.set(__self__, "spec", spec)
         if status is not None:
@@ -221,6 +410,71 @@ class _GatewayState:
             pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto-renew is enabled. This parameter is only valid when
+        `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="billingInfo")
+    def billing_info(self) -> Optional[pulumi.Input[str]]:
+        """
+        The order information of the NAT gateway.
+        When the `charging_mode` is set to **prePaid**, this parameter is available.
+        """
+        return pulumi.get(self, "billing_info")
+
+    @billing_info.setter
+    def billing_info(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "billing_info", value)
+
+    @property
+    @pulumi.getter(name="bpsMax")
+    def bps_max(self) -> Optional[pulumi.Input[int]]:
+        """
+        The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+        """
+        return pulumi.get(self, "bps_max")
+
+    @bps_max.setter
+    def bps_max(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "bps_max", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the NAT gateway.
+        The valid values are as follows:
+        + **prePaid**: the yearly/monthly billing mode.
+        + **postPaid**: the pay-per-use billing mode.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time of the NAT gateway.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -232,6 +486,18 @@ class _GatewayState:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="dnatRulesLimit")
+    def dnat_rules_limit(self) -> Optional[pulumi.Input[int]]:
+        """
+        The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
+        """
+        return pulumi.get(self, "dnat_rules_limit")
+
+    @dnat_rules_limit.setter
+    def dnat_rules_limit(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "dnat_rules_limit", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -260,6 +526,63 @@ class _GatewayState:
         pulumi.set(self, "name", value)
 
     @property
+    @pulumi.getter(name="ngportIpAddress")
+    def ngport_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP address used for the NG port of the NAT gateway.
+        The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+        If not spacified, it will be automatically allocated.
+        Changing this will creates a new resource.
+        """
+        return pulumi.get(self, "ngport_ip_address")
+
+    @ngport_ip_address.setter
+    def ngport_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ngport_ip_address", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the NAT gateway.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the NAT gateway.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="ppsMax")
+    def pps_max(self) -> Optional[pulumi.Input[int]]:
+        """
+        The number of packets that the NAT gateway can receive or send per second.
+        """
+        return pulumi.get(self, "pps_max")
+
+    @pps_max.setter
+    def pps_max(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "pps_max", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
@@ -271,6 +594,31 @@ class _GatewayState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="sessionConf")
+    def session_conf(self) -> Optional[pulumi.Input['GatewaySessionConfArgs']]:
+        """
+        Specifies the session configuration of the NAT gateway.
+        The session_conf structure is documented below.
+        """
+        return pulumi.get(self, "session_conf")
+
+    @session_conf.setter
+    def session_conf(self, value: Optional[pulumi.Input['GatewaySessionConfArgs']]):
+        pulumi.set(self, "session_conf", value)
+
+    @property
+    @pulumi.getter(name="snatRulePublicIpLimit")
+    def snat_rule_public_ip_limit(self) -> Optional[pulumi.Input[int]]:
+        """
+        The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
+        """
+        return pulumi.get(self, "snat_rule_public_ip_limit")
+
+    @snat_rule_public_ip_limit.setter
+    def snat_rule_public_ip_limit(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "snat_rule_public_ip_limit", value)
 
     @property
     @pulumi.getter
@@ -318,7 +666,7 @@ class _GatewayState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Specifies the key/value pairs to associate with the NAT geteway.
+        Specifies the key/value pairs to associate with the NAT gateway.
         """
         return pulumi.get(self, "tags")
 
@@ -345,10 +693,16 @@ class Gateway(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ngport_ip_address: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 session_conf: Optional[pulumi.Input[pulumi.InputType['GatewaySessionConfArgs']]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -358,6 +712,7 @@ class Gateway(pulumi.CustomResource):
         Manages a gateway resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
+        ### Creating a postpaid NAT gateway
 
         ```python
         import pulumi
@@ -367,11 +722,33 @@ class Gateway(pulumi.CustomResource):
         gateway_name = config.require_object("gatewayName")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
+        gateway_specification = config.require_object("gatewaySpecification")
         test = huaweicloud.nat.Gateway("test",
             description="test for terraform",
-            spec="3",
+            spec=gateway_specification,
             vpc_id=vpc_id,
             subnet_id=network_id)
+        ```
+        ### Creating a prepaid NAT gateway
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_name = config.require_object("gatewayName")
+        vpc_id = config.require_object("vpcId")
+        network_id = config.require_object("networkId")
+        gateway_specification = config.require_object("gatewaySpecification")
+        test = huaweicloud.nat.Gateway("test",
+            description="test for terraform",
+            spec=gateway_specification,
+            vpc_id=vpc_id,
+            subnet_id=network_id,
+            charging_mode="prePaid",
+            period_unit="month",
+            period=1,
+            auto_renew="true")
         ```
 
         ## Import
@@ -379,19 +756,53 @@ class Gateway(pulumi.CustomResource):
         NAT gateways can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
+         $ pulumi import huaweicloud:Nat/gateway:Gateway test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`charging_mode`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_nat_gateway" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         charging_mode, period_unit, period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. This parameter is only valid when
+               `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the NAT gateway.
+               The valid values are as follows:
+               + **prePaid**: the yearly/monthly billing mode.
+               + **postPaid**: the pay-per-use billing mode.
         :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
                characters, and angle brackets (<) and (>) are not allowed.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the NAT gateway name.  
                The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] ngport_ip_address: Specifies the IP address used for the NG port of the NAT gateway.
+               The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+               If not spacified, it will be automatically allocated.
+               Changing this will creates a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the NAT gateway.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the NAT gateway.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
         :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[pulumi.InputType['GatewaySessionConfArgs']] session_conf: Specifies the session configuration of the NAT gateway.
+               The session_conf structure is documented below.
         :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
                + **1**: Small type, which supports up to `10,000` SNAT connections.
                + **2**: Medium type, which supports up to `50,000` SNAT connections.
@@ -400,7 +811,7 @@ class Gateway(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
                DVR) of the NAT gateway.
                Changing this will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT gateway.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
                Changing this will create a new resource.
         """
@@ -414,6 +825,7 @@ class Gateway(pulumi.CustomResource):
         Manages a gateway resource of the **public** NAT within HuaweiCloud.
 
         ## Example Usage
+        ### Creating a postpaid NAT gateway
 
         ```python
         import pulumi
@@ -423,11 +835,33 @@ class Gateway(pulumi.CustomResource):
         gateway_name = config.require_object("gatewayName")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
+        gateway_specification = config.require_object("gatewaySpecification")
         test = huaweicloud.nat.Gateway("test",
             description="test for terraform",
-            spec="3",
+            spec=gateway_specification,
             vpc_id=vpc_id,
             subnet_id=network_id)
+        ```
+        ### Creating a prepaid NAT gateway
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_name = config.require_object("gatewayName")
+        vpc_id = config.require_object("vpcId")
+        network_id = config.require_object("networkId")
+        gateway_specification = config.require_object("gatewaySpecification")
+        test = huaweicloud.nat.Gateway("test",
+            description="test for terraform",
+            spec=gateway_specification,
+            vpc_id=vpc_id,
+            subnet_id=network_id,
+            charging_mode="prePaid",
+            period_unit="month",
+            period=1,
+            auto_renew="true")
         ```
 
         ## Import
@@ -435,8 +869,22 @@ class Gateway(pulumi.CustomResource):
         NAT gateways can be imported using their `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Nat/gateway:Gateway test d126fb87-43ce-4867-a2ff-cf34af3765d9
+         $ pulumi import huaweicloud:Nat/gateway:Gateway test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`charging_mode`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_nat_gateway" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         charging_mode, period_unit, period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param GatewayArgs args: The arguments to use to populate this resource's properties.
@@ -453,10 +901,16 @@ class Gateway(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 ngport_ip_address: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 session_conf: Optional[pulumi.Input[pulumi.InputType['GatewaySessionConfArgs']]] = None,
                  spec: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -470,10 +924,16 @@ class Gateway(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = GatewayArgs.__new__(GatewayArgs)
 
+            __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["description"] = description
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["ngport_ip_address"] = ngport_ip_address
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
             __props__.__dict__["region"] = region
+            __props__.__dict__["session_conf"] = session_conf
             if spec is None and not opts.urn:
                 raise TypeError("Missing required property 'spec'")
             __props__.__dict__["spec"] = spec
@@ -484,6 +944,12 @@ class Gateway(pulumi.CustomResource):
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["billing_info"] = None
+            __props__.__dict__["bps_max"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["dnat_rules_limit"] = None
+            __props__.__dict__["pps_max"] = None
+            __props__.__dict__["snat_rule_public_ip_limit"] = None
             __props__.__dict__["status"] = None
         super(Gateway, __self__).__init__(
             'huaweicloud:Nat/gateway:Gateway',
@@ -495,10 +961,22 @@ class Gateway(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            auto_renew: Optional[pulumi.Input[str]] = None,
+            billing_info: Optional[pulumi.Input[str]] = None,
+            bps_max: Optional[pulumi.Input[int]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            dnat_rules_limit: Optional[pulumi.Input[int]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            ngport_ip_address: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
+            pps_max: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            session_conf: Optional[pulumi.Input[pulumi.InputType['GatewaySessionConfArgs']]] = None,
+            snat_rule_public_ip_limit: Optional[pulumi.Input[int]] = None,
             spec: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
@@ -511,14 +989,41 @@ class Gateway(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. This parameter is only valid when
+               `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] billing_info: The order information of the NAT gateway.
+               When the `charging_mode` is set to **prePaid**, this parameter is available.
+        :param pulumi.Input[int] bps_max: The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the NAT gateway.
+               The valid values are as follows:
+               + **prePaid**: the yearly/monthly billing mode.
+               + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] created_at: The creation time of the NAT gateway.
         :param pulumi.Input[str] description: Specifies the description of the NAT gateway, which contain maximum of `512`
                characters, and angle brackets (<) and (>) are not allowed.
+        :param pulumi.Input[int] dnat_rules_limit: The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the NAT gateway.  
                Changing this will create a new resource.
         :param pulumi.Input[str] name: Specifies the NAT gateway name.  
                The valid length is limited from `1` to `64`, only letters, digits, hyphens (-) and underscores (_) are allowed.
+        :param pulumi.Input[str] ngport_ip_address: Specifies the IP address used for the NG port of the NAT gateway.
+               The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+               If not spacified, it will be automatically allocated.
+               Changing this will creates a new resource.
+        :param pulumi.Input[int] period: Specifies the charging period of the NAT gateway.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the NAT gateway.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will create a new resource.
+        :param pulumi.Input[int] pps_max: The number of packets that the NAT gateway can receive or send per second.
         :param pulumi.Input[str] region: Specifies the region where the NAT gateway is located.  
                If omitted, the provider-level region will be used. Changing this will create a new resource.
+        :param pulumi.Input[pulumi.InputType['GatewaySessionConfArgs']] session_conf: Specifies the session configuration of the NAT gateway.
+               The session_conf structure is documented below.
+        :param pulumi.Input[int] snat_rule_public_ip_limit: The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
         :param pulumi.Input[str] spec: Specifies the specification of the NAT gateway. The valid values are as follows:
                + **1**: Small type, which supports up to `10,000` SNAT connections.
                + **2**: Medium type, which supports up to `50,000` SNAT connections.
@@ -528,7 +1033,7 @@ class Gateway(pulumi.CustomResource):
         :param pulumi.Input[str] subnet_id: Specifies the subnet ID of the downstream interface (the next hop of the
                DVR) of the NAT gateway.
                Changing this will create a new resource.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT geteway.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the NAT gateway.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the NAT gateway belongs.  
                Changing this will create a new resource.
         """
@@ -536,16 +1041,73 @@ class Gateway(pulumi.CustomResource):
 
         __props__ = _GatewayState.__new__(_GatewayState)
 
+        __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["billing_info"] = billing_info
+        __props__.__dict__["bps_max"] = bps_max
+        __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
+        __props__.__dict__["dnat_rules_limit"] = dnat_rules_limit
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["ngport_ip_address"] = ngport_ip_address
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["pps_max"] = pps_max
         __props__.__dict__["region"] = region
+        __props__.__dict__["session_conf"] = session_conf
+        __props__.__dict__["snat_rule_public_ip_limit"] = snat_rule_public_ip_limit
         __props__.__dict__["spec"] = spec
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["tags"] = tags
         __props__.__dict__["vpc_id"] = vpc_id
         return Gateway(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether auto-renew is enabled. This parameter is only valid when
+        `charging_mode` is set to **prePaid**. Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="billingInfo")
+    def billing_info(self) -> pulumi.Output[str]:
+        """
+        The order information of the NAT gateway.
+        When the `charging_mode` is set to **prePaid**, this parameter is available.
+        """
+        return pulumi.get(self, "billing_info")
+
+    @property
+    @pulumi.getter(name="bpsMax")
+    def bps_max(self) -> pulumi.Output[int]:
+        """
+        The bandwidth that the NAT gateway can receive or send per second, unit is MB.
+        """
+        return pulumi.get(self, "bps_max")
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the charging mode of the NAT gateway.
+        The valid values are as follows:
+        + **prePaid**: the yearly/monthly billing mode.
+        + **postPaid**: the pay-per-use billing mode.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The creation time of the NAT gateway.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
@@ -555,6 +1117,14 @@ class Gateway(pulumi.CustomResource):
         characters, and angle brackets (<) and (>) are not allowed.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="dnatRulesLimit")
+    def dnat_rules_limit(self) -> pulumi.Output[int]:
+        """
+        The maximum number of DNAT rules on the NAT gateway. Defaults to `200`.
+        """
+        return pulumi.get(self, "dnat_rules_limit")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -575,6 +1145,47 @@ class Gateway(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @property
+    @pulumi.getter(name="ngportIpAddress")
+    def ngport_ip_address(self) -> pulumi.Output[str]:
+        """
+        Specifies the IP address used for the NG port of the NAT gateway.
+        The IP address must be one of the IP addresses of the VPC subnet associated with the NAT gateway.
+        If not spacified, it will be automatically allocated.
+        Changing this will creates a new resource.
+        """
+        return pulumi.get(self, "ngport_ip_address")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the charging period of the NAT gateway.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging period unit of the NAT gateway.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @property
+    @pulumi.getter(name="ppsMax")
+    def pps_max(self) -> pulumi.Output[int]:
+        """
+        The number of packets that the NAT gateway can receive or send per second.
+        """
+        return pulumi.get(self, "pps_max")
+
+    @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
@@ -582,6 +1193,23 @@ class Gateway(pulumi.CustomResource):
         If omitted, the provider-level region will be used. Changing this will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="sessionConf")
+    def session_conf(self) -> pulumi.Output['outputs.GatewaySessionConf']:
+        """
+        Specifies the session configuration of the NAT gateway.
+        The session_conf structure is documented below.
+        """
+        return pulumi.get(self, "session_conf")
+
+    @property
+    @pulumi.getter(name="snatRulePublicIpLimit")
+    def snat_rule_public_ip_limit(self) -> pulumi.Output[int]:
+        """
+        The maximum number of SNAT rules on the NAT gateway. Defaults to `20`.
+        """
+        return pulumi.get(self, "snat_rule_public_ip_limit")
 
     @property
     @pulumi.getter
@@ -617,7 +1245,7 @@ class Gateway(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Specifies the key/value pairs to associate with the NAT geteway.
+        Specifies the key/value pairs to associate with the NAT gateway.
         """
         return pulumi.get(self, "tags")
 

@@ -12,7 +12,10 @@ from . import outputs
 
 __all__ = [
     'KafkaInstanceCrossVpcAccess',
+    'KafkaInstanceParameter',
+    'KafkaInstancePortProtocol',
     'KafkaPermissionsPolicy',
+    'KafkaTopicConfig',
     'GetFlavorsFlavorResult',
     'GetFlavorsFlavorIoResult',
     'GetFlavorsFlavorPropertyResult',
@@ -109,6 +112,309 @@ class KafkaInstanceCrossVpcAccess(dict):
 
 
 @pulumi.output_type
+class KafkaInstanceParameter(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+        :param str value: Specifies the parameter value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the parameter name. Static parameter needs to restart the instance to take effect.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the parameter value.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class KafkaInstancePortProtocol(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "privatePlainAddress":
+            suggest = "private_plain_address"
+        elif key == "privatePlainDomainName":
+            suggest = "private_plain_domain_name"
+        elif key == "privatePlainEnable":
+            suggest = "private_plain_enable"
+        elif key == "privateSaslPlaintextAddress":
+            suggest = "private_sasl_plaintext_address"
+        elif key == "privateSaslPlaintextDomainName":
+            suggest = "private_sasl_plaintext_domain_name"
+        elif key == "privateSaslPlaintextEnable":
+            suggest = "private_sasl_plaintext_enable"
+        elif key == "privateSaslSslAddress":
+            suggest = "private_sasl_ssl_address"
+        elif key == "privateSaslSslDomainName":
+            suggest = "private_sasl_ssl_domain_name"
+        elif key == "privateSaslSslEnable":
+            suggest = "private_sasl_ssl_enable"
+        elif key == "publicPlainAddress":
+            suggest = "public_plain_address"
+        elif key == "publicPlainDomainName":
+            suggest = "public_plain_domain_name"
+        elif key == "publicPlainEnable":
+            suggest = "public_plain_enable"
+        elif key == "publicSaslPlaintextAddress":
+            suggest = "public_sasl_plaintext_address"
+        elif key == "publicSaslPlaintextDomainName":
+            suggest = "public_sasl_plaintext_domain_name"
+        elif key == "publicSaslPlaintextEnable":
+            suggest = "public_sasl_plaintext_enable"
+        elif key == "publicSaslSslAddress":
+            suggest = "public_sasl_ssl_address"
+        elif key == "publicSaslSslDomainName":
+            suggest = "public_sasl_ssl_domain_name"
+        elif key == "publicSaslSslEnable":
+            suggest = "public_sasl_ssl_enable"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in KafkaInstancePortProtocol. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        KafkaInstancePortProtocol.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        KafkaInstancePortProtocol.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 private_plain_address: Optional[str] = None,
+                 private_plain_domain_name: Optional[str] = None,
+                 private_plain_enable: Optional[bool] = None,
+                 private_sasl_plaintext_address: Optional[str] = None,
+                 private_sasl_plaintext_domain_name: Optional[str] = None,
+                 private_sasl_plaintext_enable: Optional[bool] = None,
+                 private_sasl_ssl_address: Optional[str] = None,
+                 private_sasl_ssl_domain_name: Optional[str] = None,
+                 private_sasl_ssl_enable: Optional[bool] = None,
+                 public_plain_address: Optional[str] = None,
+                 public_plain_domain_name: Optional[str] = None,
+                 public_plain_enable: Optional[bool] = None,
+                 public_sasl_plaintext_address: Optional[str] = None,
+                 public_sasl_plaintext_domain_name: Optional[str] = None,
+                 public_sasl_plaintext_enable: Optional[bool] = None,
+                 public_sasl_ssl_address: Optional[str] = None,
+                 public_sasl_ssl_domain_name: Optional[str] = None,
+                 public_sasl_ssl_enable: Optional[bool] = None):
+        """
+        :param str private_plain_address: The private plain address.
+        :param str private_plain_domain_name: The private plain domain name.
+        :param bool private_plain_enable: Whether the private plain enabled.
+        :param str private_sasl_plaintext_address: The private sasl plaintext address.
+        :param str private_sasl_plaintext_domain_name: The private sasl plaintext domain name.
+        :param bool private_sasl_plaintext_enable: Whether the private sasl plaintext enabled.
+        :param str private_sasl_ssl_address: The private sasl ssl address.
+        :param str private_sasl_ssl_domain_name: The private sasl ssl domain name.
+        :param bool private_sasl_ssl_enable: Whether the private sasl ssl enabled.
+        :param str public_plain_address: The public plain address.
+        :param str public_plain_domain_name: The public plain domain name.
+        :param bool public_plain_enable: Whether the public plain enabled.
+        :param str public_sasl_plaintext_address: The public sasl plaintext address.
+        :param str public_sasl_plaintext_domain_name: The public sasl plaintext domain name.
+        :param bool public_sasl_plaintext_enable: Whether the public sasl plaintext enabled.
+        :param str public_sasl_ssl_address: The public sasl ssl address.
+        :param str public_sasl_ssl_domain_name: The public sasl ssl domain name.
+        :param bool public_sasl_ssl_enable: Whether the public sasl ssl enabled.
+        """
+        if private_plain_address is not None:
+            pulumi.set(__self__, "private_plain_address", private_plain_address)
+        if private_plain_domain_name is not None:
+            pulumi.set(__self__, "private_plain_domain_name", private_plain_domain_name)
+        if private_plain_enable is not None:
+            pulumi.set(__self__, "private_plain_enable", private_plain_enable)
+        if private_sasl_plaintext_address is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_address", private_sasl_plaintext_address)
+        if private_sasl_plaintext_domain_name is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_domain_name", private_sasl_plaintext_domain_name)
+        if private_sasl_plaintext_enable is not None:
+            pulumi.set(__self__, "private_sasl_plaintext_enable", private_sasl_plaintext_enable)
+        if private_sasl_ssl_address is not None:
+            pulumi.set(__self__, "private_sasl_ssl_address", private_sasl_ssl_address)
+        if private_sasl_ssl_domain_name is not None:
+            pulumi.set(__self__, "private_sasl_ssl_domain_name", private_sasl_ssl_domain_name)
+        if private_sasl_ssl_enable is not None:
+            pulumi.set(__self__, "private_sasl_ssl_enable", private_sasl_ssl_enable)
+        if public_plain_address is not None:
+            pulumi.set(__self__, "public_plain_address", public_plain_address)
+        if public_plain_domain_name is not None:
+            pulumi.set(__self__, "public_plain_domain_name", public_plain_domain_name)
+        if public_plain_enable is not None:
+            pulumi.set(__self__, "public_plain_enable", public_plain_enable)
+        if public_sasl_plaintext_address is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_address", public_sasl_plaintext_address)
+        if public_sasl_plaintext_domain_name is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_domain_name", public_sasl_plaintext_domain_name)
+        if public_sasl_plaintext_enable is not None:
+            pulumi.set(__self__, "public_sasl_plaintext_enable", public_sasl_plaintext_enable)
+        if public_sasl_ssl_address is not None:
+            pulumi.set(__self__, "public_sasl_ssl_address", public_sasl_ssl_address)
+        if public_sasl_ssl_domain_name is not None:
+            pulumi.set(__self__, "public_sasl_ssl_domain_name", public_sasl_ssl_domain_name)
+        if public_sasl_ssl_enable is not None:
+            pulumi.set(__self__, "public_sasl_ssl_enable", public_sasl_ssl_enable)
+
+    @property
+    @pulumi.getter(name="privatePlainAddress")
+    def private_plain_address(self) -> Optional[str]:
+        """
+        The private plain address.
+        """
+        return pulumi.get(self, "private_plain_address")
+
+    @property
+    @pulumi.getter(name="privatePlainDomainName")
+    def private_plain_domain_name(self) -> Optional[str]:
+        """
+        The private plain domain name.
+        """
+        return pulumi.get(self, "private_plain_domain_name")
+
+    @property
+    @pulumi.getter(name="privatePlainEnable")
+    def private_plain_enable(self) -> Optional[bool]:
+        """
+        Whether the private plain enabled.
+        """
+        return pulumi.get(self, "private_plain_enable")
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextAddress")
+    def private_sasl_plaintext_address(self) -> Optional[str]:
+        """
+        The private sasl plaintext address.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_address")
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextDomainName")
+    def private_sasl_plaintext_domain_name(self) -> Optional[str]:
+        """
+        The private sasl plaintext domain name.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_domain_name")
+
+    @property
+    @pulumi.getter(name="privateSaslPlaintextEnable")
+    def private_sasl_plaintext_enable(self) -> Optional[bool]:
+        """
+        Whether the private sasl plaintext enabled.
+        """
+        return pulumi.get(self, "private_sasl_plaintext_enable")
+
+    @property
+    @pulumi.getter(name="privateSaslSslAddress")
+    def private_sasl_ssl_address(self) -> Optional[str]:
+        """
+        The private sasl ssl address.
+        """
+        return pulumi.get(self, "private_sasl_ssl_address")
+
+    @property
+    @pulumi.getter(name="privateSaslSslDomainName")
+    def private_sasl_ssl_domain_name(self) -> Optional[str]:
+        """
+        The private sasl ssl domain name.
+        """
+        return pulumi.get(self, "private_sasl_ssl_domain_name")
+
+    @property
+    @pulumi.getter(name="privateSaslSslEnable")
+    def private_sasl_ssl_enable(self) -> Optional[bool]:
+        """
+        Whether the private sasl ssl enabled.
+        """
+        return pulumi.get(self, "private_sasl_ssl_enable")
+
+    @property
+    @pulumi.getter(name="publicPlainAddress")
+    def public_plain_address(self) -> Optional[str]:
+        """
+        The public plain address.
+        """
+        return pulumi.get(self, "public_plain_address")
+
+    @property
+    @pulumi.getter(name="publicPlainDomainName")
+    def public_plain_domain_name(self) -> Optional[str]:
+        """
+        The public plain domain name.
+        """
+        return pulumi.get(self, "public_plain_domain_name")
+
+    @property
+    @pulumi.getter(name="publicPlainEnable")
+    def public_plain_enable(self) -> Optional[bool]:
+        """
+        Whether the public plain enabled.
+        """
+        return pulumi.get(self, "public_plain_enable")
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextAddress")
+    def public_sasl_plaintext_address(self) -> Optional[str]:
+        """
+        The public sasl plaintext address.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_address")
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextDomainName")
+    def public_sasl_plaintext_domain_name(self) -> Optional[str]:
+        """
+        The public sasl plaintext domain name.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_domain_name")
+
+    @property
+    @pulumi.getter(name="publicSaslPlaintextEnable")
+    def public_sasl_plaintext_enable(self) -> Optional[bool]:
+        """
+        Whether the public sasl plaintext enabled.
+        """
+        return pulumi.get(self, "public_sasl_plaintext_enable")
+
+    @property
+    @pulumi.getter(name="publicSaslSslAddress")
+    def public_sasl_ssl_address(self) -> Optional[str]:
+        """
+        The public sasl ssl address.
+        """
+        return pulumi.get(self, "public_sasl_ssl_address")
+
+    @property
+    @pulumi.getter(name="publicSaslSslDomainName")
+    def public_sasl_ssl_domain_name(self) -> Optional[str]:
+        """
+        The public sasl ssl domain name.
+        """
+        return pulumi.get(self, "public_sasl_ssl_domain_name")
+
+    @property
+    @pulumi.getter(name="publicSaslSslEnable")
+    def public_sasl_ssl_enable(self) -> Optional[bool]:
+        """
+        Whether the public sasl ssl enabled.
+        """
+        return pulumi.get(self, "public_sasl_ssl_enable")
+
+
+@pulumi.output_type
 class KafkaPermissionsPolicy(dict):
     @staticmethod
     def __key_warning(key: str):
@@ -163,6 +469,35 @@ class KafkaPermissionsPolicy(dict):
 
 
 @pulumi.output_type
+class KafkaTopicConfig(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the configuration name.
+        :param str value: Specifies the configuration value.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the configuration name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the configuration value.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
 class GetFlavorsFlavorResult(dict):
     def __init__(__self__, *,
                  arch_types: Sequence[str],
@@ -183,7 +518,7 @@ class GetFlavorsFlavorResult(dict):
                The object structure is documented below.
         :param Sequence['GetFlavorsFlavorSupportFeatureArgs'] support_features: The list of features supported by the current specification.
                The object structure is documented below.
-        :param str type: Specifies flavor type. The valid values are **single** and **cluster**.
+        :param str type: Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
         :param str vm_specification: The underlying VM specification.
         """
         pulumi.set(__self__, "arch_types", arch_types)
@@ -250,7 +585,7 @@ class GetFlavorsFlavorResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies flavor type. The valid values are **single** and **cluster**.
+        Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
         """
         return pulumi.get(self, "type")
 
@@ -275,7 +610,7 @@ class GetFlavorsFlavorIoResult(dict):
         :param str storage_spec_code: Specifies the disk IO encoding.
                + **dms.physical.storage.high.v2**: Type of the disk that uses high I/O.
                + **dms.physical.storage.ultra.v2**: Type of the disk that uses ultra-high I/O.
-        :param str type: Specifies flavor type. The valid values are **single** and **cluster**.
+        :param str type: Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
         :param Sequence[str] unavailability_zones: The list of unavailability zones with available resources.
         """
         pulumi.set(__self__, "availability_zones", availability_zones)
@@ -305,7 +640,7 @@ class GetFlavorsFlavorIoResult(dict):
     @pulumi.getter
     def type(self) -> str:
         """
-        Specifies flavor type. The valid values are **single** and **cluster**.
+        Specifies flavor type. The valid values are **single**, **cluster** and **cluster.small**.
         """
         return pulumi.get(self, "type")
 
@@ -517,6 +852,7 @@ class GetInstancesInstanceResult(dict):
                  dumping: bool,
                  enable_auto_topic: bool,
                  enable_public_ip: bool,
+                 enabled_mechanisms: Sequence[str],
                  engine_version: str,
                  enterprise_project_id: str,
                  id: str,
@@ -535,6 +871,7 @@ class GetInstancesInstanceResult(dict):
                  resource_spec_code: str,
                  retention_policy: str,
                  security_group_id: str,
+                 security_protocol: str,
                  ssl_enable: bool,
                  status: str,
                  storage_space: int,
@@ -554,6 +891,7 @@ class GetInstancesInstanceResult(dict):
         :param bool dumping: Whether to dumping is enabled.
         :param bool enable_auto_topic: Whether to enable automatic topic creation.
         :param bool enable_public_ip: Whether public access to the instance is enabled.
+        :param Sequence[str] enabled_mechanisms: The authentication mechanisms to use after SASL is enabled.
         :param str engine_version: The kafka engine version.
         :param str enterprise_project_id: Specifies the enterprise project ID to which all instances of the list
                belong.
@@ -573,6 +911,7 @@ class GetInstancesInstanceResult(dict):
         :param str resource_spec_code: The resource specifications identifier.
         :param str retention_policy: The action to be taken when the memory usage reaches the disk capacity threshold.
         :param str security_group_id: The security group ID associated with the instance.
+        :param str security_protocol: The protocol to use after SASL is enabled.
         :param bool ssl_enable: Whether the Kafka SASL_SSL is enabled.
         :param str status: Specifies the kafka instance status for data-source queries.
         :param int storage_space: The message storage capacity, in GB unit.
@@ -592,6 +931,7 @@ class GetInstancesInstanceResult(dict):
         pulumi.set(__self__, "dumping", dumping)
         pulumi.set(__self__, "enable_auto_topic", enable_auto_topic)
         pulumi.set(__self__, "enable_public_ip", enable_public_ip)
+        pulumi.set(__self__, "enabled_mechanisms", enabled_mechanisms)
         pulumi.set(__self__, "engine_version", engine_version)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "id", id)
@@ -610,6 +950,7 @@ class GetInstancesInstanceResult(dict):
         pulumi.set(__self__, "resource_spec_code", resource_spec_code)
         pulumi.set(__self__, "retention_policy", retention_policy)
         pulumi.set(__self__, "security_group_id", security_group_id)
+        pulumi.set(__self__, "security_protocol", security_protocol)
         pulumi.set(__self__, "ssl_enable", ssl_enable)
         pulumi.set(__self__, "status", status)
         pulumi.set(__self__, "storage_space", storage_space)
@@ -684,6 +1025,14 @@ class GetInstancesInstanceResult(dict):
         Whether public access to the instance is enabled.
         """
         return pulumi.get(self, "enable_public_ip")
+
+    @property
+    @pulumi.getter(name="enabledMechanisms")
+    def enabled_mechanisms(self) -> Sequence[str]:
+        """
+        The authentication mechanisms to use after SASL is enabled.
+        """
+        return pulumi.get(self, "enabled_mechanisms")
 
     @property
     @pulumi.getter(name="engineVersion")
@@ -827,6 +1176,14 @@ class GetInstancesInstanceResult(dict):
         The security group ID associated with the instance.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="securityProtocol")
+    def security_protocol(self) -> str:
+        """
+        The protocol to use after SASL is enabled.
+        """
+        return pulumi.get(self, "security_protocol")
 
     @property
     @pulumi.getter(name="sslEnable")

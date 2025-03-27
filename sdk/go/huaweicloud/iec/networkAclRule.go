@@ -52,19 +52,19 @@ import (
 type NetworkAclRule struct {
 	pulumi.CustomResourceState
 
-	// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-	// or *deny*.
+	// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+	// or **deny**.
 	Action pulumi.StringPtrOutput `pulumi:"action"`
 	// Specifies the description for the iec network ACL rule.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the destination IP address to which the traffic is allowed.
-	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+	// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrOutput `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 	DestinationPort pulumi.StringPtrOutput `pulumi:"destinationPort"`
-	// Specifies the direction of the rule, valid values are *ingress* or *egress*
-	// . Changing this parameter creates a new iec network ACL rule resource.
+	// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+	// Changing this parameter creates a new iec network ACL rule resource.
 	Direction pulumi.StringOutput `pulumi:"direction"`
 	// Specifies the Enabled status for the iec network ACL rule. The default value is true.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
@@ -74,11 +74,11 @@ type NetworkAclRule struct {
 	NetworkAclId pulumi.StringOutput `pulumi:"networkAclId"`
 	// The ID of the firewall policy for the iec network ACL.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
-	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-	// , *udp*, *icmp* and *any*.
+	// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+	// **udp**, **icmp** and **any**.
 	Protocol pulumi.StringPtrOutput `pulumi:"protocol"`
 	// Specifies the source IP address that the traffic is allowed from. The default
-	// value is *0.0.0.0/0*. For example:
+	// value is **0.0.0.0/0**. For example:
 	// xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	SourceIpAddress pulumi.StringPtrOutput `pulumi:"sourceIpAddress"`
 	// Specifies the source port number or port number range. The value ranges from 1 to
@@ -122,19 +122,19 @@ func GetNetworkAclRule(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering NetworkAclRule resources.
 type networkAclRuleState struct {
-	// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-	// or *deny*.
+	// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+	// or **deny**.
 	Action *string `pulumi:"action"`
 	// Specifies the description for the iec network ACL rule.
 	Description *string `pulumi:"description"`
 	// Specifies the destination IP address to which the traffic is allowed.
-	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+	// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress *string `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 	DestinationPort *string `pulumi:"destinationPort"`
-	// Specifies the direction of the rule, valid values are *ingress* or *egress*
-	// . Changing this parameter creates a new iec network ACL rule resource.
+	// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+	// Changing this parameter creates a new iec network ACL rule resource.
 	Direction *string `pulumi:"direction"`
 	// Specifies the Enabled status for the iec network ACL rule. The default value is true.
 	Enabled *bool `pulumi:"enabled"`
@@ -144,11 +144,11 @@ type networkAclRuleState struct {
 	NetworkAclId *string `pulumi:"networkAclId"`
 	// The ID of the firewall policy for the iec network ACL.
 	PolicyId *string `pulumi:"policyId"`
-	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-	// , *udp*, *icmp* and *any*.
+	// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+	// **udp**, **icmp** and **any**.
 	Protocol *string `pulumi:"protocol"`
 	// Specifies the source IP address that the traffic is allowed from. The default
-	// value is *0.0.0.0/0*. For example:
+	// value is **0.0.0.0/0**. For example:
 	// xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	SourceIpAddress *string `pulumi:"sourceIpAddress"`
 	// Specifies the source port number or port number range. The value ranges from 1 to
@@ -157,19 +157,19 @@ type networkAclRuleState struct {
 }
 
 type NetworkAclRuleState struct {
-	// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-	// or *deny*.
+	// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+	// or **deny**.
 	Action pulumi.StringPtrInput
 	// Specifies the description for the iec network ACL rule.
 	Description pulumi.StringPtrInput
 	// Specifies the destination IP address to which the traffic is allowed.
-	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+	// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrInput
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 	DestinationPort pulumi.StringPtrInput
-	// Specifies the direction of the rule, valid values are *ingress* or *egress*
-	// . Changing this parameter creates a new iec network ACL rule resource.
+	// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+	// Changing this parameter creates a new iec network ACL rule resource.
 	Direction pulumi.StringPtrInput
 	// Specifies the Enabled status for the iec network ACL rule. The default value is true.
 	Enabled pulumi.BoolPtrInput
@@ -179,11 +179,11 @@ type NetworkAclRuleState struct {
 	NetworkAclId pulumi.StringPtrInput
 	// The ID of the firewall policy for the iec network ACL.
 	PolicyId pulumi.StringPtrInput
-	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-	// , *udp*, *icmp* and *any*.
+	// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+	// **udp**, **icmp** and **any**.
 	Protocol pulumi.StringPtrInput
 	// Specifies the source IP address that the traffic is allowed from. The default
-	// value is *0.0.0.0/0*. For example:
+	// value is **0.0.0.0/0**. For example:
 	// xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	SourceIpAddress pulumi.StringPtrInput
 	// Specifies the source port number or port number range. The value ranges from 1 to
@@ -196,19 +196,19 @@ func (NetworkAclRuleState) ElementType() reflect.Type {
 }
 
 type networkAclRuleArgs struct {
-	// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-	// or *deny*.
+	// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+	// or **deny**.
 	Action *string `pulumi:"action"`
 	// Specifies the description for the iec network ACL rule.
 	Description *string `pulumi:"description"`
 	// Specifies the destination IP address to which the traffic is allowed.
-	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+	// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress *string `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 	DestinationPort *string `pulumi:"destinationPort"`
-	// Specifies the direction of the rule, valid values are *ingress* or *egress*
-	// . Changing this parameter creates a new iec network ACL rule resource.
+	// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+	// Changing this parameter creates a new iec network ACL rule resource.
 	Direction string `pulumi:"direction"`
 	// Specifies the Enabled status for the iec network ACL rule. The default value is true.
 	Enabled *bool `pulumi:"enabled"`
@@ -216,11 +216,11 @@ type networkAclRuleArgs struct {
 	IpVersion *int `pulumi:"ipVersion"`
 	// Specifies a unique id for the iec network ACL.
 	NetworkAclId string `pulumi:"networkAclId"`
-	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-	// , *udp*, *icmp* and *any*.
+	// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+	// **udp**, **icmp** and **any**.
 	Protocol *string `pulumi:"protocol"`
 	// Specifies the source IP address that the traffic is allowed from. The default
-	// value is *0.0.0.0/0*. For example:
+	// value is **0.0.0.0/0**. For example:
 	// xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	SourceIpAddress *string `pulumi:"sourceIpAddress"`
 	// Specifies the source port number or port number range. The value ranges from 1 to
@@ -230,19 +230,19 @@ type networkAclRuleArgs struct {
 
 // The set of arguments for constructing a NetworkAclRule resource.
 type NetworkAclRuleArgs struct {
-	// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-	// or *deny*.
+	// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+	// or **deny**.
 	Action pulumi.StringPtrInput
 	// Specifies the description for the iec network ACL rule.
 	Description pulumi.StringPtrInput
 	// Specifies the destination IP address to which the traffic is allowed.
-	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+	// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrInput
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 	DestinationPort pulumi.StringPtrInput
-	// Specifies the direction of the rule, valid values are *ingress* or *egress*
-	// . Changing this parameter creates a new iec network ACL rule resource.
+	// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+	// Changing this parameter creates a new iec network ACL rule resource.
 	Direction pulumi.StringInput
 	// Specifies the Enabled status for the iec network ACL rule. The default value is true.
 	Enabled pulumi.BoolPtrInput
@@ -250,11 +250,11 @@ type NetworkAclRuleArgs struct {
 	IpVersion pulumi.IntPtrInput
 	// Specifies a unique id for the iec network ACL.
 	NetworkAclId pulumi.StringInput
-	// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-	// , *udp*, *icmp* and *any*.
+	// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+	// **udp**, **icmp** and **any**.
 	Protocol pulumi.StringPtrInput
 	// Specifies the source IP address that the traffic is allowed from. The default
-	// value is *0.0.0.0/0*. For example:
+	// value is **0.0.0.0/0**. For example:
 	// xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	SourceIpAddress pulumi.StringPtrInput
 	// Specifies the source port number or port number range. The value ranges from 1 to
@@ -349,8 +349,8 @@ func (o NetworkAclRuleOutput) ToNetworkAclRuleOutputWithContext(ctx context.Cont
 	return o
 }
 
-// Specifies the action in the iec network ACL rule. Currently, the value can be *allow*
-// or *deny*.
+// Specifies the action in the iec network ACL rule. Currently, the value can be **allow**
+// or **deny**.
 func (o NetworkAclRuleOutput) Action() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringPtrOutput { return v.Action }).(pulumi.StringPtrOutput)
 }
@@ -361,19 +361,19 @@ func (o NetworkAclRuleOutput) Description() pulumi.StringPtrOutput {
 }
 
 // Specifies the destination IP address to which the traffic is allowed.
-// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
+// The default value is **0.0.0.0/0**. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 func (o NetworkAclRuleOutput) DestinationIpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringPtrOutput { return v.DestinationIpAddress }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the destination port number or port number range. The value ranges
-// from 1 to 65535. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
+// from `1` to `65,535`. For a port number range, enter two port numbers connected by a hyphen (-). For example, 1-100.
 func (o NetworkAclRuleOutput) DestinationPort() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringPtrOutput { return v.DestinationPort }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the direction of the rule, valid values are *ingress* or *egress*
-// . Changing this parameter creates a new iec network ACL rule resource.
+// Specifies the direction of the rule, valid values are **ingress** or **egress**.
+// Changing this parameter creates a new iec network ACL rule resource.
 func (o NetworkAclRuleOutput) Direction() pulumi.StringOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringOutput { return v.Direction }).(pulumi.StringOutput)
 }
@@ -398,14 +398,14 @@ func (o NetworkAclRuleOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// Specifies the protocol supported by the iec network ACL rule. Valid values are: *tcp*
-// , *udp*, *icmp* and *any*.
+// Specifies the protocol supported by the iec network ACL rule.Valid values are: **tcp**,
+// **udp**, **icmp** and **any**.
 func (o NetworkAclRuleOutput) Protocol() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringPtrOutput { return v.Protocol }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the source IP address that the traffic is allowed from. The default
-// value is *0.0.0.0/0*. For example:
+// value is **0.0.0.0/0**. For example:
 // xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 func (o NetworkAclRuleOutput) SourceIpAddress() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkAclRule) pulumi.StringPtrOutput { return v.SourceIpAddress }).(pulumi.StringPtrOutput)

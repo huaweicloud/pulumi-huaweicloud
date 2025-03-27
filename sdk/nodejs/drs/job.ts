@@ -12,13 +12,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The DRS job can be imported by `id`. For example,
+ * The DRS job can be imported by `id`. e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Drs/job:Job test b11b407c-e604-4e8d-8bc4-92398320b847
+ *  $ pulumi import huaweicloud:Drs/job:Job test <id>
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `tags`, `force_destroy`, `source_db.0.password` and `destination_db.0.password`.It is generally recommended running `terraform plan` after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. resource "huaweicloud_drs_job" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `force_destroy`, `source_db.0.password`, `destination_db.0.password`, `source_db.0.ip`, `destination_db.0.ip`, `source_db.0.kafka_security_config.0.trust_store_password`, `destination_db.0.kafka_security_config.0.trust_store_password`, `source_db.0.kafka_security_config.0.key_store_password`,`destination_db.0.kafka_security_config.0.key_store_password`, `source_db.0.kafka_security_config.0.key_password`, `destination_db.0.kafka_security_config.0.key_password`, `action`, `is_sync_re_edit`, `pause_mode`, `auto_renew`, `alarm_notify.0.topic_urn`, `policy_config`, `engine_type`, `public_ip_list`, `start_time`. It is generally recommended running **terraform plan** after importing a job. You can then decide if changes should be applied to the job, or the resource definition should be updated to align with the job. Also you can ignore changes as below. hcl resource "huaweicloud_drs_job" "test" {
  *
  *  ...
  *
@@ -26,7 +26,7 @@ import * as utilities from "../utilities";
  *
  *  ignore_changes = [
  *
- *  source_db.0.password,destination_db.0.password
+ *  source_db.0.password, destination_db.0.password, action,
  *
  *  ]
  *
@@ -61,9 +61,37 @@ export class Job extends pulumi.CustomResource {
     }
 
     /**
-     * Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * Specifies the action of job. The options are as follows:
+     * + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+     * **INCRE_TRANSFER_STARTED**.
+     * + **restart**: Continue the job. Available when job status is **PAUSING**.
+     * + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+     * + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+     */
+    public readonly action!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the information body for setting task exception notification.
+     * Changing this parameter will create a new resource.
+     * The alarmNotify structure is documented below.
+     */
+    public readonly alarmNotify!: pulumi.Output<outputs.Drs.JobAlarmNotify>;
+    /**
+     * schema: Internal
+     */
+    public readonly autoRenew!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
+    public readonly chargingMode!: pulumi.Output<string>;
+    /**
+     * Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the list of the databases which the job migrates or synchronizes. Means to
+     * transfer database level data. This parameter conflicts with `tables`.
+     */
+    public readonly databases!: pulumi.Output<string[] | undefined>;
     /**
      * Specifies the description of the job, which contain a
      * maximum of 256 characters, and certain special characters (including !<>&'"\\) are not allowed.
@@ -71,14 +99,14 @@ export class Job extends pulumi.CustomResource {
     public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies the destination database configuration.
-     * The `dbInfo` object structure of the `destinationDb` is documented below.
+     * The dbInfo structure of the `destinationDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     public readonly destinationDb!: pulumi.Output<outputs.Drs.JobDestinationDb>;
     /**
      * Specifies the destination DB instance as read-only helps
      * ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-     * Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+     * Read/Write. Changing this parameter will create a new resource.
      */
     public readonly destinationDbReadnoly!: pulumi.Output<boolean | undefined>;
     /**
@@ -91,7 +119,8 @@ export class Job extends pulumi.CustomResource {
     public readonly direction!: pulumi.Output<string>;
     /**
      * Specifies the engine type of database. Changing this parameter will
-     * create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+     * create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+     * **kafka**, **postgresql**.
      */
     public readonly engineType!: pulumi.Output<string>;
     /**
@@ -106,24 +135,43 @@ export class Job extends pulumi.CustomResource {
     public readonly expiredDays!: pulumi.Output<number | undefined>;
     /**
      * Specifies whether to forcibly destroy the job even if it is running.
-     * The default value is `false`.
+     * The default value is **false**.
      */
     public readonly forceDestroy!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the migration speed by setting a time period.
-     * The default is no speed limit. The maximum length is 3. Structure is documented below.
+     * Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+     * for MariaDB. Defaults to **false**.
      * Changing this parameter will create a new resource.
+     */
+    public readonly isOpenFastClean!: pulumi.Output<boolean>;
+    /**
+     * Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+     */
+    public readonly isSyncReEdit!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies the migration speed by setting a time period.
+     * The default is no speed limit. The maximum length is 3. The limitSpeed structure is documented
+     * below. Changing this parameter will create a new resource.
      */
     public readonly limitSpeeds!: pulumi.Output<outputs.Drs.JobLimitSpeed[] | undefined>;
     /**
+     * Specifies the AZ where the primary task is located.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly masterAz!: pulumi.Output<string | undefined>;
+    /**
+     * The master job ID which will return if job is dual-AZ.
+     */
+    public /*out*/ readonly masterJobId!: pulumi.Output<string>;
+    /**
      * Specifies whether to migrate the definers of all source database
-     * objects to the `user` of `destinationDb`. The default value is `true`.
+     * objects to the `user` of `destinationDb`. The default value is **true**.
      * Changing this parameter will create a new resource.
      */
     public readonly migrateDefiner!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies migration type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
      * + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
      * objects and data, in a non-system database, to a destination database at a time.
      * + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -135,8 +183,8 @@ export class Job extends pulumi.CustomResource {
     public readonly migrationType!: pulumi.Output<string | undefined>;
     /**
      * Specifies whether to enable multi write. It is mandatory when `type`
-     * is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
-     * otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+     * is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to **true**,
+     * otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
      */
     public readonly multiWrite!: pulumi.Output<boolean | undefined>;
     /**
@@ -146,7 +194,7 @@ export class Job extends pulumi.CustomResource {
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the network type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
      * + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
      * An EIP will be automatically bound to the replication instance and released after the replication task is complete.
      * + **vpc**: suitable for migration from one cloud database to another.
@@ -155,27 +203,86 @@ export class Job extends pulumi.CustomResource {
      */
     public readonly netType!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the node flavor type. Valid values are **micro**, **small**,
+     * **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+     */
+    public readonly nodeType!: pulumi.Output<string | undefined>;
+    /**
+     * The order ID which will return if `chargingMode` is **prePaid**.
+     */
+    public /*out*/ readonly orderId!: pulumi.Output<string>;
+    /**
+     * The original job direction.
+     */
+    public /*out*/ readonly originalJobDirection!: pulumi.Output<string>;
+    /**
+     * Specifies the stop type of job. It's valid when `action` is **stop**.
+     * Default value is **target**. The options are as follows:
+     * + **target**: Stop playback.
+     * + **all**: Stop log capture and playback.
+     */
+    public readonly pauseMode!: pulumi.Output<string | undefined>;
+    /**
+     * schema: Internal
+     */
+    public readonly period!: pulumi.Output<number | undefined>;
+    /**
+     * schema: Internal
+     */
+    public readonly periodUnit!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the policy information used to configure migration and
+     * synchronization policies. The policyConfig structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly policyConfig!: pulumi.Output<outputs.Drs.JobPolicyConfig | undefined>;
+    /**
      * Private IP.
      */
     public /*out*/ readonly privateIp!: pulumi.Output<string>;
     /**
-     * Public IP.
+     * Progress.
+     */
+    public /*out*/ readonly progress!: pulumi.Output<string>;
+    /**
+     * Specifies public IP.
+     * Changing this parameter will create a new resource.
      */
     public /*out*/ readonly publicIp!: pulumi.Output<string>;
+    /**
+     * Specifies the public IP list.
+     * It can be specified when `netType` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+     * Changing this parameter will create a new resource.
+     * The publicIpList structure is documented below.
+     */
+    public readonly publicIpLists!: pulumi.Output<outputs.Drs.JobPublicIpList[] | undefined>;
     /**
      * Specifies the region which the database belongs when it is a RDS database.
      * Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
+     * The security group ID to which the databese instance belongs.
+     */
+    public /*out*/ readonly securityGroupId!: pulumi.Output<string>;
+    /**
+     * Specifies the AZ where the standby task is located.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly slaveAz!: pulumi.Output<string | undefined>;
+    /**
+     * The slave job ID which will return if job is dual-AZ.
+     */
+    public /*out*/ readonly slaveJobId!: pulumi.Output<string>;
+    /**
      * Specifies the source database configuration.
-     * The `dbInfo` object structure of the `sourceDb` is documented below.
+     * The dbInfo structure of the `sourceDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     public readonly sourceDb!: pulumi.Output<outputs.Drs.JobSourceDb>;
     /**
      * Specifies the time to start speed limit, this time is UTC time. The start
-     * time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+     * time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
      * is two digits, for example: 01:00. Changing this parameter will create a new resource.
      */
     public readonly startTime!: pulumi.Output<string | undefined>;
@@ -184,18 +291,36 @@ export class Job extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
+     * Specifies subnet ID of database when it is a RDS database.
+     * It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+     */
+    public /*out*/ readonly subnetId!: pulumi.Output<string>;
+    /**
+     * Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+     * table level data. This parameter conflicts with `databases`.
+     * The tables structure is documented below.
+     */
+    public readonly tables!: pulumi.Output<outputs.Drs.JobTable[] | undefined>;
+    /**
      * Specifies the key/value pairs to associate with the DRS job.
-     * Changing this parameter will create a new resource.
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the job type. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + **migration**: Online Migration.
-     * + **sync**: Data Synchronization.
-     * + **cloudDataGuard**: Disaster Recovery.
+     * Specifies the type of a task with an EIP bound.
+     * Valid values are **master** and **slave**.
+     * + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+     * + In other cases, the value is fixed to **master**.
      */
     public readonly type!: pulumi.Output<string>;
+    /**
+     * Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
+    /**
+     * Specifies vpc ID of database.
+     * Changing this parameter will create a new resource.
+     */
+    public /*out*/ readonly vpcId!: pulumi.Output<string>;
 
     /**
      * Create a Job resource with the given unique name, arguments, and options.
@@ -210,7 +335,12 @@ export class Job extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as JobState | undefined;
+            resourceInputs["action"] = state ? state.action : undefined;
+            resourceInputs["alarmNotify"] = state ? state.alarmNotify : undefined;
+            resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
+            resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["databases"] = state ? state.databases : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["destinationDb"] = state ? state.destinationDb : undefined;
             resourceInputs["destinationDbReadnoly"] = state ? state.destinationDbReadnoly : undefined;
@@ -219,20 +349,40 @@ export class Job extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["expiredDays"] = state ? state.expiredDays : undefined;
             resourceInputs["forceDestroy"] = state ? state.forceDestroy : undefined;
+            resourceInputs["isOpenFastClean"] = state ? state.isOpenFastClean : undefined;
+            resourceInputs["isSyncReEdit"] = state ? state.isSyncReEdit : undefined;
             resourceInputs["limitSpeeds"] = state ? state.limitSpeeds : undefined;
+            resourceInputs["masterAz"] = state ? state.masterAz : undefined;
+            resourceInputs["masterJobId"] = state ? state.masterJobId : undefined;
             resourceInputs["migrateDefiner"] = state ? state.migrateDefiner : undefined;
             resourceInputs["migrationType"] = state ? state.migrationType : undefined;
             resourceInputs["multiWrite"] = state ? state.multiWrite : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["netType"] = state ? state.netType : undefined;
+            resourceInputs["nodeType"] = state ? state.nodeType : undefined;
+            resourceInputs["orderId"] = state ? state.orderId : undefined;
+            resourceInputs["originalJobDirection"] = state ? state.originalJobDirection : undefined;
+            resourceInputs["pauseMode"] = state ? state.pauseMode : undefined;
+            resourceInputs["period"] = state ? state.period : undefined;
+            resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
+            resourceInputs["policyConfig"] = state ? state.policyConfig : undefined;
             resourceInputs["privateIp"] = state ? state.privateIp : undefined;
+            resourceInputs["progress"] = state ? state.progress : undefined;
             resourceInputs["publicIp"] = state ? state.publicIp : undefined;
+            resourceInputs["publicIpLists"] = state ? state.publicIpLists : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["securityGroupId"] = state ? state.securityGroupId : undefined;
+            resourceInputs["slaveAz"] = state ? state.slaveAz : undefined;
+            resourceInputs["slaveJobId"] = state ? state.slaveJobId : undefined;
             resourceInputs["sourceDb"] = state ? state.sourceDb : undefined;
             resourceInputs["startTime"] = state ? state.startTime : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["subnetId"] = state ? state.subnetId : undefined;
+            resourceInputs["tables"] = state ? state.tables : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
+            resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as JobArgs | undefined;
             if ((!args || args.destinationDb === undefined) && !opts.urn) {
@@ -250,6 +400,11 @@ export class Job extends pulumi.CustomResource {
             if ((!args || args.type === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'type'");
             }
+            resourceInputs["action"] = args ? args.action : undefined;
+            resourceInputs["alarmNotify"] = args ? args.alarmNotify : undefined;
+            resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
+            resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["databases"] = args ? args.databases : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["destinationDb"] = args ? args.destinationDb : undefined;
             resourceInputs["destinationDbReadnoly"] = args ? args.destinationDbReadnoly : undefined;
@@ -258,21 +413,41 @@ export class Job extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["expiredDays"] = args ? args.expiredDays : undefined;
             resourceInputs["forceDestroy"] = args ? args.forceDestroy : undefined;
+            resourceInputs["isOpenFastClean"] = args ? args.isOpenFastClean : undefined;
+            resourceInputs["isSyncReEdit"] = args ? args.isSyncReEdit : undefined;
             resourceInputs["limitSpeeds"] = args ? args.limitSpeeds : undefined;
+            resourceInputs["masterAz"] = args ? args.masterAz : undefined;
             resourceInputs["migrateDefiner"] = args ? args.migrateDefiner : undefined;
             resourceInputs["migrationType"] = args ? args.migrationType : undefined;
             resourceInputs["multiWrite"] = args ? args.multiWrite : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["netType"] = args ? args.netType : undefined;
+            resourceInputs["nodeType"] = args ? args.nodeType : undefined;
+            resourceInputs["pauseMode"] = args ? args.pauseMode : undefined;
+            resourceInputs["period"] = args ? args.period : undefined;
+            resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
+            resourceInputs["policyConfig"] = args ? args.policyConfig : undefined;
+            resourceInputs["publicIpLists"] = args ? args.publicIpLists : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["slaveAz"] = args ? args.slaveAz : undefined;
             resourceInputs["sourceDb"] = args ? args.sourceDb : undefined;
             resourceInputs["startTime"] = args ? args.startTime : undefined;
+            resourceInputs["tables"] = args ? args.tables : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["type"] = args ? args.type : undefined;
             resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["masterJobId"] = undefined /*out*/;
+            resourceInputs["orderId"] = undefined /*out*/;
+            resourceInputs["originalJobDirection"] = undefined /*out*/;
             resourceInputs["privateIp"] = undefined /*out*/;
+            resourceInputs["progress"] = undefined /*out*/;
             resourceInputs["publicIp"] = undefined /*out*/;
+            resourceInputs["securityGroupId"] = undefined /*out*/;
+            resourceInputs["slaveJobId"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["subnetId"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
+            resourceInputs["vpcId"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Job.__pulumiType, name, resourceInputs, opts);
@@ -284,9 +459,37 @@ export class Job extends pulumi.CustomResource {
  */
 export interface JobState {
     /**
-     * Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
+     * Specifies the action of job. The options are as follows:
+     * + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+     * **INCRE_TRANSFER_STARTED**.
+     * + **restart**: Continue the job. Available when job status is **PAUSING**.
+     * + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+     * + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+     */
+    action?: pulumi.Input<string>;
+    /**
+     * Specifies the information body for setting task exception notification.
+     * Changing this parameter will create a new resource.
+     * The alarmNotify structure is documented below.
+     */
+    alarmNotify?: pulumi.Input<inputs.Drs.JobAlarmNotify>;
+    /**
+     * schema: Internal
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Create time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
      */
     createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the list of the databases which the job migrates or synchronizes. Means to
+     * transfer database level data. This parameter conflicts with `tables`.
+     */
+    databases?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the description of the job, which contain a
      * maximum of 256 characters, and certain special characters (including !<>&'"\\) are not allowed.
@@ -294,14 +497,14 @@ export interface JobState {
     description?: pulumi.Input<string>;
     /**
      * Specifies the destination database configuration.
-     * The `dbInfo` object structure of the `destinationDb` is documented below.
+     * The dbInfo structure of the `destinationDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     destinationDb?: pulumi.Input<inputs.Drs.JobDestinationDb>;
     /**
      * Specifies the destination DB instance as read-only helps
      * ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-     * Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+     * Read/Write. Changing this parameter will create a new resource.
      */
     destinationDbReadnoly?: pulumi.Input<boolean>;
     /**
@@ -314,7 +517,8 @@ export interface JobState {
     direction?: pulumi.Input<string>;
     /**
      * Specifies the engine type of database. Changing this parameter will
-     * create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+     * create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+     * **kafka**, **postgresql**.
      */
     engineType?: pulumi.Input<string>;
     /**
@@ -329,24 +533,43 @@ export interface JobState {
     expiredDays?: pulumi.Input<number>;
     /**
      * Specifies whether to forcibly destroy the job even if it is running.
-     * The default value is `false`.
+     * The default value is **false**.
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
-     * Specifies the migration speed by setting a time period.
-     * The default is no speed limit. The maximum length is 3. Structure is documented below.
+     * Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+     * for MariaDB. Defaults to **false**.
      * Changing this parameter will create a new resource.
+     */
+    isOpenFastClean?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+     */
+    isSyncReEdit?: pulumi.Input<boolean>;
+    /**
+     * Specifies the migration speed by setting a time period.
+     * The default is no speed limit. The maximum length is 3. The limitSpeed structure is documented
+     * below. Changing this parameter will create a new resource.
      */
     limitSpeeds?: pulumi.Input<pulumi.Input<inputs.Drs.JobLimitSpeed>[]>;
     /**
+     * Specifies the AZ where the primary task is located.
+     * Changing this parameter will create a new resource.
+     */
+    masterAz?: pulumi.Input<string>;
+    /**
+     * The master job ID which will return if job is dual-AZ.
+     */
+    masterJobId?: pulumi.Input<string>;
+    /**
      * Specifies whether to migrate the definers of all source database
-     * objects to the `user` of `destinationDb`. The default value is `true`.
+     * objects to the `user` of `destinationDb`. The default value is **true**.
      * Changing this parameter will create a new resource.
      */
     migrateDefiner?: pulumi.Input<boolean>;
     /**
      * Specifies migration type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
      * + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
      * objects and data, in a non-system database, to a destination database at a time.
      * + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -358,8 +581,8 @@ export interface JobState {
     migrationType?: pulumi.Input<string>;
     /**
      * Specifies whether to enable multi write. It is mandatory when `type`
-     * is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
-     * otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+     * is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to **true**,
+     * otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
      */
     multiWrite?: pulumi.Input<boolean>;
     /**
@@ -369,7 +592,7 @@ export interface JobState {
     name?: pulumi.Input<string>;
     /**
      * Specifies the network type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
      * + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
      * An EIP will be automatically bound to the replication instance and released after the replication task is complete.
      * + **vpc**: suitable for migration from one cloud database to another.
@@ -378,27 +601,86 @@ export interface JobState {
      */
     netType?: pulumi.Input<string>;
     /**
+     * Specifies the node flavor type. Valid values are **micro**, **small**,
+     * **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+     */
+    nodeType?: pulumi.Input<string>;
+    /**
+     * The order ID which will return if `chargingMode` is **prePaid**.
+     */
+    orderId?: pulumi.Input<string>;
+    /**
+     * The original job direction.
+     */
+    originalJobDirection?: pulumi.Input<string>;
+    /**
+     * Specifies the stop type of job. It's valid when `action` is **stop**.
+     * Default value is **target**. The options are as follows:
+     * + **target**: Stop playback.
+     * + **all**: Stop log capture and playback.
+     */
+    pauseMode?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * schema: Internal
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the policy information used to configure migration and
+     * synchronization policies. The policyConfig structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    policyConfig?: pulumi.Input<inputs.Drs.JobPolicyConfig>;
+    /**
      * Private IP.
      */
     privateIp?: pulumi.Input<string>;
     /**
-     * Public IP.
+     * Progress.
+     */
+    progress?: pulumi.Input<string>;
+    /**
+     * Specifies public IP.
+     * Changing this parameter will create a new resource.
      */
     publicIp?: pulumi.Input<string>;
+    /**
+     * Specifies the public IP list.
+     * It can be specified when `netType` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+     * Changing this parameter will create a new resource.
+     * The publicIpList structure is documented below.
+     */
+    publicIpLists?: pulumi.Input<pulumi.Input<inputs.Drs.JobPublicIpList>[]>;
     /**
      * Specifies the region which the database belongs when it is a RDS database.
      * Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
+     * The security group ID to which the databese instance belongs.
+     */
+    securityGroupId?: pulumi.Input<string>;
+    /**
+     * Specifies the AZ where the standby task is located.
+     * Changing this parameter will create a new resource.
+     */
+    slaveAz?: pulumi.Input<string>;
+    /**
+     * The slave job ID which will return if job is dual-AZ.
+     */
+    slaveJobId?: pulumi.Input<string>;
+    /**
      * Specifies the source database configuration.
-     * The `dbInfo` object structure of the `sourceDb` is documented below.
+     * The dbInfo structure of the `sourceDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     sourceDb?: pulumi.Input<inputs.Drs.JobSourceDb>;
     /**
      * Specifies the time to start speed limit, this time is UTC time. The start
-     * time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+     * time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
      * is two digits, for example: 01:00. Changing this parameter will create a new resource.
      */
     startTime?: pulumi.Input<string>;
@@ -407,18 +689,36 @@ export interface JobState {
      */
     status?: pulumi.Input<string>;
     /**
+     * Specifies subnet ID of database when it is a RDS database.
+     * It is mandatory when `direction` is **down**. Changing this parameter will create a new resource.
+     */
+    subnetId?: pulumi.Input<string>;
+    /**
+     * Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+     * table level data. This parameter conflicts with `databases`.
+     * The tables structure is documented below.
+     */
+    tables?: pulumi.Input<pulumi.Input<inputs.Drs.JobTable>[]>;
+    /**
      * Specifies the key/value pairs to associate with the DRS job.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the job type. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + **migration**: Online Migration.
-     * + **sync**: Data Synchronization.
-     * + **cloudDataGuard**: Disaster Recovery.
+     * Specifies the type of a task with an EIP bound.
+     * Valid values are **master** and **slave**.
+     * + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+     * + In other cases, the value is fixed to **master**.
      */
     type?: pulumi.Input<string>;
+    /**
+     * Update time. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ.
+     */
+    updatedAt?: pulumi.Input<string>;
+    /**
+     * Specifies vpc ID of database.
+     * Changing this parameter will create a new resource.
+     */
+    vpcId?: pulumi.Input<string>;
 }
 
 /**
@@ -426,20 +726,48 @@ export interface JobState {
  */
 export interface JobArgs {
     /**
+     * Specifies the action of job. The options are as follows:
+     * + **stop**: Stop the job. Available when job status is **FULL_TRANSFER_STARTED**, **FULL_TRANSFER_COMPLETE** or
+     * **INCRE_TRANSFER_STARTED**.
+     * + **restart**: Continue the job. Available when job status is **PAUSING**.
+     * + **reset**: Retry the job. Available when job status is **FULL_TRANSFER_FAILED** or **INCRE_TRANSFER_FAILED**.
+     * + **start**: Start the job. Available when job status is **WAITING_FOR_START**.
+     */
+    action?: pulumi.Input<string>;
+    /**
+     * Specifies the information body for setting task exception notification.
+     * Changing this parameter will create a new resource.
+     * The alarmNotify structure is documented below.
+     */
+    alarmNotify?: pulumi.Input<inputs.Drs.JobAlarmNotify>;
+    /**
+     * schema: Internal
+     */
+    autoRenew?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the list of the databases which the job migrates or synchronizes. Means to
+     * transfer database level data. This parameter conflicts with `tables`.
+     */
+    databases?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the description of the job, which contain a
      * maximum of 256 characters, and certain special characters (including !<>&'"\\) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies the destination database configuration.
-     * The `dbInfo` object structure of the `destinationDb` is documented below.
+     * The dbInfo structure of the `destinationDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     destinationDb: pulumi.Input<inputs.Drs.JobDestinationDb>;
     /**
      * Specifies the destination DB instance as read-only helps
      * ensure the migration is successful. Once the migration is complete, the DB instance automatically changes to
-     * Read/Write. The default value is `true`. Changing this parameter will create a new resource.
+     * Read/Write. Changing this parameter will create a new resource.
      */
     destinationDbReadnoly?: pulumi.Input<boolean>;
     /**
@@ -452,7 +780,8 @@ export interface JobArgs {
     direction: pulumi.Input<string>;
     /**
      * Specifies the engine type of database. Changing this parameter will
-     * create a new resource. The options are as follows: `mysql`, `mongodb`, `gaussdbv5`.
+     * create a new resource. The options are as follows: **mysql**, **mongodb**, **gaussdbv5**, **taurus**, **gaussdbv5ha**,
+     * **kafka**, **postgresql**.
      */
     engineType: pulumi.Input<string>;
     /**
@@ -467,24 +796,39 @@ export interface JobArgs {
     expiredDays?: pulumi.Input<number>;
     /**
      * Specifies whether to forcibly destroy the job even if it is running.
-     * The default value is `false`.
+     * The default value is **false**.
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
-     * Specifies the migration speed by setting a time period.
-     * The default is no speed limit. The maximum length is 3. Structure is documented below.
+     * Specifies whether to enable binlog clearing for RDS for MySQL or RDS
+     * for MariaDB. Defaults to **false**.
      * Changing this parameter will create a new resource.
+     */
+    isOpenFastClean?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to start the sync re-edit job. It's valid when `action` is **restart**.
+     */
+    isSyncReEdit?: pulumi.Input<boolean>;
+    /**
+     * Specifies the migration speed by setting a time period.
+     * The default is no speed limit. The maximum length is 3. The limitSpeed structure is documented
+     * below. Changing this parameter will create a new resource.
      */
     limitSpeeds?: pulumi.Input<pulumi.Input<inputs.Drs.JobLimitSpeed>[]>;
     /**
+     * Specifies the AZ where the primary task is located.
+     * Changing this parameter will create a new resource.
+     */
+    masterAz?: pulumi.Input<string>;
+    /**
      * Specifies whether to migrate the definers of all source database
-     * objects to the `user` of `destinationDb`. The default value is `true`.
+     * objects to the `user` of `destinationDb`. The default value is **true**.
      * Changing this parameter will create a new resource.
      */
     migrateDefiner?: pulumi.Input<boolean>;
     /**
      * Specifies migration type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **FULL_INCR_TRANS**. The options are as follows:
      * + **FULL_TRANS**: Full migration. Suitable for scenarios where services can be interrupted. It migrates all database
      * objects and data, in a non-system database, to a destination database at a time.
      * + **INCR_TRANS**: Incremental migration. Suitable for migration from an on-premises self-built database to a
@@ -496,8 +840,8 @@ export interface JobArgs {
     migrationType?: pulumi.Input<string>;
     /**
      * Specifies whether to enable multi write. It is mandatory when `type`
-     * is `cloudDataGuard`. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to `true`,
-     * otherwise to `false`. The default value is `false`. Changing this parameter will create a new resource.
+     * is **cloudDataGuard**. When the disaster recovery type is dual-active disaster recovery, set `multiWrite` to **true**,
+     * otherwise to **false**. The default value is **false**. Changing this parameter will create a new resource.
      */
     multiWrite?: pulumi.Input<boolean>;
     /**
@@ -507,7 +851,7 @@ export interface JobArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies the network type.
-     * Changing this parameter will create a new resource. The options are as follows:
+     * Changing this parameter will create a new resource. The default value is **eip**. The options are as follows:
      * + **eip**: suitable for migration from an on-premises or other cloud database to a destination cloud database.
      * An EIP will be automatically bound to the replication instance and released after the replication task is complete.
      * + **vpc**: suitable for migration from one cloud database to another.
@@ -516,33 +860,75 @@ export interface JobArgs {
      */
     netType?: pulumi.Input<string>;
     /**
+     * Specifies the node flavor type. Valid values are **micro**, **small**,
+     * **medium**, **high**, **xlarge**, **2xlarge**. Default to **high**.
+     */
+    nodeType?: pulumi.Input<string>;
+    /**
+     * Specifies the stop type of job. It's valid when `action` is **stop**.
+     * Default value is **target**. The options are as follows:
+     * + **target**: Stop playback.
+     * + **all**: Stop log capture and playback.
+     */
+    pauseMode?: pulumi.Input<string>;
+    /**
+     * schema: Internal
+     */
+    period?: pulumi.Input<number>;
+    /**
+     * schema: Internal
+     */
+    periodUnit?: pulumi.Input<string>;
+    /**
+     * Specifies the policy information used to configure migration and
+     * synchronization policies. The policyConfig structure is documented below.
+     * Changing this parameter will create a new resource.
+     */
+    policyConfig?: pulumi.Input<inputs.Drs.JobPolicyConfig>;
+    /**
+     * Specifies the public IP list.
+     * It can be specified when `netType` is **eip**, and if it's not specified, DRS job will automatically bind a public IP.
+     * Changing this parameter will create a new resource.
+     * The publicIpList structure is documented below.
+     */
+    publicIpLists?: pulumi.Input<pulumi.Input<inputs.Drs.JobPublicIpList>[]>;
+    /**
      * Specifies the region which the database belongs when it is a RDS database.
      * Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the AZ where the standby task is located.
+     * Changing this parameter will create a new resource.
+     */
+    slaveAz?: pulumi.Input<string>;
+    /**
      * Specifies the source database configuration.
-     * The `dbInfo` object structure of the `sourceDb` is documented below.
+     * The dbInfo structure of the `sourceDb` is documented below.
      * Changing this parameter will create a new resource.
      */
     sourceDb: pulumi.Input<inputs.Drs.JobSourceDb>;
     /**
      * Specifies the time to start speed limit, this time is UTC time. The start
-     * time is the whole hour, if there is a minute, it will be ignored, the format is `hh:mm`, and the hour number
+     * time is the whole hour, if there is a minute, it will be ignored, the format is **hh:mm**, and the hour number
      * is two digits, for example: 01:00. Changing this parameter will create a new resource.
      */
     startTime?: pulumi.Input<string>;
     /**
+     * Specifies the list of the tables which the job migrates or synchronizes. Means to transfer
+     * table level data. This parameter conflicts with `databases`.
+     * The tables structure is documented below.
+     */
+    tables?: pulumi.Input<pulumi.Input<inputs.Drs.JobTable>[]>;
+    /**
      * Specifies the key/value pairs to associate with the DRS job.
-     * Changing this parameter will create a new resource.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the job type. Changing this parameter will create a new
-     * resource. The options are as follows:
-     * + **migration**: Online Migration.
-     * + **sync**: Data Synchronization.
-     * + **cloudDataGuard**: Disaster Recovery.
+     * Specifies the type of a task with an EIP bound.
+     * Valid values are **master** and **slave**.
+     * + In a primary/standby task, **master** indicates the primary task, and **slave** indicates the standby task.
+     * + In other cases, the value is fixed to **master**.
      */
     type: pulumi.Input<string>;
 }

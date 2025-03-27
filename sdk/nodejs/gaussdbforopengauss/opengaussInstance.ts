@@ -6,17 +6,33 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * GaussDB OpenGauss instance management within HuaweiCoud.
+ * GaussDB OpenGauss instance management within HuaweiCould.
  *
  * ## Example Usage
  *
  * ## Import
  *
- * OpenGaussDB instance can be imported using the `id`, e.g.
+ * OpenGaussDB instance can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test 1f2c4f48adea4ae684c8edd8818fa349in14
+ *  $ pulumi import huaweicloud:GaussDBforOpenGauss/opengaussInstance:OpengaussInstance test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attributes include`password`, `ha.0.mode`, `ha.0.instance_mode`, `configuration_id`, `disk_encryption_id`, `enable_force_switch`, `enable_single_float_ip`, `parameters`, `period_unit`, `period` and `auto_renew`. It is generally recommended running `terraform plan` after importing a GaussDB OpenGauss instance. You can then decide if changes should be applied to the GaussDB OpenGauss instance, or the resource definition should be updated to align with the GaussDB OpenGauss instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_opengauss_instance" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  password, configuration_id, disk_encryption_id, enable_force_switch, enable_single_float_ip, parameters, period_unit,
+ *
+ *  period, auto_renew,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class OpengaussInstance extends pulumi.CustomResource {
     /**
@@ -47,6 +63,11 @@ export class OpengaussInstance extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies the advanced features.
+     * The advanceFeatures structure is documented below.
+     */
+    public readonly advanceFeatures!: pulumi.Output<outputs.GaussDBforOpenGauss.OpengaussInstanceAdvanceFeature[]>;
+    /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**. Defaults to **false**.
      */
@@ -58,9 +79,13 @@ export class OpengaussInstance extends pulumi.CustomResource {
     public readonly availabilityZone!: pulumi.Output<string>;
     /**
      * Specifies the advanced backup policy.
-     * The object structure is documented below.
+     * The backupStrategy structure is documented below.
      */
     public readonly backupStrategy!: pulumi.Output<outputs.GaussDBforOpenGauss.OpengaussInstanceBackupStrategy>;
+    /**
+     * Indicates whether the host load is balanced due to a primary/standby switchover.
+     */
+    public /*out*/ readonly balanceStatus!: pulumi.Output<boolean>;
     /**
      * Specifies the charging mode of opengauss instance.
      * The valid values are as follows:
@@ -74,13 +99,14 @@ export class OpengaussInstance extends pulumi.CustomResource {
      */
     public readonly configurationId!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the coordinator number. Values: 1~9. The default value is 3.
+     * Specifies the coordinator number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      * The value must not be greater than twice value of `shardingNum`.
      */
     public readonly coordinatorNum!: pulumi.Output<number | undefined>;
     /**
      * Specifies the datastore information.
-     * The object structure is documented below.
+     * The datastore structure is documented below.
      * Changing this parameter will create a new resource.
      */
     public readonly datastore!: pulumi.Output<outputs.GaussDBforOpenGauss.OpengaussInstanceDatastore>;
@@ -89,17 +115,40 @@ export class OpengaussInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly dbUserName!: pulumi.Output<string>;
     /**
+     * Specifies the key ID for disk encryption.
+     * Changing this parameter will create a new resource.
+     */
+    public readonly diskEncryptionId!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies whether to forcibly promote a standby node to primary.
+     * Defaults to **false**. Changing this parameter will create a new resource.
+     */
+    public readonly enableForceSwitch!: pulumi.Output<boolean | undefined>;
+    /**
+     * Specifies whether to enable single floating IP address policy,
+     * which is only suitable for primary/standby instances. Value options:
+     * + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+     * primary/standby fail over occurs, the floating IP address does not change.
+     * + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+     * fail over occurs, the floating IP addresses change.
+     */
+    public readonly enableSingleFloatIp!: pulumi.Output<boolean | undefined>;
+    /**
      * Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
      */
     public /*out*/ readonly endpoints!: pulumi.Output<string[]>;
     /**
      * Specifies the enterprise project ID.
-     * Changing this parameter will create a new resource.
      */
-    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
-     * Specifies the instance specifications. Please reference the API docs for valid
-     * options. Changing this parameter will create a new resource.
+     * Indicates whether error log collection is enabled. The value can be:
+     * + **ON**: enabled
+     * + **OFF**: disabled
+     */
+    public /*out*/ readonly errorLogSwitchStatus!: pulumi.Output<string>;
+    /**
+     * Specifies the instance specifications.
      */
     public readonly flavor!: pulumi.Output<string>;
     /**
@@ -118,15 +167,29 @@ export class OpengaussInstance extends pulumi.CustomResource {
      */
     public /*out*/ readonly maintenanceWindow!: pulumi.Output<string>;
     /**
-     * Specifies the instance name, which can be the same as an existing instance name.
-     * The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-     * letters, digits, hyphens (-), and underscores (_).
+     * Specifies the port for MySQL compatibility. Value range: **0** or
+     * **1024** to **39989**.
+     * + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+     * **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+     * **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+     * **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+     * **[Database port, Database port + 10]**.
+     * + If the value is **0**, the MySQL compatibility port is disabled.
+     */
+    public readonly mysqlCompatibilityPort!: pulumi.Output<string>;
+    /**
+     * Specifies the name of the advance feature.
      */
     public readonly name!: pulumi.Output<string>;
     /**
      * Indicates the instance nodes information. Structure is documented below.
      */
     public /*out*/ readonly nodes!: pulumi.Output<outputs.GaussDBforOpenGauss.OpengaussInstanceNode[]>;
+    /**
+     * Specifies an array of one or more parameters to be set to the instance after launched.
+     * The parameters structure is documented below.
+     */
+    public readonly parameters!: pulumi.Output<outputs.GaussDBforOpenGauss.OpengaussInstanceParameter[]>;
     /**
      * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
@@ -167,7 +230,7 @@ export class OpengaussInstance extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * The replica number. The valid values are **2** and **3**, defaults to **3**.
+     * The replica number. The valid values are `2` and `3`, defaults to `3`.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
      * Changing this parameter will create a new resource.
      */
@@ -178,10 +241,10 @@ export class OpengaussInstance extends pulumi.CustomResource {
      * includes the `100` ports starting with the database port.
      * (For example, if the database port is `8,000`, the TCP port must include the range from `8,000` to `8,100`.)
      */
-    public readonly securityGroupId!: pulumi.Output<string | undefined>;
+    public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3.
+     * Specifies the sharding number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      */
     public readonly shardingNum!: pulumi.Output<number | undefined>;
     /**
@@ -197,6 +260,10 @@ export class OpengaussInstance extends pulumi.CustomResource {
      * Indicates the switch strategy.
      */
     public /*out*/ readonly switchStrategy!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the time zone. Defaults to **UTC+08:00**.
      * Changing this parameter will create a new resource.
@@ -231,22 +298,30 @@ export class OpengaussInstance extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as OpengaussInstanceState | undefined;
+            resourceInputs["advanceFeatures"] = state ? state.advanceFeatures : undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = state ? state.backupStrategy : undefined;
+            resourceInputs["balanceStatus"] = state ? state.balanceStatus : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["configurationId"] = state ? state.configurationId : undefined;
             resourceInputs["coordinatorNum"] = state ? state.coordinatorNum : undefined;
             resourceInputs["datastore"] = state ? state.datastore : undefined;
             resourceInputs["dbUserName"] = state ? state.dbUserName : undefined;
+            resourceInputs["diskEncryptionId"] = state ? state.diskEncryptionId : undefined;
+            resourceInputs["enableForceSwitch"] = state ? state.enableForceSwitch : undefined;
+            resourceInputs["enableSingleFloatIp"] = state ? state.enableSingleFloatIp : undefined;
             resourceInputs["endpoints"] = state ? state.endpoints : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["errorLogSwitchStatus"] = state ? state.errorLogSwitchStatus : undefined;
             resourceInputs["flavor"] = state ? state.flavor : undefined;
             resourceInputs["forceImport"] = state ? state.forceImport : undefined;
             resourceInputs["ha"] = state ? state.ha : undefined;
             resourceInputs["maintenanceWindow"] = state ? state.maintenanceWindow : undefined;
+            resourceInputs["mysqlCompatibilityPort"] = state ? state.mysqlCompatibilityPort : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["nodes"] = state ? state.nodes : undefined;
+            resourceInputs["parameters"] = state ? state.parameters : undefined;
             resourceInputs["password"] = state ? state.password : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
@@ -260,6 +335,7 @@ export class OpengaussInstance extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["switchStrategy"] = state ? state.switchStrategy : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["timeZone"] = state ? state.timeZone : undefined;
             resourceInputs["type"] = state ? state.type : undefined;
             resourceInputs["volume"] = state ? state.volume : undefined;
@@ -287,6 +363,7 @@ export class OpengaussInstance extends pulumi.CustomResource {
             if ((!args || args.vpcId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'vpcId'");
             }
+            resourceInputs["advanceFeatures"] = args ? args.advanceFeatures : undefined;
             resourceInputs["autoRenew"] = args ? args.autoRenew : undefined;
             resourceInputs["availabilityZone"] = args ? args.availabilityZone : undefined;
             resourceInputs["backupStrategy"] = args ? args.backupStrategy : undefined;
@@ -294,11 +371,16 @@ export class OpengaussInstance extends pulumi.CustomResource {
             resourceInputs["configurationId"] = args ? args.configurationId : undefined;
             resourceInputs["coordinatorNum"] = args ? args.coordinatorNum : undefined;
             resourceInputs["datastore"] = args ? args.datastore : undefined;
+            resourceInputs["diskEncryptionId"] = args ? args.diskEncryptionId : undefined;
+            resourceInputs["enableForceSwitch"] = args ? args.enableForceSwitch : undefined;
+            resourceInputs["enableSingleFloatIp"] = args ? args.enableSingleFloatIp : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["flavor"] = args ? args.flavor : undefined;
             resourceInputs["forceImport"] = args ? args.forceImport : undefined;
             resourceInputs["ha"] = args ? args.ha : undefined;
+            resourceInputs["mysqlCompatibilityPort"] = args ? args.mysqlCompatibilityPort : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["parameters"] = args ? args.parameters : undefined;
             resourceInputs["password"] = args ? args.password : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
@@ -308,11 +390,14 @@ export class OpengaussInstance extends pulumi.CustomResource {
             resourceInputs["securityGroupId"] = args ? args.securityGroupId : undefined;
             resourceInputs["shardingNum"] = args ? args.shardingNum : undefined;
             resourceInputs["subnetId"] = args ? args.subnetId : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["timeZone"] = args ? args.timeZone : undefined;
             resourceInputs["volume"] = args ? args.volume : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
+            resourceInputs["balanceStatus"] = undefined /*out*/;
             resourceInputs["dbUserName"] = undefined /*out*/;
             resourceInputs["endpoints"] = undefined /*out*/;
+            resourceInputs["errorLogSwitchStatus"] = undefined /*out*/;
             resourceInputs["maintenanceWindow"] = undefined /*out*/;
             resourceInputs["nodes"] = undefined /*out*/;
             resourceInputs["privateIps"] = undefined /*out*/;
@@ -331,6 +416,11 @@ export class OpengaussInstance extends pulumi.CustomResource {
  */
 export interface OpengaussInstanceState {
     /**
+     * Specifies the advanced features.
+     * The advanceFeatures structure is documented below.
+     */
+    advanceFeatures?: pulumi.Input<pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceAdvanceFeature>[]>;
+    /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**. Defaults to **false**.
      */
@@ -342,9 +432,13 @@ export interface OpengaussInstanceState {
     availabilityZone?: pulumi.Input<string>;
     /**
      * Specifies the advanced backup policy.
-     * The object structure is documented below.
+     * The backupStrategy structure is documented below.
      */
     backupStrategy?: pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceBackupStrategy>;
+    /**
+     * Indicates whether the host load is balanced due to a primary/standby switchover.
+     */
+    balanceStatus?: pulumi.Input<boolean>;
     /**
      * Specifies the charging mode of opengauss instance.
      * The valid values are as follows:
@@ -358,13 +452,14 @@ export interface OpengaussInstanceState {
      */
     configurationId?: pulumi.Input<string>;
     /**
-     * Specifies the coordinator number. Values: 1~9. The default value is 3.
+     * Specifies the coordinator number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      * The value must not be greater than twice value of `shardingNum`.
      */
     coordinatorNum?: pulumi.Input<number>;
     /**
      * Specifies the datastore information.
-     * The object structure is documented below.
+     * The datastore structure is documented below.
      * Changing this parameter will create a new resource.
      */
     datastore?: pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceDatastore>;
@@ -373,17 +468,40 @@ export interface OpengaussInstanceState {
      */
     dbUserName?: pulumi.Input<string>;
     /**
+     * Specifies the key ID for disk encryption.
+     * Changing this parameter will create a new resource.
+     */
+    diskEncryptionId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to forcibly promote a standby node to primary.
+     * Defaults to **false**. Changing this parameter will create a new resource.
+     */
+    enableForceSwitch?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable single floating IP address policy,
+     * which is only suitable for primary/standby instances. Value options:
+     * + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+     * primary/standby fail over occurs, the floating IP address does not change.
+     * + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+     * fail over occurs, the floating IP addresses change.
+     */
+    enableSingleFloatIp?: pulumi.Input<boolean>;
+    /**
      * Indicates the connection endpoints list of the DB instance. Example: [127.0.0.1:8000].
      */
     endpoints?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the enterprise project ID.
-     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the instance specifications. Please reference the API docs for valid
-     * options. Changing this parameter will create a new resource.
+     * Indicates whether error log collection is enabled. The value can be:
+     * + **ON**: enabled
+     * + **OFF**: disabled
+     */
+    errorLogSwitchStatus?: pulumi.Input<string>;
+    /**
+     * Specifies the instance specifications.
      */
     flavor?: pulumi.Input<string>;
     /**
@@ -402,15 +520,29 @@ export interface OpengaussInstanceState {
      */
     maintenanceWindow?: pulumi.Input<string>;
     /**
-     * Specifies the instance name, which can be the same as an existing instance name.
-     * The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-     * letters, digits, hyphens (-), and underscores (_).
+     * Specifies the port for MySQL compatibility. Value range: **0** or
+     * **1024** to **39989**.
+     * + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+     * **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+     * **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+     * **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+     * **[Database port, Database port + 10]**.
+     * + If the value is **0**, the MySQL compatibility port is disabled.
+     */
+    mysqlCompatibilityPort?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the advance feature.
      */
     name?: pulumi.Input<string>;
     /**
      * Indicates the instance nodes information. Structure is documented below.
      */
     nodes?: pulumi.Input<pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceNode>[]>;
+    /**
+     * Specifies an array of one or more parameters to be set to the instance after launched.
+     * The parameters structure is documented below.
+     */
+    parameters?: pulumi.Input<pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceParameter>[]>;
     /**
      * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
@@ -451,7 +583,7 @@ export interface OpengaussInstanceState {
      */
     region?: pulumi.Input<string>;
     /**
-     * The replica number. The valid values are **2** and **3**, defaults to **3**.
+     * The replica number. The valid values are `2` and `3`, defaults to `3`.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
      * Changing this parameter will create a new resource.
      */
@@ -464,8 +596,8 @@ export interface OpengaussInstanceState {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3.
+     * Specifies the sharding number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      */
     shardingNum?: pulumi.Input<number>;
     /**
@@ -481,6 +613,10 @@ export interface OpengaussInstanceState {
      * Indicates the switch strategy.
      */
     switchStrategy?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the time zone. Defaults to **UTC+08:00**.
      * Changing this parameter will create a new resource.
@@ -508,6 +644,11 @@ export interface OpengaussInstanceState {
  */
 export interface OpengaussInstanceArgs {
     /**
+     * Specifies the advanced features.
+     * The advanceFeatures structure is documented below.
+     */
+    advanceFeatures?: pulumi.Input<pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceAdvanceFeature>[]>;
+    /**
      * Specifies whether auto renew is enabled.
      * Valid values are **true** and **false**. Defaults to **false**.
      */
@@ -519,7 +660,7 @@ export interface OpengaussInstanceArgs {
     availabilityZone: pulumi.Input<string>;
     /**
      * Specifies the advanced backup policy.
-     * The object structure is documented below.
+     * The backupStrategy structure is documented below.
      */
     backupStrategy?: pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceBackupStrategy>;
     /**
@@ -535,24 +676,42 @@ export interface OpengaussInstanceArgs {
      */
     configurationId?: pulumi.Input<string>;
     /**
-     * Specifies the coordinator number. Values: 1~9. The default value is 3.
+     * Specifies the coordinator number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      * The value must not be greater than twice value of `shardingNum`.
      */
     coordinatorNum?: pulumi.Input<number>;
     /**
      * Specifies the datastore information.
-     * The object structure is documented below.
+     * The datastore structure is documented below.
      * Changing this parameter will create a new resource.
      */
     datastore?: pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceDatastore>;
     /**
-     * Specifies the enterprise project ID.
+     * Specifies the key ID for disk encryption.
      * Changing this parameter will create a new resource.
+     */
+    diskEncryptionId?: pulumi.Input<string>;
+    /**
+     * Specifies whether to forcibly promote a standby node to primary.
+     * Defaults to **false**. Changing this parameter will create a new resource.
+     */
+    enableForceSwitch?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to enable single floating IP address policy,
+     * which is only suitable for primary/standby instances. Value options:
+     * + **true**: This function is enabled. Only one floating IP address is bound to the primary node of a DB instance. If a
+     * primary/standby fail over occurs, the floating IP address does not change.
+     * + **false (default value)**: The function is disabled. Each node is bound to a floating IP address. If a primary/standby
+     * fail over occurs, the floating IP addresses change.
+     */
+    enableSingleFloatIp?: pulumi.Input<boolean>;
+    /**
+     * Specifies the enterprise project ID.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the instance specifications. Please reference the API docs for valid
-     * options. Changing this parameter will create a new resource.
+     * Specifies the instance specifications.
      */
     flavor: pulumi.Input<string>;
     /**
@@ -567,11 +726,25 @@ export interface OpengaussInstanceArgs {
      */
     ha: pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceHa>;
     /**
-     * Specifies the instance name, which can be the same as an existing instance name.
-     * The value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
-     * letters, digits, hyphens (-), and underscores (_).
+     * Specifies the port for MySQL compatibility. Value range: **0** or
+     * **1024** to **39989**.
+     * + The following ports are used by the system and cannot be used: **2378**, **2379**, **2380**, **2400**, **4999**,
+     * **5000**, **5001**, **5100**, **5500**, **5999**, **6000**, **6001**, **6009**, **6010**, **6500**, **8015**, **8097**,
+     * **8098**, **8181**, **9090**, **9100**, **9180**, **9187**, **9200**, **12016**, **12017**, **20049**, **20050**,
+     * **21731**, **21732**, **32122**, **32123**, **32124**, **32125**, **32126**, **39001**,
+     * **[Database port, Database port + 10]**.
+     * + If the value is **0**, the MySQL compatibility port is disabled.
+     */
+    mysqlCompatibilityPort?: pulumi.Input<string>;
+    /**
+     * Specifies the name of the advance feature.
      */
     name?: pulumi.Input<string>;
+    /**
+     * Specifies an array of one or more parameters to be set to the instance after launched.
+     * The parameters structure is documented below.
+     */
+    parameters?: pulumi.Input<pulumi.Input<inputs.GaussDBforOpenGauss.OpengaussInstanceParameter>[]>;
     /**
      * Specifies the database password. The value must be `8` to `32` characters in length,
      * including uppercase and lowercase letters, digits, and special characters, such as **~!@#%^*-_=+?**. You are advised
@@ -604,7 +777,7 @@ export interface OpengaussInstanceArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * The replica number. The valid values are **2** and **3**, defaults to **3**.
+     * The replica number. The valid values are `2` and `3`, defaults to `3`.
      * Double replicas are only available for specific users and supports only instance versions are v1.3.0 or later.
      * Changing this parameter will create a new resource.
      */
@@ -617,8 +790,8 @@ export interface OpengaussInstanceArgs {
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies the sharding number. The valid value is range form `1` to `9`.
-     * The default value is 3.
+     * Specifies the sharding number.  
+     * The valid value is range form `1` to `9`. The default value is `3`.
      */
     shardingNum?: pulumi.Input<number>;
     /**
@@ -626,6 +799,10 @@ export interface OpengaussInstanceArgs {
      * Changing this parameter will create a new resource.
      */
     subnetId: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the GaussDB OpenGauss instance.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the time zone. Defaults to **UTC+08:00**.
      * Changing this parameter will create a new resource.

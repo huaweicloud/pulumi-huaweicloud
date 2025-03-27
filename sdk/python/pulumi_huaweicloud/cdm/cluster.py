@@ -40,16 +40,15 @@ class ClusterArgs:
         :param pulumi.Input[str] subnet_id: Specifies subnet ID. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Specifies VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] emails: Specifies email address for receiving notifications when a table/file migration
-               job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] is_auto_off: Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
                startup/shutdown functions cannot be enabled at the same time. When auto shutdown is enabled, if no job is running in
                the cluster and no scheduled job is created, a cluster will be automatically shut down 15 minutes after it starts
                running to reduce costs. The default value is `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies cluster name. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] phone_nums: Specifies phone number for receiving notifications when a table/file
-               migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               migration job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] region: The region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] schedule_boot_time: Specifies time for scheduled startup of a CDM cluster.
@@ -152,7 +151,7 @@ class ClusterArgs:
     def emails(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies email address for receiving notifications when a table/file migration
-        job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "emails")
 
@@ -165,7 +164,6 @@ class ClusterArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -205,7 +203,7 @@ class ClusterArgs:
     def phone_nums(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies phone number for receiving notifications when a table/file
-        migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        migration job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "phone_nums")
 
@@ -276,6 +274,7 @@ class _ClusterState:
                  emails: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 flavor_name: Optional[pulumi.Input[str]] = None,
                  instances: Optional[pulumi.Input[Sequence[pulumi.Input['ClusterInstanceArgs']]]] = None,
                  is_auto_off: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -296,10 +295,10 @@ class _ClusterState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: Create time. The format is: `YYYY-MM-DDThh:mm:ss`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] emails: Specifies email address for receiving notifications when a table/file migration
-               job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies flavor id. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] flavor_name: The flavor name. Format is `cdm.<flavor_type>`
         :param pulumi.Input[Sequence[pulumi.Input['ClusterInstanceArgs']]] instances: Instance list. Structure is documented below.
         :param pulumi.Input[bool] is_auto_off: Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
                startup/shutdown functions cannot be enabled at the same time. When auto shutdown is enabled, if no job is running in
@@ -307,7 +306,7 @@ class _ClusterState:
                running to reduce costs. The default value is `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies cluster name. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] phone_nums: Specifies phone number for receiving notifications when a table/file
-               migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               migration job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] public_endpoint: EIP bound to the cluster.
         :param pulumi.Input[str] public_ip: Public IP.
         :param pulumi.Input[str] region: The region in which to create the cluster resource. If omitted, the
@@ -336,6 +335,8 @@ class _ClusterState:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if flavor_name is not None:
+            pulumi.set(__self__, "flavor_name", flavor_name)
         if instances is not None:
             pulumi.set(__self__, "instances", instances)
         if is_auto_off is not None:
@@ -395,7 +396,7 @@ class _ClusterState:
     def emails(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies email address for receiving notifications when a table/file migration
-        job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "emails")
 
@@ -408,7 +409,6 @@ class _ClusterState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -427,6 +427,18 @@ class _ClusterState:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="flavorName")
+    def flavor_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        The flavor name. Format is `cdm.<flavor_type>`
+        """
+        return pulumi.get(self, "flavor_name")
+
+    @flavor_name.setter
+    def flavor_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "flavor_name", value)
 
     @property
     @pulumi.getter
@@ -472,7 +484,7 @@ class _ClusterState:
     def phone_nums(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         Specifies phone number for receiving notifications when a table/file
-        migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        migration job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "phone_nums")
 
@@ -685,9 +697,8 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] availability_zone: Specifies available zone.
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] emails: Specifies email address for receiving notifications when a table/file migration
-               job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies flavor id. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] is_auto_off: Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
                startup/shutdown functions cannot be enabled at the same time. When auto shutdown is enabled, if no job is running in
@@ -695,7 +706,7 @@ class Cluster(pulumi.CustomResource):
                running to reduce costs. The default value is `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies cluster name. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] phone_nums: Specifies phone number for receiving notifications when a table/file
-               migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               migration job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] region: The region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] schedule_boot_time: Specifies time for scheduled startup of a CDM cluster.
@@ -832,6 +843,7 @@ class Cluster(pulumi.CustomResource):
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["created"] = None
+            __props__.__dict__["flavor_name"] = None
             __props__.__dict__["instances"] = None
             __props__.__dict__["public_endpoint"] = None
             __props__.__dict__["public_ip"] = None
@@ -851,6 +863,7 @@ class Cluster(pulumi.CustomResource):
             emails: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
+            flavor_name: Optional[pulumi.Input[str]] = None,
             instances: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterInstanceArgs']]]]] = None,
             is_auto_off: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -876,10 +889,10 @@ class Cluster(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] created: Create time. The format is: `YYYY-MM-DDThh:mm:ss`.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] emails: Specifies email address for receiving notifications when a table/file migration
-               job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor_id: Specifies flavor id. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] flavor_name: The flavor name. Format is `cdm.<flavor_type>`
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterInstanceArgs']]]] instances: Instance list. Structure is documented below.
         :param pulumi.Input[bool] is_auto_off: Specifies Whether to enable auto shutdown. The auto shutdown and scheduled
                startup/shutdown functions cannot be enabled at the same time. When auto shutdown is enabled, if no job is running in
@@ -887,7 +900,7 @@ class Cluster(pulumi.CustomResource):
                running to reduce costs. The default value is `false`. Changing this parameter will create a new resource.
         :param pulumi.Input[str] name: Specifies cluster name. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] phone_nums: Specifies phone number for receiving notifications when a table/file
-               migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+               migration job fails or an EIP exception occurs. The max number is 20.
         :param pulumi.Input[str] public_endpoint: EIP bound to the cluster.
         :param pulumi.Input[str] public_ip: Public IP.
         :param pulumi.Input[str] region: The region in which to create the cluster resource. If omitted, the
@@ -915,6 +928,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["emails"] = emails
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor_id"] = flavor_id
+        __props__.__dict__["flavor_name"] = flavor_name
         __props__.__dict__["instances"] = instances
         __props__.__dict__["is_auto_off"] = is_auto_off
         __props__.__dict__["name"] = name
@@ -953,16 +967,15 @@ class Cluster(pulumi.CustomResource):
     def emails(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
         Specifies email address for receiving notifications when a table/file migration
-        job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "emails")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
-    def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
+    def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the enterprise project id.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -973,6 +986,14 @@ class Cluster(pulumi.CustomResource):
         Specifies flavor id. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="flavorName")
+    def flavor_name(self) -> pulumi.Output[str]:
+        """
+        The flavor name. Format is `cdm.<flavor_type>`
+        """
+        return pulumi.get(self, "flavor_name")
 
     @property
     @pulumi.getter
@@ -1006,7 +1027,7 @@ class Cluster(pulumi.CustomResource):
     def phone_nums(self) -> pulumi.Output[Optional[Sequence[str]]]:
         """
         Specifies phone number for receiving notifications when a table/file
-        migration job fails or an EIP exception occurs. The max number is 5. Changing this parameter will create a new resource.
+        migration job fails or an EIP exception occurs. The max number is 20.
         """
         return pulumi.get(self, "phone_nums")
 

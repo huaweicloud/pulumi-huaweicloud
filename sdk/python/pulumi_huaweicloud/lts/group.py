@@ -16,26 +16,36 @@ class GroupArgs:
     def __init__(__self__, *,
                  group_name: pulumi.Input[str],
                  ttl_in_days: pulumi.Input[int],
-                 region: Optional[pulumi.Input[str]] = None):
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Group resource.
-        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new
-               resource.
-        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days), value range: 1-30.
-        :param pulumi.Input[str] region: The region in which to create the log group resource. If omitted, the
-               provider-level region will be used. Changing this creates a new log group resource.
+        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days).  
+               The value is range from `1` to `365`.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the log group belongs.
+               Changing this parameter will create a new resource.
+               This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+               will be used.
+        :param pulumi.Input[str] region: Specifies the region in which to create the log group resource. If omitted, the
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the log group.
         """
         pulumi.set(__self__, "group_name", group_name)
         pulumi.set(__self__, "ttl_in_days", ttl_in_days)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
 
     @property
     @pulumi.getter(name="groupName")
     def group_name(self) -> pulumi.Input[str]:
         """
-        Specifies the log group name. Changing this parameter will create a new
-        resource.
+        Specifies the log group name. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_name")
 
@@ -47,7 +57,8 @@ class GroupArgs:
     @pulumi.getter(name="ttlInDays")
     def ttl_in_days(self) -> pulumi.Input[int]:
         """
-        Specifies the log expiration time(days), value range: 1-30.
+        Specifies the log expiration time(days).  
+        The value is range from `1` to `365`.
         """
         return pulumi.get(self, "ttl_in_days")
 
@@ -56,11 +67,26 @@ class GroupArgs:
         pulumi.set(self, "ttl_in_days", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the log group belongs.
+        Changing this parameter will create a new resource.
+        This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+        will be used.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the log group resource. If omitted, the
-        provider-level region will be used. Changing this creates a new log group resource.
+        Specifies the region in which to create the log group resource. If omitted, the
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -68,34 +94,87 @@ class GroupArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the log group.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
 
 @pulumi.input_type
 class _GroupState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl_in_days: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering Group resources.
-        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new
-               resource.
-        :param pulumi.Input[str] region: The region in which to create the log group resource. If omitted, the
-               provider-level region will be used. Changing this creates a new log group resource.
-        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days), value range: 1-30.
+        :param pulumi.Input[str] created_at: The creation time of the log group.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the log group belongs.
+               Changing this parameter will create a new resource.
+               This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+               will be used.
+        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the log group resource. If omitted, the
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the log group.
+        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days).  
+               The value is range from `1` to `365`.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if group_name is not None:
             pulumi.set(__self__, "group_name", group_name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if tags is not None:
+            pulumi.set(__self__, "tags", tags)
         if ttl_in_days is not None:
             pulumi.set(__self__, "ttl_in_days", ttl_in_days)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time of the log group.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID to which the log group belongs.
+        Changing this parameter will create a new resource.
+        This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+        will be used.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
 
     @property
     @pulumi.getter(name="groupName")
     def group_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the log group name. Changing this parameter will create a new
-        resource.
+        Specifies the log group name. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_name")
 
@@ -107,8 +186,8 @@ class _GroupState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the log group resource. If omitted, the
-        provider-level region will be used. Changing this creates a new log group resource.
+        Specifies the region in which to create the log group resource. If omitted, the
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -117,10 +196,23 @@ class _GroupState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the key/value pairs to associate with the log group.
+        """
+        return pulumi.get(self, "tags")
+
+    @tags.setter
+    def tags(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "tags", value)
+
+    @property
     @pulumi.getter(name="ttlInDays")
     def ttl_in_days(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the log expiration time(days), value range: 1-30.
+        Specifies the log expiration time(days).  
+        The value is range from `1` to `365`.
         """
         return pulumi.get(self, "ttl_in_days")
 
@@ -134,40 +226,46 @@ class Group(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl_in_days: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
         Manages a log group resource within HuaweiCloud.
 
         ## Example Usage
-        ### create a log group
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        log_group1 = huaweicloud.lts.Group("logGroup1",
+        test = huaweicloud.lts.Group("test",
             group_name="log_group1",
-            ttl_in_days=1)
+            ttl_in_days=30)
         ```
 
         ## Import
 
-        Log group can be imported using the `id`, e.g.
+        The log group can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Lts/group:Group group_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:Lts/group:Group test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new
-               resource.
-        :param pulumi.Input[str] region: The region in which to create the log group resource. If omitted, the
-               provider-level region will be used. Changing this creates a new log group resource.
-        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days), value range: 1-30.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the log group belongs.
+               Changing this parameter will create a new resource.
+               This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+               will be used.
+        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the log group resource. If omitted, the
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the log group.
+        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days).  
+               The value is range from `1` to `365`.
         """
         ...
     @overload
@@ -179,23 +277,22 @@ class Group(pulumi.CustomResource):
         Manages a log group resource within HuaweiCloud.
 
         ## Example Usage
-        ### create a log group
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        log_group1 = huaweicloud.lts.Group("logGroup1",
+        test = huaweicloud.lts.Group("test",
             group_name="log_group1",
-            ttl_in_days=1)
+            ttl_in_days=30)
         ```
 
         ## Import
 
-        Log group can be imported using the `id`, e.g.
+        The log group can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Lts/group:Group group_1 7117d38e-4c8f-4624-a505-bd96b97d024c
+         $ pulumi import huaweicloud:Lts/group:Group test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -213,8 +310,10 @@ class Group(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  group_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  ttl_in_days: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -225,13 +324,16 @@ class Group(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = GroupArgs.__new__(GroupArgs)
 
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if group_name is None and not opts.urn:
                 raise TypeError("Missing required property 'group_name'")
             __props__.__dict__["group_name"] = group_name
             __props__.__dict__["region"] = region
+            __props__.__dict__["tags"] = tags
             if ttl_in_days is None and not opts.urn:
                 raise TypeError("Missing required property 'ttl_in_days'")
             __props__.__dict__["ttl_in_days"] = ttl_in_days
+            __props__.__dict__["created_at"] = None
         super(Group, __self__).__init__(
             'huaweicloud:Lts/group:Group',
             resource_name,
@@ -242,8 +344,11 @@ class Group(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             group_name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             ttl_in_days: Optional[pulumi.Input[int]] = None) -> 'Group':
         """
         Get an existing Group resource's state with the given name, id, and optional extra
@@ -252,27 +357,54 @@ class Group(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new
-               resource.
-        :param pulumi.Input[str] region: The region in which to create the log group resource. If omitted, the
-               provider-level region will be used. Changing this creates a new log group resource.
-        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days), value range: 1-30.
+        :param pulumi.Input[str] created_at: The creation time of the log group.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID to which the log group belongs.
+               Changing this parameter will create a new resource.
+               This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+               will be used.
+        :param pulumi.Input[str] group_name: Specifies the log group name. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the log group resource. If omitted, the
+               provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the log group.
+        :param pulumi.Input[int] ttl_in_days: Specifies the log expiration time(days).  
+               The value is range from `1` to `365`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _GroupState.__new__(_GroupState)
 
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["group_name"] = group_name
         __props__.__dict__["region"] = region
+        __props__.__dict__["tags"] = tags
         __props__.__dict__["ttl_in_days"] = ttl_in_days
         return Group(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The creation time of the log group.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID to which the log group belongs.
+        Changing this parameter will create a new resource.
+        This parameter is valid only when the enterprise project function is enabled, if omitted, default enterprise project
+        will be used.
+        """
+        return pulumi.get(self, "enterprise_project_id")
 
     @property
     @pulumi.getter(name="groupName")
     def group_name(self) -> pulumi.Output[str]:
         """
-        Specifies the log group name. Changing this parameter will create a new
-        resource.
+        Specifies the log group name. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "group_name")
 
@@ -280,16 +412,25 @@ class Group(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the log group resource. If omitted, the
-        provider-level region will be used. Changing this creates a new log group resource.
+        Specifies the region in which to create the log group resource. If omitted, the
+        provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the key/value pairs to associate with the log group.
+        """
+        return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter(name="ttlInDays")
     def ttl_in_days(self) -> pulumi.Output[int]:
         """
-        Specifies the log expiration time(days), value range: 1-30.
+        Specifies the log expiration time(days).  
+        The value is range from `1` to `365`.
         """
         return pulumi.get(self, "ttl_in_days")
 

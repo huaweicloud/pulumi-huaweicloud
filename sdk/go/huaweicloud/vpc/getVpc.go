@@ -81,7 +81,9 @@ type LookupVpcResult struct {
 	Region              string `pulumi:"region"`
 	// Deprecated: use huaweicloud_vpc_route_table data source to get all routes
 	Routes []GetVpcRoute `pulumi:"routes"`
-	Status string        `pulumi:"status"`
+	// The secondary CIDR blocks of the VPC.
+	SecondaryCidrs []string `pulumi:"secondaryCidrs"`
+	Status         string   `pulumi:"status"`
 	// The key/value pairs to associate with the VPC.
 	Tags map[string]string `pulumi:"tags"`
 }
@@ -165,6 +167,11 @@ func (o LookupVpcResultOutput) Region() pulumi.StringOutput {
 // Deprecated: use huaweicloud_vpc_route_table data source to get all routes
 func (o LookupVpcResultOutput) Routes() GetVpcRouteArrayOutput {
 	return o.ApplyT(func(v LookupVpcResult) []GetVpcRoute { return v.Routes }).(GetVpcRouteArrayOutput)
+}
+
+// The secondary CIDR blocks of the VPC.
+func (o LookupVpcResultOutput) SecondaryCidrs() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v LookupVpcResult) []string { return v.SecondaryCidrs }).(pulumi.StringArrayOutput)
 }
 
 func (o LookupVpcResultOutput) Status() pulumi.StringOutput {

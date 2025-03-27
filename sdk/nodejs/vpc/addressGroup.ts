@@ -2,6 +2,7 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
@@ -30,6 +31,29 @@ import * as utilities from "../utilities";
  * const ipv6 = new huaweicloud.Vpc.AddressGroup("ipv6", {
  *     addresses: ["2001:db8:a583:6e::/64"],
  *     ipVersion: 6,
+ * });
+ * ```
+ * ### Address Group with ipExtraSet
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as huaweicloud from "@pulumi/huaweicloud";
+ *
+ * const ipv6 = new huaweicloud.Vpc.AddressGroup("ipv6", {
+ *     ipExtraSets: [
+ *         {
+ *             ip: "192.168.3.2",
+ *             remarks: "terraform test 1",
+ *         },
+ *         {
+ *             ip: "192.168.5.0/24",
+ *             remarks: "terraform test 2",
+ *         },
+ *         {
+ *             ip: "192.168.3.20-192.168.3.100",
+ *         },
+ *     ],
+ *     ipVersion: 4,
  * });
  * ```
  *
@@ -85,12 +109,12 @@ export class AddressGroup extends pulumi.CustomResource {
 
     /**
      * Specifies an array of one or more IP addresses. The address can be a single IP
-     * address, IP address range or IP address CIDR. The maximum length is 20.
+     * address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
      */
     public readonly addresses!: pulumi.Output<string[]>;
     /**
      * Specifies the supplementary information about the IP address group.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -105,18 +129,25 @@ export class AddressGroup extends pulumi.CustomResource {
      */
     public readonly forceDestroy!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the IP addresses and their remarks in an IP address group.
+     * The ipExtraSet structure is documented below.
+     * Only one of `addresses` and `ipExtraSet` can be specified.
+     */
+    public readonly ipExtraSets!: pulumi.Output<outputs.Vpc.AddressGroupIpExtraSet[]>;
+    /**
      * Specifies the IP version, either `4` (default) or `6`.
      * Changing this creates a new address group.
      */
     public readonly ipVersion!: pulumi.Output<number | undefined>;
     /**
      * Specifies the maximum number of addresses that an address group can contain.
-     * Value range: **1**-**20**, the default value is **20**.
+     * The valid value is range from `1` to `20`, the default value is `20`.
      */
     public readonly maxCapacity!: pulumi.Output<number>;
     /**
-     * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-     * letters, digits, underscores (_), hyphens (-) and periods (.).
+     * Specifies the IP address group name.  
+     * The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+     * periods (.).
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -132,7 +163,7 @@ export class AddressGroup extends pulumi.CustomResource {
      * @param args The arguments to use to populate this resource's properties.
      * @param opts A bag of options that control this resource's behavior.
      */
-    constructor(name: string, args: AddressGroupArgs, opts?: pulumi.CustomResourceOptions)
+    constructor(name: string, args?: AddressGroupArgs, opts?: pulumi.CustomResourceOptions)
     constructor(name: string, argsOrState?: AddressGroupArgs | AddressGroupState, opts?: pulumi.CustomResourceOptions) {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
@@ -142,19 +173,18 @@ export class AddressGroup extends pulumi.CustomResource {
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["forceDestroy"] = state ? state.forceDestroy : undefined;
+            resourceInputs["ipExtraSets"] = state ? state.ipExtraSets : undefined;
             resourceInputs["ipVersion"] = state ? state.ipVersion : undefined;
             resourceInputs["maxCapacity"] = state ? state.maxCapacity : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
         } else {
             const args = argsOrState as AddressGroupArgs | undefined;
-            if ((!args || args.addresses === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'addresses'");
-            }
             resourceInputs["addresses"] = args ? args.addresses : undefined;
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["forceDestroy"] = args ? args.forceDestroy : undefined;
+            resourceInputs["ipExtraSets"] = args ? args.ipExtraSets : undefined;
             resourceInputs["ipVersion"] = args ? args.ipVersion : undefined;
             resourceInputs["maxCapacity"] = args ? args.maxCapacity : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
@@ -171,12 +201,12 @@ export class AddressGroup extends pulumi.CustomResource {
 export interface AddressGroupState {
     /**
      * Specifies an array of one or more IP addresses. The address can be a single IP
-     * address, IP address range or IP address CIDR. The maximum length is 20.
+     * address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
      */
     addresses?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the supplementary information about the IP address group.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
@@ -191,18 +221,25 @@ export interface AddressGroupState {
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
+     * Specifies the IP addresses and their remarks in an IP address group.
+     * The ipExtraSet structure is documented below.
+     * Only one of `addresses` and `ipExtraSet` can be specified.
+     */
+    ipExtraSets?: pulumi.Input<pulumi.Input<inputs.Vpc.AddressGroupIpExtraSet>[]>;
+    /**
      * Specifies the IP version, either `4` (default) or `6`.
      * Changing this creates a new address group.
      */
     ipVersion?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of addresses that an address group can contain.
-     * Value range: **1**-**20**, the default value is **20**.
+     * The valid value is range from `1` to `20`, the default value is `20`.
      */
     maxCapacity?: pulumi.Input<number>;
     /**
-     * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-     * letters, digits, underscores (_), hyphens (-) and periods (.).
+     * Specifies the IP address group name.  
+     * The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+     * periods (.).
      */
     name?: pulumi.Input<string>;
     /**
@@ -218,12 +255,12 @@ export interface AddressGroupState {
 export interface AddressGroupArgs {
     /**
      * Specifies an array of one or more IP addresses. The address can be a single IP
-     * address, IP address range or IP address CIDR. The maximum length is 20.
+     * address, IP address range or IP address CIDR. Only one of `addresses` and `ipExtraSet` can be specified.
      */
-    addresses: pulumi.Input<pulumi.Input<string>[]>;
+    addresses?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the supplementary information about the IP address group.
-     * The value is a string of no more than 255 characters and cannot contain angle brackets (< or >).
+     * The value is a string of no more than `255` characters and cannot contain angle brackets (< or >).
      */
     description?: pulumi.Input<string>;
     /**
@@ -238,18 +275,25 @@ export interface AddressGroupArgs {
      */
     forceDestroy?: pulumi.Input<boolean>;
     /**
+     * Specifies the IP addresses and their remarks in an IP address group.
+     * The ipExtraSet structure is documented below.
+     * Only one of `addresses` and `ipExtraSet` can be specified.
+     */
+    ipExtraSets?: pulumi.Input<pulumi.Input<inputs.Vpc.AddressGroupIpExtraSet>[]>;
+    /**
      * Specifies the IP version, either `4` (default) or `6`.
      * Changing this creates a new address group.
      */
     ipVersion?: pulumi.Input<number>;
     /**
      * Specifies the maximum number of addresses that an address group can contain.
-     * Value range: **1**-**20**, the default value is **20**.
+     * The valid value is range from `1` to `20`, the default value is `20`.
      */
     maxCapacity?: pulumi.Input<number>;
     /**
-     * Specifies the IP address group name. The value is a string of 1 to 64 characters that can contain
-     * letters, digits, underscores (_), hyphens (-) and periods (.).
+     * Specifies the IP address group name.  
+     * The value is a string of `1` to `64` characters that can contain letters, digits, underscores (_), hyphens (-) and
+     * periods (.).
      */
     name?: pulumi.Input<string>;
     /**

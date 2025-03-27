@@ -14,24 +14,25 @@ __all__ = ['RabbitmqInstanceArgs', 'RabbitmqInstance']
 @pulumi.input_type
 class RabbitmqInstanceArgs:
     def __init__(__self__, *,
-                 access_user: pulumi.Input[str],
                  network_id: pulumi.Input[str],
-                 password: pulumi.Input[str],
                  security_group_id: pulumi.Input[str],
                  storage_spec_code: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
+                 access_user: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  available_zones: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  broker_num: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_acl: Optional[pulumi.Input[bool]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
@@ -42,20 +43,15 @@ class RabbitmqInstanceArgs:
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a RabbitmqInstance resource.
-        :param pulumi.Input[str] access_user: Specifies a username. A username consists of 4 to 64 characters and
-               supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
         :param pulumi.Input[str] network_id: Specifies the ID of a subnet. Changing this creates a new instance
                resource.
-        :param pulumi.Input[str] password: Specifies the password of the DMS RabbitMQ instance. A password must meet
-               the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
-               character types: lowercase letters, uppercase letters, digits,
-               and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
         :param pulumi.Input[str] security_group_id: Specifies the ID of a security group.
         :param pulumi.Input[str] storage_spec_code: Specifies the storage I/O specification.
-               Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+               Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
                Changing this creates a new instance resource.
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
+        :param pulumi.Input[str] access_user: Specifies a username. A username consists of 4 to 64 characters and
+               supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] availability_zones: Specifies the names of an AZ.
                The parameter value can not be left blank or an empty array.
@@ -66,6 +62,8 @@ class RabbitmqInstanceArgs:
                **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         :param pulumi.Input[str] description: Specifies the description of the DMS RabbitMQ instance.
                It is a character string containing not more than 1,024 characters.
+        :param pulumi.Input[bool] enable_acl: Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+               Default to **false**.
         :param pulumi.Input[str] engine_version: Specifies the version of the RabbitMQ engine. Default to "3.7.17".
                Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the RabbitMQ instance.
@@ -86,6 +84,10 @@ class RabbitmqInstanceArgs:
                In this case, the system automatically allocates the default end time 06:00.
         :param pulumi.Input[str] name: Specifies the name of the DMS RabbitMQ instance. An instance name starts with a letter,
                consists of 4 to 64 characters, and supports only letters, digits, hyphens (-) and underscores (_).
+        :param pulumi.Input[str] password: Specifies the password of the DMS RabbitMQ instance. A password must meet
+               the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
+               character types: lowercase letters, uppercase letters, digits,
+               and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to
                **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
                This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
@@ -105,12 +107,12 @@ class RabbitmqInstanceArgs:
                and 300 GB x number of nodes to 90,000 GB
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS RabbitMQ instance.
         """
-        pulumi.set(__self__, "access_user", access_user)
         pulumi.set(__self__, "network_id", network_id)
-        pulumi.set(__self__, "password", password)
         pulumi.set(__self__, "security_group_id", security_group_id)
         pulumi.set(__self__, "storage_spec_code", storage_spec_code)
         pulumi.set(__self__, "vpc_id", vpc_id)
+        if access_user is not None:
+            pulumi.set(__self__, "access_user", access_user)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zones is not None:
@@ -126,6 +128,8 @@ class RabbitmqInstanceArgs:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_acl is not None:
+            pulumi.set(__self__, "enable_acl", enable_acl)
         if engine_version is not None:
             pulumi.set(__self__, "engine_version", engine_version)
         if enterprise_project_id is not None:
@@ -138,6 +142,8 @@ class RabbitmqInstanceArgs:
             pulumi.set(__self__, "maintain_end", maintain_end)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if password is not None:
+            pulumi.set(__self__, "password", password)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -159,19 +165,6 @@ class RabbitmqInstanceArgs:
             pulumi.set(__self__, "tags", tags)
 
     @property
-    @pulumi.getter(name="accessUser")
-    def access_user(self) -> pulumi.Input[str]:
-        """
-        Specifies a username. A username consists of 4 to 64 characters and
-        supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
-        """
-        return pulumi.get(self, "access_user")
-
-    @access_user.setter
-    def access_user(self, value: pulumi.Input[str]):
-        pulumi.set(self, "access_user", value)
-
-    @property
     @pulumi.getter(name="networkId")
     def network_id(self) -> pulumi.Input[str]:
         """
@@ -183,22 +176,6 @@ class RabbitmqInstanceArgs:
     @network_id.setter
     def network_id(self, value: pulumi.Input[str]):
         pulumi.set(self, "network_id", value)
-
-    @property
-    @pulumi.getter
-    def password(self) -> pulumi.Input[str]:
-        """
-        Specifies the password of the DMS RabbitMQ instance. A password must meet
-        the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
-        character types: lowercase letters, uppercase letters, digits,
-        and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
-        """
-        return pulumi.get(self, "password")
-
-    @password.setter
-    def password(self, value: pulumi.Input[str]):
-        pulumi.set(self, "password", value)
 
     @property
     @pulumi.getter(name="securityGroupId")
@@ -217,7 +194,7 @@ class RabbitmqInstanceArgs:
     def storage_spec_code(self) -> pulumi.Input[str]:
         """
         Specifies the storage I/O specification.
-        Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+        Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "storage_spec_code")
@@ -237,6 +214,19 @@ class RabbitmqInstanceArgs:
     @vpc_id.setter
     def vpc_id(self, value: pulumi.Input[str]):
         pulumi.set(self, "vpc_id", value)
+
+    @property
+    @pulumi.getter(name="accessUser")
+    def access_user(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies a username. A username consists of 4 to 64 characters and
+        supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
+        """
+        return pulumi.get(self, "access_user")
+
+    @access_user.setter
+    def access_user(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "access_user", value)
 
     @property
     @pulumi.getter(name="autoRenew")
@@ -311,6 +301,19 @@ class RabbitmqInstanceArgs:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="enableAcl")
+    def enable_acl(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+        Default to **false**.
+        """
+        return pulumi.get(self, "enable_acl")
+
+    @enable_acl.setter
+    def enable_acl(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_acl", value)
 
     @property
     @pulumi.getter(name="engineVersion")
@@ -397,6 +400,21 @@ class RabbitmqInstanceArgs:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the password of the DMS RabbitMQ instance. A password must meet
+        the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
+        character types: lowercase letters, uppercase letters, digits,
+        and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
+        """
+        return pulumi.get(self, "password")
+
+    @password.setter
+    def password(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "password", value)
 
     @property
     @pulumi.getter
@@ -513,12 +531,16 @@ class _RabbitmqInstanceState:
                  broker_num: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  connect_address: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_acl: Optional[pulumi.Input[bool]] = None,
                  enable_public_ip: Optional[pulumi.Input[bool]] = None,
                  engine: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 extend_times: Optional[pulumi.Input[int]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
+                 is_logical_volume: Optional[pulumi.Input[bool]] = None,
                  maintain_begin: Optional[pulumi.Input[str]] = None,
                  maintain_end: Optional[pulumi.Input[str]] = None,
                  management_connect_address: Optional[pulumi.Input[str]] = None,
@@ -530,6 +552,7 @@ class _RabbitmqInstanceState:
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  product_id: Optional[pulumi.Input[str]] = None,
+                 public_ip_address: Optional[pulumi.Input[str]] = None,
                  public_ip_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  resource_spec_code: Optional[pulumi.Input[str]] = None,
@@ -558,15 +581,20 @@ class _RabbitmqInstanceState:
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are
                **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         :param pulumi.Input[str] connect_address: Indicates the IP address of the DMS RabbitMQ instance.
+        :param pulumi.Input[str] created_at: Indicates the create time of the DMS RabbitMQ instance.
         :param pulumi.Input[str] description: Specifies the description of the DMS RabbitMQ instance.
                It is a character string containing not more than 1,024 characters.
+        :param pulumi.Input[bool] enable_acl: Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+               Default to **false**.
         :param pulumi.Input[bool] enable_public_ip: Indicates whether public access to the DMS RabbitMQ instance is enabled.
         :param pulumi.Input[str] engine: Indicates the message engine.
         :param pulumi.Input[str] engine_version: Specifies the version of the RabbitMQ engine. Default to "3.7.17".
                Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the RabbitMQ instance.
+        :param pulumi.Input[int] extend_times: Indicates the extend times of the DMS RabbitMQ instance.
         :param pulumi.Input[str] flavor_id: Specifies a flavor ID.
                It is mandatory when the `charging_mode` is **prePaid**.
+        :param pulumi.Input[bool] is_logical_volume: Indicates whether the DMS RabbitMQ instance is logical volume.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm.
                The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
@@ -589,7 +617,6 @@ class _RabbitmqInstanceState:
                the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
                character types: lowercase letters, uppercase letters, digits,
                and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to
                **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
                This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
@@ -597,6 +624,7 @@ class _RabbitmqInstanceState:
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this creates a new resource.
         :param pulumi.Input[int] port: Indicates the port number of the DMS RabbitMQ instance.
+        :param pulumi.Input[str] public_ip_address: Indicates the public ip address of the DMS RabbitMQ instance.
         :param pulumi.Input[str] public_ip_id: Specifies the ID of the elastic IP address (EIP)
                bound to the DMS RabbitMQ instance.
         :param pulumi.Input[str] region: The region in which to create the DMS RabbitMQ instance resource. If omitted,
@@ -614,7 +642,7 @@ class _RabbitmqInstanceState:
                + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
                and 300 GB x number of nodes to 90,000 GB
         :param pulumi.Input[str] storage_spec_code: Specifies the storage I/O specification.
-               Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+               Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
                Changing this creates a new instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS RabbitMQ instance.
         :param pulumi.Input[str] type: Indicates the DMS RabbitMQ instance type.
@@ -640,8 +668,12 @@ class _RabbitmqInstanceState:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if connect_address is not None:
             pulumi.set(__self__, "connect_address", connect_address)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enable_acl is not None:
+            pulumi.set(__self__, "enable_acl", enable_acl)
         if enable_public_ip is not None:
             pulumi.set(__self__, "enable_public_ip", enable_public_ip)
         if engine is not None:
@@ -650,8 +682,12 @@ class _RabbitmqInstanceState:
             pulumi.set(__self__, "engine_version", engine_version)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if extend_times is not None:
+            pulumi.set(__self__, "extend_times", extend_times)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
+        if is_logical_volume is not None:
+            pulumi.set(__self__, "is_logical_volume", is_logical_volume)
         if maintain_begin is not None:
             pulumi.set(__self__, "maintain_begin", maintain_begin)
         if maintain_end is not None:
@@ -680,6 +716,8 @@ class _RabbitmqInstanceState:
             pulumi.log.warn("""product_id is deprecated: product_id has deprecated, please use \"flavor_id\" instead.""")
         if product_id is not None:
             pulumi.set(__self__, "product_id", product_id)
+        if public_ip_address is not None:
+            pulumi.set(__self__, "public_ip_address", public_ip_address)
         if public_ip_id is not None:
             pulumi.set(__self__, "public_ip_id", public_ip_id)
         if region is not None:
@@ -798,6 +836,18 @@ class _RabbitmqInstanceState:
         pulumi.set(self, "connect_address", value)
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the create time of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
@@ -809,6 +859,19 @@ class _RabbitmqInstanceState:
     @description.setter
     def description(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="enableAcl")
+    def enable_acl(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+        Default to **false**.
+        """
+        return pulumi.get(self, "enable_acl")
+
+    @enable_acl.setter
+    def enable_acl(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_acl", value)
 
     @property
     @pulumi.getter(name="enablePublicIp")
@@ -860,6 +923,18 @@ class _RabbitmqInstanceState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="extendTimes")
+    def extend_times(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the extend times of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "extend_times")
+
+    @extend_times.setter
+    def extend_times(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "extend_times", value)
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -871,6 +946,18 @@ class _RabbitmqInstanceState:
     @flavor_id.setter
     def flavor_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor_id", value)
+
+    @property
+    @pulumi.getter(name="isLogicalVolume")
+    def is_logical_volume(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the DMS RabbitMQ instance is logical volume.
+        """
+        return pulumi.get(self, "is_logical_volume")
+
+    @is_logical_volume.setter
+    def is_logical_volume(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_logical_volume", value)
 
     @property
     @pulumi.getter(name="maintainBegin")
@@ -962,7 +1049,6 @@ class _RabbitmqInstanceState:
         the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
         character types: lowercase letters, uppercase letters, digits,
         and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
         """
         return pulumi.get(self, "password")
 
@@ -1018,6 +1104,18 @@ class _RabbitmqInstanceState:
     @product_id.setter
     def product_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "product_id", value)
+
+    @property
+    @pulumi.getter(name="publicIpAddress")
+    def public_ip_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the public ip address of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "public_ip_address")
+
+    @public_ip_address.setter
+    def public_ip_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_ip_address", value)
 
     @property
     @pulumi.getter(name="publicIpId")
@@ -1128,7 +1226,7 @@ class _RabbitmqInstanceState:
     def storage_spec_code(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the storage I/O specification.
-        Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+        Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "storage_spec_code")
@@ -1222,6 +1320,7 @@ class RabbitmqInstance(pulumi.CustomResource):
                  broker_num: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_acl: Optional[pulumi.Input[bool]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
@@ -1255,7 +1354,7 @@ class RabbitmqInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dms/rabbitmqInstance:RabbitmqInstance huaweicloud_dms_rabbitmq_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
 
          ...
 
@@ -1283,6 +1382,8 @@ class RabbitmqInstance(pulumi.CustomResource):
                **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         :param pulumi.Input[str] description: Specifies the description of the DMS RabbitMQ instance.
                It is a character string containing not more than 1,024 characters.
+        :param pulumi.Input[bool] enable_acl: Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+               Default to **false**.
         :param pulumi.Input[str] engine_version: Specifies the version of the RabbitMQ engine. Default to "3.7.17".
                Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the RabbitMQ instance.
@@ -1309,7 +1410,6 @@ class RabbitmqInstance(pulumi.CustomResource):
                the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
                character types: lowercase letters, uppercase letters, digits,
                and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to
                **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
                This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
@@ -1329,7 +1429,7 @@ class RabbitmqInstance(pulumi.CustomResource):
                + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
                and 300 GB x number of nodes to 90,000 GB
         :param pulumi.Input[str] storage_spec_code: Specifies the storage I/O specification.
-               Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+               Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
                Changing this creates a new instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS RabbitMQ instance.
         :param pulumi.Input[str] vpc_id: Specifies the ID of a VPC. Changing this creates a new instance resource.
@@ -1353,7 +1453,7 @@ class RabbitmqInstance(pulumi.CustomResource):
          $ pulumi import huaweicloud:Dms/rabbitmqInstance:RabbitmqInstance huaweicloud_dms_rabbitmq_instance.instance_1 8d3c7938-dc47-4937-a30f-c80de381c5e3
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `auto_renew`, `period` and `period_unit`. It is generally recommended running `terraform plan` after importing a DMS RabbitMQ instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dms_rabbitmq_instance" "instance_1" {
 
          ...
 
@@ -1389,6 +1489,7 @@ class RabbitmqInstance(pulumi.CustomResource):
                  broker_num: Optional[pulumi.Input[int]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enable_acl: Optional[pulumi.Input[bool]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
@@ -1417,8 +1518,6 @@ class RabbitmqInstance(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = RabbitmqInstanceArgs.__new__(RabbitmqInstanceArgs)
 
-            if access_user is None and not opts.urn:
-                raise TypeError("Missing required property 'access_user'")
             __props__.__dict__["access_user"] = access_user
             __props__.__dict__["auto_renew"] = auto_renew
             __props__.__dict__["availability_zones"] = availability_zones
@@ -1429,6 +1528,7 @@ class RabbitmqInstance(pulumi.CustomResource):
             __props__.__dict__["broker_num"] = broker_num
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["description"] = description
+            __props__.__dict__["enable_acl"] = enable_acl
             __props__.__dict__["engine_version"] = engine_version
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["flavor_id"] = flavor_id
@@ -1438,8 +1538,6 @@ class RabbitmqInstance(pulumi.CustomResource):
             if network_id is None and not opts.urn:
                 raise TypeError("Missing required property 'network_id'")
             __props__.__dict__["network_id"] = network_id
-            if password is None and not opts.urn:
-                raise TypeError("Missing required property 'password'")
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
@@ -1462,11 +1560,15 @@ class RabbitmqInstance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["connect_address"] = None
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["enable_public_ip"] = None
             __props__.__dict__["engine"] = None
+            __props__.__dict__["extend_times"] = None
+            __props__.__dict__["is_logical_volume"] = None
             __props__.__dict__["management_connect_address"] = None
             __props__.__dict__["manegement_connect_address"] = None
             __props__.__dict__["port"] = None
+            __props__.__dict__["public_ip_address"] = None
             __props__.__dict__["resource_spec_code"] = None
             __props__.__dict__["specification"] = None
             __props__.__dict__["status"] = None
@@ -1491,12 +1593,16 @@ class RabbitmqInstance(pulumi.CustomResource):
             broker_num: Optional[pulumi.Input[int]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             connect_address: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enable_acl: Optional[pulumi.Input[bool]] = None,
             enable_public_ip: Optional[pulumi.Input[bool]] = None,
             engine: Optional[pulumi.Input[str]] = None,
             engine_version: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            extend_times: Optional[pulumi.Input[int]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
+            is_logical_volume: Optional[pulumi.Input[bool]] = None,
             maintain_begin: Optional[pulumi.Input[str]] = None,
             maintain_end: Optional[pulumi.Input[str]] = None,
             management_connect_address: Optional[pulumi.Input[str]] = None,
@@ -1508,6 +1614,7 @@ class RabbitmqInstance(pulumi.CustomResource):
             period_unit: Optional[pulumi.Input[str]] = None,
             port: Optional[pulumi.Input[int]] = None,
             product_id: Optional[pulumi.Input[str]] = None,
+            public_ip_address: Optional[pulumi.Input[str]] = None,
             public_ip_id: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             resource_spec_code: Optional[pulumi.Input[str]] = None,
@@ -1541,15 +1648,20 @@ class RabbitmqInstance(pulumi.CustomResource):
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are
                **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         :param pulumi.Input[str] connect_address: Indicates the IP address of the DMS RabbitMQ instance.
+        :param pulumi.Input[str] created_at: Indicates the create time of the DMS RabbitMQ instance.
         :param pulumi.Input[str] description: Specifies the description of the DMS RabbitMQ instance.
                It is a character string containing not more than 1,024 characters.
+        :param pulumi.Input[bool] enable_acl: Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+               Default to **false**.
         :param pulumi.Input[bool] enable_public_ip: Indicates whether public access to the DMS RabbitMQ instance is enabled.
         :param pulumi.Input[str] engine: Indicates the message engine.
         :param pulumi.Input[str] engine_version: Specifies the version of the RabbitMQ engine. Default to "3.7.17".
                Changing this creates a new instance resource.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the RabbitMQ instance.
+        :param pulumi.Input[int] extend_times: Indicates the extend times of the DMS RabbitMQ instance.
         :param pulumi.Input[str] flavor_id: Specifies a flavor ID.
                It is mandatory when the `charging_mode` is **prePaid**.
+        :param pulumi.Input[bool] is_logical_volume: Indicates whether the DMS RabbitMQ instance is logical volume.
         :param pulumi.Input[str] maintain_begin: Specifies the time at which a maintenance time window starts. Format: HH:mm.
                The start time and end time of a maintenance time window must indicate the time segment of a supported maintenance
                time window.
@@ -1572,7 +1684,6 @@ class RabbitmqInstance(pulumi.CustomResource):
                the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
                character types: lowercase letters, uppercase letters, digits,
                and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-               Changing this creates a new instance resource.
         :param pulumi.Input[int] period: Specifies the charging period of the instance. If `period_unit` is set to
                **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
                This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
@@ -1580,6 +1691,7 @@ class RabbitmqInstance(pulumi.CustomResource):
                Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this creates a new resource.
         :param pulumi.Input[int] port: Indicates the port number of the DMS RabbitMQ instance.
+        :param pulumi.Input[str] public_ip_address: Indicates the public ip address of the DMS RabbitMQ instance.
         :param pulumi.Input[str] public_ip_id: Specifies the ID of the elastic IP address (EIP)
                bound to the DMS RabbitMQ instance.
         :param pulumi.Input[str] region: The region in which to create the DMS RabbitMQ instance resource. If omitted,
@@ -1597,7 +1709,7 @@ class RabbitmqInstance(pulumi.CustomResource):
                + Cluster RabbitMQ instance: 100 GB x number of nodes to 90,000 GB, 200 GB x number of nodes to 90,000 GB,
                and 300 GB x number of nodes to 90,000 GB
         :param pulumi.Input[str] storage_spec_code: Specifies the storage I/O specification.
-               Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+               Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
                Changing this creates a new instance resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the DMS RabbitMQ instance.
         :param pulumi.Input[str] type: Indicates the DMS RabbitMQ instance type.
@@ -1617,12 +1729,16 @@ class RabbitmqInstance(pulumi.CustomResource):
         __props__.__dict__["broker_num"] = broker_num
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["connect_address"] = connect_address
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
+        __props__.__dict__["enable_acl"] = enable_acl
         __props__.__dict__["enable_public_ip"] = enable_public_ip
         __props__.__dict__["engine"] = engine
         __props__.__dict__["engine_version"] = engine_version
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["extend_times"] = extend_times
         __props__.__dict__["flavor_id"] = flavor_id
+        __props__.__dict__["is_logical_volume"] = is_logical_volume
         __props__.__dict__["maintain_begin"] = maintain_begin
         __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["management_connect_address"] = management_connect_address
@@ -1634,6 +1750,7 @@ class RabbitmqInstance(pulumi.CustomResource):
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["port"] = port
         __props__.__dict__["product_id"] = product_id
+        __props__.__dict__["public_ip_address"] = public_ip_address
         __props__.__dict__["public_ip_id"] = public_ip_id
         __props__.__dict__["region"] = region
         __props__.__dict__["resource_spec_code"] = resource_spec_code
@@ -1653,7 +1770,7 @@ class RabbitmqInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="accessUser")
-    def access_user(self) -> pulumi.Output[str]:
+    def access_user(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies a username. A username consists of 4 to 64 characters and
         supports only letters, digits, and hyphens (-). Changing this creates a new instance resource.
@@ -1710,6 +1827,14 @@ class RabbitmqInstance(pulumi.CustomResource):
         return pulumi.get(self, "connect_address")
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the create time of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
@@ -1717,6 +1842,15 @@ class RabbitmqInstance(pulumi.CustomResource):
         It is a character string containing not more than 1,024 characters.
         """
         return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="enableAcl")
+    def enable_acl(self) -> pulumi.Output[bool]:
+        """
+        Whether to enable ACL. Only available when `engine_version` is **AMQP-0-9-1**.
+        Default to **false**.
+        """
+        return pulumi.get(self, "enable_acl")
 
     @property
     @pulumi.getter(name="enablePublicIp")
@@ -1752,6 +1886,14 @@ class RabbitmqInstance(pulumi.CustomResource):
         return pulumi.get(self, "enterprise_project_id")
 
     @property
+    @pulumi.getter(name="extendTimes")
+    def extend_times(self) -> pulumi.Output[int]:
+        """
+        Indicates the extend times of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "extend_times")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> pulumi.Output[Optional[str]]:
         """
@@ -1759,6 +1901,14 @@ class RabbitmqInstance(pulumi.CustomResource):
         It is mandatory when the `charging_mode` is **prePaid**.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="isLogicalVolume")
+    def is_logical_volume(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the DMS RabbitMQ instance is logical volume.
+        """
+        return pulumi.get(self, "is_logical_volume")
 
     @property
     @pulumi.getter(name="maintainBegin")
@@ -1820,13 +1970,12 @@ class RabbitmqInstance(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def password(self) -> pulumi.Output[str]:
+    def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the password of the DMS RabbitMQ instance. A password must meet
         the following complexity requirements: Must be 8 to 32 characters long. Must contain at least 2 of the following
         character types: lowercase letters, uppercase letters, digits,
         and special characters (`~!@#$%^&*()-_=+\\\\|[{}]:'",<.>/?).
-        Changing this creates a new instance resource.
         """
         return pulumi.get(self, "password")
 
@@ -1862,6 +2011,14 @@ class RabbitmqInstance(pulumi.CustomResource):
     @pulumi.getter(name="productId")
     def product_id(self) -> pulumi.Output[Optional[str]]:
         return pulumi.get(self, "product_id")
+
+    @property
+    @pulumi.getter(name="publicIpAddress")
+    def public_ip_address(self) -> pulumi.Output[str]:
+        """
+        Indicates the public ip address of the DMS RabbitMQ instance.
+        """
+        return pulumi.get(self, "public_ip_address")
 
     @property
     @pulumi.getter(name="publicIpId")
@@ -1940,7 +2097,7 @@ class RabbitmqInstance(pulumi.CustomResource):
     def storage_spec_code(self) -> pulumi.Output[str]:
         """
         Specifies the storage I/O specification.
-        Valid values are **dms.physical.storage.high** and **dms.physical.storage.ultra**.
+        Valid values are **dms.physical.storage.high.v2** and **dms.physical.storage.ultra.v2**.
         Changing this creates a new instance resource.
         """
         return pulumi.get(self, "storage_spec_code")

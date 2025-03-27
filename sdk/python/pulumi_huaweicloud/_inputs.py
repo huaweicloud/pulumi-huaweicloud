@@ -17,9 +17,12 @@ __all__ = [
 class ProviderAssumeRoleArgs:
     def __init__(__self__, *,
                  agency_name: pulumi.Input[str],
-                 domain_name: pulumi.Input[str]):
+                 domain_name: pulumi.Input[str],
+                 domain_id: Optional[pulumi.Input[str]] = None):
         pulumi.set(__self__, "agency_name", agency_name)
         pulumi.set(__self__, "domain_name", domain_name)
+        if domain_id is not None:
+            pulumi.set(__self__, "domain_id", domain_id)
 
     @property
     @pulumi.getter(name="agencyName")
@@ -38,5 +41,14 @@ class ProviderAssumeRoleArgs:
     @domain_name.setter
     def domain_name(self, value: pulumi.Input[str]):
         pulumi.set(self, "domain_name", value)
+
+    @property
+    @pulumi.getter(name="domainId")
+    def domain_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "domain_id")
+
+    @domain_id.setter
+    def domain_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "domain_id", value)
 
 

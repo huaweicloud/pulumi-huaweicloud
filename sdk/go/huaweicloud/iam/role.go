@@ -13,7 +13,7 @@ import (
 
 // Manages a **Custom Policy** resource within HuaweiCloud IAM service.
 //
-// ->**Note** You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+// ->**Note** You *must* have admin privileges to use this resource.
 //
 // ## Example Usage
 //
@@ -70,7 +70,7 @@ import (
 //
 // ## Import
 //
-// Roles can be imported using the `id`, e.g.
+// IAM custom policies can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -80,16 +80,18 @@ import (
 type Role struct {
 	pulumi.CustomResourceState
 
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// Name of the custom policy.
+	// Specifies the name of the custom policy.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// Specifies the content of the custom policy in JSON format. For more details,
+	// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringOutput `pulumi:"policy"`
 	// The number of references.
 	References pulumi.IntOutput `pulumi:"references"`
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type pulumi.StringOutput `pulumi:"type"`
 }
 
@@ -132,30 +134,34 @@ func GetRole(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Role resources.
 type roleState struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description *string `pulumi:"description"`
-	// Name of the custom policy.
+	// Specifies the name of the custom policy.
 	Name *string `pulumi:"name"`
-	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// Specifies the content of the custom policy in JSON format. For more details,
+	// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy *string `pulumi:"policy"`
 	// The number of references.
 	References *int `pulumi:"references"`
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type *string `pulumi:"type"`
 }
 
 type RoleState struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description pulumi.StringPtrInput
-	// Name of the custom policy.
+	// Specifies the name of the custom policy.
 	Name pulumi.StringPtrInput
-	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// Specifies the content of the custom policy in JSON format. For more details,
+	// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringPtrInput
 	// The number of references.
 	References pulumi.IntPtrInput
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type pulumi.StringPtrInput
 }
 
@@ -164,27 +170,31 @@ func (RoleState) ElementType() reflect.Type {
 }
 
 type roleArgs struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description string `pulumi:"description"`
-	// Name of the custom policy.
+	// Specifies the name of the custom policy.
 	Name *string `pulumi:"name"`
-	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// Specifies the content of the custom policy in JSON format. For more details,
+	// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy string `pulumi:"policy"`
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type string `pulumi:"type"`
 }
 
 // The set of arguments for constructing a Role resource.
 type RoleArgs struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description pulumi.StringInput
-	// Name of the custom policy.
+	// Specifies the name of the custom policy.
 	Name pulumi.StringPtrInput
-	// Document of the custom policy in JSON format. For more details, please refer to the
-	// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+	// Specifies the content of the custom policy in JSON format. For more details,
+	// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 	Policy pulumi.StringInput
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type pulumi.StringInput
 }
 
@@ -275,18 +285,18 @@ func (o RoleOutput) ToRoleOutputWithContext(ctx context.Context) RoleOutput {
 	return o
 }
 
-// Description of the custom policy.
+// Specifies the description of the custom policy.
 func (o RoleOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Role) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// Name of the custom policy.
+// Specifies the name of the custom policy.
 func (o RoleOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Role) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Document of the custom policy in JSON format. For more details, please refer to the
-// [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+// Specifies the content of the custom policy in JSON format. For more details,
+// please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
 func (o RoleOutput) Policy() pulumi.StringOutput {
 	return o.ApplyT(func(v *Role) pulumi.StringOutput { return v.Policy }).(pulumi.StringOutput)
 }
@@ -296,7 +306,9 @@ func (o RoleOutput) References() pulumi.IntOutput {
 	return o.ApplyT(func(v *Role) pulumi.IntOutput { return v.References }).(pulumi.IntOutput)
 }
 
-// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+// Specifies the display mode of the custom policy. Valid options are as follows:
+// + **AX**: the global service project.
+// + **XA**: region-specific projects.
 func (o RoleOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Role) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }

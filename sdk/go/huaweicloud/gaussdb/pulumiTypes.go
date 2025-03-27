@@ -10,15 +10,621 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type MysqlInstanceAutoScaling struct {
+	// Specifies the average CPU usage (%). It is mandatory when `status` is set to
+	// **ON**. Value options: **50–100**.
+	EnlargeThreshold *int `pulumi:"enlargeThreshold"`
+	// Indicates the ID of an auto-scaling policy.
+	Id *string `pulumi:"id"`
+	// Specifies the maximum specifications. It is mandatory when the instance specifications
+	// are automatically scaled up or down.
+	MaxFlavor *string `pulumi:"maxFlavor"`
+	// Specifies the maximum number of read replicas. It is mandatory when read
+	// replicas are automatically added or deleted.
+	MaxReadOnlyCount *int `pulumi:"maxReadOnlyCount"`
+	// Indicates the minimum specifications.
+	MinFlavor *string `pulumi:"minFlavor"`
+	// Indicates the minimum number of read replicas.
+	MinReadOnlyCount *int `pulumi:"minReadOnlyCount"`
+	// Specifies the observation period, in seconds. During the entire observation period,
+	// if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+	// `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+	MonitorCycle *int `pulumi:"monitorCycle"`
+	// Specifies the read weights of read replicas. It is mandatory when read replicas
+	// are automatically added or deleted.
+	ReadOnlyWeight *int `pulumi:"readOnlyWeight"`
+	// Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+	// **ON**. Value options:
+	// + **true**: enabled.
+	// + **false**: disabled.
+	ReduceEnabled *bool `pulumi:"reduceEnabled"`
+	// Specifies the auto-scaling policy.
+	// The scalingStrategy structure is documented below.
+	ScalingStrategy MysqlInstanceAutoScalingScalingStrategy `pulumi:"scalingStrategy"`
+	// Specifies the silent period, in seconds. It indicates the minimum interval between
+	// two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+	// options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+	SilenceCycle *int `pulumi:"silenceCycle"`
+	// Indicates the start time of the silent period.
+	SilenceStartAt *string `pulumi:"silenceStartAt"`
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
+	Status string `pulumi:"status"`
+}
+
+// MysqlInstanceAutoScalingInput is an input type that accepts MysqlInstanceAutoScalingArgs and MysqlInstanceAutoScalingOutput values.
+// You can construct a concrete instance of `MysqlInstanceAutoScalingInput` via:
+//
+//	MysqlInstanceAutoScalingArgs{...}
+type MysqlInstanceAutoScalingInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceAutoScalingOutput() MysqlInstanceAutoScalingOutput
+	ToMysqlInstanceAutoScalingOutputWithContext(context.Context) MysqlInstanceAutoScalingOutput
+}
+
+type MysqlInstanceAutoScalingArgs struct {
+	// Specifies the average CPU usage (%). It is mandatory when `status` is set to
+	// **ON**. Value options: **50–100**.
+	EnlargeThreshold pulumi.IntPtrInput `pulumi:"enlargeThreshold"`
+	// Indicates the ID of an auto-scaling policy.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the maximum specifications. It is mandatory when the instance specifications
+	// are automatically scaled up or down.
+	MaxFlavor pulumi.StringPtrInput `pulumi:"maxFlavor"`
+	// Specifies the maximum number of read replicas. It is mandatory when read
+	// replicas are automatically added or deleted.
+	MaxReadOnlyCount pulumi.IntPtrInput `pulumi:"maxReadOnlyCount"`
+	// Indicates the minimum specifications.
+	MinFlavor pulumi.StringPtrInput `pulumi:"minFlavor"`
+	// Indicates the minimum number of read replicas.
+	MinReadOnlyCount pulumi.IntPtrInput `pulumi:"minReadOnlyCount"`
+	// Specifies the observation period, in seconds. During the entire observation period,
+	// if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+	// `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+	MonitorCycle pulumi.IntPtrInput `pulumi:"monitorCycle"`
+	// Specifies the read weights of read replicas. It is mandatory when read replicas
+	// are automatically added or deleted.
+	ReadOnlyWeight pulumi.IntPtrInput `pulumi:"readOnlyWeight"`
+	// Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+	// **ON**. Value options:
+	// + **true**: enabled.
+	// + **false**: disabled.
+	ReduceEnabled pulumi.BoolPtrInput `pulumi:"reduceEnabled"`
+	// Specifies the auto-scaling policy.
+	// The scalingStrategy structure is documented below.
+	ScalingStrategy MysqlInstanceAutoScalingScalingStrategyInput `pulumi:"scalingStrategy"`
+	// Specifies the silent period, in seconds. It indicates the minimum interval between
+	// two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+	// options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+	SilenceCycle pulumi.IntPtrInput `pulumi:"silenceCycle"`
+	// Indicates the start time of the silent period.
+	SilenceStartAt pulumi.StringPtrInput `pulumi:"silenceStartAt"`
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
+	Status pulumi.StringInput `pulumi:"status"`
+}
+
+func (MysqlInstanceAutoScalingArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceAutoScaling)(nil)).Elem()
+}
+
+func (i MysqlInstanceAutoScalingArgs) ToMysqlInstanceAutoScalingOutput() MysqlInstanceAutoScalingOutput {
+	return i.ToMysqlInstanceAutoScalingOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceAutoScalingArgs) ToMysqlInstanceAutoScalingOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingOutput)
+}
+
+func (i MysqlInstanceAutoScalingArgs) ToMysqlInstanceAutoScalingPtrOutput() MysqlInstanceAutoScalingPtrOutput {
+	return i.ToMysqlInstanceAutoScalingPtrOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceAutoScalingArgs) ToMysqlInstanceAutoScalingPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingOutput).ToMysqlInstanceAutoScalingPtrOutputWithContext(ctx)
+}
+
+// MysqlInstanceAutoScalingPtrInput is an input type that accepts MysqlInstanceAutoScalingArgs, MysqlInstanceAutoScalingPtr and MysqlInstanceAutoScalingPtrOutput values.
+// You can construct a concrete instance of `MysqlInstanceAutoScalingPtrInput` via:
+//
+//	        MysqlInstanceAutoScalingArgs{...}
+//
+//	or:
+//
+//	        nil
+type MysqlInstanceAutoScalingPtrInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceAutoScalingPtrOutput() MysqlInstanceAutoScalingPtrOutput
+	ToMysqlInstanceAutoScalingPtrOutputWithContext(context.Context) MysqlInstanceAutoScalingPtrOutput
+}
+
+type mysqlInstanceAutoScalingPtrType MysqlInstanceAutoScalingArgs
+
+func MysqlInstanceAutoScalingPtr(v *MysqlInstanceAutoScalingArgs) MysqlInstanceAutoScalingPtrInput {
+	return (*mysqlInstanceAutoScalingPtrType)(v)
+}
+
+func (*mysqlInstanceAutoScalingPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlInstanceAutoScaling)(nil)).Elem()
+}
+
+func (i *mysqlInstanceAutoScalingPtrType) ToMysqlInstanceAutoScalingPtrOutput() MysqlInstanceAutoScalingPtrOutput {
+	return i.ToMysqlInstanceAutoScalingPtrOutputWithContext(context.Background())
+}
+
+func (i *mysqlInstanceAutoScalingPtrType) ToMysqlInstanceAutoScalingPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingPtrOutput)
+}
+
+type MysqlInstanceAutoScalingOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceAutoScalingOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceAutoScaling)(nil)).Elem()
+}
+
+func (o MysqlInstanceAutoScalingOutput) ToMysqlInstanceAutoScalingOutput() MysqlInstanceAutoScalingOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingOutput) ToMysqlInstanceAutoScalingOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingOutput) ToMysqlInstanceAutoScalingPtrOutput() MysqlInstanceAutoScalingPtrOutput {
+	return o.ToMysqlInstanceAutoScalingPtrOutputWithContext(context.Background())
+}
+
+func (o MysqlInstanceAutoScalingOutput) ToMysqlInstanceAutoScalingPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v MysqlInstanceAutoScaling) *MysqlInstanceAutoScaling {
+		return &v
+	}).(MysqlInstanceAutoScalingPtrOutput)
+}
+
+// Specifies the average CPU usage (%). It is mandatory when `status` is set to
+// **ON**. Value options: **50–100**.
+func (o MysqlInstanceAutoScalingOutput) EnlargeThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.EnlargeThreshold }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the ID of an auto-scaling policy.
+func (o MysqlInstanceAutoScalingOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum specifications. It is mandatory when the instance specifications
+// are automatically scaled up or down.
+func (o MysqlInstanceAutoScalingOutput) MaxFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *string { return v.MaxFlavor }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of read replicas. It is mandatory when read
+// replicas are automatically added or deleted.
+func (o MysqlInstanceAutoScalingOutput) MaxReadOnlyCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.MaxReadOnlyCount }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the minimum specifications.
+func (o MysqlInstanceAutoScalingOutput) MinFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *string { return v.MinFlavor }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the minimum number of read replicas.
+func (o MysqlInstanceAutoScalingOutput) MinReadOnlyCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.MinReadOnlyCount }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the observation period, in seconds. During the entire observation period,
+// if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+// `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+func (o MysqlInstanceAutoScalingOutput) MonitorCycle() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.MonitorCycle }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the read weights of read replicas. It is mandatory when read replicas
+// are automatically added or deleted.
+func (o MysqlInstanceAutoScalingOutput) ReadOnlyWeight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.ReadOnlyWeight }).(pulumi.IntPtrOutput)
+}
+
+// Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+// **ON**. Value options:
+// + **true**: enabled.
+// + **false**: disabled.
+func (o MysqlInstanceAutoScalingOutput) ReduceEnabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *bool { return v.ReduceEnabled }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the auto-scaling policy.
+// The scalingStrategy structure is documented below.
+func (o MysqlInstanceAutoScalingOutput) ScalingStrategy() MysqlInstanceAutoScalingScalingStrategyOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) MysqlInstanceAutoScalingScalingStrategy { return v.ScalingStrategy }).(MysqlInstanceAutoScalingScalingStrategyOutput)
+}
+
+// Specifies the silent period, in seconds. It indicates the minimum interval between
+// two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+// options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+func (o MysqlInstanceAutoScalingOutput) SilenceCycle() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *int { return v.SilenceCycle }).(pulumi.IntPtrOutput)
+}
+
+// Indicates the start time of the silent period.
+func (o MysqlInstanceAutoScalingOutput) SilenceStartAt() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) *string { return v.SilenceStartAt }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether auto-scaling is enabled. Value options:
+// + **ON**: enabled.
+// + **OFF**: disabled.
+func (o MysqlInstanceAutoScalingOutput) Status() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScaling) string { return v.Status }).(pulumi.StringOutput)
+}
+
+type MysqlInstanceAutoScalingPtrOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceAutoScalingPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlInstanceAutoScaling)(nil)).Elem()
+}
+
+func (o MysqlInstanceAutoScalingPtrOutput) ToMysqlInstanceAutoScalingPtrOutput() MysqlInstanceAutoScalingPtrOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingPtrOutput) ToMysqlInstanceAutoScalingPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingPtrOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingPtrOutput) Elem() MysqlInstanceAutoScalingOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) MysqlInstanceAutoScaling {
+		if v != nil {
+			return *v
+		}
+		var ret MysqlInstanceAutoScaling
+		return ret
+	}).(MysqlInstanceAutoScalingOutput)
+}
+
+// Specifies the average CPU usage (%). It is mandatory when `status` is set to
+// **ON**. Value options: **50–100**.
+func (o MysqlInstanceAutoScalingPtrOutput) EnlargeThreshold() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.EnlargeThreshold
+	}).(pulumi.IntPtrOutput)
+}
+
+// Indicates the ID of an auto-scaling policy.
+func (o MysqlInstanceAutoScalingPtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum specifications. It is mandatory when the instance specifications
+// are automatically scaled up or down.
+func (o MysqlInstanceAutoScalingPtrOutput) MaxFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MaxFlavor
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the maximum number of read replicas. It is mandatory when read
+// replicas are automatically added or deleted.
+func (o MysqlInstanceAutoScalingPtrOutput) MaxReadOnlyCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MaxReadOnlyCount
+	}).(pulumi.IntPtrOutput)
+}
+
+// Indicates the minimum specifications.
+func (o MysqlInstanceAutoScalingPtrOutput) MinFlavor() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *string {
+		if v == nil {
+			return nil
+		}
+		return v.MinFlavor
+	}).(pulumi.StringPtrOutput)
+}
+
+// Indicates the minimum number of read replicas.
+func (o MysqlInstanceAutoScalingPtrOutput) MinReadOnlyCount() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MinReadOnlyCount
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the observation period, in seconds. During the entire observation period,
+// if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+// `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+func (o MysqlInstanceAutoScalingPtrOutput) MonitorCycle() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.MonitorCycle
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the read weights of read replicas. It is mandatory when read replicas
+// are automatically added or deleted.
+func (o MysqlInstanceAutoScalingPtrOutput) ReadOnlyWeight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.ReadOnlyWeight
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+// **ON**. Value options:
+// + **true**: enabled.
+// + **false**: disabled.
+func (o MysqlInstanceAutoScalingPtrOutput) ReduceEnabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.ReduceEnabled
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the auto-scaling policy.
+// The scalingStrategy structure is documented below.
+func (o MysqlInstanceAutoScalingPtrOutput) ScalingStrategy() MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *MysqlInstanceAutoScalingScalingStrategy {
+		if v == nil {
+			return nil
+		}
+		return &v.ScalingStrategy
+	}).(MysqlInstanceAutoScalingScalingStrategyPtrOutput)
+}
+
+// Specifies the silent period, in seconds. It indicates the minimum interval between
+// two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+// options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+func (o MysqlInstanceAutoScalingPtrOutput) SilenceCycle() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *int {
+		if v == nil {
+			return nil
+		}
+		return v.SilenceCycle
+	}).(pulumi.IntPtrOutput)
+}
+
+// Indicates the start time of the silent period.
+func (o MysqlInstanceAutoScalingPtrOutput) SilenceStartAt() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *string {
+		if v == nil {
+			return nil
+		}
+		return v.SilenceStartAt
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether auto-scaling is enabled. Value options:
+// + **ON**: enabled.
+// + **OFF**: disabled.
+func (o MysqlInstanceAutoScalingPtrOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScaling) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Status
+	}).(pulumi.StringPtrOutput)
+}
+
+type MysqlInstanceAutoScalingScalingStrategy struct {
+	// Specifies whether instance specifications can be automatically scaled up or down.
+	// Value options:
+	// + **ON**: Yes
+	// + **OFF**: No
+	FlavorSwitch string `pulumi:"flavorSwitch"`
+	// Specifies whether read replicas can be automatically added or deleted. To use
+	// this function, ensure that there is only one proxy instance.
+	// Value options:
+	// + **ON**: Yes
+	// + **OFF**: No
+	ReadOnlySwitch string `pulumi:"readOnlySwitch"`
+}
+
+// MysqlInstanceAutoScalingScalingStrategyInput is an input type that accepts MysqlInstanceAutoScalingScalingStrategyArgs and MysqlInstanceAutoScalingScalingStrategyOutput values.
+// You can construct a concrete instance of `MysqlInstanceAutoScalingScalingStrategyInput` via:
+//
+//	MysqlInstanceAutoScalingScalingStrategyArgs{...}
+type MysqlInstanceAutoScalingScalingStrategyInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceAutoScalingScalingStrategyOutput() MysqlInstanceAutoScalingScalingStrategyOutput
+	ToMysqlInstanceAutoScalingScalingStrategyOutputWithContext(context.Context) MysqlInstanceAutoScalingScalingStrategyOutput
+}
+
+type MysqlInstanceAutoScalingScalingStrategyArgs struct {
+	// Specifies whether instance specifications can be automatically scaled up or down.
+	// Value options:
+	// + **ON**: Yes
+	// + **OFF**: No
+	FlavorSwitch pulumi.StringInput `pulumi:"flavorSwitch"`
+	// Specifies whether read replicas can be automatically added or deleted. To use
+	// this function, ensure that there is only one proxy instance.
+	// Value options:
+	// + **ON**: Yes
+	// + **OFF**: No
+	ReadOnlySwitch pulumi.StringInput `pulumi:"readOnlySwitch"`
+}
+
+func (MysqlInstanceAutoScalingScalingStrategyArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceAutoScalingScalingStrategy)(nil)).Elem()
+}
+
+func (i MysqlInstanceAutoScalingScalingStrategyArgs) ToMysqlInstanceAutoScalingScalingStrategyOutput() MysqlInstanceAutoScalingScalingStrategyOutput {
+	return i.ToMysqlInstanceAutoScalingScalingStrategyOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceAutoScalingScalingStrategyArgs) ToMysqlInstanceAutoScalingScalingStrategyOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingScalingStrategyOutput)
+}
+
+func (i MysqlInstanceAutoScalingScalingStrategyArgs) ToMysqlInstanceAutoScalingScalingStrategyPtrOutput() MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return i.ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceAutoScalingScalingStrategyArgs) ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingScalingStrategyOutput).ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(ctx)
+}
+
+// MysqlInstanceAutoScalingScalingStrategyPtrInput is an input type that accepts MysqlInstanceAutoScalingScalingStrategyArgs, MysqlInstanceAutoScalingScalingStrategyPtr and MysqlInstanceAutoScalingScalingStrategyPtrOutput values.
+// You can construct a concrete instance of `MysqlInstanceAutoScalingScalingStrategyPtrInput` via:
+//
+//	        MysqlInstanceAutoScalingScalingStrategyArgs{...}
+//
+//	or:
+//
+//	        nil
+type MysqlInstanceAutoScalingScalingStrategyPtrInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceAutoScalingScalingStrategyPtrOutput() MysqlInstanceAutoScalingScalingStrategyPtrOutput
+	ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(context.Context) MysqlInstanceAutoScalingScalingStrategyPtrOutput
+}
+
+type mysqlInstanceAutoScalingScalingStrategyPtrType MysqlInstanceAutoScalingScalingStrategyArgs
+
+func MysqlInstanceAutoScalingScalingStrategyPtr(v *MysqlInstanceAutoScalingScalingStrategyArgs) MysqlInstanceAutoScalingScalingStrategyPtrInput {
+	return (*mysqlInstanceAutoScalingScalingStrategyPtrType)(v)
+}
+
+func (*mysqlInstanceAutoScalingScalingStrategyPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlInstanceAutoScalingScalingStrategy)(nil)).Elem()
+}
+
+func (i *mysqlInstanceAutoScalingScalingStrategyPtrType) ToMysqlInstanceAutoScalingScalingStrategyPtrOutput() MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return i.ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(context.Background())
+}
+
+func (i *mysqlInstanceAutoScalingScalingStrategyPtrType) ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceAutoScalingScalingStrategyPtrOutput)
+}
+
+type MysqlInstanceAutoScalingScalingStrategyOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceAutoScalingScalingStrategyOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceAutoScalingScalingStrategy)(nil)).Elem()
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) ToMysqlInstanceAutoScalingScalingStrategyOutput() MysqlInstanceAutoScalingScalingStrategyOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) ToMysqlInstanceAutoScalingScalingStrategyOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) ToMysqlInstanceAutoScalingScalingStrategyPtrOutput() MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return o.ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(context.Background())
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v MysqlInstanceAutoScalingScalingStrategy) *MysqlInstanceAutoScalingScalingStrategy {
+		return &v
+	}).(MysqlInstanceAutoScalingScalingStrategyPtrOutput)
+}
+
+// Specifies whether instance specifications can be automatically scaled up or down.
+// Value options:
+// + **ON**: Yes
+// + **OFF**: No
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) FlavorSwitch() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScalingScalingStrategy) string { return v.FlavorSwitch }).(pulumi.StringOutput)
+}
+
+// Specifies whether read replicas can be automatically added or deleted. To use
+// this function, ensure that there is only one proxy instance.
+// Value options:
+// + **ON**: Yes
+// + **OFF**: No
+func (o MysqlInstanceAutoScalingScalingStrategyOutput) ReadOnlySwitch() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlInstanceAutoScalingScalingStrategy) string { return v.ReadOnlySwitch }).(pulumi.StringOutput)
+}
+
+type MysqlInstanceAutoScalingScalingStrategyPtrOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceAutoScalingScalingStrategyPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlInstanceAutoScalingScalingStrategy)(nil)).Elem()
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyPtrOutput) ToMysqlInstanceAutoScalingScalingStrategyPtrOutput() MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyPtrOutput) ToMysqlInstanceAutoScalingScalingStrategyPtrOutputWithContext(ctx context.Context) MysqlInstanceAutoScalingScalingStrategyPtrOutput {
+	return o
+}
+
+func (o MysqlInstanceAutoScalingScalingStrategyPtrOutput) Elem() MysqlInstanceAutoScalingScalingStrategyOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScalingScalingStrategy) MysqlInstanceAutoScalingScalingStrategy {
+		if v != nil {
+			return *v
+		}
+		var ret MysqlInstanceAutoScalingScalingStrategy
+		return ret
+	}).(MysqlInstanceAutoScalingScalingStrategyOutput)
+}
+
+// Specifies whether instance specifications can be automatically scaled up or down.
+// Value options:
+// + **ON**: Yes
+// + **OFF**: No
+func (o MysqlInstanceAutoScalingScalingStrategyPtrOutput) FlavorSwitch() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScalingScalingStrategy) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.FlavorSwitch
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether read replicas can be automatically added or deleted. To use
+// this function, ensure that there is only one proxy instance.
+// Value options:
+// + **ON**: Yes
+// + **OFF**: No
+func (o MysqlInstanceAutoScalingScalingStrategyPtrOutput) ReadOnlySwitch() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlInstanceAutoScalingScalingStrategy) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.ReadOnlySwitch
+	}).(pulumi.StringPtrOutput)
+}
+
 type MysqlInstanceBackupStrategy struct {
-	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-	// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+	// Specifies the number of days to retain the generated backup files.\
+	// The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+	// If this parameter is not transferred, the automated backup policy is enabled by default.
+	// Backup files are stored for seven days by default.
 	KeepDays *int `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
 	// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-	// value: 08:00-09:00, 03:00-04:00.
+	// value: **08:00-09:00**, **03:00-04:00**.
 	StartTime string `pulumi:"startTime"`
 }
 
@@ -34,14 +640,15 @@ type MysqlInstanceBackupStrategyInput interface {
 }
 
 type MysqlInstanceBackupStrategyArgs struct {
-	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-	// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+	// Specifies the number of days to retain the generated backup files.\
+	// The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+	// If this parameter is not transferred, the automated backup policy is enabled by default.
+	// Backup files are stored for seven days by default.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
 	// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-	// value: 08:00-09:00, 03:00-04:00.
+	// value: **08:00-09:00**, **03:00-04:00**.
 	StartTime pulumi.StringInput `pulumi:"startTime"`
 }
 
@@ -122,9 +729,10 @@ func (o MysqlInstanceBackupStrategyOutput) ToMysqlInstanceBackupStrategyPtrOutpu
 	}).(MysqlInstanceBackupStrategyPtrOutput)
 }
 
-// Specifies the number of days to retain the generated backup files. The value ranges from
-// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+// Specifies the number of days to retain the generated backup files.\
+// The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+// If this parameter is not transferred, the automated backup policy is enabled by default.
+// Backup files are stored for seven days by default.
 func (o MysqlInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
 }
@@ -132,7 +740,7 @@ func (o MysqlInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 // Specifies the backup time window. Automated backups will be triggered during the
 // backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
 // HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-// value: 08:00-09:00, 03:00-04:00.
+// value: **08:00-09:00**, **03:00-04:00**.
 func (o MysqlInstanceBackupStrategyOutput) StartTime() pulumi.StringOutput {
 	return o.ApplyT(func(v MysqlInstanceBackupStrategy) string { return v.StartTime }).(pulumi.StringOutput)
 }
@@ -161,9 +769,10 @@ func (o MysqlInstanceBackupStrategyPtrOutput) Elem() MysqlInstanceBackupStrategy
 	}).(MysqlInstanceBackupStrategyOutput)
 }
 
-// Specifies the number of days to retain the generated backup files. The value ranges from
-// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+// Specifies the number of days to retain the generated backup files.\
+// The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+// If this parameter is not transferred, the automated backup policy is enabled by default.
+// Backup files are stored for seven days by default.
 func (o MysqlInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MysqlInstanceBackupStrategy) *int {
 		if v == nil {
@@ -176,7 +785,7 @@ func (o MysqlInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 // Specifies the backup time window. Automated backups will be triggered during the
 // backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
 // HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-// value: 08:00-09:00, 03:00-04:00.
+// value: **08:00-09:00**, **03:00-04:00**.
 func (o MysqlInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MysqlInstanceBackupStrategy) *string {
 		if v == nil {
@@ -353,15 +962,15 @@ func (o MysqlInstanceDatastorePtrOutput) Version() pulumi.StringPtrOutput {
 type MysqlInstanceNode struct {
 	// Indicates the availability zone where the node resides.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
-	// Indicates the node ID.
+	// Indicates the ID of an auto-scaling policy.
 	Id *string `pulumi:"id"`
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
 	PrivateReadIp *string `pulumi:"privateReadIp"`
-	// Indicates the node status.
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
 	Status *string `pulumi:"status"`
 	// Indicates the node type: master or slave.
 	Type *string `pulumi:"type"`
@@ -381,15 +990,15 @@ type MysqlInstanceNodeInput interface {
 type MysqlInstanceNodeArgs struct {
 	// Indicates the availability zone where the node resides.
 	AvailabilityZone pulumi.StringPtrInput `pulumi:"availabilityZone"`
-	// Indicates the node ID.
+	// Indicates the ID of an auto-scaling policy.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-	// digits, hyphens (-), and underscores (_).
+	// Specifies the name of the parameter.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
 	PrivateReadIp pulumi.StringPtrInput `pulumi:"privateReadIp"`
-	// Indicates the node status.
+	// Specifies whether auto-scaling is enabled. Value options:
+	// + **ON**: enabled.
+	// + **OFF**: disabled.
 	Status pulumi.StringPtrInput `pulumi:"status"`
 	// Indicates the node type: master or slave.
 	Type pulumi.StringPtrInput `pulumi:"type"`
@@ -451,14 +1060,12 @@ func (o MysqlInstanceNodeOutput) AvailabilityZone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceNode) *string { return v.AvailabilityZone }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the node ID.
+// Indicates the ID of an auto-scaling policy.
 func (o MysqlInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceNode) *string { return v.Id }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-// digits, hyphens (-), and underscores (_).
+// Specifies the name of the parameter.
 func (o MysqlInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
 }
@@ -468,7 +1075,9 @@ func (o MysqlInstanceNodeOutput) PrivateReadIp() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceNode) *string { return v.PrivateReadIp }).(pulumi.StringPtrOutput)
 }
 
-// Indicates the node status.
+// Specifies whether auto-scaling is enabled. Value options:
+// + **ON**: enabled.
+// + **OFF**: disabled.
 func (o MysqlInstanceNodeOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MysqlInstanceNode) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
@@ -496,6 +1105,788 @@ func (o MysqlInstanceNodeArrayOutput) Index(i pulumi.IntInput) MysqlInstanceNode
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlInstanceNode {
 		return vs[0].([]MysqlInstanceNode)[vs[1].(int)]
 	}).(MysqlInstanceNodeOutput)
+}
+
+type MysqlInstanceParameter struct {
+	// Specifies the name of the parameter.
+	Name string `pulumi:"name"`
+	// Specifies the value of the parameter.
+	Value string `pulumi:"value"`
+}
+
+// MysqlInstanceParameterInput is an input type that accepts MysqlInstanceParameterArgs and MysqlInstanceParameterOutput values.
+// You can construct a concrete instance of `MysqlInstanceParameterInput` via:
+//
+//	MysqlInstanceParameterArgs{...}
+type MysqlInstanceParameterInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceParameterOutput() MysqlInstanceParameterOutput
+	ToMysqlInstanceParameterOutputWithContext(context.Context) MysqlInstanceParameterOutput
+}
+
+type MysqlInstanceParameterArgs struct {
+	// Specifies the name of the parameter.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the value of the parameter.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (MysqlInstanceParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceParameter)(nil)).Elem()
+}
+
+func (i MysqlInstanceParameterArgs) ToMysqlInstanceParameterOutput() MysqlInstanceParameterOutput {
+	return i.ToMysqlInstanceParameterOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceParameterArgs) ToMysqlInstanceParameterOutputWithContext(ctx context.Context) MysqlInstanceParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceParameterOutput)
+}
+
+// MysqlInstanceParameterArrayInput is an input type that accepts MysqlInstanceParameterArray and MysqlInstanceParameterArrayOutput values.
+// You can construct a concrete instance of `MysqlInstanceParameterArrayInput` via:
+//
+//	MysqlInstanceParameterArray{ MysqlInstanceParameterArgs{...} }
+type MysqlInstanceParameterArrayInput interface {
+	pulumi.Input
+
+	ToMysqlInstanceParameterArrayOutput() MysqlInstanceParameterArrayOutput
+	ToMysqlInstanceParameterArrayOutputWithContext(context.Context) MysqlInstanceParameterArrayOutput
+}
+
+type MysqlInstanceParameterArray []MysqlInstanceParameterInput
+
+func (MysqlInstanceParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlInstanceParameter)(nil)).Elem()
+}
+
+func (i MysqlInstanceParameterArray) ToMysqlInstanceParameterArrayOutput() MysqlInstanceParameterArrayOutput {
+	return i.ToMysqlInstanceParameterArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlInstanceParameterArray) ToMysqlInstanceParameterArrayOutputWithContext(ctx context.Context) MysqlInstanceParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlInstanceParameterArrayOutput)
+}
+
+type MysqlInstanceParameterOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlInstanceParameter)(nil)).Elem()
+}
+
+func (o MysqlInstanceParameterOutput) ToMysqlInstanceParameterOutput() MysqlInstanceParameterOutput {
+	return o
+}
+
+func (o MysqlInstanceParameterOutput) ToMysqlInstanceParameterOutputWithContext(ctx context.Context) MysqlInstanceParameterOutput {
+	return o
+}
+
+// Specifies the name of the parameter.
+func (o MysqlInstanceParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlInstanceParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the value of the parameter.
+func (o MysqlInstanceParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlInstanceParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type MysqlInstanceParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlInstanceParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlInstanceParameter)(nil)).Elem()
+}
+
+func (o MysqlInstanceParameterArrayOutput) ToMysqlInstanceParameterArrayOutput() MysqlInstanceParameterArrayOutput {
+	return o
+}
+
+func (o MysqlInstanceParameterArrayOutput) ToMysqlInstanceParameterArrayOutputWithContext(ctx context.Context) MysqlInstanceParameterArrayOutput {
+	return o
+}
+
+func (o MysqlInstanceParameterArrayOutput) Index(i pulumi.IntInput) MysqlInstanceParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlInstanceParameter {
+		return vs[0].([]MysqlInstanceParameter)[vs[1].(int)]
+	}).(MysqlInstanceParameterOutput)
+}
+
+type MysqlProxyAccessControlIpList struct {
+	// Specifies the description.
+	// The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+	Description *string `pulumi:"description"`
+	// Specifies the IP address or CIDR block.
+	Ip string `pulumi:"ip"`
+}
+
+// MysqlProxyAccessControlIpListInput is an input type that accepts MysqlProxyAccessControlIpListArgs and MysqlProxyAccessControlIpListOutput values.
+// You can construct a concrete instance of `MysqlProxyAccessControlIpListInput` via:
+//
+//	MysqlProxyAccessControlIpListArgs{...}
+type MysqlProxyAccessControlIpListInput interface {
+	pulumi.Input
+
+	ToMysqlProxyAccessControlIpListOutput() MysqlProxyAccessControlIpListOutput
+	ToMysqlProxyAccessControlIpListOutputWithContext(context.Context) MysqlProxyAccessControlIpListOutput
+}
+
+type MysqlProxyAccessControlIpListArgs struct {
+	// Specifies the description.
+	// The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the IP address or CIDR block.
+	Ip pulumi.StringInput `pulumi:"ip"`
+}
+
+func (MysqlProxyAccessControlIpListArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyAccessControlIpList)(nil)).Elem()
+}
+
+func (i MysqlProxyAccessControlIpListArgs) ToMysqlProxyAccessControlIpListOutput() MysqlProxyAccessControlIpListOutput {
+	return i.ToMysqlProxyAccessControlIpListOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyAccessControlIpListArgs) ToMysqlProxyAccessControlIpListOutputWithContext(ctx context.Context) MysqlProxyAccessControlIpListOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyAccessControlIpListOutput)
+}
+
+// MysqlProxyAccessControlIpListArrayInput is an input type that accepts MysqlProxyAccessControlIpListArray and MysqlProxyAccessControlIpListArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyAccessControlIpListArrayInput` via:
+//
+//	MysqlProxyAccessControlIpListArray{ MysqlProxyAccessControlIpListArgs{...} }
+type MysqlProxyAccessControlIpListArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyAccessControlIpListArrayOutput() MysqlProxyAccessControlIpListArrayOutput
+	ToMysqlProxyAccessControlIpListArrayOutputWithContext(context.Context) MysqlProxyAccessControlIpListArrayOutput
+}
+
+type MysqlProxyAccessControlIpListArray []MysqlProxyAccessControlIpListInput
+
+func (MysqlProxyAccessControlIpListArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyAccessControlIpList)(nil)).Elem()
+}
+
+func (i MysqlProxyAccessControlIpListArray) ToMysqlProxyAccessControlIpListArrayOutput() MysqlProxyAccessControlIpListArrayOutput {
+	return i.ToMysqlProxyAccessControlIpListArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyAccessControlIpListArray) ToMysqlProxyAccessControlIpListArrayOutputWithContext(ctx context.Context) MysqlProxyAccessControlIpListArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyAccessControlIpListArrayOutput)
+}
+
+type MysqlProxyAccessControlIpListOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyAccessControlIpListOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyAccessControlIpList)(nil)).Elem()
+}
+
+func (o MysqlProxyAccessControlIpListOutput) ToMysqlProxyAccessControlIpListOutput() MysqlProxyAccessControlIpListOutput {
+	return o
+}
+
+func (o MysqlProxyAccessControlIpListOutput) ToMysqlProxyAccessControlIpListOutputWithContext(ctx context.Context) MysqlProxyAccessControlIpListOutput {
+	return o
+}
+
+// Specifies the description.
+// The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+func (o MysqlProxyAccessControlIpListOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyAccessControlIpList) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IP address or CIDR block.
+func (o MysqlProxyAccessControlIpListOutput) Ip() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyAccessControlIpList) string { return v.Ip }).(pulumi.StringOutput)
+}
+
+type MysqlProxyAccessControlIpListArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyAccessControlIpListArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyAccessControlIpList)(nil)).Elem()
+}
+
+func (o MysqlProxyAccessControlIpListArrayOutput) ToMysqlProxyAccessControlIpListArrayOutput() MysqlProxyAccessControlIpListArrayOutput {
+	return o
+}
+
+func (o MysqlProxyAccessControlIpListArrayOutput) ToMysqlProxyAccessControlIpListArrayOutputWithContext(ctx context.Context) MysqlProxyAccessControlIpListArrayOutput {
+	return o
+}
+
+func (o MysqlProxyAccessControlIpListArrayOutput) Index(i pulumi.IntInput) MysqlProxyAccessControlIpListOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyAccessControlIpList {
+		return vs[0].([]MysqlProxyAccessControlIpList)[vs[1].(int)]
+	}).(MysqlProxyAccessControlIpListOutput)
+}
+
+type MysqlProxyMasterNodeWeight struct {
+	// Specifies the ID of the node.
+	Id string `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight int `pulumi:"weight"`
+}
+
+// MysqlProxyMasterNodeWeightInput is an input type that accepts MysqlProxyMasterNodeWeightArgs and MysqlProxyMasterNodeWeightOutput values.
+// You can construct a concrete instance of `MysqlProxyMasterNodeWeightInput` via:
+//
+//	MysqlProxyMasterNodeWeightArgs{...}
+type MysqlProxyMasterNodeWeightInput interface {
+	pulumi.Input
+
+	ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput
+	ToMysqlProxyMasterNodeWeightOutputWithContext(context.Context) MysqlProxyMasterNodeWeightOutput
+}
+
+type MysqlProxyMasterNodeWeightArgs struct {
+	// Specifies the ID of the node.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (MysqlProxyMasterNodeWeightArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput {
+	return i.ToMysqlProxyMasterNodeWeightOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightOutput)
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return i.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyMasterNodeWeightArgs) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightOutput).ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx)
+}
+
+// MysqlProxyMasterNodeWeightPtrInput is an input type that accepts MysqlProxyMasterNodeWeightArgs, MysqlProxyMasterNodeWeightPtr and MysqlProxyMasterNodeWeightPtrOutput values.
+// You can construct a concrete instance of `MysqlProxyMasterNodeWeightPtrInput` via:
+//
+//	        MysqlProxyMasterNodeWeightArgs{...}
+//
+//	or:
+//
+//	        nil
+type MysqlProxyMasterNodeWeightPtrInput interface {
+	pulumi.Input
+
+	ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput
+	ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Context) MysqlProxyMasterNodeWeightPtrOutput
+}
+
+type mysqlProxyMasterNodeWeightPtrType MysqlProxyMasterNodeWeightArgs
+
+func MysqlProxyMasterNodeWeightPtr(v *MysqlProxyMasterNodeWeightArgs) MysqlProxyMasterNodeWeightPtrInput {
+	return (*mysqlProxyMasterNodeWeightPtrType)(v)
+}
+
+func (*mysqlProxyMasterNodeWeightPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (i *mysqlProxyMasterNodeWeightPtrType) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return i.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (i *mysqlProxyMasterNodeWeightPtrType) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyMasterNodeWeightPtrOutput)
+}
+
+type MysqlProxyMasterNodeWeightOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyMasterNodeWeightOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightOutput() MysqlProxyMasterNodeWeightOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return o.ToMysqlProxyMasterNodeWeightPtrOutputWithContext(context.Background())
+}
+
+func (o MysqlProxyMasterNodeWeightOutput) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v MysqlProxyMasterNodeWeight) *MysqlProxyMasterNodeWeight {
+		return &v
+	}).(MysqlProxyMasterNodeWeightPtrOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyMasterNodeWeightOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyMasterNodeWeight) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyMasterNodeWeightOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v MysqlProxyMasterNodeWeight) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type MysqlProxyMasterNodeWeightPtrOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyMasterNodeWeightPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**MysqlProxyMasterNodeWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) ToMysqlProxyMasterNodeWeightPtrOutput() MysqlProxyMasterNodeWeightPtrOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) ToMysqlProxyMasterNodeWeightPtrOutputWithContext(ctx context.Context) MysqlProxyMasterNodeWeightPtrOutput {
+	return o
+}
+
+func (o MysqlProxyMasterNodeWeightPtrOutput) Elem() MysqlProxyMasterNodeWeightOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) MysqlProxyMasterNodeWeight {
+		if v != nil {
+			return *v
+		}
+		var ret MysqlProxyMasterNodeWeight
+		return ret
+	}).(MysqlProxyMasterNodeWeightOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyMasterNodeWeightPtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyMasterNodeWeightPtrOutput) Weight() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *MysqlProxyMasterNodeWeight) *int {
+		if v == nil {
+			return nil
+		}
+		return &v.Weight
+	}).(pulumi.IntPtrOutput)
+}
+
+type MysqlProxyNode struct {
+	// Indicates the proxy node AZ.
+	AzCode *string `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen. The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	// + **2**: deleted after being frozen.
+	FrozenFlag *int `pulumi:"frozenFlag"`
+	// Specifies the ID of the node.
+	Id *string `pulumi:"id"`
+	// Specifies the name of the parameter.
+	Name *string `pulumi:"name"`
+	// Indicates the proxy node role. The values can be:
+	// + **master**: primary node.
+	// + **slave**: read replica.
+	Role *string `pulumi:"role"`
+	// Indicates the proxy node status. The values can be:
+	// + **ACTIVE**: The node is available.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **FAILED**: The node fails.
+	// + **DELETED**: The node has been deleted.
+	Status *string `pulumi:"status"`
+}
+
+// MysqlProxyNodeInput is an input type that accepts MysqlProxyNodeArgs and MysqlProxyNodeOutput values.
+// You can construct a concrete instance of `MysqlProxyNodeInput` via:
+//
+//	MysqlProxyNodeArgs{...}
+type MysqlProxyNodeInput interface {
+	pulumi.Input
+
+	ToMysqlProxyNodeOutput() MysqlProxyNodeOutput
+	ToMysqlProxyNodeOutputWithContext(context.Context) MysqlProxyNodeOutput
+}
+
+type MysqlProxyNodeArgs struct {
+	// Indicates the proxy node AZ.
+	AzCode pulumi.StringPtrInput `pulumi:"azCode"`
+	// Indicates whether the proxy node is frozen. The values can be:
+	// + **0**: unfrozen.
+	// + **1**: frozen.
+	// + **2**: deleted after being frozen.
+	FrozenFlag pulumi.IntPtrInput `pulumi:"frozenFlag"`
+	// Specifies the ID of the node.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the name of the parameter.
+	Name pulumi.StringPtrInput `pulumi:"name"`
+	// Indicates the proxy node role. The values can be:
+	// + **master**: primary node.
+	// + **slave**: read replica.
+	Role pulumi.StringPtrInput `pulumi:"role"`
+	// Indicates the proxy node status. The values can be:
+	// + **ACTIVE**: The node is available.
+	// + **ABNORMAL**: The node is abnormal.
+	// + **FAILED**: The node fails.
+	// + **DELETED**: The node has been deleted.
+	Status pulumi.StringPtrInput `pulumi:"status"`
+}
+
+func (MysqlProxyNodeArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyNode)(nil)).Elem()
+}
+
+func (i MysqlProxyNodeArgs) ToMysqlProxyNodeOutput() MysqlProxyNodeOutput {
+	return i.ToMysqlProxyNodeOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyNodeArgs) ToMysqlProxyNodeOutputWithContext(ctx context.Context) MysqlProxyNodeOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyNodeOutput)
+}
+
+// MysqlProxyNodeArrayInput is an input type that accepts MysqlProxyNodeArray and MysqlProxyNodeArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyNodeArrayInput` via:
+//
+//	MysqlProxyNodeArray{ MysqlProxyNodeArgs{...} }
+type MysqlProxyNodeArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput
+	ToMysqlProxyNodeArrayOutputWithContext(context.Context) MysqlProxyNodeArrayOutput
+}
+
+type MysqlProxyNodeArray []MysqlProxyNodeInput
+
+func (MysqlProxyNodeArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyNode)(nil)).Elem()
+}
+
+func (i MysqlProxyNodeArray) ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput {
+	return i.ToMysqlProxyNodeArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyNodeArray) ToMysqlProxyNodeArrayOutputWithContext(ctx context.Context) MysqlProxyNodeArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyNodeArrayOutput)
+}
+
+type MysqlProxyNodeOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyNodeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyNode)(nil)).Elem()
+}
+
+func (o MysqlProxyNodeOutput) ToMysqlProxyNodeOutput() MysqlProxyNodeOutput {
+	return o
+}
+
+func (o MysqlProxyNodeOutput) ToMysqlProxyNodeOutputWithContext(ctx context.Context) MysqlProxyNodeOutput {
+	return o
+}
+
+// Indicates the proxy node AZ.
+func (o MysqlProxyNodeOutput) AzCode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.AzCode }).(pulumi.StringPtrOutput)
+}
+
+// Indicates whether the proxy node is frozen. The values can be:
+// + **0**: unfrozen.
+// + **1**: frozen.
+// + **2**: deleted after being frozen.
+func (o MysqlProxyNodeOutput) FrozenFlag() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *int { return v.FrozenFlag }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyNodeOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of the parameter.
+func (o MysqlProxyNodeOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Name }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the proxy node role. The values can be:
+// + **master**: primary node.
+// + **slave**: read replica.
+func (o MysqlProxyNodeOutput) Role() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Role }).(pulumi.StringPtrOutput)
+}
+
+// Indicates the proxy node status. The values can be:
+// + **ACTIVE**: The node is available.
+// + **ABNORMAL**: The node is abnormal.
+// + **FAILED**: The node fails.
+// + **DELETED**: The node has been deleted.
+func (o MysqlProxyNodeOutput) Status() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v MysqlProxyNode) *string { return v.Status }).(pulumi.StringPtrOutput)
+}
+
+type MysqlProxyNodeArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyNodeArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyNode)(nil)).Elem()
+}
+
+func (o MysqlProxyNodeArrayOutput) ToMysqlProxyNodeArrayOutput() MysqlProxyNodeArrayOutput {
+	return o
+}
+
+func (o MysqlProxyNodeArrayOutput) ToMysqlProxyNodeArrayOutputWithContext(ctx context.Context) MysqlProxyNodeArrayOutput {
+	return o
+}
+
+func (o MysqlProxyNodeArrayOutput) Index(i pulumi.IntInput) MysqlProxyNodeOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyNode {
+		return vs[0].([]MysqlProxyNode)[vs[1].(int)]
+	}).(MysqlProxyNodeOutput)
+}
+
+type MysqlProxyParameter struct {
+	// Specifies the parent tag type of the parameter.
+	ElemType string `pulumi:"elemType"`
+	// Specifies the name of the parameter.
+	Name string `pulumi:"name"`
+	// Specifies the value of the parameter.
+	Value string `pulumi:"value"`
+}
+
+// MysqlProxyParameterInput is an input type that accepts MysqlProxyParameterArgs and MysqlProxyParameterOutput values.
+// You can construct a concrete instance of `MysqlProxyParameterInput` via:
+//
+//	MysqlProxyParameterArgs{...}
+type MysqlProxyParameterInput interface {
+	pulumi.Input
+
+	ToMysqlProxyParameterOutput() MysqlProxyParameterOutput
+	ToMysqlProxyParameterOutputWithContext(context.Context) MysqlProxyParameterOutput
+}
+
+type MysqlProxyParameterArgs struct {
+	// Specifies the parent tag type of the parameter.
+	ElemType pulumi.StringInput `pulumi:"elemType"`
+	// Specifies the name of the parameter.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the value of the parameter.
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (MysqlProxyParameterArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyParameter)(nil)).Elem()
+}
+
+func (i MysqlProxyParameterArgs) ToMysqlProxyParameterOutput() MysqlProxyParameterOutput {
+	return i.ToMysqlProxyParameterOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyParameterArgs) ToMysqlProxyParameterOutputWithContext(ctx context.Context) MysqlProxyParameterOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyParameterOutput)
+}
+
+// MysqlProxyParameterArrayInput is an input type that accepts MysqlProxyParameterArray and MysqlProxyParameterArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyParameterArrayInput` via:
+//
+//	MysqlProxyParameterArray{ MysqlProxyParameterArgs{...} }
+type MysqlProxyParameterArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyParameterArrayOutput() MysqlProxyParameterArrayOutput
+	ToMysqlProxyParameterArrayOutputWithContext(context.Context) MysqlProxyParameterArrayOutput
+}
+
+type MysqlProxyParameterArray []MysqlProxyParameterInput
+
+func (MysqlProxyParameterArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyParameter)(nil)).Elem()
+}
+
+func (i MysqlProxyParameterArray) ToMysqlProxyParameterArrayOutput() MysqlProxyParameterArrayOutput {
+	return i.ToMysqlProxyParameterArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyParameterArray) ToMysqlProxyParameterArrayOutputWithContext(ctx context.Context) MysqlProxyParameterArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyParameterArrayOutput)
+}
+
+type MysqlProxyParameterOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyParameterOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyParameter)(nil)).Elem()
+}
+
+func (o MysqlProxyParameterOutput) ToMysqlProxyParameterOutput() MysqlProxyParameterOutput {
+	return o
+}
+
+func (o MysqlProxyParameterOutput) ToMysqlProxyParameterOutputWithContext(ctx context.Context) MysqlProxyParameterOutput {
+	return o
+}
+
+// Specifies the parent tag type of the parameter.
+func (o MysqlProxyParameterOutput) ElemType() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyParameter) string { return v.ElemType }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the parameter.
+func (o MysqlProxyParameterOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyParameter) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the value of the parameter.
+func (o MysqlProxyParameterOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyParameter) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type MysqlProxyParameterArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyParameterArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyParameter)(nil)).Elem()
+}
+
+func (o MysqlProxyParameterArrayOutput) ToMysqlProxyParameterArrayOutput() MysqlProxyParameterArrayOutput {
+	return o
+}
+
+func (o MysqlProxyParameterArrayOutput) ToMysqlProxyParameterArrayOutputWithContext(ctx context.Context) MysqlProxyParameterArrayOutput {
+	return o
+}
+
+func (o MysqlProxyParameterArrayOutput) Index(i pulumi.IntInput) MysqlProxyParameterOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyParameter {
+		return vs[0].([]MysqlProxyParameter)[vs[1].(int)]
+	}).(MysqlProxyParameterOutput)
+}
+
+type MysqlProxyReadonlyNodesWeight struct {
+	// Specifies the ID of the node.
+	Id string `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight int `pulumi:"weight"`
+}
+
+// MysqlProxyReadonlyNodesWeightInput is an input type that accepts MysqlProxyReadonlyNodesWeightArgs and MysqlProxyReadonlyNodesWeightOutput values.
+// You can construct a concrete instance of `MysqlProxyReadonlyNodesWeightInput` via:
+//
+//	MysqlProxyReadonlyNodesWeightArgs{...}
+type MysqlProxyReadonlyNodesWeightInput interface {
+	pulumi.Input
+
+	ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput
+	ToMysqlProxyReadonlyNodesWeightOutputWithContext(context.Context) MysqlProxyReadonlyNodesWeightOutput
+}
+
+type MysqlProxyReadonlyNodesWeightArgs struct {
+	// Specifies the ID of the node.
+	Id pulumi.StringInput `pulumi:"id"`
+	// Specifies the weight assigned to the node.
+	// + If `routeMode` is `0`, the value is `0` to `1,000`.
+	// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+	// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+	Weight pulumi.IntInput `pulumi:"weight"`
+}
+
+func (MysqlProxyReadonlyNodesWeightArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyReadonlyNodesWeightArgs) ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput {
+	return i.ToMysqlProxyReadonlyNodesWeightOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyReadonlyNodesWeightArgs) ToMysqlProxyReadonlyNodesWeightOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyReadonlyNodesWeightOutput)
+}
+
+// MysqlProxyReadonlyNodesWeightArrayInput is an input type that accepts MysqlProxyReadonlyNodesWeightArray and MysqlProxyReadonlyNodesWeightArrayOutput values.
+// You can construct a concrete instance of `MysqlProxyReadonlyNodesWeightArrayInput` via:
+//
+//	MysqlProxyReadonlyNodesWeightArray{ MysqlProxyReadonlyNodesWeightArgs{...} }
+type MysqlProxyReadonlyNodesWeightArrayInput interface {
+	pulumi.Input
+
+	ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput
+	ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(context.Context) MysqlProxyReadonlyNodesWeightArrayOutput
+}
+
+type MysqlProxyReadonlyNodesWeightArray []MysqlProxyReadonlyNodesWeightInput
+
+func (MysqlProxyReadonlyNodesWeightArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (i MysqlProxyReadonlyNodesWeightArray) ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput {
+	return i.ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(context.Background())
+}
+
+func (i MysqlProxyReadonlyNodesWeightArray) ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(MysqlProxyReadonlyNodesWeightArrayOutput)
+}
+
+type MysqlProxyReadonlyNodesWeightOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyReadonlyNodesWeightOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyReadonlyNodesWeightOutput) ToMysqlProxyReadonlyNodesWeightOutput() MysqlProxyReadonlyNodesWeightOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightOutput) ToMysqlProxyReadonlyNodesWeightOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightOutput {
+	return o
+}
+
+// Specifies the ID of the node.
+func (o MysqlProxyReadonlyNodesWeightOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v MysqlProxyReadonlyNodesWeight) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Specifies the weight assigned to the node.
+// + If `routeMode` is `0`, the value is `0` to `1,000`.
+// + If `routeMode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+// + If `routeMode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+func (o MysqlProxyReadonlyNodesWeightOutput) Weight() pulumi.IntOutput {
+	return o.ApplyT(func(v MysqlProxyReadonlyNodesWeight) int { return v.Weight }).(pulumi.IntOutput)
+}
+
+type MysqlProxyReadonlyNodesWeightArrayOutput struct{ *pulumi.OutputState }
+
+func (MysqlProxyReadonlyNodesWeightArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]MysqlProxyReadonlyNodesWeight)(nil)).Elem()
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) ToMysqlProxyReadonlyNodesWeightArrayOutput() MysqlProxyReadonlyNodesWeightArrayOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) ToMysqlProxyReadonlyNodesWeightArrayOutputWithContext(ctx context.Context) MysqlProxyReadonlyNodesWeightArrayOutput {
+	return o
+}
+
+func (o MysqlProxyReadonlyNodesWeightArrayOutput) Index(i pulumi.IntInput) MysqlProxyReadonlyNodesWeightOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) MysqlProxyReadonlyNodesWeight {
+		return vs[0].([]MysqlProxyReadonlyNodesWeight)[vs[1].(int)]
+	}).(MysqlProxyReadonlyNodesWeightOutput)
 }
 
 type GetMysqlFlavorsFlavor struct {
@@ -1010,16 +2401,24 @@ type GetMysqlInstancesInstance struct {
 	BackupStrategies []GetMysqlInstancesInstanceBackupStrategy `pulumi:"backupStrategies"`
 	// Indicates the configuration ID.
 	ConfigurationId string `pulumi:"configurationId"`
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt string `pulumi:"createdAt"`
 	// Indicates the database information. Structure is documented below.
 	Datastores []GetMysqlInstancesInstanceDatastore `pulumi:"datastores"`
 	// Indicates the default username.
 	DbUserName string `pulumi:"dbUserName"`
+	// Indicates the description of the instance.
+	Description string `pulumi:"description"`
 	// Indicates the enterprise project id.
 	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// Indicates the instance specifications.
 	Flavor string `pulumi:"flavor"`
 	// Indicates the node ID.
 	Id string `pulumi:"id"`
+	// Indicates the start time for a maintenance window.
+	MaintainBegin string `pulumi:"maintainBegin"`
+	// Indicates the end time for a maintenance window.
+	MaintainEnd string `pulumi:"maintainEnd"`
 	// Indicates the availability zone where the master node resides.
 	MasterAvailabilityZone string `pulumi:"masterAvailabilityZone"`
 	// Indicates the instance mode.
@@ -1030,6 +2429,10 @@ type GetMysqlInstancesInstance struct {
 	Nodes []GetMysqlInstancesInstanceNode `pulumi:"nodes"`
 	// Indicates the database port.
 	Port int `pulumi:"port"`
+	// Indicates the private domain name.
+	PrivateDnsName string `pulumi:"privateDnsName"`
+	// Indicates the prefix of the private domain name.
+	PrivateDnsNamePrefix string `pulumi:"privateDnsNamePrefix"`
 	// Indicates the private IP address of the DB instance.
 	PrivateWriteIp string `pulumi:"privateWriteIp"`
 	// Indicates the count of read replicas.
@@ -1045,6 +2448,8 @@ type GetMysqlInstancesInstance struct {
 	SubnetId string `pulumi:"subnetId"`
 	// Indicates the time zone.
 	TimeZone string `pulumi:"timeZone"`
+	// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	UpdatedAt string `pulumi:"updatedAt"`
 	// Specifies the VPC ID.
 	VpcId string `pulumi:"vpcId"`
 }
@@ -1067,16 +2472,24 @@ type GetMysqlInstancesInstanceArgs struct {
 	BackupStrategies GetMysqlInstancesInstanceBackupStrategyArrayInput `pulumi:"backupStrategies"`
 	// Indicates the configuration ID.
 	ConfigurationId pulumi.StringInput `pulumi:"configurationId"`
+	// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	CreatedAt pulumi.StringInput `pulumi:"createdAt"`
 	// Indicates the database information. Structure is documented below.
 	Datastores GetMysqlInstancesInstanceDatastoreArrayInput `pulumi:"datastores"`
 	// Indicates the default username.
 	DbUserName pulumi.StringInput `pulumi:"dbUserName"`
+	// Indicates the description of the instance.
+	Description pulumi.StringInput `pulumi:"description"`
 	// Indicates the enterprise project id.
 	EnterpriseProjectId pulumi.StringInput `pulumi:"enterpriseProjectId"`
 	// Indicates the instance specifications.
 	Flavor pulumi.StringInput `pulumi:"flavor"`
 	// Indicates the node ID.
 	Id pulumi.StringInput `pulumi:"id"`
+	// Indicates the start time for a maintenance window.
+	MaintainBegin pulumi.StringInput `pulumi:"maintainBegin"`
+	// Indicates the end time for a maintenance window.
+	MaintainEnd pulumi.StringInput `pulumi:"maintainEnd"`
 	// Indicates the availability zone where the master node resides.
 	MasterAvailabilityZone pulumi.StringInput `pulumi:"masterAvailabilityZone"`
 	// Indicates the instance mode.
@@ -1087,6 +2500,10 @@ type GetMysqlInstancesInstanceArgs struct {
 	Nodes GetMysqlInstancesInstanceNodeArrayInput `pulumi:"nodes"`
 	// Indicates the database port.
 	Port pulumi.IntInput `pulumi:"port"`
+	// Indicates the private domain name.
+	PrivateDnsName pulumi.StringInput `pulumi:"privateDnsName"`
+	// Indicates the prefix of the private domain name.
+	PrivateDnsNamePrefix pulumi.StringInput `pulumi:"privateDnsNamePrefix"`
 	// Indicates the private IP address of the DB instance.
 	PrivateWriteIp pulumi.StringInput `pulumi:"privateWriteIp"`
 	// Indicates the count of read replicas.
@@ -1102,6 +2519,8 @@ type GetMysqlInstancesInstanceArgs struct {
 	SubnetId pulumi.StringInput `pulumi:"subnetId"`
 	// Indicates the time zone.
 	TimeZone pulumi.StringInput `pulumi:"timeZone"`
+	// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+	UpdatedAt pulumi.StringInput `pulumi:"updatedAt"`
 	// Specifies the VPC ID.
 	VpcId pulumi.StringInput `pulumi:"vpcId"`
 }
@@ -1172,6 +2591,11 @@ func (o GetMysqlInstancesInstanceOutput) ConfigurationId() pulumi.StringOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.ConfigurationId }).(pulumi.StringOutput)
 }
 
+// Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetMysqlInstancesInstanceOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.CreatedAt }).(pulumi.StringOutput)
+}
+
 // Indicates the database information. Structure is documented below.
 func (o GetMysqlInstancesInstanceOutput) Datastores() GetMysqlInstancesInstanceDatastoreArrayOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) []GetMysqlInstancesInstanceDatastore { return v.Datastores }).(GetMysqlInstancesInstanceDatastoreArrayOutput)
@@ -1180,6 +2604,11 @@ func (o GetMysqlInstancesInstanceOutput) Datastores() GetMysqlInstancesInstanceD
 // Indicates the default username.
 func (o GetMysqlInstancesInstanceOutput) DbUserName() pulumi.StringOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.DbUserName }).(pulumi.StringOutput)
+}
+
+// Indicates the description of the instance.
+func (o GetMysqlInstancesInstanceOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.Description }).(pulumi.StringOutput)
 }
 
 // Indicates the enterprise project id.
@@ -1195,6 +2624,16 @@ func (o GetMysqlInstancesInstanceOutput) Flavor() pulumi.StringOutput {
 // Indicates the node ID.
 func (o GetMysqlInstancesInstanceOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// Indicates the start time for a maintenance window.
+func (o GetMysqlInstancesInstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Indicates the end time for a maintenance window.
+func (o GetMysqlInstancesInstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.MaintainEnd }).(pulumi.StringOutput)
 }
 
 // Indicates the availability zone where the master node resides.
@@ -1220,6 +2659,16 @@ func (o GetMysqlInstancesInstanceOutput) Nodes() GetMysqlInstancesInstanceNodeAr
 // Indicates the database port.
 func (o GetMysqlInstancesInstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) int { return v.Port }).(pulumi.IntOutput)
+}
+
+// Indicates the private domain name.
+func (o GetMysqlInstancesInstanceOutput) PrivateDnsName() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.PrivateDnsName }).(pulumi.StringOutput)
+}
+
+// Indicates the prefix of the private domain name.
+func (o GetMysqlInstancesInstanceOutput) PrivateDnsNamePrefix() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.PrivateDnsNamePrefix }).(pulumi.StringOutput)
 }
 
 // Indicates the private IP address of the DB instance.
@@ -1256,6 +2705,11 @@ func (o GetMysqlInstancesInstanceOutput) SubnetId() pulumi.StringOutput {
 // Indicates the time zone.
 func (o GetMysqlInstancesInstanceOutput) TimeZone() pulumi.StringOutput {
 	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.TimeZone }).(pulumi.StringOutput)
+}
+
+// Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+func (o GetMysqlInstancesInstanceOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v GetMysqlInstancesInstance) string { return v.UpdatedAt }).(pulumi.StringOutput)
 }
 
 // Specifies the VPC ID.
@@ -1638,12 +3092,28 @@ func (o GetMysqlInstancesInstanceNodeArrayOutput) Index(i pulumi.IntInput) GetMy
 }
 
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceAutoScalingInput)(nil)).Elem(), MysqlInstanceAutoScalingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceAutoScalingPtrInput)(nil)).Elem(), MysqlInstanceAutoScalingArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceAutoScalingScalingStrategyInput)(nil)).Elem(), MysqlInstanceAutoScalingScalingStrategyArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceAutoScalingScalingStrategyPtrInput)(nil)).Elem(), MysqlInstanceAutoScalingScalingStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceBackupStrategyInput)(nil)).Elem(), MysqlInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceBackupStrategyPtrInput)(nil)).Elem(), MysqlInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceDatastoreInput)(nil)).Elem(), MysqlInstanceDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceDatastorePtrInput)(nil)).Elem(), MysqlInstanceDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceNodeInput)(nil)).Elem(), MysqlInstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceNodeArrayInput)(nil)).Elem(), MysqlInstanceNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceParameterInput)(nil)).Elem(), MysqlInstanceParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlInstanceParameterArrayInput)(nil)).Elem(), MysqlInstanceParameterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyAccessControlIpListInput)(nil)).Elem(), MysqlProxyAccessControlIpListArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyAccessControlIpListArrayInput)(nil)).Elem(), MysqlProxyAccessControlIpListArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyMasterNodeWeightInput)(nil)).Elem(), MysqlProxyMasterNodeWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyMasterNodeWeightPtrInput)(nil)).Elem(), MysqlProxyMasterNodeWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyNodeInput)(nil)).Elem(), MysqlProxyNodeArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyNodeArrayInput)(nil)).Elem(), MysqlProxyNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyParameterInput)(nil)).Elem(), MysqlProxyParameterArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyParameterArrayInput)(nil)).Elem(), MysqlProxyParameterArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyReadonlyNodesWeightInput)(nil)).Elem(), MysqlProxyReadonlyNodesWeightArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*MysqlProxyReadonlyNodesWeightArrayInput)(nil)).Elem(), MysqlProxyReadonlyNodesWeightArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlFlavorsFlavorInput)(nil)).Elem(), GetMysqlFlavorsFlavorArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlFlavorsFlavorArrayInput)(nil)).Elem(), GetMysqlFlavorsFlavorArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlInstanceBackupStrategyInput)(nil)).Elem(), GetMysqlInstanceBackupStrategyArgs{})
@@ -1660,12 +3130,28 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlInstancesInstanceDatastoreArrayInput)(nil)).Elem(), GetMysqlInstancesInstanceDatastoreArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlInstancesInstanceNodeInput)(nil)).Elem(), GetMysqlInstancesInstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetMysqlInstancesInstanceNodeArrayInput)(nil)).Elem(), GetMysqlInstancesInstanceNodeArray{})
+	pulumi.RegisterOutputType(MysqlInstanceAutoScalingOutput{})
+	pulumi.RegisterOutputType(MysqlInstanceAutoScalingPtrOutput{})
+	pulumi.RegisterOutputType(MysqlInstanceAutoScalingScalingStrategyOutput{})
+	pulumi.RegisterOutputType(MysqlInstanceAutoScalingScalingStrategyPtrOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceBackupStrategyOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceBackupStrategyPtrOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceDatastoreOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceDatastorePtrOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceNodeOutput{})
 	pulumi.RegisterOutputType(MysqlInstanceNodeArrayOutput{})
+	pulumi.RegisterOutputType(MysqlInstanceParameterOutput{})
+	pulumi.RegisterOutputType(MysqlInstanceParameterArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyAccessControlIpListOutput{})
+	pulumi.RegisterOutputType(MysqlProxyAccessControlIpListArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyMasterNodeWeightOutput{})
+	pulumi.RegisterOutputType(MysqlProxyMasterNodeWeightPtrOutput{})
+	pulumi.RegisterOutputType(MysqlProxyNodeOutput{})
+	pulumi.RegisterOutputType(MysqlProxyNodeArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyParameterOutput{})
+	pulumi.RegisterOutputType(MysqlProxyParameterArrayOutput{})
+	pulumi.RegisterOutputType(MysqlProxyReadonlyNodesWeightOutput{})
+	pulumi.RegisterOutputType(MysqlProxyReadonlyNodesWeightArrayOutput{})
 	pulumi.RegisterOutputType(GetMysqlFlavorsFlavorOutput{})
 	pulumi.RegisterOutputType(GetMysqlFlavorsFlavorArrayOutput{})
 	pulumi.RegisterOutputType(GetMysqlInstanceBackupStrategyOutput{})

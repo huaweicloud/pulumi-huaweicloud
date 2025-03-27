@@ -77,10 +77,15 @@ type LookupNodePoolResult struct {
 	CurrentNodeCount int `pulumi:"currentNodeCount"`
 	// Represents the data disk to be created. Structure is documented below.
 	DataVolumes []GetNodePoolDataVolume `pulumi:"dataVolumes"`
+	// The enterprise project ID of the node pool.
+	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// Extended parameter.
 	ExtendParam map[string]string `pulumi:"extendParam"`
 	// The flavor ID.
 	FlavorId string `pulumi:"flavorId"`
+	// The hostname config of the kubernetes node.
+	// The object structure is documented below.
+	HostnameConfigs []GetNodePoolHostnameConfig `pulumi:"hostnameConfigs"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// Initial number of nodes in the node pool.
@@ -113,7 +118,7 @@ type LookupNodePoolResult struct {
 	SubnetId string `pulumi:"subnetId"`
 	// Tags of a VM node, key/value pair format.
 	Tags map[string]string `pulumi:"tags"`
-	// Node Pool type.
+	// The hostname type of the kubernetes node.
 	Type string `pulumi:"type"`
 }
 
@@ -183,6 +188,11 @@ func (o LookupNodePoolResultOutput) DataVolumes() GetNodePoolDataVolumeArrayOutp
 	return o.ApplyT(func(v LookupNodePoolResult) []GetNodePoolDataVolume { return v.DataVolumes }).(GetNodePoolDataVolumeArrayOutput)
 }
 
+// The enterprise project ID of the node pool.
+func (o LookupNodePoolResultOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupNodePoolResult) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
 // Extended parameter.
 func (o LookupNodePoolResultOutput) ExtendParam() pulumi.StringMapOutput {
 	return o.ApplyT(func(v LookupNodePoolResult) map[string]string { return v.ExtendParam }).(pulumi.StringMapOutput)
@@ -191,6 +201,12 @@ func (o LookupNodePoolResultOutput) ExtendParam() pulumi.StringMapOutput {
 // The flavor ID.
 func (o LookupNodePoolResultOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupNodePoolResult) string { return v.FlavorId }).(pulumi.StringOutput)
+}
+
+// The hostname config of the kubernetes node.
+// The object structure is documented below.
+func (o LookupNodePoolResultOutput) HostnameConfigs() GetNodePoolHostnameConfigArrayOutput {
+	return o.ApplyT(func(v LookupNodePoolResult) []GetNodePoolHostnameConfig { return v.HostnameConfigs }).(GetNodePoolHostnameConfigArrayOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.
@@ -279,7 +295,7 @@ func (o LookupNodePoolResultOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v LookupNodePoolResult) map[string]string { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Node Pool type.
+// The hostname type of the kubernetes node.
 func (o LookupNodePoolResultOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupNodePoolResult) string { return v.Type }).(pulumi.StringOutput)
 }

@@ -32,7 +32,7 @@ class TaskTargetServerDiskArgs:
         :param pulumi.Input[int] size: Specifies the volume size in MB. Changing this parameter will create a new resource.
         :param pulumi.Input[str] disk_id: Specifies the disk index, e.g. "0".
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['TaskTargetServerDiskPhysicalVolumeArgs']]] physical_volumes: Specifies an array of physical volume informations.
+        :param pulumi.Input[Sequence[pulumi.Input['TaskTargetServerDiskPhysicalVolumeArgs']]] physical_volumes: Specifies an array of physical volume information.
                The object is documented below. Changing this parameter will create a new resource.
         :param pulumi.Input[int] used_size: Specifies the used space in MB.
                Changing this parameter will create a new resource.
@@ -103,7 +103,7 @@ class TaskTargetServerDiskArgs:
     @pulumi.getter(name="physicalVolumes")
     def physical_volumes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['TaskTargetServerDiskPhysicalVolumeArgs']]]]:
         """
-        Specifies an array of physical volume informations.
+        Specifies an array of physical volume information.
         The object is documented below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "physical_volumes")

@@ -6,7 +6,7 @@ import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
- * Manages a CBR Vault resource within Huaweicloud.
+ * Manages a CBR vault resource within HuaweiCloud.
  *
  * ## Example Usage
  * ### Create a server type vault
@@ -31,6 +31,44 @@ import * as utilities from "../utilities";
  *     tags: {
  *         foo: "bar",
  *     },
+ * });
+ * ```
+ * ### Create a server type vault and associate backup and reprecation policies
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const destinationRegion = config.requireObject("destinationRegion");
+ * const destinationVaultName = config.requireObject("destinationVaultName");
+ * const vaultName = config.requireObject("vaultName");
+ * const backupPolicyId = config.requireObject("backupPolicyId");
+ * const replicationPolicyId = config.requireObject("replicationPolicyId");
+ * const destination = new huaweicloud.cbr.Vault("destination", {
+ *     region: destinationRegion,
+ *     type: "server",
+ *     protectionType: "replication",
+ *     size: 500,
+ * });
+ * const test = new huaweicloud.cbr.Vault("test", {
+ *     type: "server",
+ *     protectionType: "backup",
+ *     consistentLevel: "crash_consistent",
+ *     size: 500,
+ *     autoBind: true,
+ *     bindRules: {
+ *         service_name: "xxx",
+ *     },
+ *     policies: [
+ *         {
+ *             id: backupPolicyId,
+ *         },
+ *         {
+ *             id: replicationPolicyId,
+ *             destinationVaultId: destination.id,
+ *         },
+ *     ],
  * });
  * ```
  * ### Create a disk type vault
@@ -90,16 +128,61 @@ import * as utilities from "../utilities";
  *     size: 1000,
  * });
  * ```
+ * ### Create a Workspace type vault
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vaultName = config.requireObject("vaultName");
+ * const test = new huaweicloud.cbr.Vault("test", {
+ *     type: "workspace",
+ *     protectionType: "backup",
+ *     size: 100,
+ *     consistentLevel: "crash_consistent",
+ * });
+ * ```
+ * ### Create a VMware type vault
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vaultName = config.requireObject("vaultName");
+ * const test = new huaweicloud.cbr.Vault("test", {
+ *     type: "vmware",
+ *     protectionType: "backup",
+ *     size: 100,
+ *     consistentLevel: "crash_consistent",
+ * });
+ * ```
+ * ### Create a file type vault
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const vaultName = config.requireObject("vaultName");
+ * const test = new huaweicloud.cbr.Vault("test", {
+ *     type: "file",
+ *     protectionType: "backup",
+ *     size: 100,
+ *     consistentLevel: "crash_consistent",
+ * });
+ * ```
  *
  * ## Import
  *
- * Vaults can be imported by their `id`. For example,
+ * Vaults can be imported by their `id`. For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cbr/vault:Vault test 01c33779-7c83-4182-8b6b-24a671fcedf8
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. resource "huaweicloud_cbr_vault" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. hcl resource "huaweicloud_cbr_vault" "test" {
  *
  *  ...
  *
@@ -180,6 +263,11 @@ export class Vault extends pulumi.CustomResource {
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
+     * Specifies the cloud type of the vault.  
+     * Changing this will create a new vault.
+     */
+    public readonly cloudType!: pulumi.Output<string>;
+    /**
      * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -187,10 +275,14 @@ export class Vault extends pulumi.CustomResource {
      */
     public readonly consistentLevel!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the ID of the enterprise project to which the vault
-     * belongs. Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault belongs.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
+    /**
+     * Specifies whether multiple availability zones are used for backing up.
+     * Defaults to **false**.
+     */
+    public readonly isMultiAz!: pulumi.Output<boolean>;
     /**
      * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
      * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -231,7 +323,8 @@ export class Vault extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies an array of one or more resources to attach to the CBR vault.
+     * Specifies an array of one or more resources to attach to the CBR vault.  
+     * This feature is not supported for the **vmware** type and the **file** type.
      * The object structure is documented below.
      */
     public readonly resources!: pulumi.Output<outputs.Cbr.VaultResource[]>;
@@ -257,10 +350,13 @@ export class Vault extends pulumi.CustomResource {
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * Specifies the object type of the CBR vault.
-     * Changing this will create a new vault. Vaild values are as follows:
-     * + **server** (Cloud Servers)
-     * + **disk** (EVS Disks)
-     * + **turbo** (SFS Turbo file systems)
+     * Changing this will create a new vault. Valid values are as follows:
+     * + **server** (Elastic Cloud Server)
+     * + **disk** (EVS Disk)
+     * + **turbo** (SFS Turbo file system)
+     * + **workspace** (Workspace Desktop)
+     * + **vmware** (VMware)
+     * + **file** (File System)
      */
     public readonly type!: pulumi.Output<string>;
     /**
@@ -289,8 +385,10 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["backupNamePrefix"] = state ? state.backupNamePrefix : undefined;
             resourceInputs["bindRules"] = state ? state.bindRules : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["cloudType"] = state ? state.cloudType : undefined;
             resourceInputs["consistentLevel"] = state ? state.consistentLevel : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["isMultiAz"] = state ? state.isMultiAz : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["period"] = state ? state.period : undefined;
             resourceInputs["periodUnit"] = state ? state.periodUnit : undefined;
@@ -324,8 +422,10 @@ export class Vault extends pulumi.CustomResource {
             resourceInputs["backupNamePrefix"] = args ? args.backupNamePrefix : undefined;
             resourceInputs["bindRules"] = args ? args.bindRules : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["cloudType"] = args ? args.cloudType : undefined;
             resourceInputs["consistentLevel"] = args ? args.consistentLevel : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["isMultiAz"] = args ? args.isMultiAz : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["period"] = args ? args.period : undefined;
             resourceInputs["periodUnit"] = args ? args.periodUnit : undefined;
@@ -391,6 +491,11 @@ export interface VaultState {
      */
     chargingMode?: pulumi.Input<string>;
     /**
+     * Specifies the cloud type of the vault.  
+     * Changing this will create a new vault.
+     */
+    cloudType?: pulumi.Input<string>;
+    /**
      * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -398,10 +503,14 @@ export interface VaultState {
      */
     consistentLevel?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the enterprise project to which the vault
-     * belongs. Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault belongs.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies whether multiple availability zones are used for backing up.
+     * Defaults to **false**.
+     */
+    isMultiAz?: pulumi.Input<boolean>;
     /**
      * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
      * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -442,7 +551,8 @@ export interface VaultState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more resources to attach to the CBR vault.
+     * Specifies an array of one or more resources to attach to the CBR vault.  
+     * This feature is not supported for the **vmware** type and the **file** type.
      * The object structure is documented below.
      */
     resources?: pulumi.Input<pulumi.Input<inputs.Cbr.VaultResource>[]>;
@@ -468,10 +578,13 @@ export interface VaultState {
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the object type of the CBR vault.
-     * Changing this will create a new vault. Vaild values are as follows:
-     * + **server** (Cloud Servers)
-     * + **disk** (EVS Disks)
-     * + **turbo** (SFS Turbo file systems)
+     * Changing this will create a new vault. Valid values are as follows:
+     * + **server** (Elastic Cloud Server)
+     * + **disk** (EVS Disk)
+     * + **turbo** (SFS Turbo file system)
+     * + **workspace** (Workspace Desktop)
+     * + **vmware** (VMware)
+     * + **file** (File System)
      */
     type?: pulumi.Input<string>;
     /**
@@ -519,6 +632,11 @@ export interface VaultArgs {
      */
     chargingMode?: pulumi.Input<string>;
     /**
+     * Specifies the cloud type of the vault.  
+     * Changing this will create a new vault.
+     */
+    cloudType?: pulumi.Input<string>;
+    /**
      * Specifies the consistent level (specification) of the vault.
      * The valid values are as follows:
      * + **[crashConsistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
@@ -526,10 +644,14 @@ export interface VaultArgs {
      */
     consistentLevel?: pulumi.Input<string>;
     /**
-     * Specifies the ID of the enterprise project to which the vault
-     * belongs. Changing this will create a new vault.
+     * Specifies the ID of the enterprise project to which the vault belongs.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies whether multiple availability zones are used for backing up.
+     * Defaults to **false**.
+     */
+    isMultiAz?: pulumi.Input<boolean>;
     /**
      * Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
      * characters, which may consist of letters, digits, underscores(_) and hyphens (-).
@@ -570,7 +692,8 @@ export interface VaultArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an array of one or more resources to attach to the CBR vault.
+     * Specifies an array of one or more resources to attach to the CBR vault.  
+     * This feature is not supported for the **vmware** type and the **file** type.
      * The object structure is documented below.
      */
     resources?: pulumi.Input<pulumi.Input<inputs.Cbr.VaultResource>[]>;
@@ -584,10 +707,13 @@ export interface VaultArgs {
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * Specifies the object type of the CBR vault.
-     * Changing this will create a new vault. Vaild values are as follows:
-     * + **server** (Cloud Servers)
-     * + **disk** (EVS Disks)
-     * + **turbo** (SFS Turbo file systems)
+     * Changing this will create a new vault. Valid values are as follows:
+     * + **server** (Elastic Cloud Server)
+     * + **disk** (EVS Disk)
+     * + **turbo** (SFS Turbo file system)
+     * + **workspace** (Workspace Desktop)
+     * + **vmware** (VMware)
+     * + **file** (File System)
      */
     type: pulumi.Input<string>;
 }

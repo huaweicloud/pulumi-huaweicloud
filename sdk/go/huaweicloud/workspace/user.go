@@ -7,7 +7,6 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/pkg/errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -51,28 +50,48 @@ import (
 //
 // ## Import
 //
-// Users can be imported using the `id`, e.g.
+// Users can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Workspace/user:User test a96e632a399d452eb29e5091e0af806a
+//	$ pulumi import huaweicloud:Workspace/user:User test <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_user" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	password,
+//
+//	]
+//
+//	} }
 type User struct {
 	pulumi.CustomResourceState
 
 	// Specifies the user's valid period configuration.
+	// Defaults to "0".
 	// + Never expires: **0**.
 	// + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 	//   The times is in local time, depending on the timezone.
 	AccountExpires pulumi.StringPtrOutput `pulumi:"accountExpires"`
+	// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+	// The valid values are as follows:
+	// + **USER_ACTIVATE**: Activated by the user.
+	// + **ADMIN_ACTIVATE**: Activated by the administator.
+	ActiveType pulumi.StringOutput `pulumi:"activeType"`
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies whether the user is disabled.
 	// Defaults to **false**.
 	Disabled pulumi.BoolPtrOutput `pulumi:"disabled"`
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
-	Email pulumi.StringOutput `pulumi:"email"`
+	Email pulumi.StringPtrOutput `pulumi:"email"`
 	// Specifies whether to allow password modification.
 	// Defaults to **true**.
 	EnableChangePassword pulumi.BoolPtrOutput `pulumi:"enableChangePassword"`
@@ -86,9 +105,14 @@ type User struct {
 	// Specifies whether the next login requires a password reset.
 	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrOutput `pulumi:"nextLoginChangePassword"`
+	// Specifies the initial passowrd of user.\
+	// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+	Password pulumi.StringPtrOutput `pulumi:"password"`
 	// Specifies whether the password will never expires.
 	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrOutput `pulumi:"passwordNeverExpires"`
+	// Specifies the phone number of user.
+	Phone pulumi.StringPtrOutput `pulumi:"phone"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -100,12 +124,9 @@ type User struct {
 func NewUser(ctx *pulumi.Context,
 	name string, args *UserArgs, opts ...pulumi.ResourceOption) (*User, error) {
 	if args == nil {
-		return nil, errors.New("missing one or more required arguments")
+		args = &UserArgs{}
 	}
 
-	if args.Email == nil {
-		return nil, errors.New("invalid value for required argument 'Email'")
-	}
 	opts = pkgResourceDefaultOpts(opts)
 	var resource User
 	err := ctx.RegisterResource("huaweicloud:Workspace/user:User", name, args, &resource, opts...)
@@ -130,10 +151,16 @@ func GetUser(ctx *pulumi.Context,
 // Input properties used for looking up and filtering User resources.
 type userState struct {
 	// Specifies the user's valid period configuration.
+	// Defaults to "0".
 	// + Never expires: **0**.
 	// + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 	//   The times is in local time, depending on the timezone.
 	AccountExpires *string `pulumi:"accountExpires"`
+	// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+	// The valid values are as follows:
+	// + **USER_ACTIVATE**: Activated by the user.
+	// + **ADMIN_ACTIVATE**: Activated by the administator.
+	ActiveType *string `pulumi:"activeType"`
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description *string `pulumi:"description"`
 	// Specifies whether the user is disabled.
@@ -154,9 +181,14 @@ type userState struct {
 	// Specifies whether the next login requires a password reset.
 	// Defaults to **true**.
 	NextLoginChangePassword *bool `pulumi:"nextLoginChangePassword"`
+	// Specifies the initial passowrd of user.\
+	// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+	Password *string `pulumi:"password"`
 	// Specifies whether the password will never expires.
 	// Defaults to **false**.
 	PasswordNeverExpires *bool `pulumi:"passwordNeverExpires"`
+	// Specifies the phone number of user.
+	Phone *string `pulumi:"phone"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -166,10 +198,16 @@ type userState struct {
 
 type UserState struct {
 	// Specifies the user's valid period configuration.
+	// Defaults to "0".
 	// + Never expires: **0**.
 	// + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 	//   The times is in local time, depending on the timezone.
 	AccountExpires pulumi.StringPtrInput
+	// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+	// The valid values are as follows:
+	// + **USER_ACTIVATE**: Activated by the user.
+	// + **ADMIN_ACTIVATE**: Activated by the administator.
+	ActiveType pulumi.StringPtrInput
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrInput
 	// Specifies whether the user is disabled.
@@ -190,9 +228,14 @@ type UserState struct {
 	// Specifies whether the next login requires a password reset.
 	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrInput
+	// Specifies the initial passowrd of user.\
+	// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+	Password pulumi.StringPtrInput
 	// Specifies whether the password will never expires.
 	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrInput
+	// Specifies the phone number of user.
+	Phone pulumi.StringPtrInput
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -206,17 +249,23 @@ func (UserState) ElementType() reflect.Type {
 
 type userArgs struct {
 	// Specifies the user's valid period configuration.
+	// Defaults to "0".
 	// + Never expires: **0**.
 	// + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 	//   The times is in local time, depending on the timezone.
 	AccountExpires *string `pulumi:"accountExpires"`
+	// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+	// The valid values are as follows:
+	// + **USER_ACTIVATE**: Activated by the user.
+	// + **ADMIN_ACTIVATE**: Activated by the administator.
+	ActiveType *string `pulumi:"activeType"`
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description *string `pulumi:"description"`
 	// Specifies whether the user is disabled.
 	// Defaults to **false**.
 	Disabled *bool `pulumi:"disabled"`
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
-	Email string `pulumi:"email"`
+	Email *string `pulumi:"email"`
 	// Specifies whether to allow password modification.
 	// Defaults to **true**.
 	EnableChangePassword *bool `pulumi:"enableChangePassword"`
@@ -228,9 +277,14 @@ type userArgs struct {
 	// Specifies whether the next login requires a password reset.
 	// Defaults to **true**.
 	NextLoginChangePassword *bool `pulumi:"nextLoginChangePassword"`
+	// Specifies the initial passowrd of user.\
+	// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+	Password *string `pulumi:"password"`
 	// Specifies whether the password will never expires.
 	// Defaults to **false**.
 	PasswordNeverExpires *bool `pulumi:"passwordNeverExpires"`
+	// Specifies the phone number of user.
+	Phone *string `pulumi:"phone"`
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -239,17 +293,23 @@ type userArgs struct {
 // The set of arguments for constructing a User resource.
 type UserArgs struct {
 	// Specifies the user's valid period configuration.
+	// Defaults to "0".
 	// + Never expires: **0**.
 	// + Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 	//   The times is in local time, depending on the timezone.
 	AccountExpires pulumi.StringPtrInput
+	// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+	// The valid values are as follows:
+	// + **USER_ACTIVATE**: Activated by the user.
+	// + **ADMIN_ACTIVATE**: Activated by the administator.
+	ActiveType pulumi.StringPtrInput
 	// Specifies the description of user. The maximum length is `255` characters.
 	Description pulumi.StringPtrInput
 	// Specifies whether the user is disabled.
 	// Defaults to **false**.
 	Disabled pulumi.BoolPtrInput
 	// Specifies the email address of user. The value can contain `1` to `64` characters.
-	Email pulumi.StringInput
+	Email pulumi.StringPtrInput
 	// Specifies whether to allow password modification.
 	// Defaults to **true**.
 	EnableChangePassword pulumi.BoolPtrInput
@@ -261,9 +321,14 @@ type UserArgs struct {
 	// Specifies whether the next login requires a password reset.
 	// Defaults to **true**.
 	NextLoginChangePassword pulumi.BoolPtrInput
+	// Specifies the initial passowrd of user.\
+	// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+	Password pulumi.StringPtrInput
 	// Specifies whether the password will never expires.
 	// Defaults to **false**.
 	PasswordNeverExpires pulumi.BoolPtrInput
+	// Specifies the phone number of user.
+	Phone pulumi.StringPtrInput
 	// The region in which to create the Workspace user resource.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -357,11 +422,20 @@ func (o UserOutput) ToUserOutputWithContext(ctx context.Context) UserOutput {
 }
 
 // Specifies the user's valid period configuration.
+// Defaults to "0".
 //   - Never expires: **0**.
 //   - Expires at a certain time: account expires must in RFC3339 format like `yyyy-MM-ddTHH:mm:ssZ`.
 //     The times is in local time, depending on the timezone.
 func (o UserOutput) AccountExpires() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.AccountExpires }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the activation mode of the user. Defaults to **USER_ACTIVATE**.\
+// The valid values are as follows:
+// + **USER_ACTIVATE**: Activated by the user.
+// + **ADMIN_ACTIVATE**: Activated by the administator.
+func (o UserOutput) ActiveType() pulumi.StringOutput {
+	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.ActiveType }).(pulumi.StringOutput)
 }
 
 // Specifies the description of user. The maximum length is `255` characters.
@@ -376,8 +450,8 @@ func (o UserOutput) Disabled() pulumi.BoolPtrOutput {
 }
 
 // Specifies the email address of user. The value can contain `1` to `64` characters.
-func (o UserOutput) Email() pulumi.StringOutput {
-	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Email }).(pulumi.StringOutput)
+func (o UserOutput) Email() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Email }).(pulumi.StringPtrOutput)
 }
 
 // Specifies whether to allow password modification.
@@ -405,10 +479,21 @@ func (o UserOutput) NextLoginChangePassword() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.NextLoginChangePassword }).(pulumi.BoolPtrOutput)
 }
 
+// Specifies the initial passowrd of user.\
+// This parameter is available and required when `activeType` is set to **ADMIN_ACTIVATE**.
+func (o UserOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
+}
+
 // Specifies whether the password will never expires.
 // Defaults to **false**.
 func (o UserOutput) PasswordNeverExpires() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.PasswordNeverExpires }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the phone number of user.
+func (o UserOutput) Phone() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Phone }).(pulumi.StringPtrOutput)
 }
 
 // The region in which to create the Workspace user resource.

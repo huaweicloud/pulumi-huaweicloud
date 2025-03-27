@@ -16,13 +16,24 @@ class AccountArgs:
     def __init__(__self__, *,
                  instance_id: pulumi.Input[str],
                  password: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None,
+                 hosts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Account resource.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] password: Specifies the password of the DB account.
+        :param pulumi.Input[str] description: Specifies remarks of the DB account.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] hosts: Specifies the IP addresses that are allowed to access your DB instance.
+        :param pulumi.Input[str] name: Specifies the username of the DB account.
         """
         pulumi.set(__self__, "instance_id", instance_id)
         pulumi.set(__self__, "password", password)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if hosts is not None:
+            pulumi.set(__self__, "hosts", hosts)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -31,6 +42,9 @@ class AccountArgs:
     @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -40,6 +54,9 @@ class AccountArgs:
     @property
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
+        """
+        Specifies the password of the DB account.
+        """
         return pulumi.get(self, "password")
 
     @password.setter
@@ -48,7 +65,34 @@ class AccountArgs:
 
     @property
     @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies remarks of the DB account.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
+    def hosts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IP addresses that are allowed to access your DB instance.
+        """
+        return pulumi.get(self, "hosts")
+
+    @hosts.setter
+    def hosts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "hosts", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the username of the DB account.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -68,13 +112,24 @@ class AccountArgs:
 @pulumi.input_type
 class _AccountState:
     def __init__(__self__, *,
+                 description: Optional[pulumi.Input[str]] = None,
+                 hosts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Account resources.
+        :param pulumi.Input[str] description: Specifies remarks of the DB account.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] hosts: Specifies the IP addresses that are allowed to access your DB instance.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the username of the DB account.
+        :param pulumi.Input[str] password: Specifies the password of the DB account.
         """
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if hosts is not None:
+            pulumi.set(__self__, "hosts", hosts)
         if instance_id is not None:
             pulumi.set(__self__, "instance_id", instance_id)
         if name is not None:
@@ -85,8 +140,35 @@ class _AccountState:
             pulumi.set(__self__, "region", region)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies remarks of the DB account.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter
+    def hosts(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IP addresses that are allowed to access your DB instance.
+        """
+        return pulumi.get(self, "hosts")
+
+    @hosts.setter
+    def hosts(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "hosts", value)
+
+    @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @instance_id.setter
@@ -96,6 +178,9 @@ class _AccountState:
     @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the username of the DB account.
+        """
         return pulumi.get(self, "name")
 
     @name.setter
@@ -105,6 +190,9 @@ class _AccountState:
     @property
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the password of the DB account.
+        """
         return pulumi.get(self, "password")
 
     @password.setter
@@ -126,6 +214,8 @@ class Account(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 hosts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -135,6 +225,11 @@ class Account(pulumi.CustomResource):
         Create a Account resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies remarks of the DB account.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] hosts: Specifies the IP addresses that are allowed to access your DB instance.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the username of the DB account.
+        :param pulumi.Input[str] password: Specifies the password of the DB account.
         """
         ...
     @overload
@@ -159,6 +254,8 @@ class Account(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 hosts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  instance_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  password: Optional[pulumi.Input[str]] = None,
@@ -172,6 +269,8 @@ class Account(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = AccountArgs.__new__(AccountArgs)
 
+            __props__.__dict__["description"] = description
+            __props__.__dict__["hosts"] = hosts
             if instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'instance_id'")
             __props__.__dict__["instance_id"] = instance_id
@@ -190,6 +289,8 @@ class Account(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            description: Optional[pulumi.Input[str]] = None,
+            hosts: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             instance_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             password: Optional[pulumi.Input[str]] = None,
@@ -201,11 +302,18 @@ class Account(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] description: Specifies remarks of the DB account.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] hosts: Specifies the IP addresses that are allowed to access your DB instance.
+        :param pulumi.Input[str] instance_id: Specifies the ID of the RDS Mysql instance.
+        :param pulumi.Input[str] name: Specifies the username of the DB account.
+        :param pulumi.Input[str] password: Specifies the password of the DB account.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _AccountState.__new__(_AccountState)
 
+        __props__.__dict__["description"] = description
+        __props__.__dict__["hosts"] = hosts
         __props__.__dict__["instance_id"] = instance_id
         __props__.__dict__["name"] = name
         __props__.__dict__["password"] = password
@@ -213,18 +321,43 @@ class Account(pulumi.CustomResource):
         return Account(resource_name, opts=opts, __props__=__props__)
 
     @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies remarks of the DB account.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def hosts(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the IP addresses that are allowed to access your DB instance.
+        """
+        return pulumi.get(self, "hosts")
+
+    @property
     @pulumi.getter(name="instanceId")
     def instance_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the ID of the RDS Mysql instance.
+        """
         return pulumi.get(self, "instance_id")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
+        """
+        Specifies the username of the DB account.
+        """
         return pulumi.get(self, "name")
 
     @property
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
+        """
+        Specifies the password of the DB account.
+        """
         return pulumi.get(self, "password")
 
     @property

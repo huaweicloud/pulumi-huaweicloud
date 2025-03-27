@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get available HuaweiCloud gaussdb redis instance.
+// Use this data source to get available HuaweiCloud GeminiDB Redis instance.
 //
 // ## Example Usage
 //

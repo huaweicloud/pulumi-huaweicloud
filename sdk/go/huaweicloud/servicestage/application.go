@@ -57,7 +57,7 @@ import (
 //
 // ## Import
 //
-// Applications can be imported using their `id`, e.g.
+// Applications can be imported using their `id`, e.g. bash
 //
 // ```sh
 //
@@ -72,7 +72,7 @@ type Application struct {
 	// Specifies the application description.
 	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the configurations of the environment variables.
@@ -121,7 +121,7 @@ type applicationState struct {
 	// Specifies the application description.
 	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the configurations of the environment variables.
@@ -141,7 +141,7 @@ type ApplicationState struct {
 	// Specifies the application description.
 	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the configurations of the environment variables.
@@ -163,7 +163,7 @@ type applicationArgs struct {
 	// Specifies the application description.
 	// The description can contain a maximum of `128` characters.
 	Description *string `pulumi:"description"`
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the configurations of the environment variables.
@@ -182,7 +182,7 @@ type ApplicationArgs struct {
 	// Specifies the application description.
 	// The description can contain a maximum of `128` characters.
 	Description pulumi.StringPtrInput
-	// Specifies the enterprise projcet ID to which the application
+	// Specifies the enterprise project ID to which the application
 	// belongs. Changing this will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the configurations of the environment variables.
@@ -294,7 +294,7 @@ func (o ApplicationOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Application) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the enterprise projcet ID to which the application
+// Specifies the enterprise project ID to which the application
 // belongs. Changing this will create a new resource.
 func (o ApplicationOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Application) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)

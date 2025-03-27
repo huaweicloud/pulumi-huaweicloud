@@ -29,7 +29,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Parameter groups can be imported using the `id`, e.g.
+ * Parameter groups can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Rds/parametergroup:Parametergroup pg_1 7117d38e-4c8f-4624-a505-bd96b97d024c
@@ -69,6 +69,10 @@ export class Parametergroup extends pulumi.CustomResource {
      */
     public /*out*/ readonly configurationParameters!: pulumi.Output<outputs.Rds.ParametergroupConfigurationParameter[]>;
     /**
+     * The creation time, in UTC format.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Database object. The database object structure is documented below. Changing
      * this creates a new parameter group.
      */
@@ -87,6 +91,10 @@ export class Parametergroup extends pulumi.CustomResource {
      * provider-level region will be used. Changing this creates a new parameter group.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * The last update time, in UTC format.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
     /**
      * Parameter group values key/value pairs defined by users based on the default parameter
      * groups.
@@ -107,10 +115,12 @@ export class Parametergroup extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as ParametergroupState | undefined;
             resourceInputs["configurationParameters"] = state ? state.configurationParameters : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["datastore"] = state ? state.datastore : undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["values"] = state ? state.values : undefined;
         } else {
             const args = argsOrState as ParametergroupArgs | undefined;
@@ -123,6 +133,8 @@ export class Parametergroup extends pulumi.CustomResource {
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["values"] = args ? args.values : undefined;
             resourceInputs["configurationParameters"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Parametergroup.__pulumiType, name, resourceInputs, opts);
@@ -138,6 +150,10 @@ export interface ParametergroupState {
      * groups.
      */
     configurationParameters?: pulumi.Input<pulumi.Input<inputs.Rds.ParametergroupConfigurationParameter>[]>;
+    /**
+     * The creation time, in UTC format.
+     */
+    createdAt?: pulumi.Input<string>;
     /**
      * Database object. The database object structure is documented below. Changing
      * this creates a new parameter group.
@@ -157,6 +173,10 @@ export interface ParametergroupState {
      * provider-level region will be used. Changing this creates a new parameter group.
      */
     region?: pulumi.Input<string>;
+    /**
+     * The last update time, in UTC format.
+     */
+    updatedAt?: pulumi.Input<string>;
     /**
      * Parameter group values key/value pairs defined by users based on the default parameter
      * groups.

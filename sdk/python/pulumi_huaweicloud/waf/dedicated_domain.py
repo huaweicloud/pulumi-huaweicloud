@@ -20,42 +20,91 @@ class DedicatedDomainArgs:
                  servers: pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]],
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  cipher: Optional[pulumi.Input[str]] = None,
+                 connection_protection: Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']] = None,
+                 custom_page: Optional[pulumi.Input['DedicatedDomainCustomPageArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 forward_header_map: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  pci3ds: Optional[pulumi.Input[bool]] = None,
                  pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
+                 redirect_url: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
-                 tls: Optional[pulumi.Input[str]] = None):
+                 timeout_settings: Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']] = None,
+                 tls: Optional[pulumi.Input[str]] = None,
+                 traffic_mark: Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']] = None,
+                 website_name: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a DedicatedDomain resource.
         :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
                `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
-        :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
-               The object structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: Specifies the server configuration list of the domain.
+               A maximum of `80` can be configured. The server structure is documented below.
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-               is set to HTTPS.
-        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-               `cipher_3`, `cipher_4`, `cipher_default`.
+               is set to **HTTPS**.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+               **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
+        :param pulumi.Input['DedicatedDomainConnectionProtectionArgs'] connection_protection: Specifies the connection protection configuration to let WAF protect your
+               origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+               Only supports one protection configuration.
+               The connection_protection structure is documented below.
+        :param pulumi.Input['DedicatedDomainCustomPageArgs'] custom_page: Specifies the custom page. Only supports one custom alarm page.
+               The custom_page structure is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the WAF dedicated domain.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] forward_header_map: Specifies the field forwarding configuration. WAF inserts the added fields into
+               the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+               The options of value are as follows:
+               + **$time_local**
+               + **$request_id**
+               + **$connection_requests**
+               + **$tenant_id**
+               + **$project_id**
+               + **$remote_addr**
+               + **$remote_port**
+               + **$scheme**
+               + **$request_method**
+               + **$http_host**
+               + **$origin_uri**
+               + **$request_length**
+               + **$ssl_server_name**
+               + **$ssl_protocol**
+               + **$ssl_curves**
+               + **$ssl_session_reused**
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
-               Defaults to `true`.
+               Defaults to **true**.
         :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
-        :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
-               Default value is `1`.
-        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Default value is `false`.
-        :param pulumi.Input[str] region: The region in which to create the dedicated mode domain resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new domain.
-        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-               `TLS v1.2`.
+        :param pulumi.Input[int] protect_status: Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+               Defaults to `0`.
+        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Defaults to **false**.
+        :param pulumi.Input[str] redirect_url: Specifies the URL of the redirected page. The root domain name of the redirection
+               address must be the name of the currently protected domain (including a wildcard domain name).
+               The available **${http_host}** can be used to indicate the currently protected domain name and port.
+               For example: **${http_host}/error.html**.
+        :param pulumi.Input[str] region: Specifies the region in which to create the dedicated mode domain resource.
+               If omitted, the provider-level region will be used. Changing this setting will push a new domain.
+        :param pulumi.Input['DedicatedDomainTimeoutSettingsArgs'] timeout_settings: Specifies the timeout setting. Only supports one timeout setting.
+               The timeout_settings structure is documented below.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+               **TLS v1.1** and **TLS v1.2**.
+        :param pulumi.Input['DedicatedDomainTrafficMarkArgs'] traffic_mark: Specifies the traffic identifier. WAF uses the configurations to identify the
+               malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+               and then triggers the corresponding known attack source rules to block attack sources.
+               Only supports one traffic identifier.
+               The traffic_mark structure is documented below.
+        :param pulumi.Input[str] website_name: Specifies the website name. This website name must start with a letter and only
+               letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+               characters. The website name must be unique within this account.
         """
         pulumi.set(__self__, "domain", domain)
         pulumi.set(__self__, "servers", servers)
@@ -63,8 +112,16 @@ class DedicatedDomainArgs:
             pulumi.set(__self__, "certificate_id", certificate_id)
         if cipher is not None:
             pulumi.set(__self__, "cipher", cipher)
+        if connection_protection is not None:
+            pulumi.set(__self__, "connection_protection", connection_protection)
+        if custom_page is not None:
+            pulumi.set(__self__, "custom_page", custom_page)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if forward_header_map is not None:
+            pulumi.set(__self__, "forward_header_map", forward_header_map)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
         if pci3ds is not None:
@@ -77,10 +134,18 @@ class DedicatedDomainArgs:
             pulumi.set(__self__, "protect_status", protect_status)
         if proxy is not None:
             pulumi.set(__self__, "proxy", proxy)
+        if redirect_url is not None:
+            pulumi.set(__self__, "redirect_url", redirect_url)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if timeout_settings is not None:
+            pulumi.set(__self__, "timeout_settings", timeout_settings)
         if tls is not None:
             pulumi.set(__self__, "tls", tls)
+        if traffic_mark is not None:
+            pulumi.set(__self__, "traffic_mark", traffic_mark)
+        if website_name is not None:
+            pulumi.set(__self__, "website_name", website_name)
 
     @property
     @pulumi.getter
@@ -99,8 +164,8 @@ class DedicatedDomainArgs:
     @pulumi.getter
     def servers(self) -> pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]]:
         """
-        The server configuration list of the domain. A maximum of 80 can be configured.
-        The object structure is documented below.
+        Specifies the server configuration list of the domain.
+        A maximum of `80` can be configured. The server structure is documented below.
         """
         return pulumi.get(self, "servers")
 
@@ -113,7 +178,7 @@ class DedicatedDomainArgs:
     def certificate_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-        is set to HTTPS.
+        is set to **HTTPS**.
         """
         return pulumi.get(self, "certificate_id")
 
@@ -125,8 +190,8 @@ class DedicatedDomainArgs:
     @pulumi.getter
     def cipher(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-        `cipher_3`, `cipher_4`, `cipher_default`.
+        Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+        **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
         """
         return pulumi.get(self, "cipher")
 
@@ -135,10 +200,51 @@ class DedicatedDomainArgs:
         pulumi.set(self, "cipher", value)
 
     @property
+    @pulumi.getter(name="connectionProtection")
+    def connection_protection(self) -> Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']]:
+        """
+        Specifies the connection protection configuration to let WAF protect your
+        origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+        Only supports one protection configuration.
+        The connection_protection structure is documented below.
+        """
+        return pulumi.get(self, "connection_protection")
+
+    @connection_protection.setter
+    def connection_protection(self, value: Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']]):
+        pulumi.set(self, "connection_protection", value)
+
+    @property
+    @pulumi.getter(name="customPage")
+    def custom_page(self) -> Optional[pulumi.Input['DedicatedDomainCustomPageArgs']]:
+        """
+        Specifies the custom page. Only supports one custom alarm page.
+        The custom_page structure is documented below.
+        """
+        return pulumi.get(self, "custom_page")
+
+    @custom_page.setter
+    def custom_page(self, value: Optional[pulumi.Input['DedicatedDomainCustomPageArgs']]):
+        pulumi.set(self, "custom_page", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the WAF dedicated domain.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF dedicated domain.
+        For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -148,11 +254,41 @@ class DedicatedDomainArgs:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="forwardHeaderMap")
+    def forward_header_map(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the field forwarding configuration. WAF inserts the added fields into
+        the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+        The options of value are as follows:
+        + **$time_local**
+        + **$request_id**
+        + **$connection_requests**
+        + **$tenant_id**
+        + **$project_id**
+        + **$remote_addr**
+        + **$remote_port**
+        + **$scheme**
+        + **$request_method**
+        + **$http_host**
+        + **$origin_uri**
+        + **$request_length**
+        + **$ssl_server_name**
+        + **$ssl_protocol**
+        + **$ssl_curves**
+        + **$ssl_session_reused**
+        """
+        return pulumi.get(self, "forward_header_map")
+
+    @forward_header_map.setter
+    def forward_header_map(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "forward_header_map", value)
+
+    @property
     @pulumi.getter(name="keepPolicy")
     def keep_policy(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to retain the policy when deleting a domain name.
-        Defaults to `true`.
+        Defaults to **true**.
         """
         return pulumi.get(self, "keep_policy")
 
@@ -165,7 +301,7 @@ class DedicatedDomainArgs:
     def pci3ds(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies the status of the PCI 3DS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci3ds")
 
@@ -178,7 +314,7 @@ class DedicatedDomainArgs:
     def pci_dss(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies the status of the PCI DSS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci_dss")
 
@@ -203,8 +339,8 @@ class DedicatedDomainArgs:
     @pulumi.getter(name="protectStatus")
     def protect_status(self) -> Optional[pulumi.Input[int]]:
         """
-        The protection status of domain, `0`: suspended, `1`: enabled.
-        Default value is `1`.
+        Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+        Defaults to `0`.
         """
         return pulumi.get(self, "protect_status")
 
@@ -216,7 +352,7 @@ class DedicatedDomainArgs:
     @pulumi.getter
     def proxy(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether a proxy is configured. Default value is `false`.
+        Specifies whether a proxy is configured. Defaults to **false**.
         """
         return pulumi.get(self, "proxy")
 
@@ -225,11 +361,26 @@ class DedicatedDomainArgs:
         pulumi.set(self, "proxy", value)
 
     @property
+    @pulumi.getter(name="redirectUrl")
+    def redirect_url(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URL of the redirected page. The root domain name of the redirection
+        address must be the name of the currently protected domain (including a wildcard domain name).
+        The available **${http_host}** can be used to indicate the currently protected domain name and port.
+        For example: **${http_host}/error.html**.
+        """
+        return pulumi.get(self, "redirect_url")
+
+    @redirect_url.setter
+    def redirect_url(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_url", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the dedicated mode domain resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new domain.
+        Specifies the region in which to create the dedicated mode domain resource.
+        If omitted, the provider-level region will be used. Changing this setting will push a new domain.
         """
         return pulumi.get(self, "region")
 
@@ -238,17 +389,60 @@ class DedicatedDomainArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="timeoutSettings")
+    def timeout_settings(self) -> Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']]:
+        """
+        Specifies the timeout setting. Only supports one timeout setting.
+        The timeout_settings structure is documented below.
+        """
+        return pulumi.get(self, "timeout_settings")
+
+    @timeout_settings.setter
+    def timeout_settings(self, value: Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']]):
+        pulumi.set(self, "timeout_settings", value)
+
+    @property
     @pulumi.getter
     def tls(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-        `TLS v1.2`.
+        Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+        **TLS v1.1** and **TLS v1.2**.
         """
         return pulumi.get(self, "tls")
 
     @tls.setter
     def tls(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "tls", value)
+
+    @property
+    @pulumi.getter(name="trafficMark")
+    def traffic_mark(self) -> Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']]:
+        """
+        Specifies the traffic identifier. WAF uses the configurations to identify the
+        malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+        and then triggers the corresponding known attack source rules to block attack sources.
+        Only supports one traffic identifier.
+        The traffic_mark structure is documented below.
+        """
+        return pulumi.get(self, "traffic_mark")
+
+    @traffic_mark.setter
+    def traffic_mark(self, value: Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']]):
+        pulumi.set(self, "traffic_mark", value)
+
+    @property
+    @pulumi.getter(name="websiteName")
+    def website_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the website name. This website name must start with a letter and only
+        letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+        characters. The website name must be unique within this account.
+        """
+        return pulumi.get(self, "website_name")
+
+    @website_name.setter
+    def website_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "website_name", value)
 
 
 @pulumi.input_type
@@ -260,8 +454,12 @@ class _DedicatedDomainState:
                  certificate_name: Optional[pulumi.Input[str]] = None,
                  cipher: Optional[pulumi.Input[str]] = None,
                  compliance_certification: Optional[pulumi.Input[Mapping[str, pulumi.Input[bool]]]] = None,
+                 connection_protection: Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']] = None,
+                 custom_page: Optional[pulumi.Input['DedicatedDomainCustomPageArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 forward_header_map: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  pci3ds: Optional[pulumi.Input[bool]] = None,
                  pci_dss: Optional[pulumi.Input[bool]] = None,
@@ -269,43 +467,88 @@ class _DedicatedDomainState:
                  protect_status: Optional[pulumi.Input[int]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
+                 redirect_url: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  servers: Optional[pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]]] = None,
+                 timeout_settings: Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']] = None,
                  tls: Optional[pulumi.Input[str]] = None,
-                 traffic_identifier: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
+                 traffic_identifier: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 traffic_mark: Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']] = None,
+                 website_name: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering DedicatedDomain resources.
         :param pulumi.Input[int] access_status: Whether a domain name is connected to WAF. Valid values are:
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] alarm_page: The alarm page of domain. Valid values are:
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-               is set to HTTPS.
+               is set to **HTTPS**.
         :param pulumi.Input[str] certificate_name: The name of the certificate used by the domain name.
-        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-               `cipher_3`, `cipher_4`, `cipher_default`.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+               **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
         :param pulumi.Input[Mapping[str, pulumi.Input[bool]]] compliance_certification: The compliance certifications of the domain, values are:
+        :param pulumi.Input['DedicatedDomainConnectionProtectionArgs'] connection_protection: Specifies the connection protection configuration to let WAF protect your
+               origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+               Only supports one protection configuration.
+               The connection_protection structure is documented below.
+        :param pulumi.Input['DedicatedDomainCustomPageArgs'] custom_page: Specifies the custom page. Only supports one custom alarm page.
+               The custom_page structure is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the WAF dedicated domain.
         :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
                `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] forward_header_map: Specifies the field forwarding configuration. WAF inserts the added fields into
+               the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+               The options of value are as follows:
+               + **$time_local**
+               + **$request_id**
+               + **$connection_requests**
+               + **$tenant_id**
+               + **$project_id**
+               + **$remote_addr**
+               + **$remote_port**
+               + **$scheme**
+               + **$request_method**
+               + **$http_host**
+               + **$origin_uri**
+               + **$request_length**
+               + **$ssl_server_name**
+               + **$ssl_protocol**
+               + **$ssl_curves**
+               + **$ssl_session_reused**
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
-               Defaults to `true`.
+               Defaults to **true**.
         :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
-        :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
-               Default value is `1`.
+        :param pulumi.Input[int] protect_status: Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+               Defaults to `0`.
         :param pulumi.Input[str] protocol: The protocol type of the client. The options are `HTTP` and `HTTPS`.
-        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Default value is `false`.
-        :param pulumi.Input[str] region: The region in which to create the dedicated mode domain resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new domain.
-        :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
-               The object structure is documented below.
-        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-               `TLS v1.2`.
+        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Defaults to **false**.
+        :param pulumi.Input[str] redirect_url: Specifies the URL of the redirected page. The root domain name of the redirection
+               address must be the name of the currently protected domain (including a wildcard domain name).
+               The available **${http_host}** can be used to indicate the currently protected domain name and port.
+               For example: **${http_host}/error.html**.
+        :param pulumi.Input[str] region: Specifies the region in which to create the dedicated mode domain resource.
+               If omitted, the provider-level region will be used. Changing this setting will push a new domain.
+        :param pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]] servers: Specifies the server configuration list of the domain.
+               A maximum of `80` can be configured. The server structure is documented below.
+        :param pulumi.Input['DedicatedDomainTimeoutSettingsArgs'] timeout_settings: Specifies the timeout setting. Only supports one timeout setting.
+               The timeout_settings structure is documented below.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+               **TLS v1.1** and **TLS v1.2**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] traffic_identifier: The traffic identifier of domain. Valid values are:
+        :param pulumi.Input['DedicatedDomainTrafficMarkArgs'] traffic_mark: Specifies the traffic identifier. WAF uses the configurations to identify the
+               malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+               and then triggers the corresponding known attack source rules to block attack sources.
+               Only supports one traffic identifier.
+               The traffic_mark structure is documented below.
+        :param pulumi.Input[str] website_name: Specifies the website name. This website name must start with a letter and only
+               letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+               characters. The website name must be unique within this account.
         """
         if access_status is not None:
             pulumi.set(__self__, "access_status", access_status)
@@ -319,10 +562,18 @@ class _DedicatedDomainState:
             pulumi.set(__self__, "cipher", cipher)
         if compliance_certification is not None:
             pulumi.set(__self__, "compliance_certification", compliance_certification)
+        if connection_protection is not None:
+            pulumi.set(__self__, "connection_protection", connection_protection)
+        if custom_page is not None:
+            pulumi.set(__self__, "custom_page", custom_page)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if domain is not None:
             pulumi.set(__self__, "domain", domain)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if forward_header_map is not None:
+            pulumi.set(__self__, "forward_header_map", forward_header_map)
         if keep_policy is not None:
             pulumi.set(__self__, "keep_policy", keep_policy)
         if pci3ds is not None:
@@ -337,14 +588,22 @@ class _DedicatedDomainState:
             pulumi.set(__self__, "protocol", protocol)
         if proxy is not None:
             pulumi.set(__self__, "proxy", proxy)
+        if redirect_url is not None:
+            pulumi.set(__self__, "redirect_url", redirect_url)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if servers is not None:
             pulumi.set(__self__, "servers", servers)
+        if timeout_settings is not None:
+            pulumi.set(__self__, "timeout_settings", timeout_settings)
         if tls is not None:
             pulumi.set(__self__, "tls", tls)
         if traffic_identifier is not None:
             pulumi.set(__self__, "traffic_identifier", traffic_identifier)
+        if traffic_mark is not None:
+            pulumi.set(__self__, "traffic_mark", traffic_mark)
+        if website_name is not None:
+            pulumi.set(__self__, "website_name", website_name)
 
     @property
     @pulumi.getter(name="accessStatus")
@@ -375,7 +634,7 @@ class _DedicatedDomainState:
     def certificate_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-        is set to HTTPS.
+        is set to **HTTPS**.
         """
         return pulumi.get(self, "certificate_id")
 
@@ -399,8 +658,8 @@ class _DedicatedDomainState:
     @pulumi.getter
     def cipher(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-        `cipher_3`, `cipher_4`, `cipher_default`.
+        Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+        **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
         """
         return pulumi.get(self, "cipher")
 
@@ -421,6 +680,46 @@ class _DedicatedDomainState:
         pulumi.set(self, "compliance_certification", value)
 
     @property
+    @pulumi.getter(name="connectionProtection")
+    def connection_protection(self) -> Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']]:
+        """
+        Specifies the connection protection configuration to let WAF protect your
+        origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+        Only supports one protection configuration.
+        The connection_protection structure is documented below.
+        """
+        return pulumi.get(self, "connection_protection")
+
+    @connection_protection.setter
+    def connection_protection(self, value: Optional[pulumi.Input['DedicatedDomainConnectionProtectionArgs']]):
+        pulumi.set(self, "connection_protection", value)
+
+    @property
+    @pulumi.getter(name="customPage")
+    def custom_page(self) -> Optional[pulumi.Input['DedicatedDomainCustomPageArgs']]:
+        """
+        Specifies the custom page. Only supports one custom alarm page.
+        The custom_page structure is documented below.
+        """
+        return pulumi.get(self, "custom_page")
+
+    @custom_page.setter
+    def custom_page(self, value: Optional[pulumi.Input['DedicatedDomainCustomPageArgs']]):
+        pulumi.set(self, "custom_page", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the WAF dedicated domain.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter
     def domain(self) -> Optional[pulumi.Input[str]]:
         """
@@ -438,6 +737,7 @@ class _DedicatedDomainState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF dedicated domain.
+        For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
@@ -447,11 +747,41 @@ class _DedicatedDomainState:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="forwardHeaderMap")
+    def forward_header_map(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the field forwarding configuration. WAF inserts the added fields into
+        the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+        The options of value are as follows:
+        + **$time_local**
+        + **$request_id**
+        + **$connection_requests**
+        + **$tenant_id**
+        + **$project_id**
+        + **$remote_addr**
+        + **$remote_port**
+        + **$scheme**
+        + **$request_method**
+        + **$http_host**
+        + **$origin_uri**
+        + **$request_length**
+        + **$ssl_server_name**
+        + **$ssl_protocol**
+        + **$ssl_curves**
+        + **$ssl_session_reused**
+        """
+        return pulumi.get(self, "forward_header_map")
+
+    @forward_header_map.setter
+    def forward_header_map(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "forward_header_map", value)
+
+    @property
     @pulumi.getter(name="keepPolicy")
     def keep_policy(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to retain the policy when deleting a domain name.
-        Defaults to `true`.
+        Defaults to **true**.
         """
         return pulumi.get(self, "keep_policy")
 
@@ -464,7 +794,7 @@ class _DedicatedDomainState:
     def pci3ds(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies the status of the PCI 3DS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci3ds")
 
@@ -477,7 +807,7 @@ class _DedicatedDomainState:
     def pci_dss(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies the status of the PCI DSS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci_dss")
 
@@ -502,8 +832,8 @@ class _DedicatedDomainState:
     @pulumi.getter(name="protectStatus")
     def protect_status(self) -> Optional[pulumi.Input[int]]:
         """
-        The protection status of domain, `0`: suspended, `1`: enabled.
-        Default value is `1`.
+        Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+        Defaults to `0`.
         """
         return pulumi.get(self, "protect_status")
 
@@ -527,7 +857,7 @@ class _DedicatedDomainState:
     @pulumi.getter
     def proxy(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether a proxy is configured. Default value is `false`.
+        Specifies whether a proxy is configured. Defaults to **false**.
         """
         return pulumi.get(self, "proxy")
 
@@ -536,11 +866,26 @@ class _DedicatedDomainState:
         pulumi.set(self, "proxy", value)
 
     @property
+    @pulumi.getter(name="redirectUrl")
+    def redirect_url(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the URL of the redirected page. The root domain name of the redirection
+        address must be the name of the currently protected domain (including a wildcard domain name).
+        The available **${http_host}** can be used to indicate the currently protected domain name and port.
+        For example: **${http_host}/error.html**.
+        """
+        return pulumi.get(self, "redirect_url")
+
+    @redirect_url.setter
+    def redirect_url(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "redirect_url", value)
+
+    @property
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the dedicated mode domain resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new domain.
+        Specifies the region in which to create the dedicated mode domain resource.
+        If omitted, the provider-level region will be used. Changing this setting will push a new domain.
         """
         return pulumi.get(self, "region")
 
@@ -552,8 +897,8 @@ class _DedicatedDomainState:
     @pulumi.getter
     def servers(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DedicatedDomainServerArgs']]]]:
         """
-        The server configuration list of the domain. A maximum of 80 can be configured.
-        The object structure is documented below.
+        Specifies the server configuration list of the domain.
+        A maximum of `80` can be configured. The server structure is documented below.
         """
         return pulumi.get(self, "servers")
 
@@ -562,11 +907,24 @@ class _DedicatedDomainState:
         pulumi.set(self, "servers", value)
 
     @property
+    @pulumi.getter(name="timeoutSettings")
+    def timeout_settings(self) -> Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']]:
+        """
+        Specifies the timeout setting. Only supports one timeout setting.
+        The timeout_settings structure is documented below.
+        """
+        return pulumi.get(self, "timeout_settings")
+
+    @timeout_settings.setter
+    def timeout_settings(self, value: Optional[pulumi.Input['DedicatedDomainTimeoutSettingsArgs']]):
+        pulumi.set(self, "timeout_settings", value)
+
+    @property
     @pulumi.getter
     def tls(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-        `TLS v1.2`.
+        Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+        **TLS v1.1** and **TLS v1.2**.
         """
         return pulumi.get(self, "tls")
 
@@ -586,6 +944,36 @@ class _DedicatedDomainState:
     def traffic_identifier(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
         pulumi.set(self, "traffic_identifier", value)
 
+    @property
+    @pulumi.getter(name="trafficMark")
+    def traffic_mark(self) -> Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']]:
+        """
+        Specifies the traffic identifier. WAF uses the configurations to identify the
+        malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+        and then triggers the corresponding known attack source rules to block attack sources.
+        Only supports one traffic identifier.
+        The traffic_mark structure is documented below.
+        """
+        return pulumi.get(self, "traffic_mark")
+
+    @traffic_mark.setter
+    def traffic_mark(self, value: Optional[pulumi.Input['DedicatedDomainTrafficMarkArgs']]):
+        pulumi.set(self, "traffic_mark", value)
+
+    @property
+    @pulumi.getter(name="websiteName")
+    def website_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the website name. This website name must start with a letter and only
+        letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+        characters. The website name must be unique within this account.
+        """
+        return pulumi.get(self, "website_name")
+
+    @website_name.setter
+    def website_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "website_name", value)
+
 
 class DedicatedDomain(pulumi.CustomResource):
     @overload
@@ -594,23 +982,31 @@ class DedicatedDomain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  cipher: Optional[pulumi.Input[str]] = None,
+                 connection_protection: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainConnectionProtectionArgs']]] = None,
+                 custom_page: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainCustomPageArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 forward_header_map: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  pci3ds: Optional[pulumi.Input[bool]] = None,
                  pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
+                 redirect_url: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  servers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]]] = None,
+                 timeout_settings: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTimeoutSettingsArgs']]] = None,
                  tls: Optional[pulumi.Input[str]] = None,
+                 traffic_mark: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTrafficMarkArgs']]] = None,
+                 website_name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Manages a dedicated mode domain resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The dedicated mode domain name resource can be used in Dedicated Mode and ELB Mode.
+        used. The dedicated mode domain name resource can be used in Dedicated Mode.
 
         ## Example Usage
 
@@ -622,10 +1018,13 @@ class DedicatedDomain(pulumi.CustomResource):
         certificated_id = config.require_object("certificatedId")
         vpc_id = config.require_object("vpcId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        domain1 = huaweicloud.waf.DedicatedDomain("domain1",
+        test = huaweicloud.waf.DedicatedDomain("test",
             domain="www.example.com",
             certificate_id=certificated_id,
             enterprise_project_id=enterprise_project_id,
+            protect_status=1,
+            website_name="websiteName",
+            description="test description",
             servers=[huaweicloud.waf.DedicatedDomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -633,7 +1032,39 @@ class DedicatedDomain(pulumi.CustomResource):
                 port=8080,
                 type="ipv4",
                 vpc_id=vpc_id,
-            )])
+            )],
+            custom_page=huaweicloud.waf.DedicatedDomainCustomPageArgs(
+                http_return_code="404",
+                block_page_type="application/json",
+                page_content=f\"\"\"{{
+          "event_id": "{waf_event_id}",
+          "error_msg": "error message"
+        }}
+        \"\"\",
+            ),
+            forward_header_map={
+                "key1": "$time_local",
+                "key2": "$tenant_id",
+            },
+            connection_protection=huaweicloud.waf.DedicatedDomainConnectionProtectionArgs(
+                error_threshold=1000,
+                error_percentage=90,
+                initial_downtime=200,
+                multiplier_for_consecutive_breakdowns=5,
+                pending_url_request_threshold=7000,
+                duration=10000,
+                status=True,
+            ),
+            timeout_settings=huaweicloud.waf.DedicatedDomainTimeoutSettingsArgs(
+                connection_timeout=100,
+                read_timeout=1000,
+                write_timeout=1000,
+            ),
+            traffic_mark=huaweicloud.waf.DedicatedDomainTrafficMarkArgs(
+                ip_tags=["ip_tag"],
+                session_tag="session_tag",
+                user_tag="user_tag",
+            ))
         ```
 
         ## Import
@@ -653,30 +1084,71 @@ class DedicatedDomain(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-               is set to HTTPS.
-        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-               `cipher_3`, `cipher_4`, `cipher_default`.
+               is set to **HTTPS**.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+               **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainConnectionProtectionArgs']] connection_protection: Specifies the connection protection configuration to let WAF protect your
+               origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+               Only supports one protection configuration.
+               The connection_protection structure is documented below.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainCustomPageArgs']] custom_page: Specifies the custom page. Only supports one custom alarm page.
+               The custom_page structure is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the WAF dedicated domain.
         :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
                `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] forward_header_map: Specifies the field forwarding configuration. WAF inserts the added fields into
+               the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+               The options of value are as follows:
+               + **$time_local**
+               + **$request_id**
+               + **$connection_requests**
+               + **$tenant_id**
+               + **$project_id**
+               + **$remote_addr**
+               + **$remote_port**
+               + **$scheme**
+               + **$request_method**
+               + **$http_host**
+               + **$origin_uri**
+               + **$request_length**
+               + **$ssl_server_name**
+               + **$ssl_protocol**
+               + **$ssl_curves**
+               + **$ssl_session_reused**
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
-               Defaults to `true`.
+               Defaults to **true**.
         :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
-        :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
-               Default value is `1`.
-        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Default value is `false`.
-        :param pulumi.Input[str] region: The region in which to create the dedicated mode domain resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new domain.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
-               The object structure is documented below.
-        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-               `TLS v1.2`.
+        :param pulumi.Input[int] protect_status: Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+               Defaults to `0`.
+        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Defaults to **false**.
+        :param pulumi.Input[str] redirect_url: Specifies the URL of the redirected page. The root domain name of the redirection
+               address must be the name of the currently protected domain (including a wildcard domain name).
+               The available **${http_host}** can be used to indicate the currently protected domain name and port.
+               For example: **${http_host}/error.html**.
+        :param pulumi.Input[str] region: Specifies the region in which to create the dedicated mode domain resource.
+               If omitted, the provider-level region will be used. Changing this setting will push a new domain.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: Specifies the server configuration list of the domain.
+               A maximum of `80` can be configured. The server structure is documented below.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainTimeoutSettingsArgs']] timeout_settings: Specifies the timeout setting. Only supports one timeout setting.
+               The timeout_settings structure is documented below.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+               **TLS v1.1** and **TLS v1.2**.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainTrafficMarkArgs']] traffic_mark: Specifies the traffic identifier. WAF uses the configurations to identify the
+               malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+               and then triggers the corresponding known attack source rules to block attack sources.
+               Only supports one traffic identifier.
+               The traffic_mark structure is documented below.
+        :param pulumi.Input[str] website_name: Specifies the website name. This website name must start with a letter and only
+               letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+               characters. The website name must be unique within this account.
         """
         ...
     @overload
@@ -688,7 +1160,7 @@ class DedicatedDomain(pulumi.CustomResource):
         Manages a dedicated mode domain resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The dedicated mode domain name resource can be used in Dedicated Mode and ELB Mode.
+        used. The dedicated mode domain name resource can be used in Dedicated Mode.
 
         ## Example Usage
 
@@ -700,10 +1172,13 @@ class DedicatedDomain(pulumi.CustomResource):
         certificated_id = config.require_object("certificatedId")
         vpc_id = config.require_object("vpcId")
         enterprise_project_id = config.require_object("enterpriseProjectId")
-        domain1 = huaweicloud.waf.DedicatedDomain("domain1",
+        test = huaweicloud.waf.DedicatedDomain("test",
             domain="www.example.com",
             certificate_id=certificated_id,
             enterprise_project_id=enterprise_project_id,
+            protect_status=1,
+            website_name="websiteName",
+            description="test description",
             servers=[huaweicloud.waf.DedicatedDomainServerArgs(
                 client_protocol="HTTPS",
                 server_protocol="HTTP",
@@ -711,7 +1186,39 @@ class DedicatedDomain(pulumi.CustomResource):
                 port=8080,
                 type="ipv4",
                 vpc_id=vpc_id,
-            )])
+            )],
+            custom_page=huaweicloud.waf.DedicatedDomainCustomPageArgs(
+                http_return_code="404",
+                block_page_type="application/json",
+                page_content=f\"\"\"{{
+          "event_id": "{waf_event_id}",
+          "error_msg": "error message"
+        }}
+        \"\"\",
+            ),
+            forward_header_map={
+                "key1": "$time_local",
+                "key2": "$tenant_id",
+            },
+            connection_protection=huaweicloud.waf.DedicatedDomainConnectionProtectionArgs(
+                error_threshold=1000,
+                error_percentage=90,
+                initial_downtime=200,
+                multiplier_for_consecutive_breakdowns=5,
+                pending_url_request_threshold=7000,
+                duration=10000,
+                status=True,
+            ),
+            timeout_settings=huaweicloud.waf.DedicatedDomainTimeoutSettingsArgs(
+                connection_timeout=100,
+                read_timeout=1000,
+                write_timeout=1000,
+            ),
+            traffic_mark=huaweicloud.waf.DedicatedDomainTrafficMarkArgs(
+                ip_tags=["ip_tag"],
+                session_tag="session_tag",
+                user_tag="user_tag",
+            ))
         ```
 
         ## Import
@@ -745,17 +1252,25 @@ class DedicatedDomain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate_id: Optional[pulumi.Input[str]] = None,
                  cipher: Optional[pulumi.Input[str]] = None,
+                 connection_protection: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainConnectionProtectionArgs']]] = None,
+                 custom_page: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainCustomPageArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 forward_header_map: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  keep_policy: Optional[pulumi.Input[bool]] = None,
                  pci3ds: Optional[pulumi.Input[bool]] = None,
                  pci_dss: Optional[pulumi.Input[bool]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  protect_status: Optional[pulumi.Input[int]] = None,
                  proxy: Optional[pulumi.Input[bool]] = None,
+                 redirect_url: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  servers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]]] = None,
+                 timeout_settings: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTimeoutSettingsArgs']]] = None,
                  tls: Optional[pulumi.Input[str]] = None,
+                 traffic_mark: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTrafficMarkArgs']]] = None,
+                 website_name: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -767,21 +1282,29 @@ class DedicatedDomain(pulumi.CustomResource):
 
             __props__.__dict__["certificate_id"] = certificate_id
             __props__.__dict__["cipher"] = cipher
+            __props__.__dict__["connection_protection"] = connection_protection
+            __props__.__dict__["custom_page"] = custom_page
+            __props__.__dict__["description"] = description
             if domain is None and not opts.urn:
                 raise TypeError("Missing required property 'domain'")
             __props__.__dict__["domain"] = domain
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["forward_header_map"] = forward_header_map
             __props__.__dict__["keep_policy"] = keep_policy
             __props__.__dict__["pci3ds"] = pci3ds
             __props__.__dict__["pci_dss"] = pci_dss
             __props__.__dict__["policy_id"] = policy_id
             __props__.__dict__["protect_status"] = protect_status
             __props__.__dict__["proxy"] = proxy
+            __props__.__dict__["redirect_url"] = redirect_url
             __props__.__dict__["region"] = region
             if servers is None and not opts.urn:
                 raise TypeError("Missing required property 'servers'")
             __props__.__dict__["servers"] = servers
+            __props__.__dict__["timeout_settings"] = timeout_settings
             __props__.__dict__["tls"] = tls
+            __props__.__dict__["traffic_mark"] = traffic_mark
+            __props__.__dict__["website_name"] = website_name
             __props__.__dict__["access_status"] = None
             __props__.__dict__["alarm_page"] = None
             __props__.__dict__["certificate_name"] = None
@@ -804,8 +1327,12 @@ class DedicatedDomain(pulumi.CustomResource):
             certificate_name: Optional[pulumi.Input[str]] = None,
             cipher: Optional[pulumi.Input[str]] = None,
             compliance_certification: Optional[pulumi.Input[Mapping[str, pulumi.Input[bool]]]] = None,
+            connection_protection: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainConnectionProtectionArgs']]] = None,
+            custom_page: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainCustomPageArgs']]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             domain: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            forward_header_map: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             keep_policy: Optional[pulumi.Input[bool]] = None,
             pci3ds: Optional[pulumi.Input[bool]] = None,
             pci_dss: Optional[pulumi.Input[bool]] = None,
@@ -813,10 +1340,14 @@ class DedicatedDomain(pulumi.CustomResource):
             protect_status: Optional[pulumi.Input[int]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
             proxy: Optional[pulumi.Input[bool]] = None,
+            redirect_url: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             servers: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]]] = None,
+            timeout_settings: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTimeoutSettingsArgs']]] = None,
             tls: Optional[pulumi.Input[str]] = None,
-            traffic_identifier: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'DedicatedDomain':
+            traffic_identifier: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            traffic_mark: Optional[pulumi.Input[pulumi.InputType['DedicatedDomainTrafficMarkArgs']]] = None,
+            website_name: Optional[pulumi.Input[str]] = None) -> 'DedicatedDomain':
         """
         Get an existing DedicatedDomain resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -827,34 +1358,75 @@ class DedicatedDomain(pulumi.CustomResource):
         :param pulumi.Input[int] access_status: Whether a domain name is connected to WAF. Valid values are:
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] alarm_page: The alarm page of domain. Valid values are:
         :param pulumi.Input[str] certificate_id: Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-               is set to HTTPS.
+               is set to **HTTPS**.
         :param pulumi.Input[str] certificate_name: The name of the certificate used by the domain name.
-        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-               `cipher_3`, `cipher_4`, `cipher_default`.
+        :param pulumi.Input[str] cipher: Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+               **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
         :param pulumi.Input[Mapping[str, pulumi.Input[bool]]] compliance_certification: The compliance certifications of the domain, values are:
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainConnectionProtectionArgs']] connection_protection: Specifies the connection protection configuration to let WAF protect your
+               origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+               Only supports one protection configuration.
+               The connection_protection structure is documented below.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainCustomPageArgs']] custom_page: Specifies the custom page. Only supports one custom alarm page.
+               The custom_page structure is documented below.
+        :param pulumi.Input[str] description: Specifies the description of the WAF dedicated domain.
         :param pulumi.Input[str] domain: Specifies the protected domain name or IP address (port allowed). For example,
                `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF dedicated domain.
+               For enterprise users, if omitted, default enterprise project will be used.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] forward_header_map: Specifies the field forwarding configuration. WAF inserts the added fields into
+               the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+               The options of value are as follows:
+               + **$time_local**
+               + **$request_id**
+               + **$connection_requests**
+               + **$tenant_id**
+               + **$project_id**
+               + **$remote_addr**
+               + **$remote_port**
+               + **$scheme**
+               + **$request_method**
+               + **$http_host**
+               + **$origin_uri**
+               + **$request_length**
+               + **$ssl_server_name**
+               + **$ssl_protocol**
+               + **$ssl_curves**
+               + **$ssl_session_reused**
         :param pulumi.Input[bool] keep_policy: Specifies whether to retain the policy when deleting a domain name.
-               Defaults to `true`.
+               Defaults to **true**.
         :param pulumi.Input[bool] pci3ds: Specifies the status of the PCI 3DS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[bool] pci_dss: Specifies the status of the PCI DSS compliance certification check. The options
-               include `true` and `false`. This parameter must be used together with tls and cipher.
+               include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         :param pulumi.Input[str] policy_id: Specifies the policy ID associated with the domain. If not specified, a new policy
                will be created automatically.
-        :param pulumi.Input[int] protect_status: The protection status of domain, `0`: suspended, `1`: enabled.
-               Default value is `1`.
+        :param pulumi.Input[int] protect_status: Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+               Defaults to `0`.
         :param pulumi.Input[str] protocol: The protocol type of the client. The options are `HTTP` and `HTTPS`.
-        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Default value is `false`.
-        :param pulumi.Input[str] region: The region in which to create the dedicated mode domain resource. If omitted,
-               the provider-level region will be used. Changing this setting will push a new domain.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: The server configuration list of the domain. A maximum of 80 can be configured.
-               The object structure is documented below.
-        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-               `TLS v1.2`.
+        :param pulumi.Input[bool] proxy: Specifies whether a proxy is configured. Defaults to **false**.
+        :param pulumi.Input[str] redirect_url: Specifies the URL of the redirected page. The root domain name of the redirection
+               address must be the name of the currently protected domain (including a wildcard domain name).
+               The available **${http_host}** can be used to indicate the currently protected domain name and port.
+               For example: **${http_host}/error.html**.
+        :param pulumi.Input[str] region: Specifies the region in which to create the dedicated mode domain resource.
+               If omitted, the provider-level region will be used. Changing this setting will push a new domain.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DedicatedDomainServerArgs']]]] servers: Specifies the server configuration list of the domain.
+               A maximum of `80` can be configured. The server structure is documented below.
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainTimeoutSettingsArgs']] timeout_settings: Specifies the timeout setting. Only supports one timeout setting.
+               The timeout_settings structure is documented below.
+        :param pulumi.Input[str] tls: Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+               **TLS v1.1** and **TLS v1.2**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] traffic_identifier: The traffic identifier of domain. Valid values are:
+        :param pulumi.Input[pulumi.InputType['DedicatedDomainTrafficMarkArgs']] traffic_mark: Specifies the traffic identifier. WAF uses the configurations to identify the
+               malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+               and then triggers the corresponding known attack source rules to block attack sources.
+               Only supports one traffic identifier.
+               The traffic_mark structure is documented below.
+        :param pulumi.Input[str] website_name: Specifies the website name. This website name must start with a letter and only
+               letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+               characters. The website name must be unique within this account.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -866,8 +1438,12 @@ class DedicatedDomain(pulumi.CustomResource):
         __props__.__dict__["certificate_name"] = certificate_name
         __props__.__dict__["cipher"] = cipher
         __props__.__dict__["compliance_certification"] = compliance_certification
+        __props__.__dict__["connection_protection"] = connection_protection
+        __props__.__dict__["custom_page"] = custom_page
+        __props__.__dict__["description"] = description
         __props__.__dict__["domain"] = domain
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["forward_header_map"] = forward_header_map
         __props__.__dict__["keep_policy"] = keep_policy
         __props__.__dict__["pci3ds"] = pci3ds
         __props__.__dict__["pci_dss"] = pci_dss
@@ -875,10 +1451,14 @@ class DedicatedDomain(pulumi.CustomResource):
         __props__.__dict__["protect_status"] = protect_status
         __props__.__dict__["protocol"] = protocol
         __props__.__dict__["proxy"] = proxy
+        __props__.__dict__["redirect_url"] = redirect_url
         __props__.__dict__["region"] = region
         __props__.__dict__["servers"] = servers
+        __props__.__dict__["timeout_settings"] = timeout_settings
         __props__.__dict__["tls"] = tls
         __props__.__dict__["traffic_identifier"] = traffic_identifier
+        __props__.__dict__["traffic_mark"] = traffic_mark
+        __props__.__dict__["website_name"] = website_name
         return DedicatedDomain(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -902,7 +1482,7 @@ class DedicatedDomain(pulumi.CustomResource):
     def certificate_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the certificate ID. This parameter is mandatory when `client_protocol`
-        is set to HTTPS.
+        is set to **HTTPS**.
         """
         return pulumi.get(self, "certificate_id")
 
@@ -918,8 +1498,8 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter
     def cipher(self) -> pulumi.Output[str]:
         """
-        Specifies the cipher suite of domain. The options include `cipher_1`, `cipher_2`,
-        `cipher_3`, `cipher_4`, `cipher_default`.
+        Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+        **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
         """
         return pulumi.get(self, "cipher")
 
@@ -930,6 +1510,34 @@ class DedicatedDomain(pulumi.CustomResource):
         The compliance certifications of the domain, values are:
         """
         return pulumi.get(self, "compliance_certification")
+
+    @property
+    @pulumi.getter(name="connectionProtection")
+    def connection_protection(self) -> pulumi.Output['outputs.DedicatedDomainConnectionProtection']:
+        """
+        Specifies the connection protection configuration to let WAF protect your
+        origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+        Only supports one protection configuration.
+        The connection_protection structure is documented below.
+        """
+        return pulumi.get(self, "connection_protection")
+
+    @property
+    @pulumi.getter(name="customPage")
+    def custom_page(self) -> pulumi.Output[Optional['outputs.DedicatedDomainCustomPage']]:
+        """
+        Specifies the custom page. Only supports one custom alarm page.
+        The custom_page structure is documented below.
+        """
+        return pulumi.get(self, "custom_page")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[str]:
+        """
+        Specifies the description of the WAF dedicated domain.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter
@@ -945,16 +1553,43 @@ class DedicatedDomain(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project ID of WAF dedicated domain.
+        For enterprise users, if omitted, default enterprise project will be used.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="forwardHeaderMap")
+    def forward_header_map(self) -> pulumi.Output[Mapping[str, str]]:
+        """
+        Specifies the field forwarding configuration. WAF inserts the added fields into
+        the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+        The options of value are as follows:
+        + **$time_local**
+        + **$request_id**
+        + **$connection_requests**
+        + **$tenant_id**
+        + **$project_id**
+        + **$remote_addr**
+        + **$remote_port**
+        + **$scheme**
+        + **$request_method**
+        + **$http_host**
+        + **$origin_uri**
+        + **$request_length**
+        + **$ssl_server_name**
+        + **$ssl_protocol**
+        + **$ssl_curves**
+        + **$ssl_session_reused**
+        """
+        return pulumi.get(self, "forward_header_map")
 
     @property
     @pulumi.getter(name="keepPolicy")
     def keep_policy(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to retain the policy when deleting a domain name.
-        Defaults to `true`.
+        Defaults to **true**.
         """
         return pulumi.get(self, "keep_policy")
 
@@ -963,7 +1598,7 @@ class DedicatedDomain(pulumi.CustomResource):
     def pci3ds(self) -> pulumi.Output[bool]:
         """
         Specifies the status of the PCI 3DS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci3ds")
 
@@ -972,7 +1607,7 @@ class DedicatedDomain(pulumi.CustomResource):
     def pci_dss(self) -> pulumi.Output[bool]:
         """
         Specifies the status of the PCI DSS compliance certification check. The options
-        include `true` and `false`. This parameter must be used together with tls and cipher.
+        include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
         """
         return pulumi.get(self, "pci_dss")
 
@@ -989,8 +1624,8 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter(name="protectStatus")
     def protect_status(self) -> pulumi.Output[int]:
         """
-        The protection status of domain, `0`: suspended, `1`: enabled.
-        Default value is `1`.
+        Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+        Defaults to `0`.
         """
         return pulumi.get(self, "protect_status")
 
@@ -1006,16 +1641,27 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter
     def proxy(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether a proxy is configured. Default value is `false`.
+        Specifies whether a proxy is configured. Defaults to **false**.
         """
         return pulumi.get(self, "proxy")
+
+    @property
+    @pulumi.getter(name="redirectUrl")
+    def redirect_url(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the URL of the redirected page. The root domain name of the redirection
+        address must be the name of the currently protected domain (including a wildcard domain name).
+        The available **${http_host}** can be used to indicate the currently protected domain name and port.
+        For example: **${http_host}/error.html**.
+        """
+        return pulumi.get(self, "redirect_url")
 
     @property
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the dedicated mode domain resource. If omitted,
-        the provider-level region will be used. Changing this setting will push a new domain.
+        Specifies the region in which to create the dedicated mode domain resource.
+        If omitted, the provider-level region will be used. Changing this setting will push a new domain.
         """
         return pulumi.get(self, "region")
 
@@ -1023,17 +1669,26 @@ class DedicatedDomain(pulumi.CustomResource):
     @pulumi.getter
     def servers(self) -> pulumi.Output[Sequence['outputs.DedicatedDomainServer']]:
         """
-        The server configuration list of the domain. A maximum of 80 can be configured.
-        The object structure is documented below.
+        Specifies the server configuration list of the domain.
+        A maximum of `80` can be configured. The server structure is documented below.
         """
         return pulumi.get(self, "servers")
+
+    @property
+    @pulumi.getter(name="timeoutSettings")
+    def timeout_settings(self) -> pulumi.Output['outputs.DedicatedDomainTimeoutSettings']:
+        """
+        Specifies the timeout setting. Only supports one timeout setting.
+        The timeout_settings structure is documented below.
+        """
+        return pulumi.get(self, "timeout_settings")
 
     @property
     @pulumi.getter
     def tls(self) -> pulumi.Output[str]:
         """
-        Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-        `TLS v1.2`.
+        Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+        **TLS v1.1** and **TLS v1.2**.
         """
         return pulumi.get(self, "tls")
 
@@ -1044,4 +1699,26 @@ class DedicatedDomain(pulumi.CustomResource):
         The traffic identifier of domain. Valid values are:
         """
         return pulumi.get(self, "traffic_identifier")
+
+    @property
+    @pulumi.getter(name="trafficMark")
+    def traffic_mark(self) -> pulumi.Output['outputs.DedicatedDomainTrafficMark']:
+        """
+        Specifies the traffic identifier. WAF uses the configurations to identify the
+        malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+        and then triggers the corresponding known attack source rules to block attack sources.
+        Only supports one traffic identifier.
+        The traffic_mark structure is documented below.
+        """
+        return pulumi.get(self, "traffic_mark")
+
+    @property
+    @pulumi.getter(name="websiteName")
+    def website_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the website name. This website name must start with a letter and only
+        letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+        characters. The website name must be unique within this account.
+        """
+        return pulumi.get(self, "website_name")
 

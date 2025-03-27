@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
  * Manages a WAF certificate resource within HuaweiCloud.
  *
  * > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
- * used. The certificate resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+ * used. The certificate resource can be used in Cloud Mode and Dedicated Mode.
  *
  * ## Example Usage
  *
@@ -18,7 +18,7 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const certificate1 = new huaweicloud.waf.Certificate("certificate1", {
+ * const test = new huaweicloud.waf.Certificate("test", {
  *     enterpriseProjectId: enterpriseProjectId,
  *     certificate: `-----BEGIN CERTIFICATE-----
  * MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
@@ -52,7 +52,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Waf/certificate:Certificate test <id>/<enterprise_project_id>
  * ```
  *
- *  Note that the imported state is not identical to your resource definition, due to security reason. The missing attributes include `certificate`, and `private_key`. You can ignore changes as below. resource "huaweicloud_waf_certificate" "certificate_2" {
+ *  Note that the imported state is not identical to your resource definition, due to security reason. The missing attributes include `certificate`, and `private_key`. You can ignore changes as below. hcl resource "huaweicloud_waf_certificate" "test" {
  *
  *  ...
  *
@@ -95,31 +95,42 @@ export class Certificate extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the certificate content. Changing this creates a new
-     * certificate.
+     * Specifies the certificate content.
      */
     public readonly certificate!: pulumi.Output<string>;
     /**
+     * Indicates the time when the certificate uploaded, in RFC3339 format.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
      * Specifies the enterprise project ID of WAF certificate.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
-     * Indicates the time when the certificate expires.
+     * schema: Deprecated; The certificate expiration time.
+     *
+     * @deprecated Use 'expired_at' instead. 
      */
     public /*out*/ readonly expiration!: pulumi.Output<string>;
     /**
-     * Specifies the certificate name. The maximum length is 256 characters. Only digits,
-     * letters, underscores(`_`), and hyphens(`-`) are allowed.
+     * Indicates the time when the certificate expires, in RFC3339 format.
+     */
+    public /*out*/ readonly expiredAt!: pulumi.Output<string>;
+    /**
+     * Specifies the certificate name. The maximum length is `256` characters. Only digits,
+     * letters, underscores(_), and hyphens(-) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the private key. Changing this creates a new certificate.
+     * Specifies the private key. This field does not support individual editing.
+     * Changes to this field will only take effect when `certificate` changes.
      */
     public readonly privateKey!: pulumi.Output<string>;
     /**
-     * The region in which to create the WAF certificate resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the region in which to create the WAF certificate. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     public readonly region!: pulumi.Output<string>;
 
@@ -137,8 +148,10 @@ export class Certificate extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as CertificateState | undefined;
             resourceInputs["certificate"] = state ? state.certificate : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["expiration"] = state ? state.expiration : undefined;
+            resourceInputs["expiredAt"] = state ? state.expiredAt : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["privateKey"] = state ? state.privateKey : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
@@ -155,7 +168,9 @@ export class Certificate extends pulumi.CustomResource {
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["privateKey"] = args ? args.privateKey : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
             resourceInputs["expiration"] = undefined /*out*/;
+            resourceInputs["expiredAt"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(Certificate.__pulumiType, name, resourceInputs, opts);
@@ -167,31 +182,42 @@ export class Certificate extends pulumi.CustomResource {
  */
 export interface CertificateState {
     /**
-     * Specifies the certificate content. Changing this creates a new
-     * certificate.
+     * Specifies the certificate content.
      */
     certificate?: pulumi.Input<string>;
     /**
+     * Indicates the time when the certificate uploaded, in RFC3339 format.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
      * Specifies the enterprise project ID of WAF certificate.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Indicates the time when the certificate expires.
+     * schema: Deprecated; The certificate expiration time.
+     *
+     * @deprecated Use 'expired_at' instead. 
      */
     expiration?: pulumi.Input<string>;
     /**
-     * Specifies the certificate name. The maximum length is 256 characters. Only digits,
-     * letters, underscores(`_`), and hyphens(`-`) are allowed.
+     * Indicates the time when the certificate expires, in RFC3339 format.
+     */
+    expiredAt?: pulumi.Input<string>;
+    /**
+     * Specifies the certificate name. The maximum length is `256` characters. Only digits,
+     * letters, underscores(_), and hyphens(-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the private key. Changing this creates a new certificate.
+     * Specifies the private key. This field does not support individual editing.
+     * Changes to this field will only take effect when `certificate` changes.
      */
     privateKey?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF certificate resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the region in which to create the WAF certificate. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
 }
@@ -201,27 +227,28 @@ export interface CertificateState {
  */
 export interface CertificateArgs {
     /**
-     * Specifies the certificate content. Changing this creates a new
-     * certificate.
+     * Specifies the certificate content.
      */
     certificate: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of WAF certificate.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
-     * Specifies the certificate name. The maximum length is 256 characters. Only digits,
-     * letters, underscores(`_`), and hyphens(`-`) are allowed.
+     * Specifies the certificate name. The maximum length is `256` characters. Only digits,
+     * letters, underscores(_), and hyphens(-) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the private key. Changing this creates a new certificate.
+     * Specifies the private key. This field does not support individual editing.
+     * Changes to this field will only take effect when `certificate` changes.
      */
     privateKey: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF certificate resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the region in which to create the WAF certificate. If omitted, the
+     * provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
 }

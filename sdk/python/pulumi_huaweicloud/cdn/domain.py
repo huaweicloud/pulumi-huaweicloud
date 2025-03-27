@@ -20,28 +20,35 @@ class DomainArgs:
                  type: pulumi.Input[str],
                  cache_settings: Optional[pulumi.Input['DomainCacheSettingsArgs']] = None,
                  configs: Optional[pulumi.Input['DomainConfigsArgs']] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  service_area: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Domain resource.
-        :param pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]] sources: An array of one or more objects specifies the domain name of the origin server.
-               The sources object structure is documented below.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
-        :param pulumi.Input['DomainCacheSettingsArgs'] cache_settings: Specifies the cache configuration. The object structure
+        :param pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]] sources: Specifies an array of one or more objects specifying origin server settings.
+               A maximum of `50` origin site configurations can be configured.
+               The sources structure is documented below.
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
+        :param pulumi.Input['DomainCacheSettingsArgs'] cache_settings: Specifies the cache configuration. The cache_settings structure
                is documented below.
-        :param pulumi.Input['DomainConfigsArgs'] configs: Specifies the domain configuration items. The object structure is
+        :param pulumi.Input['DomainConfigsArgs'] configs: Specifies the domain configuration items. The configs structure is
                documented below.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] service_area: The area covered by the acceleration service. Valid values are
-               `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] service_area: Specifies the area covered by the acceleration service.
+               Valid values are as follows:
+               + **mainland_china**: Indicates that the service scope is mainland China.
+               + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+               + **global**: Indicates that the service scope is global.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the domain.
         """
         pulumi.set(__self__, "sources", sources)
@@ -50,6 +57,8 @@ class DomainArgs:
             pulumi.set(__self__, "cache_settings", cache_settings)
         if configs is not None:
             pulumi.set(__self__, "configs", configs)
+        if enable_force_new is not None:
+            pulumi.set(__self__, "enable_force_new", enable_force_new)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
@@ -63,8 +72,9 @@ class DomainArgs:
     @pulumi.getter
     def sources(self) -> pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]]:
         """
-        An array of one or more objects specifies the domain name of the origin server.
-        The sources object structure is documented below.
+        Specifies an array of one or more objects specifying origin server settings.
+        A maximum of `50` origin site configurations can be configured.
+        The sources structure is documented below.
         """
         return pulumi.get(self, "sources")
 
@@ -76,11 +86,11 @@ class DomainArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
@@ -92,7 +102,7 @@ class DomainArgs:
     @pulumi.getter(name="cacheSettings")
     def cache_settings(self) -> Optional[pulumi.Input['DomainCacheSettingsArgs']]:
         """
-        Specifies the cache configuration. The object structure
+        Specifies the cache configuration. The cache_settings structure
         is documented below.
         """
         return pulumi.get(self, "cache_settings")
@@ -105,7 +115,7 @@ class DomainArgs:
     @pulumi.getter
     def configs(self) -> Optional[pulumi.Input['DomainConfigsArgs']]:
         """
-        Specifies the domain configuration items. The object structure is
+        Specifies the domain configuration items. The configs structure is
         documented below.
         """
         return pulumi.get(self, "configs")
@@ -115,11 +125,19 @@ class DomainArgs:
         pulumi.set(self, "configs", value)
 
     @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enable_force_new")
+
+    @enable_force_new.setter
+    def enable_force_new(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enable_force_new", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id. Changing this parameter will create
-        a new resource.
+        Specifies the enterprise project ID.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -131,7 +149,10 @@ class DomainArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the request or response header.
+        Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+        **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+        **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+        and hyphens (-), and starts with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -143,8 +164,11 @@ class DomainArgs:
     @pulumi.getter(name="serviceArea")
     def service_area(self) -> Optional[pulumi.Input[str]]:
         """
-        The area covered by the acceleration service. Valid values are
-        `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
+        Specifies the area covered by the acceleration service.
+        Valid values are as follows:
+        + **mainland_china**: Indicates that the service scope is mainland China.
+        + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+        + **global**: Indicates that the service scope is global.
         """
         return pulumi.get(self, "service_area")
 
@@ -171,7 +195,9 @@ class _DomainState:
                  cache_settings: Optional[pulumi.Input['DomainCacheSettingsArgs']] = None,
                  cname: Optional[pulumi.Input[str]] = None,
                  configs: Optional[pulumi.Input['DomainConfigsArgs']] = None,
+                 domain_name: Optional[pulumi.Input[str]] = None,
                  domain_status: Optional[pulumi.Input[str]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  service_area: Optional[pulumi.Input[str]] = None,
@@ -180,26 +206,33 @@ class _DomainState:
                  type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Domain resources.
-        :param pulumi.Input['DomainCacheSettingsArgs'] cache_settings: Specifies the cache configuration. The object structure
+        :param pulumi.Input['DomainCacheSettingsArgs'] cache_settings: Specifies the cache configuration. The cache_settings structure
                is documented below.
         :param pulumi.Input[str] cname: The CNAME of the acceleration domain name.
-        :param pulumi.Input['DomainConfigsArgs'] configs: Specifies the domain configuration items. The object structure is
+        :param pulumi.Input['DomainConfigsArgs'] configs: Specifies the domain configuration items. The configs structure is
                documented below.
+        :param pulumi.Input[str] domain_name: schema: Internal
         :param pulumi.Input[str] domain_status: The status of the acceleration domain name. The available values are
-               'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] service_area: The area covered by the acceleration service. Valid values are
-               `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]] sources: An array of one or more objects specifies the domain name of the origin server.
-               The sources object structure is documented below.
+               **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] service_area: Specifies the area covered by the acceleration service.
+               Valid values are as follows:
+               + **mainland_china**: Indicates that the service scope is mainland China.
+               + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+               + **global**: Indicates that the service scope is global.
+        :param pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]] sources: Specifies an array of one or more objects specifying origin server settings.
+               A maximum of `50` origin site configurations can be configured.
+               The sources structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the domain.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         if cache_settings is not None:
             pulumi.set(__self__, "cache_settings", cache_settings)
@@ -207,8 +240,12 @@ class _DomainState:
             pulumi.set(__self__, "cname", cname)
         if configs is not None:
             pulumi.set(__self__, "configs", configs)
+        if domain_name is not None:
+            pulumi.set(__self__, "domain_name", domain_name)
         if domain_status is not None:
             pulumi.set(__self__, "domain_status", domain_status)
+        if enable_force_new is not None:
+            pulumi.set(__self__, "enable_force_new", enable_force_new)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
@@ -226,7 +263,7 @@ class _DomainState:
     @pulumi.getter(name="cacheSettings")
     def cache_settings(self) -> Optional[pulumi.Input['DomainCacheSettingsArgs']]:
         """
-        Specifies the cache configuration. The object structure
+        Specifies the cache configuration. The cache_settings structure
         is documented below.
         """
         return pulumi.get(self, "cache_settings")
@@ -251,7 +288,7 @@ class _DomainState:
     @pulumi.getter
     def configs(self) -> Optional[pulumi.Input['DomainConfigsArgs']]:
         """
-        Specifies the domain configuration items. The object structure is
+        Specifies the domain configuration items. The configs structure is
         documented below.
         """
         return pulumi.get(self, "configs")
@@ -261,11 +298,23 @@ class _DomainState:
         pulumi.set(self, "configs", value)
 
     @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "domain_name")
+
+    @domain_name.setter
+    def domain_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "domain_name", value)
+
+    @property
     @pulumi.getter(name="domainStatus")
     def domain_status(self) -> Optional[pulumi.Input[str]]:
         """
         The status of the acceleration domain name. The available values are
-        'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
+        **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
         """
         return pulumi.get(self, "domain_status")
 
@@ -274,11 +323,19 @@ class _DomainState:
         pulumi.set(self, "domain_status", value)
 
     @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enable_force_new")
+
+    @enable_force_new.setter
+    def enable_force_new(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enable_force_new", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id. Changing this parameter will create
-        a new resource.
+        Specifies the enterprise project ID.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -290,7 +347,10 @@ class _DomainState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the request or response header.
+        Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+        **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+        **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+        and hyphens (-), and starts with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -302,8 +362,11 @@ class _DomainState:
     @pulumi.getter(name="serviceArea")
     def service_area(self) -> Optional[pulumi.Input[str]]:
         """
-        The area covered by the acceleration service. Valid values are
-        `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
+        Specifies the area covered by the acceleration service.
+        Valid values are as follows:
+        + **mainland_china**: Indicates that the service scope is mainland China.
+        + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+        + **global**: Indicates that the service scope is global.
         """
         return pulumi.get(self, "service_area")
 
@@ -315,8 +378,9 @@ class _DomainState:
     @pulumi.getter
     def sources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DomainSourceArgs']]]]:
         """
-        An array of one or more objects specifies the domain name of the origin server.
-        The sources object structure is documented below.
+        Specifies an array of one or more objects specifying origin server settings.
+        A maximum of `50` origin site configurations can be configured.
+        The sources structure is documented below.
         """
         return pulumi.get(self, "sources")
 
@@ -340,11 +404,11 @@ class _DomainState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 
@@ -360,6 +424,7 @@ class Domain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cache_settings: Optional[pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']]] = None,
                  configs: Optional[pulumi.Input[pulumi.InputType['DomainConfigsArgs']]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  service_area: Optional[pulumi.Input[str]] = None,
@@ -368,10 +433,10 @@ class Domain(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        CDN domain management.
+        Manages a CDN domain resource within HuaweiCloud.
 
         ## Example Usage
-        ### Create a cdn domain
+        ### Create a CDN domain
 
         ```python
         import pulumi
@@ -380,8 +445,9 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -392,7 +458,7 @@ class Domain(pulumi.CustomResource):
                 "foo": "bar",
             })
         ```
-        ### Create a cdn domain with cache rules
+        ### Create a CDN domain with cache rules
 
         ```python
         import pulumi
@@ -401,8 +467,9 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -410,14 +477,15 @@ class Domain(pulumi.CustomResource):
             )],
             cache_settings=huaweicloud.cdn.DomainCacheSettingsArgs(
                 rules=[huaweicloud.cdn.DomainCacheSettingsRuleArgs(
-                    rule_type=0,
+                    rule_type="all",
                     ttl=180,
-                    ttl_type=4,
+                    ttl_type="d",
                     priority=2,
+                    url_parameter_type="ignore_url_params",
                 )],
             ))
         ```
-        ### Create a cdn domain with configs
+        ### Create a CDN domain with configs
 
         ```python
         import pulumi
@@ -426,8 +494,11 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        ip_or_domain = config.require_object("ipOrDomain")
+        ca_certificate_body = config.require_object("caCertificateBody")
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -435,15 +506,16 @@ class Domain(pulumi.CustomResource):
             )],
             configs=huaweicloud.cdn.DomainConfigsArgs(
                 origin_protocol="http",
+                ipv6_enable=True,
+                range_based_retrieval_enabled=True,
+                description="test description",
                 https_settings=huaweicloud.cdn.DomainConfigsHttpsSettingsArgs(
                     certificate_name="terraform-test",
                     certificate_body=(lambda path: open(path).read())("your_directory/chain.cer"),
                     http2_enabled=True,
                     https_enabled=True,
                     private_key=(lambda path: open(path).read())("your_directory/server_private.key"),
-                ),
-                cache_url_parameter_filter=huaweicloud.cdn.DomainConfigsCacheUrlParameterFilterArgs(
-                    type="ignore_url_params",
+                    ocsp_stapling_status="on",
                 ),
                 retrieval_request_headers=[huaweicloud.cdn.DomainConfigsRetrievalRequestHeaderArgs(
                     name="test-name",
@@ -456,7 +528,101 @@ class Domain(pulumi.CustomResource):
                     action="set",
                 )],
                 url_signing=huaweicloud.cdn.DomainConfigsUrlSigningArgs(
-                    enabled=False,
+                    enabled=True,
+                    type="type_a",
+                    sign_method="md5",
+                    match_type="all",
+                    sign_arg="Psd_123",
+                    key="A27jtfSTy13q7A0UnTA9vpxYXEb",
+                    backup_key="S36klgTFa60q3V8DmSK2hwfBOYp",
+                    time_format="dec",
+                    expire_time=30,
+                    inherit_config=huaweicloud.cdn.DomainConfigsUrlSigningInheritConfigArgs(
+                        enabled=True,
+                        inherit_type="m3u8",
+                        inherit_time_type="sys_time",
+                    ),
+                ),
+                flexible_origins=[huaweicloud.cdn.DomainConfigsFlexibleOriginArgs(
+                    match_type="all",
+                    priority=1,
+                    back_sources=huaweicloud.cdn.DomainConfigsFlexibleOriginBackSourcesArgs(
+                        http_port=80,
+                        https_port=443,
+                        ip_or_domain=ip_or_domain,
+                        sources_type="ipaddr",
+                    ),
+                )],
+                request_limit_rules=[huaweicloud.cdn.DomainConfigsRequestLimitRuleArgs(
+                    limit_rate_after=50,
+                    limit_rate_value=1048576,
+                    match_type="catalog",
+                    match_value="/test/ff",
+                    priority=4,
+                    type="size",
+                )],
+                error_code_caches=[huaweicloud.cdn.DomainConfigsErrorCodeCachArgs(
+                    code=403,
+                    ttl=70,
+                )],
+                origin_request_url_rewrites=[huaweicloud.cdn.DomainConfigsOriginRequestUrlRewriteArgs(
+                    match_type="file_path",
+                    priority=10,
+                    source_url="/tt/abc.txt",
+                    target_url="/new/$1/$2.html",
+                )],
+                user_agent_filter=huaweicloud.cdn.DomainConfigsUserAgentFilterArgs(
+                    type="black",
+                    include_empty="false",
+                    ua_lists=["t1*"],
+                ),
+                sni=huaweicloud.cdn.DomainConfigsSniArgs(
+                    enabled=True,
+                    server_name="backup.all.cn.com",
+                ),
+                request_url_rewrites=[huaweicloud.cdn.DomainConfigsRequestUrlRewriteArgs(
+                    execution_mode="break",
+                    redirect_url="/test/index.html",
+                    condition=huaweicloud.cdn.DomainConfigsRequestUrlRewriteConditionArgs(
+                        match_type="catalog",
+                        match_value="/test/folder/1",
+                        priority=10,
+                    ),
+                )],
+                browser_cache_rules=[huaweicloud.cdn.DomainConfigsBrowserCacheRuleArgs(
+                    cache_type="ttl",
+                    ttl=30,
+                    ttl_unit="m",
+                    condition=huaweicloud.cdn.DomainConfigsBrowserCacheRuleConditionArgs(
+                        match_type="file_extension",
+                        match_value=".jpg,.zip,.gz",
+                        priority=2,
+                    ),
+                )],
+                client_cert=huaweicloud.cdn.DomainConfigsClientCertArgs(
+                    enabled=True,
+                    hosts="demo1.com.cn|demo2.com.cn|demo3.com.cn",
+                    trusted_cert=ca_certificate_body,
+                ),
+                remote_auth=huaweicloud.cdn.DomainConfigsRemoteAuthArgs(
+                    enabled=True,
+                    remote_auth_rules=huaweicloud.cdn.DomainConfigsRemoteAuthRemoteAuthRulesArgs(
+                        auth_failed_status="503",
+                        auth_server="https://testdomain-update.com",
+                        auth_success_status="302",
+                        file_type_setting="all",
+                        request_method="POST",
+                        reserve_args_setting="reserve_all_args",
+                        reserve_headers_setting="reserve_all_headers",
+                        response_status="206",
+                        timeout=3000,
+                        timeout_action="forbid",
+                        add_custom_args_rules=[huaweicloud.cdn.DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs(
+                            key="http_user_agent",
+                            type="nginx_preset_var",
+                            value="$server_protocol",
+                        )],
+                    ),
                 ),
                 compress=huaweicloud.cdn.DomainConfigsCompressArgs(
                     enabled=False,
@@ -465,36 +631,93 @@ class Domain(pulumi.CustomResource):
                     enabled=True,
                     type="http",
                 ),
+                referer=huaweicloud.cdn.DomainConfigsRefererArgs(
+                    type="white",
+                    value="*.common.com,192.187.2.43,www.test.top:4990",
+                    include_empty=False,
+                ),
+            ))
+        ```
+        ### Create a CDN domain with SCM certificate HTTPS configs
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        domain_name = config.require_object("domainName")
+        origin_server = config.require_object("originServer")
+        certificate_name = config.require_object("certificateName")
+        scm_certificate_id = config.require_object("scmCertificateId")
+        test = huaweicloud.cdn.Domain("test",
+            type="web",
+            service_area="mainland_china",
+            sources=[huaweicloud.cdn.DomainSourceArgs(
+                origin=origin_server,
+                origin_type="ipaddr",
+                active=1,
+            )],
+            configs=huaweicloud.cdn.DomainConfigsArgs(
+                https_settings=huaweicloud.cdn.DomainConfigsHttpsSettingsArgs(
+                    certificate_source=2,
+                    certificate_name=certificate_name,
+                    scm_certificate_id=scm_certificate_id,
+                    certificate_type="server",
+                    http2_enabled=True,
+                    https_enabled=True,
+                ),
             ))
         ```
 
         ## Import
 
-        Domains can be imported using the `id`, e.g.
+        The CDN domain resource can be imported using the domain `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cdn/domain:Domain domain_1 fe2462fac09a4a42a76ecc4a1ef542f1
+         $ pulumi import huaweicloud:Cdn/domain:Domain test <name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `configs.0.url_signing.0.key`, `configs.0.url_signing.0.backup_key`, `configs.0.https_settings.0.certificate_body`, `configs.0.https_settings.0.private_key`, `cache_settings`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_cdn_domain" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         enterprise_project_id, configs.0.url_signing.0.key, configs.0.url_signing.0.backup_key,
+
+         configs.0.https_settings.0.certificate_body, configs.0.https_settings.0.private_key, cache_settings,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']] cache_settings: Specifies the cache configuration. The object structure
+        :param pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']] cache_settings: Specifies the cache configuration. The cache_settings structure
                is documented below.
-        :param pulumi.Input[pulumi.InputType['DomainConfigsArgs']] configs: Specifies the domain configuration items. The object structure is
+        :param pulumi.Input[pulumi.InputType['DomainConfigsArgs']] configs: Specifies the domain configuration items. The configs structure is
                documented below.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] service_area: The area covered by the acceleration service. Valid values are
-               `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DomainSourceArgs']]]] sources: An array of one or more objects specifies the domain name of the origin server.
-               The sources object structure is documented below.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] service_area: Specifies the area covered by the acceleration service.
+               Valid values are as follows:
+               + **mainland_china**: Indicates that the service scope is mainland China.
+               + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+               + **global**: Indicates that the service scope is global.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DomainSourceArgs']]]] sources: Specifies an array of one or more objects specifying origin server settings.
+               A maximum of `50` origin site configurations can be configured.
+               The sources structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the domain.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         ...
     @overload
@@ -503,10 +726,10 @@ class Domain(pulumi.CustomResource):
                  args: DomainArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        CDN domain management.
+        Manages a CDN domain resource within HuaweiCloud.
 
         ## Example Usage
-        ### Create a cdn domain
+        ### Create a CDN domain
 
         ```python
         import pulumi
@@ -515,8 +738,9 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -527,7 +751,7 @@ class Domain(pulumi.CustomResource):
                 "foo": "bar",
             })
         ```
-        ### Create a cdn domain with cache rules
+        ### Create a CDN domain with cache rules
 
         ```python
         import pulumi
@@ -536,8 +760,9 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -545,14 +770,15 @@ class Domain(pulumi.CustomResource):
             )],
             cache_settings=huaweicloud.cdn.DomainCacheSettingsArgs(
                 rules=[huaweicloud.cdn.DomainCacheSettingsRuleArgs(
-                    rule_type=0,
+                    rule_type="all",
                     ttl=180,
-                    ttl_type=4,
+                    ttl_type="d",
                     priority=2,
+                    url_parameter_type="ignore_url_params",
                 )],
             ))
         ```
-        ### Create a cdn domain with configs
+        ### Create a CDN domain with configs
 
         ```python
         import pulumi
@@ -561,8 +787,11 @@ class Domain(pulumi.CustomResource):
         config = pulumi.Config()
         domain_name = config.require_object("domainName")
         origin_server = config.require_object("originServer")
-        domain1 = huaweicloud.cdn.Domain("domain1",
+        ip_or_domain = config.require_object("ipOrDomain")
+        ca_certificate_body = config.require_object("caCertificateBody")
+        test = huaweicloud.cdn.Domain("test",
             type="web",
+            service_area="mainland_china",
             sources=[huaweicloud.cdn.DomainSourceArgs(
                 origin=origin_server,
                 origin_type="ipaddr",
@@ -570,15 +799,16 @@ class Domain(pulumi.CustomResource):
             )],
             configs=huaweicloud.cdn.DomainConfigsArgs(
                 origin_protocol="http",
+                ipv6_enable=True,
+                range_based_retrieval_enabled=True,
+                description="test description",
                 https_settings=huaweicloud.cdn.DomainConfigsHttpsSettingsArgs(
                     certificate_name="terraform-test",
                     certificate_body=(lambda path: open(path).read())("your_directory/chain.cer"),
                     http2_enabled=True,
                     https_enabled=True,
                     private_key=(lambda path: open(path).read())("your_directory/server_private.key"),
-                ),
-                cache_url_parameter_filter=huaweicloud.cdn.DomainConfigsCacheUrlParameterFilterArgs(
-                    type="ignore_url_params",
+                    ocsp_stapling_status="on",
                 ),
                 retrieval_request_headers=[huaweicloud.cdn.DomainConfigsRetrievalRequestHeaderArgs(
                     name="test-name",
@@ -591,7 +821,101 @@ class Domain(pulumi.CustomResource):
                     action="set",
                 )],
                 url_signing=huaweicloud.cdn.DomainConfigsUrlSigningArgs(
-                    enabled=False,
+                    enabled=True,
+                    type="type_a",
+                    sign_method="md5",
+                    match_type="all",
+                    sign_arg="Psd_123",
+                    key="A27jtfSTy13q7A0UnTA9vpxYXEb",
+                    backup_key="S36klgTFa60q3V8DmSK2hwfBOYp",
+                    time_format="dec",
+                    expire_time=30,
+                    inherit_config=huaweicloud.cdn.DomainConfigsUrlSigningInheritConfigArgs(
+                        enabled=True,
+                        inherit_type="m3u8",
+                        inherit_time_type="sys_time",
+                    ),
+                ),
+                flexible_origins=[huaweicloud.cdn.DomainConfigsFlexibleOriginArgs(
+                    match_type="all",
+                    priority=1,
+                    back_sources=huaweicloud.cdn.DomainConfigsFlexibleOriginBackSourcesArgs(
+                        http_port=80,
+                        https_port=443,
+                        ip_or_domain=ip_or_domain,
+                        sources_type="ipaddr",
+                    ),
+                )],
+                request_limit_rules=[huaweicloud.cdn.DomainConfigsRequestLimitRuleArgs(
+                    limit_rate_after=50,
+                    limit_rate_value=1048576,
+                    match_type="catalog",
+                    match_value="/test/ff",
+                    priority=4,
+                    type="size",
+                )],
+                error_code_caches=[huaweicloud.cdn.DomainConfigsErrorCodeCachArgs(
+                    code=403,
+                    ttl=70,
+                )],
+                origin_request_url_rewrites=[huaweicloud.cdn.DomainConfigsOriginRequestUrlRewriteArgs(
+                    match_type="file_path",
+                    priority=10,
+                    source_url="/tt/abc.txt",
+                    target_url="/new/$1/$2.html",
+                )],
+                user_agent_filter=huaweicloud.cdn.DomainConfigsUserAgentFilterArgs(
+                    type="black",
+                    include_empty="false",
+                    ua_lists=["t1*"],
+                ),
+                sni=huaweicloud.cdn.DomainConfigsSniArgs(
+                    enabled=True,
+                    server_name="backup.all.cn.com",
+                ),
+                request_url_rewrites=[huaweicloud.cdn.DomainConfigsRequestUrlRewriteArgs(
+                    execution_mode="break",
+                    redirect_url="/test/index.html",
+                    condition=huaweicloud.cdn.DomainConfigsRequestUrlRewriteConditionArgs(
+                        match_type="catalog",
+                        match_value="/test/folder/1",
+                        priority=10,
+                    ),
+                )],
+                browser_cache_rules=[huaweicloud.cdn.DomainConfigsBrowserCacheRuleArgs(
+                    cache_type="ttl",
+                    ttl=30,
+                    ttl_unit="m",
+                    condition=huaweicloud.cdn.DomainConfigsBrowserCacheRuleConditionArgs(
+                        match_type="file_extension",
+                        match_value=".jpg,.zip,.gz",
+                        priority=2,
+                    ),
+                )],
+                client_cert=huaweicloud.cdn.DomainConfigsClientCertArgs(
+                    enabled=True,
+                    hosts="demo1.com.cn|demo2.com.cn|demo3.com.cn",
+                    trusted_cert=ca_certificate_body,
+                ),
+                remote_auth=huaweicloud.cdn.DomainConfigsRemoteAuthArgs(
+                    enabled=True,
+                    remote_auth_rules=huaweicloud.cdn.DomainConfigsRemoteAuthRemoteAuthRulesArgs(
+                        auth_failed_status="503",
+                        auth_server="https://testdomain-update.com",
+                        auth_success_status="302",
+                        file_type_setting="all",
+                        request_method="POST",
+                        reserve_args_setting="reserve_all_args",
+                        reserve_headers_setting="reserve_all_headers",
+                        response_status="206",
+                        timeout=3000,
+                        timeout_action="forbid",
+                        add_custom_args_rules=[huaweicloud.cdn.DomainConfigsRemoteAuthRemoteAuthRulesAddCustomArgsRuleArgs(
+                            key="http_user_agent",
+                            type="nginx_preset_var",
+                            value="$server_protocol",
+                        )],
+                    ),
                 ),
                 compress=huaweicloud.cdn.DomainConfigsCompressArgs(
                     enabled=False,
@@ -600,16 +924,67 @@ class Domain(pulumi.CustomResource):
                     enabled=True,
                     type="http",
                 ),
+                referer=huaweicloud.cdn.DomainConfigsRefererArgs(
+                    type="white",
+                    value="*.common.com,192.187.2.43,www.test.top:4990",
+                    include_empty=False,
+                ),
+            ))
+        ```
+        ### Create a CDN domain with SCM certificate HTTPS configs
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        domain_name = config.require_object("domainName")
+        origin_server = config.require_object("originServer")
+        certificate_name = config.require_object("certificateName")
+        scm_certificate_id = config.require_object("scmCertificateId")
+        test = huaweicloud.cdn.Domain("test",
+            type="web",
+            service_area="mainland_china",
+            sources=[huaweicloud.cdn.DomainSourceArgs(
+                origin=origin_server,
+                origin_type="ipaddr",
+                active=1,
+            )],
+            configs=huaweicloud.cdn.DomainConfigsArgs(
+                https_settings=huaweicloud.cdn.DomainConfigsHttpsSettingsArgs(
+                    certificate_source=2,
+                    certificate_name=certificate_name,
+                    scm_certificate_id=scm_certificate_id,
+                    certificate_type="server",
+                    http2_enabled=True,
+                    https_enabled=True,
+                ),
             ))
         ```
 
         ## Import
 
-        Domains can be imported using the `id`, e.g.
+        The CDN domain resource can be imported using the domain `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Cdn/domain:Domain domain_1 fe2462fac09a4a42a76ecc4a1ef542f1
+         $ pulumi import huaweicloud:Cdn/domain:Domain test <name>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enterprise_project_id`, `configs.0.url_signing.0.key`, `configs.0.url_signing.0.backup_key`, `configs.0.https_settings.0.certificate_body`, `configs.0.https_settings.0.private_key`, `cache_settings`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_cdn_domain" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         enterprise_project_id, configs.0.url_signing.0.key, configs.0.url_signing.0.backup_key,
+
+         configs.0.https_settings.0.certificate_body, configs.0.https_settings.0.private_key, cache_settings,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param DomainArgs args: The arguments to use to populate this resource's properties.
@@ -628,6 +1003,7 @@ class Domain(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cache_settings: Optional[pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']]] = None,
                  configs: Optional[pulumi.Input[pulumi.InputType['DomainConfigsArgs']]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  service_area: Optional[pulumi.Input[str]] = None,
@@ -645,6 +1021,7 @@ class Domain(pulumi.CustomResource):
 
             __props__.__dict__["cache_settings"] = cache_settings
             __props__.__dict__["configs"] = configs
+            __props__.__dict__["enable_force_new"] = enable_force_new
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             __props__.__dict__["service_area"] = service_area
@@ -656,6 +1033,7 @@ class Domain(pulumi.CustomResource):
                 raise TypeError("Missing required property 'type'")
             __props__.__dict__["type"] = type
             __props__.__dict__["cname"] = None
+            __props__.__dict__["domain_name"] = None
             __props__.__dict__["domain_status"] = None
         super(Domain, __self__).__init__(
             'huaweicloud:Cdn/domain:Domain',
@@ -670,7 +1048,9 @@ class Domain(pulumi.CustomResource):
             cache_settings: Optional[pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']]] = None,
             cname: Optional[pulumi.Input[str]] = None,
             configs: Optional[pulumi.Input[pulumi.InputType['DomainConfigsArgs']]] = None,
+            domain_name: Optional[pulumi.Input[str]] = None,
             domain_status: Optional[pulumi.Input[str]] = None,
+            enable_force_new: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             service_area: Optional[pulumi.Input[str]] = None,
@@ -684,26 +1064,33 @@ class Domain(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']] cache_settings: Specifies the cache configuration. The object structure
+        :param pulumi.Input[pulumi.InputType['DomainCacheSettingsArgs']] cache_settings: Specifies the cache configuration. The cache_settings structure
                is documented below.
         :param pulumi.Input[str] cname: The CNAME of the acceleration domain name.
-        :param pulumi.Input[pulumi.InputType['DomainConfigsArgs']] configs: Specifies the domain configuration items. The object structure is
+        :param pulumi.Input[pulumi.InputType['DomainConfigsArgs']] configs: Specifies the domain configuration items. The configs structure is
                documented below.
+        :param pulumi.Input[str] domain_name: schema: Internal
         :param pulumi.Input[str] domain_status: The status of the acceleration domain name. The available values are
-               'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] name: Specifies the request or response header.
-        :param pulumi.Input[str] service_area: The area covered by the acceleration service. Valid values are
-               `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DomainSourceArgs']]]] sources: An array of one or more objects specifies the domain name of the origin server.
-               The sources object structure is documented below.
+               **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+        :param pulumi.Input[str] name: Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+               **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+               **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+               and hyphens (-), and starts with a letter.
+        :param pulumi.Input[str] service_area: Specifies the area covered by the acceleration service.
+               Valid values are as follows:
+               + **mainland_china**: Indicates that the service scope is mainland China.
+               + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+               + **global**: Indicates that the service scope is global.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DomainSourceArgs']]]] sources: Specifies an array of one or more objects specifying origin server settings.
+               A maximum of `50` origin site configurations can be configured.
+               The sources structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the domain.
-        :param pulumi.Input[str] type: Specifies the operation type for caching URL parameters. Posiible values are:
-               **full_url**: cache all parameters
-               **ignore_url_params**: ignore all parameters
-               **del_args**: ignore specific URL parameters
-               **reserve_args**: reserve specified URL parameters
+        :param pulumi.Input[str] type: Specifies the blacklist and whitelist rule type. Valid values are:
+               + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+               returned.
+               + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+               returned for other users.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -712,7 +1099,9 @@ class Domain(pulumi.CustomResource):
         __props__.__dict__["cache_settings"] = cache_settings
         __props__.__dict__["cname"] = cname
         __props__.__dict__["configs"] = configs
+        __props__.__dict__["domain_name"] = domain_name
         __props__.__dict__["domain_status"] = domain_status
+        __props__.__dict__["enable_force_new"] = enable_force_new
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
         __props__.__dict__["service_area"] = service_area
@@ -725,7 +1114,7 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter(name="cacheSettings")
     def cache_settings(self) -> pulumi.Output['outputs.DomainCacheSettings']:
         """
-        Specifies the cache configuration. The object structure
+        Specifies the cache configuration. The cache_settings structure
         is documented below.
         """
         return pulumi.get(self, "cache_settings")
@@ -742,26 +1131,38 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter
     def configs(self) -> pulumi.Output['outputs.DomainConfigs']:
         """
-        Specifies the domain configuration items. The object structure is
+        Specifies the domain configuration items. The configs structure is
         documented below.
         """
         return pulumi.get(self, "configs")
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> pulumi.Output[str]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "domain_name")
 
     @property
     @pulumi.getter(name="domainStatus")
     def domain_status(self) -> pulumi.Output[str]:
         """
         The status of the acceleration domain name. The available values are
-        'online', 'offline', 'configuring', 'configure_failed', 'checking', 'check_failed' and 'deleting.'
+        **online**, **offline**, **configuring**, **configure_failed**, **checking**, **check_failed** and **deleting**.
         """
         return pulumi.get(self, "domain_status")
+
+    @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> pulumi.Output[Optional[str]]:
+        return pulumi.get(self, "enable_force_new")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
-        The enterprise project id. Changing this parameter will create
-        a new resource.
+        Specifies the enterprise project ID.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -769,7 +1170,10 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the request or response header.
+        Specifies the HTTP response header. Valid values are **Content-Disposition**, **Content-Language**,
+        **Access-Control-Allow-Origin**, **Access-Control-Allow-Methods**, **Access-Control-Max-Age**, **Access-Control-Expose-Headers**,
+        **Access-Control-Allow-Headers** or custom headers. A header contains `1` to `100` characters, including letters, digits,
+        and hyphens (-), and starts with a letter.
         """
         return pulumi.get(self, "name")
 
@@ -777,8 +1181,11 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter(name="serviceArea")
     def service_area(self) -> pulumi.Output[str]:
         """
-        The area covered by the acceleration service. Valid values are
-        `mainland_china`, `outside_mainland_china`, and `global`. Changing this parameter will create a new resource.
+        Specifies the area covered by the acceleration service.
+        Valid values are as follows:
+        + **mainland_china**: Indicates that the service scope is mainland China.
+        + **outside_mainland_china**: Indicates that the service scope is outside mainland China.
+        + **global**: Indicates that the service scope is global.
         """
         return pulumi.get(self, "service_area")
 
@@ -786,8 +1193,9 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter
     def sources(self) -> pulumi.Output[Sequence['outputs.DomainSource']]:
         """
-        An array of one or more objects specifies the domain name of the origin server.
-        The sources object structure is documented below.
+        Specifies an array of one or more objects specifying origin server settings.
+        A maximum of `50` origin site configurations can be configured.
+        The sources structure is documented below.
         """
         return pulumi.get(self, "sources")
 
@@ -803,11 +1211,11 @@ class Domain(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the operation type for caching URL parameters. Posiible values are:
-        **full_url**: cache all parameters
-        **ignore_url_params**: ignore all parameters
-        **del_args**: ignore specific URL parameters
-        **reserve_args**: reserve specified URL parameters
+        Specifies the blacklist and whitelist rule type. Valid values are:
+        + **black**: Blacklist. Users in regions specified in the blacklist cannot access resources and status code `403` is
+        returned.
+        + **white**: Whitelist. Only users in regions specified in the whitelist can access resources. Status code `403` is
+        returned for other users.
         """
         return pulumi.get(self, "type")
 

@@ -7,7 +7,7 @@ import * as utilities from "../utilities";
 /**
  * Manages a **Custom Policy** resource within HuaweiCloud IAM service.
  *
- * ->**Note** You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+ * ->**Note** You *must* have admin privileges to use this resource.
  *
  * ## Example Usage
  *
@@ -45,7 +45,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Roles can be imported using the `id`, e.g.
+ * IAM custom policies can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Iam/role:Role role1 89c60255-9bd6-460c-822a-e2b959ede9d2
@@ -80,16 +80,16 @@ export class Role extends pulumi.CustomResource {
     }
 
     /**
-     * Description of the custom policy.
+     * Specifies the description of the custom policy.
      */
     public readonly description!: pulumi.Output<string>;
     /**
-     * Name of the custom policy.
+     * Specifies the name of the custom policy.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Document of the custom policy in JSON format. For more details, please refer to the
-     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * Specifies the content of the custom policy in JSON format. For more details,
+     * please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     public readonly policy!: pulumi.Output<string>;
     /**
@@ -97,7 +97,9 @@ export class Role extends pulumi.CustomResource {
      */
     public /*out*/ readonly references!: pulumi.Output<number>;
     /**
-     * Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+     * Specifies the display mode of the custom policy. Valid options are as follows:
+     * + **AX**: the global service project.
+     * + **XA**: region-specific projects.
      */
     public readonly type!: pulumi.Output<string>;
 
@@ -146,16 +148,16 @@ export class Role extends pulumi.CustomResource {
  */
 export interface RoleState {
     /**
-     * Description of the custom policy.
+     * Specifies the description of the custom policy.
      */
     description?: pulumi.Input<string>;
     /**
-     * Name of the custom policy.
+     * Specifies the name of the custom policy.
      */
     name?: pulumi.Input<string>;
     /**
-     * Document of the custom policy in JSON format. For more details, please refer to the
-     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * Specifies the content of the custom policy in JSON format. For more details,
+     * please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     policy?: pulumi.Input<string>;
     /**
@@ -163,7 +165,9 @@ export interface RoleState {
      */
     references?: pulumi.Input<number>;
     /**
-     * Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+     * Specifies the display mode of the custom policy. Valid options are as follows:
+     * + **AX**: the global service project.
+     * + **XA**: region-specific projects.
      */
     type?: pulumi.Input<string>;
 }
@@ -173,20 +177,22 @@ export interface RoleState {
  */
 export interface RoleArgs {
     /**
-     * Description of the custom policy.
+     * Specifies the description of the custom policy.
      */
     description: pulumi.Input<string>;
     /**
-     * Name of the custom policy.
+     * Specifies the name of the custom policy.
      */
     name?: pulumi.Input<string>;
     /**
-     * Document of the custom policy in JSON format. For more details, please refer to the
-     * [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
+     * Specifies the content of the custom policy in JSON format. For more details,
+     * please refer to the [official document](https://support.huaweicloud.com/intl/en-us/usermanual-iam/iam_01_0017.html).
      */
     policy: pulumi.Input<string>;
     /**
-     * Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+     * Specifies the display mode of the custom policy. Valid options are as follows:
+     * + **AX**: the global service project.
+     * + **XA**: region-specific projects.
      */
     type: pulumi.Input<string>;
 }

@@ -21,16 +21,22 @@ class GetEipResult:
     """
     A collection of values returned by getEip.
     """
-    def __init__(__self__, bandwidth_id=None, bandwidth_share_type=None, bandwidth_size=None, enterprise_project_id=None, id=None, ip_version=None, ipv6_address=None, port_id=None, private_ip=None, public_ip=None, region=None, status=None, type=None):
+    def __init__(__self__, bandwidth_id=None, bandwidth_name=None, bandwidth_share_type=None, bandwidth_size=None, created_at=None, enterprise_project_id=None, id=None, ip_version=None, ipv6_address=None, name=None, port_id=None, private_ip=None, public_ip=None, region=None, status=None, type=None):
         if bandwidth_id and not isinstance(bandwidth_id, str):
             raise TypeError("Expected argument 'bandwidth_id' to be a str")
         pulumi.set(__self__, "bandwidth_id", bandwidth_id)
+        if bandwidth_name and not isinstance(bandwidth_name, str):
+            raise TypeError("Expected argument 'bandwidth_name' to be a str")
+        pulumi.set(__self__, "bandwidth_name", bandwidth_name)
         if bandwidth_share_type and not isinstance(bandwidth_share_type, str):
             raise TypeError("Expected argument 'bandwidth_share_type' to be a str")
         pulumi.set(__self__, "bandwidth_share_type", bandwidth_share_type)
         if bandwidth_size and not isinstance(bandwidth_size, int):
             raise TypeError("Expected argument 'bandwidth_size' to be a int")
         pulumi.set(__self__, "bandwidth_size", bandwidth_size)
+        if created_at and not isinstance(created_at, str):
+            raise TypeError("Expected argument 'created_at' to be a str")
+        pulumi.set(__self__, "created_at", created_at)
         if enterprise_project_id and not isinstance(enterprise_project_id, str):
             raise TypeError("Expected argument 'enterprise_project_id' to be a str")
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
@@ -43,6 +49,9 @@ class GetEipResult:
         if ipv6_address and not isinstance(ipv6_address, str):
             raise TypeError("Expected argument 'ipv6_address' to be a str")
         pulumi.set(__self__, "ipv6_address", ipv6_address)
+        if name and not isinstance(name, str):
+            raise TypeError("Expected argument 'name' to be a str")
+        pulumi.set(__self__, "name", name)
         if port_id and not isinstance(port_id, str):
             raise TypeError("Expected argument 'port_id' to be a str")
         pulumi.set(__self__, "port_id", port_id)
@@ -71,6 +80,14 @@ class GetEipResult:
         return pulumi.get(self, "bandwidth_id")
 
     @property
+    @pulumi.getter(name="bandwidthName")
+    def bandwidth_name(self) -> str:
+        """
+        The bandwidth name of the EIP.
+        """
+        return pulumi.get(self, "bandwidth_name")
+
+    @property
     @pulumi.getter(name="bandwidthShareType")
     def bandwidth_share_type(self) -> str:
         """
@@ -85,6 +102,14 @@ class GetEipResult:
         The bandwidth size of the EIP.
         """
         return pulumi.get(self, "bandwidth_size")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The create time of the EIP.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -114,6 +139,14 @@ class GetEipResult:
         The IPv6 address of the EIP.
         """
         return pulumi.get(self, "ipv6_address")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The name of the EIP.
+        """
+        return pulumi.get(self, "name")
 
     @property
     @pulumi.getter(name="portId")
@@ -162,12 +195,15 @@ class AwaitableGetEipResult(GetEipResult):
             yield self
         return GetEipResult(
             bandwidth_id=self.bandwidth_id,
+            bandwidth_name=self.bandwidth_name,
             bandwidth_share_type=self.bandwidth_share_type,
             bandwidth_size=self.bandwidth_size,
+            created_at=self.created_at,
             enterprise_project_id=self.enterprise_project_id,
             id=self.id,
             ip_version=self.ip_version,
             ipv6_address=self.ipv6_address,
+            name=self.name,
             port_id=self.port_id,
             private_ip=self.private_ip,
             public_ip=self.public_ip,
@@ -210,12 +246,15 @@ def get_eip(enterprise_project_id: Optional[str] = None,
 
     return AwaitableGetEipResult(
         bandwidth_id=__ret__.bandwidth_id,
+        bandwidth_name=__ret__.bandwidth_name,
         bandwidth_share_type=__ret__.bandwidth_share_type,
         bandwidth_size=__ret__.bandwidth_size,
+        created_at=__ret__.created_at,
         enterprise_project_id=__ret__.enterprise_project_id,
         id=__ret__.id,
         ip_version=__ret__.ip_version,
         ipv6_address=__ret__.ipv6_address,
+        name=__ret__.name,
         port_id=__ret__.port_id,
         private_ip=__ret__.private_ip,
         public_ip=__ret__.public_ip,

@@ -19,35 +19,46 @@ import * as utilities from "../utilities";
  *
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
- * const certificate1 = new huaweicloud.waf.Certificate("certificate1", {
- *     enterpriseProjectId: enterpriseProjectId,
- *     certificate: `-----BEGIN CERTIFICATE-----
- * MIIFmQl5dh2QUAeo39TIKtadgAgh4zHx09kSgayS9Wph9LEqq7MA+2042L3J9aOa
- * DAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUR+SosWwALt6PkP0J9iOIxA6RW8gVsLwq
- * ...
- * +HhDvD/VeOHytX3RAs2GeTOtxyAV5XpKY5r+PkyUqPJj04t3d0Fopi0gNtLpMF=
- * -----END CERTIFICATE-----
- * `,
- *     privateKey: `-----BEGIN PRIVATE KEY-----
- * MIIJwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAM
- * ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
- * ...
- * he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
- * 1qoJFlcDyqSMo5iHq3HLjs
- * -----END PRIVATE KEY-----
- * `,
- * });
- * const domain1 = new huaweicloud.waf.Domain("domain1", {
+ * const certificateId = config.requireObject("certificateId");
+ * const certificateName = config.requireObject("certificateName");
+ * const test = new huaweicloud.waf.Domain("test", {
  *     domain: "www.example.com",
- *     certificateId: certificate1.id,
- *     certificateName: certificate1.name,
+ *     certificateId: certificateId,
+ *     certificateName: certificateName,
  *     proxy: true,
  *     enterpriseProjectId: enterpriseProjectId,
+ *     description: "test description",
+ *     websiteName: "websiteName",
+ *     protectStatus: 1,
+ *     forwardHeaderMap: {
+ *         key1: `$time_local`,
+ *         key2: `$tenant_id`,
+ *     },
+ *     customPage: {
+ *         httpReturnCode: "404",
+ *         blockPageType: "application/json",
+ *         pageContent: `{
+ *   "event_id": "${waf_event_id}",
+ *   "error_msg": "error message"
+ * }
+ * `,
+ *     },
+ *     timeoutSettings: {
+ *         connectionTimeout: 100,
+ *         readTimeout: 1000,
+ *         writeTimeout: 1000,
+ *     },
+ *     trafficMark: {
+ *         ipTags: ["ip_tag"],
+ *         sessionTag: "session_tag",
+ *         userTag: "user_tag",
+ *     },
  *     servers: [{
  *         clientProtocol: "HTTPS",
  *         serverProtocol: "HTTP",
  *         address: "119.8.0.13",
  *         port: 8080,
+ *         type: "ipv4",
  *     }],
  * });
  * ```
@@ -65,6 +76,24 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:Waf/domain:Domain test <id>/<enterprise_project_id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`keep_policy`, `charging_mode`, `ipv6_enable`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_waf_domain" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  keep_policy,
+ *
+ *  charging_mode,
+ *
+ *  ipv6_enable,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Domain extends pulumi.CustomResource {
     /**
@@ -95,25 +124,43 @@ export class Domain extends pulumi.CustomResource {
     }
 
     /**
+     * The CNAME prefix. The CNAME suffix is `.vip1.huaweicloudwaf.com`.
+     */
+    public /*out*/ readonly accessCode!: pulumi.Output<string>;
+    /**
      * Whether a domain name is connected to WAF. 0: The domain name is not connected to WAF, 1: The domain
      * name is connected to WAF.
      */
     public /*out*/ readonly accessStatus!: pulumi.Output<number>;
     /**
      * Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-     * is set to HTTPS.
+     * is set to **HTTPS**.
      */
     public readonly certificateId!: pulumi.Output<string | undefined>;
     /**
      * Specifies the certificate name. This parameter is mandatory
-     * when `clientProtocol` is set to HTTPS.
+     * when `clientProtocol` is set to **HTTPS**.
      */
     public readonly certificateName!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the charging mode of the domain. Valid values are *prePaid*
-     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     * Specifies the charging mode of the domain. Valid values are **prePaid**
+     * and **postPaid**, defaults to **prePaid**. Changing this creates a new instance.
      */
     public readonly chargingMode!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the cipher suite of domain.
+     * The options include **cipher_1**, **cipher_2**,**cipher_3**, **cipher_4**, **cipher_default**.
+     */
+    public readonly cipher!: pulumi.Output<string>;
+    /**
+     * Specifies the custom page. Only supports one custom alarm page.
+     * The customPage structure is documented below.
+     */
+    public readonly customPage!: pulumi.Output<outputs.Waf.DomainCustomPage | undefined>;
+    /**
+     * Specifies the description of the WAF domain.
+     */
+    public readonly description!: pulumi.Output<string>;
     /**
      * Specifies the domain name to be protected. For example, `www.example.com` or
      * `*.example.com`. Changing this creates a new domain.
@@ -121,23 +168,94 @@ export class Domain extends pulumi.CustomResource {
     public readonly domain!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project ID of WAF domain.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
+     * Specifies the field forwarding configuration. WAF inserts the added fields into
+     * the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+     * The options of value are as follows:
+     * + **$time_local**
+     * + **$request_id**
+     * + **$connection_requests**
+     * + **$tenant_id**
+     * + **$project_id**
+     * + **$remote_addr**
+     * + **$remote_port**
+     * + **$scheme**
+     * + **$request_method**
+     * + **$http_host**
+     * + **$origin_uri**
+     * + **$request_length**
+     * + **$ssl_server_name**
+     * + **$ssl_protocol**
+     * + **$ssl_curves**
+     * + **$ssl_session_reused**
+     */
+    public readonly forwardHeaderMap!: pulumi.Output<{[key: string]: string}>;
+    /**
+     * Specifies whether to use the http2 protocol.
+     * This field is only used for communication between clients and WAF.
+     * Defaults to **false**.
+     * Things to note when using this field are as follows:
+     * + There must be at least one server configuration with client protocol set to **HTTPS**, or this configuration is unable
+     * to work.
+     * + This field cannot not work if the client supports **TLS 1.3**.
+     * + This field can work only when the client supports **TLS 1.2** or earlier versions.
+     * + If you want to use HTTP/2 forwarding, use a dedicated WAF instance.
+     */
+    public readonly http2Enable!: pulumi.Output<boolean>;
+    /**
+     * Specifies whether IPv6 protection is enabled.
+     * Enable IPv6 protection if the domain name is accessible using an IPv6 address.
+     * After you enable it, WAF assigns an IPv6 address to the domain name.
+     * This field must be set to **true** when `server` contains a value of type **ipv6**.
+     * Defaults to false.
+     */
+    public readonly ipv6Enable!: pulumi.Output<boolean>;
+    /**
      * Specifies whether to retain the policy when deleting a domain name.
-     * Defaults to true.
+     * Defaults to **true**.
      */
     public readonly keepPolicy!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the load balancing algorithms used to
+     * distribute requests across origin servers.
+     * Only the professional edition (original enterprise edition) and platinum edition
+     * (original ultimate edition) support configuring the load balancing algorithm.
+     * The options of value are as follows:
+     * + **ip_hash** : Requests from the same IP address are routed to the same backend server.
+     * + **round_robin** : Requests are distributed across backend servers in turn based on the
+     * weight you assign to each server.
+     * + **session_hash** : Direct requests with the same session ID to the same origin server.
+     * Before using this configuration, please make sure to configure the traffic identifier for
+     * attack punishment after adding the domain name, otherwise the session hash configuration will not take effect.
+     */
+    public readonly lbAlgorithm!: pulumi.Output<string>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    public readonly pci3ds!: pulumi.Output<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    public readonly pciDss!: pulumi.Output<boolean>;
+    /**
      * Specifies the policy ID associated with the domain. If not specified, a new
-     * policy will be created automatically. Changing this create a new domain.
+     * policy will be created automatically.
      */
     public readonly policyId!: pulumi.Output<string>;
     /**
-     * The WAF mode. -1: bypassed, 0: disabled, 1: enabled.
+     * The protection status of domain. Valid values are:
+     * + `0`: The WAF protection is suspended. WAF only forwards requests destined for the domain name and does not detect attacks.
+     * + `1`: The WAF protection is enabled. WAF detects attacks based on the policy you configure.
+     * + `-1`: The WAF protection is bypassed. Requests of the domain name are directly sent to the backend server and do
+     * not pass through WAF.
      */
-    public /*out*/ readonly protectStatus!: pulumi.Output<number>;
+    public readonly protectStatus!: pulumi.Output<number>;
     /**
      * The protocol type of the client. The options are HTTP, HTTPS, and HTTP&HTTPS.
      */
@@ -147,14 +265,49 @@ export class Domain extends pulumi.CustomResource {
      */
     public readonly proxy!: pulumi.Output<boolean | undefined>;
     /**
-     * The region in which to create the WAF domain resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the URL of the redirected page. The root domain name of the redirection
+     * address must be the name of the currently protected domain (including a wildcard domain name).
+     * The available **${http_host}** can be used to indicate the currently protected domain name and port.
+     * For example: **${http_host}/error.html**.
+     */
+    public readonly redirectUrl!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the region in which to create the WAF domain resource.
+     * If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies an array of origin web servers. The object structure is documented below.
+     * Specifies an array of origin web servers.
+     * The server structure is documented below.
      */
     public readonly servers!: pulumi.Output<outputs.Waf.DomainServer[]>;
+    /**
+     * Specifies the timeout setting. Only supports one timeout setting.
+     * The timeoutSettings structure is documented below.
+     */
+    public readonly timeoutSettings!: pulumi.Output<outputs.Waf.DomainTimeoutSettings>;
+    /**
+     * Specifies the minimum required TLS version. The options include **TLS v1.0**, **TLS v1.1**,
+     * **TLS v1.2**.
+     */
+    public readonly tls!: pulumi.Output<string>;
+    /**
+     * Specifies the traffic identifier.
+     * WAF uses the configurations to identify the malicious client IP address (proxy mode) in the header,
+     * session in the cookie, and user attribute in the parameter,
+     * and then triggers the corresponding known attack source rules to block attack sources.
+     * Only supports one traffic identifier.
+     * The trafficMark structure is documented below.
+     */
+    public readonly trafficMark!: pulumi.Output<outputs.Waf.DomainTrafficMark>;
+    /**
+     * Specifies the website name.
+     * This website name must start with a letter and only letters, digits, underscores (_),
+     * hyphens (-), colons (:) and periods (.) are allowed.
+     * The value contains `1` to `128` characters.
+     * The website name must be unique within this account.
+     */
+    public readonly websiteName!: pulumi.Output<string>;
 
     /**
      * Create a Domain resource with the given unique name, arguments, and options.
@@ -169,19 +322,34 @@ export class Domain extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as DomainState | undefined;
+            resourceInputs["accessCode"] = state ? state.accessCode : undefined;
             resourceInputs["accessStatus"] = state ? state.accessStatus : undefined;
             resourceInputs["certificateId"] = state ? state.certificateId : undefined;
             resourceInputs["certificateName"] = state ? state.certificateName : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
+            resourceInputs["cipher"] = state ? state.cipher : undefined;
+            resourceInputs["customPage"] = state ? state.customPage : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
+            resourceInputs["forwardHeaderMap"] = state ? state.forwardHeaderMap : undefined;
+            resourceInputs["http2Enable"] = state ? state.http2Enable : undefined;
+            resourceInputs["ipv6Enable"] = state ? state.ipv6Enable : undefined;
             resourceInputs["keepPolicy"] = state ? state.keepPolicy : undefined;
+            resourceInputs["lbAlgorithm"] = state ? state.lbAlgorithm : undefined;
+            resourceInputs["pci3ds"] = state ? state.pci3ds : undefined;
+            resourceInputs["pciDss"] = state ? state.pciDss : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["protectStatus"] = state ? state.protectStatus : undefined;
             resourceInputs["protocol"] = state ? state.protocol : undefined;
             resourceInputs["proxy"] = state ? state.proxy : undefined;
+            resourceInputs["redirectUrl"] = state ? state.redirectUrl : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["servers"] = state ? state.servers : undefined;
+            resourceInputs["timeoutSettings"] = state ? state.timeoutSettings : undefined;
+            resourceInputs["tls"] = state ? state.tls : undefined;
+            resourceInputs["trafficMark"] = state ? state.trafficMark : undefined;
+            resourceInputs["websiteName"] = state ? state.websiteName : undefined;
         } else {
             const args = argsOrState as DomainArgs | undefined;
             if ((!args || args.domain === undefined) && !opts.urn) {
@@ -193,15 +361,30 @@ export class Domain extends pulumi.CustomResource {
             resourceInputs["certificateId"] = args ? args.certificateId : undefined;
             resourceInputs["certificateName"] = args ? args.certificateName : undefined;
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
+            resourceInputs["cipher"] = args ? args.cipher : undefined;
+            resourceInputs["customPage"] = args ? args.customPage : undefined;
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["domain"] = args ? args.domain : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
+            resourceInputs["forwardHeaderMap"] = args ? args.forwardHeaderMap : undefined;
+            resourceInputs["http2Enable"] = args ? args.http2Enable : undefined;
+            resourceInputs["ipv6Enable"] = args ? args.ipv6Enable : undefined;
             resourceInputs["keepPolicy"] = args ? args.keepPolicy : undefined;
+            resourceInputs["lbAlgorithm"] = args ? args.lbAlgorithm : undefined;
+            resourceInputs["pci3ds"] = args ? args.pci3ds : undefined;
+            resourceInputs["pciDss"] = args ? args.pciDss : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
+            resourceInputs["protectStatus"] = args ? args.protectStatus : undefined;
             resourceInputs["proxy"] = args ? args.proxy : undefined;
+            resourceInputs["redirectUrl"] = args ? args.redirectUrl : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["servers"] = args ? args.servers : undefined;
+            resourceInputs["timeoutSettings"] = args ? args.timeoutSettings : undefined;
+            resourceInputs["tls"] = args ? args.tls : undefined;
+            resourceInputs["trafficMark"] = args ? args.trafficMark : undefined;
+            resourceInputs["websiteName"] = args ? args.websiteName : undefined;
+            resourceInputs["accessCode"] = undefined /*out*/;
             resourceInputs["accessStatus"] = undefined /*out*/;
-            resourceInputs["protectStatus"] = undefined /*out*/;
             resourceInputs["protocol"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
@@ -214,25 +397,43 @@ export class Domain extends pulumi.CustomResource {
  */
 export interface DomainState {
     /**
+     * The CNAME prefix. The CNAME suffix is `.vip1.huaweicloudwaf.com`.
+     */
+    accessCode?: pulumi.Input<string>;
+    /**
      * Whether a domain name is connected to WAF. 0: The domain name is not connected to WAF, 1: The domain
      * name is connected to WAF.
      */
     accessStatus?: pulumi.Input<number>;
     /**
      * Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-     * is set to HTTPS.
+     * is set to **HTTPS**.
      */
     certificateId?: pulumi.Input<string>;
     /**
      * Specifies the certificate name. This parameter is mandatory
-     * when `clientProtocol` is set to HTTPS.
+     * when `clientProtocol` is set to **HTTPS**.
      */
     certificateName?: pulumi.Input<string>;
     /**
-     * Specifies the charging mode of the domain. Valid values are *prePaid*
-     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     * Specifies the charging mode of the domain. Valid values are **prePaid**
+     * and **postPaid**, defaults to **prePaid**. Changing this creates a new instance.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the cipher suite of domain.
+     * The options include **cipher_1**, **cipher_2**,**cipher_3**, **cipher_4**, **cipher_default**.
+     */
+    cipher?: pulumi.Input<string>;
+    /**
+     * Specifies the custom page. Only supports one custom alarm page.
+     * The customPage structure is documented below.
+     */
+    customPage?: pulumi.Input<inputs.Waf.DomainCustomPage>;
+    /**
+     * Specifies the description of the WAF domain.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the domain name to be protected. For example, `www.example.com` or
      * `*.example.com`. Changing this creates a new domain.
@@ -240,21 +441,92 @@ export interface DomainState {
     domain?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of WAF domain.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies the field forwarding configuration. WAF inserts the added fields into
+     * the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+     * The options of value are as follows:
+     * + **$time_local**
+     * + **$request_id**
+     * + **$connection_requests**
+     * + **$tenant_id**
+     * + **$project_id**
+     * + **$remote_addr**
+     * + **$remote_port**
+     * + **$scheme**
+     * + **$request_method**
+     * + **$http_host**
+     * + **$origin_uri**
+     * + **$request_length**
+     * + **$ssl_server_name**
+     * + **$ssl_protocol**
+     * + **$ssl_curves**
+     * + **$ssl_session_reused**
+     */
+    forwardHeaderMap?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies whether to use the http2 protocol.
+     * This field is only used for communication between clients and WAF.
+     * Defaults to **false**.
+     * Things to note when using this field are as follows:
+     * + There must be at least one server configuration with client protocol set to **HTTPS**, or this configuration is unable
+     * to work.
+     * + This field cannot not work if the client supports **TLS 1.3**.
+     * + This field can work only when the client supports **TLS 1.2** or earlier versions.
+     * + If you want to use HTTP/2 forwarding, use a dedicated WAF instance.
+     */
+    http2Enable?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether IPv6 protection is enabled.
+     * Enable IPv6 protection if the domain name is accessible using an IPv6 address.
+     * After you enable it, WAF assigns an IPv6 address to the domain name.
+     * This field must be set to **true** when `server` contains a value of type **ipv6**.
+     * Defaults to false.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
      * Specifies whether to retain the policy when deleting a domain name.
-     * Defaults to true.
+     * Defaults to **true**.
      */
     keepPolicy?: pulumi.Input<boolean>;
     /**
+     * Specifies the load balancing algorithms used to
+     * distribute requests across origin servers.
+     * Only the professional edition (original enterprise edition) and platinum edition
+     * (original ultimate edition) support configuring the load balancing algorithm.
+     * The options of value are as follows:
+     * + **ip_hash** : Requests from the same IP address are routed to the same backend server.
+     * + **round_robin** : Requests are distributed across backend servers in turn based on the
+     * weight you assign to each server.
+     * + **session_hash** : Direct requests with the same session ID to the same origin server.
+     * Before using this configuration, please make sure to configure the traffic identifier for
+     * attack punishment after adding the domain name, otherwise the session hash configuration will not take effect.
+     */
+    lbAlgorithm?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    pci3ds?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    pciDss?: pulumi.Input<boolean>;
+    /**
      * Specifies the policy ID associated with the domain. If not specified, a new
-     * policy will be created automatically. Changing this create a new domain.
+     * policy will be created automatically.
      */
     policyId?: pulumi.Input<string>;
     /**
-     * The WAF mode. -1: bypassed, 0: disabled, 1: enabled.
+     * The protection status of domain. Valid values are:
+     * + `0`: The WAF protection is suspended. WAF only forwards requests destined for the domain name and does not detect attacks.
+     * + `1`: The WAF protection is enabled. WAF detects attacks based on the policy you configure.
+     * + `-1`: The WAF protection is bypassed. Requests of the domain name are directly sent to the backend server and do
+     * not pass through WAF.
      */
     protectStatus?: pulumi.Input<number>;
     /**
@@ -266,14 +538,49 @@ export interface DomainState {
      */
     proxy?: pulumi.Input<boolean>;
     /**
-     * The region in which to create the WAF domain resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the URL of the redirected page. The root domain name of the redirection
+     * address must be the name of the currently protected domain (including a wildcard domain name).
+     * The available **${http_host}** can be used to indicate the currently protected domain name and port.
+     * For example: **${http_host}/error.html**.
+     */
+    redirectUrl?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to create the WAF domain resource.
+     * If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an array of origin web servers. The object structure is documented below.
+     * Specifies an array of origin web servers.
+     * The server structure is documented below.
      */
     servers?: pulumi.Input<pulumi.Input<inputs.Waf.DomainServer>[]>;
+    /**
+     * Specifies the timeout setting. Only supports one timeout setting.
+     * The timeoutSettings structure is documented below.
+     */
+    timeoutSettings?: pulumi.Input<inputs.Waf.DomainTimeoutSettings>;
+    /**
+     * Specifies the minimum required TLS version. The options include **TLS v1.0**, **TLS v1.1**,
+     * **TLS v1.2**.
+     */
+    tls?: pulumi.Input<string>;
+    /**
+     * Specifies the traffic identifier.
+     * WAF uses the configurations to identify the malicious client IP address (proxy mode) in the header,
+     * session in the cookie, and user attribute in the parameter,
+     * and then triggers the corresponding known attack source rules to block attack sources.
+     * Only supports one traffic identifier.
+     * The trafficMark structure is documented below.
+     */
+    trafficMark?: pulumi.Input<inputs.Waf.DomainTrafficMark>;
+    /**
+     * Specifies the website name.
+     * This website name must start with a letter and only letters, digits, underscores (_),
+     * hyphens (-), colons (:) and periods (.) are allowed.
+     * The value contains `1` to `128` characters.
+     * The website name must be unique within this account.
+     */
+    websiteName?: pulumi.Input<string>;
 }
 
 /**
@@ -282,19 +589,33 @@ export interface DomainState {
 export interface DomainArgs {
     /**
      * Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-     * is set to HTTPS.
+     * is set to **HTTPS**.
      */
     certificateId?: pulumi.Input<string>;
     /**
      * Specifies the certificate name. This parameter is mandatory
-     * when `clientProtocol` is set to HTTPS.
+     * when `clientProtocol` is set to **HTTPS**.
      */
     certificateName?: pulumi.Input<string>;
     /**
-     * Specifies the charging mode of the domain. Valid values are *prePaid*
-     * and *postPaid*, defaults to *prePaid*. Changing this creates a new instance.
+     * Specifies the charging mode of the domain. Valid values are **prePaid**
+     * and **postPaid**, defaults to **prePaid**. Changing this creates a new instance.
      */
     chargingMode?: pulumi.Input<string>;
+    /**
+     * Specifies the cipher suite of domain.
+     * The options include **cipher_1**, **cipher_2**,**cipher_3**, **cipher_4**, **cipher_default**.
+     */
+    cipher?: pulumi.Input<string>;
+    /**
+     * Specifies the custom page. Only supports one custom alarm page.
+     * The customPage structure is documented below.
+     */
+    customPage?: pulumi.Input<inputs.Waf.DomainCustomPage>;
+    /**
+     * Specifies the description of the WAF domain.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the domain name to be protected. For example, `www.example.com` or
      * `*.example.com`. Changing this creates a new domain.
@@ -302,30 +623,140 @@ export interface DomainArgs {
     domain: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of WAF domain.
+     * For enterprise users, if omitted, default enterprise project will be used.
      * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
+     * Specifies the field forwarding configuration. WAF inserts the added fields into
+     * the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+     * The options of value are as follows:
+     * + **$time_local**
+     * + **$request_id**
+     * + **$connection_requests**
+     * + **$tenant_id**
+     * + **$project_id**
+     * + **$remote_addr**
+     * + **$remote_port**
+     * + **$scheme**
+     * + **$request_method**
+     * + **$http_host**
+     * + **$origin_uri**
+     * + **$request_length**
+     * + **$ssl_server_name**
+     * + **$ssl_protocol**
+     * + **$ssl_curves**
+     * + **$ssl_session_reused**
+     */
+    forwardHeaderMap?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies whether to use the http2 protocol.
+     * This field is only used for communication between clients and WAF.
+     * Defaults to **false**.
+     * Things to note when using this field are as follows:
+     * + There must be at least one server configuration with client protocol set to **HTTPS**, or this configuration is unable
+     * to work.
+     * + This field cannot not work if the client supports **TLS 1.3**.
+     * + This field can work only when the client supports **TLS 1.2** or earlier versions.
+     * + If you want to use HTTP/2 forwarding, use a dedicated WAF instance.
+     */
+    http2Enable?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether IPv6 protection is enabled.
+     * Enable IPv6 protection if the domain name is accessible using an IPv6 address.
+     * After you enable it, WAF assigns an IPv6 address to the domain name.
+     * This field must be set to **true** when `server` contains a value of type **ipv6**.
+     * Defaults to false.
+     */
+    ipv6Enable?: pulumi.Input<boolean>;
+    /**
      * Specifies whether to retain the policy when deleting a domain name.
-     * Defaults to true.
+     * Defaults to **true**.
      */
     keepPolicy?: pulumi.Input<boolean>;
     /**
+     * Specifies the load balancing algorithms used to
+     * distribute requests across origin servers.
+     * Only the professional edition (original enterprise edition) and platinum edition
+     * (original ultimate edition) support configuring the load balancing algorithm.
+     * The options of value are as follows:
+     * + **ip_hash** : Requests from the same IP address are routed to the same backend server.
+     * + **round_robin** : Requests are distributed across backend servers in turn based on the
+     * weight you assign to each server.
+     * + **session_hash** : Direct requests with the same session ID to the same origin server.
+     * Before using this configuration, please make sure to configure the traffic identifier for
+     * attack punishment after adding the domain name, otherwise the session hash configuration will not take effect.
+     */
+    lbAlgorithm?: pulumi.Input<string>;
+    /**
+     * Specifies the status of the PCI 3DS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    pci3ds?: pulumi.Input<boolean>;
+    /**
+     * Specifies the status of the PCI DSS compliance certification check.
+     * This parameter must be used together with `tls` and `cipher`.
+     */
+    pciDss?: pulumi.Input<boolean>;
+    /**
      * Specifies the policy ID associated with the domain. If not specified, a new
-     * policy will be created automatically. Changing this create a new domain.
+     * policy will be created automatically.
      */
     policyId?: pulumi.Input<string>;
+    /**
+     * The protection status of domain. Valid values are:
+     * + `0`: The WAF protection is suspended. WAF only forwards requests destined for the domain name and does not detect attacks.
+     * + `1`: The WAF protection is enabled. WAF detects attacks based on the policy you configure.
+     * + `-1`: The WAF protection is bypassed. Requests of the domain name are directly sent to the backend server and do
+     * not pass through WAF.
+     */
+    protectStatus?: pulumi.Input<number>;
     /**
      * Specifies whether a proxy is configured.
      */
     proxy?: pulumi.Input<boolean>;
     /**
-     * The region in which to create the WAF domain resource. If omitted, the
-     * provider-level region will be used. Changing this setting will push a new certificate.
+     * Specifies the URL of the redirected page. The root domain name of the redirection
+     * address must be the name of the currently protected domain (including a wildcard domain name).
+     * The available **${http_host}** can be used to indicate the currently protected domain name and port.
+     * For example: **${http_host}/error.html**.
+     */
+    redirectUrl?: pulumi.Input<string>;
+    /**
+     * Specifies the region in which to create the WAF domain resource.
+     * If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies an array of origin web servers. The object structure is documented below.
+     * Specifies an array of origin web servers.
+     * The server structure is documented below.
      */
     servers: pulumi.Input<pulumi.Input<inputs.Waf.DomainServer>[]>;
+    /**
+     * Specifies the timeout setting. Only supports one timeout setting.
+     * The timeoutSettings structure is documented below.
+     */
+    timeoutSettings?: pulumi.Input<inputs.Waf.DomainTimeoutSettings>;
+    /**
+     * Specifies the minimum required TLS version. The options include **TLS v1.0**, **TLS v1.1**,
+     * **TLS v1.2**.
+     */
+    tls?: pulumi.Input<string>;
+    /**
+     * Specifies the traffic identifier.
+     * WAF uses the configurations to identify the malicious client IP address (proxy mode) in the header,
+     * session in the cookie, and user attribute in the parameter,
+     * and then triggers the corresponding known attack source rules to block attack sources.
+     * Only supports one traffic identifier.
+     * The trafficMark structure is documented below.
+     */
+    trafficMark?: pulumi.Input<inputs.Waf.DomainTrafficMark>;
+    /**
+     * Specifies the website name.
+     * This website name must start with a letter and only letters, digits, underscores (_),
+     * hyphens (-), colons (:) and periods (.) are allowed.
+     * The value contains `1` to `128` characters.
+     * The website name must be unique within this account.
+     */
+    websiteName?: pulumi.Input<string>;
 }

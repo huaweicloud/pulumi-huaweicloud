@@ -10,9 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to query the project list within HuaweiCloud.
+// Use this data source to query the IAM project list within HuaweiCloud.
 //
-// > You *must* have IAM read privileges to use this data source.
+// > **NOTE:** You *must* have IAM read privileges to use this data source.
 //
 // ## Example Usage
 // ### Obtain project information by name
@@ -79,7 +79,7 @@ func GetProjects(ctx *pulumi.Context, args *GetProjectsArgs, opts ...pulumi.Invo
 
 // A collection of arguments for invoking getProjects.
 type GetProjectsArgs struct {
-	// Specifies the project name to query.
+	// Specifies the IAM project name to query.
 	Name *string `pulumi:"name"`
 }
 
@@ -87,7 +87,7 @@ type GetProjectsArgs struct {
 type GetProjectsResult struct {
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
-	// The project name.
+	// The IAM project name.
 	Name *string `pulumi:"name"`
 	// The details of the query projects. The structure is documented below.
 	Projects []GetProjectsProject `pulumi:"projects"`
@@ -108,7 +108,7 @@ func GetProjectsOutput(ctx *pulumi.Context, args GetProjectsOutputArgs, opts ...
 
 // A collection of arguments for invoking getProjects.
 type GetProjectsOutputArgs struct {
-	// Specifies the project name to query.
+	// Specifies the IAM project name to query.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 }
 
@@ -136,7 +136,7 @@ func (o GetProjectsResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetProjectsResult) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// The project name.
+// The IAM project name.
 func (o GetProjectsResultOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GetProjectsResult) *string { return v.Name }).(pulumi.StringPtrOutput)
 }

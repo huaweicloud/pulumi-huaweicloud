@@ -12,7 +12,10 @@ import (
 
 // ## # getAvailabilityZones
 //
-// # Use this data source to get a list of availability zones from HuaweiCloud
+// layout: "huaweicloud"
+// page_title: "HuaweiCloud: getAvailabilityZones"
+// description: ""
+// Use this data source to get a list of availability zones from HuaweiCloud
 //
 // ## Example Usage
 //

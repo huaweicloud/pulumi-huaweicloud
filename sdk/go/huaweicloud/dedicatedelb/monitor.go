@@ -22,19 +22,24 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/DedicatedElb"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			poolId := cfg.RequireObject("poolId")
 //			_, err := DedicatedElb.NewMonitor(ctx, "monitor1", &DedicatedElb.MonitorArgs{
-//				Protocol:   pulumi.String("HTTP"),
+//				PoolId:     pulumi.Any(poolId),
+//				Protocol:   pulumi.String("HTTPS"),
 //				Interval:   pulumi.Int(30),
-//				Timeout:    pulumi.Int(15),
-//				MaxRetries: pulumi.Int(10),
-//				UrlPath:    pulumi.String("/api"),
+//				Timeout:    pulumi.Int(20),
+//				MaxRetries: pulumi.Int(8),
+//				UrlPath:    pulumi.String("/bb"),
+//				DomainName: pulumi.String("www.bb.com"),
 //				Port:       pulumi.Int(8888),
-//				PoolId:     pulumi.Any(huaweicloud_elb_pool.Test.Id),
+//				StatusCode: pulumi.String("200,301,404-500,504"),
 //			})
 //			if err != nil {
 //				return err
@@ -47,38 +52,77 @@ import (
 //
 // ## Import
 //
-// ELB monitor can be imported using the monitor ID, e.g.
+// ELB monitor can be imported using the monitor `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedElb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
+//	$ pulumi import huaweicloud:DedicatedElb/monitor:Monitor test <id>
 //
 // ```
 type Monitor struct {
 	pulumi.CustomResourceState
 
-	// The Domain Name of the Monitor.
-	DomainName pulumi.StringPtrOutput `pulumi:"domainName"`
-	// The time, in seconds, between sending probes to members.
+	// The creation time of the monitor.
+	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the domain name that HTTP requests are sent to during the health check.
+	// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+	// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+	// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+	// is set to **HTTP** or **HTTPS**.
+	DomainName pulumi.StringOutput `pulumi:"domainName"`
+	// Specifies whether the health check is enabled.
+	// + **true(default)**: Health check is enabled.
+	// + **false**: Health check is disabled.
+	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
+	// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+	HttpMethod pulumi.StringOutput `pulumi:"httpMethod"`
+	// Specifies the interval between health checks, in seconds.
+	// Value ranges from `1` to `50`.
 	Interval pulumi.IntOutput `pulumi:"interval"`
-	// Number of permissible ping failures before changing the member's status to INACTIVE.
-	// Must be a number between 1 and 10.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 	MaxRetries pulumi.IntOutput `pulumi:"maxRetries"`
-	// The id of the pool that this monitor will be assigned to.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+	MaxRetriesDown pulumi.IntOutput `pulumi:"maxRetriesDown"`
+	// Specifies the health check name.
+	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the ID of the backend server group for which the health check is
+	// configured. Changing this creates a new monitor.
 	PoolId pulumi.StringOutput `pulumi:"poolId"`
-	// Specifies the health check port. The value ranges from 1 to 65535.
-	Port pulumi.IntPtrOutput `pulumi:"port"`
-	// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-	// balancer to verify the member state. Changing this creates a new monitor.
+	// Specifies the port used for the health check. If this parameter is left blank, a port of
+	// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+	// Value ranges from `1` to `65,535`.
+	Port pulumi.IntOutput `pulumi:"port"`
+	// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+	// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+	// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+	// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 	Protocol pulumi.StringOutput `pulumi:"protocol"`
 	// The region in which to create the ELB monitor resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new monitor.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-	// value must be less than the delay value.
+	// Specifies the expected HTTP status code. This parameter will take effect only when
+	// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+	// + A specific value, for example: **200**.
+	// + A list of values that are separated with commas (,), for example: **200,202**.
+	// + A value range, for example: **200-204**.
+	StatusCode pulumi.StringOutput `pulumi:"statusCode"`
+	// Specifies the maximum time required for waiting for a response from the health check,
+	// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+	// parameter `interval`.
 	Timeout pulumi.IntOutput `pulumi:"timeout"`
-	// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-	// HTTPS.
+	// The update time of the monitor.
+	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
+	// Specifies the HTTP request path for the health check. The value must start with a
+	// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+	// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+	// `protocol` is set to **HTTP** or **HTTPS**.
 	UrlPath pulumi.StringOutput `pulumi:"urlPath"`
 }
 
@@ -127,54 +171,132 @@ func GetMonitor(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Monitor resources.
 type monitorState struct {
-	// The Domain Name of the Monitor.
+	// The creation time of the monitor.
+	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the domain name that HTTP requests are sent to during the health check.
+	// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+	// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+	// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+	// is set to **HTTP** or **HTTPS**.
 	DomainName *string `pulumi:"domainName"`
-	// The time, in seconds, between sending probes to members.
+	// Specifies whether the health check is enabled.
+	// + **true(default)**: Health check is enabled.
+	// + **false**: Health check is disabled.
+	Enabled *bool `pulumi:"enabled"`
+	// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+	HttpMethod *string `pulumi:"httpMethod"`
+	// Specifies the interval between health checks, in seconds.
+	// Value ranges from `1` to `50`.
 	Interval *int `pulumi:"interval"`
-	// Number of permissible ping failures before changing the member's status to INACTIVE.
-	// Must be a number between 1 and 10.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 	MaxRetries *int `pulumi:"maxRetries"`
-	// The id of the pool that this monitor will be assigned to.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+	MaxRetriesDown *int `pulumi:"maxRetriesDown"`
+	// Specifies the health check name.
+	Name *string `pulumi:"name"`
+	// Specifies the ID of the backend server group for which the health check is
+	// configured. Changing this creates a new monitor.
 	PoolId *string `pulumi:"poolId"`
-	// Specifies the health check port. The value ranges from 1 to 65535.
+	// Specifies the port used for the health check. If this parameter is left blank, a port of
+	// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+	// Value ranges from `1` to `65,535`.
 	Port *int `pulumi:"port"`
-	// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-	// balancer to verify the member state. Changing this creates a new monitor.
+	// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+	// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+	// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+	// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 	Protocol *string `pulumi:"protocol"`
 	// The region in which to create the ELB monitor resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new monitor.
 	Region *string `pulumi:"region"`
-	// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-	// value must be less than the delay value.
+	// Specifies the expected HTTP status code. This parameter will take effect only when
+	// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+	// + A specific value, for example: **200**.
+	// + A list of values that are separated with commas (,), for example: **200,202**.
+	// + A value range, for example: **200-204**.
+	StatusCode *string `pulumi:"statusCode"`
+	// Specifies the maximum time required for waiting for a response from the health check,
+	// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+	// parameter `interval`.
 	Timeout *int `pulumi:"timeout"`
-	// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-	// HTTPS.
+	// The update time of the monitor.
+	UpdatedAt *string `pulumi:"updatedAt"`
+	// Specifies the HTTP request path for the health check. The value must start with a
+	// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+	// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+	// `protocol` is set to **HTTP** or **HTTPS**.
 	UrlPath *string `pulumi:"urlPath"`
 }
 
 type MonitorState struct {
-	// The Domain Name of the Monitor.
+	// The creation time of the monitor.
+	CreatedAt pulumi.StringPtrInput
+	// Specifies the domain name that HTTP requests are sent to during the health check.
+	// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+	// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+	// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+	// is set to **HTTP** or **HTTPS**.
 	DomainName pulumi.StringPtrInput
-	// The time, in seconds, between sending probes to members.
+	// Specifies whether the health check is enabled.
+	// + **true(default)**: Health check is enabled.
+	// + **false**: Health check is disabled.
+	Enabled pulumi.BoolPtrInput
+	// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+	HttpMethod pulumi.StringPtrInput
+	// Specifies the interval between health checks, in seconds.
+	// Value ranges from `1` to `50`.
 	Interval pulumi.IntPtrInput
-	// Number of permissible ping failures before changing the member's status to INACTIVE.
-	// Must be a number between 1 and 10.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 	MaxRetries pulumi.IntPtrInput
-	// The id of the pool that this monitor will be assigned to.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+	MaxRetriesDown pulumi.IntPtrInput
+	// Specifies the health check name.
+	Name pulumi.StringPtrInput
+	// Specifies the ID of the backend server group for which the health check is
+	// configured. Changing this creates a new monitor.
 	PoolId pulumi.StringPtrInput
-	// Specifies the health check port. The value ranges from 1 to 65535.
+	// Specifies the port used for the health check. If this parameter is left blank, a port of
+	// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+	// Value ranges from `1` to `65,535`.
 	Port pulumi.IntPtrInput
-	// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-	// balancer to verify the member state. Changing this creates a new monitor.
+	// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+	// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+	// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+	// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 	Protocol pulumi.StringPtrInput
 	// The region in which to create the ELB monitor resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new monitor.
 	Region pulumi.StringPtrInput
-	// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-	// value must be less than the delay value.
+	// Specifies the expected HTTP status code. This parameter will take effect only when
+	// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+	// + A specific value, for example: **200**.
+	// + A list of values that are separated with commas (,), for example: **200,202**.
+	// + A value range, for example: **200-204**.
+	StatusCode pulumi.StringPtrInput
+	// Specifies the maximum time required for waiting for a response from the health check,
+	// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+	// parameter `interval`.
 	Timeout pulumi.IntPtrInput
-	// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-	// HTTPS.
+	// The update time of the monitor.
+	UpdatedAt pulumi.StringPtrInput
+	// Specifies the HTTP request path for the health check. The value must start with a
+	// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+	// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+	// `protocol` is set to **HTTP** or **HTTPS**.
 	UrlPath pulumi.StringPtrInput
 }
 
@@ -183,55 +305,125 @@ func (MonitorState) ElementType() reflect.Type {
 }
 
 type monitorArgs struct {
-	// The Domain Name of the Monitor.
+	// Specifies the domain name that HTTP requests are sent to during the health check.
+	// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+	// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+	// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+	// is set to **HTTP** or **HTTPS**.
 	DomainName *string `pulumi:"domainName"`
-	// The time, in seconds, between sending probes to members.
+	// Specifies whether the health check is enabled.
+	// + **true(default)**: Health check is enabled.
+	// + **false**: Health check is disabled.
+	Enabled *bool `pulumi:"enabled"`
+	// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+	HttpMethod *string `pulumi:"httpMethod"`
+	// Specifies the interval between health checks, in seconds.
+	// Value ranges from `1` to `50`.
 	Interval int `pulumi:"interval"`
-	// Number of permissible ping failures before changing the member's status to INACTIVE.
-	// Must be a number between 1 and 10.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 	MaxRetries int `pulumi:"maxRetries"`
-	// The id of the pool that this monitor will be assigned to.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+	MaxRetriesDown *int `pulumi:"maxRetriesDown"`
+	// Specifies the health check name.
+	Name *string `pulumi:"name"`
+	// Specifies the ID of the backend server group for which the health check is
+	// configured. Changing this creates a new monitor.
 	PoolId string `pulumi:"poolId"`
-	// Specifies the health check port. The value ranges from 1 to 65535.
+	// Specifies the port used for the health check. If this parameter is left blank, a port of
+	// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+	// Value ranges from `1` to `65,535`.
 	Port *int `pulumi:"port"`
-	// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-	// balancer to verify the member state. Changing this creates a new monitor.
+	// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+	// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+	// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+	// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 	Protocol string `pulumi:"protocol"`
 	// The region in which to create the ELB monitor resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new monitor.
 	Region *string `pulumi:"region"`
-	// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-	// value must be less than the delay value.
+	// Specifies the expected HTTP status code. This parameter will take effect only when
+	// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+	// + A specific value, for example: **200**.
+	// + A list of values that are separated with commas (,), for example: **200,202**.
+	// + A value range, for example: **200-204**.
+	StatusCode *string `pulumi:"statusCode"`
+	// Specifies the maximum time required for waiting for a response from the health check,
+	// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+	// parameter `interval`.
 	Timeout int `pulumi:"timeout"`
-	// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-	// HTTPS.
+	// Specifies the HTTP request path for the health check. The value must start with a
+	// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+	// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+	// `protocol` is set to **HTTP** or **HTTPS**.
 	UrlPath *string `pulumi:"urlPath"`
 }
 
 // The set of arguments for constructing a Monitor resource.
 type MonitorArgs struct {
-	// The Domain Name of the Monitor.
+	// Specifies the domain name that HTTP requests are sent to during the health check.
+	// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+	// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+	// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+	// is set to **HTTP** or **HTTPS**.
 	DomainName pulumi.StringPtrInput
-	// The time, in seconds, between sending probes to members.
+	// Specifies whether the health check is enabled.
+	// + **true(default)**: Health check is enabled.
+	// + **false**: Health check is disabled.
+	Enabled pulumi.BoolPtrInput
+	// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+	HttpMethod pulumi.StringPtrInput
+	// Specifies the interval between health checks, in seconds.
+	// Value ranges from `1` to `50`.
 	Interval pulumi.IntInput
-	// Number of permissible ping failures before changing the member's status to INACTIVE.
-	// Must be a number between 1 and 10.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 	MaxRetries pulumi.IntInput
-	// The id of the pool that this monitor will be assigned to.
+	// Specifies the number of consecutive health checks when the health check result of
+	// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+	MaxRetriesDown pulumi.IntPtrInput
+	// Specifies the health check name.
+	Name pulumi.StringPtrInput
+	// Specifies the ID of the backend server group for which the health check is
+	// configured. Changing this creates a new monitor.
 	PoolId pulumi.StringInput
-	// Specifies the health check port. The value ranges from 1 to 65535.
+	// Specifies the port used for the health check. If this parameter is left blank, a port of
+	// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+	// Value ranges from `1` to `65,535`.
 	Port pulumi.IntPtrInput
-	// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-	// balancer to verify the member state. Changing this creates a new monitor.
+	// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+	// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+	// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+	// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+	// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+	// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 	Protocol pulumi.StringInput
 	// The region in which to create the ELB monitor resource. If omitted, the
 	// provider-level region will be used. Changing this creates a new monitor.
 	Region pulumi.StringPtrInput
-	// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-	// value must be less than the delay value.
+	// Specifies the expected HTTP status code. This parameter will take effect only when
+	// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+	// + A specific value, for example: **200**.
+	// + A list of values that are separated with commas (,), for example: **200,202**.
+	// + A value range, for example: **200-204**.
+	StatusCode pulumi.StringPtrInput
+	// Specifies the maximum time required for waiting for a response from the health check,
+	// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+	// parameter `interval`.
 	Timeout pulumi.IntInput
-	// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-	// HTTPS.
+	// Specifies the HTTP request path for the health check. The value must start with a
+	// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+	// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+	// `protocol` is set to **HTTP** or **HTTPS**.
 	UrlPath pulumi.StringPtrInput
 }
 
@@ -322,34 +514,77 @@ func (o MonitorOutput) ToMonitorOutputWithContext(ctx context.Context) MonitorOu
 	return o
 }
 
-// The Domain Name of the Monitor.
-func (o MonitorOutput) DomainName() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Monitor) pulumi.StringPtrOutput { return v.DomainName }).(pulumi.StringPtrOutput)
+// The creation time of the monitor.
+func (o MonitorOutput) CreatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
-// The time, in seconds, between sending probes to members.
+// Specifies the domain name that HTTP requests are sent to during the health check.
+// The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+// must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+// load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+// is set to **HTTP** or **HTTPS**.
+func (o MonitorOutput) DomainName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.DomainName }).(pulumi.StringOutput)
+}
+
+// Specifies whether the health check is enabled.
+// + **true(default)**: Health check is enabled.
+// + **false**: Health check is disabled.
+func (o MonitorOutput) Enabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+func (o MonitorOutput) HttpMethod() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.HttpMethod }).(pulumi.StringOutput)
+}
+
+// Specifies the interval between health checks, in seconds.
+// Value ranges from `1` to `50`.
 func (o MonitorOutput) Interval() pulumi.IntOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.IntOutput { return v.Interval }).(pulumi.IntOutput)
 }
 
-// Number of permissible ping failures before changing the member's status to INACTIVE.
-// Must be a number between 1 and 10.
+// Specifies the number of consecutive health checks when the health check result of
+// a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
 func (o MonitorOutput) MaxRetries() pulumi.IntOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.IntOutput { return v.MaxRetries }).(pulumi.IntOutput)
 }
 
-// The id of the pool that this monitor will be assigned to.
+// Specifies the number of consecutive health checks when the health check result of
+// a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+func (o MonitorOutput) MaxRetriesDown() pulumi.IntOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.IntOutput { return v.MaxRetriesDown }).(pulumi.IntOutput)
+}
+
+// Specifies the health check name.
+func (o MonitorOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the ID of the backend server group for which the health check is
+// configured. Changing this creates a new monitor.
 func (o MonitorOutput) PoolId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.PoolId }).(pulumi.StringOutput)
 }
 
-// Specifies the health check port. The value ranges from 1 to 65535.
-func (o MonitorOutput) Port() pulumi.IntPtrOutput {
-	return o.ApplyT(func(v *Monitor) pulumi.IntPtrOutput { return v.Port }).(pulumi.IntPtrOutput)
+// Specifies the port used for the health check. If this parameter is left blank, a port of
+// the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+// Value ranges from `1` to `65,535`.
+func (o MonitorOutput) Port() pulumi.IntOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }
 
-// The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-// balancer to verify the member state. Changing this creates a new monitor.
+// Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+// **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+// + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+// + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+// + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+// + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+// + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+// + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+// + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
 func (o MonitorOutput) Protocol() pulumi.StringOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.Protocol }).(pulumi.StringOutput)
 }
@@ -360,14 +595,31 @@ func (o MonitorOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-// value must be less than the delay value.
+// Specifies the expected HTTP status code. This parameter will take effect only when
+// `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+// + A specific value, for example: **200**.
+// + A list of values that are separated with commas (,), for example: **200,202**.
+// + A value range, for example: **200-204**.
+func (o MonitorOutput) StatusCode() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.StatusCode }).(pulumi.StringOutput)
+}
+
+// Specifies the maximum time required for waiting for a response from the health check,
+// in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+// parameter `interval`.
 func (o MonitorOutput) Timeout() pulumi.IntOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.IntOutput { return v.Timeout }).(pulumi.IntOutput)
 }
 
-// Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-// HTTPS.
+// The update time of the monitor.
+func (o MonitorOutput) UpdatedAt() pulumi.StringOutput {
+	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
+}
+
+// Specifies the HTTP request path for the health check. The value must start with a
+// slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+// and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+// `protocol` is set to **HTTP** or **HTTPS**.
 func (o MonitorOutput) UrlPath() pulumi.StringOutput {
 	return o.ApplyT(func(v *Monitor) pulumi.StringOutput { return v.UrlPath }).(pulumi.StringOutput)
 }

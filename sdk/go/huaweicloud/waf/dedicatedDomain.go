@@ -14,7 +14,7 @@ import (
 // Manages a dedicated mode domain resource within HuaweiCloud.
 //
 // > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-// used. The dedicated mode domain name resource can be used in Dedicated Mode and ELB Mode.
+// used. The dedicated mode domain name resource can be used in Dedicated Mode.
 //
 // ## Example Usage
 //
@@ -22,6 +22,8 @@ import (
 // package main
 //
 // import (
+//
+//	"fmt"
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
 //	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Waf"
@@ -36,10 +38,13 @@ import (
 //			certificatedId := cfg.RequireObject("certificatedId")
 //			vpcId := cfg.RequireObject("vpcId")
 //			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
-//			_, err := Waf.NewDedicatedDomain(ctx, "domain1", &Waf.DedicatedDomainArgs{
+//			_, err := Waf.NewDedicatedDomain(ctx, "test", &Waf.DedicatedDomainArgs{
 //				Domain:              pulumi.String("www.example.com"),
 //				CertificateId:       pulumi.Any(certificatedId),
 //				EnterpriseProjectId: pulumi.Any(enterpriseProjectId),
+//				ProtectStatus:       pulumi.Int(1),
+//				WebsiteName:         pulumi.String("websiteName"),
+//				Description:         pulumi.String("test description"),
 //				Servers: waf.DedicatedDomainServerArray{
 //					&waf.DedicatedDomainServerArgs{
 //						ClientProtocol: pulumi.String("HTTPS"),
@@ -49,6 +54,36 @@ import (
 //						Type:           pulumi.String("ipv4"),
 //						VpcId:          pulumi.Any(vpcId),
 //					},
+//				},
+//				CustomPage: &waf.DedicatedDomainCustomPageArgs{
+//					HttpReturnCode: pulumi.String("404"),
+//					BlockPageType:  pulumi.String("application/json"),
+//					PageContent:    pulumi.String(fmt.Sprintf("{\n  \"event_id\": \"%v\",\n  \"error_msg\": \"error message\"\n}\n", waf_event_id)),
+//				},
+//				ForwardHeaderMap: pulumi.StringMap{
+//					"key1": pulumi.String(fmt.Sprintf("$time_local")),
+//					"key2": pulumi.String(fmt.Sprintf("$tenant_id")),
+//				},
+//				ConnectionProtection: &waf.DedicatedDomainConnectionProtectionArgs{
+//					ErrorThreshold:                     pulumi.Int(1000),
+//					ErrorPercentage:                    pulumi.Float64(90),
+//					InitialDowntime:                    pulumi.Int(200),
+//					MultiplierForConsecutiveBreakdowns: pulumi.Int(5),
+//					PendingUrlRequestThreshold:         pulumi.Int(7000),
+//					Duration:                           pulumi.Int(10000),
+//					Status:                             pulumi.Bool(true),
+//				},
+//				TimeoutSettings: &waf.DedicatedDomainTimeoutSettingsArgs{
+//					ConnectionTimeout: pulumi.Int(100),
+//					ReadTimeout:       pulumi.Int(1000),
+//					WriteTimeout:      pulumi.Int(1000),
+//				},
+//				TrafficMark: &waf.DedicatedDomainTrafficMarkArgs{
+//					IpTags: pulumi.StringArray{
+//						pulumi.String("ip_tag"),
+//					},
+//					SessionTag: pulumi.String("session_tag"),
+//					UserTag:    pulumi.String("user_tag"),
 //				},
 //			})
 //			if err != nil {
@@ -85,51 +120,100 @@ type DedicatedDomain struct {
 	// The alarm page of domain. Valid values are:
 	AlarmPage pulumi.StringMapOutput `pulumi:"alarmPage"`
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-	// is set to HTTPS.
+	// is set to **HTTPS**.
 	CertificateId pulumi.StringPtrOutput `pulumi:"certificateId"`
 	// The name of the certificate used by the domain name.
 	CertificateName pulumi.StringOutput `pulumi:"certificateName"`
-	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-	// `cipher3`, `cipher4`, `cipherDefault`.
+	// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+	// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 	Cipher pulumi.StringOutput `pulumi:"cipher"`
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification pulumi.BoolMapOutput `pulumi:"complianceCertification"`
+	// Specifies the connection protection configuration to let WAF protect your
+	// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+	// Only supports one protection configuration.
+	// The connectionProtection structure is documented below.
+	ConnectionProtection DedicatedDomainConnectionProtectionOutput `pulumi:"connectionProtection"`
+	// Specifies the custom page. Only supports one custom alarm page.
+	// The customPage structure is documented below.
+	CustomPage DedicatedDomainCustomPagePtrOutput `pulumi:"customPage"`
+	// Specifies the description of the WAF dedicated domain.
+	Description pulumi.StringOutput `pulumi:"description"`
 	// Specifies the protected domain name or IP address (port allowed). For example,
 	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringOutput `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF dedicated domain.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
+	// Specifies the field forwarding configuration. WAF inserts the added fields into
+	// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+	// The options of value are as follows:
+	// + **$time_local**
+	// + **$request_id**
+	// + **$connection_requests**
+	// + **$tenant_id**
+	// + **$project_id**
+	// + **$remote_addr**
+	// + **$remote_port**
+	// + **$scheme**
+	// + **$request_method**
+	// + **$http_host**
+	// + **$origin_uri**
+	// + **$request_length**
+	// + **$ssl_server_name**
+	// + **$ssl_protocol**
+	// + **$ssl_curves**
+	// + **$ssl_session_reused**
+	ForwardHeaderMap pulumi.StringMapOutput `pulumi:"forwardHeaderMap"`
 	// Specifies whether to retain the policy when deleting a domain name.
-	// Defaults to `true`.
+	// Defaults to **true**.
 	KeepPolicy pulumi.BoolPtrOutput `pulumi:"keepPolicy"`
 	// Specifies the status of the PCI 3DS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	Pci3ds pulumi.BoolOutput `pulumi:"pci3ds"`
 	// Specifies the status of the PCI DSS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	PciDss pulumi.BoolOutput `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringOutput `pulumi:"policyId"`
-	// The protection status of domain, `0`: suspended, `1`: enabled.
-	// Default value is `1`.
+	// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+	// Defaults to `0`.
 	ProtectStatus pulumi.IntOutput `pulumi:"protectStatus"`
 	// The protocol type of the client. The options are `HTTP` and `HTTPS`.
 	Protocol pulumi.StringOutput `pulumi:"protocol"`
-	// Specifies whether a proxy is configured. Default value is `false`.
+	// Specifies whether a proxy is configured. Defaults to **false**.
 	Proxy pulumi.BoolPtrOutput `pulumi:"proxy"`
-	// The region in which to create the dedicated mode domain resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new domain.
+	// Specifies the URL of the redirected page. The root domain name of the redirection
+	// address must be the name of the currently protected domain (including a wildcard domain name).
+	// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+	// For example: **${http_host}/error.html**.
+	RedirectUrl pulumi.StringPtrOutput `pulumi:"redirectUrl"`
+	// Specifies the region in which to create the dedicated mode domain resource.
+	// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// The server configuration list of the domain. A maximum of 80 can be configured.
-	// The object structure is documented below.
+	// Specifies the server configuration list of the domain.
+	// A maximum of `80` can be configured. The server structure is documented below.
 	Servers DedicatedDomainServerArrayOutput `pulumi:"servers"`
-	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-	// `TLS v1.2`.
+	// Specifies the timeout setting. Only supports one timeout setting.
+	// The timeoutSettings structure is documented below.
+	TimeoutSettings DedicatedDomainTimeoutSettingsOutput `pulumi:"timeoutSettings"`
+	// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+	// **TLS v1.1** and **TLS v1.2**.
 	Tls pulumi.StringOutput `pulumi:"tls"`
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier pulumi.StringMapOutput `pulumi:"trafficIdentifier"`
+	// Specifies the traffic identifier. WAF uses the configurations to identify the
+	// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+	// and then triggers the corresponding known attack source rules to block attack sources.
+	// Only supports one traffic identifier.
+	// The trafficMark structure is documented below.
+	TrafficMark DedicatedDomainTrafficMarkOutput `pulumi:"trafficMark"`
+	// Specifies the website name. This website name must start with a letter and only
+	// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+	// characters. The website name must be unique within this account.
+	WebsiteName pulumi.StringOutput `pulumi:"websiteName"`
 }
 
 // NewDedicatedDomain registers a new resource with the given unique name, arguments, and options.
@@ -173,51 +257,100 @@ type dedicatedDomainState struct {
 	// The alarm page of domain. Valid values are:
 	AlarmPage map[string]string `pulumi:"alarmPage"`
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-	// is set to HTTPS.
+	// is set to **HTTPS**.
 	CertificateId *string `pulumi:"certificateId"`
 	// The name of the certificate used by the domain name.
 	CertificateName *string `pulumi:"certificateName"`
-	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-	// `cipher3`, `cipher4`, `cipherDefault`.
+	// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+	// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 	Cipher *string `pulumi:"cipher"`
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification map[string]bool `pulumi:"complianceCertification"`
+	// Specifies the connection protection configuration to let WAF protect your
+	// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+	// Only supports one protection configuration.
+	// The connectionProtection structure is documented below.
+	ConnectionProtection *DedicatedDomainConnectionProtection `pulumi:"connectionProtection"`
+	// Specifies the custom page. Only supports one custom alarm page.
+	// The customPage structure is documented below.
+	CustomPage *DedicatedDomainCustomPage `pulumi:"customPage"`
+	// Specifies the description of the WAF dedicated domain.
+	Description *string `pulumi:"description"`
 	// Specifies the protected domain name or IP address (port allowed). For example,
 	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain *string `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF dedicated domain.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the field forwarding configuration. WAF inserts the added fields into
+	// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+	// The options of value are as follows:
+	// + **$time_local**
+	// + **$request_id**
+	// + **$connection_requests**
+	// + **$tenant_id**
+	// + **$project_id**
+	// + **$remote_addr**
+	// + **$remote_port**
+	// + **$scheme**
+	// + **$request_method**
+	// + **$http_host**
+	// + **$origin_uri**
+	// + **$request_length**
+	// + **$ssl_server_name**
+	// + **$ssl_protocol**
+	// + **$ssl_curves**
+	// + **$ssl_session_reused**
+	ForwardHeaderMap map[string]string `pulumi:"forwardHeaderMap"`
 	// Specifies whether to retain the policy when deleting a domain name.
-	// Defaults to `true`.
+	// Defaults to **true**.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
 	// Specifies the status of the PCI 3DS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	Pci3ds *bool `pulumi:"pci3ds"`
 	// Specifies the status of the PCI DSS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	PciDss *bool `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId *string `pulumi:"policyId"`
-	// The protection status of domain, `0`: suspended, `1`: enabled.
-	// Default value is `1`.
+	// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+	// Defaults to `0`.
 	ProtectStatus *int `pulumi:"protectStatus"`
 	// The protocol type of the client. The options are `HTTP` and `HTTPS`.
 	Protocol *string `pulumi:"protocol"`
-	// Specifies whether a proxy is configured. Default value is `false`.
+	// Specifies whether a proxy is configured. Defaults to **false**.
 	Proxy *bool `pulumi:"proxy"`
-	// The region in which to create the dedicated mode domain resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new domain.
+	// Specifies the URL of the redirected page. The root domain name of the redirection
+	// address must be the name of the currently protected domain (including a wildcard domain name).
+	// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+	// For example: **${http_host}/error.html**.
+	RedirectUrl *string `pulumi:"redirectUrl"`
+	// Specifies the region in which to create the dedicated mode domain resource.
+	// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 	Region *string `pulumi:"region"`
-	// The server configuration list of the domain. A maximum of 80 can be configured.
-	// The object structure is documented below.
+	// Specifies the server configuration list of the domain.
+	// A maximum of `80` can be configured. The server structure is documented below.
 	Servers []DedicatedDomainServer `pulumi:"servers"`
-	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-	// `TLS v1.2`.
+	// Specifies the timeout setting. Only supports one timeout setting.
+	// The timeoutSettings structure is documented below.
+	TimeoutSettings *DedicatedDomainTimeoutSettings `pulumi:"timeoutSettings"`
+	// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+	// **TLS v1.1** and **TLS v1.2**.
 	Tls *string `pulumi:"tls"`
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier map[string]string `pulumi:"trafficIdentifier"`
+	// Specifies the traffic identifier. WAF uses the configurations to identify the
+	// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+	// and then triggers the corresponding known attack source rules to block attack sources.
+	// Only supports one traffic identifier.
+	// The trafficMark structure is documented below.
+	TrafficMark *DedicatedDomainTrafficMark `pulumi:"trafficMark"`
+	// Specifies the website name. This website name must start with a letter and only
+	// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+	// characters. The website name must be unique within this account.
+	WebsiteName *string `pulumi:"websiteName"`
 }
 
 type DedicatedDomainState struct {
@@ -226,51 +359,100 @@ type DedicatedDomainState struct {
 	// The alarm page of domain. Valid values are:
 	AlarmPage pulumi.StringMapInput
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-	// is set to HTTPS.
+	// is set to **HTTPS**.
 	CertificateId pulumi.StringPtrInput
 	// The name of the certificate used by the domain name.
 	CertificateName pulumi.StringPtrInput
-	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-	// `cipher3`, `cipher4`, `cipherDefault`.
+	// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+	// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 	Cipher pulumi.StringPtrInput
 	// The compliance certifications of the domain, values are:
 	ComplianceCertification pulumi.BoolMapInput
+	// Specifies the connection protection configuration to let WAF protect your
+	// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+	// Only supports one protection configuration.
+	// The connectionProtection structure is documented below.
+	ConnectionProtection DedicatedDomainConnectionProtectionPtrInput
+	// Specifies the custom page. Only supports one custom alarm page.
+	// The customPage structure is documented below.
+	CustomPage DedicatedDomainCustomPagePtrInput
+	// Specifies the description of the WAF dedicated domain.
+	Description pulumi.StringPtrInput
 	// Specifies the protected domain name or IP address (port allowed). For example,
 	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringPtrInput
 	// Specifies the enterprise project ID of WAF dedicated domain.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the field forwarding configuration. WAF inserts the added fields into
+	// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+	// The options of value are as follows:
+	// + **$time_local**
+	// + **$request_id**
+	// + **$connection_requests**
+	// + **$tenant_id**
+	// + **$project_id**
+	// + **$remote_addr**
+	// + **$remote_port**
+	// + **$scheme**
+	// + **$request_method**
+	// + **$http_host**
+	// + **$origin_uri**
+	// + **$request_length**
+	// + **$ssl_server_name**
+	// + **$ssl_protocol**
+	// + **$ssl_curves**
+	// + **$ssl_session_reused**
+	ForwardHeaderMap pulumi.StringMapInput
 	// Specifies whether to retain the policy when deleting a domain name.
-	// Defaults to `true`.
+	// Defaults to **true**.
 	KeepPolicy pulumi.BoolPtrInput
 	// Specifies the status of the PCI 3DS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	Pci3ds pulumi.BoolPtrInput
 	// Specifies the status of the PCI DSS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	PciDss pulumi.BoolPtrInput
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringPtrInput
-	// The protection status of domain, `0`: suspended, `1`: enabled.
-	// Default value is `1`.
+	// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+	// Defaults to `0`.
 	ProtectStatus pulumi.IntPtrInput
 	// The protocol type of the client. The options are `HTTP` and `HTTPS`.
 	Protocol pulumi.StringPtrInput
-	// Specifies whether a proxy is configured. Default value is `false`.
+	// Specifies whether a proxy is configured. Defaults to **false**.
 	Proxy pulumi.BoolPtrInput
-	// The region in which to create the dedicated mode domain resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new domain.
+	// Specifies the URL of the redirected page. The root domain name of the redirection
+	// address must be the name of the currently protected domain (including a wildcard domain name).
+	// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+	// For example: **${http_host}/error.html**.
+	RedirectUrl pulumi.StringPtrInput
+	// Specifies the region in which to create the dedicated mode domain resource.
+	// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 	Region pulumi.StringPtrInput
-	// The server configuration list of the domain. A maximum of 80 can be configured.
-	// The object structure is documented below.
+	// Specifies the server configuration list of the domain.
+	// A maximum of `80` can be configured. The server structure is documented below.
 	Servers DedicatedDomainServerArrayInput
-	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-	// `TLS v1.2`.
+	// Specifies the timeout setting. Only supports one timeout setting.
+	// The timeoutSettings structure is documented below.
+	TimeoutSettings DedicatedDomainTimeoutSettingsPtrInput
+	// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+	// **TLS v1.1** and **TLS v1.2**.
 	Tls pulumi.StringPtrInput
 	// The traffic identifier of domain. Valid values are:
 	TrafficIdentifier pulumi.StringMapInput
+	// Specifies the traffic identifier. WAF uses the configurations to identify the
+	// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+	// and then triggers the corresponding known attack source rules to block attack sources.
+	// Only supports one traffic identifier.
+	// The trafficMark structure is documented below.
+	TrafficMark DedicatedDomainTrafficMarkPtrInput
+	// Specifies the website name. This website name must start with a letter and only
+	// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+	// characters. The website name must be unique within this account.
+	WebsiteName pulumi.StringPtrInput
 }
 
 func (DedicatedDomainState) ElementType() reflect.Type {
@@ -279,85 +461,183 @@ func (DedicatedDomainState) ElementType() reflect.Type {
 
 type dedicatedDomainArgs struct {
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-	// is set to HTTPS.
+	// is set to **HTTPS**.
 	CertificateId *string `pulumi:"certificateId"`
-	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-	// `cipher3`, `cipher4`, `cipherDefault`.
+	// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+	// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 	Cipher *string `pulumi:"cipher"`
+	// Specifies the connection protection configuration to let WAF protect your
+	// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+	// Only supports one protection configuration.
+	// The connectionProtection structure is documented below.
+	ConnectionProtection *DedicatedDomainConnectionProtection `pulumi:"connectionProtection"`
+	// Specifies the custom page. Only supports one custom alarm page.
+	// The customPage structure is documented below.
+	CustomPage *DedicatedDomainCustomPage `pulumi:"customPage"`
+	// Specifies the description of the WAF dedicated domain.
+	Description *string `pulumi:"description"`
 	// Specifies the protected domain name or IP address (port allowed). For example,
 	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain string `pulumi:"domain"`
 	// Specifies the enterprise project ID of WAF dedicated domain.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the field forwarding configuration. WAF inserts the added fields into
+	// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+	// The options of value are as follows:
+	// + **$time_local**
+	// + **$request_id**
+	// + **$connection_requests**
+	// + **$tenant_id**
+	// + **$project_id**
+	// + **$remote_addr**
+	// + **$remote_port**
+	// + **$scheme**
+	// + **$request_method**
+	// + **$http_host**
+	// + **$origin_uri**
+	// + **$request_length**
+	// + **$ssl_server_name**
+	// + **$ssl_protocol**
+	// + **$ssl_curves**
+	// + **$ssl_session_reused**
+	ForwardHeaderMap map[string]string `pulumi:"forwardHeaderMap"`
 	// Specifies whether to retain the policy when deleting a domain name.
-	// Defaults to `true`.
+	// Defaults to **true**.
 	KeepPolicy *bool `pulumi:"keepPolicy"`
 	// Specifies the status of the PCI 3DS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	Pci3ds *bool `pulumi:"pci3ds"`
 	// Specifies the status of the PCI DSS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	PciDss *bool `pulumi:"pciDss"`
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId *string `pulumi:"policyId"`
-	// The protection status of domain, `0`: suspended, `1`: enabled.
-	// Default value is `1`.
+	// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+	// Defaults to `0`.
 	ProtectStatus *int `pulumi:"protectStatus"`
-	// Specifies whether a proxy is configured. Default value is `false`.
+	// Specifies whether a proxy is configured. Defaults to **false**.
 	Proxy *bool `pulumi:"proxy"`
-	// The region in which to create the dedicated mode domain resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new domain.
+	// Specifies the URL of the redirected page. The root domain name of the redirection
+	// address must be the name of the currently protected domain (including a wildcard domain name).
+	// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+	// For example: **${http_host}/error.html**.
+	RedirectUrl *string `pulumi:"redirectUrl"`
+	// Specifies the region in which to create the dedicated mode domain resource.
+	// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 	Region *string `pulumi:"region"`
-	// The server configuration list of the domain. A maximum of 80 can be configured.
-	// The object structure is documented below.
+	// Specifies the server configuration list of the domain.
+	// A maximum of `80` can be configured. The server structure is documented below.
 	Servers []DedicatedDomainServer `pulumi:"servers"`
-	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-	// `TLS v1.2`.
+	// Specifies the timeout setting. Only supports one timeout setting.
+	// The timeoutSettings structure is documented below.
+	TimeoutSettings *DedicatedDomainTimeoutSettings `pulumi:"timeoutSettings"`
+	// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+	// **TLS v1.1** and **TLS v1.2**.
 	Tls *string `pulumi:"tls"`
+	// Specifies the traffic identifier. WAF uses the configurations to identify the
+	// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+	// and then triggers the corresponding known attack source rules to block attack sources.
+	// Only supports one traffic identifier.
+	// The trafficMark structure is documented below.
+	TrafficMark *DedicatedDomainTrafficMark `pulumi:"trafficMark"`
+	// Specifies the website name. This website name must start with a letter and only
+	// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+	// characters. The website name must be unique within this account.
+	WebsiteName *string `pulumi:"websiteName"`
 }
 
 // The set of arguments for constructing a DedicatedDomain resource.
 type DedicatedDomainArgs struct {
 	// Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-	// is set to HTTPS.
+	// is set to **HTTPS**.
 	CertificateId pulumi.StringPtrInput
-	// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-	// `cipher3`, `cipher4`, `cipherDefault`.
+	// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+	// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 	Cipher pulumi.StringPtrInput
+	// Specifies the connection protection configuration to let WAF protect your
+	// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+	// Only supports one protection configuration.
+	// The connectionProtection structure is documented below.
+	ConnectionProtection DedicatedDomainConnectionProtectionPtrInput
+	// Specifies the custom page. Only supports one custom alarm page.
+	// The customPage structure is documented below.
+	CustomPage DedicatedDomainCustomPagePtrInput
+	// Specifies the description of the WAF dedicated domain.
+	Description pulumi.StringPtrInput
 	// Specifies the protected domain name or IP address (port allowed). For example,
 	// `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 	Domain pulumi.StringInput
 	// Specifies the enterprise project ID of WAF dedicated domain.
+	// For enterprise users, if omitted, default enterprise project will be used.
 	// Changing this parameter will create a new resource.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the field forwarding configuration. WAF inserts the added fields into
+	// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+	// The options of value are as follows:
+	// + **$time_local**
+	// + **$request_id**
+	// + **$connection_requests**
+	// + **$tenant_id**
+	// + **$project_id**
+	// + **$remote_addr**
+	// + **$remote_port**
+	// + **$scheme**
+	// + **$request_method**
+	// + **$http_host**
+	// + **$origin_uri**
+	// + **$request_length**
+	// + **$ssl_server_name**
+	// + **$ssl_protocol**
+	// + **$ssl_curves**
+	// + **$ssl_session_reused**
+	ForwardHeaderMap pulumi.StringMapInput
 	// Specifies whether to retain the policy when deleting a domain name.
-	// Defaults to `true`.
+	// Defaults to **true**.
 	KeepPolicy pulumi.BoolPtrInput
 	// Specifies the status of the PCI 3DS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	Pci3ds pulumi.BoolPtrInput
 	// Specifies the status of the PCI DSS compliance certification check. The options
-	// include `true` and `false`. This parameter must be used together with tls and cipher.
+	// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 	PciDss pulumi.BoolPtrInput
 	// Specifies the policy ID associated with the domain. If not specified, a new policy
 	// will be created automatically.
 	PolicyId pulumi.StringPtrInput
-	// The protection status of domain, `0`: suspended, `1`: enabled.
-	// Default value is `1`.
+	// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+	// Defaults to `0`.
 	ProtectStatus pulumi.IntPtrInput
-	// Specifies whether a proxy is configured. Default value is `false`.
+	// Specifies whether a proxy is configured. Defaults to **false**.
 	Proxy pulumi.BoolPtrInput
-	// The region in which to create the dedicated mode domain resource. If omitted,
-	// the provider-level region will be used. Changing this setting will push a new domain.
+	// Specifies the URL of the redirected page. The root domain name of the redirection
+	// address must be the name of the currently protected domain (including a wildcard domain name).
+	// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+	// For example: **${http_host}/error.html**.
+	RedirectUrl pulumi.StringPtrInput
+	// Specifies the region in which to create the dedicated mode domain resource.
+	// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 	Region pulumi.StringPtrInput
-	// The server configuration list of the domain. A maximum of 80 can be configured.
-	// The object structure is documented below.
+	// Specifies the server configuration list of the domain.
+	// A maximum of `80` can be configured. The server structure is documented below.
 	Servers DedicatedDomainServerArrayInput
-	// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-	// `TLS v1.2`.
+	// Specifies the timeout setting. Only supports one timeout setting.
+	// The timeoutSettings structure is documented below.
+	TimeoutSettings DedicatedDomainTimeoutSettingsPtrInput
+	// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+	// **TLS v1.1** and **TLS v1.2**.
 	Tls pulumi.StringPtrInput
+	// Specifies the traffic identifier. WAF uses the configurations to identify the
+	// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+	// and then triggers the corresponding known attack source rules to block attack sources.
+	// Only supports one traffic identifier.
+	// The trafficMark structure is documented below.
+	TrafficMark DedicatedDomainTrafficMarkPtrInput
+	// Specifies the website name. This website name must start with a letter and only
+	// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+	// characters. The website name must be unique within this account.
+	WebsiteName pulumi.StringPtrInput
 }
 
 func (DedicatedDomainArgs) ElementType() reflect.Type {
@@ -458,7 +738,7 @@ func (o DedicatedDomainOutput) AlarmPage() pulumi.StringMapOutput {
 }
 
 // Specifies the certificate ID. This parameter is mandatory when `clientProtocol`
-// is set to HTTPS.
+// is set to **HTTPS**.
 func (o DedicatedDomainOutput) CertificateId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringPtrOutput { return v.CertificateId }).(pulumi.StringPtrOutput)
 }
@@ -468,8 +748,8 @@ func (o DedicatedDomainOutput) CertificateName() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.CertificateName }).(pulumi.StringOutput)
 }
 
-// Specifies the cipher suite of domain. The options include `cipher1`, `cipher2`,
-// `cipher3`, `cipher4`, `cipherDefault`.
+// Specifies the cipher suite of domain. The valid values are: **cipher_1**, **cipher_2**,
+// **cipher_3**, **cipher_4**, **cipher_5**, **cipher_6**, and **cipher_default**.
 func (o DedicatedDomainOutput) Cipher() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Cipher }).(pulumi.StringOutput)
 }
@@ -479,6 +759,25 @@ func (o DedicatedDomainOutput) ComplianceCertification() pulumi.BoolMapOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolMapOutput { return v.ComplianceCertification }).(pulumi.BoolMapOutput)
 }
 
+// Specifies the connection protection configuration to let WAF protect your
+// origin servers from being crashed when WAF detects a large number of `502`/`504` error codes or pending requests.
+// Only supports one protection configuration.
+// The connectionProtection structure is documented below.
+func (o DedicatedDomainOutput) ConnectionProtection() DedicatedDomainConnectionProtectionOutput {
+	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainConnectionProtectionOutput { return v.ConnectionProtection }).(DedicatedDomainConnectionProtectionOutput)
+}
+
+// Specifies the custom page. Only supports one custom alarm page.
+// The customPage structure is documented below.
+func (o DedicatedDomainOutput) CustomPage() DedicatedDomainCustomPagePtrOutput {
+	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainCustomPagePtrOutput { return v.CustomPage }).(DedicatedDomainCustomPagePtrOutput)
+}
+
+// Specifies the description of the WAF dedicated domain.
+func (o DedicatedDomainOutput) Description() pulumi.StringOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
+}
+
 // Specifies the protected domain name or IP address (port allowed). For example,
 // `www.example.com` or `*.example.com` or `www.example.com:89`. Changing this creates a new domain.
 func (o DedicatedDomainOutput) Domain() pulumi.StringOutput {
@@ -486,25 +785,49 @@ func (o DedicatedDomainOutput) Domain() pulumi.StringOutput {
 }
 
 // Specifies the enterprise project ID of WAF dedicated domain.
+// For enterprise users, if omitted, default enterprise project will be used.
 // Changing this parameter will create a new resource.
 func (o DedicatedDomainOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the field forwarding configuration. WAF inserts the added fields into
+// the header and forwards the header to the origin server. The key cannot be the same as the native Nginx field.
+// The options of value are as follows:
+// + **$time_local**
+// + **$request_id**
+// + **$connection_requests**
+// + **$tenant_id**
+// + **$project_id**
+// + **$remote_addr**
+// + **$remote_port**
+// + **$scheme**
+// + **$request_method**
+// + **$http_host**
+// + **$origin_uri**
+// + **$request_length**
+// + **$ssl_server_name**
+// + **$ssl_protocol**
+// + **$ssl_curves**
+// + **$ssl_session_reused**
+func (o DedicatedDomainOutput) ForwardHeaderMap() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringMapOutput { return v.ForwardHeaderMap }).(pulumi.StringMapOutput)
+}
+
 // Specifies whether to retain the policy when deleting a domain name.
-// Defaults to `true`.
+// Defaults to **true**.
 func (o DedicatedDomainOutput) KeepPolicy() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolPtrOutput { return v.KeepPolicy }).(pulumi.BoolPtrOutput)
 }
 
 // Specifies the status of the PCI 3DS compliance certification check. The options
-// include `true` and `false`. This parameter must be used together with tls and cipher.
+// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 func (o DedicatedDomainOutput) Pci3ds() pulumi.BoolOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolOutput { return v.Pci3ds }).(pulumi.BoolOutput)
 }
 
 // Specifies the status of the PCI DSS compliance certification check. The options
-// include `true` and `false`. This parameter must be used together with tls and cipher.
+// include **true** and **false**. This parameter must be used together with `tls` and `cipher`.
 func (o DedicatedDomainOutput) PciDss() pulumi.BoolOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolOutput { return v.PciDss }).(pulumi.BoolOutput)
 }
@@ -515,8 +838,8 @@ func (o DedicatedDomainOutput) PolicyId() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.PolicyId }).(pulumi.StringOutput)
 }
 
-// The protection status of domain, `0`: suspended, `1`: enabled.
-// Default value is `1`.
+// Specifies the protection status of domain, `0`: suspended, `1`: enabled.
+// Defaults to `0`.
 func (o DedicatedDomainOutput) ProtectStatus() pulumi.IntOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.IntOutput { return v.ProtectStatus }).(pulumi.IntOutput)
 }
@@ -526,25 +849,39 @@ func (o DedicatedDomainOutput) Protocol() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Protocol }).(pulumi.StringOutput)
 }
 
-// Specifies whether a proxy is configured. Default value is `false`.
+// Specifies whether a proxy is configured. Defaults to **false**.
 func (o DedicatedDomainOutput) Proxy() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.BoolPtrOutput { return v.Proxy }).(pulumi.BoolPtrOutput)
 }
 
-// The region in which to create the dedicated mode domain resource. If omitted,
-// the provider-level region will be used. Changing this setting will push a new domain.
+// Specifies the URL of the redirected page. The root domain name of the redirection
+// address must be the name of the currently protected domain (including a wildcard domain name).
+// The available **${http_host}** can be used to indicate the currently protected domain name and port.
+// For example: **${http_host}/error.html**.
+func (o DedicatedDomainOutput) RedirectUrl() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringPtrOutput { return v.RedirectUrl }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the region in which to create the dedicated mode domain resource.
+// If omitted, the provider-level region will be used. Changing this setting will push a new domain.
 func (o DedicatedDomainOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// The server configuration list of the domain. A maximum of 80 can be configured.
-// The object structure is documented below.
+// Specifies the server configuration list of the domain.
+// A maximum of `80` can be configured. The server structure is documented below.
 func (o DedicatedDomainOutput) Servers() DedicatedDomainServerArrayOutput {
 	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainServerArrayOutput { return v.Servers }).(DedicatedDomainServerArrayOutput)
 }
 
-// Specifies the minimum required TLS version. The options include `TLS v1.0`, `TLS v1.1`,
-// `TLS v1.2`.
+// Specifies the timeout setting. Only supports one timeout setting.
+// The timeoutSettings structure is documented below.
+func (o DedicatedDomainOutput) TimeoutSettings() DedicatedDomainTimeoutSettingsOutput {
+	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainTimeoutSettingsOutput { return v.TimeoutSettings }).(DedicatedDomainTimeoutSettingsOutput)
+}
+
+// Specifies the minimum required TLS version. The valid values are: **TLS v1.0**,
+// **TLS v1.1** and **TLS v1.2**.
 func (o DedicatedDomainOutput) Tls() pulumi.StringOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.Tls }).(pulumi.StringOutput)
 }
@@ -552,6 +889,22 @@ func (o DedicatedDomainOutput) Tls() pulumi.StringOutput {
 // The traffic identifier of domain. Valid values are:
 func (o DedicatedDomainOutput) TrafficIdentifier() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringMapOutput { return v.TrafficIdentifier }).(pulumi.StringMapOutput)
+}
+
+// Specifies the traffic identifier. WAF uses the configurations to identify the
+// malicious client IP address (proxy mode) in the header, session in the cookie, and user attribute in the parameter,
+// and then triggers the corresponding known attack source rules to block attack sources.
+// Only supports one traffic identifier.
+// The trafficMark structure is documented below.
+func (o DedicatedDomainOutput) TrafficMark() DedicatedDomainTrafficMarkOutput {
+	return o.ApplyT(func(v *DedicatedDomain) DedicatedDomainTrafficMarkOutput { return v.TrafficMark }).(DedicatedDomainTrafficMarkOutput)
+}
+
+// Specifies the website name. This website name must start with a letter and only
+// letters, digits, underscores (_), hyphens (-), colons (:) and periods (.) are allowed. The value contains `1` to `128`
+// characters. The website name must be unique within this account.
+func (o DedicatedDomainOutput) WebsiteName() pulumi.StringOutput {
+	return o.ApplyT(func(v *DedicatedDomain) pulumi.StringOutput { return v.WebsiteName }).(pulumi.StringOutput)
 }
 
 type DedicatedDomainArrayOutput struct{ *pulumi.OutputState }

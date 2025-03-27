@@ -11,7 +11,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Provides a resource to manage a VPC endpoint service resource.
+// Manages a VPC endpoint service resource within HuaweiCloud.
 //
 // ## Example Usage
 //
@@ -71,12 +71,28 @@ type Service struct {
 	Connections ServiceConnectionArrayOutput `pulumi:"connections"`
 	// Specifies the description of the VPC endpoint service.
 	Description pulumi.StringOutput `pulumi:"description"`
+	// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+	// Changing this creates a new VPC endpoint service resource.
+	EnablePolicy pulumi.BoolOutput `pulumi:"enablePolicy"`
+	// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+	IpAddress pulumi.StringOutput `pulumi:"ipAddress"`
+	// Specifies the IP version of the VPC endpoint service.
+	// The valid values are as follows:
+	// + **ipv4** (Default value)
+	// + **ipv6**
+	IpVersion pulumi.StringOutput `pulumi:"ipVersion"`
 	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the list of accounts to access the VPC endpoint service. The record is in
-	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of organizations to access the VPC endpoint service.
+	// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+	// organizations to access the VPC endpoint service.
+	OrganizationPermissions pulumi.StringArrayOutput `pulumi:"organizationPermissions"`
+	// Specifies the list of accounts to access the VPC endpoint service.
+	// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayOutput `pulumi:"permissions"`
+	// The dedicated cluster ID associated with the VPC endpoint service.
+	PoolId pulumi.StringOutput `pulumi:"poolId"`
 	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -97,10 +113,21 @@ type Service struct {
 	ServiceName pulumi.StringOutput `pulumi:"serviceName"`
 	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrOutput `pulumi:"serviceType"`
+	// Specifies the network ID of any subnet within the VPC used to create
+	// the VPC endpoint service.
+	SnatNetworkId pulumi.StringOutput `pulumi:"snatNetworkId"`
 	// The connection status of the VPC endpoint.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
+	// Specifies whether to transfer client information (such as source IP address,
+	// source port number and packet ID) to the server.
+	// The valid values are as follows:
+	// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+	// + **toa_open**: **TCP TOA** information is carried.
+	// + **proxy_open**: **Proxy Protocol** information is carried.
+	// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+	TcpProxy pulumi.StringOutput `pulumi:"tcpProxy"`
 	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
 	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
@@ -154,12 +181,28 @@ type serviceState struct {
 	Connections []ServiceConnection `pulumi:"connections"`
 	// Specifies the description of the VPC endpoint service.
 	Description *string `pulumi:"description"`
+	// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+	// Changing this creates a new VPC endpoint service resource.
+	EnablePolicy *bool `pulumi:"enablePolicy"`
+	// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+	IpAddress *string `pulumi:"ipAddress"`
+	// Specifies the IP version of the VPC endpoint service.
+	// The valid values are as follows:
+	// + **ipv4** (Default value)
+	// + **ipv6**
+	IpVersion *string `pulumi:"ipVersion"`
 	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
-	// Specifies the list of accounts to access the VPC endpoint service. The record is in
-	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of organizations to access the VPC endpoint service.
+	// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+	// organizations to access the VPC endpoint service.
+	OrganizationPermissions []string `pulumi:"organizationPermissions"`
+	// Specifies the list of accounts to access the VPC endpoint service.
+	// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions []string `pulumi:"permissions"`
+	// The dedicated cluster ID associated with the VPC endpoint service.
+	PoolId *string `pulumi:"poolId"`
 	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -180,10 +223,21 @@ type serviceState struct {
 	ServiceName *string `pulumi:"serviceName"`
 	// The type of the VPC endpoint service.
 	ServiceType *string `pulumi:"serviceType"`
+	// Specifies the network ID of any subnet within the VPC used to create
+	// the VPC endpoint service.
+	SnatNetworkId *string `pulumi:"snatNetworkId"`
 	// The connection status of the VPC endpoint.
 	Status *string `pulumi:"status"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies whether to transfer client information (such as source IP address,
+	// source port number and packet ID) to the server.
+	// The valid values are as follows:
+	// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+	// + **toa_open**: **TCP TOA** information is carried.
+	// + **proxy_open**: **Proxy Protocol** information is carried.
+	// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+	TcpProxy *string `pulumi:"tcpProxy"`
 	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
 	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId *string `pulumi:"vpcId"`
@@ -196,12 +250,28 @@ type ServiceState struct {
 	Connections ServiceConnectionArrayInput
 	// Specifies the description of the VPC endpoint service.
 	Description pulumi.StringPtrInput
+	// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+	// Changing this creates a new VPC endpoint service resource.
+	EnablePolicy pulumi.BoolPtrInput
+	// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+	IpAddress pulumi.StringPtrInput
+	// Specifies the IP version of the VPC endpoint service.
+	// The valid values are as follows:
+	// + **ipv4** (Default value)
+	// + **ipv6**
+	IpVersion pulumi.StringPtrInput
 	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
-	// Specifies the list of accounts to access the VPC endpoint service. The record is in
-	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of organizations to access the VPC endpoint service.
+	// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+	// organizations to access the VPC endpoint service.
+	OrganizationPermissions pulumi.StringArrayInput
+	// Specifies the list of accounts to access the VPC endpoint service.
+	// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayInput
+	// The dedicated cluster ID associated with the VPC endpoint service.
+	PoolId pulumi.StringPtrInput
 	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -222,10 +292,21 @@ type ServiceState struct {
 	ServiceName pulumi.StringPtrInput
 	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrInput
+	// Specifies the network ID of any subnet within the VPC used to create
+	// the VPC endpoint service.
+	SnatNetworkId pulumi.StringPtrInput
 	// The connection status of the VPC endpoint.
 	Status pulumi.StringPtrInput
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapInput
+	// Specifies whether to transfer client information (such as source IP address,
+	// source port number and packet ID) to the server.
+	// The valid values are as follows:
+	// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+	// + **toa_open**: **TCP TOA** information is carried.
+	// + **proxy_open**: **Proxy Protocol** information is carried.
+	// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+	TcpProxy pulumi.StringPtrInput
 	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
 	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringPtrInput
@@ -240,12 +321,28 @@ type serviceArgs struct {
 	Approval *bool `pulumi:"approval"`
 	// Specifies the description of the VPC endpoint service.
 	Description *string `pulumi:"description"`
+	// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+	// Changing this creates a new VPC endpoint service resource.
+	EnablePolicy *bool `pulumi:"enablePolicy"`
+	// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+	IpAddress *string `pulumi:"ipAddress"`
+	// Specifies the IP version of the VPC endpoint service.
+	// The valid values are as follows:
+	// + **ipv4** (Default value)
+	// + **ipv6**
+	IpVersion *string `pulumi:"ipVersion"`
 	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name *string `pulumi:"name"`
-	// Specifies the list of accounts to access the VPC endpoint service. The record is in
-	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of organizations to access the VPC endpoint service.
+	// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+	// organizations to access the VPC endpoint service.
+	OrganizationPermissions []string `pulumi:"organizationPermissions"`
+	// Specifies the list of accounts to access the VPC endpoint service.
+	// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions []string `pulumi:"permissions"`
+	// The dedicated cluster ID associated with the VPC endpoint service.
+	PoolId *string `pulumi:"poolId"`
 	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -264,8 +361,19 @@ type serviceArgs struct {
 	ServerType string `pulumi:"serverType"`
 	// The type of the VPC endpoint service.
 	ServiceType *string `pulumi:"serviceType"`
+	// Specifies the network ID of any subnet within the VPC used to create
+	// the VPC endpoint service.
+	SnatNetworkId *string `pulumi:"snatNetworkId"`
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags map[string]string `pulumi:"tags"`
+	// Specifies whether to transfer client information (such as source IP address,
+	// source port number and packet ID) to the server.
+	// The valid values are as follows:
+	// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+	// + **toa_open**: **TCP TOA** information is carried.
+	// + **proxy_open**: **Proxy Protocol** information is carried.
+	// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+	TcpProxy *string `pulumi:"tcpProxy"`
 	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
 	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId string `pulumi:"vpcId"`
@@ -277,12 +385,28 @@ type ServiceArgs struct {
 	Approval pulumi.BoolPtrInput
 	// Specifies the description of the VPC endpoint service.
 	Description pulumi.StringPtrInput
+	// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+	// Changing this creates a new VPC endpoint service resource.
+	EnablePolicy pulumi.BoolPtrInput
+	// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+	IpAddress pulumi.StringPtrInput
+	// Specifies the IP version of the VPC endpoint service.
+	// The valid values are as follows:
+	// + **ipv4** (Default value)
+	// + **ipv6**
+	IpVersion pulumi.StringPtrInput
 	// Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 	// characters, including letters, digits, underscores (_), and hyphens (-).
 	Name pulumi.StringPtrInput
-	// Specifies the list of accounts to access the VPC endpoint service. The record is in
-	// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+	// Specifies the list of organizations to access the VPC endpoint service.
+	// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+	// organizations to access the VPC endpoint service.
+	OrganizationPermissions pulumi.StringArrayInput
+	// Specifies the list of accounts to access the VPC endpoint service.
+	// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 	Permissions pulumi.StringArrayInput
+	// The dedicated cluster ID associated with the VPC endpoint service.
+	PoolId pulumi.StringPtrInput
 	// Specifies the ID for identifying the backend resource of the VPC endpoint service.
 	// + If the `serverType` is **VM**, the value is the NIC ID of the ECS where the VPC endpoint service is deployed.
 	// + If the `serverType` is **LB**, the value is the ID of the port bound to the private IP address of the load
@@ -301,8 +425,19 @@ type ServiceArgs struct {
 	ServerType pulumi.StringInput
 	// The type of the VPC endpoint service.
 	ServiceType pulumi.StringPtrInput
+	// Specifies the network ID of any subnet within the VPC used to create
+	// the VPC endpoint service.
+	SnatNetworkId pulumi.StringPtrInput
 	// The key/value pairs to associate with the VPC endpoint service.
 	Tags pulumi.StringMapInput
+	// Specifies whether to transfer client information (such as source IP address,
+	// source port number and packet ID) to the server.
+	// The valid values are as follows:
+	// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+	// + **toa_open**: **TCP TOA** information is carried.
+	// + **proxy_open**: **Proxy Protocol** information is carried.
+	// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+	TcpProxy pulumi.StringPtrInput
 	// Specifies the ID of the VPC to which the backend resource of the VPC endpoint
 	// service belongs. Changing this creates a new VPC endpoint service.
 	VpcId pulumi.StringInput
@@ -410,16 +545,47 @@ func (o ServiceOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
+// Specifies whether the VPC endpoint policy is enabled. Defaults to **false**.
+// Changing this creates a new VPC endpoint service resource.
+func (o ServiceOutput) EnablePolicy() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Service) pulumi.BoolOutput { return v.EnablePolicy }).(pulumi.BoolOutput)
+}
+
+// The IPv4 address or domain name of the server in the interface type VLAN scenario.
+func (o ServiceOutput) IpAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.IpAddress }).(pulumi.StringOutput)
+}
+
+// Specifies the IP version of the VPC endpoint service.
+// The valid values are as follows:
+// + **ipv4** (Default value)
+// + **ipv6**
+func (o ServiceOutput) IpVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.IpVersion }).(pulumi.StringOutput)
+}
+
 // Specifies the name of the VPC endpoint service. The value contains a maximum of 16
 // characters, including letters, digits, underscores (_), and hyphens (-).
 func (o ServiceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the list of accounts to access the VPC endpoint service. The record is in
-// the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
+// Specifies the list of organizations to access the VPC endpoint service.
+// The record is in the `organizations:orgPath::org_path` format, while `organizations:orgPath::*` allows all users in
+// organizations to access the VPC endpoint service.
+func (o ServiceOutput) OrganizationPermissions() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringArrayOutput { return v.OrganizationPermissions }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the list of accounts to access the VPC endpoint service.
+// The record is in the `iam:domain::domain_id` format, while `*` allows all users to access the VPC endpoint service.
 func (o ServiceOutput) Permissions() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringArrayOutput { return v.Permissions }).(pulumi.StringArrayOutput)
+}
+
+// The dedicated cluster ID associated with the VPC endpoint service.
+func (o ServiceOutput) PoolId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.PoolId }).(pulumi.StringOutput)
 }
 
 // Specifies the ID for identifying the backend resource of the VPC endpoint service.
@@ -460,6 +626,12 @@ func (o ServiceOutput) ServiceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringPtrOutput { return v.ServiceType }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the network ID of any subnet within the VPC used to create
+// the VPC endpoint service.
+func (o ServiceOutput) SnatNetworkId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.SnatNetworkId }).(pulumi.StringOutput)
+}
+
 // The connection status of the VPC endpoint.
 func (o ServiceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
@@ -468,6 +640,17 @@ func (o ServiceOutput) Status() pulumi.StringOutput {
 // The key/value pairs to associate with the VPC endpoint service.
 func (o ServiceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
+// Specifies whether to transfer client information (such as source IP address,
+// source port number and packet ID) to the server.
+// The valid values are as follows:
+// + **close**: Neither **TCP TOA** nor **Proxy Protocol** information is carried. Default value.
+// + **toa_open**: **TCP TOA** information is carried.
+// + **proxy_open**: **Proxy Protocol** information is carried.
+// + **open**: Both **TCP TOA** and **Proxy Protocol** information are carried.
+func (o ServiceOutput) TcpProxy() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.TcpProxy }).(pulumi.StringOutput)
 }
 
 // Specifies the ID of the VPC to which the backend resource of the VPC endpoint

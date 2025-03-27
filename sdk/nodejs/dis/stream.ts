@@ -36,7 +36,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Dis stream can be imported by `stream_name`. For example,
+ * Dis stream can be imported by `stream_name`. For example, bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dis/stream:Stream example _abc123
@@ -95,13 +95,13 @@ export class Stream extends pulumi.CustomResource {
      */
     public readonly csvDelimiter!: pulumi.Output<string>;
     /**
-     * User's JOSN, CSV format data schema, described with Avro schema. Changing
+     * User's JSON, CSV format data schema, described with Avro schema. Changing
      * this parameter will create a new resource.
      */
     public readonly dataSchema!: pulumi.Output<string>;
     /**
-     * Data type of the data putting into the stream. The value is one of `BLOB`,
-     * `JSON` and `CSV`. Changing this parameter will create a new resource.
+     * Data type of the data putting into the stream. The value is one of **BLOB**,
+     * **JSON** and **CSV**. Changing this parameter will create a new resource.
      */
     public readonly dataType!: pulumi.Output<string>;
     /**
@@ -130,7 +130,7 @@ export class Stream extends pulumi.CustomResource {
     public readonly region!: pulumi.Output<string>;
     /**
      * The number of hours for which data from the stream will be retained in DIS.
-     * Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+     * Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
      */
     public readonly retentionPeriod!: pulumi.Output<number | undefined>;
     /**
@@ -254,13 +254,13 @@ export interface StreamState {
      */
     csvDelimiter?: pulumi.Input<string>;
     /**
-     * User's JOSN, CSV format data schema, described with Avro schema. Changing
+     * User's JSON, CSV format data schema, described with Avro schema. Changing
      * this parameter will create a new resource.
      */
     dataSchema?: pulumi.Input<string>;
     /**
-     * Data type of the data putting into the stream. The value is one of `BLOB`,
-     * `JSON` and `CSV`. Changing this parameter will create a new resource.
+     * Data type of the data putting into the stream. The value is one of **BLOB**,
+     * **JSON** and **CSV**. Changing this parameter will create a new resource.
      */
     dataType?: pulumi.Input<string>;
     /**
@@ -289,7 +289,7 @@ export interface StreamState {
     region?: pulumi.Input<string>;
     /**
      * The number of hours for which data from the stream will be retained in DIS.
-     * Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+     * Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
      */
     retentionPeriod?: pulumi.Input<number>;
     /**
@@ -345,13 +345,13 @@ export interface StreamArgs {
      */
     csvDelimiter?: pulumi.Input<string>;
     /**
-     * User's JOSN, CSV format data schema, described with Avro schema. Changing
+     * User's JSON, CSV format data schema, described with Avro schema. Changing
      * this parameter will create a new resource.
      */
     dataSchema?: pulumi.Input<string>;
     /**
-     * Data type of the data putting into the stream. The value is one of `BLOB`,
-     * `JSON` and `CSV`. Changing this parameter will create a new resource.
+     * Data type of the data putting into the stream. The value is one of **BLOB**,
+     * **JSON** and **CSV**. Changing this parameter will create a new resource.
      */
     dataType?: pulumi.Input<string>;
     /**
@@ -372,7 +372,7 @@ export interface StreamArgs {
     region?: pulumi.Input<string>;
     /**
      * The number of hours for which data from the stream will be retained in DIS.
-     * Value range: `24` to `72`. Unit: `hour`. Default:`24`. Changing this parameter will create a new resource.
+     * Value range: `24` to `72`. Unit: **hour**. Default:`24`. Changing this parameter will create a new resource.
      */
     retentionPeriod?: pulumi.Input<number>;
     /**

@@ -37,7 +37,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Environments can be imported using their `id`, e.g.
+ * Environments can be imported using their `id`, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ServiceStage/environment:Environment test 17383329-b686-47e4-8f70-0d8dcddb65e9
@@ -78,17 +78,17 @@ export class Environment extends pulumi.CustomResource {
     public readonly basicResources!: pulumi.Output<outputs.ServiceStage.EnvironmentBasicResource[]>;
     /**
      * Specifies the environment description.
-     * The description can contain a maximum of 128 characters.
+     * The description can contain a maximum of `128` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
      * Specifies the environment name.
-     * The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+     * The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
      * The name must start with a letter and end with a letter or a digit.
      */
     public readonly name!: pulumi.Output<string>;
@@ -160,17 +160,17 @@ export interface EnvironmentState {
     basicResources?: pulumi.Input<pulumi.Input<inputs.ServiceStage.EnvironmentBasicResource>[]>;
     /**
      * Specifies the environment description.
-     * The description can contain a maximum of 128 characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the environment name.
-     * The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+     * The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
      * The name must start with a letter and end with a letter or a digit.
      */
     name?: pulumi.Input<string>;
@@ -202,17 +202,17 @@ export interface EnvironmentArgs {
     basicResources: pulumi.Input<pulumi.Input<inputs.ServiceStage.EnvironmentBasicResource>[]>;
     /**
      * Specifies the environment description.
-     * The description can contain a maximum of 128 characters.
+     * The description can contain a maximum of `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise projcet ID to which the application
+     * Specifies the enterprise project ID to which the application
      * belongs. Changing this will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * Specifies the environment name.
-     * The name can contain of 2 to 64 characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
+     * The name can contain of `2` to `64` characters, only letters, digits, hyphens (-) and underscores (_) are allowed.
      * The name must start with a letter and end with a letter or a digit.
      */
     name?: pulumi.Input<string>;

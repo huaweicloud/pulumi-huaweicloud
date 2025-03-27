@@ -35,8 +35,8 @@ class AlarmruleArgs:
                  resources: Optional[pulumi.Input[Sequence[pulumi.Input['AlarmruleResourceArgs']]]] = None):
         """
         The set of arguments for constructing a Alarmrule resource.
-        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
-               characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+               characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]] conditions: Specifies the alarm triggering condition. The structure is described below.
         :param pulumi.Input['AlarmruleMetricArgs'] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
@@ -51,8 +51,7 @@ class AlarmruleArgs:
                The default value is 2.
         :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
                **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
-               this creates a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the alarm rule.
         :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
                example: **05:30**. Changing this creates a new resource.
         :param pulumi.Input[str] notification_end_time: Specifies the alarm notification stop time, for
@@ -104,8 +103,8 @@ class AlarmruleArgs:
     @pulumi.getter(name="alarmName")
     def alarm_name(self) -> pulumi.Input[str]:
         """
-        Specifies the name of an alarm rule. The value can be a string of 1 to 128
-        characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+        characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         """
         return pulumi.get(self, "alarm_name")
 
@@ -219,8 +218,7 @@ class AlarmruleArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the alarm rule. Changing
-        this creates a new resource.
+        Specifies the enterprise project ID of the alarm rule.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -348,8 +346,8 @@ class _AlarmruleState:
         :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
-        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
-               characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+               characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         :param pulumi.Input[str] alarm_state: Indicates the alarm status. The value can be:
                + ok: The alarm status is normal;
                + alarm: An alarm is generated;
@@ -357,8 +355,7 @@ class _AlarmruleState:
         :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
                **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         :param pulumi.Input[Sequence[pulumi.Input['AlarmruleConditionArgs']]] conditions: Specifies the alarm triggering condition. The structure is described below.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
-               this creates a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the alarm rule.
         :param pulumi.Input['AlarmruleMetricArgs'] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
         :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
@@ -484,8 +481,8 @@ class _AlarmruleState:
     @pulumi.getter(name="alarmName")
     def alarm_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of an alarm rule. The value can be a string of 1 to 128
-        characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+        characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         """
         return pulumi.get(self, "alarm_name")
 
@@ -537,8 +534,7 @@ class _AlarmruleState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the alarm rule. Changing
-        this creates a new resource.
+        Specifies the enterprise project ID of the alarm rule.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -746,7 +742,48 @@ class Alarmrule(pulumi.CustomResource):
                 notification_lists=[topic_urn],
             )])
         ```
-        ## Alarm rule for event monitoring
+        ### Alarm rule for All instance
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
+            alarm_action_enabled=True,
+            alarm_enabled=True,
+            alarm_type="ALL_INSTANCE",
+            metric=huaweicloud.cse.AlarmruleMetricArgs(
+                namespace="AGT.ECS",
+            ),
+            resources=[huaweicloud.cse.AlarmruleResourceArgs(
+                dimensions=[
+                    huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                    ),
+                    huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="mount_point",
+                    ),
+                ],
+            )],
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
+                alarm_level=2,
+                suppress_duration=0,
+                period=1,
+                filter="average",
+                comparison_operator=">",
+                value=80,
+                count=1,
+                metric_name="disk_usedPercent",
+            )],
+            alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
+                type="notification",
+                notification_lists=[topic_urn],
+            )])
+        ```
+        ### Alarm rule for event monitoring
 
         ```python
         import pulumi
@@ -780,7 +817,7 @@ class Alarmrule(pulumi.CustomResource):
 
         ## Import
 
-        CES alarm rules can be imported using the `id`, e.g.
+        CES alarm rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cse/alarmrule:Alarmrule alarm_rule al1619578509719Ga0X1RGWv
@@ -797,13 +834,12 @@ class Alarmrule(pulumi.CustomResource):
         :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
-        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
-               characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+               characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
                **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]] conditions: Specifies the alarm triggering condition. The structure is described below.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
-               this creates a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the alarm rule.
         :param pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
         :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
@@ -889,7 +925,48 @@ class Alarmrule(pulumi.CustomResource):
                 notification_lists=[topic_urn],
             )])
         ```
-        ## Alarm rule for event monitoring
+        ### Alarm rule for All instance
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        topic_urn = config.require_object("topicUrn")
+        test = huaweicloud.cse.Alarmrule("test",
+            alarm_name="rule-test",
+            alarm_action_enabled=True,
+            alarm_enabled=True,
+            alarm_type="ALL_INSTANCE",
+            metric=huaweicloud.cse.AlarmruleMetricArgs(
+                namespace="AGT.ECS",
+            ),
+            resources=[huaweicloud.cse.AlarmruleResourceArgs(
+                dimensions=[
+                    huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="instance_id",
+                    ),
+                    huaweicloud.cse.AlarmruleResourceDimensionArgs(
+                        name="mount_point",
+                    ),
+                ],
+            )],
+            conditions=[huaweicloud.cse.AlarmruleConditionArgs(
+                alarm_level=2,
+                suppress_duration=0,
+                period=1,
+                filter="average",
+                comparison_operator=">",
+                value=80,
+                count=1,
+                metric_name="disk_usedPercent",
+            )],
+            alarm_actions=[huaweicloud.cse.AlarmruleAlarmActionArgs(
+                type="notification",
+                notification_lists=[topic_urn],
+            )])
+        ```
+        ### Alarm rule for event monitoring
 
         ```python
         import pulumi
@@ -923,7 +1000,7 @@ class Alarmrule(pulumi.CustomResource):
 
         ## Import
 
-        CES alarm rules can be imported using the `id`, e.g.
+        CES alarm rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Cse/alarmrule:Alarmrule alarm_rule al1619578509719Ga0X1RGWv
@@ -1043,8 +1120,8 @@ class Alarmrule(pulumi.CustomResource):
         :param pulumi.Input[int] alarm_level: Specifies the alarm severity of the condition. The value can be 1, 2, 3 or 4,
                which indicates *critical*, *major*, *minor*, and *informational*, respectively.
                The default value is 2.
-        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of 1 to 128
-               characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        :param pulumi.Input[str] alarm_name: Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+               characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         :param pulumi.Input[str] alarm_state: Indicates the alarm status. The value can be:
                + ok: The alarm status is normal;
                + alarm: An alarm is generated;
@@ -1052,8 +1129,7 @@ class Alarmrule(pulumi.CustomResource):
         :param pulumi.Input[str] alarm_type: Specifies the alarm type. The value can be **EVENT.SYS**, **EVENT.CUSTOM**,
                **MULTI_INSTANCE** and **ALL_INSTANCE**. Defaults to **MULTI_INSTANCE**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AlarmruleConditionArgs']]]] conditions: Specifies the alarm triggering condition. The structure is described below.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the alarm rule. Changing
-               this creates a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the alarm rule.
         :param pulumi.Input[pulumi.InputType['AlarmruleMetricArgs']] metric: Specifies the alarm metrics. The structure is described below. Changing this
                creates a new resource.
         :param pulumi.Input[str] notification_begin_time: Specifies the alarm notification start time, for
@@ -1142,8 +1218,8 @@ class Alarmrule(pulumi.CustomResource):
     @pulumi.getter(name="alarmName")
     def alarm_name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of an alarm rule. The value can be a string of 1 to 128
-        characters that can consist of letters, digits, underscores (_), hyphens (-) and chinese characters.
+        Specifies the name of an alarm rule. The value can be a string of `1` to `128`
+        characters that can consist of English letters, Chinese characters, digits, underscores (_), hyphens (-).
         """
         return pulumi.get(self, "alarm_name")
 
@@ -1179,8 +1255,7 @@ class Alarmrule(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the alarm rule. Changing
-        this creates a new resource.
+        Specifies the enterprise project ID of the alarm rule.
         """
         return pulumi.get(self, "enterprise_project_id")
 

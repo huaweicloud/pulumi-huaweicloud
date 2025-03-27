@@ -15,31 +15,48 @@ __all__ = ['DomainArgs', 'Domain']
 class DomainArgs:
     def __init__(__self__, *,
                  type: pulumi.Input[str],
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ingest_domain_name: Optional[pulumi.Input[str]] = None,
+                 is_ipv6: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 service_area: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Domain resource.
         :param pulumi.Input[str] type: Specifies the type of domain name. The options are as follows:
                + **pull**: streaming domain name.
                + **push**: ingest domain name.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ingest_domain_name: Specifies the ingest domain name, which associates with the streaming
                domain name to push streams to nearby CDN nodes.
+        :param pulumi.Input[bool] is_ipv6: Specifies whether enable IPv6 switch. Defaults to **false**.
+               This field can only be edited when `status` is **on**.
         :param pulumi.Input[str] name: Specifies the domain name. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the Live domain resource. If omitted,
                the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] service_area: Specifies the domain name acceleration service area. Valid values are:
+               + **mainland_china**: Chinese mainland.
+               + **outside_mainland_china**: Outside the Chinese mainland.
+               + **global**: Global acceleration.
         :param pulumi.Input[str] status: Specifies status of the domain name. The options are as follows:
                + **on**: enable the domain name.
                + **off**: disable the domain name.
         """
         pulumi.set(__self__, "type", type)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if ingest_domain_name is not None:
             pulumi.set(__self__, "ingest_domain_name", ingest_domain_name)
+        if is_ipv6 is not None:
+            pulumi.set(__self__, "is_ipv6", is_ipv6)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if service_area is not None:
+            pulumi.set(__self__, "service_area", service_area)
         if status is not None:
             pulumi.set(__self__, "status", status)
 
@@ -58,6 +75,19 @@ class DomainArgs:
         pulumi.set(self, "type", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="ingestDomainName")
     def ingest_domain_name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -69,6 +99,19 @@ class DomainArgs:
     @ingest_domain_name.setter
     def ingest_domain_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ingest_domain_name", value)
+
+    @property
+    @pulumi.getter(name="isIpv6")
+    def is_ipv6(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether enable IPv6 switch. Defaults to **false**.
+        This field can only be edited when `status` is **on**.
+        """
+        return pulumi.get(self, "is_ipv6")
+
+    @is_ipv6.setter
+    def is_ipv6(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_ipv6", value)
 
     @property
     @pulumi.getter
@@ -94,6 +137,21 @@ class DomainArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="serviceArea")
+    def service_area(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the domain name acceleration service area. Valid values are:
+        + **mainland_china**: Chinese mainland.
+        + **outside_mainland_china**: Outside the Chinese mainland.
+        + **global**: Global acceleration.
+        """
+        return pulumi.get(self, "service_area")
+
+    @service_area.setter
+    def service_area(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "service_area", value)
 
     @property
     @pulumi.getter
@@ -114,19 +172,30 @@ class DomainArgs:
 class _DomainState:
     def __init__(__self__, *,
                  cname: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ingest_domain_name: Optional[pulumi.Input[str]] = None,
+                 is_ipv6: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 service_area: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Domain resources.
         :param pulumi.Input[str] cname: CNAME record of the domain name.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ingest_domain_name: Specifies the ingest domain name, which associates with the streaming
                domain name to push streams to nearby CDN nodes.
+        :param pulumi.Input[bool] is_ipv6: Specifies whether enable IPv6 switch. Defaults to **false**.
+               This field can only be edited when `status` is **on**.
         :param pulumi.Input[str] name: Specifies the domain name. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the Live domain resource. If omitted,
                the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] service_area: Specifies the domain name acceleration service area. Valid values are:
+               + **mainland_china**: Chinese mainland.
+               + **outside_mainland_china**: Outside the Chinese mainland.
+               + **global**: Global acceleration.
         :param pulumi.Input[str] status: Specifies status of the domain name. The options are as follows:
                + **on**: enable the domain name.
                + **off**: disable the domain name.
@@ -136,12 +205,18 @@ class _DomainState:
         """
         if cname is not None:
             pulumi.set(__self__, "cname", cname)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if ingest_domain_name is not None:
             pulumi.set(__self__, "ingest_domain_name", ingest_domain_name)
+        if is_ipv6 is not None:
+            pulumi.set(__self__, "is_ipv6", is_ipv6)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if service_area is not None:
+            pulumi.set(__self__, "service_area", service_area)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if type is not None:
@@ -160,6 +235,19 @@ class _DomainState:
         pulumi.set(self, "cname", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="ingestDomainName")
     def ingest_domain_name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -171,6 +259,19 @@ class _DomainState:
     @ingest_domain_name.setter
     def ingest_domain_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ingest_domain_name", value)
+
+    @property
+    @pulumi.getter(name="isIpv6")
+    def is_ipv6(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether enable IPv6 switch. Defaults to **false**.
+        This field can only be edited when `status` is **on**.
+        """
+        return pulumi.get(self, "is_ipv6")
+
+    @is_ipv6.setter
+    def is_ipv6(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_ipv6", value)
 
     @property
     @pulumi.getter
@@ -196,6 +297,21 @@ class _DomainState:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="serviceArea")
+    def service_area(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the domain name acceleration service area. Valid values are:
+        + **mainland_china**: Chinese mainland.
+        + **outside_mainland_china**: Outside the Chinese mainland.
+        + **global**: Global acceleration.
+        """
+        return pulumi.get(self, "service_area")
+
+    @service_area.setter
+    def service_area(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "service_area", value)
 
     @property
     @pulumi.getter
@@ -231,9 +347,12 @@ class Domain(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ingest_domain_name: Optional[pulumi.Input[str]] = None,
+                 is_ipv6: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 service_area: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -258,19 +377,27 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
-        Domains can be imported using the `name`, e.g.
+        Domains can be imported using the `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/domain:Domain test domainName
+         $ pulumi import huaweicloud:Live/domain:Domain test <name>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ingest_domain_name: Specifies the ingest domain name, which associates with the streaming
                domain name to push streams to nearby CDN nodes.
+        :param pulumi.Input[bool] is_ipv6: Specifies whether enable IPv6 switch. Defaults to **false**.
+               This field can only be edited when `status` is **on**.
         :param pulumi.Input[str] name: Specifies the domain name. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the Live domain resource. If omitted,
                the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] service_area: Specifies the domain name acceleration service area. Valid values are:
+               + **mainland_china**: Chinese mainland.
+               + **outside_mainland_china**: Outside the Chinese mainland.
+               + **global**: Global acceleration.
         :param pulumi.Input[str] status: Specifies status of the domain name. The options are as follows:
                + **on**: enable the domain name.
                + **off**: disable the domain name.
@@ -305,10 +432,10 @@ class Domain(pulumi.CustomResource):
 
         ## Import
 
-        Domains can be imported using the `name`, e.g.
+        Domains can be imported using the `name`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Live/domain:Domain test domainName
+         $ pulumi import huaweicloud:Live/domain:Domain test <name>
         ```
 
         :param str resource_name: The name of the resource.
@@ -326,9 +453,12 @@ class Domain(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ingest_domain_name: Optional[pulumi.Input[str]] = None,
+                 is_ipv6: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 service_area: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -340,9 +470,12 @@ class Domain(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = DomainArgs.__new__(DomainArgs)
 
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["ingest_domain_name"] = ingest_domain_name
+            __props__.__dict__["is_ipv6"] = is_ipv6
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
+            __props__.__dict__["service_area"] = service_area
             __props__.__dict__["status"] = status
             if type is None and not opts.urn:
                 raise TypeError("Missing required property 'type'")
@@ -359,9 +492,12 @@ class Domain(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             cname: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             ingest_domain_name: Optional[pulumi.Input[str]] = None,
+            is_ipv6: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            service_area: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             type: Optional[pulumi.Input[str]] = None) -> 'Domain':
         """
@@ -372,11 +508,19 @@ class Domain(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] cname: CNAME record of the domain name.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] ingest_domain_name: Specifies the ingest domain name, which associates with the streaming
                domain name to push streams to nearby CDN nodes.
+        :param pulumi.Input[bool] is_ipv6: Specifies whether enable IPv6 switch. Defaults to **false**.
+               This field can only be edited when `status` is **on**.
         :param pulumi.Input[str] name: Specifies the domain name. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to create the Live domain resource. If omitted,
                the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] service_area: Specifies the domain name acceleration service area. Valid values are:
+               + **mainland_china**: Chinese mainland.
+               + **outside_mainland_china**: Outside the Chinese mainland.
+               + **global**: Global acceleration.
         :param pulumi.Input[str] status: Specifies status of the domain name. The options are as follows:
                + **on**: enable the domain name.
                + **off**: disable the domain name.
@@ -389,9 +533,12 @@ class Domain(pulumi.CustomResource):
         __props__ = _DomainState.__new__(_DomainState)
 
         __props__.__dict__["cname"] = cname
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["ingest_domain_name"] = ingest_domain_name
+        __props__.__dict__["is_ipv6"] = is_ipv6
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
+        __props__.__dict__["service_area"] = service_area
         __props__.__dict__["status"] = status
         __props__.__dict__["type"] = type
         return Domain(resource_name, opts=opts, __props__=__props__)
@@ -405,6 +552,15 @@ class Domain(pulumi.CustomResource):
         return pulumi.get(self, "cname")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="ingestDomainName")
     def ingest_domain_name(self) -> pulumi.Output[Optional[str]]:
         """
@@ -412,6 +568,15 @@ class Domain(pulumi.CustomResource):
         domain name to push streams to nearby CDN nodes.
         """
         return pulumi.get(self, "ingest_domain_name")
+
+    @property
+    @pulumi.getter(name="isIpv6")
+    def is_ipv6(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether enable IPv6 switch. Defaults to **false**.
+        This field can only be edited when `status` is **on**.
+        """
+        return pulumi.get(self, "is_ipv6")
 
     @property
     @pulumi.getter
@@ -429,6 +594,17 @@ class Domain(pulumi.CustomResource):
         the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter(name="serviceArea")
+    def service_area(self) -> pulumi.Output[str]:
+        """
+        Specifies the domain name acceleration service area. Valid values are:
+        + **mainland_china**: Chinese mainland.
+        + **outside_mainland_china**: Outside the Chinese mainland.
+        + **global**: Global acceleration.
+        """
+        return pulumi.get(self, "service_area")
 
     @property
     @pulumi.getter

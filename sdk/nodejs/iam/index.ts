@@ -8,18 +8,30 @@ import * as utilities from "../utilities";
 export * from "./accessKey";
 export * from "./acl";
 export * from "./agency";
+export * from "./getAgencies";
 export * from "./getCustomRole";
 export * from "./getGroup";
+export * from "./getPermissions";
 export * from "./getProjects";
+export * from "./getProviders";
 export * from "./getRole";
 export * from "./getUsers";
+export * from "./getVirtualMfaDevices";
 export * from "./group";
 export * from "./groupMembership";
+export * from "./groupRoleAssignment";
+export * from "./loginPolicy";
+export * from "./passwordPolicy";
 export * from "./project";
+export * from "./protectionPolicy";
 export * from "./provider";
+export * from "./providerConversion";
 export * from "./role";
 export * from "./roleAssignment";
 export * from "./user";
+export * from "./userRoleAssignment";
+export * from "./userToken";
+export * from "./virtualMfaDevice";
 
 // Import resources to register:
 import { AccessKey } from "./accessKey";
@@ -27,11 +39,19 @@ import { Acl } from "./acl";
 import { Agency } from "./agency";
 import { Group } from "./group";
 import { GroupMembership } from "./groupMembership";
+import { GroupRoleAssignment } from "./groupRoleAssignment";
+import { LoginPolicy } from "./loginPolicy";
+import { PasswordPolicy } from "./passwordPolicy";
 import { Project } from "./project";
+import { ProtectionPolicy } from "./protectionPolicy";
 import { Provider } from "./provider";
+import { ProviderConversion } from "./providerConversion";
 import { Role } from "./role";
 import { RoleAssignment } from "./roleAssignment";
 import { User } from "./user";
+import { UserRoleAssignment } from "./userRoleAssignment";
+import { UserToken } from "./userToken";
+import { VirtualMfaDevice } from "./virtualMfaDevice";
 
 const _module = {
     version: utilities.getVersion(),
@@ -47,16 +67,32 @@ const _module = {
                 return new Group(name, <any>undefined, { urn })
             case "huaweicloud:Iam/groupMembership:GroupMembership":
                 return new GroupMembership(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/groupRoleAssignment:GroupRoleAssignment":
+                return new GroupRoleAssignment(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/loginPolicy:LoginPolicy":
+                return new LoginPolicy(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/passwordPolicy:PasswordPolicy":
+                return new PasswordPolicy(name, <any>undefined, { urn })
             case "huaweicloud:Iam/project:Project":
                 return new Project(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/protectionPolicy:ProtectionPolicy":
+                return new ProtectionPolicy(name, <any>undefined, { urn })
             case "huaweicloud:Iam/provider:Provider":
                 return new Provider(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/providerConversion:ProviderConversion":
+                return new ProviderConversion(name, <any>undefined, { urn })
             case "huaweicloud:Iam/role:Role":
                 return new Role(name, <any>undefined, { urn })
             case "huaweicloud:Iam/roleAssignment:RoleAssignment":
                 return new RoleAssignment(name, <any>undefined, { urn })
             case "huaweicloud:Iam/user:User":
                 return new User(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/userRoleAssignment:UserRoleAssignment":
+                return new UserRoleAssignment(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/userToken:UserToken":
+                return new UserToken(name, <any>undefined, { urn })
+            case "huaweicloud:Iam/virtualMfaDevice:VirtualMfaDevice":
+                return new VirtualMfaDevice(name, <any>undefined, { urn })
             default:
                 throw new Error(`unknown resource type ${type}`);
         }
@@ -67,8 +103,16 @@ pulumi.runtime.registerResourceModule("huaweicloud", "Iam/acl", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/agency", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/group", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/groupMembership", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/groupRoleAssignment", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/loginPolicy", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/passwordPolicy", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/project", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/protectionPolicy", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/provider", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/providerConversion", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/role", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/roleAssignment", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Iam/user", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/userRoleAssignment", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/userToken", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Iam/virtualMfaDevice", _module)

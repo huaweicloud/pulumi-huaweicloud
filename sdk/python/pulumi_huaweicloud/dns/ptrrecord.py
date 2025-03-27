@@ -23,18 +23,19 @@ class PtrrecordArgs:
                  ttl: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a Ptrrecord resource.
-        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.
-               Changing this creates a new PTR record.
+        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.  
+               Changing this parameter will create a new resource.
         :param pulumi.Input[str] description: Specifies the description of the PTR record.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the PTR record. Changing this
-               creates a new PTR record.
-        :param pulumi.Input[str] name: Specifies the domain name of the PTR record. A domain name is case-insensitive.
-               Uppercase letters will also be converted into lowercase letters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the PTR record.  
+               This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the domain name of the PTR record.  
+               A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         :param pulumi.Input[str] region: Specifies the region in which to create the PTR record. If omitted,
-               the `region` argument of the provider will be used. Changing this creates a new PTR record.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Tags key/value pairs to associate with the PTR record.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 300–2147483647. The default value is 300.
+               the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the PTR record.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+               The valid value is range from `1` to `2,147,483,647`.
         """
         pulumi.set(__self__, "floatingip_id", floatingip_id)
         if description is not None:
@@ -54,8 +55,8 @@ class PtrrecordArgs:
     @pulumi.getter(name="floatingipId")
     def floatingip_id(self) -> pulumi.Input[str]:
         """
-        Specifies the ID of the FloatingIP/EIP.
-        Changing this creates a new PTR record.
+        Specifies the ID of the FloatingIP/EIP.  
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "floatingip_id")
 
@@ -79,8 +80,9 @@ class PtrrecordArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the PTR record. Changing this
-        creates a new PTR record.
+        Specifies the enterprise project ID of the PTR record.  
+        This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -92,8 +94,8 @@ class PtrrecordArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain name of the PTR record. A domain name is case-insensitive.
-        Uppercase letters will also be converted into lowercase letters.
+        Specifies the domain name of the PTR record.  
+        A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         """
         return pulumi.get(self, "name")
 
@@ -106,7 +108,7 @@ class PtrrecordArgs:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the PTR record. If omitted,
-        the `region` argument of the provider will be used. Changing this creates a new PTR record.
+        the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -118,7 +120,7 @@ class PtrrecordArgs:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Tags key/value pairs to associate with the PTR record.
+        Specifies the key/value pairs to associate with the PTR record.
         """
         return pulumi.get(self, "tags")
 
@@ -130,8 +132,8 @@ class PtrrecordArgs:
     @pulumi.getter
     def ttl(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 300–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+        The valid value is range from `1` to `2,147,483,647`.
         """
         return pulumi.get(self, "ttl")
 
@@ -155,17 +157,18 @@ class _PtrrecordState:
         Input properties used for looking up and filtering Ptrrecord resources.
         :param pulumi.Input[str] address: The address of the FloatingIP/EIP.
         :param pulumi.Input[str] description: Specifies the description of the PTR record.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the PTR record. Changing this
-               creates a new PTR record.
-        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.
-               Changing this creates a new PTR record.
-        :param pulumi.Input[str] name: Specifies the domain name of the PTR record. A domain name is case-insensitive.
-               Uppercase letters will also be converted into lowercase letters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the PTR record.  
+               This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.  
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the domain name of the PTR record.  
+               A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         :param pulumi.Input[str] region: Specifies the region in which to create the PTR record. If omitted,
-               the `region` argument of the provider will be used. Changing this creates a new PTR record.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Tags key/value pairs to associate with the PTR record.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 300–2147483647. The default value is 300.
+               the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the PTR record.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+               The valid value is range from `1` to `2,147,483,647`.
         """
         if address is not None:
             pulumi.set(__self__, "address", address)
@@ -212,8 +215,9 @@ class _PtrrecordState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the PTR record. Changing this
-        creates a new PTR record.
+        Specifies the enterprise project ID of the PTR record.  
+        This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -225,8 +229,8 @@ class _PtrrecordState:
     @pulumi.getter(name="floatingipId")
     def floatingip_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the FloatingIP/EIP.
-        Changing this creates a new PTR record.
+        Specifies the ID of the FloatingIP/EIP.  
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "floatingip_id")
 
@@ -238,8 +242,8 @@ class _PtrrecordState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the domain name of the PTR record. A domain name is case-insensitive.
-        Uppercase letters will also be converted into lowercase letters.
+        Specifies the domain name of the PTR record.  
+        A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         """
         return pulumi.get(self, "name")
 
@@ -252,7 +256,7 @@ class _PtrrecordState:
     def region(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the region in which to create the PTR record. If omitted,
-        the `region` argument of the provider will be used. Changing this creates a new PTR record.
+        the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -264,7 +268,7 @@ class _PtrrecordState:
     @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
-        Tags key/value pairs to associate with the PTR record.
+        Specifies the key/value pairs to associate with the PTR record.
         """
         return pulumi.get(self, "tags")
 
@@ -276,8 +280,8 @@ class _PtrrecordState:
     @pulumi.getter
     def ttl(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 300–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+        The valid value is range from `1` to `2,147,483,647`.
         """
         return pulumi.get(self, "ttl")
 
@@ -300,7 +304,7 @@ class Ptrrecord(pulumi.CustomResource):
                  ttl: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
-        Manages a DNS PTR record in the HuaweiCloud DNS Service.
+        Manages a DNS PTR record resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -308,19 +312,13 @@ class Ptrrecord(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        eip1 = huaweicloud.vpc.Eip("eip1",
-            publicip=huaweicloud.vpc.EipPublicipArgs(
-                type="5_bgp",
-            ),
-            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
-                name="test",
-                size=5,
-                share_type="PER",
-                charge_mode="traffic",
-            ))
-        ptr1 = huaweicloud.dns.Ptrrecord("ptr1",
-            description="An example PTR record",
-            floatingip_id=eip1.id,
+        config = pulumi.Config()
+        ptrrecord_name = config.require_object("ptrrecordName")
+        eip_id = config.require_object("eipId")
+        description = config.require_object("description")
+        test = huaweicloud.dns.Ptrrecord("test",
+            floatingip_id=eip_id,
+            description=description,
             ttl=3000,
             tags={
                 "foo": "bar",
@@ -329,26 +327,33 @@ class Ptrrecord(pulumi.CustomResource):
 
         ## Import
 
-        PTR records can be imported using region and floatingip/eip ID, separated by a colon(:), e.g.
+        The PTR record resource can be imported using `id` (consists of the region and the EIP ID (`floatingip_id`)), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord ptr_1 cn-north-1:d90ce693-5ccf-4136-a0ed-152ce412b6b9
+         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord test <id>
+        ```
+
+         You can also use `region` and `floatingip_id` instead of `id`, separated by a colon (:), e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord test <region>:<floatingip_id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of the PTR record.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the PTR record. Changing this
-               creates a new PTR record.
-        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.
-               Changing this creates a new PTR record.
-        :param pulumi.Input[str] name: Specifies the domain name of the PTR record. A domain name is case-insensitive.
-               Uppercase letters will also be converted into lowercase letters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the PTR record.  
+               This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.  
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the domain name of the PTR record.  
+               A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         :param pulumi.Input[str] region: Specifies the region in which to create the PTR record. If omitted,
-               the `region` argument of the provider will be used. Changing this creates a new PTR record.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Tags key/value pairs to associate with the PTR record.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 300–2147483647. The default value is 300.
+               the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the PTR record.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+               The valid value is range from `1` to `2,147,483,647`.
         """
         ...
     @overload
@@ -357,7 +362,7 @@ class Ptrrecord(pulumi.CustomResource):
                  args: PtrrecordArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a DNS PTR record in the HuaweiCloud DNS Service.
+        Manages a DNS PTR record resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -365,19 +370,13 @@ class Ptrrecord(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        eip1 = huaweicloud.vpc.Eip("eip1",
-            publicip=huaweicloud.vpc.EipPublicipArgs(
-                type="5_bgp",
-            ),
-            bandwidth=huaweicloud.vpc.EipBandwidthArgs(
-                name="test",
-                size=5,
-                share_type="PER",
-                charge_mode="traffic",
-            ))
-        ptr1 = huaweicloud.dns.Ptrrecord("ptr1",
-            description="An example PTR record",
-            floatingip_id=eip1.id,
+        config = pulumi.Config()
+        ptrrecord_name = config.require_object("ptrrecordName")
+        eip_id = config.require_object("eipId")
+        description = config.require_object("description")
+        test = huaweicloud.dns.Ptrrecord("test",
+            floatingip_id=eip_id,
+            description=description,
             ttl=3000,
             tags={
                 "foo": "bar",
@@ -386,10 +385,16 @@ class Ptrrecord(pulumi.CustomResource):
 
         ## Import
 
-        PTR records can be imported using region and floatingip/eip ID, separated by a colon(:), e.g.
+        The PTR record resource can be imported using `id` (consists of the region and the EIP ID (`floatingip_id`)), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord ptr_1 cn-north-1:d90ce693-5ccf-4136-a0ed-152ce412b6b9
+         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord test <id>
+        ```
+
+         You can also use `region` and `floatingip_id` instead of `id`, separated by a colon (:), e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Dns/ptrrecord:Ptrrecord test <region>:<floatingip_id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -460,17 +465,18 @@ class Ptrrecord(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] address: The address of the FloatingIP/EIP.
         :param pulumi.Input[str] description: Specifies the description of the PTR record.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the PTR record. Changing this
-               creates a new PTR record.
-        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.
-               Changing this creates a new PTR record.
-        :param pulumi.Input[str] name: Specifies the domain name of the PTR record. A domain name is case-insensitive.
-               Uppercase letters will also be converted into lowercase letters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the PTR record.  
+               This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] floatingip_id: Specifies the ID of the FloatingIP/EIP.  
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] name: Specifies the domain name of the PTR record.  
+               A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         :param pulumi.Input[str] region: Specifies the region in which to create the PTR record. If omitted,
-               the `region` argument of the provider will be used. Changing this creates a new PTR record.
-        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Tags key/value pairs to associate with the PTR record.
-        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds).
-               The value range is 300–2147483647. The default value is 300.
+               the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the PTR record.
+        :param pulumi.Input[int] ttl: Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+               The valid value is range from `1` to `2,147,483,647`.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -506,8 +512,9 @@ class Ptrrecord(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the PTR record. Changing this
-        creates a new PTR record.
+        Specifies the enterprise project ID of the PTR record.  
+        This parameter is only valid for enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -515,8 +522,8 @@ class Ptrrecord(pulumi.CustomResource):
     @pulumi.getter(name="floatingipId")
     def floatingip_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the FloatingIP/EIP.
-        Changing this creates a new PTR record.
+        Specifies the ID of the FloatingIP/EIP.  
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "floatingip_id")
 
@@ -524,8 +531,8 @@ class Ptrrecord(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the domain name of the PTR record. A domain name is case-insensitive.
-        Uppercase letters will also be converted into lowercase letters.
+        Specifies the domain name of the PTR record.  
+        A domain name is case-insensitive. Uppercase letters will also be converted into lowercase letters.
         """
         return pulumi.get(self, "name")
 
@@ -534,7 +541,7 @@ class Ptrrecord(pulumi.CustomResource):
     def region(self) -> pulumi.Output[str]:
         """
         Specifies the region in which to create the PTR record. If omitted,
-        the `region` argument of the provider will be used. Changing this creates a new PTR record.
+        the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
@@ -542,16 +549,16 @@ class Ptrrecord(pulumi.CustomResource):
     @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
-        Tags key/value pairs to associate with the PTR record.
+        Specifies the key/value pairs to associate with the PTR record.
         """
         return pulumi.get(self, "tags")
 
     @property
     @pulumi.getter
-    def ttl(self) -> pulumi.Output[Optional[int]]:
+    def ttl(self) -> pulumi.Output[int]:
         """
-        Specifies the time to live (TTL) of the record set (in seconds).
-        The value range is 300–2147483647. The default value is 300.
+        Specifies the time to live (TTL) of the record set (in seconds), defaults to `300`.  
+        The valid value is range from `1` to `2,147,483,647`.
         """
         return pulumi.get(self, "ttl")
 

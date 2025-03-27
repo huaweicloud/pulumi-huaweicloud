@@ -50,7 +50,7 @@ import (
 //
 // ## Import
 //
-// ELB pool can be imported using the pool ID, e.g.
+// ELB pool can be imported using the pool ID, e.g. bash
 //
 // ```sh
 //
@@ -60,6 +60,7 @@ import (
 type Pool struct {
 	pulumi.CustomResourceState
 
+	// Deprecated: this field is deprecated
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
@@ -72,11 +73,20 @@ type Pool struct {
 	// The load balancer on which to provision this pool. Changing this
 	// creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
 	LoadbalancerId pulumi.StringOutput `pulumi:"loadbalancerId"`
+	// The ID of the health check configured for the backend server group.
+	MonitorId pulumi.StringOutput `pulumi:"monitorId"`
 	// Human-readable name for the pool.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Omit this field to prevent session persistence. Indicates whether
-	// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+	// connections in the same session will be processed by the same Pool member or not.
 	Persistences PoolPersistenceArrayOutput `pulumi:"persistences"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrOutput `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringOutput `pulumi:"protectionStatus"`
 	// The protocol - can either be TCP, UDP or HTTP.
 	// + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
 	// + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -125,6 +135,7 @@ func GetPool(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Pool resources.
 type poolState struct {
+	// Deprecated: this field is deprecated
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description *string `pulumi:"description"`
@@ -137,11 +148,20 @@ type poolState struct {
 	// The load balancer on which to provision this pool. Changing this
 	// creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
 	LoadbalancerId *string `pulumi:"loadbalancerId"`
+	// The ID of the health check configured for the backend server group.
+	MonitorId *string `pulumi:"monitorId"`
 	// Human-readable name for the pool.
 	Name *string `pulumi:"name"`
 	// Omit this field to prevent session persistence. Indicates whether
-	// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+	// connections in the same session will be processed by the same Pool member or not.
 	Persistences []PoolPersistence `pulumi:"persistences"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
 	// The protocol - can either be TCP, UDP or HTTP.
 	// + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
 	// + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -155,6 +175,7 @@ type poolState struct {
 }
 
 type PoolState struct {
+	// Deprecated: this field is deprecated
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrInput
@@ -167,11 +188,20 @@ type PoolState struct {
 	// The load balancer on which to provision this pool. Changing this
 	// creates a new pool. Note:  At least one of LoadbalancerID or ListenerID must be provided.
 	LoadbalancerId pulumi.StringPtrInput
+	// The ID of the health check configured for the backend server group.
+	MonitorId pulumi.StringPtrInput
 	// Human-readable name for the pool.
 	Name pulumi.StringPtrInput
 	// Omit this field to prevent session persistence. Indicates whether
-	// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+	// connections in the same session will be processed by the same Pool member or not.
 	Persistences PoolPersistenceArrayInput
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
 	// The protocol - can either be TCP, UDP or HTTP.
 	// + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
 	// + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -189,6 +219,7 @@ func (PoolState) ElementType() reflect.Type {
 }
 
 type poolArgs struct {
+	// Deprecated: this field is deprecated
 	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable description for the pool.
 	Description *string `pulumi:"description"`
@@ -204,8 +235,15 @@ type poolArgs struct {
 	// Human-readable name for the pool.
 	Name *string `pulumi:"name"`
 	// Omit this field to prevent session persistence. Indicates whether
-	// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+	// connections in the same session will be processed by the same Pool member or not.
 	Persistences []PoolPersistence `pulumi:"persistences"`
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason *string `pulumi:"protectionReason"`
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus *string `pulumi:"protectionStatus"`
 	// The protocol - can either be TCP, UDP or HTTP.
 	// + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
 	// + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -220,6 +258,7 @@ type poolArgs struct {
 
 // The set of arguments for constructing a Pool resource.
 type PoolArgs struct {
+	// Deprecated: this field is deprecated
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable description for the pool.
 	Description pulumi.StringPtrInput
@@ -235,8 +274,15 @@ type PoolArgs struct {
 	// Human-readable name for the pool.
 	Name pulumi.StringPtrInput
 	// Omit this field to prevent session persistence. Indicates whether
-	// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+	// connections in the same session will be processed by the same Pool member or not.
 	Persistences PoolPersistenceArrayInput
+	// The reason for update protection. Only valid when `protectionStatus` is
+	// **consoleProtection**.
+	ProtectionReason pulumi.StringPtrInput
+	// The protection status for update. Value options:
+	// + **nonProtection**: No protection.
+	// + **consoleProtection**: Console modification protection.
+	ProtectionStatus pulumi.StringPtrInput
 	// The protocol - can either be TCP, UDP or HTTP.
 	// + When the protocol used by the listener is UDP, the protocol of the backend pool must be UDP.
 	// + When the protocol used by the listener is TCP, the protocol of the backend pool must be TCP.
@@ -336,6 +382,7 @@ func (o PoolOutput) ToPoolOutputWithContext(ctx context.Context) PoolOutput {
 	return o
 }
 
+// Deprecated: this field is deprecated
 func (o PoolOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Pool) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
 }
@@ -363,15 +410,33 @@ func (o PoolOutput) LoadbalancerId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Pool) pulumi.StringOutput { return v.LoadbalancerId }).(pulumi.StringOutput)
 }
 
+// The ID of the health check configured for the backend server group.
+func (o PoolOutput) MonitorId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Pool) pulumi.StringOutput { return v.MonitorId }).(pulumi.StringOutput)
+}
+
 // Human-readable name for the pool.
 func (o PoolOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Pool) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
 // Omit this field to prevent session persistence. Indicates whether
-// connections in the same session will be processed by the same Pool member or not. Changing this creates a new pool.
+// connections in the same session will be processed by the same Pool member or not.
 func (o PoolOutput) Persistences() PoolPersistenceArrayOutput {
 	return o.ApplyT(func(v *Pool) PoolPersistenceArrayOutput { return v.Persistences }).(PoolPersistenceArrayOutput)
+}
+
+// The reason for update protection. Only valid when `protectionStatus` is
+// **consoleProtection**.
+func (o PoolOutput) ProtectionReason() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Pool) pulumi.StringPtrOutput { return v.ProtectionReason }).(pulumi.StringPtrOutput)
+}
+
+// The protection status for update. Value options:
+// + **nonProtection**: No protection.
+// + **consoleProtection**: Console modification protection.
+func (o PoolOutput) ProtectionStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *Pool) pulumi.StringOutput { return v.ProtectionStatus }).(pulumi.StringOutput)
 }
 
 // The protocol - can either be TCP, UDP or HTTP.

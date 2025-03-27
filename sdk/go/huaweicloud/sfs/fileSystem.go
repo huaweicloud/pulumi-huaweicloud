@@ -11,6 +11,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated.
+//
 // Provides a Shared File System (SFS) resource within HuaweiCloud.
 //
 // ## Example Usage
@@ -131,7 +133,7 @@ import (
 //
 // ## Import
 //
-// SFS can be imported using the `id`, e.g.
+// SFS can be imported using the `id`, e.g. bash
 //
 // ```sh
 //

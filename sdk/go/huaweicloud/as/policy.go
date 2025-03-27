@@ -167,7 +167,7 @@ import (
 //
 // ## Import
 //
-// AS policies can be imported by their `id`, e.g.
+// AS policies can be imported by their `id`, e.g. bash
 //
 // ```sh
 //
@@ -177,6 +177,11 @@ import (
 type Policy struct {
 	pulumi.CustomResourceState
 
+	// Specifies the operation for the AS policy.
+	// The default value is **resume**. The valid values are as follows:
+	// + **resume**: Enables the AS policy.
+	// + **pause**: Disables the AS policy.
+	Action  pulumi.StringOutput    `pulumi:"action"`
 	AlarmId pulumi.StringPtrOutput `pulumi:"alarmId"`
 	// Specifies the cooling duration (in seconds).
 	// The value ranges from 0 to 86400 and is 300 by default.
@@ -244,6 +249,11 @@ func GetPolicy(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Policy resources.
 type policyState struct {
+	// Specifies the operation for the AS policy.
+	// The default value is **resume**. The valid values are as follows:
+	// + **resume**: Enables the AS policy.
+	// + **pause**: Disables the AS policy.
+	Action  *string `pulumi:"action"`
 	AlarmId *string `pulumi:"alarmId"`
 	// Specifies the cooling duration (in seconds).
 	// The value ranges from 0 to 86400 and is 300 by default.
@@ -273,6 +283,11 @@ type policyState struct {
 }
 
 type PolicyState struct {
+	// Specifies the operation for the AS policy.
+	// The default value is **resume**. The valid values are as follows:
+	// + **resume**: Enables the AS policy.
+	// + **pause**: Disables the AS policy.
+	Action  pulumi.StringPtrInput
 	AlarmId pulumi.StringPtrInput
 	// Specifies the cooling duration (in seconds).
 	// The value ranges from 0 to 86400 and is 300 by default.
@@ -306,6 +321,11 @@ func (PolicyState) ElementType() reflect.Type {
 }
 
 type policyArgs struct {
+	// Specifies the operation for the AS policy.
+	// The default value is **resume**. The valid values are as follows:
+	// + **resume**: Enables the AS policy.
+	// + **pause**: Disables the AS policy.
+	Action  *string `pulumi:"action"`
 	AlarmId *string `pulumi:"alarmId"`
 	// Specifies the cooling duration (in seconds).
 	// The value ranges from 0 to 86400 and is 300 by default.
@@ -334,6 +354,11 @@ type policyArgs struct {
 
 // The set of arguments for constructing a Policy resource.
 type PolicyArgs struct {
+	// Specifies the operation for the AS policy.
+	// The default value is **resume**. The valid values are as follows:
+	// + **resume**: Enables the AS policy.
+	// + **pause**: Disables the AS policy.
+	Action  pulumi.StringPtrInput
 	AlarmId pulumi.StringPtrInput
 	// Specifies the cooling duration (in seconds).
 	// The value ranges from 0 to 86400 and is 300 by default.
@@ -445,6 +470,14 @@ func (o PolicyOutput) ToPolicyOutput() PolicyOutput {
 
 func (o PolicyOutput) ToPolicyOutputWithContext(ctx context.Context) PolicyOutput {
 	return o
+}
+
+// Specifies the operation for the AS policy.
+// The default value is **resume**. The valid values are as follows:
+// + **resume**: Enables the AS policy.
+// + **pause**: Disables the AS policy.
+func (o PolicyOutput) Action() pulumi.StringOutput {
+	return o.ApplyT(func(v *Policy) pulumi.StringOutput { return v.Action }).(pulumi.StringOutput)
 }
 
 func (o PolicyOutput) AlarmId() pulumi.StringPtrOutput {

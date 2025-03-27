@@ -34,10 +34,11 @@ import (
 //			authorizerName := cfg.RequireObject("authorizerName")
 //			functionUrn := cfg.RequireObject("functionUrn")
 //			_, err := DedicatedApig.NewCustomAuthorizer(ctx, "test", &DedicatedApig.CustomAuthorizerArgs{
-//				InstanceId:  pulumi.Any(instanceId),
-//				FunctionUrn: pulumi.Any(functionUrn),
-//				Type:        pulumi.String("FRONTEND"),
-//				CacheAge:    pulumi.Int(60),
+//				InstanceId:      pulumi.Any(instanceId),
+//				FunctionUrn:     pulumi.Any(functionUrn),
+//				FunctionVersion: pulumi.String("latest"),
+//				Type:            pulumi.String("FRONTEND"),
+//				CacheAge:        pulumi.Int(60),
 //				Identities: dedicatedapig.CustomAuthorizerIdentityArray{
 //					&dedicatedapig.CustomAuthorizerIdentityArgs{
 //						Name:     pulumi.String("user_name"),
@@ -66,12 +67,17 @@ import (
 type CustomAuthorizer struct {
 	pulumi.CustomResourceState
 
-	// Specifies the maximum cache age.
+	// Specifies the maximum cache age.\
+	// The valid value is range from `1` to `3,600`.
 	CacheAge pulumi.IntPtrOutput `pulumi:"cacheAge"`
 	// The creation time of the custom authorizer.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specifies the version alias URI of the FGS function.
+	FunctionAliasUri pulumi.StringOutput `pulumi:"functionAliasUri"`
 	// Specifies the uniform function URN of the function graph resource.
 	FunctionUrn pulumi.StringOutput `pulumi:"functionUrn"`
+	// Specifies the version of the FGS function.
+	FunctionVersion pulumi.StringOutput `pulumi:"functionVersion"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
 	Identities CustomAuthorizerIdentityArrayOutput `pulumi:"identities"`
@@ -84,11 +90,15 @@ type CustomAuthorizer struct {
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the framework type of the function.
+	// + **V1**: Non-VPC network architecture.
+	// + **V2**: VPC network architecture.
+	NetworkType pulumi.StringOutput `pulumi:"networkType"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the custom authoriz type.
+	// Specifies the custom authorize type.
 	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrOutput `pulumi:"type"`
@@ -133,12 +143,17 @@ func GetCustomAuthorizer(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering CustomAuthorizer resources.
 type customAuthorizerState struct {
-	// Specifies the maximum cache age.
+	// Specifies the maximum cache age.\
+	// The valid value is range from `1` to `3,600`.
 	CacheAge *int `pulumi:"cacheAge"`
 	// The creation time of the custom authorizer.
 	CreatedAt *string `pulumi:"createdAt"`
+	// Specifies the version alias URI of the FGS function.
+	FunctionAliasUri *string `pulumi:"functionAliasUri"`
 	// Specifies the uniform function URN of the function graph resource.
 	FunctionUrn *string `pulumi:"functionUrn"`
+	// Specifies the version of the FGS function.
+	FunctionVersion *string `pulumi:"functionVersion"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
 	Identities []CustomAuthorizerIdentity `pulumi:"identities"`
@@ -151,11 +166,15 @@ type customAuthorizerState struct {
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
 	Name *string `pulumi:"name"`
+	// Specifies the framework type of the function.
+	// + **V1**: Non-VPC network architecture.
+	// + **V2**: VPC network architecture.
+	NetworkType *string `pulumi:"networkType"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region *string `pulumi:"region"`
-	// Specifies the custom authoriz type.
+	// Specifies the custom authorize type.
 	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type *string `pulumi:"type"`
@@ -165,12 +184,17 @@ type customAuthorizerState struct {
 }
 
 type CustomAuthorizerState struct {
-	// Specifies the maximum cache age.
+	// Specifies the maximum cache age.\
+	// The valid value is range from `1` to `3,600`.
 	CacheAge pulumi.IntPtrInput
 	// The creation time of the custom authorizer.
 	CreatedAt pulumi.StringPtrInput
+	// Specifies the version alias URI of the FGS function.
+	FunctionAliasUri pulumi.StringPtrInput
 	// Specifies the uniform function URN of the function graph resource.
 	FunctionUrn pulumi.StringPtrInput
+	// Specifies the version of the FGS function.
+	FunctionVersion pulumi.StringPtrInput
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
 	Identities CustomAuthorizerIdentityArrayInput
@@ -183,11 +207,15 @@ type CustomAuthorizerState struct {
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
 	Name pulumi.StringPtrInput
+	// Specifies the framework type of the function.
+	// + **V1**: Non-VPC network architecture.
+	// + **V2**: VPC network architecture.
+	NetworkType pulumi.StringPtrInput
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringPtrInput
-	// Specifies the custom authoriz type.
+	// Specifies the custom authorize type.
 	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrInput
@@ -201,10 +229,15 @@ func (CustomAuthorizerState) ElementType() reflect.Type {
 }
 
 type customAuthorizerArgs struct {
-	// Specifies the maximum cache age.
+	// Specifies the maximum cache age.\
+	// The valid value is range from `1` to `3,600`.
 	CacheAge *int `pulumi:"cacheAge"`
+	// Specifies the version alias URI of the FGS function.
+	FunctionAliasUri *string `pulumi:"functionAliasUri"`
 	// Specifies the uniform function URN of the function graph resource.
 	FunctionUrn string `pulumi:"functionUrn"`
+	// Specifies the version of the FGS function.
+	FunctionVersion *string `pulumi:"functionVersion"`
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
 	Identities []CustomAuthorizerIdentity `pulumi:"identities"`
@@ -217,11 +250,15 @@ type customAuthorizerArgs struct {
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
 	Name *string `pulumi:"name"`
+	// Specifies the framework type of the function.
+	// + **V1**: Non-VPC network architecture.
+	// + **V2**: VPC network architecture.
+	NetworkType *string `pulumi:"networkType"`
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region *string `pulumi:"region"`
-	// Specifies the custom authoriz type.
+	// Specifies the custom authorize type.
 	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type *string `pulumi:"type"`
@@ -232,10 +269,15 @@ type customAuthorizerArgs struct {
 
 // The set of arguments for constructing a CustomAuthorizer resource.
 type CustomAuthorizerArgs struct {
-	// Specifies the maximum cache age.
+	// Specifies the maximum cache age.\
+	// The valid value is range from `1` to `3,600`.
 	CacheAge pulumi.IntPtrInput
+	// Specifies the version alias URI of the FGS function.
+	FunctionAliasUri pulumi.StringPtrInput
 	// Specifies the uniform function URN of the function graph resource.
 	FunctionUrn pulumi.StringInput
+	// Specifies the version of the FGS function.
+	FunctionVersion pulumi.StringPtrInput
 	// Specifies an array of one or more parameter identities of the custom authorizer.
 	// The object structure is documented below.
 	Identities CustomAuthorizerIdentityArrayInput
@@ -248,11 +290,15 @@ type CustomAuthorizerArgs struct {
 	// Specifies the name of the parameter to be verified.
 	// The parameter includes front-end and back-end parameters.
 	Name pulumi.StringPtrInput
+	// Specifies the framework type of the function.
+	// + **V1**: Non-VPC network architecture.
+	// + **V2**: VPC network architecture.
+	NetworkType pulumi.StringPtrInput
 	// Specifies the region in which to create the custom authorizer resource.
 	// If omitted, the provider-level region will be used.
 	// Changing this will create a new custom authorizer resource.
 	Region pulumi.StringPtrInput
-	// Specifies the custom authoriz type.
+	// Specifies the custom authorize type.
 	// The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 	// Changing this will create a new custom authorizer resource.
 	Type pulumi.StringPtrInput
@@ -348,7 +394,8 @@ func (o CustomAuthorizerOutput) ToCustomAuthorizerOutputWithContext(ctx context.
 	return o
 }
 
-// Specifies the maximum cache age.
+// Specifies the maximum cache age.\
+// The valid value is range from `1` to `3,600`.
 func (o CustomAuthorizerOutput) CacheAge() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.IntPtrOutput { return v.CacheAge }).(pulumi.IntPtrOutput)
 }
@@ -358,9 +405,19 @@ func (o CustomAuthorizerOutput) CreatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
+// Specifies the version alias URI of the FGS function.
+func (o CustomAuthorizerOutput) FunctionAliasUri() pulumi.StringOutput {
+	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.FunctionAliasUri }).(pulumi.StringOutput)
+}
+
 // Specifies the uniform function URN of the function graph resource.
 func (o CustomAuthorizerOutput) FunctionUrn() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.FunctionUrn }).(pulumi.StringOutput)
+}
+
+// Specifies the version of the FGS function.
+func (o CustomAuthorizerOutput) FunctionVersion() pulumi.StringOutput {
+	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.FunctionVersion }).(pulumi.StringOutput)
 }
 
 // Specifies an array of one or more parameter identities of the custom authorizer.
@@ -387,6 +444,13 @@ func (o CustomAuthorizerOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the framework type of the function.
+// + **V1**: Non-VPC network architecture.
+// + **V2**: VPC network architecture.
+func (o CustomAuthorizerOutput) NetworkType() pulumi.StringOutput {
+	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.NetworkType }).(pulumi.StringOutput)
+}
+
 // Specifies the region in which to create the custom authorizer resource.
 // If omitted, the provider-level region will be used.
 // Changing this will create a new custom authorizer resource.
@@ -394,7 +458,7 @@ func (o CustomAuthorizerOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *CustomAuthorizer) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the custom authoriz type.
+// Specifies the custom authorize type.
 // The valid values are **FRONTEND** and **BACKEND**. Defaults to **FRONTEND**.
 // Changing this will create a new custom authorizer resource.
 func (o CustomAuthorizerOutput) Type() pulumi.StringPtrOutput {

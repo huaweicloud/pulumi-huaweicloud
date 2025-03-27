@@ -95,7 +95,7 @@ export interface GetServerResult {
      */
     readonly nics: outputs.Iec.GetServerNic[];
     /**
-     * The EIP address that is associted to the IEC server.
+     * The EIP address that is associated to the IEC server.
      */
     readonly publicIp: string;
     /**
@@ -104,7 +104,7 @@ export interface GetServerResult {
     readonly securityGroups: string[];
     readonly status: string;
     /**
-     * The system disk voume ID.
+     * The system disk volume ID.
      */
     readonly systemDiskId: string;
     /**

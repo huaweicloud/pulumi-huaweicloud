@@ -15,7 +15,7 @@ type MigrationTaskBandwidthPolicy struct {
 	// e.g. **12:03**.
 	End string `pulumi:"end"`
 	// Specifies the maximum traffic bandwidth allowed in the specified time
-	// segment. The unit is byte/s. The value ranges from **1** MB/s to **200** MB/s.
+	// segment. The value ranges from `1` to `200`. The unit is MB/s.
 	MaxBandwidth int `pulumi:"maxBandwidth"`
 	// Specifies the start time of the traffic limit rule. The format is **hh:mm**,
 	// e.g. **12:03**.
@@ -38,7 +38,7 @@ type MigrationTaskBandwidthPolicyArgs struct {
 	// e.g. **12:03**.
 	End pulumi.StringInput `pulumi:"end"`
 	// Specifies the maximum traffic bandwidth allowed in the specified time
-	// segment. The unit is byte/s. The value ranges from **1** MB/s to **200** MB/s.
+	// segment. The value ranges from `1` to `200`. The unit is MB/s.
 	MaxBandwidth pulumi.IntInput `pulumi:"maxBandwidth"`
 	// Specifies the start time of the traffic limit rule. The format is **hh:mm**,
 	// e.g. **12:03**.
@@ -103,7 +103,7 @@ func (o MigrationTaskBandwidthPolicyOutput) End() pulumi.StringOutput {
 }
 
 // Specifies the maximum traffic bandwidth allowed in the specified time
-// segment. The unit is byte/s. The value ranges from **1** MB/s to **200** MB/s.
+// segment. The value ranges from `1` to `200`. The unit is MB/s.
 func (o MigrationTaskBandwidthPolicyOutput) MaxBandwidth() pulumi.IntOutput {
 	return o.ApplyT(func(v MigrationTaskBandwidthPolicy) int { return v.MaxBandwidth }).(pulumi.IntOutput)
 }
@@ -591,7 +591,8 @@ type MigrationTaskSourceCdn struct {
 	AuthenticationKey *string `pulumi:"authenticationKey"`
 	// Specifies the authentication type. Valid values are **NONE**,
 	// **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-	// **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+	// **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+	// **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
 	AuthenticationType *string `pulumi:"authenticationType"`
 	// Specifies the domain name from which to obtain objects to be migrated.
 	// Changing this creates a new resource.
@@ -618,7 +619,8 @@ type MigrationTaskSourceCdnArgs struct {
 	AuthenticationKey pulumi.StringPtrInput `pulumi:"authenticationKey"`
 	// Specifies the authentication type. Valid values are **NONE**,
 	// **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-	// **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+	// **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+	// **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
 	AuthenticationType pulumi.StringPtrInput `pulumi:"authenticationType"`
 	// Specifies the domain name from which to obtain objects to be migrated.
 	// Changing this creates a new resource.
@@ -713,7 +715,8 @@ func (o MigrationTaskSourceCdnOutput) AuthenticationKey() pulumi.StringPtrOutput
 
 // Specifies the authentication type. Valid values are **NONE**,
 // **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-// **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+// **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+// **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
 func (o MigrationTaskSourceCdnOutput) AuthenticationType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MigrationTaskSourceCdn) *string { return v.AuthenticationType }).(pulumi.StringPtrOutput)
 }
@@ -767,7 +770,8 @@ func (o MigrationTaskSourceCdnPtrOutput) AuthenticationKey() pulumi.StringPtrOut
 
 // Specifies the authentication type. Valid values are **NONE**,
 // **QINIU_PRIVATE_AUTHENTICATION**, **ALIYUN_OSS_A**, **ALIYUN_OSS_B**, **ALIYUN_OSS_C**,
-// **KSYUN_PRIVATE_AUTHENTICATION**. Default value: **None**. Changing this creates a new resource.
+// **KSYUN_PRIVATE_AUTHENTICATION**, **TENCENT_COS_A**, **TENCENT_COS_B**, **TENCENT_COS_C**,
+// **TENCENT_COS_D**. Default value: **None**. Changing this creates a new resource.
 func (o MigrationTaskSourceCdnPtrOutput) AuthenticationType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *MigrationTaskSourceCdn) *string {
 		if v == nil {

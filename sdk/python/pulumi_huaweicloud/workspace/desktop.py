@@ -28,8 +28,11 @@ class DesktopArgs:
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopDataVolumeArgs']]]] = None,
                  delete_user: Optional[pulumi.Input[bool]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 power_action_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
@@ -37,7 +40,6 @@ class DesktopArgs:
         The set of arguments for constructing a Desktop resource.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] image_type: Specifies the image type. The valid values are as follows:
                + **market**: The market image.
                + **gold**: The public image.
@@ -67,19 +69,25 @@ class DesktopArgs:
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
                operations.
                Defaults to **false**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the desktop.
         :param pulumi.Input[str] name: Specifies the desktop name.
                The name can contain `1` to `15` characters, only letters, digits and hyphens (-) are allowed.
                The name must start with a letter or digit and cannot end with a hyphen.
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]] nics: Specifies the NIC information corresponding to the desktop.
-               The object structure is documented below. Changing this will create a new resource.
+               The object structure is documented below.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the desktop.
+               The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        :param pulumi.Input[str] power_action_type: Specifies the power action mechanisms for the desktop.
+               The valid values are as follows:
+               + **SOFT**: Normal operation.
+               + **HARD**: Forced operation.
         :param pulumi.Input[str] region: The region in which to create the Workspace desktop resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the ID list of security groups.
                In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
                Changing this will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs of the desktop.
-               Changing this will create a new resource.
         """
         pulumi.set(__self__, "flavor_id", flavor_id)
         pulumi.set(__self__, "image_id", image_id)
@@ -97,10 +105,16 @@ class DesktopArgs:
             pulumi.set(__self__, "delete_user", delete_user)
         if email_notification is not None:
             pulumi.set(__self__, "email_notification", email_notification)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if nics is not None:
             pulumi.set(__self__, "nics", nics)
+        if power_action is not None:
+            pulumi.set(__self__, "power_action", power_action)
+        if power_action_type is not None:
+            pulumi.set(__self__, "power_action_type", power_action_type)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if security_groups is not None:
@@ -125,7 +139,6 @@ class DesktopArgs:
     def image_id(self) -> pulumi.Input[str]:
         """
         Specifies the image ID to create the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "image_id")
 
@@ -273,6 +286,18 @@ class DesktopArgs:
         pulumi.set(self, "email_notification", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of the desktop.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
@@ -292,13 +317,41 @@ class DesktopArgs:
     def nics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]]:
         """
         Specifies the NIC information corresponding to the desktop.
-        The object structure is documented below. Changing this will create a new resource.
+        The object structure is documented below.
         """
         return pulumi.get(self, "nics")
 
     @nics.setter
     def nics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]]):
         pulumi.set(self, "nics", value)
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action to be done for the desktop.
+        The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @power_action.setter
+    def power_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action", value)
+
+    @property
+    @pulumi.getter(name="powerActionType")
+    def power_action_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action mechanisms for the desktop.
+        The valid values are as follows:
+        + **SOFT**: Normal operation.
+        + **HARD**: Forced operation.
+        """
+        return pulumi.get(self, "power_action_type")
+
+    @power_action_type.setter
+    def power_action_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action_type", value)
 
     @property
     @pulumi.getter
@@ -332,7 +385,6 @@ class DesktopArgs:
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs of the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -348,14 +400,18 @@ class _DesktopState:
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopDataVolumeArgs']]]] = None,
                  delete_user: Optional[pulumi.Input[bool]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
                  image_type: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 power_action_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  root_volume: Optional[pulumi.Input['DesktopRootVolumeArgs']] = None,
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+                 status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  user_email: Optional[pulumi.Input[str]] = None,
                  user_group: Optional[pulumi.Input[str]] = None,
@@ -372,9 +428,9 @@ class _DesktopState:
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
                operations.
                Defaults to **false**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the desktop.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] image_type: Specifies the image type. The valid values are as follows:
                + **market**: The market image.
                + **gold**: The public image.
@@ -384,7 +440,13 @@ class _DesktopState:
                The name must start with a letter or digit and cannot end with a hyphen.
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]] nics: Specifies the NIC information corresponding to the desktop.
-               The object structure is documented below. Changing this will create a new resource.
+               The object structure is documented below.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the desktop.
+               The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        :param pulumi.Input[str] power_action_type: Specifies the power action mechanisms for the desktop.
+               The valid values are as follows:
+               + **SOFT**: Normal operation.
+               + **HARD**: Forced operation.
         :param pulumi.Input[str] region: The region in which to create the Workspace desktop resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input['DesktopRootVolumeArgs'] root_volume: Specifies the configuration of system volume.
@@ -392,8 +454,8 @@ class _DesktopState:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the ID list of security groups.
                In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
                Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the desktop.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs of the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] user_email: Specifies the user email.
                Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
                Changing this will create a new resource.
@@ -417,6 +479,8 @@ class _DesktopState:
             pulumi.set(__self__, "delete_user", delete_user)
         if email_notification is not None:
             pulumi.set(__self__, "email_notification", email_notification)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor_id is not None:
             pulumi.set(__self__, "flavor_id", flavor_id)
         if image_id is not None:
@@ -427,12 +491,18 @@ class _DesktopState:
             pulumi.set(__self__, "name", name)
         if nics is not None:
             pulumi.set(__self__, "nics", nics)
+        if power_action is not None:
+            pulumi.set(__self__, "power_action", power_action)
+        if power_action_type is not None:
+            pulumi.set(__self__, "power_action_type", power_action_type)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if root_volume is not None:
             pulumi.set(__self__, "root_volume", root_volume)
         if security_groups is not None:
             pulumi.set(__self__, "security_groups", security_groups)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if user_email is not None:
@@ -498,6 +568,18 @@ class _DesktopState:
         pulumi.set(self, "email_notification", value)
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID of the desktop.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -514,7 +596,6 @@ class _DesktopState:
     def image_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the image ID to create the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "image_id")
 
@@ -557,13 +638,41 @@ class _DesktopState:
     def nics(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]]:
         """
         Specifies the NIC information corresponding to the desktop.
-        The object structure is documented below. Changing this will create a new resource.
+        The object structure is documented below.
         """
         return pulumi.get(self, "nics")
 
     @nics.setter
     def nics(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['DesktopNicArgs']]]]):
         pulumi.set(self, "nics", value)
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action to be done for the desktop.
+        The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @power_action.setter
+    def power_action(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action", value)
+
+    @property
+    @pulumi.getter(name="powerActionType")
+    def power_action_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the power action mechanisms for the desktop.
+        The valid values are as follows:
+        + **SOFT**: Normal operation.
+        + **HARD**: Forced operation.
+        """
+        return pulumi.get(self, "power_action_type")
+
+    @power_action_type.setter
+    def power_action_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "power_action_type", value)
 
     @property
     @pulumi.getter
@@ -607,10 +716,21 @@ class _DesktopState:
 
     @property
     @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        The current status of the desktop.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter
     def tags(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
         """
         Specifies the key/value pairs of the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "tags")
 
@@ -686,11 +806,14 @@ class Desktop(pulumi.CustomResource):
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopDataVolumeArgs']]]]] = None,
                  delete_user: Optional[pulumi.Input[bool]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
                  image_type: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopNicArgs']]]]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 power_action_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  root_volume: Optional[pulumi.Input[pulumi.InputType['DesktopRootVolumeArgs']]] = None,
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -703,17 +826,19 @@ class Desktop(pulumi.CustomResource):
         """
         Manages a Workspace desktop resource within HuaweiCloud.
 
+        > **NOTE:** Before creating Workspace desktop, ensure that the Workspace service has been registered.
+
         ## Example Usage
 
         ## Import
 
-        Desktops can be imported using the `id`, e.g.
+        Desktops can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Workspace/desktop:Desktop test 339d2539-e945-4090-a08d-c16badc0c6bb
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`nic` and `user_email`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. resource "huaweicloud_workspace_desktop" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`user_email`, `delete_user`, `image_type`, `vpc_id`, `power_action`, `power_action_type` and `email_notification`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_desktop" "test" {
 
          ...
 
@@ -721,7 +846,7 @@ class Desktop(pulumi.CustomResource):
 
          ignore_changes = [
 
-         user_email, nic,
+         user_email, delete_user, image_type, vpc_id, power_action, power_action_type, email_notification,
 
          ]
 
@@ -738,9 +863,9 @@ class Desktop(pulumi.CustomResource):
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
                operations.
                Defaults to **false**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the desktop.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] image_type: Specifies the image type. The valid values are as follows:
                + **market**: The market image.
                + **gold**: The public image.
@@ -750,7 +875,13 @@ class Desktop(pulumi.CustomResource):
                The name must start with a letter or digit and cannot end with a hyphen.
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopNicArgs']]]] nics: Specifies the NIC information corresponding to the desktop.
-               The object structure is documented below. Changing this will create a new resource.
+               The object structure is documented below.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the desktop.
+               The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        :param pulumi.Input[str] power_action_type: Specifies the power action mechanisms for the desktop.
+               The valid values are as follows:
+               + **SOFT**: Normal operation.
+               + **HARD**: Forced operation.
         :param pulumi.Input[str] region: The region in which to create the Workspace desktop resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[pulumi.InputType['DesktopRootVolumeArgs']] root_volume: Specifies the configuration of system volume.
@@ -759,7 +890,6 @@ class Desktop(pulumi.CustomResource):
                In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
                Changing this will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs of the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] user_email: Specifies the user email.
                Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
                Changing this will create a new resource.
@@ -784,17 +914,19 @@ class Desktop(pulumi.CustomResource):
         """
         Manages a Workspace desktop resource within HuaweiCloud.
 
+        > **NOTE:** Before creating Workspace desktop, ensure that the Workspace service has been registered.
+
         ## Example Usage
 
         ## Import
 
-        Desktops can be imported using the `id`, e.g.
+        Desktops can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Workspace/desktop:Desktop test 339d2539-e945-4090-a08d-c16badc0c6bb
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`nic` and `user_email`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. resource "huaweicloud_workspace_desktop" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`user_email`, `delete_user`, `image_type`, `vpc_id`, `power_action`, `power_action_type` and `email_notification`. It is generally recommended running `terraform plan` after importing a desktop. You can then decide if changes should be applied to the desktop, or the resource definition should be updated to align with the desktop. Also you can ignore changes as below. hcl resource "huaweicloud_workspace_desktop" "test" {
 
          ...
 
@@ -802,7 +934,7 @@ class Desktop(pulumi.CustomResource):
 
          ignore_changes = [
 
-         user_email, nic,
+         user_email, delete_user, image_type, vpc_id, power_action, power_action_type, email_notification,
 
          ]
 
@@ -827,11 +959,14 @@ class Desktop(pulumi.CustomResource):
                  data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopDataVolumeArgs']]]]] = None,
                  delete_user: Optional[pulumi.Input[bool]] = None,
                  email_notification: Optional[pulumi.Input[bool]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor_id: Optional[pulumi.Input[str]] = None,
                  image_id: Optional[pulumi.Input[str]] = None,
                  image_type: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopNicArgs']]]]] = None,
+                 power_action: Optional[pulumi.Input[str]] = None,
+                 power_action_type: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  root_volume: Optional[pulumi.Input[pulumi.InputType['DesktopRootVolumeArgs']]] = None,
                  security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
@@ -853,6 +988,7 @@ class Desktop(pulumi.CustomResource):
             __props__.__dict__["data_volumes"] = data_volumes
             __props__.__dict__["delete_user"] = delete_user
             __props__.__dict__["email_notification"] = email_notification
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if flavor_id is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor_id'")
             __props__.__dict__["flavor_id"] = flavor_id
@@ -864,6 +1000,8 @@ class Desktop(pulumi.CustomResource):
             __props__.__dict__["image_type"] = image_type
             __props__.__dict__["name"] = name
             __props__.__dict__["nics"] = nics
+            __props__.__dict__["power_action"] = power_action
+            __props__.__dict__["power_action_type"] = power_action_type
             __props__.__dict__["region"] = region
             if root_volume is None and not opts.urn:
                 raise TypeError("Missing required property 'root_volume'")
@@ -882,6 +1020,7 @@ class Desktop(pulumi.CustomResource):
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["status"] = None
         super(Desktop, __self__).__init__(
             'huaweicloud:Workspace/desktop:Desktop',
             resource_name,
@@ -896,14 +1035,18 @@ class Desktop(pulumi.CustomResource):
             data_volumes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopDataVolumeArgs']]]]] = None,
             delete_user: Optional[pulumi.Input[bool]] = None,
             email_notification: Optional[pulumi.Input[bool]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor_id: Optional[pulumi.Input[str]] = None,
             image_id: Optional[pulumi.Input[str]] = None,
             image_type: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nics: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopNicArgs']]]]] = None,
+            power_action: Optional[pulumi.Input[str]] = None,
+            power_action_type: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             root_volume: Optional[pulumi.Input[pulumi.InputType['DesktopRootVolumeArgs']]] = None,
             security_groups: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
+            status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             user_email: Optional[pulumi.Input[str]] = None,
             user_group: Optional[pulumi.Input[str]] = None,
@@ -925,9 +1068,9 @@ class Desktop(pulumi.CustomResource):
         :param pulumi.Input[bool] email_notification: Specifies whether to send emails to user mailbox during important
                operations.
                Defaults to **false**. Changing this will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the desktop.
         :param pulumi.Input[str] flavor_id: Specifies the flavor ID of desktop.
         :param pulumi.Input[str] image_id: Specifies the image ID to create the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] image_type: Specifies the image type. The valid values are as follows:
                + **market**: The market image.
                + **gold**: The public image.
@@ -937,7 +1080,13 @@ class Desktop(pulumi.CustomResource):
                The name must start with a letter or digit and cannot end with a hyphen.
                Changing this will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DesktopNicArgs']]]] nics: Specifies the NIC information corresponding to the desktop.
-               The object structure is documented below. Changing this will create a new resource.
+               The object structure is documented below.
+        :param pulumi.Input[str] power_action: Specifies the power action to be done for the desktop.
+               The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        :param pulumi.Input[str] power_action_type: Specifies the power action mechanisms for the desktop.
+               The valid values are as follows:
+               + **SOFT**: Normal operation.
+               + **HARD**: Forced operation.
         :param pulumi.Input[str] region: The region in which to create the Workspace desktop resource.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[pulumi.InputType['DesktopRootVolumeArgs']] root_volume: Specifies the configuration of system volume.
@@ -945,8 +1094,8 @@ class Desktop(pulumi.CustomResource):
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_groups: Specifies the ID list of security groups.
                In addition to the custom security group, it must also contain a security group called **WorkspaceUserSecurityGroup**.
                Changing this will create a new resource.
+        :param pulumi.Input[str] status: The current status of the desktop.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs of the desktop.
-               Changing this will create a new resource.
         :param pulumi.Input[str] user_email: Specifies the user email.
                Some operations on the desktop (such as creation, deletion) will notify the user by sending an email.
                Changing this will create a new resource.
@@ -970,14 +1119,18 @@ class Desktop(pulumi.CustomResource):
         __props__.__dict__["data_volumes"] = data_volumes
         __props__.__dict__["delete_user"] = delete_user
         __props__.__dict__["email_notification"] = email_notification
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor_id"] = flavor_id
         __props__.__dict__["image_id"] = image_id
         __props__.__dict__["image_type"] = image_type
         __props__.__dict__["name"] = name
         __props__.__dict__["nics"] = nics
+        __props__.__dict__["power_action"] = power_action
+        __props__.__dict__["power_action_type"] = power_action_type
         __props__.__dict__["region"] = region
         __props__.__dict__["root_volume"] = root_volume
         __props__.__dict__["security_groups"] = security_groups
+        __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
         __props__.__dict__["user_email"] = user_email
         __props__.__dict__["user_group"] = user_group
@@ -1023,6 +1176,14 @@ class Desktop(pulumi.CustomResource):
         return pulumi.get(self, "email_notification")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID of the desktop.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> pulumi.Output[str]:
         """
@@ -1035,7 +1196,6 @@ class Desktop(pulumi.CustomResource):
     def image_id(self) -> pulumi.Output[str]:
         """
         Specifies the image ID to create the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "image_id")
 
@@ -1063,12 +1223,32 @@ class Desktop(pulumi.CustomResource):
 
     @property
     @pulumi.getter
-    def nics(self) -> pulumi.Output[Optional[Sequence['outputs.DesktopNic']]]:
+    def nics(self) -> pulumi.Output[Sequence['outputs.DesktopNic']]:
         """
         Specifies the NIC information corresponding to the desktop.
-        The object structure is documented below. Changing this will create a new resource.
+        The object structure is documented below.
         """
         return pulumi.get(self, "nics")
+
+    @property
+    @pulumi.getter(name="powerAction")
+    def power_action(self) -> pulumi.Output[str]:
+        """
+        Specifies the power action to be done for the desktop.
+        The valid values are **os-start**, **os-stop**, **reboot**, **os-hibernate**.
+        """
+        return pulumi.get(self, "power_action")
+
+    @property
+    @pulumi.getter(name="powerActionType")
+    def power_action_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the power action mechanisms for the desktop.
+        The valid values are as follows:
+        + **SOFT**: Normal operation.
+        + **HARD**: Forced operation.
+        """
+        return pulumi.get(self, "power_action_type")
 
     @property
     @pulumi.getter
@@ -1100,10 +1280,17 @@ class Desktop(pulumi.CustomResource):
 
     @property
     @pulumi.getter
+    def status(self) -> pulumi.Output[str]:
+        """
+        The current status of the desktop.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter
     def tags(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
         """
         Specifies the key/value pairs of the desktop.
-        Changing this will create a new resource.
         """
         return pulumi.get(self, "tags")
 

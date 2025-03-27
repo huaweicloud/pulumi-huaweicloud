@@ -57,6 +57,8 @@ type Provider struct {
 	SecurityToken pulumi.StringPtrOutput `pulumi:"securityToken"`
 	// The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
 	SharedConfigFile pulumi.StringPtrOutput `pulumi:"sharedConfigFile"`
+	// The signing algorithm for authentication
+	SigningAlgorithm pulumi.StringPtrOutput `pulumi:"signingAlgorithm"`
 	// The ID of the Tenant (Identity v2) to login with.
 	TenantId pulumi.StringPtrOutput `pulumi:"tenantId"`
 	// The name of the Tenant (Identity v2) to login with.
@@ -107,6 +109,8 @@ type providerArgs struct {
 	DomainId *string `pulumi:"domainId"`
 	// The name of the Domain to scope to.
 	DomainName *string `pulumi:"domainName"`
+	// Whether to enable ForceNew
+	EnableForceNew *bool `pulumi:"enableForceNew"`
 	// The custom endpoints used to override the default endpoint URL.
 	Endpoints map[string]string `pulumi:"endpoints"`
 	// enterprise project id
@@ -135,6 +139,12 @@ type providerArgs struct {
 	SecurityToken *string `pulumi:"securityToken"`
 	// The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
 	SharedConfigFile *string `pulumi:"sharedConfigFile"`
+	// The signing algorithm for authentication
+	SigningAlgorithm *string `pulumi:"signingAlgorithm"`
+	// Whether to skip upgrade check
+	SkipCheckUpgrade *bool `pulumi:"skipCheckUpgrade"`
+	// Whether to skip website type check
+	SkipCheckWebsiteType *bool `pulumi:"skipCheckWebsiteType"`
 	// The ID of the Tenant (Identity v2) to login with.
 	TenantId *string `pulumi:"tenantId"`
 	// The name of the Tenant (Identity v2) to login with.
@@ -170,6 +180,8 @@ type ProviderArgs struct {
 	DomainId pulumi.StringPtrInput
 	// The name of the Domain to scope to.
 	DomainName pulumi.StringPtrInput
+	// Whether to enable ForceNew
+	EnableForceNew pulumi.BoolPtrInput
 	// The custom endpoints used to override the default endpoint URL.
 	Endpoints pulumi.StringMapInput
 	// enterprise project id
@@ -198,6 +210,12 @@ type ProviderArgs struct {
 	SecurityToken pulumi.StringPtrInput
 	// The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
 	SharedConfigFile pulumi.StringPtrInput
+	// The signing algorithm for authentication
+	SigningAlgorithm pulumi.StringPtrInput
+	// Whether to skip upgrade check
+	SkipCheckUpgrade pulumi.BoolPtrInput
+	// Whether to skip website type check
+	SkipCheckWebsiteType pulumi.BoolPtrInput
 	// The ID of the Tenant (Identity v2) to login with.
 	TenantId pulumi.StringPtrInput
 	// The name of the Tenant (Identity v2) to login with.
@@ -345,6 +363,11 @@ func (o ProviderOutput) SecurityToken() pulumi.StringPtrOutput {
 // The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
 func (o ProviderOutput) SharedConfigFile() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Provider) pulumi.StringPtrOutput { return v.SharedConfigFile }).(pulumi.StringPtrOutput)
+}
+
+// The signing algorithm for authentication
+func (o ProviderOutput) SigningAlgorithm() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Provider) pulumi.StringPtrOutput { return v.SigningAlgorithm }).(pulumi.StringPtrOutput)
 }
 
 // The ID of the Tenant (Identity v2) to login with.

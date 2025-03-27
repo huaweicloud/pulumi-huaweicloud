@@ -8,99 +8,52 @@ import * as utilities from "../utilities";
 /**
  * Manages a dedicated microservice instance resource within HuaweiCloud.
  *
+ * > Before creating a configuration, make sure the engine has enabled the rules shown in the appendix
+ *    table.
+ *
  * ## Example Usage
- * ### Create a microservice instance under a microservice with RBAC authentication of engine disabled
+ * ## Appendix
  *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
+ * <a name="microserviceInstanceDefaultEngineAccessRules"></a>
+ * Security group rules required to access the engine:
+ * (Remote is not the minimum range and can be adjusted according to business needs)
  *
- * const config = new pulumi.Config();
- * const engineConnAddr = config.requireObject("engineConnAddr");
- * const microserviceId = config.requireObject("microserviceId");
- * const regionName = config.requireObject("regionName");
- * const azName = config.requireObject("azName");
- * const test = new huaweicloud.cse.MicroserviceInstance("test", {
- *     connectAddress: engineConnAddr,
- *     microserviceId: microserviceId,
- *     hostName: "localhost",
- *     endpoints: [
- *         "grpc://127.0.1.132:9980",
- *         "rest://127.0.0.111:8081",
- *     ],
- *     version: "1.0.0",
- *     properties: {
- *         _TAGS: "A, B",
- *         attr1: "a",
- *         nodeIP: "127.0.0.1",
- *     },
- *     healthCheck: {
- *         mode: "push",
- *         interval: 30,
- *         maxRetries: 3,
- *     },
- *     dataCenter: {
- *         name: "dc",
- *         region: regionName,
- *         availabilityZone: azName,
- *     },
- * });
- * ```
- * ### Create a microservice instance under a microservice with RBAC authentication of engine enabled
- *
- * ```typescript
- * import * as pulumi from "@pulumi/pulumi";
- * import * as pulumi from "@huaweicloudos/pulumi";
- *
- * const config = new pulumi.Config();
- * const engineConnAddr = config.requireObject("engineConnAddr");
- * const microserviceId = config.requireObject("microserviceId");
- * const regionName = config.requireObject("regionName");
- * const azName = config.requireObject("azName");
- * const test = new huaweicloud.cse.MicroserviceInstance("test", {
- *     connectAddress: engineConnAddr,
- *     microserviceId: microserviceId,
- *     hostName: "localhost",
- *     endpoints: [
- *         "grpc://127.0.1.132:9980",
- *         "rest://127.0.0.111:8081",
- *     ],
- *     version: "1.0.0",
- *     properties: {
- *         _TAGS: "A, B",
- *         attr1: "a",
- *         nodeIP: "127.0.0.1",
- *     },
- *     healthCheck: {
- *         mode: "push",
- *         interval: 30,
- *         maxRetries: 3,
- *     },
- *     dataCenter: {
- *         name: "dc",
- *         region: regionName,
- *         availabilityZone: azName,
- *     },
- *     adminUser: "root",
- *     adminPass: "Huawei!123",
- * });
- * ```
+ * | Direction | Priority | Action | Protocol | Ports         | Ethertype | Remote                |
+ * | --------- | -------- | ------ | -------- | ------------- | --------- | --------------------- |
+ * | Ingress   | 1        | Allow  | ICMP     | All           | Ipv6      | ::/0                  |
+ * | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv6      | ::/0                  |
+ * | Ingress   | 1        | Allow  | All      | All           | Ipv6      | cse-engine-default-sg |
+ * | Ingress   | 1        | Allow  | ICMP     | All           | Ipv4      | 0.0.0.0/0             |
+ * | Ingress   | 1        | Allow  | TCP      | 30100-30130   | Ipv4      | 0.0.0.0/0             |
+ * | Ingress   | 1        | Allow  | All      | All           | Ipv4      | cse-engine-default-sg |
+ * | Egress    | 100      | Allow  | All      | All           | Ipv6      | ::/0                  |
+ * | Egress    | 100      | Allow  | All      | All           | Ipv4      | 0.0.0.0/0             |
  *
  * ## Import
  *
- * Microservices can be imported using related `connect_address`, `microservice_id` and their `id`, separated by a slash (/), e.g.
+ * Microservice instances can be imported using related `auth_address`, `connect_address`, `microservice_id` and their `id`, separated by the slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7
+ *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>
  * ```
  *
- *  If you enabled the **RBAC** authorization, you also need to provide the account name and password, e.g.
+ *  If you enabled the **RBAC** authorization in the microservice engine, it's necessary to provide the account name (`admin_user`) and password (`admin_pass`) of the microservice engine. All fields separated by the slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+ *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test <auth_address>/<connect_address>/<microservice_id>/<id>/<admin_user>/<admin_pass>
  * ```
  *
- *  The single quotes can help you solve the problem of special characters reporting errors on bash.
+ *  The single quotes (') or backslashes (\\) can help you solve the problem of special characters reporting errors on bash. bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test\!123
+ * ```
+ *
+ *  bash
+ *
+ * ```sh
+ *  $ pulumi import huaweicloud:Cse/microserviceInstance:MicroserviceInstance test 'https://124.70.26.32:30100/https://124.70.26.32:30100/f14960ba495e03f59f85aacaaafbdef3fbff3f0d/336e7428dd9411eca913fa163e7364b7/root/Test!123'
+ * ```
  */
 export class MicroserviceInstance extends pulumi.CustomResource {
     /**
@@ -147,8 +100,16 @@ export class MicroserviceInstance extends pulumi.CustomResource {
      */
     public readonly adminUser!: pulumi.Output<string | undefined>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice instance.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    public readonly authAddress!: pulumi.Output<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice instance.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     public readonly connectAddress!: pulumi.Output<string>;
     /**
@@ -208,6 +169,7 @@ export class MicroserviceInstance extends pulumi.CustomResource {
             const state = argsOrState as MicroserviceInstanceState | undefined;
             resourceInputs["adminPass"] = state ? state.adminPass : undefined;
             resourceInputs["adminUser"] = state ? state.adminUser : undefined;
+            resourceInputs["authAddress"] = state ? state.authAddress : undefined;
             resourceInputs["connectAddress"] = state ? state.connectAddress : undefined;
             resourceInputs["dataCenter"] = state ? state.dataCenter : undefined;
             resourceInputs["endpoints"] = state ? state.endpoints : undefined;
@@ -233,6 +195,7 @@ export class MicroserviceInstance extends pulumi.CustomResource {
             }
             resourceInputs["adminPass"] = args ? args.adminPass : undefined;
             resourceInputs["adminUser"] = args ? args.adminUser : undefined;
+            resourceInputs["authAddress"] = args ? args.authAddress : undefined;
             resourceInputs["connectAddress"] = args ? args.connectAddress : undefined;
             resourceInputs["dataCenter"] = args ? args.dataCenter : undefined;
             resourceInputs["endpoints"] = args ? args.endpoints : undefined;
@@ -269,8 +232,16 @@ export interface MicroserviceInstanceState {
      */
     adminUser?: pulumi.Input<string>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice instance.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    authAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice instance.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     connectAddress?: pulumi.Input<string>;
     /**
@@ -337,8 +308,16 @@ export interface MicroserviceInstanceArgs {
      */
     adminUser?: pulumi.Input<string>;
     /**
-     * Specifies the connection address of service registry center for the
-     * specified dedicated CSE engine. Changing this will create a new microservice instance.
+     * Specifies the address that used to request the access token.  
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
+     */
+    authAddress?: pulumi.Input<string>;
+    /**
+     * Specifies the address that used to access engine and manages
+     * microservice instance.
+     * Usually is the connection address of service center.
+     * Changing this will create a new resource.
      */
     connectAddress: pulumi.Input<string>;
     /**

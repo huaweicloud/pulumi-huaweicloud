@@ -52,13 +52,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The media asset can be imported using the `id`, e.g.
+ * The media asset can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Vod/mediaAsset:MediaAsset test 8754976729b8a2ba745d01036edded2b
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. resource "huaweicloud_vod_media_asset" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`url`, `input_bucket`, `input_path`, `output_bucket`, `output_path`, `storage_mode`, `template_group_name`, `workflow_name`, `publish`, `auto_encrypt`, `auto_preload`, `review_template_id`, `thumbnail`. It is generally recommended running `terraform plan` after importing a media asset. You can then decide if changes should be applied to the media asset, or the resource definition should be updated to align with the media asset. Also you can ignore changes as below. hcl resource "huaweicloud_vod_media_asset" "test" {
  *
  *  ...
  *
@@ -114,7 +114,7 @@ export class MediaAsset extends pulumi.CustomResource {
      */
     public readonly autoPreload!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the category ID of the media asset. Default to: **-1**, which means the media
+     * Specifies the category ID of the media asset. Defaults to `-1`, which means the media
      * asset will be categorized into the 'Other' category of system presets.
      */
     public readonly categoryId!: pulumi.Output<number>;
@@ -123,7 +123,8 @@ export class MediaAsset extends pulumi.CustomResource {
      */
     public /*out*/ readonly categoryName!: pulumi.Output<string>;
     /**
-     * Specifies the media asset description, which contains a maximum of 1024 characters.
+     * Specifies the media asset description, which contains a maximum of `1,024`
+     * characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -157,7 +158,7 @@ export class MediaAsset extends pulumi.CustomResource {
      */
     public /*out*/ readonly mediaUrl!: pulumi.Output<string>;
     /**
-     * Specifies the media asset name, which contains a maximum of 128 characters.
+     * Specifies the media asset name, which contains a maximum of `128` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -294,7 +295,7 @@ export interface MediaAssetState {
      */
     autoPreload?: pulumi.Input<boolean>;
     /**
-     * Specifies the category ID of the media asset. Default to: **-1**, which means the media
+     * Specifies the category ID of the media asset. Defaults to `-1`, which means the media
      * asset will be categorized into the 'Other' category of system presets.
      */
     categoryId?: pulumi.Input<number>;
@@ -303,7 +304,8 @@ export interface MediaAssetState {
      */
     categoryName?: pulumi.Input<string>;
     /**
-     * Specifies the media asset description, which contains a maximum of 1024 characters.
+     * Specifies the media asset description, which contains a maximum of `1,024`
+     * characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -337,7 +339,7 @@ export interface MediaAssetState {
      */
     mediaUrl?: pulumi.Input<string>;
     /**
-     * Specifies the media asset name, which contains a maximum of 128 characters.
+     * Specifies the media asset name, which contains a maximum of `128` characters.
      */
     name?: pulumi.Input<string>;
     /**
@@ -407,12 +409,13 @@ export interface MediaAssetArgs {
      */
     autoPreload?: pulumi.Input<boolean>;
     /**
-     * Specifies the category ID of the media asset. Default to: **-1**, which means the media
+     * Specifies the category ID of the media asset. Defaults to `-1`, which means the media
      * asset will be categorized into the 'Other' category of system presets.
      */
     categoryId?: pulumi.Input<number>;
     /**
-     * Specifies the media asset description, which contains a maximum of 1024 characters.
+     * Specifies the media asset description, which contains a maximum of `1,024`
+     * characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -438,7 +441,7 @@ export interface MediaAssetArgs {
      */
     mediaType: pulumi.Input<string>;
     /**
-     * Specifies the media asset name, which contains a maximum of 128 characters.
+     * Specifies the media asset name, which contains a maximum of `128` characters.
      */
     name?: pulumi.Input<string>;
     /**

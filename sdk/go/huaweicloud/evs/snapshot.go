@@ -27,7 +27,7 @@ import (
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			myvolume, err := Evs.NewVolume(ctx, "myvolume", &Evs.VolumeArgs{
+//			testVolume, err := Evs.NewVolume(ctx, "testVolume", &Evs.VolumeArgs{
 //				Description:      pulumi.String("my volume"),
 //				VolumeType:       pulumi.String("SATA"),
 //				Size:             pulumi.Int(20),
@@ -40,9 +40,9 @@ import (
 //			if err != nil {
 //				return err
 //			}
-//			_, err = Evs.NewSnapshot(ctx, "snapshot1", &Evs.SnapshotArgs{
+//			_, err = Evs.NewSnapshot(ctx, "testSnapshot", &Evs.SnapshotArgs{
 //				Description: pulumi.String("Daily backup"),
-//				VolumeId:    myvolume.ID(),
+//				VolumeId:    testVolume.ID(),
 //			})
 //			if err != nil {
 //				return err
@@ -55,13 +55,27 @@ import (
 //
 // ## Import
 //
-// EVS snapshot can be imported using the `snapshot id`, e.g.
+// EVS snapshot can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Evs/snapshot:Snapshot huaweicloud_evs_snapshot.snapshot_1 3a11b255-3bb6-46f3-91e4-3338baa92dd6
+//	$ pulumi import huaweicloud:Evs/snapshot:Snapshot test <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`metadata`, `force`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the snapshot. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_snapshot" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	metadata, force,
+//
+//	]
+//
+//	} }
 type Snapshot struct {
 	pulumi.CustomResourceState
 
@@ -69,6 +83,9 @@ type Snapshot struct {
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies the flag for forcibly creating a snapshot. Default to false.
 	Force pulumi.BoolPtrOutput `pulumi:"force"`
+	// Specifies the user-defined metadata key-value pair. Changing the parameter
+	// creates a new snapshot.
+	Metadata pulumi.StringMapOutput `pulumi:"metadata"`
 	// The name of the snapshot. The value can contain a maximum of 255 bytes.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// The region in which to create the evs snapshot resource. If omitted, the
@@ -120,6 +137,9 @@ type snapshotState struct {
 	Description *string `pulumi:"description"`
 	// Specifies the flag for forcibly creating a snapshot. Default to false.
 	Force *bool `pulumi:"force"`
+	// Specifies the user-defined metadata key-value pair. Changing the parameter
+	// creates a new snapshot.
+	Metadata map[string]string `pulumi:"metadata"`
 	// The name of the snapshot. The value can contain a maximum of 255 bytes.
 	Name *string `pulumi:"name"`
 	// The region in which to create the evs snapshot resource. If omitted, the
@@ -139,6 +159,9 @@ type SnapshotState struct {
 	Description pulumi.StringPtrInput
 	// Specifies the flag for forcibly creating a snapshot. Default to false.
 	Force pulumi.BoolPtrInput
+	// Specifies the user-defined metadata key-value pair. Changing the parameter
+	// creates a new snapshot.
+	Metadata pulumi.StringMapInput
 	// The name of the snapshot. The value can contain a maximum of 255 bytes.
 	Name pulumi.StringPtrInput
 	// The region in which to create the evs snapshot resource. If omitted, the
@@ -162,6 +185,9 @@ type snapshotArgs struct {
 	Description *string `pulumi:"description"`
 	// Specifies the flag for forcibly creating a snapshot. Default to false.
 	Force *bool `pulumi:"force"`
+	// Specifies the user-defined metadata key-value pair. Changing the parameter
+	// creates a new snapshot.
+	Metadata map[string]string `pulumi:"metadata"`
 	// The name of the snapshot. The value can contain a maximum of 255 bytes.
 	Name *string `pulumi:"name"`
 	// The region in which to create the evs snapshot resource. If omitted, the
@@ -178,6 +204,9 @@ type SnapshotArgs struct {
 	Description pulumi.StringPtrInput
 	// Specifies the flag for forcibly creating a snapshot. Default to false.
 	Force pulumi.BoolPtrInput
+	// Specifies the user-defined metadata key-value pair. Changing the parameter
+	// creates a new snapshot.
+	Metadata pulumi.StringMapInput
 	// The name of the snapshot. The value can contain a maximum of 255 bytes.
 	Name pulumi.StringPtrInput
 	// The region in which to create the evs snapshot resource. If omitted, the
@@ -283,6 +312,12 @@ func (o SnapshotOutput) Description() pulumi.StringPtrOutput {
 // Specifies the flag for forcibly creating a snapshot. Default to false.
 func (o SnapshotOutput) Force() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Snapshot) pulumi.BoolPtrOutput { return v.Force }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the user-defined metadata key-value pair. Changing the parameter
+// creates a new snapshot.
+func (o SnapshotOutput) Metadata() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Snapshot) pulumi.StringMapOutput { return v.Metadata }).(pulumi.StringMapOutput)
 }
 
 // The name of the snapshot. The value can contain a maximum of 255 bytes.

@@ -37,7 +37,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * DMS kafka permissions can be imported using the kafka instance ID and topic name separated by a slash, e.g.
+ * DMS kafka permissions can be imported using the kafka instance ID and topic name separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Dms/kafkaPermissions:KafkaPermissions permissions c8057fe5-23a8-46ef-ad83-c0055b4e0c5c/topic_1

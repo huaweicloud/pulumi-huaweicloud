@@ -14,7 +14,7 @@ import (
 // Manages a DNS record set resource within HuaweiCloud.
 //
 // ## Example Usage
-// ### Record Set with Multi-line
+// ### Record Set with Public Zone
 //
 // ```go
 // package main
@@ -23,24 +23,20 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dns"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			exampleZone, err := Dns.NewZone(ctx, "exampleZone", &Dns.ZoneArgs{
-//				Email:       pulumi.String("email2@example.com"),
-//				Description: pulumi.String("a zone"),
-//				Ttl:         pulumi.Int(6000),
-//				ZoneType:    pulumi.String("public"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Dns.NewRecordset(ctx, "test", &Dns.RecordsetArgs{
-//				ZoneId:      exampleZone.ID(),
+//			cfg := config.New(ctx, "")
+//			publicZoneId := cfg.RequireObject("publicZoneId")
+//			publicRecordsetName := cfg.RequireObject("publicRecordsetName")
+//			description := cfg.RequireObject("description")
+//			_, err := Dns.NewRecordset(ctx, "test", &Dns.RecordsetArgs{
+//				ZoneId:      pulumi.Any(publicZoneId),
 //				Type:        pulumi.String("A"),
-//				Description: pulumi.String("a recordset description"),
+//				Description: pulumi.Any(description),
 //				Status:      pulumi.String("ENABLE"),
 //				Ttl:         pulumi.Int(300),
 //				Records: pulumi.StringArray{
@@ -61,46 +57,6 @@ import (
 //	}
 //
 // ```
-// ### Record Set with Public Zone
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dns"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			exampleZone, err := Dns.NewZone(ctx, "exampleZone", &Dns.ZoneArgs{
-//				Email:       pulumi.String("email2@example.com"),
-//				Description: pulumi.String("a public zone"),
-//				Ttl:         pulumi.Int(6000),
-//				ZoneType:    pulumi.String("public"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Dns.NewRecordset(ctx, "test", &Dns.RecordsetArgs{
-//				ZoneId:      exampleZone.ID(),
-//				Description: pulumi.String("An example record set"),
-//				Ttl:         pulumi.Int(3000),
-//				Type:        pulumi.String("A"),
-//				Records: pulumi.StringArray{
-//					pulumi.String("10.0.0.1"),
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 // ### Record Set with Private Zone
 //
 // ```go
@@ -110,23 +66,19 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Dns"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
-//			exampleZone, err := Dns.NewZone(ctx, "exampleZone", &Dns.ZoneArgs{
-//				Email:       pulumi.String("email2@example.com"),
-//				Description: pulumi.String("a private zone"),
-//				Ttl:         pulumi.Int(6000),
-//				ZoneType:    pulumi.String("private"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Dns.NewRecordset(ctx, "test", &Dns.RecordsetArgs{
-//				ZoneId:      exampleZone.ID(),
-//				Description: pulumi.String("An example record set"),
+//			cfg := config.New(ctx, "")
+//			privateZoneId := cfg.RequireObject("privateZoneId")
+//			privateRecordsetName := cfg.RequireObject("privateRecordsetName")
+//			description := cfg.RequireObject("description")
+//			_, err := Dns.NewRecordset(ctx, "test", &Dns.RecordsetArgs{
+//				ZoneId:      pulumi.Any(privateZoneId),
+//				Description: pulumi.Any(description),
 //				Ttl:         pulumi.Int(3000),
 //				Type:        pulumi.String("A"),
 //				Records: pulumi.StringArray{
@@ -144,11 +96,11 @@ import (
 //
 // ## Import
 //
-// The DNS recordset can be imported using `zone_id`, `recordset_id`, separated by slashes, e.g. bash
+// The DNS recordset can be imported using `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Dns/recordset:Recordset test <zone_id>/<recordset_id>
+//	$ pulumi import huaweicloud:Dns/recordset:Recordset test <id>
 //
 // ```
 type Recordset struct {
@@ -156,36 +108,44 @@ type Recordset struct {
 
 	// Specifies the description of the record set.
 	Description pulumi.StringOutput `pulumi:"description"`
-	// Specifies the resolution line ID.
+	// Specifies the resolution line ID.\
 	// Changing this parameter will create a new resource.
 	LineId pulumi.StringOutput `pulumi:"lineId"`
-	// Specifies the name of the record set.
+	// Specifies the name of the record set.\
 	// The name suffixed with a zone name, which is a complete host name ended with a dot.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies an array of DNS records. The value rules vary depending on the record set type.
+	// Specifies the list of the records of the record set.\
+	// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 	Records pulumi.StringArrayOutput `pulumi:"records"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the status of the record set.
-	// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+	// Specifies the status of the record set, defaults to **ENABLE**.\
+	// The valid values are as follows:
+	// + **ENABLE**
+	// + **DISABLE**
 	Status pulumi.StringPtrOutput `pulumi:"status"`
-	// Specifies the key/value pairs to associate with the DNS recordset.
+	// Specifies the key/value pairs to associate with the DNS record set.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// Specifies the time to live (TTL) of the record set (in seconds).
-	// The value range is 1–2147483647. The default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).\
+	// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 	Ttl pulumi.IntPtrOutput `pulumi:"ttl"`
 	// Specifies the type of the record set.
-	// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+	// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+	// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 	Type pulumi.StringOutput `pulumi:"type"`
 	// Specifies the weight of the record set.
-	// Only public zone support. The value range is 0–1000.
+	// Only public zone support. The valid value is range from `1` to `1,000`.
 	Weight pulumi.IntOutput `pulumi:"weight"`
-	// Specifies the zone ID.
+	// Specifies the ID of the zone to which the record set belongs.\
 	// Changing this parameter will create a new resource.
 	ZoneId pulumi.StringOutput `pulumi:"zoneId"`
-	// The zone name of the record set.
+	// The name of the zone to which the record set belongs.
 	ZoneName pulumi.StringOutput `pulumi:"zoneName"`
+	// The type of the zone to which the record set belongs.
+	// + **public**
+	// + **private**
+	ZoneType pulumi.StringOutput `pulumi:"zoneType"`
 }
 
 // NewRecordset registers a new resource with the given unique name, arguments, and options.
@@ -229,71 +189,87 @@ func GetRecordset(ctx *pulumi.Context,
 type recordsetState struct {
 	// Specifies the description of the record set.
 	Description *string `pulumi:"description"`
-	// Specifies the resolution line ID.
+	// Specifies the resolution line ID.\
 	// Changing this parameter will create a new resource.
 	LineId *string `pulumi:"lineId"`
-	// Specifies the name of the record set.
+	// Specifies the name of the record set.\
 	// The name suffixed with a zone name, which is a complete host name ended with a dot.
 	Name *string `pulumi:"name"`
-	// Specifies an array of DNS records. The value rules vary depending on the record set type.
+	// Specifies the list of the records of the record set.\
+	// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 	Records []string `pulumi:"records"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the status of the record set.
-	// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+	// Specifies the status of the record set, defaults to **ENABLE**.\
+	// The valid values are as follows:
+	// + **ENABLE**
+	// + **DISABLE**
 	Status *string `pulumi:"status"`
-	// Specifies the key/value pairs to associate with the DNS recordset.
+	// Specifies the key/value pairs to associate with the DNS record set.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the time to live (TTL) of the record set (in seconds).
-	// The value range is 1–2147483647. The default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).\
+	// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 	Ttl *int `pulumi:"ttl"`
 	// Specifies the type of the record set.
-	// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+	// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+	// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 	Type *string `pulumi:"type"`
 	// Specifies the weight of the record set.
-	// Only public zone support. The value range is 0–1000.
+	// Only public zone support. The valid value is range from `1` to `1,000`.
 	Weight *int `pulumi:"weight"`
-	// Specifies the zone ID.
+	// Specifies the ID of the zone to which the record set belongs.\
 	// Changing this parameter will create a new resource.
 	ZoneId *string `pulumi:"zoneId"`
-	// The zone name of the record set.
+	// The name of the zone to which the record set belongs.
 	ZoneName *string `pulumi:"zoneName"`
+	// The type of the zone to which the record set belongs.
+	// + **public**
+	// + **private**
+	ZoneType *string `pulumi:"zoneType"`
 }
 
 type RecordsetState struct {
 	// Specifies the description of the record set.
 	Description pulumi.StringPtrInput
-	// Specifies the resolution line ID.
+	// Specifies the resolution line ID.\
 	// Changing this parameter will create a new resource.
 	LineId pulumi.StringPtrInput
-	// Specifies the name of the record set.
+	// Specifies the name of the record set.\
 	// The name suffixed with a zone name, which is a complete host name ended with a dot.
 	Name pulumi.StringPtrInput
-	// Specifies an array of DNS records. The value rules vary depending on the record set type.
+	// Specifies the list of the records of the record set.\
+	// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 	Records pulumi.StringArrayInput
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the status of the record set.
-	// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+	// Specifies the status of the record set, defaults to **ENABLE**.\
+	// The valid values are as follows:
+	// + **ENABLE**
+	// + **DISABLE**
 	Status pulumi.StringPtrInput
-	// Specifies the key/value pairs to associate with the DNS recordset.
+	// Specifies the key/value pairs to associate with the DNS record set.
 	Tags pulumi.StringMapInput
-	// Specifies the time to live (TTL) of the record set (in seconds).
-	// The value range is 1–2147483647. The default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).\
+	// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 	Ttl pulumi.IntPtrInput
 	// Specifies the type of the record set.
-	// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+	// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+	// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 	Type pulumi.StringPtrInput
 	// Specifies the weight of the record set.
-	// Only public zone support. The value range is 0–1000.
+	// Only public zone support. The valid value is range from `1` to `1,000`.
 	Weight pulumi.IntPtrInput
-	// Specifies the zone ID.
+	// Specifies the ID of the zone to which the record set belongs.\
 	// Changing this parameter will create a new resource.
 	ZoneId pulumi.StringPtrInput
-	// The zone name of the record set.
+	// The name of the zone to which the record set belongs.
 	ZoneName pulumi.StringPtrInput
+	// The type of the zone to which the record set belongs.
+	// + **public**
+	// + **private**
+	ZoneType pulumi.StringPtrInput
 }
 
 func (RecordsetState) ElementType() reflect.Type {
@@ -303,32 +279,36 @@ func (RecordsetState) ElementType() reflect.Type {
 type recordsetArgs struct {
 	// Specifies the description of the record set.
 	Description *string `pulumi:"description"`
-	// Specifies the resolution line ID.
+	// Specifies the resolution line ID.\
 	// Changing this parameter will create a new resource.
 	LineId *string `pulumi:"lineId"`
-	// Specifies the name of the record set.
+	// Specifies the name of the record set.\
 	// The name suffixed with a zone name, which is a complete host name ended with a dot.
 	Name *string `pulumi:"name"`
-	// Specifies an array of DNS records. The value rules vary depending on the record set type.
+	// Specifies the list of the records of the record set.\
+	// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 	Records []string `pulumi:"records"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the status of the record set.
-	// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+	// Specifies the status of the record set, defaults to **ENABLE**.\
+	// The valid values are as follows:
+	// + **ENABLE**
+	// + **DISABLE**
 	Status *string `pulumi:"status"`
-	// Specifies the key/value pairs to associate with the DNS recordset.
+	// Specifies the key/value pairs to associate with the DNS record set.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the time to live (TTL) of the record set (in seconds).
-	// The value range is 1–2147483647. The default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).\
+	// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 	Ttl *int `pulumi:"ttl"`
 	// Specifies the type of the record set.
-	// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+	// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+	// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 	Type string `pulumi:"type"`
 	// Specifies the weight of the record set.
-	// Only public zone support. The value range is 0–1000.
+	// Only public zone support. The valid value is range from `1` to `1,000`.
 	Weight *int `pulumi:"weight"`
-	// Specifies the zone ID.
+	// Specifies the ID of the zone to which the record set belongs.\
 	// Changing this parameter will create a new resource.
 	ZoneId string `pulumi:"zoneId"`
 }
@@ -337,32 +317,36 @@ type recordsetArgs struct {
 type RecordsetArgs struct {
 	// Specifies the description of the record set.
 	Description pulumi.StringPtrInput
-	// Specifies the resolution line ID.
+	// Specifies the resolution line ID.\
 	// Changing this parameter will create a new resource.
 	LineId pulumi.StringPtrInput
-	// Specifies the name of the record set.
+	// Specifies the name of the record set.\
 	// The name suffixed with a zone name, which is a complete host name ended with a dot.
 	Name pulumi.StringPtrInput
-	// Specifies an array of DNS records. The value rules vary depending on the record set type.
+	// Specifies the list of the records of the record set.\
+	// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 	Records pulumi.StringArrayInput
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the status of the record set.
-	// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+	// Specifies the status of the record set, defaults to **ENABLE**.\
+	// The valid values are as follows:
+	// + **ENABLE**
+	// + **DISABLE**
 	Status pulumi.StringPtrInput
-	// Specifies the key/value pairs to associate with the DNS recordset.
+	// Specifies the key/value pairs to associate with the DNS record set.
 	Tags pulumi.StringMapInput
-	// Specifies the time to live (TTL) of the record set (in seconds).
-	// The value range is 1–2147483647. The default value is 300.
+	// Specifies the time to live (TTL) of the record set (in seconds).\
+	// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 	Ttl pulumi.IntPtrInput
 	// Specifies the type of the record set.
-	// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+	// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+	// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 	Type pulumi.StringInput
 	// Specifies the weight of the record set.
-	// Only public zone support. The value range is 0–1000.
+	// Only public zone support. The valid value is range from `1` to `1,000`.
 	Weight pulumi.IntPtrInput
-	// Specifies the zone ID.
+	// Specifies the ID of the zone to which the record set belongs.\
 	// Changing this parameter will create a new resource.
 	ZoneId pulumi.StringInput
 }
@@ -459,19 +443,20 @@ func (o RecordsetOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
 
-// Specifies the resolution line ID.
+// Specifies the resolution line ID.\
 // Changing this parameter will create a new resource.
 func (o RecordsetOutput) LineId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.LineId }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the record set.
+// Specifies the name of the record set.\
 // The name suffixed with a zone name, which is a complete host name ended with a dot.
 func (o RecordsetOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies an array of DNS records. The value rules vary depending on the record set type.
+// Specifies the list of the records of the record set.\
+// The value depends on the `type` parameter, you can refer to this [document](https://support.huaweicloud.com/intl/en-us/usermanual-dns/dns_usermanual_0601.html#dns_usermanual_0601__table936244914119).
 func (o RecordsetOutput) Records() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringArrayOutput { return v.Records }).(pulumi.StringArrayOutput)
 }
@@ -482,44 +467,54 @@ func (o RecordsetOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the status of the record set.
-// Value options: **ENABLE**, **DISABLE**. The default value is **ENABLE**.
+// Specifies the status of the record set, defaults to **ENABLE**.\
+// The valid values are as follows:
+// + **ENABLE**
+// + **DISABLE**
 func (o RecordsetOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringPtrOutput { return v.Status }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the key/value pairs to associate with the DNS recordset.
+// Specifies the key/value pairs to associate with the DNS record set.
 func (o RecordsetOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the time to live (TTL) of the record set (in seconds).
-// The value range is 1–2147483647. The default value is 300.
+// Specifies the time to live (TTL) of the record set (in seconds).\
+// The valid value is range from `1` to `2,147,483,647`. The default value is `300`.
 func (o RecordsetOutput) Ttl() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.IntPtrOutput { return v.Ttl }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the type of the record set.
-// Value options: **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV**, **CAA**.
+// + For the public record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT**, **NS**, **SRV** and **CAA**.
+// + For the private record set, the valid values are **A**, **AAAA**, **MX**, **CNAME**, **TXT** and **SRV**.
 func (o RecordsetOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
 // Specifies the weight of the record set.
-// Only public zone support. The value range is 0–1000.
+// Only public zone support. The valid value is range from `1` to `1,000`.
 func (o RecordsetOutput) Weight() pulumi.IntOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.IntOutput { return v.Weight }).(pulumi.IntOutput)
 }
 
-// Specifies the zone ID.
+// Specifies the ID of the zone to which the record set belongs.\
 // Changing this parameter will create a new resource.
 func (o RecordsetOutput) ZoneId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.ZoneId }).(pulumi.StringOutput)
 }
 
-// The zone name of the record set.
+// The name of the zone to which the record set belongs.
 func (o RecordsetOutput) ZoneName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.ZoneName }).(pulumi.StringOutput)
+}
+
+// The type of the zone to which the record set belongs.
+// + **public**
+// + **private**
+func (o RecordsetOutput) ZoneType() pulumi.StringOutput {
+	return o.ApplyT(func(v *Recordset) pulumi.StringOutput { return v.ZoneType }).(pulumi.StringOutput)
 }
 
 type RecordsetArrayOutput struct{ *pulumi.OutputState }

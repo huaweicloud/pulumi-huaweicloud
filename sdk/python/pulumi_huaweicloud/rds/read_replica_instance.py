@@ -22,11 +22,19 @@ class ReadReplicaInstanceArgs:
                  volume: pulumi.Input['ReadReplicaInstanceVolumeArgs'],
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 db: Optional[pulumi.Input['ReadReplicaInstanceDbArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 fixed_ip: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a ReadReplicaInstance resource.
@@ -35,27 +43,36 @@ class ReadReplicaInstanceArgs:
         :param pulumi.Input[str] flavor: Specifies the specification code.
         :param pulumi.Input[str] primary_instance_id: Specifies the DB instance ID, which is used to create a read
                replica. Changing this parameter will create a new resource.
-        :param pulumi.Input['ReadReplicaInstanceVolumeArgs'] volume: Specifies the volume information. Structure is documented below. Changing this
-               parameter will create a new resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        :param pulumi.Input['ReadReplicaInstanceVolumeArgs'] volume: Specifies the volume information. The volume structure is
+               documented below. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the read replica instance. Valid values
-               are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the read replica instance.
+               are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+        :param pulumi.Input['ReadReplicaInstanceDbArgs'] db: Specifies the database information. The db structure is documented below.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be
-               unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-               case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-               create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the read replica instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of read replica instance.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the read replica instance
+               after launched. You can check on console to see which parameters supported. The parameters
+               structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the read replica instance. If `period_unit` is
-               set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+               set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the read replica instance. Valid
-               values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+               values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
                creates a new resource.
         :param pulumi.Input[str] region: The region in which to create the rds read replica instance resource. If
                omitted, the provider-level region will be used.
                Changing this parameter will create a new resource.
-               Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+               Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
+        :param pulumi.Input[str] security_group_id: Specifies the security group which the read replica instance belongs to.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for read replica instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
                key-value pair.
         """
@@ -67,16 +84,32 @@ class ReadReplicaInstanceArgs:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if db is not None:
+            pulumi.set(__self__, "db", db)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if fixed_ip is not None:
+            pulumi.set(__self__, "fixed_ip", fixed_ip)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if security_group_id is not None:
+            pulumi.set(__self__, "security_group_id", security_group_id)
+        if ssl_enable is not None:
+            pulumi.set(__self__, "ssl_enable", ssl_enable)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -122,8 +155,8 @@ class ReadReplicaInstanceArgs:
     @pulumi.getter
     def volume(self) -> pulumi.Input['ReadReplicaInstanceVolumeArgs']:
         """
-        Specifies the volume information. Structure is documented below. Changing this
-        parameter will create a new resource.
+        Specifies the volume information. The volume structure is
+        documented below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "volume")
 
@@ -135,7 +168,7 @@ class ReadReplicaInstanceArgs:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -148,7 +181,7 @@ class ReadReplicaInstanceArgs:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the read replica instance. Valid values
-        are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -157,11 +190,36 @@ class ReadReplicaInstanceArgs:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter
+    def db(self) -> Optional[pulumi.Input['ReadReplicaInstanceDbArgs']]:
+        """
+        Specifies the database information. The db structure is documented below.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "db")
+
+    @db.setter
+    def db(self, value: Optional[pulumi.Input['ReadReplicaInstanceDbArgs']]):
+        pulumi.set(self, "db", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the read replica instance.
-        Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the read replica instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -170,13 +228,47 @@ class ReadReplicaInstanceArgs:
         pulumi.set(self, "enterprise_project_id", value)
 
     @property
+    @pulumi.getter(name="fixedIp")
+    def fixed_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies an intranet floating IP address of read replica instance.
+        """
+        return pulumi.get(self, "fixed_ip")
+
+    @fixed_ip.setter
+    def fixed_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "fixed_ip", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be
-        unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-        case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-        create a new resource.
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -186,11 +278,25 @@ class ReadReplicaInstanceArgs:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the read replica instance
+        after launched. You can check on console to see which parameters supported. The parameters
+        structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the read replica instance. If `period_unit` is
-        set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "period")
 
@@ -203,7 +309,7 @@ class ReadReplicaInstanceArgs:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the read replica instance. Valid
-        values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+        values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
         creates a new resource.
         """
         return pulumi.get(self, "period_unit")
@@ -219,13 +325,37 @@ class ReadReplicaInstanceArgs:
         The region in which to create the rds read replica instance resource. If
         omitted, the provider-level region will be used.
         Changing this parameter will create a new resource.
-        Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+        Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
         """
         return pulumi.get(self, "region")
 
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the security group which the read replica instance belongs to.
+        """
+        return pulumi.get(self, "security_group_id")
+
+    @security_group_id.setter
+    def security_group_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the SSL for read replica instance.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @ssl_enable.setter
+    def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_enable", value)
 
     @property
     @pulumi.getter
@@ -247,10 +377,15 @@ class _ReadReplicaInstanceState:
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
-                 dbs: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceDbArgs']]]] = None,
+                 db: Optional[pulumi.Input['ReadReplicaInstanceDbArgs']] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  primary_instance_id: Optional[pulumi.Input[str]] = None,
@@ -258,6 +393,7 @@ class _ReadReplicaInstanceState:
                  public_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -266,24 +402,30 @@ class _ReadReplicaInstanceState:
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering ReadReplicaInstance resources.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the read replica instance. Valid values
-               are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceDbArgs']]] dbs: Indicates the database information. Structure is documented below.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the read replica instance.
+               are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+        :param pulumi.Input['ReadReplicaInstanceDbArgs'] db: Specifies the database information. The db structure is documented below.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the read replica instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of read replica instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be
-               unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-               case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-               create a new resource.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]] parameters: Specify an array of one or more parameters to be set to the read replica instance
+               after launched. You can check on console to see which parameters supported. The parameters
+               structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the read replica instance. If `period_unit` is
-               set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+               set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the read replica instance. Valid
-               values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+               values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
                creates a new resource.
         :param pulumi.Input[str] primary_instance_id: Specifies the DB instance ID, which is used to create a read
                replica. Changing this parameter will create a new resource.
@@ -292,21 +434,22 @@ class _ReadReplicaInstanceState:
         :param pulumi.Input[str] region: The region in which to create the rds read replica instance resource. If
                omitted, the provider-level region will be used.
                Changing this parameter will create a new resource.
-               Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
-        :param pulumi.Input[str] security_group_id: Indicates the security group which the RDS DB instance belongs to.
+               Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
+        :param pulumi.Input[str] security_group_id: Specifies the security group which the read replica instance belongs to.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for read replica instance.
         :param pulumi.Input[str] status: Indicates the instance status.
         :param pulumi.Input[str] subnet_id: Indicates the subnet id.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
                key-value pair.
-        :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
-               case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        :param pulumi.Input[str] type: Specifies the volume type. It must same with the type of the primary instance.
+               Its value can be any of the following and is case-sensitive:
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
-        :param pulumi.Input['ReadReplicaInstanceVolumeArgs'] volume: Specifies the volume information. Structure is documented below. Changing this
-               parameter will create a new resource.
+               + **ESSD**: extreme SSD storage.
+        :param pulumi.Input['ReadReplicaInstanceVolumeArgs'] volume: Specifies the volume information. The volume structure is
+               documented below. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Indicates the VPC ID.
         """
         if auto_renew is not None:
@@ -315,14 +458,24 @@ class _ReadReplicaInstanceState:
             pulumi.set(__self__, "availability_zone", availability_zone)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
-        if dbs is not None:
-            pulumi.set(__self__, "dbs", dbs)
+        if db is not None:
+            pulumi.set(__self__, "db", db)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if fixed_ip is not None:
+            pulumi.set(__self__, "fixed_ip", fixed_ip)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
@@ -337,6 +490,8 @@ class _ReadReplicaInstanceState:
             pulumi.set(__self__, "region", region)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if ssl_enable is not None:
+            pulumi.set(__self__, "ssl_enable", ssl_enable)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
@@ -354,7 +509,7 @@ class _ReadReplicaInstanceState:
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -380,7 +535,7 @@ class _ReadReplicaInstanceState:
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the read replica instance. Valid values
-        are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -390,28 +545,53 @@ class _ReadReplicaInstanceState:
 
     @property
     @pulumi.getter
-    def dbs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceDbArgs']]]]:
+    def db(self) -> Optional[pulumi.Input['ReadReplicaInstanceDbArgs']]:
         """
-        Indicates the database information. Structure is documented below.
+        Specifies the database information. The db structure is documented below.
+        Changing this parameter will create a new resource.
         """
-        return pulumi.get(self, "dbs")
+        return pulumi.get(self, "db")
 
-    @dbs.setter
-    def dbs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceDbArgs']]]]):
-        pulumi.set(self, "dbs", value)
+    @db.setter
+    def db(self, value: Optional[pulumi.Input['ReadReplicaInstanceDbArgs']]):
+        pulumi.set(self, "db", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the read replica instance.
-        Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the read replica instance.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="fixedIp")
+    def fixed_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies an intranet floating IP address of read replica instance.
+        """
+        return pulumi.get(self, "fixed_ip")
+
+    @fixed_ip.setter
+    def fixed_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "fixed_ip", value)
 
     @property
     @pulumi.getter
@@ -426,13 +606,35 @@ class _ReadReplicaInstanceState:
         pulumi.set(self, "flavor", value)
 
     @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be
-        unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-        case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-        create a new resource.
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
 
@@ -442,11 +644,25 @@ class _ReadReplicaInstanceState:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]]:
+        """
+        Specify an array of one or more parameters to be set to the read replica instance
+        after launched. You can check on console to see which parameters supported. The parameters
+        structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['ReadReplicaInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the read replica instance. If `period_unit` is
-        set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "period")
 
@@ -459,7 +675,7 @@ class _ReadReplicaInstanceState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the read replica instance. Valid
-        values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+        values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
         creates a new resource.
         """
         return pulumi.get(self, "period_unit")
@@ -512,7 +728,7 @@ class _ReadReplicaInstanceState:
         The region in which to create the rds read replica instance resource. If
         omitted, the provider-level region will be used.
         Changing this parameter will create a new resource.
-        Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+        Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
         """
         return pulumi.get(self, "region")
 
@@ -524,13 +740,25 @@ class _ReadReplicaInstanceState:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the security group which the RDS DB instance belongs to.
+        Specifies the security group which the read replica instance belongs to.
         """
         return pulumi.get(self, "security_group_id")
 
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable the SSL for read replica instance.
+        """
+        return pulumi.get(self, "ssl_enable")
+
+    @ssl_enable.setter
+    def ssl_enable(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "ssl_enable", value)
 
     @property
     @pulumi.getter
@@ -573,13 +801,13 @@ class _ReadReplicaInstanceState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the volume type. Its value can be any of the following and is
-        case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        Specifies the volume type. It must same with the type of the primary instance.
+        Its value can be any of the following and is case-sensitive:
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -591,8 +819,8 @@ class _ReadReplicaInstanceState:
     @pulumi.getter
     def volume(self) -> Optional[pulumi.Input['ReadReplicaInstanceVolumeArgs']]:
         """
-        Specifies the volume information. Structure is documented below. Changing this
-        parameter will create a new resource.
+        Specifies the volume information. The volume structure is
+        documented below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "volume")
 
@@ -621,13 +849,21 @@ class ReadReplicaInstance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 db: Optional[pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  primary_instance_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']]] = None,
                  __props__=None):
@@ -635,82 +871,54 @@ class ReadReplicaInstance(pulumi.CustomResource):
         Manage RDS Read Replica Instance resource.
 
         ## Example Usage
-        ### Create a Rds read replica instance
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="security group for rds read replica instance")
-        instance = huaweicloud.rds.Instance("instance",
-            flavor="rds.pg.n1.large.2",
-            availability_zones="{{ availability_zone }}",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            enterprise_project_id="{{ enterprise_project_id }}",
-            db=huaweicloud.rds.InstanceDbArgs(
-                type="PostgreSQL",
-                version="12",
-                password="Huangwei!120521",
-                port=8635,
-            ),
-            volume=huaweicloud.rds.InstanceVolumeArgs(
-                type="ULTRAHIGH",
-                size=50,
-            ),
-            backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
-                start_time="08:00-09:00",
-                keep_days=1,
-            ))
-        replica_instance = huaweicloud.rds.ReadReplicaInstance("replicaInstance",
-            flavor="rds.pg.n1.large.2.rr",
-            primary_instance_id=instance.id,
-            availability_zone="{{ availability_zone }}",
-            enterprise_project_id="{{ enterprise_project_id }}",
-            volume=huaweicloud.rds.ReadReplicaInstanceVolumeArgs(
-                type="ULTRAHIGH",
-            ))
-        ```
 
         ## Import
 
-        RDS read replica instance can be imported by `id`, e.g.
+        RDS read replica instance can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance 92302c133d13424cbe357506ce057ea5in03
+         $ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the read replica instance. Valid values
-               are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the read replica instance.
+               are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']] db: Specifies the database information. The db structure is documented below.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the read replica instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of read replica instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be
-               unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-               case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-               create a new resource.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the read replica instance
+               after launched. You can check on console to see which parameters supported. The parameters
+               structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the read replica instance. If `period_unit` is
-               set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+               set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the read replica instance. Valid
-               values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+               values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
                creates a new resource.
         :param pulumi.Input[str] primary_instance_id: Specifies the DB instance ID, which is used to create a read
                replica. Changing this parameter will create a new resource.
         :param pulumi.Input[str] region: The region in which to create the rds read replica instance resource. If
                omitted, the provider-level region will be used.
                Changing this parameter will create a new resource.
-               Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+               Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
+        :param pulumi.Input[str] security_group_id: Specifies the security group which the read replica instance belongs to.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for read replica instance.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
                key-value pair.
-        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']] volume: Specifies the volume information. Structure is documented below. Changing this
-               parameter will create a new resource.
+        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']] volume: Specifies the volume information. The volume structure is
+               documented below. Changing this parameter will create a new resource.
         """
         ...
     @overload
@@ -722,50 +930,13 @@ class ReadReplicaInstance(pulumi.CustomResource):
         Manage RDS Read Replica Instance resource.
 
         ## Example Usage
-        ### Create a Rds read replica instance
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        secgroup = huaweicloud.vpc.Secgroup("secgroup", description="security group for rds read replica instance")
-        instance = huaweicloud.rds.Instance("instance",
-            flavor="rds.pg.n1.large.2",
-            availability_zones="{{ availability_zone }}",
-            vpc_id="{{ vpc_id }}",
-            subnet_id="{{ subnet_id }}",
-            security_group_id=secgroup.id,
-            enterprise_project_id="{{ enterprise_project_id }}",
-            db=huaweicloud.rds.InstanceDbArgs(
-                type="PostgreSQL",
-                version="12",
-                password="Huangwei!120521",
-                port=8635,
-            ),
-            volume=huaweicloud.rds.InstanceVolumeArgs(
-                type="ULTRAHIGH",
-                size=50,
-            ),
-            backup_strategy=huaweicloud.rds.InstanceBackupStrategyArgs(
-                start_time="08:00-09:00",
-                keep_days=1,
-            ))
-        replica_instance = huaweicloud.rds.ReadReplicaInstance("replicaInstance",
-            flavor="rds.pg.n1.large.2.rr",
-            primary_instance_id=instance.id,
-            availability_zone="{{ availability_zone }}",
-            enterprise_project_id="{{ enterprise_project_id }}",
-            volume=huaweicloud.rds.ReadReplicaInstanceVolumeArgs(
-                type="ULTRAHIGH",
-            ))
-        ```
 
         ## Import
 
-        RDS read replica instance can be imported by `id`, e.g.
+        RDS read replica instance can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance 92302c133d13424cbe357506ce057ea5in03
+         $ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -786,13 +957,21 @@ class ReadReplicaInstance(pulumi.CustomResource):
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 db: Optional[pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 fixed_ip: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceParameterArgs']]]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  primary_instance_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 security_group_id: Optional[pulumi.Input[str]] = None,
+                 ssl_enable: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  volume: Optional[pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']]] = None,
                  __props__=None):
@@ -809,25 +988,31 @@ class ReadReplicaInstance(pulumi.CustomResource):
                 raise TypeError("Missing required property 'availability_zone'")
             __props__.__dict__["availability_zone"] = availability_zone
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["db"] = db
+            __props__.__dict__["description"] = description
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["fixed_ip"] = fixed_ip
             if flavor is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor'")
             __props__.__dict__["flavor"] = flavor
+            __props__.__dict__["maintain_begin"] = maintain_begin
+            __props__.__dict__["maintain_end"] = maintain_end
             __props__.__dict__["name"] = name
+            __props__.__dict__["parameters"] = parameters
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
             if primary_instance_id is None and not opts.urn:
                 raise TypeError("Missing required property 'primary_instance_id'")
             __props__.__dict__["primary_instance_id"] = primary_instance_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["ssl_enable"] = ssl_enable
             __props__.__dict__["tags"] = tags
             if volume is None and not opts.urn:
                 raise TypeError("Missing required property 'volume'")
             __props__.__dict__["volume"] = volume
-            __props__.__dict__["dbs"] = None
             __props__.__dict__["private_ips"] = None
             __props__.__dict__["public_ips"] = None
-            __props__.__dict__["security_group_id"] = None
             __props__.__dict__["status"] = None
             __props__.__dict__["subnet_id"] = None
             __props__.__dict__["type"] = None
@@ -845,10 +1030,15 @@ class ReadReplicaInstance(pulumi.CustomResource):
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
-            dbs: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']]]]] = None,
+            db: Optional[pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']]] = None,
+            description: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            fixed_ip: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
+            maintain_begin: Optional[pulumi.Input[str]] = None,
+            maintain_end: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceParameterArgs']]]]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
             primary_instance_id: Optional[pulumi.Input[str]] = None,
@@ -856,6 +1046,7 @@ class ReadReplicaInstance(pulumi.CustomResource):
             public_ips: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            ssl_enable: Optional[pulumi.Input[bool]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -869,24 +1060,30 @@ class ReadReplicaInstance(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        :param pulumi.Input[str] auto_renew: Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         :param pulumi.Input[str] availability_zone: Specifies the AZ name. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the read replica instance. Valid values
-               are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']]]] dbs: Indicates the database information. Structure is documented below.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the read replica instance.
+               are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
+        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceDbArgs']] db: Specifies the database information. The db structure is documented below.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance. The value consists of 0 to 64
+               characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the read replica instance.
+        :param pulumi.Input[str] fixed_ip: Specifies an intranet floating IP address of read replica instance.
         :param pulumi.Input[str] flavor: Specifies the specification code.
-        :param pulumi.Input[str] name: Specifies the DB instance name. The DB instance name of the same type must be
-               unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-               case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-               create a new resource.
+        :param pulumi.Input[str] maintain_begin: Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        :param pulumi.Input[str] name: Specifies the parameter name. Some of them needs the instance to be restarted
+               to take effect.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ReadReplicaInstanceParameterArgs']]]] parameters: Specify an array of one or more parameters to be set to the read replica instance
+               after launched. You can check on console to see which parameters supported. The parameters
+               structure is documented below.
         :param pulumi.Input[int] period: Specifies the charging period of the read replica instance. If `period_unit` is
-               set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-               parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+               set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the read replica instance. Valid
-               values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+               values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
                creates a new resource.
         :param pulumi.Input[str] primary_instance_id: Specifies the DB instance ID, which is used to create a read
                replica. Changing this parameter will create a new resource.
@@ -895,21 +1092,22 @@ class ReadReplicaInstance(pulumi.CustomResource):
         :param pulumi.Input[str] region: The region in which to create the rds read replica instance resource. If
                omitted, the provider-level region will be used.
                Changing this parameter will create a new resource.
-               Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
-        :param pulumi.Input[str] security_group_id: Indicates the security group which the RDS DB instance belongs to.
+               Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
+        :param pulumi.Input[str] security_group_id: Specifies the security group which the read replica instance belongs to.
+        :param pulumi.Input[bool] ssl_enable: Specifies whether to enable the SSL for read replica instance.
         :param pulumi.Input[str] status: Indicates the instance status.
         :param pulumi.Input[str] subnet_id: Indicates the subnet id.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
                key-value pair.
-        :param pulumi.Input[str] type: Specifies the volume type. Its value can be any of the following and is
-               case-sensitive:
-               + *ULTRAHIGH*: SSD storage.
-               + *LOCALSSD*: local SSD storage.
-               + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        :param pulumi.Input[str] type: Specifies the volume type. It must same with the type of the primary instance.
+               Its value can be any of the following and is case-sensitive:
+               + **ULTRAHIGH**: SSD storage.
+               + **LOCALSSD**: local SSD storage.
+               + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
                instances.
-               + *ESSD*: extreme SSD storage.
-        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']] volume: Specifies the volume information. Structure is documented below. Changing this
-               parameter will create a new resource.
+               + **ESSD**: extreme SSD storage.
+        :param pulumi.Input[pulumi.InputType['ReadReplicaInstanceVolumeArgs']] volume: Specifies the volume information. The volume structure is
+               documented below. Changing this parameter will create a new resource.
         :param pulumi.Input[str] vpc_id: Indicates the VPC ID.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -919,10 +1117,15 @@ class ReadReplicaInstance(pulumi.CustomResource):
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
         __props__.__dict__["charging_mode"] = charging_mode
-        __props__.__dict__["dbs"] = dbs
+        __props__.__dict__["db"] = db
+        __props__.__dict__["description"] = description
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["fixed_ip"] = fixed_ip
         __props__.__dict__["flavor"] = flavor
+        __props__.__dict__["maintain_begin"] = maintain_begin
+        __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["name"] = name
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["primary_instance_id"] = primary_instance_id
@@ -930,6 +1133,7 @@ class ReadReplicaInstance(pulumi.CustomResource):
         __props__.__dict__["public_ips"] = public_ips
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["ssl_enable"] = ssl_enable
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["tags"] = tags
@@ -942,7 +1146,7 @@ class ReadReplicaInstance(pulumi.CustomResource):
     @pulumi.getter(name="autoRenew")
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies whether auto renew is enabled. Valid values are "true" and "false".
+        Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -960,26 +1164,43 @@ class ReadReplicaInstance(pulumi.CustomResource):
     def charging_mode(self) -> pulumi.Output[str]:
         """
         Specifies the charging mode of the read replica instance. Valid values
-        are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+        are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
     @property
     @pulumi.getter
-    def dbs(self) -> pulumi.Output[Sequence['outputs.ReadReplicaInstanceDb']]:
+    def db(self) -> pulumi.Output['outputs.ReadReplicaInstanceDb']:
         """
-        Indicates the database information. Structure is documented below.
+        Specifies the database information. The db structure is documented below.
+        Changing this parameter will create a new resource.
         """
-        return pulumi.get(self, "dbs")
+        return pulumi.get(self, "db")
+
+    @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the instance. The value consists of 0 to 64
+        characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the read replica instance.
-        Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the read replica instance.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="fixedIp")
+    def fixed_ip(self) -> pulumi.Output[str]:
+        """
+        Specifies an intranet floating IP address of read replica instance.
+        """
+        return pulumi.get(self, "fixed_ip")
 
     @property
     @pulumi.getter
@@ -990,23 +1211,47 @@ class ReadReplicaInstance(pulumi.CustomResource):
         return pulumi.get(self, "flavor")
 
     @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> pulumi.Output[str]:
+        """
+        Specifies the time at which the maintenance time window starts, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> pulumi.Output[str]:
+        """
+        Specifies the time at which the maintenance time window ends, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the DB instance name. The DB instance name of the same type must be
-        unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-        case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-        create a new resource.
+        Specifies the parameter name. Some of them needs the instance to be restarted
+        to take effect.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.ReadReplicaInstanceParameter']]:
+        """
+        Specify an array of one or more parameters to be set to the read replica instance
+        after launched. You can check on console to see which parameters supported. The parameters
+        structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
 
     @property
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the charging period of the read replica instance. If `period_unit` is
-        set to *month*, the value ranges from 1 to 9. If `period_unit` is set to *year*, the value ranges from 1 to 3. This
-        parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this creates a new resource.
+        set to **month**, the value ranges from 1 to 9. If `period_unit` is set to **year**, the value ranges from 1 to 3.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this creates a new resource.
         """
         return pulumi.get(self, "period")
 
@@ -1015,7 +1260,7 @@ class ReadReplicaInstance(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the charging period unit of the read replica instance. Valid
-        values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this
+        values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**. Changing this
         creates a new resource.
         """
         return pulumi.get(self, "period_unit")
@@ -1052,7 +1297,7 @@ class ReadReplicaInstance(pulumi.CustomResource):
         The region in which to create the rds read replica instance resource. If
         omitted, the provider-level region will be used.
         Changing this parameter will create a new resource.
-        Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+        Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
         """
         return pulumi.get(self, "region")
 
@@ -1060,9 +1305,17 @@ class ReadReplicaInstance(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
-        Indicates the security group which the RDS DB instance belongs to.
+        Specifies the security group which the read replica instance belongs to.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="sslEnable")
+    def ssl_enable(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether to enable the SSL for read replica instance.
+        """
+        return pulumi.get(self, "ssl_enable")
 
     @property
     @pulumi.getter
@@ -1093,13 +1346,13 @@ class ReadReplicaInstance(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the volume type. Its value can be any of the following and is
-        case-sensitive:
-        + *ULTRAHIGH*: SSD storage.
-        + *LOCALSSD*: local SSD storage.
-        + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+        Specifies the volume type. It must same with the type of the primary instance.
+        Its value can be any of the following and is case-sensitive:
+        + **ULTRAHIGH**: SSD storage.
+        + **LOCALSSD**: local SSD storage.
+        + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
         instances.
-        + *ESSD*: extreme SSD storage.
+        + **ESSD**: extreme SSD storage.
         """
         return pulumi.get(self, "type")
 
@@ -1107,8 +1360,8 @@ class ReadReplicaInstance(pulumi.CustomResource):
     @pulumi.getter
     def volume(self) -> pulumi.Output['outputs.ReadReplicaInstanceVolume']:
         """
-        Specifies the volume information. Structure is documented below. Changing this
-        parameter will create a new resource.
+        Specifies the volume information. The volume structure is
+        documented below. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "volume")
 

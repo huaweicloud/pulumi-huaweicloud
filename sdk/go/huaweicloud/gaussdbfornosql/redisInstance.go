@@ -11,10 +11,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB for Redis instance management within HuaweiCoud.
+// GeminiDB Redis instance management within HuaweiCould.
 //
 // ## Example Usage
-// ### create a gaussdb for redis instance with tags
+// ### create a geminidb redis instance with tags
 //
 // ```go
 // package main
@@ -31,7 +31,7 @@ import (
 //			_, err := GaussDBforNoSQL.NewRedisInstance(ctx, "test", &GaussDBforNoSQL.RedisInstanceArgs{
 //				Password:         pulumi.Any(_var.Password),
 //				Flavor:           pulumi.String("geminidb.redis.xlarge.4"),
-//				VolumeSize:       pulumi.Int(100),
+//				VolumeSize:       pulumi.Int(16),
 //				VpcId:            pulumi.Any(_var.Vpc_id),
 //				SubnetId:         pulumi.Any(_var.Subnet_id),
 //				SecurityGroupId:  pulumi.Any(_var.Secgroup_id),
@@ -49,7 +49,7 @@ import (
 //	}
 //
 // ```
-// ### create a gaussdb redis instance with backup strategy
+// ### create a geminidb redis instance with backup strategy
 //
 // ```go
 // package main
@@ -67,7 +67,7 @@ import (
 //			_, err := GaussDBforNoSQL.NewRedisInstance(ctx, "test", &GaussDBforNoSQL.RedisInstanceArgs{
 //				Password:         pulumi.Any(_var.Password),
 //				Flavor:           pulumi.String("geminidb.redis.xlarge.4"),
-//				VolumeSize:       pulumi.Int(100),
+//				VolumeSize:       pulumi.Int(16),
 //				VpcId:            pulumi.Any(_var.Vpc_id),
 //				SubnetId:         pulumi.Any(_var.Subnet_id),
 //				SecurityGroupId:  pulumi.Any(_var.Secgroup_id),
@@ -88,7 +88,7 @@ import (
 //
 // ## Import
 //
-// GaussDB Redis instance can be imported using the `id`, e.g.
+// GaussDB Redis instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -106,19 +106,23 @@ type RedisInstance struct {
 	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
+	// Specifies Multi-AZ details of the active/standby instance.
+	// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+	// supported.
+	AvailabilityZoneDetail RedisInstanceAvailabilityZoneDetailPtrOutput `pulumi:"availabilityZoneDetail"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
 	// in update method if change this parameter.
 	BackupStrategy RedisInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
 	// Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 	ChargingMode pulumi.StringPtrOutput `pulumi:"chargingMode"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore RedisInstanceDatastoreOutput `pulumi:"datastore"`
 	// Indicates the default username.
 	DbUserName pulumi.StringOutput `pulumi:"dbUserName"`
-	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// Specifies the enterprise project ID, Only valid for users who
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -130,33 +134,35 @@ type RedisInstance struct {
 	LbIpAddress pulumi.StringOutput `pulumi:"lbIpAddress"`
 	// Indicates the LB port of the db.
 	LbPort pulumi.StringOutput `pulumi:"lbPort"`
-	// Indicates the instance type.
-	Mode pulumi.StringOutput `pulumi:"mode"`
+	// Specifies the instance type. Value options: **Cluster**, **Replication**.
+	// Defaults to **Cluster**.
+	Mode pulumi.StringPtrOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 	NodeNum pulumi.IntPtrOutput `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes RedisInstanceNodeArrayOutput `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringOutput `pulumi:"password"`
-	// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+	// Specifies the charging period of the GaussDB for Redis instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+	// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Specifies the port number for accessing the instance. You can specify a port number
-	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-	// **50069**. Defaults to **6379**.
-	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+	// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+	// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 	Port pulumi.IntOutput `pulumi:"port"`
 	// Indicates the IP address list of the db.
 	PrivateIps pulumi.StringArrayOutput `pulumi:"privateIps"`
@@ -240,19 +246,23 @@ type redisInstanceState struct {
 	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
+	// Specifies Multi-AZ details of the active/standby instance.
+	// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+	// supported.
+	AvailabilityZoneDetail *RedisInstanceAvailabilityZoneDetail `pulumi:"availabilityZoneDetail"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
 	// in update method if change this parameter.
 	BackupStrategy *RedisInstanceBackupStrategy `pulumi:"backupStrategy"`
 	// Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore *RedisInstanceDatastore `pulumi:"datastore"`
 	// Indicates the default username.
 	DbUserName *string `pulumi:"dbUserName"`
-	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// Specifies the enterprise project ID, Only valid for users who
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -264,33 +274,35 @@ type redisInstanceState struct {
 	LbIpAddress *string `pulumi:"lbIpAddress"`
 	// Indicates the LB port of the db.
 	LbPort *string `pulumi:"lbPort"`
-	// Indicates the instance type.
+	// Specifies the instance type. Value options: **Cluster**, **Replication**.
+	// Defaults to **Cluster**.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []RedisInstanceNode `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password *string `pulumi:"password"`
-	// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+	// Specifies the charging period of the GaussDB for Redis instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+	// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the port number for accessing the instance. You can specify a port number
-	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-	// **50069**. Defaults to **6379**.
-	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+	// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+	// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 	Port *int `pulumi:"port"`
 	// Indicates the IP address list of the db.
 	PrivateIps []string `pulumi:"privateIps"`
@@ -327,19 +339,23 @@ type RedisInstanceState struct {
 	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringPtrInput
+	// Specifies Multi-AZ details of the active/standby instance.
+	// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+	// supported.
+	AvailabilityZoneDetail RedisInstanceAvailabilityZoneDetailPtrInput
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
 	// in update method if change this parameter.
 	BackupStrategy RedisInstanceBackupStrategyPtrInput
 	// Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore RedisInstanceDatastorePtrInput
 	// Indicates the default username.
 	DbUserName pulumi.StringPtrInput
-	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// Specifies the enterprise project ID, Only valid for users who
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -351,33 +367,35 @@ type RedisInstanceState struct {
 	LbIpAddress pulumi.StringPtrInput
 	// Indicates the LB port of the db.
 	LbPort pulumi.StringPtrInput
-	// Indicates the instance type.
+	// Specifies the instance type. Value options: **Cluster**, **Replication**.
+	// Defaults to **Cluster**.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes RedisInstanceNodeArrayInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringPtrInput
-	// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+	// Specifies the charging period of the GaussDB for Redis instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+	// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the port number for accessing the instance. You can specify a port number
-	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-	// **50069**. Defaults to **6379**.
-	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+	// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+	// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 	Port pulumi.IntPtrInput
 	// Indicates the IP address list of the db.
 	PrivateIps pulumi.StringArrayInput
@@ -418,17 +436,21 @@ type redisInstanceArgs struct {
 	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
+	// Specifies Multi-AZ details of the active/standby instance.
+	// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+	// supported.
+	AvailabilityZoneDetail *RedisInstanceAvailabilityZoneDetail `pulumi:"availabilityZoneDetail"`
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
 	// in update method if change this parameter.
 	BackupStrategy *RedisInstanceBackupStrategy `pulumi:"backupStrategy"`
 	// Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore *RedisInstanceDatastore `pulumi:"datastore"`
-	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// Specifies the enterprise project ID, Only valid for users who
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -436,29 +458,33 @@ type redisInstanceArgs struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
+	// Specifies the instance type. Value options: **Cluster**, **Replication**.
+	// Defaults to **Cluster**.
+	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password string `pulumi:"password"`
-	// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+	// Specifies the charging period of the GaussDB for Redis instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+	// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the port number for accessing the instance. You can specify a port number
-	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-	// **50069**. Defaults to **6379**.
-	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+	// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+	// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 	Port *int `pulumi:"port"`
 	// The region in which to create the Redis instance resource.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
@@ -492,17 +518,21 @@ type RedisInstanceArgs struct {
 	// For a three-AZ deployment instance, use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
 	// Changing this parameter will create a new resource.
 	AvailabilityZone pulumi.StringInput
+	// Specifies Multi-AZ details of the active/standby instance.
+	// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+	// supported.
+	AvailabilityZoneDetail RedisInstanceAvailabilityZoneDetailPtrInput
 	// Specifies the advanced backup policy. Structure is documented below. Do nothing
 	// in update method if change this parameter.
 	BackupStrategy RedisInstanceBackupStrategyPtrInput
 	// Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-	// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+	// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the database information. Structure is documented below. Changing
 	// this parameter will create a new resource.
 	Datastore RedisInstanceDatastorePtrInput
-	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// Specifies the enterprise project ID, Only valid for users who
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/redisug-nosql/nosql_05_0059.html).
@@ -510,29 +540,33 @@ type RedisInstanceArgs struct {
 	// If specified, try to import the instance instead of creating if the name already
 	// existed.
 	ForceImport pulumi.BoolPtrInput
+	// Specifies the instance type. Value options: **Cluster**, **Replication**.
+	// Defaults to **Cluster**.
+	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringInput
-	// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-	// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+	// Specifies the charging period of the GaussDB for Redis instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-	// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+	// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 	// method if change this parameter.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the port number for accessing the instance. You can specify a port number
-	// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-	// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-	// **50069**. Defaults to **6379**.
-	// If you want to use this instance for dual-active DR, set the port to **8635**.
+	// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+	// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+	// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 	Port pulumi.IntPtrInput
 	// The region in which to create the Redis instance resource.
 	// See [Region and Endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint?GaussDB%20NoSQL) for more detail. If
@@ -660,6 +694,13 @@ func (o RedisInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.AvailabilityZone }).(pulumi.StringOutput)
 }
 
+// Specifies Multi-AZ details of the active/standby instance.
+// The system ignores this parameter if single-AZ deployment is selected. Currently, only GeminiDB Redis instances are
+// supported.
+func (o RedisInstanceOutput) AvailabilityZoneDetail() RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return o.ApplyT(func(v *RedisInstance) RedisInstanceAvailabilityZoneDetailPtrOutput { return v.AvailabilityZoneDetail }).(RedisInstanceAvailabilityZoneDetailPtrOutput)
+}
+
 // Specifies the advanced backup policy. Structure is documented below. Do nothing
 // in update method if change this parameter.
 func (o RedisInstanceOutput) BackupStrategy() RedisInstanceBackupStrategyOutput {
@@ -667,7 +708,7 @@ func (o RedisInstanceOutput) BackupStrategy() RedisInstanceBackupStrategyOutput 
 }
 
 // Specifies the charging mode of the GaussDB for Redis instance. Valid values are
-// *prePaid* and *postPaid*, defaults to *postPaid*. Do nothing in update method if change this parameter.
+// **prePaid** and **postPaid**, defaults to **postPaid**. Do nothing in update method if change this parameter.
 func (o RedisInstanceOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.ChargingMode }).(pulumi.StringPtrOutput)
 }
@@ -683,8 +724,8 @@ func (o RedisInstanceOutput) DbUserName() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.DbUserName }).(pulumi.StringOutput)
 }
 
-// Specifies the enterprise project id, Only valid for users who
-// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+// Specifies the enterprise project ID, Only valid for users who
+// have enabled the enterprise multi-project service.
 func (o RedisInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
@@ -711,19 +752,20 @@ func (o RedisInstanceOutput) LbPort() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.LbPort }).(pulumi.StringOutput)
 }
 
-// Indicates the instance type.
-func (o RedisInstanceOutput) Mode() pulumi.StringOutput {
-	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.Mode }).(pulumi.StringOutput)
+// Specifies the instance type. Value options: **Cluster**, **Replication**.
+// Defaults to **Cluster**.
+func (o RedisInstanceOutput) Mode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.Mode }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 // digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 func (o RedisInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the number of nodes, ranges from 2 to 12. Defaults to 3.
+// Specifies the number of nodes, ranges from `2` to `12`. Defaults to `3`.
 func (o RedisInstanceOutput) NodeNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.IntPtrOutput { return v.NodeNum }).(pulumi.IntPtrOutput)
 }
@@ -733,32 +775,33 @@ func (o RedisInstanceOutput) Nodes() RedisInstanceNodeArrayOutput {
 	return o.ApplyT(func(v *RedisInstance) RedisInstanceNodeArrayOutput { return v.Nodes }).(RedisInstanceNodeArrayOutput)
 }
 
-// Specifies the database password. The value must be 8 to 32 characters in length,
+// Specifies the database password. The value must be `8` to `32` characters in length,
 // including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 // enter a strong password to improve security, preventing security risks such as brute force cracking.
 func (o RedisInstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
-// Specifies the charging period of the GaussDB for Redis instance. If `periodUnit` is set
-// to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-// parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update method if change this parameter.
+// Specifies the charging period of the GaussDB for Redis instance.\
+// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this will do nothing.
 func (o RedisInstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the charging period unit of the GaussDB for Redis instance. Valid values
-// are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Do nothing in update
+// are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Do nothing in update
 // method if change this parameter.
 func (o RedisInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the port number for accessing the instance. You can specify a port number
-// based on your requirements. The port number ranges from **1024** to **65535**, excluding **2180**, **2887**, **3887**,
-// **6377**, **6378**, **6380**, **8018**, **8079**, **8091**, **8479**, **8484**, **8999**, **12017**, **12333**, and
-// **50069**. Defaults to **6379**.
-// If you want to use this instance for dual-active DR, set the port to **8635**.
+// based on your requirements. The port number ranges from `1,024` to `65,535`, excluding `2,180`, `2,887`, `3,887`,
+// `6,377`, `6,378`, `6,380`, `8,018`, `8,079`, `8,091`, `8,479`, `8,484`, `8,999`, `12,017`, `12,333`, and `50,069`.
+// Defaults to `6,379`. If you want to use this instance for dual-active DR, set the port to `8,635`.
 func (o RedisInstanceOutput) Port() pulumi.IntOutput {
 	return o.ApplyT(func(v *RedisInstance) pulumi.IntOutput { return v.Port }).(pulumi.IntOutput)
 }

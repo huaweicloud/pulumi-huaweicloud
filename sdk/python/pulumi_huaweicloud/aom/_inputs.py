@@ -117,8 +117,8 @@ class ServiceDiscoveryRuleLogPathRuleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] args: Specifies the input value.
         :param pulumi.Input[str] name_type: Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
                and **str**.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of
-               `name_type` is **cmdLineHash**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of `name_type` is
+               **cmdLineHash**.
         """
         pulumi.set(__self__, "args", args)
         pulumi.set(__self__, "name_type", name_type)
@@ -153,8 +153,8 @@ class ServiceDiscoveryRuleLogPathRuleArgs:
     @pulumi.getter
     def values(self) -> pulumi.Input[Sequence[pulumi.Input[str]]]:
         """
-        Specifies the application name, which is mandatory only when the value of
-        `name_type` is **cmdLineHash**.
+        Specifies the application name, which is mandatory only when the value of `name_type` is
+        **cmdLineHash**.
         """
         return pulumi.get(self, "values")
 
@@ -238,8 +238,8 @@ class ServiceDiscoveryRuleNameRulesApplicationNameRuleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] args: Specifies the input value.
         :param pulumi.Input[str] name_type: Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
                and **str**.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of
-               `name_type` is **cmdLineHash**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of `name_type` is
+               **cmdLineHash**.
         """
         pulumi.set(__self__, "args", args)
         pulumi.set(__self__, "name_type", name_type)
@@ -275,8 +275,8 @@ class ServiceDiscoveryRuleNameRulesApplicationNameRuleArgs:
     @pulumi.getter
     def values(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the application name, which is mandatory only when the value of
-        `name_type` is **cmdLineHash**.
+        Specifies the application name, which is mandatory only when the value of `name_type` is
+        **cmdLineHash**.
         """
         return pulumi.get(self, "values")
 
@@ -295,8 +295,8 @@ class ServiceDiscoveryRuleNameRulesServiceNameRuleArgs:
         :param pulumi.Input[Sequence[pulumi.Input[str]]] args: Specifies the input value.
         :param pulumi.Input[str] name_type: Specifies the value type. The value can be **cmdLineHash**, **cmdLine**, **env**
                and **str**.
-        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of
-               `name_type` is **cmdLineHash**.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] values: Specifies the application name, which is mandatory only when the value of `name_type` is
+               **cmdLineHash**.
         """
         pulumi.set(__self__, "args", args)
         pulumi.set(__self__, "name_type", name_type)
@@ -332,8 +332,8 @@ class ServiceDiscoveryRuleNameRulesServiceNameRuleArgs:
     @pulumi.getter
     def values(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
-        Specifies the application name, which is mandatory only when the value of
-        `name_type` is **cmdLineHash**.
+        Specifies the application name, which is mandatory only when the value of `name_type` is
+        **cmdLineHash**.
         """
         return pulumi.get(self, "values")
 

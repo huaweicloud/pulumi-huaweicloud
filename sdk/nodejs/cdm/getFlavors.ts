@@ -46,6 +46,7 @@ export interface GetFlavorsArgs {
 export interface GetFlavorsResult {
     /**
      * Indicates the flavors information. Structure is documented below.
+     * The flavors structure is documented below.
      */
     readonly flavors: outputs.Cdm.GetFlavorsFlavor[];
     /**

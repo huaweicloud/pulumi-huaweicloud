@@ -14,11 +14,11 @@ type InstanceBlockInfo struct {
 	// Specifies the volume of the block, the unit is MB. The default value is 2.
 	// Changing this creates a new instance.
 	BlockSize *int `pulumi:"blockSize"`
-	// Specifies the block generation time, the unit is second. The defalt
+	// Specifies the block generation time, the unit is second. The default
 	// value is 2. Changing this creates a new instance.
 	GenerationInterval *int `pulumi:"generationInterval"`
 	// Specifies the number of transactions included in the block. The
-	// defalt value is 500. Changing this creates a new instance.
+	// default value is 500. Changing this creates a new instance.
 	TransactionQuantity *int `pulumi:"transactionQuantity"`
 }
 
@@ -37,11 +37,11 @@ type InstanceBlockInfoArgs struct {
 	// Specifies the volume of the block, the unit is MB. The default value is 2.
 	// Changing this creates a new instance.
 	BlockSize pulumi.IntPtrInput `pulumi:"blockSize"`
-	// Specifies the block generation time, the unit is second. The defalt
+	// Specifies the block generation time, the unit is second. The default
 	// value is 2. Changing this creates a new instance.
 	GenerationInterval pulumi.IntPtrInput `pulumi:"generationInterval"`
 	// Specifies the number of transactions included in the block. The
-	// defalt value is 500. Changing this creates a new instance.
+	// default value is 500. Changing this creates a new instance.
 	TransactionQuantity pulumi.IntPtrInput `pulumi:"transactionQuantity"`
 }
 
@@ -128,14 +128,14 @@ func (o InstanceBlockInfoOutput) BlockSize() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBlockInfo) *int { return v.BlockSize }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the block generation time, the unit is second. The defalt
+// Specifies the block generation time, the unit is second. The default
 // value is 2. Changing this creates a new instance.
 func (o InstanceBlockInfoOutput) GenerationInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBlockInfo) *int { return v.GenerationInterval }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the number of transactions included in the block. The
-// defalt value is 500. Changing this creates a new instance.
+// default value is 500. Changing this creates a new instance.
 func (o InstanceBlockInfoOutput) TransactionQuantity() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InstanceBlockInfo) *int { return v.TransactionQuantity }).(pulumi.IntPtrOutput)
 }
@@ -175,7 +175,7 @@ func (o InstanceBlockInfoPtrOutput) BlockSize() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the block generation time, the unit is second. The defalt
+// Specifies the block generation time, the unit is second. The default
 // value is 2. Changing this creates a new instance.
 func (o InstanceBlockInfoPtrOutput) GenerationInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceBlockInfo) *int {
@@ -187,7 +187,7 @@ func (o InstanceBlockInfoPtrOutput) GenerationInterval() pulumi.IntPtrOutput {
 }
 
 // Specifies the number of transactions included in the block. The
-// defalt value is 500. Changing this creates a new instance.
+// default value is 500. Changing this creates a new instance.
 func (o InstanceBlockInfoPtrOutput) TransactionQuantity() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InstanceBlockInfo) *int {
 		if v == nil {
@@ -307,11 +307,11 @@ func (o InstanceChannelArrayOutput) Index(i pulumi.IntInput) InstanceChannelOutp
 }
 
 type InstanceCouchdb struct {
-	// Specifies the password of the couch datebase. The password consists of 8 to
+	// Specifies the password of the couch database. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
 	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password string `pulumi:"password"`
-	// Specifies the user name of the couch datebase. Changing this creates a new
+	// Specifies the user name of the couch database. Changing this creates a new
 	// instance.
 	UserName string `pulumi:"userName"`
 }
@@ -328,11 +328,11 @@ type InstanceCouchdbInput interface {
 }
 
 type InstanceCouchdbArgs struct {
-	// Specifies the password of the couch datebase. The password consists of 8 to
+	// Specifies the password of the couch database. The password consists of 8 to
 	// 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
 	// characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 	Password pulumi.StringInput `pulumi:"password"`
-	// Specifies the user name of the couch datebase. Changing this creates a new
+	// Specifies the user name of the couch database. Changing this creates a new
 	// instance.
 	UserName pulumi.StringInput `pulumi:"userName"`
 }
@@ -414,14 +414,14 @@ func (o InstanceCouchdbOutput) ToInstanceCouchdbPtrOutputWithContext(ctx context
 	}).(InstanceCouchdbPtrOutput)
 }
 
-// Specifies the password of the couch datebase. The password consists of 8 to
+// Specifies the password of the couch database. The password consists of 8 to
 // 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
 // characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 func (o InstanceCouchdbOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceCouchdb) string { return v.Password }).(pulumi.StringOutput)
 }
 
-// Specifies the user name of the couch datebase. Changing this creates a new
+// Specifies the user name of the couch database. Changing this creates a new
 // instance.
 func (o InstanceCouchdbOutput) UserName() pulumi.StringOutput {
 	return o.ApplyT(func(v InstanceCouchdb) string { return v.UserName }).(pulumi.StringOutput)
@@ -451,7 +451,7 @@ func (o InstanceCouchdbPtrOutput) Elem() InstanceCouchdbOutput {
 	}).(InstanceCouchdbOutput)
 }
 
-// Specifies the password of the couch datebase. The password consists of 8 to
+// Specifies the password of the couch database. The password consists of 8 to
 // 26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
 // characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
 func (o InstanceCouchdbPtrOutput) Password() pulumi.StringPtrOutput {
@@ -463,7 +463,7 @@ func (o InstanceCouchdbPtrOutput) Password() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the user name of the couch datebase. Changing this creates a new
+// Specifies the user name of the couch database. Changing this creates a new
 // instance.
 func (o InstanceCouchdbPtrOutput) UserName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *InstanceCouchdb) *string {

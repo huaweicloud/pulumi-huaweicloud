@@ -9,6 +9,7 @@ import * as utilities from "../utilities";
  * Manages ModelArts notebook resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create a notebook with the EVS storage type
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -17,21 +18,48 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const notebookName = config.requireObject("notebookName");
  * const keyPairName = config.requireObject("keyPairName");
- * const ip = config.requireObject("ip");
- * const notebook = new huaweicloud.modelarts.Notebook("notebook", {
+ * const imageId = config.requireObject("imageId");
+ * const allowedIpAddresses = config.requireObject("allowedIpAddresses");
+ * const keyPairNameInput = config.requireObject("keyPairNameInput");
+ * const test = new huaweicloud.modelarts.Notebook("test", {
  *     flavorId: "modelarts.vm.cpu.2u",
- *     imageId: "e1a07296-22a8-4f05-8bc8-e936c8e54090",
- *     allowedAccessIps: [ip],
+ *     imageId: imageId,
+ *     allowedAccessIps: allowedIpAddresses,
  *     keyPair: keyPairName,
  *     volume: {
+ *         type: "EVS",
+ *         size: 5,
+ *     },
+ * });
+ * ```
+ * ### Create a notebook with the EFS storage type
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const notebookName = config.requireObject("notebookName");
+ * const imageId = config.requireObject("imageId");
+ * const resourcePoolId = config.requireObject("resourcePoolId");
+ * const sfsExportLocation = config.requireObject("sfsExportLocation");
+ * const sfsTurboId = config.requireObject("sfsTurboId");
+ * const test = new huaweicloud.modelarts.Notebook("test", {
+ *     flavorId: "modelarts.vm.cpu.2u",
+ *     imageId: imageId,
+ *     poolId: resourcePoolId,
+ *     volume: {
  *         type: "EFS",
+ *         ownership: "DEDICATED",
+ *         uri: sfsExportLocation,
+ *         id: sfsTurboId,
  *     },
  * });
  * ```
  *
  * ## Import
  *
- * The notebook can be imported by `id`.
+ * The notebook can be imported by `id`. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ModelArts/notebook:Notebook test b11b407c-e604-4e8d-8bc4-92398320b847
@@ -79,7 +107,7 @@ export class Notebook extends pulumi.CustomResource {
      */
     public /*out*/ readonly createdAt!: pulumi.Output<string>;
     /**
-     * Specifies the description of notebook. It contains a maximum of 512 characters and
+     * Specifies the description of notebook. It contains a maximum of `512` characters and
      * cannot contain special characters `&<>"'/`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -260,7 +288,7 @@ export interface NotebookState {
      */
     createdAt?: pulumi.Input<string>;
     /**
-     * Specifies the description of notebook. It contains a maximum of 512 characters and
+     * Specifies the description of notebook. It contains a maximum of `512` characters and
      * cannot contain special characters `&<>"'/`.
      */
     description?: pulumi.Input<string>;
@@ -362,7 +390,7 @@ export interface NotebookArgs {
      */
     allowedAccessIps?: pulumi.Input<pulumi.Input<string>[]>;
     /**
-     * Specifies the description of notebook. It contains a maximum of 512 characters and
+     * Specifies the description of notebook. It contains a maximum of `512` characters and
      * cannot contain special characters `&<>"'/`.
      */
     description?: pulumi.Input<string>;

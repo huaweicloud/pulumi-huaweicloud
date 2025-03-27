@@ -109,12 +109,17 @@ import (
 type Instance struct {
 	pulumi.CustomResourceState
 
-	// Specifies the administrative password to assign to the instance. Changing
-	// this creates a new instance.
+	// Specifies the login password of the administrator for logging in to the
+	// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+	// complexity requirements:
+	// + Contains 8 to 26 characters.
+	// + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+	//   characters !@$%^-_=+[{}]:,./?
+	// + Cannot contain the username or the username in reverse.
 	AdminPass pulumi.StringPtrOutput `pulumi:"adminPass"`
 	// Specifies the IAM agency name which is created on IAM to provide
-	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
-	AgencyName pulumi.StringPtrOutput `pulumi:"agencyName"`
+	// temporary credentials for BMS to access cloud services.
+	AgencyName pulumi.StringOutput `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
 	// false", defaults to *false*.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
@@ -147,8 +152,7 @@ type Instance struct {
 	EipChargeMode pulumi.StringPtrOutput `pulumi:"eipChargeMode"`
 	// The ID of the EIP. Changing this creates a new instance.
 	EipId pulumi.StringPtrOutput `pulumi:"eipId"`
-	// Specifies a unique id in UUID format of enterprise project .
-	// Changing this creates a new instance.
+	// Specifies a unique id in UUID format of enterprise project.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of the desired flavor for the instance. Changing
 	// this creates a new instance.
@@ -165,14 +169,20 @@ type Instance struct {
 	// + `5Bgp`: dynamic BGP.
 	// + `5Sbgp`: static BGP.
 	Iptype pulumi.StringPtrOutput `pulumi:"iptype"`
-	// Specifies the name of a key pair to put on the instance. The key pair must
-	// already be created and associated with the tenant's account. Changing this creates a new instance.
+	// Specifies the name of a key pair for logging in to the BMS using key pair
+	// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+	// required when using a Windows image to create a BMS. Changing this creates a new instance.
 	KeyPair pulumi.StringPtrOutput `pulumi:"keyPair"`
+	// Specifies the user-defined metadata key-value pair.
+	// + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+	//   underscores (_), colons (:), and point (.).
+	// + A metadata value consists of a maximum of 255 Unicode characters.
+	Metadata pulumi.StringMapOutput `pulumi:"metadata"`
 	// Specifies a unique name for the instance. The name consists of 1 to 63 characters,
 	// including letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies an array of one or more networks to attach to the instance. The network
-	// object structure is documented below. Changing this creates a new instance.
+	// object structure is documented below.
 	Nics InstanceNicArrayOutput `pulumi:"nics"`
 	// Specifies the charging period of the instance. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value is 1. This parameter is mandatory
@@ -182,7 +192,7 @@ type Instance struct {
 	// month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new
 	// instance.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -209,13 +219,12 @@ type Instance struct {
 	// + `GPSSD`: general purpose SSD disk type.
 	// + `SAS`: high I/O disk type.
 	SystemDiskType pulumi.StringPtrOutput `pulumi:"systemDiskType"`
-	// Specifies the key/value pairs to associate with the instance. Changing this creates
-	// a new instance.
+	// Specifies the key/value pairs to associate with the instance.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the user data to be injected during the instance creation. Text
-	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-	// *file* function. Changing this creates a new instance.
-	UserData pulumi.StringPtrOutput `pulumi:"userData"`
+	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+	// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
+	UserData pulumi.StringOutput `pulumi:"userData"`
 	// Specifies the user ID. You can obtain the user ID from My Credential on the
 	// management console. Changing this creates a new instance.
 	UserId pulumi.StringOutput `pulumi:"userId"`
@@ -272,11 +281,16 @@ func GetInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Instance resources.
 type instanceState struct {
-	// Specifies the administrative password to assign to the instance. Changing
-	// this creates a new instance.
+	// Specifies the login password of the administrator for logging in to the
+	// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+	// complexity requirements:
+	// + Contains 8 to 26 characters.
+	// + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+	//   characters !@$%^-_=+[{}]:,./?
+	// + Cannot contain the username or the username in reverse.
 	AdminPass *string `pulumi:"adminPass"`
 	// Specifies the IAM agency name which is created on IAM to provide
-	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+	// temporary credentials for BMS to access cloud services.
 	AgencyName *string `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
 	// false", defaults to *false*.
@@ -310,8 +324,7 @@ type instanceState struct {
 	EipChargeMode *string `pulumi:"eipChargeMode"`
 	// The ID of the EIP. Changing this creates a new instance.
 	EipId *string `pulumi:"eipId"`
-	// Specifies a unique id in UUID format of enterprise project .
-	// Changing this creates a new instance.
+	// Specifies a unique id in UUID format of enterprise project.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of the desired flavor for the instance. Changing
 	// this creates a new instance.
@@ -328,14 +341,20 @@ type instanceState struct {
 	// + `5Bgp`: dynamic BGP.
 	// + `5Sbgp`: static BGP.
 	Iptype *string `pulumi:"iptype"`
-	// Specifies the name of a key pair to put on the instance. The key pair must
-	// already be created and associated with the tenant's account. Changing this creates a new instance.
+	// Specifies the name of a key pair for logging in to the BMS using key pair
+	// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+	// required when using a Windows image to create a BMS. Changing this creates a new instance.
 	KeyPair *string `pulumi:"keyPair"`
+	// Specifies the user-defined metadata key-value pair.
+	// + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+	//   underscores (_), colons (:), and point (.).
+	// + A metadata value consists of a maximum of 255 Unicode characters.
+	Metadata map[string]string `pulumi:"metadata"`
 	// Specifies a unique name for the instance. The name consists of 1 to 63 characters,
 	// including letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
 	// Specifies an array of one or more networks to attach to the instance. The network
-	// object structure is documented below. Changing this creates a new instance.
+	// object structure is documented below.
 	Nics []InstanceNic `pulumi:"nics"`
 	// Specifies the charging period of the instance. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value is 1. This parameter is mandatory
@@ -345,7 +364,7 @@ type instanceState struct {
 	// month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new
 	// instance.
 	PeriodUnit *string `pulumi:"periodUnit"`
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp *string `pulumi:"publicIp"`
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -372,12 +391,11 @@ type instanceState struct {
 	// + `GPSSD`: general purpose SSD disk type.
 	// + `SAS`: high I/O disk type.
 	SystemDiskType *string `pulumi:"systemDiskType"`
-	// Specifies the key/value pairs to associate with the instance. Changing this creates
-	// a new instance.
+	// Specifies the key/value pairs to associate with the instance.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the user data to be injected during the instance creation. Text
-	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-	// *file* function. Changing this creates a new instance.
+	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+	// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
 	UserData *string `pulumi:"userData"`
 	// Specifies the user ID. You can obtain the user ID from My Credential on the
 	// management console. Changing this creates a new instance.
@@ -388,11 +406,16 @@ type instanceState struct {
 }
 
 type InstanceState struct {
-	// Specifies the administrative password to assign to the instance. Changing
-	// this creates a new instance.
+	// Specifies the login password of the administrator for logging in to the
+	// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+	// complexity requirements:
+	// + Contains 8 to 26 characters.
+	// + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+	//   characters !@$%^-_=+[{}]:,./?
+	// + Cannot contain the username or the username in reverse.
 	AdminPass pulumi.StringPtrInput
 	// Specifies the IAM agency name which is created on IAM to provide
-	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+	// temporary credentials for BMS to access cloud services.
 	AgencyName pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
 	// false", defaults to *false*.
@@ -426,8 +449,7 @@ type InstanceState struct {
 	EipChargeMode pulumi.StringPtrInput
 	// The ID of the EIP. Changing this creates a new instance.
 	EipId pulumi.StringPtrInput
-	// Specifies a unique id in UUID format of enterprise project .
-	// Changing this creates a new instance.
+	// Specifies a unique id in UUID format of enterprise project.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavor ID of the desired flavor for the instance. Changing
 	// this creates a new instance.
@@ -444,14 +466,20 @@ type InstanceState struct {
 	// + `5Bgp`: dynamic BGP.
 	// + `5Sbgp`: static BGP.
 	Iptype pulumi.StringPtrInput
-	// Specifies the name of a key pair to put on the instance. The key pair must
-	// already be created and associated with the tenant's account. Changing this creates a new instance.
+	// Specifies the name of a key pair for logging in to the BMS using key pair
+	// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+	// required when using a Windows image to create a BMS. Changing this creates a new instance.
 	KeyPair pulumi.StringPtrInput
+	// Specifies the user-defined metadata key-value pair.
+	// + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+	//   underscores (_), colons (:), and point (.).
+	// + A metadata value consists of a maximum of 255 Unicode characters.
+	Metadata pulumi.StringMapInput
 	// Specifies a unique name for the instance. The name consists of 1 to 63 characters,
 	// including letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
 	// Specifies an array of one or more networks to attach to the instance. The network
-	// object structure is documented below. Changing this creates a new instance.
+	// object structure is documented below.
 	Nics InstanceNicArrayInput
 	// Specifies the charging period of the instance. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value is 1. This parameter is mandatory
@@ -461,7 +489,7 @@ type InstanceState struct {
 	// month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new
 	// instance.
 	PeriodUnit pulumi.StringPtrInput
-	// The EIP address that is associted to the instance.
+	// The EIP address that is associated to the instance.
 	PublicIp pulumi.StringPtrInput
 	// Specifies the region in which to create the instance. If omitted, the
 	// provider-level region will be used. Changing this creates a new instance.
@@ -488,12 +516,11 @@ type InstanceState struct {
 	// + `GPSSD`: general purpose SSD disk type.
 	// + `SAS`: high I/O disk type.
 	SystemDiskType pulumi.StringPtrInput
-	// Specifies the key/value pairs to associate with the instance. Changing this creates
-	// a new instance.
+	// Specifies the key/value pairs to associate with the instance.
 	Tags pulumi.StringMapInput
 	// Specifies the user data to be injected during the instance creation. Text
-	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-	// *file* function. Changing this creates a new instance.
+	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+	// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
 	UserData pulumi.StringPtrInput
 	// Specifies the user ID. You can obtain the user ID from My Credential on the
 	// management console. Changing this creates a new instance.
@@ -508,11 +535,16 @@ func (InstanceState) ElementType() reflect.Type {
 }
 
 type instanceArgs struct {
-	// Specifies the administrative password to assign to the instance. Changing
-	// this creates a new instance.
+	// Specifies the login password of the administrator for logging in to the
+	// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+	// complexity requirements:
+	// + Contains 8 to 26 characters.
+	// + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+	//   characters !@$%^-_=+[{}]:,./?
+	// + Cannot contain the username or the username in reverse.
 	AdminPass *string `pulumi:"adminPass"`
 	// Specifies the IAM agency name which is created on IAM to provide
-	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+	// temporary credentials for BMS to access cloud services.
 	AgencyName *string `pulumi:"agencyName"`
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
 	// false", defaults to *false*.
@@ -542,8 +574,7 @@ type instanceArgs struct {
 	EipChargeMode *string `pulumi:"eipChargeMode"`
 	// The ID of the EIP. Changing this creates a new instance.
 	EipId *string `pulumi:"eipId"`
-	// Specifies a unique id in UUID format of enterprise project .
-	// Changing this creates a new instance.
+	// Specifies a unique id in UUID format of enterprise project.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the flavor ID of the desired flavor for the instance. Changing
 	// this creates a new instance.
@@ -556,14 +587,20 @@ type instanceArgs struct {
 	// + `5Bgp`: dynamic BGP.
 	// + `5Sbgp`: static BGP.
 	Iptype *string `pulumi:"iptype"`
-	// Specifies the name of a key pair to put on the instance. The key pair must
-	// already be created and associated with the tenant's account. Changing this creates a new instance.
+	// Specifies the name of a key pair for logging in to the BMS using key pair
+	// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+	// required when using a Windows image to create a BMS. Changing this creates a new instance.
 	KeyPair *string `pulumi:"keyPair"`
+	// Specifies the user-defined metadata key-value pair.
+	// + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+	//   underscores (_), colons (:), and point (.).
+	// + A metadata value consists of a maximum of 255 Unicode characters.
+	Metadata map[string]string `pulumi:"metadata"`
 	// Specifies a unique name for the instance. The name consists of 1 to 63 characters,
 	// including letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name *string `pulumi:"name"`
 	// Specifies an array of one or more networks to attach to the instance. The network
-	// object structure is documented below. Changing this creates a new instance.
+	// object structure is documented below.
 	Nics []InstanceNic `pulumi:"nics"`
 	// Specifies the charging period of the instance. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value is 1. This parameter is mandatory
@@ -596,12 +633,11 @@ type instanceArgs struct {
 	// + `GPSSD`: general purpose SSD disk type.
 	// + `SAS`: high I/O disk type.
 	SystemDiskType *string `pulumi:"systemDiskType"`
-	// Specifies the key/value pairs to associate with the instance. Changing this creates
-	// a new instance.
+	// Specifies the key/value pairs to associate with the instance.
 	Tags map[string]string `pulumi:"tags"`
 	// Specifies the user data to be injected during the instance creation. Text
-	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-	// *file* function. Changing this creates a new instance.
+	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+	// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
 	UserData *string `pulumi:"userData"`
 	// Specifies the user ID. You can obtain the user ID from My Credential on the
 	// management console. Changing this creates a new instance.
@@ -613,11 +649,16 @@ type instanceArgs struct {
 
 // The set of arguments for constructing a Instance resource.
 type InstanceArgs struct {
-	// Specifies the administrative password to assign to the instance. Changing
-	// this creates a new instance.
+	// Specifies the login password of the administrator for logging in to the
+	// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+	// complexity requirements:
+	// + Contains 8 to 26 characters.
+	// + Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+	//   characters !@$%^-_=+[{}]:,./?
+	// + Cannot contain the username or the username in reverse.
 	AdminPass pulumi.StringPtrInput
 	// Specifies the IAM agency name which is created on IAM to provide
-	// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
+	// temporary credentials for BMS to access cloud services.
 	AgencyName pulumi.StringPtrInput
 	// Specifies whether auto renew is enabled. Valid values are "true" and "
 	// false", defaults to *false*.
@@ -647,8 +688,7 @@ type InstanceArgs struct {
 	EipChargeMode pulumi.StringPtrInput
 	// The ID of the EIP. Changing this creates a new instance.
 	EipId pulumi.StringPtrInput
-	// Specifies a unique id in UUID format of enterprise project .
-	// Changing this creates a new instance.
+	// Specifies a unique id in UUID format of enterprise project.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the flavor ID of the desired flavor for the instance. Changing
 	// this creates a new instance.
@@ -661,14 +701,20 @@ type InstanceArgs struct {
 	// + `5Bgp`: dynamic BGP.
 	// + `5Sbgp`: static BGP.
 	Iptype pulumi.StringPtrInput
-	// Specifies the name of a key pair to put on the instance. The key pair must
-	// already be created and associated with the tenant's account. Changing this creates a new instance.
+	// Specifies the name of a key pair for logging in to the BMS using key pair
+	// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+	// required when using a Windows image to create a BMS. Changing this creates a new instance.
 	KeyPair pulumi.StringPtrInput
+	// Specifies the user-defined metadata key-value pair.
+	// + A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+	//   underscores (_), colons (:), and point (.).
+	// + A metadata value consists of a maximum of 255 Unicode characters.
+	Metadata pulumi.StringMapInput
 	// Specifies a unique name for the instance. The name consists of 1 to 63 characters,
 	// including letters, digits, underscores (_), hyphens (-), and periods (.).
 	Name pulumi.StringPtrInput
 	// Specifies an array of one or more networks to attach to the instance. The network
-	// object structure is documented below. Changing this creates a new instance.
+	// object structure is documented below.
 	Nics InstanceNicArrayInput
 	// Specifies the charging period of the instance. If `periodUnit` is set to *month*
 	// , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value is 1. This parameter is mandatory
@@ -701,12 +747,11 @@ type InstanceArgs struct {
 	// + `GPSSD`: general purpose SSD disk type.
 	// + `SAS`: high I/O disk type.
 	SystemDiskType pulumi.StringPtrInput
-	// Specifies the key/value pairs to associate with the instance. Changing this creates
-	// a new instance.
+	// Specifies the key/value pairs to associate with the instance.
 	Tags pulumi.StringMapInput
 	// Specifies the user data to be injected during the instance creation. Text
-	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-	// *file* function. Changing this creates a new instance.
+	// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+	// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
 	UserData pulumi.StringPtrInput
 	// Specifies the user ID. You can obtain the user ID from My Credential on the
 	// management console. Changing this creates a new instance.
@@ -803,16 +848,21 @@ func (o InstanceOutput) ToInstanceOutputWithContext(ctx context.Context) Instanc
 	return o
 }
 
-// Specifies the administrative password to assign to the instance. Changing
-// this creates a new instance.
+// Specifies the login password of the administrator for logging in to the
+// BMS using password authentication. Changing this creates a new instance. The password must meet the following
+// complexity requirements:
+//   - Contains 8 to 26 characters.
+//   - Contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special
+//     characters !@$%^-_=+[{}]:,./?
+//   - Cannot contain the username or the username in reverse.
 func (o InstanceOutput) AdminPass() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AdminPass }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the IAM agency name which is created on IAM to provide
-// temporary credentials for BMS to access cloud services. Changing this creates a new instance.
-func (o InstanceOutput) AgencyName() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.AgencyName }).(pulumi.StringPtrOutput)
+// temporary credentials for BMS to access cloud services.
+func (o InstanceOutput) AgencyName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.AgencyName }).(pulumi.StringOutput)
 }
 
 // Specifies whether auto renew is enabled. Valid values are "true" and "
@@ -877,8 +927,7 @@ func (o InstanceOutput) EipId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.EipId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies a unique id in UUID format of enterprise project .
-// Changing this creates a new instance.
+// Specifies a unique id in UUID format of enterprise project.
 func (o InstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -913,10 +962,19 @@ func (o InstanceOutput) Iptype() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.Iptype }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the name of a key pair to put on the instance. The key pair must
-// already be created and associated with the tenant's account. Changing this creates a new instance.
+// Specifies the name of a key pair for logging in to the BMS using key pair
+// authentication. The key pair must already be created and associated with the tenant's account. The parameter is
+// required when using a Windows image to create a BMS. Changing this creates a new instance.
 func (o InstanceOutput) KeyPair() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.KeyPair }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user-defined metadata key-value pair.
+//   - A metadata key contains of a maximum of 255 Unicode characters which can be letters, digits, hyphens (-),
+//     underscores (_), colons (:), and point (.).
+//   - A metadata value consists of a maximum of 255 Unicode characters.
+func (o InstanceOutput) Metadata() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Metadata }).(pulumi.StringMapOutput)
 }
 
 // Specifies a unique name for the instance. The name consists of 1 to 63 characters,
@@ -926,7 +984,7 @@ func (o InstanceOutput) Name() pulumi.StringOutput {
 }
 
 // Specifies an array of one or more networks to attach to the instance. The network
-// object structure is documented below. Changing this creates a new instance.
+// object structure is documented below.
 func (o InstanceOutput) Nics() InstanceNicArrayOutput {
 	return o.ApplyT(func(v *Instance) InstanceNicArrayOutput { return v.Nics }).(InstanceNicArrayOutput)
 }
@@ -945,7 +1003,7 @@ func (o InstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
 }
 
-// The EIP address that is associted to the instance.
+// The EIP address that is associated to the instance.
 func (o InstanceOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
 }
@@ -993,17 +1051,16 @@ func (o InstanceOutput) SystemDiskType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.SystemDiskType }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the key/value pairs to associate with the instance. Changing this creates
-// a new instance.
+// Specifies the key/value pairs to associate with the instance.
 func (o InstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
 // Specifies the user data to be injected during the instance creation. Text
-// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the
-// *file* function. Changing this creates a new instance.
-func (o InstanceOutput) UserData() pulumi.StringPtrOutput {
-	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.UserData }).(pulumi.StringPtrOutput)
+// and text files can be injected. `userData` can come from a variety of sources: inline, read in from the *file*
+// function. The content of `userData` can be plaint text or encoded with base64. Changing this creates a new instance.
+func (o InstanceOutput) UserData() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.UserData }).(pulumi.StringOutput)
 }
 
 // Specifies the user ID. You can obtain the user ID from My Credential on the

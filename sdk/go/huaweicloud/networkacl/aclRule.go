@@ -11,6 +11,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+//
 // Manages a network ACL rule resource within HuaweiCloud.
 //
 // ## Example Usage
@@ -46,7 +48,7 @@ import (
 //
 // ## Import
 //
-// network ACL rules can be imported using the `id`, e.g.
+// network ACL rules can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -65,7 +67,7 @@ type AclRule struct {
 	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrOutput `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 	DestinationPort pulumi.StringPtrOutput `pulumi:"destinationPort"`
 	// Enabled status for the network ACL rule. Defaults to true.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
@@ -133,7 +135,7 @@ type aclRuleState struct {
 	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress *string `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 	DestinationPort *string `pulumi:"destinationPort"`
 	// Enabled status for the network ACL rule. Defaults to true.
 	Enabled *bool `pulumi:"enabled"`
@@ -166,7 +168,7 @@ type AclRuleState struct {
 	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrInput
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 	DestinationPort pulumi.StringPtrInput
 	// Enabled status for the network ACL rule. Defaults to true.
 	Enabled pulumi.BoolPtrInput
@@ -203,7 +205,7 @@ type aclRuleArgs struct {
 	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress *string `pulumi:"destinationIpAddress"`
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 	DestinationPort *string `pulumi:"destinationPort"`
 	// Enabled status for the network ACL rule. Defaults to true.
 	Enabled *bool `pulumi:"enabled"`
@@ -237,7 +239,7 @@ type AclRuleArgs struct {
 	// The default value is *0.0.0.0/0*. For example: xxx.xxx.xxx.xxx (IP address), xxx.xxx.xxx.0/24 (CIDR block).
 	DestinationIpAddress pulumi.StringPtrInput
 	// Specifies the destination port number or port number range. The value ranges
-	// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+	// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 	DestinationPort pulumi.StringPtrInput
 	// Enabled status for the network ACL rule. Defaults to true.
 	Enabled pulumi.BoolPtrInput
@@ -365,7 +367,7 @@ func (o AclRuleOutput) DestinationIpAddress() pulumi.StringPtrOutput {
 }
 
 // Specifies the destination port number or port number range. The value ranges
-// from 1 to 65535. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
+// from `1` to `65,535`. For a port number range, enter two port numbers connected by a colon(:). For example, 1:100.
 func (o AclRuleOutput) DestinationPort() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *AclRule) pulumi.StringPtrOutput { return v.DestinationPort }).(pulumi.StringPtrOutput)
 }

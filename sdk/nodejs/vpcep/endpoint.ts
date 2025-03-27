@@ -8,21 +8,18 @@ import * as utilities from "../utilities";
  * Provides a resource to manage a VPC endpoint resource.
  *
  * ## Example Usage
- * ### Access to the public service
+ * ### Access to the public interface service
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
+ * const publicInterfaceServiceId = config.requireObject("publicInterfaceServiceId");
  * const vpcId = config.requireObject("vpcId");
  * const networkId = config.requireObject("networkId");
- * const cloudService = huaweicloud.Vpcep.getPublicServices({
- *     serviceName: "dis",
- * });
- * const myendpoint = new huaweicloud.vpcep.Endpoint("myendpoint", {
- *     serviceId: cloudService.then(cloudService => cloudService.services?[0]?.id),
+ * const test = new huaweicloud.vpcep.Endpoint("test", {
+ *     serviceId: publicInterfaceServiceId,
  *     vpcId: vpcId,
  *     networkId: networkId,
  *     enableDns: true,
@@ -30,7 +27,7 @@ import * as utilities from "../utilities";
  *     whitelists: ["192.168.0.0/24"],
  * });
  * ```
- * ### Access to the private service
+ * ### Access to the private interface service
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -41,7 +38,7 @@ import * as utilities from "../utilities";
  * const vmPort = config.requireObject("vmPort");
  * const vpcId = config.requireObject("vpcId");
  * const networkId = config.requireObject("networkId");
- * const demoService = new huaweicloud.vpcep.Service("demoService", {
+ * const testService = new huaweicloud.vpcep.Service("testService", {
  *     serverType: "VM",
  *     vpcId: serviceVpcId,
  *     portId: vmPort,
@@ -50,12 +47,65 @@ import * as utilities from "../utilities";
  *         terminalPort: 80,
  *     }],
  * });
- * const demoEndpoint = new huaweicloud.vpcep.Endpoint("demoEndpoint", {
- *     serviceId: demoService.id,
+ * const testEndpoint = new huaweicloud.vpcep.Endpoint("testEndpoint", {
+ *     serviceId: testService.id,
  *     vpcId: vpcId,
  *     networkId: networkId,
  *     enableDns: true,
  *     description: "test description",
+ * });
+ * ```
+ * ### Access to the gateway service without policy statement
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const gatewayServiceId = config.requireObject("gatewayServiceId");
+ * const vpcId = config.requireObject("vpcId");
+ * const test = new huaweicloud.vpcep.Endpoint("test", {
+ *     serviceId: gatewayServiceId,
+ *     vpcId: vpcId,
+ *     description: "test description",
+ * });
+ * ```
+ * ### Access to the gateway service with policy statement
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const gatewayServiceId = config.requireObject("gatewayServiceId");
+ * const vpcId = config.requireObject("vpcId");
+ * const test = new huaweicloud.vpcep.Endpoint("test", {
+ *     serviceId: gatewayServiceId,
+ *     vpcId: vpcId,
+ *     description: "test description",
+ *     policyStatement: `  [
+ *     {
+ *       "Effect": "Allow",
+ *       "Action": [
+ *         "obs:bucket:ListBucket"
+ *       ],
+ *       "Resource": [
+ *         "obs:*:*:*:*&#47;*",
+ *         "obs:*:*:*:*"
+ *       ]
+ *     },
+ *     {
+ *       "Effect": "Deny",
+ *       "Action": [
+ *         "obs:object:DeleteObject"
+ *       ],
+ *       "Resource": [
+ *         "obs:*:*:*:*&#47;*",
+ *         "obs:*:*:*:*"
+ *       ]
+ *     }
+ *   ]
+ * `,
  * });
  * ```
  *
@@ -66,6 +116,20 @@ import * as utilities from "../utilities";
  * ```sh
  *  $ pulumi import huaweicloud:Vpcep/endpoint:Endpoint test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enable_dns`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_vpcep_endpoint" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  enable_dns,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Endpoint extends pulumi.CustomResource {
     /**
@@ -96,33 +160,61 @@ export class Endpoint extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the description of the VPC endpoint.
+     * Specifies the description of the VPC endpoint. The value can contain
+     * characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
      */
     public readonly description!: pulumi.Output<string>;
     /**
      * Specifies whether to create a private domain name. The default value is
-     * true. Changing this creates a new VPC endpoint.
+     * **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     public readonly enableDns!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies whether to enable access control. The default value is
-     * false.
+     * Specifies whether to enable access control. The default value is **false**.
      */
     public readonly enableWhitelist!: pulumi.Output<boolean | undefined>;
     /**
      * Specifies the IP address for accessing the associated VPC endpoint
-     * service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+     * service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+     * interface VPC endpoint service.
      */
     public readonly ipAddress!: pulumi.Output<string>;
     /**
+     * Specifies the IP version of the VPC endpoint.
+     * Changing this will create a new resource.
+     * The valid values are as follows:
+     * + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+     * + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+     */
+    public readonly ipVersion!: pulumi.Output<string>;
+    /**
+     * Specifies the IPv6 address for accessing the connected VPC
+     * endpoint service.
+     * Changing this will create a new resource.
+     */
+    public readonly ipv6Address!: pulumi.Output<string>;
+    /**
      * Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-     * Changing this creates a new VPC endpoint.
+     * This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+     * The use of this field has the following restrictions:
+     * + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+     * + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
      */
     public readonly networkId!: pulumi.Output<string>;
     /**
      * The packet ID of the VPC endpoint.
      */
     public /*out*/ readonly packetId!: pulumi.Output<number>;
+    /**
+     * Specifies the endpoint policy information
+     */
+    public readonly policyDocument!: pulumi.Output<string>;
+    /**
+     * Specifies the policy of the gateway VPC endpoint. The value is a string in
+     * JSON array format. This parameter is only available when `enablePolicy` of the VPC endpoint services for
+     * Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+     */
+    public readonly policyStatement!: pulumi.Output<string>;
     /**
      * The domain name for accessing the associated VPC endpoint service. This parameter is only
      * available when enableDns is set to true.
@@ -134,8 +226,21 @@ export class Endpoint extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
+     * Specifies the IDs of the route tables associated with the VPC endpoint.
+     * This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+     * The default route table will be used when this field is not specified.
+     */
+    public readonly routetables!: pulumi.Output<string[]>;
+    /**
      * Specifies the ID of the VPC endpoint service.
-     * The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+     * The VPC endpoint service could be private interface service, public interface service or gateway service.
+     * + For private interface service, the value of `serviceId` can be obtained through resource `huaweicloud.Vpcep.Service`
+     * or datasource `huaweicloudVpcepServices`.
+     * + For public interface service, the value of `serviceId` can be obtained through datasource
+     * `huaweicloud.Vpcep.getPublicServices`.
+     * + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+     * VPC endpoint services. Please try to obtain `serviceId` through datasource `huaweicloud.Vpcep.getPublicServices` or
+     * look for VPCEP operation and maintenance help to find the gateway service ID.
      */
     public readonly serviceId!: pulumi.Output<string>;
     /**
@@ -147,7 +252,8 @@ export class Endpoint extends pulumi.CustomResource {
      */
     public /*out*/ readonly serviceType!: pulumi.Output<string>;
     /**
-     * The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+     * The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+     * **rejected**, **failed**, **deleting**.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
@@ -162,6 +268,7 @@ export class Endpoint extends pulumi.CustomResource {
     /**
      * Specifies the list of IP address or CIDR block which can be accessed to the
      * VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
+     * This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     public readonly whitelists!: pulumi.Output<string[] | undefined>;
 
@@ -182,10 +289,15 @@ export class Endpoint extends pulumi.CustomResource {
             resourceInputs["enableDns"] = state ? state.enableDns : undefined;
             resourceInputs["enableWhitelist"] = state ? state.enableWhitelist : undefined;
             resourceInputs["ipAddress"] = state ? state.ipAddress : undefined;
+            resourceInputs["ipVersion"] = state ? state.ipVersion : undefined;
+            resourceInputs["ipv6Address"] = state ? state.ipv6Address : undefined;
             resourceInputs["networkId"] = state ? state.networkId : undefined;
             resourceInputs["packetId"] = state ? state.packetId : undefined;
+            resourceInputs["policyDocument"] = state ? state.policyDocument : undefined;
+            resourceInputs["policyStatement"] = state ? state.policyStatement : undefined;
             resourceInputs["privateDomainName"] = state ? state.privateDomainName : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["routetables"] = state ? state.routetables : undefined;
             resourceInputs["serviceId"] = state ? state.serviceId : undefined;
             resourceInputs["serviceName"] = state ? state.serviceName : undefined;
             resourceInputs["serviceType"] = state ? state.serviceType : undefined;
@@ -195,9 +307,6 @@ export class Endpoint extends pulumi.CustomResource {
             resourceInputs["whitelists"] = state ? state.whitelists : undefined;
         } else {
             const args = argsOrState as EndpointArgs | undefined;
-            if ((!args || args.networkId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'networkId'");
-            }
             if ((!args || args.serviceId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'serviceId'");
             }
@@ -208,8 +317,13 @@ export class Endpoint extends pulumi.CustomResource {
             resourceInputs["enableDns"] = args ? args.enableDns : undefined;
             resourceInputs["enableWhitelist"] = args ? args.enableWhitelist : undefined;
             resourceInputs["ipAddress"] = args ? args.ipAddress : undefined;
+            resourceInputs["ipVersion"] = args ? args.ipVersion : undefined;
+            resourceInputs["ipv6Address"] = args ? args.ipv6Address : undefined;
             resourceInputs["networkId"] = args ? args.networkId : undefined;
+            resourceInputs["policyDocument"] = args ? args.policyDocument : undefined;
+            resourceInputs["policyStatement"] = args ? args.policyStatement : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["routetables"] = args ? args.routetables : undefined;
             resourceInputs["serviceId"] = args ? args.serviceId : undefined;
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
@@ -230,33 +344,61 @@ export class Endpoint extends pulumi.CustomResource {
  */
 export interface EndpointState {
     /**
-     * Specifies the description of the VPC endpoint.
+     * Specifies the description of the VPC endpoint. The value can contain
+     * characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies whether to create a private domain name. The default value is
-     * true. Changing this creates a new VPC endpoint.
+     * **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     enableDns?: pulumi.Input<boolean>;
     /**
-     * Specifies whether to enable access control. The default value is
-     * false.
+     * Specifies whether to enable access control. The default value is **false**.
      */
     enableWhitelist?: pulumi.Input<boolean>;
     /**
      * Specifies the IP address for accessing the associated VPC endpoint
-     * service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+     * service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+     * interface VPC endpoint service.
      */
     ipAddress?: pulumi.Input<string>;
     /**
+     * Specifies the IP version of the VPC endpoint.
+     * Changing this will create a new resource.
+     * The valid values are as follows:
+     * + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+     * + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+     */
+    ipVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the IPv6 address for accessing the connected VPC
+     * endpoint service.
+     * Changing this will create a new resource.
+     */
+    ipv6Address?: pulumi.Input<string>;
+    /**
      * Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-     * Changing this creates a new VPC endpoint.
+     * This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+     * The use of this field has the following restrictions:
+     * + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+     * + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
      */
     networkId?: pulumi.Input<string>;
     /**
      * The packet ID of the VPC endpoint.
      */
     packetId?: pulumi.Input<number>;
+    /**
+     * Specifies the endpoint policy information
+     */
+    policyDocument?: pulumi.Input<string>;
+    /**
+     * Specifies the policy of the gateway VPC endpoint. The value is a string in
+     * JSON array format. This parameter is only available when `enablePolicy` of the VPC endpoint services for
+     * Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+     */
+    policyStatement?: pulumi.Input<string>;
     /**
      * The domain name for accessing the associated VPC endpoint service. This parameter is only
      * available when enableDns is set to true.
@@ -268,8 +410,21 @@ export interface EndpointState {
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the IDs of the route tables associated with the VPC endpoint.
+     * This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+     * The default route table will be used when this field is not specified.
+     */
+    routetables?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the ID of the VPC endpoint service.
-     * The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+     * The VPC endpoint service could be private interface service, public interface service or gateway service.
+     * + For private interface service, the value of `serviceId` can be obtained through resource `huaweicloud.Vpcep.Service`
+     * or datasource `huaweicloudVpcepServices`.
+     * + For public interface service, the value of `serviceId` can be obtained through datasource
+     * `huaweicloud.Vpcep.getPublicServices`.
+     * + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+     * VPC endpoint services. Please try to obtain `serviceId` through datasource `huaweicloud.Vpcep.getPublicServices` or
+     * look for VPCEP operation and maintenance help to find the gateway service ID.
      */
     serviceId?: pulumi.Input<string>;
     /**
@@ -281,7 +436,8 @@ export interface EndpointState {
      */
     serviceType?: pulumi.Input<string>;
     /**
-     * The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+     * The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+     * **rejected**, **failed**, **deleting**.
      */
     status?: pulumi.Input<string>;
     /**
@@ -296,6 +452,7 @@ export interface EndpointState {
     /**
      * Specifies the list of IP address or CIDR block which can be accessed to the
      * VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
+     * This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     whitelists?: pulumi.Input<pulumi.Input<string>[]>;
 }
@@ -305,37 +462,78 @@ export interface EndpointState {
  */
 export interface EndpointArgs {
     /**
-     * Specifies the description of the VPC endpoint.
+     * Specifies the description of the VPC endpoint. The value can contain
+     * characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
      */
     description?: pulumi.Input<string>;
     /**
      * Specifies whether to create a private domain name. The default value is
-     * true. Changing this creates a new VPC endpoint.
+     * **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     enableDns?: pulumi.Input<boolean>;
     /**
-     * Specifies whether to enable access control. The default value is
-     * false.
+     * Specifies whether to enable access control. The default value is **false**.
      */
     enableWhitelist?: pulumi.Input<boolean>;
     /**
      * Specifies the IP address for accessing the associated VPC endpoint
-     * service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+     * service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+     * interface VPC endpoint service.
      */
     ipAddress?: pulumi.Input<string>;
     /**
-     * Specifies the network ID of the subnet in the VPC specified by `vpcId`.
-     * Changing this creates a new VPC endpoint.
+     * Specifies the IP version of the VPC endpoint.
+     * Changing this will create a new resource.
+     * The valid values are as follows:
+     * + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+     * + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
      */
-    networkId: pulumi.Input<string>;
+    ipVersion?: pulumi.Input<string>;
+    /**
+     * Specifies the IPv6 address for accessing the connected VPC
+     * endpoint service.
+     * Changing this will create a new resource.
+     */
+    ipv6Address?: pulumi.Input<string>;
+    /**
+     * Specifies the network ID of the subnet in the VPC specified by `vpcId`.
+     * This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+     * The use of this field has the following restrictions:
+     * + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+     * + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
+     */
+    networkId?: pulumi.Input<string>;
+    /**
+     * Specifies the endpoint policy information
+     */
+    policyDocument?: pulumi.Input<string>;
+    /**
+     * Specifies the policy of the gateway VPC endpoint. The value is a string in
+     * JSON array format. This parameter is only available when `enablePolicy` of the VPC endpoint services for
+     * Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+     */
+    policyStatement?: pulumi.Input<string>;
     /**
      * The region in which to create the VPC endpoint. If omitted, the provider-level
      * region will be used. Changing this creates a new VPC endpoint.
      */
     region?: pulumi.Input<string>;
     /**
+     * Specifies the IDs of the route tables associated with the VPC endpoint.
+     * This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+     * The default route table will be used when this field is not specified.
+     */
+    routetables?: pulumi.Input<pulumi.Input<string>[]>;
+    /**
      * Specifies the ID of the VPC endpoint service.
-     * The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+     * The VPC endpoint service could be private interface service, public interface service or gateway service.
+     * + For private interface service, the value of `serviceId` can be obtained through resource `huaweicloud.Vpcep.Service`
+     * or datasource `huaweicloudVpcepServices`.
+     * + For public interface service, the value of `serviceId` can be obtained through datasource
+     * `huaweicloud.Vpcep.getPublicServices`.
+     * + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+     * VPC endpoint services. Please try to obtain `serviceId` through datasource `huaweicloud.Vpcep.getPublicServices` or
+     * look for VPCEP operation and maintenance help to find the gateway service ID.
      */
     serviceId: pulumi.Input<string>;
     /**
@@ -350,6 +548,7 @@ export interface EndpointArgs {
     /**
      * Specifies the list of IP address or CIDR block which can be accessed to the
      * VPC endpoint. This field is valid when `enableWhitelist` is set to **true**. The max length of whitelist is 20.
+     * This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
      */
     whitelists?: pulumi.Input<pulumi.Input<string>[]>;
 }

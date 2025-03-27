@@ -198,9 +198,9 @@ class ServicePortMappingArgs:
         """
         :param pulumi.Input[str] protocol: Specifies the protocol used in port mappings. Only **TCP** is supported.
         :param pulumi.Input[int] service_port: Specifies the port for accessing the VPC endpoint service. This port is provided by
-               the backend service to provide services. The value ranges from 1 to 65535.
+               the backend service to provide services. The value ranges from `1` to `65,535`.
         :param pulumi.Input[int] terminal_port: Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
-               endpoint, allowing you to access the VPC endpoint service. The value ranges from 1 to 65535.
+               endpoint, allowing you to access the VPC endpoint service. The value ranges from `1` to `65,535`.
         """
         if protocol is not None:
             pulumi.set(__self__, "protocol", protocol)
@@ -226,7 +226,7 @@ class ServicePortMappingArgs:
     def service_port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the port for accessing the VPC endpoint service. This port is provided by
-        the backend service to provide services. The value ranges from 1 to 65535.
+        the backend service to provide services. The value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "service_port")
 
@@ -239,7 +239,7 @@ class ServicePortMappingArgs:
     def terminal_port(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the port for accessing the VPC endpoint. This port is provided by the VPC
-        endpoint, allowing you to access the VPC endpoint service. The value ranges from 1 to 65535.
+        endpoint, allowing you to access the VPC endpoint service. The value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "terminal_port")
 

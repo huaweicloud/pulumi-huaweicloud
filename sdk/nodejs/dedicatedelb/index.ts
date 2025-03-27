@@ -5,36 +5,64 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 // Export members:
+export * from "./activeStandbyPool";
 export * from "./certificate";
+export * from "./certificatePrivateKeyEcho";
+export * from "./getActiveStandbyPools";
+export * from "./getAllMembers";
+export * from "./getAvailabilityZones";
 export * from "./getCertificate";
+export * from "./getFeatureConfigurations";
 export * from "./getFlavors";
+export * from "./getIpgroups";
+export * from "./getL7policies";
+export * from "./getL7rules";
+export * from "./getListeners";
+export * from "./getLoadbalancerFeatureConfigurations";
+export * from "./getLoadbalancers";
+export * from "./getLogtanks";
+export * from "./getMonitors";
 export * from "./getPools";
+export * from "./getQuotas";
+export * from "./getSecurityPolicies";
 export * from "./ipgroup";
 export * from "./l7policy";
 export * from "./l7rule";
 export * from "./listener";
 export * from "./loadbalancer";
+export * from "./loadbalancerCopy";
+export * from "./logtank";
 export * from "./member";
 export * from "./monitor";
 export * from "./pool";
+export * from "./securityPolicy";
 
 // Import resources to register:
+import { ActiveStandbyPool } from "./activeStandbyPool";
 import { Certificate } from "./certificate";
+import { CertificatePrivateKeyEcho } from "./certificatePrivateKeyEcho";
 import { Ipgroup } from "./ipgroup";
 import { L7policy } from "./l7policy";
 import { L7rule } from "./l7rule";
 import { Listener } from "./listener";
 import { Loadbalancer } from "./loadbalancer";
+import { LoadbalancerCopy } from "./loadbalancerCopy";
+import { Logtank } from "./logtank";
 import { Member } from "./member";
 import { Monitor } from "./monitor";
 import { Pool } from "./pool";
+import { SecurityPolicy } from "./securityPolicy";
 
 const _module = {
     version: utilities.getVersion(),
     construct: (name: string, type: string, urn: string): pulumi.Resource => {
         switch (type) {
+            case "huaweicloud:DedicatedElb/activeStandbyPool:ActiveStandbyPool":
+                return new ActiveStandbyPool(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/certificate:Certificate":
                 return new Certificate(name, <any>undefined, { urn })
+            case "huaweicloud:DedicatedElb/certificatePrivateKeyEcho:CertificatePrivateKeyEcho":
+                return new CertificatePrivateKeyEcho(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/ipgroup:Ipgroup":
                 return new Ipgroup(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/l7policy:L7policy":
@@ -45,23 +73,34 @@ const _module = {
                 return new Listener(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/loadbalancer:Loadbalancer":
                 return new Loadbalancer(name, <any>undefined, { urn })
+            case "huaweicloud:DedicatedElb/loadbalancerCopy:LoadbalancerCopy":
+                return new LoadbalancerCopy(name, <any>undefined, { urn })
+            case "huaweicloud:DedicatedElb/logtank:Logtank":
+                return new Logtank(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/member:Member":
                 return new Member(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/monitor:Monitor":
                 return new Monitor(name, <any>undefined, { urn })
             case "huaweicloud:DedicatedElb/pool:Pool":
                 return new Pool(name, <any>undefined, { urn })
+            case "huaweicloud:DedicatedElb/securityPolicy:SecurityPolicy":
+                return new SecurityPolicy(name, <any>undefined, { urn })
             default:
                 throw new Error(`unknown resource type ${type}`);
         }
     },
 };
+pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/activeStandbyPool", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/certificate", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/certificatePrivateKeyEcho", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/ipgroup", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/l7policy", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/l7rule", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/listener", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/loadbalancer", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/loadbalancerCopy", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/logtank", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/member", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/monitor", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/pool", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "DedicatedElb/securityPolicy", _module)

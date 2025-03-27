@@ -14,12 +14,35 @@ __all__ = [
     'AddonValues',
     'ClusterCertificateCluster',
     'ClusterCertificateUser',
+    'ClusterComponentConfiguration',
+    'ClusterExtendParam',
+    'ClusterLogConfigLogConfig',
     'ClusterMaster',
+    'ClusterUpgradeAddon',
+    'ClusterUpgradeAddonValues',
+    'ClusterUpgradeStrategy',
+    'ClusterUpgradeStrategyInPlaceRollingUpdate',
     'NodeAttachDataVolume',
+    'NodeAttachHostnameConfig',
     'NodeAttachRootVolume',
+    'NodeAttachStorage',
+    'NodeAttachStorageGroup',
+    'NodeAttachStorageGroupVirtualSpace',
+    'NodeAttachStorageSelector',
     'NodeAttachTaint',
     'NodeDataVolume',
+    'NodeExtendParams',
+    'NodeExtensionNic',
+    'NodeHostnameConfig',
     'NodePoolDataVolume',
+    'NodePoolExtendParams',
+    'NodePoolExtensionScaleGroup',
+    'NodePoolExtensionScaleGroupMetadata',
+    'NodePoolExtensionScaleGroupSpec',
+    'NodePoolExtensionScaleGroupSpecAutoscaling',
+    'NodePoolExtensionScaleGroupSpecCapacityReservationSpecification',
+    'NodePoolHostnameConfig',
+    'NodePoolNodesAddNodeList',
     'NodePoolRootVolume',
     'NodePoolStorage',
     'NodePoolStorageGroup',
@@ -33,8 +56,18 @@ __all__ = [
     'NodeStorageSelector',
     'NodeTaint',
     'GetAddonTemplateSupportVersionResult',
+    'GetAddonsItemResult',
+    'GetAddonsItemMetadataResult',
+    'GetAddonsItemSpecResult',
+    'GetAddonsItemStatusResult',
+    'GetAddonsItemStatusCurrentVersionResult',
+    'GetAddonsItemStatusCurrentVersionSupportVersionResult',
+    'GetChartsChartResult',
     'GetClusterCertificateClusterResult',
     'GetClusterCertificateUserResult',
+    'GetClusterCertificatesClusterResult',
+    'GetClusterCertificatesContextResult',
+    'GetClusterCertificatesUserResult',
     'GetClusterEndpointResult',
     'GetClusterMasterResult',
     'GetClustersClusterResult',
@@ -43,11 +76,14 @@ __all__ = [
     'GetClustersClusterEndpointResult',
     'GetClustersClusterMasterResult',
     'GetNodeDataVolumeResult',
+    'GetNodeHostnameConfigResult',
     'GetNodePoolDataVolumeResult',
+    'GetNodePoolHostnameConfigResult',
     'GetNodePoolRootVolumeResult',
     'GetNodeRootVolumeResult',
     'GetNodesNodeResult',
     'GetNodesNodeDataVolumeResult',
+    'GetNodesNodeHostnameConfigResult',
     'GetNodesNodeRootVolumeResult',
 ]
 
@@ -188,8 +224,7 @@ class ClusterCertificateCluster(dict):
                  server: Optional[str] = None):
         """
         :param str certificate_authority_data: The certificate data.
-        :param str name: Specifies the cluster name.
-               Changing this parameter will create a new cluster resource.
+        :param str name: Specifies the component name.
         :param str server: The server IP address.
         """
         if certificate_authority_data is not None:
@@ -211,8 +246,7 @@ class ClusterCertificateCluster(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the cluster name.
-        Changing this parameter will create a new cluster resource.
+        Specifies the component name.
         """
         return pulumi.get(self, "name")
 
@@ -253,8 +287,7 @@ class ClusterCertificateUser(dict):
         """
         :param str client_certificate_data: The client certificate data.
         :param str client_key_data: The client key data.
-        :param str name: Specifies the cluster name.
-               Changing this parameter will create a new cluster resource.
+        :param str name: Specifies the component name.
         """
         if client_certificate_data is not None:
             pulumi.set(__self__, "client_certificate_data", client_certificate_data)
@@ -283,8 +316,210 @@ class ClusterCertificateUser(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the cluster name.
+        Specifies the component name.
+        """
+        return pulumi.get(self, "name")
+
+
+@pulumi.output_type
+class ClusterComponentConfiguration(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 configurations: Optional[str] = None):
+        """
+        :param str name: Specifies the component name.
+        :param str configurations: Specifies JSON string of the component configurations.
+        """
+        pulumi.set(__self__, "name", name)
+        if configurations is not None:
+            pulumi.set(__self__, "configurations", configurations)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the component name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def configurations(self) -> Optional[str]:
+        """
+        Specifies JSON string of the component configurations.
+        """
+        return pulumi.get(self, "configurations")
+
+
+@pulumi.output_type
+class ClusterExtendParam(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "clusterAz":
+            suggest = "cluster_az"
+        elif key == "cpuManagerPolicy":
+            suggest = "cpu_manager_policy"
+        elif key == "decMasterFlavor":
+            suggest = "dec_master_flavor"
+        elif key == "dockerUmaskMode":
+            suggest = "docker_umask_mode"
+        elif key == "dssMasterVolumes":
+            suggest = "dss_master_volumes"
+        elif key == "fixPoolMask":
+            suggest = "fix_pool_mask"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterExtendParam. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterExtendParam.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterExtendParam.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 cluster_az: Optional[str] = None,
+                 cpu_manager_policy: Optional[str] = None,
+                 dec_master_flavor: Optional[str] = None,
+                 docker_umask_mode: Optional[str] = None,
+                 dss_master_volumes: Optional[str] = None,
+                 fix_pool_mask: Optional[str] = None):
+        """
+        :param str cluster_az: Specifies the AZ of master nodes in the cluster. The value can be:
+               + **multi_az**: The cluster will span across AZs. This field is configurable only for high-availability clusters.
+               + **AZ of the dedicated cloud computing pool**: The cluster will be deployed in the AZ of Dedicated Cloud (DeC).
+               This parameter is mandatory for dedicated CCE clusters.
+        :param str cpu_manager_policy: Specifies the cluster CPU management policy.
+               The value can be:
+               + **none**: CPU cores will not be exclusively allocated to workload pods.
+               Select this value if you want a large pool of shareable CPU cores.
+               + **static**: CPU cores can be exclusively allocated to workload pods.
+               Select this value if your workload is sensitive to latency in CPU cache and scheduling.In a CCE Turbo cluster,
+               this setting is valid only for nodes where common containers, not Kata containers, run.
+        :param str dec_master_flavor: Specifies the specifications of the master node
+               in the dedicated hybrid cluster.
+               Changing this parameter will create a new cluster resource.
+        :param str docker_umask_mode: Specifies the default UmaskMode configuration of Docker in a
+               cluster. The value can be **secure** or **normal**, defaults to normal.
+               Changing this parameter will create a new cluster resource.
+        :param str dss_master_volumes: Specifies whether the system and data disks of a master node
+               use dedicated distributed storage. If left unspecified, EVS disks are used by default.
+               This parameter is mandatory for dedicated CCE clusters.
+               It is in the following format:
+        :param str fix_pool_mask: Specifies the number of mask bits of the fixed IP address pool
+               of the container network model. This field can only be used when `container_network_type` is set to **vpc-router**.
+               Changing this parameter will create a new cluster resource.
+        """
+        if cluster_az is not None:
+            pulumi.set(__self__, "cluster_az", cluster_az)
+        if cpu_manager_policy is not None:
+            pulumi.set(__self__, "cpu_manager_policy", cpu_manager_policy)
+        if dec_master_flavor is not None:
+            pulumi.set(__self__, "dec_master_flavor", dec_master_flavor)
+        if docker_umask_mode is not None:
+            pulumi.set(__self__, "docker_umask_mode", docker_umask_mode)
+        if dss_master_volumes is not None:
+            pulumi.set(__self__, "dss_master_volumes", dss_master_volumes)
+        if fix_pool_mask is not None:
+            pulumi.set(__self__, "fix_pool_mask", fix_pool_mask)
+
+    @property
+    @pulumi.getter(name="clusterAz")
+    def cluster_az(self) -> Optional[str]:
+        """
+        Specifies the AZ of master nodes in the cluster. The value can be:
+        + **multi_az**: The cluster will span across AZs. This field is configurable only for high-availability clusters.
+        + **AZ of the dedicated cloud computing pool**: The cluster will be deployed in the AZ of Dedicated Cloud (DeC).
+        This parameter is mandatory for dedicated CCE clusters.
+        """
+        return pulumi.get(self, "cluster_az")
+
+    @property
+    @pulumi.getter(name="cpuManagerPolicy")
+    def cpu_manager_policy(self) -> Optional[str]:
+        """
+        Specifies the cluster CPU management policy.
+        The value can be:
+        + **none**: CPU cores will not be exclusively allocated to workload pods.
+        Select this value if you want a large pool of shareable CPU cores.
+        + **static**: CPU cores can be exclusively allocated to workload pods.
+        Select this value if your workload is sensitive to latency in CPU cache and scheduling.In a CCE Turbo cluster,
+        this setting is valid only for nodes where common containers, not Kata containers, run.
+        """
+        return pulumi.get(self, "cpu_manager_policy")
+
+    @property
+    @pulumi.getter(name="decMasterFlavor")
+    def dec_master_flavor(self) -> Optional[str]:
+        """
+        Specifies the specifications of the master node
+        in the dedicated hybrid cluster.
         Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "dec_master_flavor")
+
+    @property
+    @pulumi.getter(name="dockerUmaskMode")
+    def docker_umask_mode(self) -> Optional[str]:
+        """
+        Specifies the default UmaskMode configuration of Docker in a
+        cluster. The value can be **secure** or **normal**, defaults to normal.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "docker_umask_mode")
+
+    @property
+    @pulumi.getter(name="dssMasterVolumes")
+    def dss_master_volumes(self) -> Optional[str]:
+        """
+        Specifies whether the system and data disks of a master node
+        use dedicated distributed storage. If left unspecified, EVS disks are used by default.
+        This parameter is mandatory for dedicated CCE clusters.
+        It is in the following format:
+        """
+        return pulumi.get(self, "dss_master_volumes")
+
+    @property
+    @pulumi.getter(name="fixPoolMask")
+    def fix_pool_mask(self) -> Optional[str]:
+        """
+        Specifies the number of mask bits of the fixed IP address pool
+        of the container network model. This field can only be used when `container_network_type` is set to **vpc-router**.
+        Changing this parameter will create a new cluster resource.
+        """
+        return pulumi.get(self, "fix_pool_mask")
+
+
+@pulumi.output_type
+class ClusterLogConfigLogConfig(dict):
+    def __init__(__self__, *,
+                 enable: Optional[bool] = None,
+                 name: Optional[str] = None):
+        """
+        :param bool enable: Specifies whether to collect the log.
+        :param str name: Specifies the log type.
+        """
+        if enable is not None:
+            pulumi.set(__self__, "enable", enable)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter
+    def enable(self) -> Optional[bool]:
+        """
+        Specifies whether to collect the log.
+        """
+        return pulumi.get(self, "enable")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the log type.
         """
         return pulumi.get(self, "name")
 
@@ -328,11 +563,243 @@ class ClusterMaster(dict):
 
 
 @pulumi.output_type
+class ClusterUpgradeAddon(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "addonTemplateName":
+            suggest = "addon_template_name"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterUpgradeAddon. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterUpgradeAddon.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterUpgradeAddon.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 addon_template_name: str,
+                 operation: str,
+                 version: str,
+                 values: Optional['outputs.ClusterUpgradeAddonValues'] = None):
+        """
+        :param str addon_template_name: Specifies the add-on name.
+        :param str operation: Specifies the execution action.
+               For current upgrades, the value can be **patch**.
+        :param str version: Specifies the target add-on version.
+               The target add-on version must match the target cluster version.
+        :param 'ClusterUpgradeAddonValuesArgs' values: Specifies the add-on template installation parameters.
+               These parameters vary depending on the add-on. The values is documented below.
+        """
+        pulumi.set(__self__, "addon_template_name", addon_template_name)
+        pulumi.set(__self__, "operation", operation)
+        pulumi.set(__self__, "version", version)
+        if values is not None:
+            pulumi.set(__self__, "values", values)
+
+    @property
+    @pulumi.getter(name="addonTemplateName")
+    def addon_template_name(self) -> str:
+        """
+        Specifies the add-on name.
+        """
+        return pulumi.get(self, "addon_template_name")
+
+    @property
+    @pulumi.getter
+    def operation(self) -> str:
+        """
+        Specifies the execution action.
+        For current upgrades, the value can be **patch**.
+        """
+        return pulumi.get(self, "operation")
+
+    @property
+    @pulumi.getter
+    def version(self) -> str:
+        """
+        Specifies the target add-on version.
+        The target add-on version must match the target cluster version.
+        """
+        return pulumi.get(self, "version")
+
+    @property
+    @pulumi.getter
+    def values(self) -> Optional['outputs.ClusterUpgradeAddonValues']:
+        """
+        Specifies the add-on template installation parameters.
+        These parameters vary depending on the add-on. The values is documented below.
+        """
+        return pulumi.get(self, "values")
+
+
+@pulumi.output_type
+class ClusterUpgradeAddonValues(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "basicJson":
+            suggest = "basic_json"
+        elif key == "customJson":
+            suggest = "custom_json"
+        elif key == "flavorJson":
+            suggest = "flavor_json"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterUpgradeAddonValues. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterUpgradeAddonValues.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterUpgradeAddonValues.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 basic_json: Optional[str] = None,
+                 custom_json: Optional[str] = None,
+                 flavor_json: Optional[str] = None):
+        """
+        :param str basic_json: Specifies the json string vary depending on the add-on.
+        :param str custom_json: Specifies the json string vary depending on the add-on.
+        :param str flavor_json: Specifies the json string vary depending on the add-on.
+        """
+        if basic_json is not None:
+            pulumi.set(__self__, "basic_json", basic_json)
+        if custom_json is not None:
+            pulumi.set(__self__, "custom_json", custom_json)
+        if flavor_json is not None:
+            pulumi.set(__self__, "flavor_json", flavor_json)
+
+    @property
+    @pulumi.getter(name="basicJson")
+    def basic_json(self) -> Optional[str]:
+        """
+        Specifies the json string vary depending on the add-on.
+        """
+        return pulumi.get(self, "basic_json")
+
+    @property
+    @pulumi.getter(name="customJson")
+    def custom_json(self) -> Optional[str]:
+        """
+        Specifies the json string vary depending on the add-on.
+        """
+        return pulumi.get(self, "custom_json")
+
+    @property
+    @pulumi.getter(name="flavorJson")
+    def flavor_json(self) -> Optional[str]:
+        """
+        Specifies the json string vary depending on the add-on.
+        """
+        return pulumi.get(self, "flavor_json")
+
+
+@pulumi.output_type
+class ClusterUpgradeStrategy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "inPlaceRollingUpdate":
+            suggest = "in_place_rolling_update"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterUpgradeStrategy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterUpgradeStrategy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterUpgradeStrategy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 type: str,
+                 in_place_rolling_update: Optional['outputs.ClusterUpgradeStrategyInPlaceRollingUpdate'] = None):
+        """
+        :param str type: Specifies the upgrade strategy type.
+               The value can be **inPlaceRollingUpdate**.
+        :param 'ClusterUpgradeStrategyInPlaceRollingUpdateArgs' in_place_rolling_update: Specifies the in-place upgrade settings.
+               It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+               The in_place_rolling_update structure is documented below.
+        """
+        pulumi.set(__self__, "type", type)
+        if in_place_rolling_update is not None:
+            pulumi.set(__self__, "in_place_rolling_update", in_place_rolling_update)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the upgrade strategy type.
+        The value can be **inPlaceRollingUpdate**.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="inPlaceRollingUpdate")
+    def in_place_rolling_update(self) -> Optional['outputs.ClusterUpgradeStrategyInPlaceRollingUpdate']:
+        """
+        Specifies the in-place upgrade settings.
+        It's mandatory when the `type` is set to **inPlaceRollingUpdate**.
+        The in_place_rolling_update structure is documented below.
+        """
+        return pulumi.get(self, "in_place_rolling_update")
+
+
+@pulumi.output_type
+class ClusterUpgradeStrategyInPlaceRollingUpdate(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "userDefinedStep":
+            suggest = "user_defined_step"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in ClusterUpgradeStrategyInPlaceRollingUpdate. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        ClusterUpgradeStrategyInPlaceRollingUpdate.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        ClusterUpgradeStrategyInPlaceRollingUpdate.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 user_defined_step: Optional[int] = None):
+        """
+        :param int user_defined_step: Specifies the node upgrade step.
+               The value ranges from **1** to **40**. The recommended value is **20**.
+        """
+        if user_defined_step is not None:
+            pulumi.set(__self__, "user_defined_step", user_defined_step)
+
+    @property
+    @pulumi.getter(name="userDefinedStep")
+    def user_defined_step(self) -> Optional[int]:
+        """
+        Specifies the node upgrade step.
+        The value ranges from **1** to **40**. The recommended value is **20**.
+        """
+        return pulumi.get(self, "user_defined_step")
+
+
+@pulumi.output_type
 class NodeAttachDataVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -353,30 +820,52 @@ class NodeAttachDataVolume(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
+                 iops: Optional[int] = None,
                  kms_key_id: Optional[str] = None,
                  size: Optional[int] = None,
+                 throughput: Optional[int] = None,
                  volumetype: Optional[str] = None):
         """
+        :param str dss_pool_id: The DSS pool ID. This field is used only for dedicated storage.
         :param Mapping[str, str] extend_params: The disk expansion parameters.
+        :param int iops: The iops of the disk.
         :param str kms_key_id: The ID of a KMS key. This is used to encrypt the volume.
-        :param int size: The disk size in GB.
+        :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
+               Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+               Changing this parameter will reset the node.
+        :param int throughput: The throughput of the disk.
         :param str volumetype: The disk type.
         """
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if size is not None:
             pulumi.set(__self__, "size", size)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
         if volumetype is not None:
             pulumi.set(__self__, "volumetype", volumetype)
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        The DSS pool ID. This field is used only for dedicated storage.
+        """
+        return pulumi.get(self, "dss_pool_id")
 
     @property
     @pulumi.getter(name="extendParam")
@@ -397,6 +886,14 @@ class NodeAttachDataVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        The iops of the disk.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -408,9 +905,19 @@ class NodeAttachDataVolume(dict):
     @pulumi.getter
     def size(self) -> Optional[int]:
         """
-        The disk size in GB.
+        Specifies the size of a virtual space. Only an integer percentage is supported.
+        Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "size")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        The throughput of the disk.
+        """
+        return pulumi.get(self, "throughput")
 
     @property
     @pulumi.getter
@@ -422,11 +929,37 @@ class NodeAttachDataVolume(dict):
 
 
 @pulumi.output_type
+class NodeAttachHostnameConfig(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class NodeAttachRootVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -447,30 +980,52 @@ class NodeAttachRootVolume(dict):
         return super().get(key, default)
 
     def __init__(__self__, *,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
+                 iops: Optional[int] = None,
                  kms_key_id: Optional[str] = None,
                  size: Optional[int] = None,
+                 throughput: Optional[int] = None,
                  volumetype: Optional[str] = None):
         """
+        :param str dss_pool_id: The DSS pool ID. This field is used only for dedicated storage.
         :param Mapping[str, str] extend_params: The disk expansion parameters.
+        :param int iops: The iops of the disk.
         :param str kms_key_id: The ID of a KMS key. This is used to encrypt the volume.
-        :param int size: The disk size in GB.
+        :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
+               Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+               Changing this parameter will reset the node.
+        :param int throughput: The throughput of the disk.
         :param str volumetype: The disk type.
         """
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
         if size is not None:
             pulumi.set(__self__, "size", size)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
         if volumetype is not None:
             pulumi.set(__self__, "volumetype", volumetype)
+
+    @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        The DSS pool ID. This field is used only for dedicated storage.
+        """
+        return pulumi.get(self, "dss_pool_id")
 
     @property
     @pulumi.getter(name="extendParam")
@@ -491,6 +1046,14 @@ class NodeAttachRootVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        The iops of the disk.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -502,9 +1065,19 @@ class NodeAttachRootVolume(dict):
     @pulumi.getter
     def size(self) -> Optional[int]:
         """
-        The disk size in GB.
+        Specifies the size of a virtual space. Only an integer percentage is supported.
+        Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "size")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        The throughput of the disk.
+        """
+        return pulumi.get(self, "throughput")
 
     @property
     @pulumi.getter
@@ -516,6 +1089,365 @@ class NodeAttachRootVolume(dict):
 
 
 @pulumi.output_type
+class NodeAttachStorage(dict):
+    def __init__(__self__, *,
+                 groups: Sequence['outputs.NodeAttachStorageGroup'],
+                 selectors: Sequence['outputs.NodeAttachStorageSelector']):
+        """
+        :param Sequence['NodeAttachStorageGroupArgs'] groups: Specifies the storage group consists of multiple storage devices.
+               This is used to divide storage space. Structure is documented below.
+               Changing this parameter will reset the node.
+        :param Sequence['NodeAttachStorageSelectorArgs'] selectors: Specifies the disk selection.
+               Matched disks are managed according to match labels and storage type. Structure is documented below.
+               Changing this parameter will reset the node.
+        """
+        pulumi.set(__self__, "groups", groups)
+        pulumi.set(__self__, "selectors", selectors)
+
+    @property
+    @pulumi.getter
+    def groups(self) -> Sequence['outputs.NodeAttachStorageGroup']:
+        """
+        Specifies the storage group consists of multiple storage devices.
+        This is used to divide storage space. Structure is documented below.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "groups")
+
+    @property
+    @pulumi.getter
+    def selectors(self) -> Sequence['outputs.NodeAttachStorageSelector']:
+        """
+        Specifies the disk selection.
+        Matched disks are managed according to match labels and storage type. Structure is documented below.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "selectors")
+
+
+@pulumi.output_type
+class NodeAttachStorageGroup(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "selectorNames":
+            suggest = "selector_names"
+        elif key == "virtualSpaces":
+            suggest = "virtual_spaces"
+        elif key == "cceManaged":
+            suggest = "cce_managed"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodeAttachStorageGroup. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodeAttachStorageGroup.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodeAttachStorageGroup.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: str,
+                 selector_names: Sequence[str],
+                 virtual_spaces: Sequence['outputs.NodeAttachStorageGroupVirtualSpace'],
+                 cce_managed: Optional[bool] = None):
+        """
+        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
+        :param Sequence[str] selector_names: Specifies the list of names of selectors to match.
+               This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+               but a selector can match only one group. Changing this parameter will reset the node.
+        :param Sequence['NodeAttachStorageGroupVirtualSpaceArgs'] virtual_spaces: Specifies the detailed management of space configuration in a group.
+               Changing this parameter will reset the node.
+        :param bool cce_managed: Specifies the whether the storage space is for **kubernetes** and
+               **runtime** components. Only one group can be set to true. The default value is **false**.
+               Changing this parameter will reset the node.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "selector_names", selector_names)
+        pulumi.set(__self__, "virtual_spaces", virtual_spaces)
+        if cce_managed is not None:
+            pulumi.set(__self__, "cce_managed", cce_managed)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="selectorNames")
+    def selector_names(self) -> Sequence[str]:
+        """
+        Specifies the list of names of selectors to match.
+        This parameter corresponds to name in `selectors`. A group can match multiple selectors,
+        but a selector can match only one group. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "selector_names")
+
+    @property
+    @pulumi.getter(name="virtualSpaces")
+    def virtual_spaces(self) -> Sequence['outputs.NodeAttachStorageGroupVirtualSpace']:
+        """
+        Specifies the detailed management of space configuration in a group.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "virtual_spaces")
+
+    @property
+    @pulumi.getter(name="cceManaged")
+    def cce_managed(self) -> Optional[bool]:
+        """
+        Specifies the whether the storage space is for **kubernetes** and
+        **runtime** components. Only one group can be set to true. The default value is **false**.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "cce_managed")
+
+
+@pulumi.output_type
+class NodeAttachStorageGroupVirtualSpace(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "lvmLvType":
+            suggest = "lvm_lv_type"
+        elif key == "lvmPath":
+            suggest = "lvm_path"
+        elif key == "runtimeLvType":
+            suggest = "runtime_lv_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodeAttachStorageGroupVirtualSpace. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodeAttachStorageGroupVirtualSpace.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodeAttachStorageGroupVirtualSpace.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: str,
+                 size: str,
+                 lvm_lv_type: Optional[str] = None,
+                 lvm_path: Optional[str] = None,
+                 runtime_lv_type: Optional[str] = None):
+        """
+        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
+        :param str size: Specifies the size of a virtual space. Only an integer percentage is supported.
+               Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+               Changing this parameter will reset the node.
+        :param str lvm_lv_type: Specifies the LVM write mode, values can be **linear** and **striped**.
+               This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+               a new resource.
+        :param str lvm_path: Specifies the absolute path to which the disk is attached.
+               This parameter takes effect only in **user** configuration. Changing this parameter will reset the node.
+        :param str runtime_lv_type: Specifies the LVM write mode, values can be **linear** and **striped**.
+               This parameter takes effect only in **runtime** configuration. Changing this parameter will reset the node.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "size", size)
+        if lvm_lv_type is not None:
+            pulumi.set(__self__, "lvm_lv_type", lvm_lv_type)
+        if lvm_path is not None:
+            pulumi.set(__self__, "lvm_path", lvm_path)
+        if runtime_lv_type is not None:
+            pulumi.set(__self__, "runtime_lv_type", runtime_lv_type)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def size(self) -> str:
+        """
+        Specifies the size of a virtual space. Only an integer percentage is supported.
+        Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "size")
+
+    @property
+    @pulumi.getter(name="lvmLvType")
+    def lvm_lv_type(self) -> Optional[str]:
+        """
+        Specifies the LVM write mode, values can be **linear** and **striped**.
+        This parameter takes effect only in **kubernetes** and **user** configuration. Changing this parameter will create
+        a new resource.
+        """
+        return pulumi.get(self, "lvm_lv_type")
+
+    @property
+    @pulumi.getter(name="lvmPath")
+    def lvm_path(self) -> Optional[str]:
+        """
+        Specifies the absolute path to which the disk is attached.
+        This parameter takes effect only in **user** configuration. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "lvm_path")
+
+    @property
+    @pulumi.getter(name="runtimeLvType")
+    def runtime_lv_type(self) -> Optional[str]:
+        """
+        Specifies the LVM write mode, values can be **linear** and **striped**.
+        This parameter takes effect only in **runtime** configuration. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "runtime_lv_type")
+
+
+@pulumi.output_type
+class NodeAttachStorageSelector(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "matchLabelCount":
+            suggest = "match_label_count"
+        elif key == "matchLabelMetadataCmkid":
+            suggest = "match_label_metadata_cmkid"
+        elif key == "matchLabelMetadataEncrypted":
+            suggest = "match_label_metadata_encrypted"
+        elif key == "matchLabelSize":
+            suggest = "match_label_size"
+        elif key == "matchLabelVolumeType":
+            suggest = "match_label_volume_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodeAttachStorageSelector. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodeAttachStorageSelector.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodeAttachStorageSelector.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 name: str,
+                 match_label_count: Optional[str] = None,
+                 match_label_metadata_cmkid: Optional[str] = None,
+                 match_label_metadata_encrypted: Optional[str] = None,
+                 match_label_size: Optional[str] = None,
+                 match_label_volume_type: Optional[str] = None,
+                 type: Optional[str] = None):
+        """
+        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+               and **user** are supported. Changing this parameter will reset the node.
+        :param str match_label_count: Specifies the number of disks to be selected. If omitted,
+               all disks of this type are selected. Changing this parameter will reset the node.
+        :param str match_label_metadata_cmkid: Specifies the customer master key ID of an encrypted
+               disk. Changing this parameter will reset the node.
+        :param str match_label_metadata_encrypted: Specifies the disk encryption identifier.
+               Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+               If omitted, whether the disk is encrypted is not limited. Changing this parameter will reset the node.
+        :param str match_label_size: Specifies the matched disk size. If omitted,
+               the disk size is not limited. Example: 100. Changing this parameter will reset the node.
+        :param str match_label_volume_type: Specifies the EVS disk type. Currently,
+               **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+               Changing this parameter will reset the node.
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        pulumi.set(__self__, "name", name)
+        if match_label_count is not None:
+            pulumi.set(__self__, "match_label_count", match_label_count)
+        if match_label_metadata_cmkid is not None:
+            pulumi.set(__self__, "match_label_metadata_cmkid", match_label_metadata_cmkid)
+        if match_label_metadata_encrypted is not None:
+            pulumi.set(__self__, "match_label_metadata_encrypted", match_label_metadata_encrypted)
+        if match_label_size is not None:
+            pulumi.set(__self__, "match_label_size", match_label_size)
+        if match_label_volume_type is not None:
+            pulumi.set(__self__, "match_label_volume_type", match_label_volume_type)
+        if type is not None:
+            pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
+        and **user** are supported. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="matchLabelCount")
+    def match_label_count(self) -> Optional[str]:
+        """
+        Specifies the number of disks to be selected. If omitted,
+        all disks of this type are selected. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "match_label_count")
+
+    @property
+    @pulumi.getter(name="matchLabelMetadataCmkid")
+    def match_label_metadata_cmkid(self) -> Optional[str]:
+        """
+        Specifies the customer master key ID of an encrypted
+        disk. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "match_label_metadata_cmkid")
+
+    @property
+    @pulumi.getter(name="matchLabelMetadataEncrypted")
+    def match_label_metadata_encrypted(self) -> Optional[str]:
+        """
+        Specifies the disk encryption identifier.
+        Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
+        If omitted, whether the disk is encrypted is not limited. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "match_label_metadata_encrypted")
+
+    @property
+    @pulumi.getter(name="matchLabelSize")
+    def match_label_size(self) -> Optional[str]:
+        """
+        Specifies the matched disk size. If omitted,
+        the disk size is not limited. Example: 100. Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "match_label_size")
+
+    @property
+    @pulumi.getter(name="matchLabelVolumeType")
+    def match_label_volume_type(self) -> Optional[str]:
+        """
+        Specifies the EVS disk type. Currently,
+        **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
+        Changing this parameter will reset the node.
+        """
+        return pulumi.get(self, "match_label_volume_type")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class NodeAttachTaint(dict):
     def __init__(__self__, *,
                  effect: str,
@@ -523,13 +1455,13 @@ class NodeAttachTaint(dict):
                  value: str):
         """
         :param str effect: Available options are NoSchedule, PreferNoSchedule, and NoExecute.
-               Changing this parameter will create a new resource.
+               Changing this parameter will reset the node.
         :param str key: A key must contain 1 to 63 characters starting with a letter or digit.
                Only letters, digits, hyphens (-), underscores (_), and periods (.) are allowed. A DNS subdomain name can be used
-               as the prefix of a key. Changing this parameter will create a new resource.
+               as the prefix of a key. Changing this parameter will reset the node.
         :param str value: A value must start with a letter or digit and can contain a maximum of 63
                characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
-               create a new resource.
+               reset the node.
         """
         pulumi.set(__self__, "effect", effect)
         pulumi.set(__self__, "key", key)
@@ -540,7 +1472,7 @@ class NodeAttachTaint(dict):
     def effect(self) -> str:
         """
         Available options are NoSchedule, PreferNoSchedule, and NoExecute.
-        Changing this parameter will create a new resource.
+        Changing this parameter will reset the node.
         """
         return pulumi.get(self, "effect")
 
@@ -550,7 +1482,7 @@ class NodeAttachTaint(dict):
         """
         A key must contain 1 to 63 characters starting with a letter or digit.
         Only letters, digits, hyphens (-), underscores (_), and periods (.) are allowed. A DNS subdomain name can be used
-        as the prefix of a key. Changing this parameter will create a new resource.
+        as the prefix of a key. Changing this parameter will reset the node.
         """
         return pulumi.get(self, "key")
 
@@ -560,7 +1492,7 @@ class NodeAttachTaint(dict):
         """
         A value must start with a letter or digit and can contain a maximum of 63
         characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
-        create a new resource.
+        reset the node.
         """
         return pulumi.get(self, "value")
 
@@ -570,7 +1502,9 @@ class NodeDataVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -593,38 +1527,47 @@ class NodeDataVolume(dict):
     def __init__(__self__, *,
                  size: int,
                  volumetype: str,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
-                 kms_key_id: Optional[str] = None):
+                 iops: Optional[int] = None,
+                 kms_key_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
                Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
                Changing this parameter will create a new resource.
         :param str volumetype: Specifies the disk type.
                Changing this parameter will create a new resource.
-        :param str extend_param: Specifies the extended parameter.
+        :param str dss_pool_id: Specifies the DSS pool ID. This field is used only for
+               dedicated storage. Changing this parameter will create a new resource.
+        :param Mapping[str, str] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        :param Mapping[str, str] extend_params: Specifies the disk expansion parameters.
-               Changing this parameter will create a new resource.
+        :param int iops: Specifies the iops of the disk,
+               required when `volumetype` is **GPSSD2** or **ESSD2**.
         :param str kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the volume.
                Changing this parameter will create a new resource.
+        :param int throughput: Specifies the throughput of the disk in MiB/s,
+               required when `volumetype` is **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volumetype", volumetype)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -646,24 +1589,25 @@ class NodeDataVolume(dict):
         return pulumi.get(self, "volumetype")
 
     @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        Specifies the DSS pool ID. This field is used only for
+        dedicated storage. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[str]:
-        """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        """
         return pulumi.get(self, "extend_param")
 
     @property
     @pulumi.getter(name="extendParams")
     def extend_params(self) -> Optional[Mapping[str, str]]:
         """
-        Specifies the disk expansion parameters.
+        Specifies the extended parameters.
+        The object structure is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "extend_params")
@@ -674,6 +1618,15 @@ class NodeDataVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the iops of the disk,
+        required when `volumetype` is **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -682,13 +1635,299 @@ class NodeDataVolume(dict):
         """
         return pulumi.get(self, "kms_key_id")
 
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput of the disk in MiB/s,
+        required when `volumetype` is **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
+
+
+@pulumi.output_type
+class NodeExtendParams(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "agencyName":
+            suggest = "agency_name"
+        elif key == "dockerBaseSize":
+            suggest = "docker_base_size"
+        elif key == "kubeReservedMem":
+            suggest = "kube_reserved_mem"
+        elif key == "marketType":
+            suggest = "market_type"
+        elif key == "maxPods":
+            suggest = "max_pods"
+        elif key == "nicThreshold":
+            suggest = "nic_threshold"
+        elif key == "nodeImageId":
+            suggest = "node_image_id"
+        elif key == "nodeMultiQueue":
+            suggest = "node_multi_queue"
+        elif key == "securityReinforcementType":
+            suggest = "security_reinforcement_type"
+        elif key == "spotPrice":
+            suggest = "spot_price"
+        elif key == "systemReservedMem":
+            suggest = "system_reserved_mem"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodeExtendParams. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodeExtendParams.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodeExtendParams.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 agency_name: Optional[str] = None,
+                 docker_base_size: Optional[int] = None,
+                 kube_reserved_mem: Optional[int] = None,
+                 market_type: Optional[str] = None,
+                 max_pods: Optional[int] = None,
+                 nic_threshold: Optional[str] = None,
+                 node_image_id: Optional[str] = None,
+                 node_multi_queue: Optional[str] = None,
+                 postinstall: Optional[str] = None,
+                 preinstall: Optional[str] = None,
+                 security_reinforcement_type: Optional[str] = None,
+                 spot_price: Optional[str] = None,
+                 system_reserved_mem: Optional[int] = None):
+        """
+        :param str agency_name: Specifies the agency name.
+               Changing this parameter will create a new resource.
+        :param int docker_base_size: Specifies the available disk space of a single container on a node,
+               in GB. Changing this parameter will create a new resource.
+        :param int kube_reserved_mem: Specifies the reserved node memory, which is reserved for
+               Kubernetes-related components. Changing this parameter will create a new resource.
+        :param int max_pods: Specifies the maximum number of instances a node is allowed to create.
+               Changing this parameter will create a new resource.
+        :param str nic_threshold: Specifies the ENI pre-binding thresholds.
+               Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+        :param str node_image_id: Specifies the image ID to create the node.
+               Changing this parameter will create a new resource.
+        :param str node_multi_queue: Specifies the number of ENI queues.
+               Example setting: **"[{\\"queue\\":4}]"**. Changing this parameter will create a new resource.
+        :param str postinstall: Specifies the script to be executed after installation.
+               The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param str preinstall: Specifies the script to be executed before installation.
+               The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param str security_reinforcement_type: Specifies the security reinforcement type.
+               The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+        :param int system_reserved_mem: Specifies the reserved node memory, which is reserved
+               value for system components. Changing this parameter will create a new resource.
+        """
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
+        if docker_base_size is not None:
+            pulumi.set(__self__, "docker_base_size", docker_base_size)
+        if kube_reserved_mem is not None:
+            pulumi.set(__self__, "kube_reserved_mem", kube_reserved_mem)
+        if market_type is not None:
+            pulumi.set(__self__, "market_type", market_type)
+        if max_pods is not None:
+            pulumi.set(__self__, "max_pods", max_pods)
+        if nic_threshold is not None:
+            pulumi.set(__self__, "nic_threshold", nic_threshold)
+        if node_image_id is not None:
+            pulumi.set(__self__, "node_image_id", node_image_id)
+        if node_multi_queue is not None:
+            pulumi.set(__self__, "node_multi_queue", node_multi_queue)
+        if postinstall is not None:
+            pulumi.set(__self__, "postinstall", postinstall)
+        if preinstall is not None:
+            pulumi.set(__self__, "preinstall", preinstall)
+        if security_reinforcement_type is not None:
+            pulumi.set(__self__, "security_reinforcement_type", security_reinforcement_type)
+        if spot_price is not None:
+            pulumi.set(__self__, "spot_price", spot_price)
+        if system_reserved_mem is not None:
+            pulumi.set(__self__, "system_reserved_mem", system_reserved_mem)
+
+    @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[str]:
+        """
+        Specifies the agency name.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @property
+    @pulumi.getter(name="dockerBaseSize")
+    def docker_base_size(self) -> Optional[int]:
+        """
+        Specifies the available disk space of a single container on a node,
+        in GB. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "docker_base_size")
+
+    @property
+    @pulumi.getter(name="kubeReservedMem")
+    def kube_reserved_mem(self) -> Optional[int]:
+        """
+        Specifies the reserved node memory, which is reserved for
+        Kubernetes-related components. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "kube_reserved_mem")
+
+    @property
+    @pulumi.getter(name="marketType")
+    def market_type(self) -> Optional[str]:
+        return pulumi.get(self, "market_type")
+
+    @property
+    @pulumi.getter(name="maxPods")
+    def max_pods(self) -> Optional[int]:
+        """
+        Specifies the maximum number of instances a node is allowed to create.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_pods")
+
+    @property
+    @pulumi.getter(name="nicThreshold")
+    def nic_threshold(self) -> Optional[str]:
+        """
+        Specifies the ENI pre-binding thresholds.
+        Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "nic_threshold")
+
+    @property
+    @pulumi.getter(name="nodeImageId")
+    def node_image_id(self) -> Optional[str]:
+        """
+        Specifies the image ID to create the node.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "node_image_id")
+
+    @property
+    @pulumi.getter(name="nodeMultiQueue")
+    def node_multi_queue(self) -> Optional[str]:
+        """
+        Specifies the number of ENI queues.
+        Example setting: **"[{\\"queue\\":4}]"**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "node_multi_queue")
+
+    @property
+    @pulumi.getter
+    def postinstall(self) -> Optional[str]:
+        """
+        Specifies the script to be executed after installation.
+        The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "postinstall")
+
+    @property
+    @pulumi.getter
+    def preinstall(self) -> Optional[str]:
+        """
+        Specifies the script to be executed before installation.
+        The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "preinstall")
+
+    @property
+    @pulumi.getter(name="securityReinforcementType")
+    def security_reinforcement_type(self) -> Optional[str]:
+        """
+        Specifies the security reinforcement type.
+        The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "security_reinforcement_type")
+
+    @property
+    @pulumi.getter(name="spotPrice")
+    def spot_price(self) -> Optional[str]:
+        return pulumi.get(self, "spot_price")
+
+    @property
+    @pulumi.getter(name="systemReservedMem")
+    def system_reserved_mem(self) -> Optional[int]:
+        """
+        Specifies the reserved node memory, which is reserved
+        value for system components. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "system_reserved_mem")
+
+
+@pulumi.output_type
+class NodeExtensionNic(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "subnetId":
+            suggest = "subnet_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodeExtensionNic. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodeExtensionNic.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodeExtensionNic.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 subnet_id: str):
+        """
+        :param str subnet_id: Specifies the ID of the subnet to which the NIC belongs.
+               Changing this parameter will create a new resource.
+        """
+        pulumi.set(__self__, "subnet_id", subnet_id)
+
+    @property
+    @pulumi.getter(name="subnetId")
+    def subnet_id(self) -> str:
+        """
+        Specifies the ID of the subnet to which the NIC belongs.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "subnet_id")
+
+
+@pulumi.output_type
+class NodeHostnameConfig(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        return pulumi.get(self, "type")
+
 
 @pulumi.output_type
 class NodePoolDataVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -711,37 +1950,45 @@ class NodePoolDataVolume(dict):
     def __init__(__self__, *,
                  size: int,
                  volumetype: str,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
-                 kms_key_id: Optional[str] = None):
+                 iops: Optional[int] = None,
+                 kms_key_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
                Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
                Changing this parameter will create a new resource.
         :param str volumetype: Specifies the disk type. Changing this parameter will create a new resource.
-        :param str extend_param: Specifies the extended parameter.
+        :param str dss_pool_id: Specifies the DSS pool ID. This field is used only for dedicated storage.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
         :param Mapping[str, str] extend_params: Specifies the disk expansion parameters.
                Changing this parameter will create a new resource.
+        :param int iops: Specifies the iops of the disk,
+               required when `volumetype` is **GPSSD2** or **ESSD2**.
         :param str kms_key_id: Specifies the KMS key ID. This is used to encrypt the volume.
                Changing this parameter will create a new resource.
+        :param int throughput: Specifies the throughput of the disk in MiB/s,
+               required when `volumetype` is **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volumetype", volumetype)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -762,17 +2009,17 @@ class NodePoolDataVolume(dict):
         return pulumi.get(self, "volumetype")
 
     @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        Specifies the DSS pool ID. This field is used only for dedicated storage.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[str]:
-        """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        """
         return pulumi.get(self, "extend_param")
 
     @property
@@ -790,6 +2037,15 @@ class NodePoolDataVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the iops of the disk,
+        required when `volumetype` is **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -798,13 +2054,558 @@ class NodePoolDataVolume(dict):
         """
         return pulumi.get(self, "kms_key_id")
 
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput of the disk in MiB/s,
+        required when `volumetype` is **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
+
+
+@pulumi.output_type
+class NodePoolExtendParams(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "agencyName":
+            suggest = "agency_name"
+        elif key == "dockerBaseSize":
+            suggest = "docker_base_size"
+        elif key == "kubeReservedMem":
+            suggest = "kube_reserved_mem"
+        elif key == "marketType":
+            suggest = "market_type"
+        elif key == "maxPods":
+            suggest = "max_pods"
+        elif key == "nicThreshold":
+            suggest = "nic_threshold"
+        elif key == "nodeImageId":
+            suggest = "node_image_id"
+        elif key == "nodeMultiQueue":
+            suggest = "node_multi_queue"
+        elif key == "securityReinforcementType":
+            suggest = "security_reinforcement_type"
+        elif key == "spotPrice":
+            suggest = "spot_price"
+        elif key == "systemReservedMem":
+            suggest = "system_reserved_mem"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodePoolExtendParams. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodePoolExtendParams.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodePoolExtendParams.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 agency_name: Optional[str] = None,
+                 docker_base_size: Optional[int] = None,
+                 kube_reserved_mem: Optional[int] = None,
+                 market_type: Optional[str] = None,
+                 max_pods: Optional[int] = None,
+                 nic_threshold: Optional[str] = None,
+                 node_image_id: Optional[str] = None,
+                 node_multi_queue: Optional[str] = None,
+                 postinstall: Optional[str] = None,
+                 preinstall: Optional[str] = None,
+                 security_reinforcement_type: Optional[str] = None,
+                 spot_price: Optional[str] = None,
+                 system_reserved_mem: Optional[int] = None):
+        """
+        :param str agency_name: Specifies the agency name.
+               Changing this parameter will create a new resource.
+        :param int docker_base_size: Specifies the available disk space of a single container on a node,
+               in GB. Changing this parameter will create a new resource.
+        :param int kube_reserved_mem: Specifies the reserved node memory, which is reserved for
+               Kubernetes-related components. Changing this parameter will create a new resource.
+        :param int max_pods: Specifies the maximum number of instances a node is allowed to create.
+               Changing this parameter will create a new resource.
+        :param str nic_threshold: Specifies the ENI pre-binding thresholds.
+               Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+        :param str node_image_id: Specifies the image ID to create the node.
+               Changing this parameter will create a new resource.
+        :param str node_multi_queue: Specifies the number of ENI queues.
+               Example setting: **"[{\\"queue\\":4}]"**. Changing this parameter will create a new resource.
+        :param str postinstall: Specifies the script to be executed after installation.
+               The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param str preinstall: Specifies the script to be executed before installation.
+               The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        :param str security_reinforcement_type: Specifies the security reinforcement type.
+               The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+        :param int system_reserved_mem: Specifies the reserved node memory, which is reserved
+               value for system components. Changing this parameter will create a new resource.
+        """
+        if agency_name is not None:
+            pulumi.set(__self__, "agency_name", agency_name)
+        if docker_base_size is not None:
+            pulumi.set(__self__, "docker_base_size", docker_base_size)
+        if kube_reserved_mem is not None:
+            pulumi.set(__self__, "kube_reserved_mem", kube_reserved_mem)
+        if market_type is not None:
+            pulumi.set(__self__, "market_type", market_type)
+        if max_pods is not None:
+            pulumi.set(__self__, "max_pods", max_pods)
+        if nic_threshold is not None:
+            pulumi.set(__self__, "nic_threshold", nic_threshold)
+        if node_image_id is not None:
+            pulumi.set(__self__, "node_image_id", node_image_id)
+        if node_multi_queue is not None:
+            pulumi.set(__self__, "node_multi_queue", node_multi_queue)
+        if postinstall is not None:
+            pulumi.set(__self__, "postinstall", postinstall)
+        if preinstall is not None:
+            pulumi.set(__self__, "preinstall", preinstall)
+        if security_reinforcement_type is not None:
+            pulumi.set(__self__, "security_reinforcement_type", security_reinforcement_type)
+        if spot_price is not None:
+            pulumi.set(__self__, "spot_price", spot_price)
+        if system_reserved_mem is not None:
+            pulumi.set(__self__, "system_reserved_mem", system_reserved_mem)
+
+    @property
+    @pulumi.getter(name="agencyName")
+    def agency_name(self) -> Optional[str]:
+        """
+        Specifies the agency name.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "agency_name")
+
+    @property
+    @pulumi.getter(name="dockerBaseSize")
+    def docker_base_size(self) -> Optional[int]:
+        """
+        Specifies the available disk space of a single container on a node,
+        in GB. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "docker_base_size")
+
+    @property
+    @pulumi.getter(name="kubeReservedMem")
+    def kube_reserved_mem(self) -> Optional[int]:
+        """
+        Specifies the reserved node memory, which is reserved for
+        Kubernetes-related components. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "kube_reserved_mem")
+
+    @property
+    @pulumi.getter(name="marketType")
+    def market_type(self) -> Optional[str]:
+        return pulumi.get(self, "market_type")
+
+    @property
+    @pulumi.getter(name="maxPods")
+    def max_pods(self) -> Optional[int]:
+        """
+        Specifies the maximum number of instances a node is allowed to create.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "max_pods")
+
+    @property
+    @pulumi.getter(name="nicThreshold")
+    def nic_threshold(self) -> Optional[str]:
+        """
+        Specifies the ENI pre-binding thresholds.
+        Example setting: **"0.3:0.6"**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "nic_threshold")
+
+    @property
+    @pulumi.getter(name="nodeImageId")
+    def node_image_id(self) -> Optional[str]:
+        """
+        Specifies the image ID to create the node.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "node_image_id")
+
+    @property
+    @pulumi.getter(name="nodeMultiQueue")
+    def node_multi_queue(self) -> Optional[str]:
+        """
+        Specifies the number of ENI queues.
+        Example setting: **"[{\\"queue\\":4}]"**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "node_multi_queue")
+
+    @property
+    @pulumi.getter
+    def postinstall(self) -> Optional[str]:
+        """
+        Specifies the script to be executed after installation.
+        The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "postinstall")
+
+    @property
+    @pulumi.getter
+    def preinstall(self) -> Optional[str]:
+        """
+        Specifies the script to be executed before installation.
+        The input value can be a Base64 encoded string or not. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "preinstall")
+
+    @property
+    @pulumi.getter(name="securityReinforcementType")
+    def security_reinforcement_type(self) -> Optional[str]:
+        """
+        Specifies the security reinforcement type.
+        The value can be: **null** or **cybersecurity**. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "security_reinforcement_type")
+
+    @property
+    @pulumi.getter(name="spotPrice")
+    def spot_price(self) -> Optional[str]:
+        return pulumi.get(self, "spot_price")
+
+    @property
+    @pulumi.getter(name="systemReservedMem")
+    def system_reserved_mem(self) -> Optional[int]:
+        """
+        Specifies the reserved node memory, which is reserved
+        value for system components. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "system_reserved_mem")
+
+
+@pulumi.output_type
+class NodePoolExtensionScaleGroup(dict):
+    def __init__(__self__, *,
+                 metadata: Optional['outputs.NodePoolExtensionScaleGroupMetadata'] = None,
+                 spec: Optional['outputs.NodePoolExtensionScaleGroupSpec'] = None):
+        """
+        :param 'NodePoolExtensionScaleGroupMetadataArgs' metadata: Specifies the basic information about the extended scaling group.
+               The object structure is documented below.
+        :param 'NodePoolExtensionScaleGroupSpecArgs' spec: Specifies the configurations of the extended scaling group,
+               which carry different configurations from those of the default scaling group.
+               The object structure is documented below.
+        """
+        if metadata is not None:
+            pulumi.set(__self__, "metadata", metadata)
+        if spec is not None:
+            pulumi.set(__self__, "spec", spec)
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> Optional['outputs.NodePoolExtensionScaleGroupMetadata']:
+        """
+        Specifies the basic information about the extended scaling group.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "metadata")
+
+    @property
+    @pulumi.getter
+    def spec(self) -> Optional['outputs.NodePoolExtensionScaleGroupSpec']:
+        """
+        Specifies the configurations of the extended scaling group,
+        which carry different configurations from those of the default scaling group.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "spec")
+
+
+@pulumi.output_type
+class NodePoolExtensionScaleGroupMetadata(dict):
+    def __init__(__self__, *,
+                 name: Optional[str] = None):
+        """
+        :param str name: Specifies the name of an extended scaling group.
+               The value cannot be default and can contain a maximum of 55 characters.
+               Only digits, lowercase letters, and hyphens (-) are allowed.
+        """
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the name of an extended scaling group.
+        The value cannot be default and can contain a maximum of 55 characters.
+        Only digits, lowercase letters, and hyphens (-) are allowed.
+        """
+        return pulumi.get(self, "name")
+
+
+@pulumi.output_type
+class NodePoolExtensionScaleGroupSpec(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "capacityReservationSpecification":
+            suggest = "capacity_reservation_specification"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodePoolExtensionScaleGroupSpec. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodePoolExtensionScaleGroupSpec.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodePoolExtensionScaleGroupSpec.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 autoscaling: Optional['outputs.NodePoolExtensionScaleGroupSpecAutoscaling'] = None,
+                 az: Optional[str] = None,
+                 capacity_reservation_specification: Optional['outputs.NodePoolExtensionScaleGroupSpecCapacityReservationSpecification'] = None,
+                 flavor: Optional[str] = None):
+        """
+        :param 'NodePoolExtensionScaleGroupSpecAutoscalingArgs' autoscaling: Specifies the auto scaling configurations of the extended scaling group.
+               The object structure is documented below.
+        :param str az: Specifies the availability zone of a node.
+               If this parameter is not specified or left blank, the default scaling group configurations take effect.
+        :param 'NodePoolExtensionScaleGroupSpecCapacityReservationSpecificationArgs' capacity_reservation_specification: Specifies the capacity reservation
+               configurations of the extended scaling group.
+               The object structure is documented below.
+        :param str flavor: Specifies the node flavor.
+        """
+        if autoscaling is not None:
+            pulumi.set(__self__, "autoscaling", autoscaling)
+        if az is not None:
+            pulumi.set(__self__, "az", az)
+        if capacity_reservation_specification is not None:
+            pulumi.set(__self__, "capacity_reservation_specification", capacity_reservation_specification)
+        if flavor is not None:
+            pulumi.set(__self__, "flavor", flavor)
+
+    @property
+    @pulumi.getter
+    def autoscaling(self) -> Optional['outputs.NodePoolExtensionScaleGroupSpecAutoscaling']:
+        """
+        Specifies the auto scaling configurations of the extended scaling group.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "autoscaling")
+
+    @property
+    @pulumi.getter
+    def az(self) -> Optional[str]:
+        """
+        Specifies the availability zone of a node.
+        If this parameter is not specified or left blank, the default scaling group configurations take effect.
+        """
+        return pulumi.get(self, "az")
+
+    @property
+    @pulumi.getter(name="capacityReservationSpecification")
+    def capacity_reservation_specification(self) -> Optional['outputs.NodePoolExtensionScaleGroupSpecCapacityReservationSpecification']:
+        """
+        Specifies the capacity reservation
+        configurations of the extended scaling group.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "capacity_reservation_specification")
+
+    @property
+    @pulumi.getter
+    def flavor(self) -> Optional[str]:
+        """
+        Specifies the node flavor.
+        """
+        return pulumi.get(self, "flavor")
+
+
+@pulumi.output_type
+class NodePoolExtensionScaleGroupSpecAutoscaling(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "extensionPriority":
+            suggest = "extension_priority"
+        elif key == "maxNodeCount":
+            suggest = "max_node_count"
+        elif key == "minNodeCount":
+            suggest = "min_node_count"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodePoolExtensionScaleGroupSpecAutoscaling. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodePoolExtensionScaleGroupSpecAutoscaling.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodePoolExtensionScaleGroupSpecAutoscaling.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 enable: Optional[bool] = None,
+                 extension_priority: Optional[int] = None,
+                 max_node_count: Optional[int] = None,
+                 min_node_count: Optional[int] = None):
+        """
+        :param bool enable: Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+        :param int extension_priority: Specifies the priority of the scaling group, defaults to **0**.
+               A higher value indicates a greater priority.
+        :param int max_node_count: Specifies the maximum number of nodes that can be retained in the scaling group
+               during auto scaling. The value must be greater than or equal to that of `min_node_count`, and can neither be greater
+               than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+        :param int min_node_count: Specifies the minimum number of nodes in the scaling group during auto scaling.
+               The value must be greater than **0**.
+        """
+        if enable is not None:
+            pulumi.set(__self__, "enable", enable)
+        if extension_priority is not None:
+            pulumi.set(__self__, "extension_priority", extension_priority)
+        if max_node_count is not None:
+            pulumi.set(__self__, "max_node_count", max_node_count)
+        if min_node_count is not None:
+            pulumi.set(__self__, "min_node_count", min_node_count)
+
+    @property
+    @pulumi.getter
+    def enable(self) -> Optional[bool]:
+        """
+        Specifies whether to enable auto scaling for the scaling group, defaults to **false**.
+        """
+        return pulumi.get(self, "enable")
+
+    @property
+    @pulumi.getter(name="extensionPriority")
+    def extension_priority(self) -> Optional[int]:
+        """
+        Specifies the priority of the scaling group, defaults to **0**.
+        A higher value indicates a greater priority.
+        """
+        return pulumi.get(self, "extension_priority")
+
+    @property
+    @pulumi.getter(name="maxNodeCount")
+    def max_node_count(self) -> Optional[int]:
+        """
+        Specifies the maximum number of nodes that can be retained in the scaling group
+        during auto scaling. The value must be greater than or equal to that of `min_node_count`, and can neither be greater
+        than the maximum number of nodes allowed by the cluster nor the maximum number of nodes in the node pool.
+        """
+        return pulumi.get(self, "max_node_count")
+
+    @property
+    @pulumi.getter(name="minNodeCount")
+    def min_node_count(self) -> Optional[int]:
+        """
+        Specifies the minimum number of nodes in the scaling group during auto scaling.
+        The value must be greater than **0**.
+        """
+        return pulumi.get(self, "min_node_count")
+
+
+@pulumi.output_type
+class NodePoolExtensionScaleGroupSpecCapacityReservationSpecification(dict):
+    def __init__(__self__, *,
+                 id: Optional[str] = None,
+                 preference: Optional[str] = None):
+        """
+        :param str id: Specifies the private pool ID.
+               The parameter value can be ignored when preference is set to none.
+        :param str preference: Specifies the capacity of a private storage pool. If the value is none,
+               the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+               In this case, the `id` cannot be left blank.
+        """
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if preference is not None:
+            pulumi.set(__self__, "preference", preference)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        Specifies the private pool ID.
+        The parameter value can be ignored when preference is set to none.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def preference(self) -> Optional[str]:
+        """
+        Specifies the capacity of a private storage pool. If the value is none,
+        the capacity reservation is not specified. If the value is targeted, the capacity reservation is specified.
+        In this case, the `id` cannot be left blank.
+        """
+        return pulumi.get(self, "preference")
+
+
+@pulumi.output_type
+class NodePoolHostnameConfig(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class NodePoolNodesAddNodeList(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "serverId":
+            suggest = "server_id"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in NodePoolNodesAddNodeList. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        NodePoolNodesAddNodeList.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        NodePoolNodesAddNodeList.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 server_id: str):
+        """
+        :param str server_id: Specifies server ID.
+        """
+        pulumi.set(__self__, "server_id", server_id)
+
+    @property
+    @pulumi.getter(name="serverId")
+    def server_id(self) -> str:
+        """
+        Specifies server ID.
+        """
+        return pulumi.get(self, "server_id")
+
 
 @pulumi.output_type
 class NodePoolRootVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -827,37 +2628,45 @@ class NodePoolRootVolume(dict):
     def __init__(__self__, *,
                  size: int,
                  volumetype: str,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
-                 kms_key_id: Optional[str] = None):
+                 iops: Optional[int] = None,
+                 kms_key_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
                Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
                Changing this parameter will create a new resource.
         :param str volumetype: Specifies the disk type. Changing this parameter will create a new resource.
-        :param str extend_param: Specifies the extended parameter.
+        :param str dss_pool_id: Specifies the DSS pool ID. This field is used only for dedicated storage.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
         :param Mapping[str, str] extend_params: Specifies the disk expansion parameters.
                Changing this parameter will create a new resource.
+        :param int iops: Specifies the iops of the disk,
+               required when `volumetype` is **GPSSD2** or **ESSD2**.
         :param str kms_key_id: Specifies the KMS key ID. This is used to encrypt the volume.
                Changing this parameter will create a new resource.
+        :param int throughput: Specifies the throughput of the disk in MiB/s,
+               required when `volumetype` is **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volumetype", volumetype)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -878,17 +2687,17 @@ class NodePoolRootVolume(dict):
         return pulumi.get(self, "volumetype")
 
     @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        Specifies the DSS pool ID. This field is used only for dedicated storage.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[str]:
-        """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        """
         return pulumi.get(self, "extend_param")
 
     @property
@@ -906,6 +2715,15 @@ class NodePoolRootVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the iops of the disk,
+        required when `volumetype` is **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -913,6 +2731,15 @@ class NodePoolRootVolume(dict):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "kms_key_id")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput of the disk in MiB/s,
+        required when `volumetype` is **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
 
 
 @pulumi.output_type
@@ -981,9 +2808,10 @@ class NodePoolStorageGroup(dict):
                  virtual_spaces: Sequence['outputs.NodePoolStorageGroupVirtualSpace'],
                  cce_managed: Optional[bool] = None):
         """
-        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-               and **user** are supported. Changing this parameter will create a new resource.
-        :param Sequence[str] selector_names: Specifies the list of names of seletors to match.
+        :param str name: Specifies the name of an extended scaling group.
+               The value cannot be default and can contain a maximum of 55 characters.
+               Only digits, lowercase letters, and hyphens (-) are allowed.
+        :param Sequence[str] selector_names: Specifies the list of names of selectors to match.
                This parameter corresponds to name in `selectors`. A group can match multiple selectors,
                but a selector can match only one group. Changing this parameter will create a new resource.
         :param Sequence['NodePoolStorageGroupVirtualSpaceArgs'] virtual_spaces: Specifies the detailed management of space configuration in a group.
@@ -1002,8 +2830,9 @@ class NodePoolStorageGroup(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-        and **user** are supported. Changing this parameter will create a new resource.
+        Specifies the name of an extended scaling group.
+        The value cannot be default and can contain a maximum of 55 characters.
+        Only digits, lowercase letters, and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1011,7 +2840,7 @@ class NodePoolStorageGroup(dict):
     @pulumi.getter(name="selectorNames")
     def selector_names(self) -> Sequence[str]:
         """
-        Specifies the list of names of seletors to match.
+        Specifies the list of names of selectors to match.
         This parameter corresponds to name in `selectors`. A group can match multiple selectors,
         but a selector can match only one group. Changing this parameter will create a new resource.
         """
@@ -1067,8 +2896,9 @@ class NodePoolStorageGroupVirtualSpace(dict):
                  lvm_path: Optional[str] = None,
                  runtime_lv_type: Optional[str] = None):
         """
-        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-               and **user** are supported. Changing this parameter will create a new resource.
+        :param str name: Specifies the name of an extended scaling group.
+               The value cannot be default and can contain a maximum of 55 characters.
+               Only digits, lowercase letters, and hyphens (-) are allowed.
         :param str size: Specifies the size of a virtual space. Only an integer percentage is supported.
                Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
                Changing this parameter will create a new resource.
@@ -1093,8 +2923,9 @@ class NodePoolStorageGroupVirtualSpace(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-        and **user** are supported. Changing this parameter will create a new resource.
+        Specifies the name of an extended scaling group.
+        The value cannot be default and can contain a maximum of 55 characters.
+        Only digits, lowercase letters, and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1173,11 +3004,12 @@ class NodePoolStorageSelector(dict):
                  match_label_volume_type: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-               and **user** are supported. Changing this parameter will create a new resource.
+        :param str name: Specifies the name of an extended scaling group.
+               The value cannot be default and can contain a maximum of 55 characters.
+               Only digits, lowercase letters, and hyphens (-) are allowed.
         :param str match_label_count: Specifies the number of disks to be selected. If omitted,
                all disks of this type are selected. Changing this parameter will create a new resource.
-        :param str match_label_metadata_cmkid: Specifies the cstomer master key ID of an encrypted
+        :param str match_label_metadata_cmkid: Specifies the customer master key ID of an encrypted
                disk. Changing this parameter will create a new resource.
         :param str match_label_metadata_encrypted: Specifies the disk encryption identifier.
                Values can be: **0** indicates that the disk is not encrypted and **1** indicates that the disk is encrypted.
@@ -1187,8 +3019,10 @@ class NodePoolStorageSelector(dict):
         :param str match_label_volume_type: Specifies the EVS disk type. Currently,
                **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
                Changing this parameter will create a new resource.
-        :param str type: Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-               The default value is **evs**. Changing this parameter will create a new resource.
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
         """
         pulumi.set(__self__, "name", name)
         if match_label_count is not None:
@@ -1208,8 +3042,9 @@ class NodePoolStorageSelector(dict):
     @pulumi.getter
     def name(self) -> str:
         """
-        Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
-        and **user** are supported. Changing this parameter will create a new resource.
+        Specifies the name of an extended scaling group.
+        The value cannot be default and can contain a maximum of 55 characters.
+        Only digits, lowercase letters, and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -1226,7 +3061,7 @@ class NodePoolStorageSelector(dict):
     @pulumi.getter(name="matchLabelMetadataCmkid")
     def match_label_metadata_cmkid(self) -> Optional[str]:
         """
-        Specifies the cstomer master key ID of an encrypted
+        Specifies the customer master key ID of an encrypted
         disk. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "match_label_metadata_cmkid")
@@ -1264,8 +3099,10 @@ class NodePoolStorageSelector(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-        The default value is **evs**. Changing this parameter will create a new resource.
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
         """
         return pulumi.get(self, "type")
 
@@ -1321,7 +3158,9 @@ class NodeRootVolume(dict):
     @staticmethod
     def __key_warning(key: str):
         suggest = None
-        if key == "extendParam":
+        if key == "dssPoolId":
+            suggest = "dss_pool_id"
+        elif key == "extendParam":
             suggest = "extend_param"
         elif key == "extendParams":
             suggest = "extend_params"
@@ -1344,38 +3183,47 @@ class NodeRootVolume(dict):
     def __init__(__self__, *,
                  size: int,
                  volumetype: str,
+                 dss_pool_id: Optional[str] = None,
                  extend_param: Optional[str] = None,
                  extend_params: Optional[Mapping[str, str]] = None,
                  hw_passthrough: Optional[bool] = None,
-                 kms_key_id: Optional[str] = None):
+                 iops: Optional[int] = None,
+                 kms_key_id: Optional[str] = None,
+                 throughput: Optional[int] = None):
         """
         :param int size: Specifies the size of a virtual space. Only an integer percentage is supported.
                Example: 90%. Note that the total percentage of all virtual spaces in a group cannot exceed 100%.
                Changing this parameter will create a new resource.
         :param str volumetype: Specifies the disk type.
                Changing this parameter will create a new resource.
-        :param str extend_param: Specifies the extended parameter.
+        :param str dss_pool_id: Specifies the DSS pool ID. This field is used only for
+               dedicated storage. Changing this parameter will create a new resource.
+        :param Mapping[str, str] extend_params: Specifies the extended parameters.
+               The object structure is documented below.
                Changing this parameter will create a new resource.
-               The available keys are as follows:
-               + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-               + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-               + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-               + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        :param Mapping[str, str] extend_params: Specifies the disk expansion parameters.
-               Changing this parameter will create a new resource.
+        :param int iops: Specifies the iops of the disk,
+               required when `volumetype` is **GPSSD2** or **ESSD2**.
         :param str kms_key_id: Specifies the ID of a KMS key. This is used to encrypt the volume.
                Changing this parameter will create a new resource.
+        :param int throughput: Specifies the throughput of the disk in MiB/s,
+               required when `volumetype` is **GPSSD2**.
         """
         pulumi.set(__self__, "size", size)
         pulumi.set(__self__, "volumetype", volumetype)
+        if dss_pool_id is not None:
+            pulumi.set(__self__, "dss_pool_id", dss_pool_id)
         if extend_param is not None:
             pulumi.set(__self__, "extend_param", extend_param)
         if extend_params is not None:
             pulumi.set(__self__, "extend_params", extend_params)
         if hw_passthrough is not None:
             pulumi.set(__self__, "hw_passthrough", hw_passthrough)
+        if iops is not None:
+            pulumi.set(__self__, "iops", iops)
         if kms_key_id is not None:
             pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if throughput is not None:
+            pulumi.set(__self__, "throughput", throughput)
 
     @property
     @pulumi.getter
@@ -1397,24 +3245,25 @@ class NodeRootVolume(dict):
         return pulumi.get(self, "volumetype")
 
     @property
+    @pulumi.getter(name="dssPoolId")
+    def dss_pool_id(self) -> Optional[str]:
+        """
+        Specifies the DSS pool ID. This field is used only for
+        dedicated storage. Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "dss_pool_id")
+
+    @property
     @pulumi.getter(name="extendParam")
     def extend_param(self) -> Optional[str]:
-        """
-        Specifies the extended parameter.
-        Changing this parameter will create a new resource.
-        The available keys are as follows:
-        + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-        + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-        + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-        + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
-        """
         return pulumi.get(self, "extend_param")
 
     @property
     @pulumi.getter(name="extendParams")
     def extend_params(self) -> Optional[Mapping[str, str]]:
         """
-        Specifies the disk expansion parameters.
+        Specifies the extended parameters.
+        The object structure is documented below.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "extend_params")
@@ -1425,6 +3274,15 @@ class NodeRootVolume(dict):
         return pulumi.get(self, "hw_passthrough")
 
     @property
+    @pulumi.getter
+    def iops(self) -> Optional[int]:
+        """
+        Specifies the iops of the disk,
+        required when `volumetype` is **GPSSD2** or **ESSD2**.
+        """
+        return pulumi.get(self, "iops")
+
+    @property
     @pulumi.getter(name="kmsKeyId")
     def kms_key_id(self) -> Optional[str]:
         """
@@ -1432,6 +3290,15 @@ class NodeRootVolume(dict):
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "kms_key_id")
+
+    @property
+    @pulumi.getter
+    def throughput(self) -> Optional[int]:
+        """
+        Specifies the throughput of the disk in MiB/s,
+        required when `volumetype` is **GPSSD2**.
+        """
+        return pulumi.get(self, "throughput")
 
 
 @pulumi.output_type
@@ -1502,7 +3369,7 @@ class NodeStorageGroup(dict):
         """
         :param str name: Specifies the virtual space name. Currently, only **kubernetes**, **runtime**,
                and **user** are supported. Changing this parameter will create a new resource.
-        :param Sequence[str] selector_names: Specifies the list of names of seletors to match.
+        :param Sequence[str] selector_names: Specifies the list of names of selectors to match.
                This parameter corresponds to name in `selectors`. A group can match multiple selectors,
                but a selector can match only one group. Changing this parameter will create a new resource.
         :param Sequence['NodeStorageGroupVirtualSpaceArgs'] virtual_spaces: Specifies the detailed management of space configuration in a group.
@@ -1530,7 +3397,7 @@ class NodeStorageGroup(dict):
     @pulumi.getter(name="selectorNames")
     def selector_names(self) -> Sequence[str]:
         """
-        Specifies the list of names of seletors to match.
+        Specifies the list of names of selectors to match.
         This parameter corresponds to name in `selectors`. A group can match multiple selectors,
         but a selector can match only one group. Changing this parameter will create a new resource.
         """
@@ -1706,8 +3573,10 @@ class NodeStorageSelector(dict):
         :param str match_label_volume_type: Specifies the EVS disk type. Currently,
                **SSD**, **GPSSD**, and **SAS** are supported. If omitted, the disk type is not limited.
                Changing this parameter will create a new resource.
-        :param str type: Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-               The default value is **evs**. Changing this parameter will create a new resource.
+        :param str type: Specifies the hostname type of the kubernetes node.
+               The value can be:
+               + **privateIp**: The Kubernetes node is named after its IP address.
+               + **cceNodeName**: The Kubernetes node is named after the CCE node.
         """
         pulumi.set(__self__, "name", name)
         if match_label_count is not None:
@@ -1783,8 +3652,10 @@ class NodeStorageSelector(dict):
     @pulumi.getter
     def type(self) -> Optional[str]:
         """
-        Specifies the storage type. Currently, only **evs (EVS volumes)** is supported.
-        The default value is **evs**. Changing this parameter will create a new resource.
+        Specifies the hostname type of the kubernetes node.
+        The value can be:
+        + **privateIp**: The Kubernetes node is named after its IP address.
+        + **cceNodeName**: The Kubernetes node is named after the CCE node.
         """
         return pulumi.get(self, "type")
 
@@ -1794,7 +3665,7 @@ class NodeTaint(dict):
     def __init__(__self__, *,
                  effect: str,
                  key: str,
-                 value: str):
+                 value: Optional[str] = None):
         """
         :param str effect: Available options are NoSchedule, PreferNoSchedule, and NoExecute.
                Changing this parameter will create a new resource.
@@ -1807,7 +3678,8 @@ class NodeTaint(dict):
         """
         pulumi.set(__self__, "effect", effect)
         pulumi.set(__self__, "key", key)
-        pulumi.set(__self__, "value", value)
+        if value is not None:
+            pulumi.set(__self__, "value", value)
 
     @property
     @pulumi.getter
@@ -1830,7 +3702,7 @@ class NodeTaint(dict):
 
     @property
     @pulumi.getter
-    def value(self) -> str:
+    def value(self) -> Optional[str]:
         """
         A value must start with a letter or digit and can contain a maximum of 63
         characters, including letters, digits, hyphens (-), underscores (_), and periods (.). Changing this parameter will
@@ -1866,6 +3738,583 @@ class GetAddonTemplateSupportVersionResult(dict):
         The cluster (Virtual Machine) version that the add-on template supported.
         """
         return pulumi.get(self, "virtual_machines")
+
+
+@pulumi.output_type
+class GetAddonsItemResult(dict):
+    def __init__(__self__, *,
+                 metadatas: Sequence['outputs.GetAddonsItemMetadataResult'],
+                 specs: Sequence['outputs.GetAddonsItemSpecResult'],
+                 statuses: Sequence['outputs.GetAddonsItemStatusResult']):
+        """
+        :param Sequence['GetAddonsItemMetadataArgs'] metadatas: The metadata of the add-on instance.
+        :param Sequence['GetAddonsItemSpecArgs'] specs: The detailed description of the add-on instance.
+        :param Sequence['GetAddonsItemStatusArgs'] statuses: The statuses of add-on instances.
+        """
+        pulumi.set(__self__, "metadatas", metadatas)
+        pulumi.set(__self__, "specs", specs)
+        pulumi.set(__self__, "statuses", statuses)
+
+    @property
+    @pulumi.getter
+    def metadatas(self) -> Sequence['outputs.GetAddonsItemMetadataResult']:
+        """
+        The metadata of the add-on instance.
+        """
+        return pulumi.get(self, "metadatas")
+
+    @property
+    @pulumi.getter
+    def specs(self) -> Sequence['outputs.GetAddonsItemSpecResult']:
+        """
+        The detailed description of the add-on instance.
+        """
+        return pulumi.get(self, "specs")
+
+    @property
+    @pulumi.getter
+    def statuses(self) -> Sequence['outputs.GetAddonsItemStatusResult']:
+        """
+        The statuses of add-on instances.
+        """
+        return pulumi.get(self, "statuses")
+
+
+@pulumi.output_type
+class GetAddonsItemMetadataResult(dict):
+    def __init__(__self__, *,
+                 alias: str,
+                 annotations: Mapping[str, str],
+                 creation_timestamp: str,
+                 labels: Mapping[str, str],
+                 name: str,
+                 uid: str,
+                 update_timestamp: str):
+        """
+        :param str alias: The add-on instance alias.
+        :param Mapping[str, str] annotations: The add-on annotations in the format of key/value pairs.
+        :param str creation_timestamp: The creation time.
+        :param Mapping[str, str] labels: The add-on labels in key/value pairs.
+        :param str name: The add-on instance name.
+        :param str uid: The add-on instance ID.
+        :param str update_timestamp: The update time.
+        """
+        pulumi.set(__self__, "alias", alias)
+        pulumi.set(__self__, "annotations", annotations)
+        pulumi.set(__self__, "creation_timestamp", creation_timestamp)
+        pulumi.set(__self__, "labels", labels)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "uid", uid)
+        pulumi.set(__self__, "update_timestamp", update_timestamp)
+
+    @property
+    @pulumi.getter
+    def alias(self) -> str:
+        """
+        The add-on instance alias.
+        """
+        return pulumi.get(self, "alias")
+
+    @property
+    @pulumi.getter
+    def annotations(self) -> Mapping[str, str]:
+        """
+        The add-on annotations in the format of key/value pairs.
+        """
+        return pulumi.get(self, "annotations")
+
+    @property
+    @pulumi.getter(name="creationTimestamp")
+    def creation_timestamp(self) -> str:
+        """
+        The creation time.
+        """
+        return pulumi.get(self, "creation_timestamp")
+
+    @property
+    @pulumi.getter
+    def labels(self) -> Mapping[str, str]:
+        """
+        The add-on labels in key/value pairs.
+        """
+        return pulumi.get(self, "labels")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The add-on instance name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def uid(self) -> str:
+        """
+        The add-on instance ID.
+        """
+        return pulumi.get(self, "uid")
+
+    @property
+    @pulumi.getter(name="updateTimestamp")
+    def update_timestamp(self) -> str:
+        """
+        The update time.
+        """
+        return pulumi.get(self, "update_timestamp")
+
+
+@pulumi.output_type
+class GetAddonsItemSpecResult(dict):
+    def __init__(__self__, *,
+                 addon_template_labels: Sequence[str],
+                 addon_template_logo: str,
+                 addon_template_name: str,
+                 addon_template_type: str,
+                 cluster_id: str,
+                 description: str,
+                 values: Sequence[str],
+                 version: str):
+        """
+        :param Sequence[str] addon_template_labels: The labels of the add-on template.
+        :param str addon_template_logo: The URL for obtaining the add-on template logo.
+        :param str addon_template_name: The add-on name.
+        :param str addon_template_type: The add-on type.
+        :param str cluster_id: Specifies the ID of the cluster to which the add-on instance belongs.
+        :param str description: The add-on description.
+        :param Sequence[str] values: The add-on installation parameters.
+        :param str version: The add-on version.
+        """
+        pulumi.set(__self__, "addon_template_labels", addon_template_labels)
+        pulumi.set(__self__, "addon_template_logo", addon_template_logo)
+        pulumi.set(__self__, "addon_template_name", addon_template_name)
+        pulumi.set(__self__, "addon_template_type", addon_template_type)
+        pulumi.set(__self__, "cluster_id", cluster_id)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "values", values)
+        pulumi.set(__self__, "version", version)
+
+    @property
+    @pulumi.getter(name="addonTemplateLabels")
+    def addon_template_labels(self) -> Sequence[str]:
+        """
+        The labels of the add-on template.
+        """
+        return pulumi.get(self, "addon_template_labels")
+
+    @property
+    @pulumi.getter(name="addonTemplateLogo")
+    def addon_template_logo(self) -> str:
+        """
+        The URL for obtaining the add-on template logo.
+        """
+        return pulumi.get(self, "addon_template_logo")
+
+    @property
+    @pulumi.getter(name="addonTemplateName")
+    def addon_template_name(self) -> str:
+        """
+        The add-on name.
+        """
+        return pulumi.get(self, "addon_template_name")
+
+    @property
+    @pulumi.getter(name="addonTemplateType")
+    def addon_template_type(self) -> str:
+        """
+        The add-on type.
+        """
+        return pulumi.get(self, "addon_template_type")
+
+    @property
+    @pulumi.getter(name="clusterId")
+    def cluster_id(self) -> str:
+        """
+        Specifies the ID of the cluster to which the add-on instance belongs.
+        """
+        return pulumi.get(self, "cluster_id")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The add-on description.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter
+    def values(self) -> Sequence[str]:
+        """
+        The add-on installation parameters.
+        """
+        return pulumi.get(self, "values")
+
+    @property
+    @pulumi.getter
+    def version(self) -> str:
+        """
+        The add-on version.
+        """
+        return pulumi.get(self, "version")
+
+
+@pulumi.output_type
+class GetAddonsItemStatusResult(dict):
+    def __init__(__self__, *,
+                 _reason: str,
+                 current_versions: Sequence['outputs.GetAddonsItemStatusCurrentVersionResult'],
+                 is_rollbackable: bool,
+                 message: str,
+                 previous_version: str,
+                 status: str,
+                 target_versions: Sequence[str]):
+        """
+        :param str _reason: The cause of the add-on installation failure.
+        :param Sequence['GetAddonsItemStatusCurrentVersionArgs'] current_versions: The information about the current add-on version.
+        :param bool is_rollbackable: Whether the add-on version can be rolled back to the source version.
+        :param str message: The installation error details.
+        :param str previous_version: The add-on version before upgrade or rollback
+        :param str status: The statuses of add-on instances.
+        :param Sequence[str] target_versions: The versions to which the current add-on version can be upgraded.
+        """
+        pulumi.set(__self__, "_reason", _reason)
+        pulumi.set(__self__, "current_versions", current_versions)
+        pulumi.set(__self__, "is_rollbackable", is_rollbackable)
+        pulumi.set(__self__, "message", message)
+        pulumi.set(__self__, "previous_version", previous_version)
+        pulumi.set(__self__, "status", status)
+        pulumi.set(__self__, "target_versions", target_versions)
+
+    @property
+    @pulumi.getter
+    def _reason(self) -> str:
+        """
+        The cause of the add-on installation failure.
+        """
+        return pulumi.get(self, "_reason")
+
+    @property
+    @pulumi.getter(name="currentVersions")
+    def current_versions(self) -> Sequence['outputs.GetAddonsItemStatusCurrentVersionResult']:
+        """
+        The information about the current add-on version.
+        """
+        return pulumi.get(self, "current_versions")
+
+    @property
+    @pulumi.getter(name="isRollbackable")
+    def is_rollbackable(self) -> bool:
+        """
+        Whether the add-on version can be rolled back to the source version.
+        """
+        return pulumi.get(self, "is_rollbackable")
+
+    @property
+    @pulumi.getter
+    def message(self) -> str:
+        """
+        The installation error details.
+        """
+        return pulumi.get(self, "message")
+
+    @property
+    @pulumi.getter(name="previousVersion")
+    def previous_version(self) -> str:
+        """
+        The add-on version before upgrade or rollback
+        """
+        return pulumi.get(self, "previous_version")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        The statuses of add-on instances.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="targetVersions")
+    def target_versions(self) -> Sequence[str]:
+        """
+        The versions to which the current add-on version can be upgraded.
+        """
+        return pulumi.get(self, "target_versions")
+
+
+@pulumi.output_type
+class GetAddonsItemStatusCurrentVersionResult(dict):
+    def __init__(__self__, *,
+                 creation_timestamp: str,
+                 inputs: Sequence[str],
+                 stable: bool,
+                 support_versions: Sequence['outputs.GetAddonsItemStatusCurrentVersionSupportVersionResult'],
+                 translates: Sequence[str],
+                 update_timestamp: str,
+                 version: str):
+        """
+        :param str creation_timestamp: The creation time.
+        :param Sequence[str] inputs: The add-on installation parameters.
+        :param bool stable: Whether the add-on version is a stable release.
+        :param Sequence['GetAddonsItemStatusCurrentVersionSupportVersionArgs'] support_versions: The cluster versions that support the add-on.
+        :param Sequence[str] translates: The translation information used by the GUI.
+        :param str update_timestamp: The update time.
+        :param str version: The add-on version.
+        """
+        pulumi.set(__self__, "creation_timestamp", creation_timestamp)
+        pulumi.set(__self__, "inputs", inputs)
+        pulumi.set(__self__, "stable", stable)
+        pulumi.set(__self__, "support_versions", support_versions)
+        pulumi.set(__self__, "translates", translates)
+        pulumi.set(__self__, "update_timestamp", update_timestamp)
+        pulumi.set(__self__, "version", version)
+
+    @property
+    @pulumi.getter(name="creationTimestamp")
+    def creation_timestamp(self) -> str:
+        """
+        The creation time.
+        """
+        return pulumi.get(self, "creation_timestamp")
+
+    @property
+    @pulumi.getter
+    def inputs(self) -> Sequence[str]:
+        """
+        The add-on installation parameters.
+        """
+        return pulumi.get(self, "inputs")
+
+    @property
+    @pulumi.getter
+    def stable(self) -> bool:
+        """
+        Whether the add-on version is a stable release.
+        """
+        return pulumi.get(self, "stable")
+
+    @property
+    @pulumi.getter(name="supportVersions")
+    def support_versions(self) -> Sequence['outputs.GetAddonsItemStatusCurrentVersionSupportVersionResult']:
+        """
+        The cluster versions that support the add-on.
+        """
+        return pulumi.get(self, "support_versions")
+
+    @property
+    @pulumi.getter
+    def translates(self) -> Sequence[str]:
+        """
+        The translation information used by the GUI.
+        """
+        return pulumi.get(self, "translates")
+
+    @property
+    @pulumi.getter(name="updateTimestamp")
+    def update_timestamp(self) -> str:
+        """
+        The update time.
+        """
+        return pulumi.get(self, "update_timestamp")
+
+    @property
+    @pulumi.getter
+    def version(self) -> str:
+        """
+        The add-on version.
+        """
+        return pulumi.get(self, "version")
+
+
+@pulumi.output_type
+class GetAddonsItemStatusCurrentVersionSupportVersionResult(dict):
+    def __init__(__self__, *,
+                 categories: Sequence[str],
+                 cluster_type: str,
+                 cluster_versions: Sequence[str]):
+        """
+        :param Sequence[str] categories: The current support version category.
+        :param str cluster_type: The cluster type that supports the add-on.
+        :param Sequence[str] cluster_versions: The cluster versions that support the add-on. The value is a regular expression.
+        """
+        pulumi.set(__self__, "categories", categories)
+        pulumi.set(__self__, "cluster_type", cluster_type)
+        pulumi.set(__self__, "cluster_versions", cluster_versions)
+
+    @property
+    @pulumi.getter
+    def categories(self) -> Sequence[str]:
+        """
+        The current support version category.
+        """
+        return pulumi.get(self, "categories")
+
+    @property
+    @pulumi.getter(name="clusterType")
+    def cluster_type(self) -> str:
+        """
+        The cluster type that supports the add-on.
+        """
+        return pulumi.get(self, "cluster_type")
+
+    @property
+    @pulumi.getter(name="clusterVersions")
+    def cluster_versions(self) -> Sequence[str]:
+        """
+        The cluster versions that support the add-on. The value is a regular expression.
+        """
+        return pulumi.get(self, "cluster_versions")
+
+
+@pulumi.output_type
+class GetChartsChartResult(dict):
+    def __init__(__self__, *,
+                 chart_url: str,
+                 created_at: str,
+                 description: str,
+                 icon_url: str,
+                 id: str,
+                 instruction: str,
+                 name: str,
+                 public: bool,
+                 source: str,
+                 translate: str,
+                 updated_at: str,
+                 values: str,
+                 version: str):
+        """
+        :param str chart_url: The chart URL.
+        :param str created_at: The create time.
+        :param str description: The description of the chart.
+        :param str icon_url: The icon URL.
+        :param str id: The chart ID.
+        :param str instruction: The instruction of the chart.
+        :param str name: The chart name.
+        :param bool public: Whether the chart is public.
+        :param str source: The source of the chart.
+        :param str translate: The traslate source of the chart.
+        :param str updated_at: The update time.
+        :param str values: The values of the chart.
+        :param str version: The chart version.
+        """
+        pulumi.set(__self__, "chart_url", chart_url)
+        pulumi.set(__self__, "created_at", created_at)
+        pulumi.set(__self__, "description", description)
+        pulumi.set(__self__, "icon_url", icon_url)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "instruction", instruction)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "public", public)
+        pulumi.set(__self__, "source", source)
+        pulumi.set(__self__, "translate", translate)
+        pulumi.set(__self__, "updated_at", updated_at)
+        pulumi.set(__self__, "values", values)
+        pulumi.set(__self__, "version", version)
+
+    @property
+    @pulumi.getter(name="chartUrl")
+    def chart_url(self) -> str:
+        """
+        The chart URL.
+        """
+        return pulumi.get(self, "chart_url")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        The create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        The description of the chart.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="iconUrl")
+    def icon_url(self) -> str:
+        """
+        The icon URL.
+        """
+        return pulumi.get(self, "icon_url")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        The chart ID.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def instruction(self) -> str:
+        """
+        The instruction of the chart.
+        """
+        return pulumi.get(self, "instruction")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The chart name.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def public(self) -> bool:
+        """
+        Whether the chart is public.
+        """
+        return pulumi.get(self, "public")
+
+    @property
+    @pulumi.getter
+    def source(self) -> str:
+        """
+        The source of the chart.
+        """
+        return pulumi.get(self, "source")
+
+    @property
+    @pulumi.getter
+    def translate(self) -> str:
+        """
+        The traslate source of the chart.
+        """
+        return pulumi.get(self, "translate")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        The update time.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter
+    def values(self) -> str:
+        """
+        The values of the chart.
+        """
+        return pulumi.get(self, "values")
+
+    @property
+    @pulumi.getter
+    def version(self) -> str:
+        """
+        The chart version.
+        """
+        return pulumi.get(self, "version")
 
 
 @pulumi.output_type
@@ -1944,6 +4393,137 @@ class GetClusterCertificateUserResult(dict):
     def name(self) -> str:
         """
         Specifies the name of the cluster.
+        """
+        return pulumi.get(self, "name")
+
+
+@pulumi.output_type
+class GetClusterCertificatesClusterResult(dict):
+    def __init__(__self__, *,
+                 certificate_authority_data: str,
+                 insecure_skip_tls_verify: bool,
+                 name: str,
+                 server: str):
+        """
+        :param str certificate_authority_data: The certificate authority data of the cluster certificate.
+        :param bool insecure_skip_tls_verify: Whether insecure skip tls verify of the cluster certificate.
+        :param str name: The context name of the cluster certificate.
+        :param str server: The server address of the cluster certificate.
+        """
+        pulumi.set(__self__, "certificate_authority_data", certificate_authority_data)
+        pulumi.set(__self__, "insecure_skip_tls_verify", insecure_skip_tls_verify)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "server", server)
+
+    @property
+    @pulumi.getter(name="certificateAuthorityData")
+    def certificate_authority_data(self) -> str:
+        """
+        The certificate authority data of the cluster certificate.
+        """
+        return pulumi.get(self, "certificate_authority_data")
+
+    @property
+    @pulumi.getter(name="insecureSkipTlsVerify")
+    def insecure_skip_tls_verify(self) -> bool:
+        """
+        Whether insecure skip tls verify of the cluster certificate.
+        """
+        return pulumi.get(self, "insecure_skip_tls_verify")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The context name of the cluster certificate.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def server(self) -> str:
+        """
+        The server address of the cluster certificate.
+        """
+        return pulumi.get(self, "server")
+
+
+@pulumi.output_type
+class GetClusterCertificatesContextResult(dict):
+    def __init__(__self__, *,
+                 cluster: str,
+                 name: str,
+                 user: str):
+        """
+        :param str cluster: The context cluster of the cluster certificate.
+        :param str name: The context name of the cluster certificate.
+        :param str user: The context user of the cluster certificate.
+        """
+        pulumi.set(__self__, "cluster", cluster)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "user", user)
+
+    @property
+    @pulumi.getter
+    def cluster(self) -> str:
+        """
+        The context cluster of the cluster certificate.
+        """
+        return pulumi.get(self, "cluster")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The context name of the cluster certificate.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def user(self) -> str:
+        """
+        The context user of the cluster certificate.
+        """
+        return pulumi.get(self, "user")
+
+
+@pulumi.output_type
+class GetClusterCertificatesUserResult(dict):
+    def __init__(__self__, *,
+                 client_certificate_data: str,
+                 client_key_data: str,
+                 name: str):
+        """
+        :param str client_certificate_data: The client certificate data of the cluster certificate.
+        :param str client_key_data: The client key data of the cluster certificate.
+        :param str name: The context name of the cluster certificate.
+        """
+        pulumi.set(__self__, "client_certificate_data", client_certificate_data)
+        pulumi.set(__self__, "client_key_data", client_key_data)
+        pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter(name="clientCertificateData")
+    def client_certificate_data(self) -> str:
+        """
+        The client certificate data of the cluster certificate.
+        """
+        return pulumi.get(self, "client_certificate_data")
+
+    @property
+    @pulumi.getter(name="clientKeyData")
+    def client_key_data(self) -> str:
+        """
+        The client key data of the cluster certificate.
+        """
+        return pulumi.get(self, "client_key_data")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        The context name of the cluster certificate.
         """
         return pulumi.get(self, "name")
 
@@ -2431,6 +5011,24 @@ class GetNodeDataVolumeResult(dict):
 
 
 @pulumi.output_type
+class GetNodeHostnameConfigResult(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: The hostname type of the kubernetes node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        The hostname type of the kubernetes node.
+        """
+        return pulumi.get(self, "type")
+
+
+@pulumi.output_type
 class GetNodePoolDataVolumeResult(dict):
     def __init__(__self__, *,
                  extend_params: Mapping[str, str],
@@ -2468,6 +5066,24 @@ class GetNodePoolDataVolumeResult(dict):
         Disk type.
         """
         return pulumi.get(self, "volumetype")
+
+
+@pulumi.output_type
+class GetNodePoolHostnameConfigResult(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: The hostname type of the kubernetes node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        The hostname type of the kubernetes node.
+        """
+        return pulumi.get(self, "type")
 
 
 @pulumi.output_type
@@ -2557,7 +5173,9 @@ class GetNodesNodeResult(dict):
                  billing_mode: int,
                  data_volumes: Sequence['outputs.GetNodesNodeDataVolumeResult'],
                  ecs_group_id: str,
+                 enterprise_project_id: str,
                  flavor_id: str,
+                 hostname_configs: Sequence['outputs.GetNodesNodeHostnameConfigResult'],
                  id: str,
                  key_pair: str,
                  name: str,
@@ -2574,7 +5192,10 @@ class GetNodesNodeResult(dict):
         :param int billing_mode: The node's billing mode: The value is 0 (on demand).
         :param Sequence['GetNodesNodeDataVolumeArgs'] data_volumes: The data related configuration. Structure is documented below.
         :param str ecs_group_id: The ID of ECS group to which the node belongs.
+        :param str enterprise_project_id: The enterprise project ID of the node.
         :param str flavor_id: The flavor ID to be used.
+        :param Sequence['GetNodesNodeHostnameConfigArgs'] hostname_configs: The hostname config of the kubernetes node.
+               The object structure is documented below.
         :param str id: The ID of the node.
         :param str key_pair: The key pair name when logging in to select the key pair mode.
         :param str name: Specifies the of the node.
@@ -2591,7 +5212,9 @@ class GetNodesNodeResult(dict):
         pulumi.set(__self__, "billing_mode", billing_mode)
         pulumi.set(__self__, "data_volumes", data_volumes)
         pulumi.set(__self__, "ecs_group_id", ecs_group_id)
+        pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "flavor_id", flavor_id)
+        pulumi.set(__self__, "hostname_configs", hostname_configs)
         pulumi.set(__self__, "id", id)
         pulumi.set(__self__, "key_pair", key_pair)
         pulumi.set(__self__, "name", name)
@@ -2637,12 +5260,29 @@ class GetNodesNodeResult(dict):
         return pulumi.get(self, "ecs_group_id")
 
     @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> str:
+        """
+        The enterprise project ID of the node.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter(name="flavorId")
     def flavor_id(self) -> str:
         """
         The flavor ID to be used.
         """
         return pulumi.get(self, "flavor_id")
+
+    @property
+    @pulumi.getter(name="hostnameConfigs")
+    def hostname_configs(self) -> Sequence['outputs.GetNodesNodeHostnameConfigResult']:
+        """
+        The hostname config of the kubernetes node.
+        The object structure is documented below.
+        """
+        return pulumi.get(self, "hostname_configs")
 
     @property
     @pulumi.getter
@@ -2771,6 +5411,24 @@ class GetNodesNodeDataVolumeResult(dict):
         Disk type.
         """
         return pulumi.get(self, "volumetype")
+
+
+@pulumi.output_type
+class GetNodesNodeHostnameConfigResult(dict):
+    def __init__(__self__, *,
+                 type: str):
+        """
+        :param str type: The hostname type of the kubernetes node.
+        """
+        pulumi.set(__self__, "type", type)
+
+    @property
+    @pulumi.getter
+    def type(self) -> str:
+        """
+        The hostname type of the kubernetes node.
+        """
+        return pulumi.get(self, "type")
 
 
 @pulumi.output_type

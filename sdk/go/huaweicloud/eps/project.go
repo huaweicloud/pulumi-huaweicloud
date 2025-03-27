@@ -48,20 +48,21 @@ import (
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Eps/project:Project test 88f889c7-270e-4e77-8230-bf7db08d9b0e
+//	$ pulumi import huaweicloud:Eps/project:Project test <id>
 //
 // ```
 type Project struct {
 	pulumi.CustomResourceState
 
-	// Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+	// Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
 	// Specifies the description of the enterprise project.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Specifies whether to enable the enterprise project. Defaults to **true**.
 	Enable pulumi.BoolPtrOutput `pulumi:"enable"`
 	// Specifies the name of the enterprise project.
-	// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+	// and hyphens (-) are allowed.
 	// The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies whether to skip disable the enterprise project on destroy.
@@ -74,7 +75,7 @@ type Project struct {
 	// Specifies the type of the enterprise project.
 	// The valid values are **poc** and **prod**, defaults to **prod**.
 	Type pulumi.StringOutput `pulumi:"type"`
-	// Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+	// Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
 }
 
@@ -108,14 +109,15 @@ func GetProject(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Project resources.
 type projectState struct {
-	// Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+	// Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
 	CreatedAt *string `pulumi:"createdAt"`
 	// Specifies the description of the enterprise project.
 	Description *string `pulumi:"description"`
 	// Specifies whether to enable the enterprise project. Defaults to **true**.
 	Enable *bool `pulumi:"enable"`
 	// Specifies the name of the enterprise project.
-	// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+	// and hyphens (-) are allowed.
 	// The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 	Name *string `pulumi:"name"`
 	// Specifies whether to skip disable the enterprise project on destroy.
@@ -128,19 +130,20 @@ type projectState struct {
 	// Specifies the type of the enterprise project.
 	// The valid values are **poc** and **prod**, defaults to **prod**.
 	Type *string `pulumi:"type"`
-	// Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+	// Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
 	UpdatedAt *string `pulumi:"updatedAt"`
 }
 
 type ProjectState struct {
-	// Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+	// Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
 	CreatedAt pulumi.StringPtrInput
 	// Specifies the description of the enterprise project.
 	Description pulumi.StringPtrInput
 	// Specifies whether to enable the enterprise project. Defaults to **true**.
 	Enable pulumi.BoolPtrInput
 	// Specifies the name of the enterprise project.
-	// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+	// and hyphens (-) are allowed.
 	// The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 	Name pulumi.StringPtrInput
 	// Specifies whether to skip disable the enterprise project on destroy.
@@ -153,7 +156,7 @@ type ProjectState struct {
 	// Specifies the type of the enterprise project.
 	// The valid values are **poc** and **prod**, defaults to **prod**.
 	Type pulumi.StringPtrInput
-	// Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+	// Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
 	UpdatedAt pulumi.StringPtrInput
 }
 
@@ -167,7 +170,8 @@ type projectArgs struct {
 	// Specifies whether to enable the enterprise project. Defaults to **true**.
 	Enable *bool `pulumi:"enable"`
 	// Specifies the name of the enterprise project.
-	// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+	// and hyphens (-) are allowed.
 	// The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 	Name *string `pulumi:"name"`
 	// Specifies whether to skip disable the enterprise project on destroy.
@@ -185,7 +189,8 @@ type ProjectArgs struct {
 	// Specifies whether to enable the enterprise project. Defaults to **true**.
 	Enable pulumi.BoolPtrInput
 	// Specifies the name of the enterprise project.
-	// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+	// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+	// and hyphens (-) are allowed.
 	// The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 	Name pulumi.StringPtrInput
 	// Specifies whether to skip disable the enterprise project on destroy.
@@ -283,7 +288,7 @@ func (o ProjectOutput) ToProjectOutputWithContext(ctx context.Context) ProjectOu
 	return o
 }
 
-// Indicates the time (UTC) when the enterprise project was created. Example: `2018-05-18T06:49:06Z`.
+// Indicates the time (UTC) when the enterprise project was created. Example: **2018-05-18T06:49:06Z**.
 func (o ProjectOutput) CreatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
@@ -299,7 +304,8 @@ func (o ProjectOutput) Enable() pulumi.BoolPtrOutput {
 }
 
 // Specifies the name of the enterprise project.
-// This parameter can contain `1` to `64` characters. Only letters, digits, underscores (_), and hyphens (-) are allowed.
+// This parameter can contain `1` to `64` characters. Only English letters, Chinese characters, digits, underscores (_),
+// and hyphens (-) are allowed.
 // The name must be unique in the domain and cannot include any form of the word "default" ("deFaulT", for instance).
 func (o ProjectOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
@@ -324,7 +330,7 @@ func (o ProjectOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
-// Indicates the time (UTC) when the enterprise project was modified. Example: `2018-05-28T02:21:36Z`.
+// Indicates the time (UTC) when the enterprise project was modified. Example: **2018-05-28T02:21:36Z**.
 func (o ProjectOutput) UpdatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Project) pulumi.StringOutput { return v.UpdatedAt }).(pulumi.StringOutput)
 }

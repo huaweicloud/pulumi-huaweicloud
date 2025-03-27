@@ -23,6 +23,7 @@ class ClusterArgs:
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  client_node_config: Optional[pulumi.Input['ClusterClientNodeConfigArgs']] = None,
                  cold_node_config: Optional[pulumi.Input['ClusterColdNodeConfigArgs']] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  engine_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ess_node_config: Optional[pulumi.Input['ClusterEssNodeConfigArgs']] = None,
@@ -46,66 +47,63 @@ class ClusterArgs:
         """
         The set of arguments for constructing a Cluster resource.
         :param pulumi.Input[str] engine_version: Specifies the engine version.
-               [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-               Changing this parameter will create a new resource.
+               For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
+               The valid values are **true** and **false**, defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
         :param pulumi.Input['ClusterBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterClientNodeConfigArgs'] client_node_config: Specifies the config of client node.
                The client_node_config structure is documented below.
         :param pulumi.Input['ClusterColdNodeConfigArgs'] cold_node_config: Specifies the config of cold data node.
                The cold_node_config structure is documented below.
-        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value is `elasticsearch`.
-               Defaults to `elasticsearch`. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, Value 0
-               indicates the default enterprise project. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+               Defaults to **elasticsearch**. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, The value **0**
+               indicates the default enterprise project.
         :param pulumi.Input['ClusterEssNodeConfigArgs'] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
-        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
-               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to **false**.
+               When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterKibanaPublicAccessArgs'] kibana_public_access: Specifies Kibana public network access information.
-               This parameter is valid only when security_mode is set to true.
+               This parameter is valid only when security_mode is set to **true**.
                The kibana_public_access structure is documented below.
         :param pulumi.Input['ClusterMasterNodeConfigArgs'] master_node_config: Specifies the config of master node.
                The master_node_config structure is documented below.
-        :param pulumi.Input[str] name: Specifies the cluster name. It contains 4 to 32 characters.
+        :param pulumi.Input[str] name: Specifies the cluster name. It contains `4` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] password: Specifies the password of the cluster administrator in security mode.
-               This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+               This parameter is mandatory only when `security_mode` is set to true.
                The administrator password must meet the following requirements:
                + The password can contain 8 to 32 characters.
                + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
                and special characters (~!@#$%^&*()-_=+\\\\|[{}];:,<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               Changing this parameter will create a new resource.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
-               Changing this parameter will create a new resource.
+               Valid values are **month** and **year**.
         :param pulumi.Input['ClusterPublicAccessArgs'] public_access: Specifies the public network access information.
                The public_access structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this creates a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Specifies Security group ID.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
+        :param pulumi.Input[bool] security_mode: Specifies whether to enable authentication.
+               The value can be **true** or **false**. Authentication is disabled by default.
+               + **true:** Authentication is enabled for the cluster.
+               + **false:** Authentication is disabled for the cluster.
+        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
-               authentication. Available values include *true* and *false*. security_mode is disabled by default.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterVpcepEndpointArgs'] vpcep_endpoint: Specifies the VPC endpoint service information.
                The vpcep_endpoint structure is documented below.
         """
@@ -122,6 +120,8 @@ class ClusterArgs:
             pulumi.set(__self__, "client_node_config", client_node_config)
         if cold_node_config is not None:
             pulumi.set(__self__, "cold_node_config", cold_node_config)
+        if enable_force_new is not None:
+            pulumi.set(__self__, "enable_force_new", enable_force_new)
         if engine_type is not None:
             pulumi.set(__self__, "engine_type", engine_type)
         if enterprise_project_id is not None:
@@ -174,8 +174,7 @@ class ClusterArgs:
     def engine_version(self) -> pulumi.Input[str]:
         """
         Specifies the engine version.
-        [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-        Changing this parameter will create a new resource.
+        For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
         """
         return pulumi.get(self, "engine_version")
 
@@ -188,7 +187,7 @@ class ClusterArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
+        The valid values are **true** and **false**, defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -204,8 +203,7 @@ class ClusterArgs:
         Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
         than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
         distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-        between node quantity in any two AZs is 1 at most.
-        Changing this parameter will create a new resource.
+        between node quantity in any two AZs is **1** at most.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -231,7 +229,6 @@ class ClusterArgs:
         """
         Specifies the charging mode of the cluster.
         Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -266,11 +263,20 @@ class ClusterArgs:
         pulumi.set(self, "cold_node_config", value)
 
     @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enable_force_new")
+
+    @enable_force_new.setter
+    def enable_force_new(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enable_force_new", value)
+
+    @property
     @pulumi.getter(name="engineType")
     def engine_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the engine type. The valid value is `elasticsearch`.
-        Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+        Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine_type")
 
@@ -282,8 +288,8 @@ class ClusterArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the css cluster, Value 0
-        indicates the default enterprise project. Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the css cluster, The value **0**
+        indicates the default enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -317,8 +323,8 @@ class ClusterArgs:
     @pulumi.getter(name="httpsEnabled")
     def https_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable HTTPS. Defaults to `false`.
-        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Specifies whether to enable HTTPS. Defaults to **false**.
+        When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "https_enabled")
@@ -332,7 +338,7 @@ class ClusterArgs:
     def kibana_public_access(self) -> Optional[pulumi.Input['ClusterKibanaPublicAccessArgs']]:
         """
         Specifies Kibana public network access information.
-        This parameter is valid only when security_mode is set to true.
+        This parameter is valid only when security_mode is set to **true**.
         The kibana_public_access structure is documented below.
         """
         return pulumi.get(self, "kibana_public_access")
@@ -358,7 +364,7 @@ class ClusterArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cluster name. It contains 4 to 32 characters.
+        Specifies the cluster name. It contains `4` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
         Changing this parameter will create a new resource.
         """
@@ -382,7 +388,7 @@ class ClusterArgs:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the password of the cluster administrator in security mode.
-        This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+        This parameter is mandatory only when `security_mode` is set to true.
         The administrator password must meet the following requirements:
         + The password can contain 8 to 32 characters.
         + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -399,9 +405,8 @@ class ClusterArgs:
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        Changing this parameter will create a new resource.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         """
         return pulumi.get(self, "period")
 
@@ -414,8 +419,7 @@ class ClusterArgs:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
-        Changing this parameter will create a new resource.
+        Valid values are **month** and **year**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -453,8 +457,7 @@ class ClusterArgs:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies Security group ID.
-        Changing this parameter will create a new resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -466,9 +469,10 @@ class ClusterArgs:
     @pulumi.getter(name="securityMode")
     def security_mode(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable communication encryption and security
-        authentication. Available values include *true* and *false*. security_mode is disabled by default.
-        Changing this parameter will create a new resource.
+        Specifies whether to enable authentication.
+        The value can be **true** or **false**. Authentication is disabled by default.
+        + **true:** Authentication is enabled for the cluster.
+        + **false:** Authentication is disabled for the cluster.
         """
         return pulumi.get(self, "security_mode")
 
@@ -480,7 +484,8 @@ class ClusterArgs:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Subnet ID. Changing this parameter will create a new resource.
+        Specifies the Subnet ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -504,7 +509,8 @@ class ClusterArgs:
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the VPC ID. Changing this parameter will create a new resource.
+        Specifies the VPC ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -531,11 +537,16 @@ class _ClusterState:
     def __init__(__self__, *,
                  auto_renew: Optional[pulumi.Input[str]] = None,
                  availability_zone: Optional[pulumi.Input[str]] = None,
+                 backup_available: Optional[pulumi.Input[bool]] = None,
                  backup_strategy: Optional[pulumi.Input['ClusterBackupStrategyArgs']] = None,
+                 bandwidth_resource_id: Optional[pulumi.Input[str]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  client_node_config: Optional[pulumi.Input['ClusterClientNodeConfigArgs']] = None,
                  cold_node_config: Optional[pulumi.Input['ClusterColdNodeConfigArgs']] = None,
                  created: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 disk_encrypted: Optional[pulumi.Input[bool]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  endpoint: Optional[pulumi.Input[str]] = None,
                  engine_type: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
@@ -543,6 +554,7 @@ class _ClusterState:
                  ess_node_config: Optional[pulumi.Input['ClusterEssNodeConfigArgs']] = None,
                  expect_node_num: Optional[pulumi.Input[int]] = None,
                  https_enabled: Optional[pulumi.Input[bool]] = None,
+                 is_period: Optional[pulumi.Input[bool]] = None,
                  kibana_public_access: Optional[pulumi.Input['ClusterKibanaPublicAccessArgs']] = None,
                  master_node_config: Optional[pulumi.Input['ClusterMasterNodeConfigArgs']] = None,
                  name: Optional[pulumi.Input[str]] = None,
@@ -558,6 +570,7 @@ class _ClusterState:
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  vpcep_endpoint: Optional[pulumi.Input['ClusterVpcepEndpointArgs']] = None,
                  vpcep_endpoint_id: Optional[pulumi.Input[str]] = None,
@@ -565,71 +578,74 @@ class _ClusterState:
         """
         Input properties used for looking up and filtering Cluster resources.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
+               The valid values are **true** and **false**, defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
+        :param pulumi.Input[bool] backup_available: Whether the snapshot function is enabled.
         :param pulumi.Input['ClusterBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
+        :param pulumi.Input[str] bandwidth_resource_id: The resource ID of bandwidth.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterClientNodeConfigArgs'] client_node_config: Specifies the config of client node.
                The client_node_config structure is documented below.
         :param pulumi.Input['ClusterColdNodeConfigArgs'] cold_node_config: Specifies the config of cold data node.
                The cold_node_config structure is documented below.
-        :param pulumi.Input[str] created: Time when a cluster is created. The format is ISO8601:
-               CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[str] created: schema: Deprecated; use created_at instead
+        :param pulumi.Input[str] created_at: Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[bool] disk_encrypted: Whether disks are encrypted.
         :param pulumi.Input[str] endpoint: The IP address and port number.
-        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value is `elasticsearch`.
-               Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+               Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] engine_version: Specifies the engine version.
-               [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, Value 0
-               indicates the default enterprise project. Changing this parameter will create a new resource.
+               For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, The value **0**
+               indicates the default enterprise project.
         :param pulumi.Input['ClusterEssNodeConfigArgs'] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
-        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
-               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to **false**.
+               When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_period: Whether a cluster is billed on the yearly/monthly mode.
         :param pulumi.Input['ClusterKibanaPublicAccessArgs'] kibana_public_access: Specifies Kibana public network access information.
-               This parameter is valid only when security_mode is set to true.
+               This parameter is valid only when security_mode is set to **true**.
                The kibana_public_access structure is documented below.
         :param pulumi.Input['ClusterMasterNodeConfigArgs'] master_node_config: Specifies the config of master node.
                The master_node_config structure is documented below.
-        :param pulumi.Input[str] name: Specifies the cluster name. It contains 4 to 32 characters.
+        :param pulumi.Input[str] name: Specifies the cluster name. It contains `4` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input['ClusterNodeArgs']]] nodes: List of node objects. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['ClusterNodeArgs']]] nodes: List of node objects.
+               The nodes structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of the cluster administrator in security mode.
-               This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+               This parameter is mandatory only when `security_mode` is set to true.
                The administrator password must meet the following requirements:
                + The password can contain 8 to 32 characters.
                + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
                and special characters (~!@#$%^&*()-_=+\\\\|[{}];:,<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               Changing this parameter will create a new resource.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
-               Changing this parameter will create a new resource.
+               Valid values are **month** and **year**.
         :param pulumi.Input['ClusterPublicAccessArgs'] public_access: Specifies the public network access information.
                The public_access structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this creates a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Specifies Security group ID.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
-               authentication. Available values include *true* and *false*. security_mode is disabled by default.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
+        :param pulumi.Input[bool] security_mode: Specifies whether to enable authentication.
+               The value can be **true** or **false**. Authentication is disabled by default.
+               + **true:** Authentication is enabled for the cluster.
+               + **false:** Authentication is disabled for the cluster.
         :param pulumi.Input[str] status: Instance status.
-        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] updated_at: Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input['ClusterVpcepEndpointArgs'] vpcep_endpoint: Specifies the VPC endpoint service information.
                The vpcep_endpoint structure is documented below.
         :param pulumi.Input[str] vpcep_endpoint_id: The VPC endpoint service ID.
@@ -639,8 +655,12 @@ class _ClusterState:
             pulumi.set(__self__, "auto_renew", auto_renew)
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
+        if backup_available is not None:
+            pulumi.set(__self__, "backup_available", backup_available)
         if backup_strategy is not None:
             pulumi.set(__self__, "backup_strategy", backup_strategy)
+        if bandwidth_resource_id is not None:
+            pulumi.set(__self__, "bandwidth_resource_id", bandwidth_resource_id)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
         if client_node_config is not None:
@@ -649,6 +669,12 @@ class _ClusterState:
             pulumi.set(__self__, "cold_node_config", cold_node_config)
         if created is not None:
             pulumi.set(__self__, "created", created)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if disk_encrypted is not None:
+            pulumi.set(__self__, "disk_encrypted", disk_encrypted)
+        if enable_force_new is not None:
+            pulumi.set(__self__, "enable_force_new", enable_force_new)
         if endpoint is not None:
             pulumi.set(__self__, "endpoint", endpoint)
         if engine_type is not None:
@@ -666,6 +692,8 @@ class _ClusterState:
             pulumi.set(__self__, "expect_node_num", expect_node_num)
         if https_enabled is not None:
             pulumi.set(__self__, "https_enabled", https_enabled)
+        if is_period is not None:
+            pulumi.set(__self__, "is_period", is_period)
         if kibana_public_access is not None:
             pulumi.set(__self__, "kibana_public_access", kibana_public_access)
         if master_node_config is not None:
@@ -699,6 +727,8 @@ class _ClusterState:
             pulumi.set(__self__, "subnet_id", subnet_id)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if vpc_id is not None:
             pulumi.set(__self__, "vpc_id", vpc_id)
         if vpcep_endpoint is not None:
@@ -713,7 +743,7 @@ class _ClusterState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
+        The valid values are **true** and **false**, defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -729,14 +759,25 @@ class _ClusterState:
         Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
         than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
         distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-        between node quantity in any two AZs is 1 at most.
-        Changing this parameter will create a new resource.
+        between node quantity in any two AZs is **1** at most.
         """
         return pulumi.get(self, "availability_zone")
 
     @availability_zone.setter
     def availability_zone(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "availability_zone", value)
+
+    @property
+    @pulumi.getter(name="backupAvailable")
+    def backup_available(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether the snapshot function is enabled.
+        """
+        return pulumi.get(self, "backup_available")
+
+    @backup_available.setter
+    def backup_available(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "backup_available", value)
 
     @property
     @pulumi.getter(name="backupStrategy")
@@ -751,12 +792,23 @@ class _ClusterState:
         pulumi.set(self, "backup_strategy", value)
 
     @property
+    @pulumi.getter(name="bandwidthResourceId")
+    def bandwidth_resource_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        The resource ID of bandwidth.
+        """
+        return pulumi.get(self, "bandwidth_resource_id")
+
+    @bandwidth_resource_id.setter
+    def bandwidth_resource_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "bandwidth_resource_id", value)
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging mode of the cluster.
         Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -794,14 +846,46 @@ class _ClusterState:
     @pulumi.getter
     def created(self) -> Optional[pulumi.Input[str]]:
         """
-        Time when a cluster is created. The format is ISO8601:
-        CCYY-MM-DDThh:mm:ss.
+        schema: Deprecated; use created_at instead
         """
         return pulumi.get(self, "created")
 
     @created.setter
     def created(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "created", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter(name="diskEncrypted")
+    def disk_encrypted(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether disks are encrypted.
+        """
+        return pulumi.get(self, "disk_encrypted")
+
+    @disk_encrypted.setter
+    def disk_encrypted(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "disk_encrypted", value)
+
+    @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "enable_force_new")
+
+    @enable_force_new.setter
+    def enable_force_new(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enable_force_new", value)
 
     @property
     @pulumi.getter
@@ -819,8 +903,8 @@ class _ClusterState:
     @pulumi.getter(name="engineType")
     def engine_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the engine type. The valid value is `elasticsearch`.
-        Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+        Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine_type")
 
@@ -833,8 +917,7 @@ class _ClusterState:
     def engine_version(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the engine version.
-        [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-        Changing this parameter will create a new resource.
+        For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
         """
         return pulumi.get(self, "engine_version")
 
@@ -846,8 +929,8 @@ class _ClusterState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the css cluster, Value 0
-        indicates the default enterprise project. Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the css cluster, The value **0**
+        indicates the default enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -881,8 +964,8 @@ class _ClusterState:
     @pulumi.getter(name="httpsEnabled")
     def https_enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable HTTPS. Defaults to `false`.
-        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Specifies whether to enable HTTPS. Defaults to **false**.
+        When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "https_enabled")
@@ -892,11 +975,23 @@ class _ClusterState:
         pulumi.set(self, "https_enabled", value)
 
     @property
+    @pulumi.getter(name="isPeriod")
+    def is_period(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether a cluster is billed on the yearly/monthly mode.
+        """
+        return pulumi.get(self, "is_period")
+
+    @is_period.setter
+    def is_period(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_period", value)
+
+    @property
     @pulumi.getter(name="kibanaPublicAccess")
     def kibana_public_access(self) -> Optional[pulumi.Input['ClusterKibanaPublicAccessArgs']]:
         """
         Specifies Kibana public network access information.
-        This parameter is valid only when security_mode is set to true.
+        This parameter is valid only when security_mode is set to **true**.
         The kibana_public_access structure is documented below.
         """
         return pulumi.get(self, "kibana_public_access")
@@ -922,7 +1017,7 @@ class _ClusterState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the cluster name. It contains 4 to 32 characters.
+        Specifies the cluster name. It contains `4` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
         Changing this parameter will create a new resource.
         """
@@ -945,7 +1040,8 @@ class _ClusterState:
     @pulumi.getter
     def nodes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['ClusterNodeArgs']]]]:
         """
-        List of node objects. Structure is documented below.
+        List of node objects.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
@@ -958,7 +1054,7 @@ class _ClusterState:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the password of the cluster administrator in security mode.
-        This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+        This parameter is mandatory only when `security_mode` is set to true.
         The administrator password must meet the following requirements:
         + The password can contain 8 to 32 characters.
         + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -975,9 +1071,8 @@ class _ClusterState:
     def period(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        Changing this parameter will create a new resource.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         """
         return pulumi.get(self, "period")
 
@@ -990,8 +1085,7 @@ class _ClusterState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
-        Changing this parameter will create a new resource.
+        Valid values are **month** and **year**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -1029,8 +1123,7 @@ class _ClusterState:
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies Security group ID.
-        Changing this parameter will create a new resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -1042,9 +1135,10 @@ class _ClusterState:
     @pulumi.getter(name="securityMode")
     def security_mode(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable communication encryption and security
-        authentication. Available values include *true* and *false*. security_mode is disabled by default.
-        Changing this parameter will create a new resource.
+        Specifies whether to enable authentication.
+        The value can be **true** or **false**. Authentication is disabled by default.
+        + **true:** Authentication is enabled for the cluster.
+        + **false:** Authentication is disabled for the cluster.
         """
         return pulumi.get(self, "security_mode")
 
@@ -1068,7 +1162,8 @@ class _ClusterState:
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Subnet ID. Changing this parameter will create a new resource.
+        Specifies the Subnet ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -1089,10 +1184,23 @@ class _ClusterState:
         pulumi.set(self, "tags", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the VPC ID. Changing this parameter will create a new resource.
+        Specifies the VPC ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -1149,6 +1257,7 @@ class Cluster(pulumi.CustomResource):
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  client_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterClientNodeConfigArgs']]] = None,
                  cold_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterColdNodeConfigArgs']]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  engine_type: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1264,75 +1373,72 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        CSS cluster can be imported by `id`. For example,
+        The CSS cluster can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/cluster:Cluster example 6d793124-3d5d-47be-bf09-f694fdf2d9ed
+         $ pulumi import huaweicloud:Css/cluster:Cluster test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
+               The valid values are **true** and **false**, defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
         :param pulumi.Input[pulumi.InputType['ClusterBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterClientNodeConfigArgs']] client_node_config: Specifies the config of client node.
                The client_node_config structure is documented below.
         :param pulumi.Input[pulumi.InputType['ClusterColdNodeConfigArgs']] cold_node_config: Specifies the config of cold data node.
                The cold_node_config structure is documented below.
-        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value is `elasticsearch`.
-               Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+               Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] engine_version: Specifies the engine version.
-               [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, Value 0
-               indicates the default enterprise project. Changing this parameter will create a new resource.
+               For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, The value **0**
+               indicates the default enterprise project.
         :param pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
-        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
-               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to **false**.
+               When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
                Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']] kibana_public_access: Specifies Kibana public network access information.
-               This parameter is valid only when security_mode is set to true.
+               This parameter is valid only when security_mode is set to **true**.
                The kibana_public_access structure is documented below.
         :param pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']] master_node_config: Specifies the config of master node.
                The master_node_config structure is documented below.
-        :param pulumi.Input[str] name: Specifies the cluster name. It contains 4 to 32 characters.
+        :param pulumi.Input[str] name: Specifies the cluster name. It contains `4` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] password: Specifies the password of the cluster administrator in security mode.
-               This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+               This parameter is mandatory only when `security_mode` is set to true.
                The administrator password must meet the following requirements:
                + The password can contain 8 to 32 characters.
                + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
                and special characters (~!@#$%^&*()-_=+\\\\|[{}];:,<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               Changing this parameter will create a new resource.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
-               Changing this parameter will create a new resource.
+               Valid values are **month** and **year**.
         :param pulumi.Input[pulumi.InputType['ClusterPublicAccessArgs']] public_access: Specifies the public network access information.
                The public_access structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this creates a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Specifies Security group ID.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
+        :param pulumi.Input[bool] security_mode: Specifies whether to enable authentication.
+               The value can be **true** or **false**. Authentication is disabled by default.
+               + **true:** Authentication is enabled for the cluster.
+               + **false:** Authentication is disabled for the cluster.
+        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
-               authentication. Available values include *true* and *false*. security_mode is disabled by default.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterVpcepEndpointArgs']] vpcep_endpoint: Specifies the VPC endpoint service information.
                The vpcep_endpoint structure is documented below.
         """
@@ -1435,10 +1541,10 @@ class Cluster(pulumi.CustomResource):
 
         ## Import
 
-        CSS cluster can be imported by `id`. For example,
+        The CSS cluster can be imported by `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Css/cluster:Cluster example 6d793124-3d5d-47be-bf09-f694fdf2d9ed
+         $ pulumi import huaweicloud:Css/cluster:Cluster test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -1462,6 +1568,7 @@ class Cluster(pulumi.CustomResource):
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  client_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterClientNodeConfigArgs']]] = None,
                  cold_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterColdNodeConfigArgs']]] = None,
+                 enable_force_new: Optional[pulumi.Input[str]] = None,
                  engine_type: Optional[pulumi.Input[str]] = None,
                  engine_version: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -1498,6 +1605,7 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["client_node_config"] = client_node_config
             __props__.__dict__["cold_node_config"] = cold_node_config
+            __props__.__dict__["enable_force_new"] = enable_force_new
             __props__.__dict__["engine_type"] = engine_type
             if engine_version is None and not opts.urn:
                 raise TypeError("Missing required property 'engine_version'")
@@ -1527,10 +1635,16 @@ class Cluster(pulumi.CustomResource):
             __props__.__dict__["tags"] = tags
             __props__.__dict__["vpc_id"] = vpc_id
             __props__.__dict__["vpcep_endpoint"] = vpcep_endpoint
+            __props__.__dict__["backup_available"] = None
+            __props__.__dict__["bandwidth_resource_id"] = None
             __props__.__dict__["created"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["disk_encrypted"] = None
             __props__.__dict__["endpoint"] = None
+            __props__.__dict__["is_period"] = None
             __props__.__dict__["nodes"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["updated_at"] = None
             __props__.__dict__["vpcep_endpoint_id"] = None
             __props__.__dict__["vpcep_ip"] = None
         super(Cluster, __self__).__init__(
@@ -1545,11 +1659,16 @@ class Cluster(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
             availability_zone: Optional[pulumi.Input[str]] = None,
+            backup_available: Optional[pulumi.Input[bool]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['ClusterBackupStrategyArgs']]] = None,
+            bandwidth_resource_id: Optional[pulumi.Input[str]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             client_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterClientNodeConfigArgs']]] = None,
             cold_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterColdNodeConfigArgs']]] = None,
             created: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            disk_encrypted: Optional[pulumi.Input[bool]] = None,
+            enable_force_new: Optional[pulumi.Input[str]] = None,
             endpoint: Optional[pulumi.Input[str]] = None,
             engine_type: Optional[pulumi.Input[str]] = None,
             engine_version: Optional[pulumi.Input[str]] = None,
@@ -1557,6 +1676,7 @@ class Cluster(pulumi.CustomResource):
             ess_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']]] = None,
             expect_node_num: Optional[pulumi.Input[int]] = None,
             https_enabled: Optional[pulumi.Input[bool]] = None,
+            is_period: Optional[pulumi.Input[bool]] = None,
             kibana_public_access: Optional[pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']]] = None,
             master_node_config: Optional[pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']]] = None,
             name: Optional[pulumi.Input[str]] = None,
@@ -1572,6 +1692,7 @@ class Cluster(pulumi.CustomResource):
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None,
             vpcep_endpoint: Optional[pulumi.Input[pulumi.InputType['ClusterVpcepEndpointArgs']]] = None,
             vpcep_endpoint_id: Optional[pulumi.Input[str]] = None,
@@ -1584,71 +1705,74 @@ class Cluster(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are `true` and `false`, defaults to `false`.
+               The valid values are **true** and **false**, defaults to **false**.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone name.
                Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
                than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
                distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-               between node quantity in any two AZs is 1 at most.
-               Changing this parameter will create a new resource.
+               between node quantity in any two AZs is **1** at most.
+        :param pulumi.Input[bool] backup_available: Whether the snapshot function is enabled.
         :param pulumi.Input[pulumi.InputType['ClusterBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
+        :param pulumi.Input[str] bandwidth_resource_id: The resource ID of bandwidth.
         :param pulumi.Input[str] charging_mode: Specifies the charging mode of the cluster.
                Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterClientNodeConfigArgs']] client_node_config: Specifies the config of client node.
                The client_node_config structure is documented below.
         :param pulumi.Input[pulumi.InputType['ClusterColdNodeConfigArgs']] cold_node_config: Specifies the config of cold data node.
                The cold_node_config structure is documented below.
-        :param pulumi.Input[str] created: Time when a cluster is created. The format is ISO8601:
-               CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[str] created: schema: Deprecated; use created_at instead
+        :param pulumi.Input[str] created_at: Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[bool] disk_encrypted: Whether disks are encrypted.
         :param pulumi.Input[str] endpoint: The IP address and port number.
-        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value is `elasticsearch`.
-               Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] engine_type: Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+               Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         :param pulumi.Input[str] engine_version: Specifies the engine version.
-               [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, Value 0
-               indicates the default enterprise project. Changing this parameter will create a new resource.
+               For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the css cluster, The value **0**
+               indicates the default enterprise project.
         :param pulumi.Input[pulumi.InputType['ClusterEssNodeConfigArgs']] ess_node_config: Specifies the config of data node.
                The ess_node_config structure is documented below.
-        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to `false`.
-               When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        :param pulumi.Input[bool] https_enabled: Specifies whether to enable HTTPS. Defaults to **false**.
+               When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
                Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] is_period: Whether a cluster is billed on the yearly/monthly mode.
         :param pulumi.Input[pulumi.InputType['ClusterKibanaPublicAccessArgs']] kibana_public_access: Specifies Kibana public network access information.
-               This parameter is valid only when security_mode is set to true.
+               This parameter is valid only when security_mode is set to **true**.
                The kibana_public_access structure is documented below.
         :param pulumi.Input[pulumi.InputType['ClusterMasterNodeConfigArgs']] master_node_config: Specifies the config of master node.
                The master_node_config structure is documented below.
-        :param pulumi.Input[str] name: Specifies the cluster name. It contains 4 to 32 characters.
+        :param pulumi.Input[str] name: Specifies the cluster name. It contains `4` to `32` characters.
                Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterNodeArgs']]]] nodes: List of node objects. Structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['ClusterNodeArgs']]]] nodes: List of node objects.
+               The nodes structure is documented below.
         :param pulumi.Input[str] password: Specifies the password of the cluster administrator in security mode.
-               This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+               This parameter is mandatory only when `security_mode` is set to true.
                The administrator password must meet the following requirements:
                + The password can contain 8 to 32 characters.
                + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
                and special characters (~!@#$%^&*()-_=+\\\\|[{}];:,<.>/?).
         :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month*, the value ranges from 1 to 9.
-               If `period_unit` is set to *year*, the value ranges from 1 to 3.
-               Changing this parameter will create a new resource.
+               If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*.
-               Changing this parameter will create a new resource.
+               Valid values are **month** and **year**.
         :param pulumi.Input[pulumi.InputType['ClusterPublicAccessArgs']] public_access: Specifies the public network access information.
                The public_access structure is documented below.
         :param pulumi.Input[str] region: Specifies the region in which to create the cluster resource. If omitted, the
                provider-level region will be used. Changing this creates a new cluster resource.
-        :param pulumi.Input[str] security_group_id: Specifies Security group ID.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[bool] security_mode: Specifies whether to enable communication encryption and security
-               authentication. Available values include *true* and *false*. security_mode is disabled by default.
-               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID.
+        :param pulumi.Input[bool] security_mode: Specifies whether to enable authentication.
+               The value can be **true** or **false**. Authentication is disabled by default.
+               + **true:** Authentication is enabled for the cluster.
+               + **false:** Authentication is disabled for the cluster.
         :param pulumi.Input[str] status: Instance status.
-        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] subnet_id: Specifies the Subnet ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the cluster.
-        :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] updated_at: Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        :param pulumi.Input[str] vpc_id: Specifies the VPC ID.
+               Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['ClusterVpcepEndpointArgs']] vpcep_endpoint: Specifies the VPC endpoint service information.
                The vpcep_endpoint structure is documented below.
         :param pulumi.Input[str] vpcep_endpoint_id: The VPC endpoint service ID.
@@ -1660,11 +1784,16 @@ class Cluster(pulumi.CustomResource):
 
         __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["availability_zone"] = availability_zone
+        __props__.__dict__["backup_available"] = backup_available
         __props__.__dict__["backup_strategy"] = backup_strategy
+        __props__.__dict__["bandwidth_resource_id"] = bandwidth_resource_id
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["client_node_config"] = client_node_config
         __props__.__dict__["cold_node_config"] = cold_node_config
         __props__.__dict__["created"] = created
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["disk_encrypted"] = disk_encrypted
+        __props__.__dict__["enable_force_new"] = enable_force_new
         __props__.__dict__["endpoint"] = endpoint
         __props__.__dict__["engine_type"] = engine_type
         __props__.__dict__["engine_version"] = engine_version
@@ -1672,6 +1801,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["ess_node_config"] = ess_node_config
         __props__.__dict__["expect_node_num"] = expect_node_num
         __props__.__dict__["https_enabled"] = https_enabled
+        __props__.__dict__["is_period"] = is_period
         __props__.__dict__["kibana_public_access"] = kibana_public_access
         __props__.__dict__["master_node_config"] = master_node_config
         __props__.__dict__["name"] = name
@@ -1687,6 +1817,7 @@ class Cluster(pulumi.CustomResource):
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["tags"] = tags
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["vpc_id"] = vpc_id
         __props__.__dict__["vpcep_endpoint"] = vpcep_endpoint
         __props__.__dict__["vpcep_endpoint_id"] = vpcep_endpoint_id
@@ -1698,7 +1829,7 @@ class Cluster(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are `true` and `false`, defaults to `false`.
+        The valid values are **true** and **false**, defaults to **false**.
         """
         return pulumi.get(self, "auto_renew")
 
@@ -1710,10 +1841,17 @@ class Cluster(pulumi.CustomResource):
         Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
         than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
         distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-        between node quantity in any two AZs is 1 at most.
-        Changing this parameter will create a new resource.
+        between node quantity in any two AZs is **1** at most.
         """
         return pulumi.get(self, "availability_zone")
+
+    @property
+    @pulumi.getter(name="backupAvailable")
+    def backup_available(self) -> pulumi.Output[bool]:
+        """
+        Whether the snapshot function is enabled.
+        """
+        return pulumi.get(self, "backup_available")
 
     @property
     @pulumi.getter(name="backupStrategy")
@@ -1724,12 +1862,19 @@ class Cluster(pulumi.CustomResource):
         return pulumi.get(self, "backup_strategy")
 
     @property
+    @pulumi.getter(name="bandwidthResourceId")
+    def bandwidth_resource_id(self) -> pulumi.Output[str]:
+        """
+        The resource ID of bandwidth.
+        """
+        return pulumi.get(self, "bandwidth_resource_id")
+
+    @property
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> pulumi.Output[str]:
         """
         Specifies the charging mode of the cluster.
         Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -1755,10 +1900,30 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def created(self) -> pulumi.Output[str]:
         """
-        Time when a cluster is created. The format is ISO8601:
-        CCYY-MM-DDThh:mm:ss.
+        schema: Deprecated; use created_at instead
         """
         return pulumi.get(self, "created")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="diskEncrypted")
+    def disk_encrypted(self) -> pulumi.Output[bool]:
+        """
+        Whether disks are encrypted.
+        """
+        return pulumi.get(self, "disk_encrypted")
+
+    @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> pulumi.Output[Optional[str]]:
+        return pulumi.get(self, "enable_force_new")
 
     @property
     @pulumi.getter
@@ -1772,8 +1937,8 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="engineType")
     def engine_type(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the engine type. The valid value is `elasticsearch`.
-        Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+        Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+        Defaults to **elasticsearch**. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "engine_type")
 
@@ -1782,8 +1947,7 @@ class Cluster(pulumi.CustomResource):
     def engine_version(self) -> pulumi.Output[str]:
         """
         Specifies the engine version.
-        [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-        Changing this parameter will create a new resource.
+        For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
         """
         return pulumi.get(self, "engine_version")
 
@@ -1791,8 +1955,8 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the css cluster, Value 0
-        indicates the default enterprise project. Changing this parameter will create a new resource.
+        Specifies the enterprise project id of the css cluster, The value **0**
+        indicates the default enterprise project.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1814,18 +1978,26 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="httpsEnabled")
     def https_enabled(self) -> pulumi.Output[bool]:
         """
-        Specifies whether to enable HTTPS. Defaults to `false`.
-        When `https_enabled` is set to `true`, the `security_mode` needs to be set to `true`.
+        Specifies whether to enable HTTPS. Defaults to **false**.
+        When `https_enabled` is set to **true**, the `security_mode` needs to be set to **true**.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "https_enabled")
+
+    @property
+    @pulumi.getter(name="isPeriod")
+    def is_period(self) -> pulumi.Output[bool]:
+        """
+        Whether a cluster is billed on the yearly/monthly mode.
+        """
+        return pulumi.get(self, "is_period")
 
     @property
     @pulumi.getter(name="kibanaPublicAccess")
     def kibana_public_access(self) -> pulumi.Output[Optional['outputs.ClusterKibanaPublicAccess']]:
         """
         Specifies Kibana public network access information.
-        This parameter is valid only when security_mode is set to true.
+        This parameter is valid only when security_mode is set to **true**.
         The kibana_public_access structure is documented below.
         """
         return pulumi.get(self, "kibana_public_access")
@@ -1843,7 +2015,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the cluster name. It contains 4 to 32 characters.
+        Specifies the cluster name. It contains `4` to `32` characters.
         Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
         Changing this parameter will create a new resource.
         """
@@ -1858,7 +2030,8 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter
     def nodes(self) -> pulumi.Output[Sequence['outputs.ClusterNode']]:
         """
-        List of node objects. Structure is documented below.
+        List of node objects.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
@@ -1867,7 +2040,7 @@ class Cluster(pulumi.CustomResource):
     def password(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the password of the cluster administrator in security mode.
-        This parameter is mandatory only when security_mode is set to true. Changing this parameter will create a new resource.
+        This parameter is mandatory only when `security_mode` is set to true.
         The administrator password must meet the following requirements:
         + The password can contain 8 to 32 characters.
         + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -1880,9 +2053,8 @@ class Cluster(pulumi.CustomResource):
     def period(self) -> pulumi.Output[Optional[int]]:
         """
         Specifies the charging period of the instance.
-        If `period_unit` is set to *month*, the value ranges from 1 to 9.
-        If `period_unit` is set to *year*, the value ranges from 1 to 3.
-        Changing this parameter will create a new resource.
+        If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `9`.
         """
         return pulumi.get(self, "period")
 
@@ -1891,8 +2063,7 @@ class Cluster(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*.
-        Changing this parameter will create a new resource.
+        Valid values are **month** and **year**.
         """
         return pulumi.get(self, "period_unit")
 
@@ -1918,8 +2089,7 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> pulumi.Output[str]:
         """
-        Specifies Security group ID.
-        Changing this parameter will create a new resource.
+        Specifies the security group ID.
         """
         return pulumi.get(self, "security_group_id")
 
@@ -1927,9 +2097,10 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="securityMode")
     def security_mode(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether to enable communication encryption and security
-        authentication. Available values include *true* and *false*. security_mode is disabled by default.
-        Changing this parameter will create a new resource.
+        Specifies whether to enable authentication.
+        The value can be **true** or **false**. Authentication is disabled by default.
+        + **true:** Authentication is enabled for the cluster.
+        + **false:** Authentication is disabled for the cluster.
         """
         return pulumi.get(self, "security_mode")
 
@@ -1945,7 +2116,8 @@ class Cluster(pulumi.CustomResource):
     @pulumi.getter(name="subnetId")
     def subnet_id(self) -> pulumi.Output[str]:
         """
-        Specifies the Subnet ID. Changing this parameter will create a new resource.
+        Specifies the Subnet ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "subnet_id")
 
@@ -1958,10 +2130,19 @@ class Cluster(pulumi.CustomResource):
         return pulumi.get(self, "tags")
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
     @pulumi.getter(name="vpcId")
     def vpc_id(self) -> pulumi.Output[str]:
         """
-        Specifies the VPC ID. Changing this parameter will create a new resource.
+        Specifies the VPC ID.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "vpc_id")
 

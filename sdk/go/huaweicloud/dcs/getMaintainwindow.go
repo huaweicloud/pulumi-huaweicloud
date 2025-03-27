@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the ID of an available DCS maintainwindow.
+// Use this data source to get the ID of an available DCS maintenance windows.
 //
 // ## Example Usage
 //
@@ -56,7 +56,7 @@ type GetMaintainwindowArgs struct {
 	Default *bool `pulumi:"default"`
 	// Specifies the time at which a maintenance time window ends.
 	End *string `pulumi:"end"`
-	// The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
+	// The region in which to obtain the dcs maintenance windows. If omitted, the provider-level
 	// region will be used.
 	Region *string `pulumi:"region"`
 	// Specifies the sequential number of a maintenance time window.
@@ -95,7 +95,7 @@ type GetMaintainwindowOutputArgs struct {
 	Default pulumi.BoolPtrInput `pulumi:"default"`
 	// Specifies the time at which a maintenance time window ends.
 	End pulumi.StringPtrInput `pulumi:"end"`
-	// The region in which to obtain the dcs maintainwindows. If omitted, the provider-level
+	// The region in which to obtain the dcs maintenance windows. If omitted, the provider-level
 	// region will be used.
 	Region pulumi.StringPtrInput `pulumi:"region"`
 	// Specifies the sequential number of a maintenance time window.

@@ -18,10 +18,12 @@ class VpcArgs:
     def __init__(__self__, *,
                  cidr: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
+                 enhanced_local_route: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_cidr: Optional[pulumi.Input[str]] = None,
+                 secondary_cidrs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Vpc resource.
@@ -29,18 +31,23 @@ class VpcArgs:
                10.255.255.0/24, 172.16.0.0/12 to 172.31.255.0/24, or 192.168.0.0/16 to 192.168.255.0/24.
         :param pulumi.Input[str] description: Specifies supplementary information about the VPC. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the VPC. Changing this
-               creates a new VPC resource.
+        :param pulumi.Input[str] enhanced_local_route: Specifies whether to enable local route enhancement function. It can not be
+               closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the VPC.
         :param pulumi.Input[str] name: Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
                of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region in which to create the VPC. If omitted, the
                provider-level region will be used. Changing this creates a new VPC resource.
-        :param pulumi.Input[str] secondary_cidr: Specifies the secondary CIDR block of the VPC.
+        :param pulumi.Input[str] secondary_cidr: schema: Deprecated; use secondary_cidrs instead
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] secondary_cidrs: Specifies the secondary CIDR blocks of the VPC.
+               Each VPC can have 5 secondary CIDR blocks.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the VPC.
         """
         pulumi.set(__self__, "cidr", cidr)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enhanced_local_route is not None:
+            pulumi.set(__self__, "enhanced_local_route", enhanced_local_route)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
@@ -49,6 +56,8 @@ class VpcArgs:
             pulumi.set(__self__, "region", region)
         if secondary_cidr is not None:
             pulumi.set(__self__, "secondary_cidr", secondary_cidr)
+        if secondary_cidrs is not None:
+            pulumi.set(__self__, "secondary_cidrs", secondary_cidrs)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
 
@@ -79,11 +88,23 @@ class VpcArgs:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enhancedLocalRoute")
+    def enhanced_local_route(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable local route enhancement function. It can not be
+        closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        """
+        return pulumi.get(self, "enhanced_local_route")
+
+    @enhanced_local_route.setter
+    def enhanced_local_route(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enhanced_local_route", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the VPC. Changing this
-        creates a new VPC resource.
+        Specifies the enterprise project ID of the VPC.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -121,13 +142,26 @@ class VpcArgs:
     @pulumi.getter(name="secondaryCidr")
     def secondary_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secondary CIDR block of the VPC.
+        schema: Deprecated; use secondary_cidrs instead
         """
         return pulumi.get(self, "secondary_cidr")
 
     @secondary_cidr.setter
     def secondary_cidr(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "secondary_cidr", value)
+
+    @property
+    @pulumi.getter(name="secondaryCidrs")
+    def secondary_cidrs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the secondary CIDR blocks of the VPC.
+        Each VPC can have 5 secondary CIDR blocks.
+        """
+        return pulumi.get(self, "secondary_cidrs")
+
+    @secondary_cidrs.setter
+    def secondary_cidrs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "secondary_cidrs", value)
 
     @property
     @pulumi.getter
@@ -147,11 +181,13 @@ class _VpcState:
     def __init__(__self__, *,
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enhanced_local_route: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  routes: Optional[pulumi.Input[Sequence[pulumi.Input['VpcRouteArgs']]]] = None,
                  secondary_cidr: Optional[pulumi.Input[str]] = None,
+                 secondary_cidrs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None):
         """
@@ -160,13 +196,16 @@ class _VpcState:
                10.255.255.0/24, 172.16.0.0/12 to 172.31.255.0/24, or 192.168.0.0/16 to 192.168.255.0/24.
         :param pulumi.Input[str] description: Specifies supplementary information about the VPC. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the VPC. Changing this
-               creates a new VPC resource.
+        :param pulumi.Input[str] enhanced_local_route: Specifies whether to enable local route enhancement function. It can not be
+               closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the VPC.
         :param pulumi.Input[str] name: Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
                of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region in which to create the VPC. If omitted, the
                provider-level region will be used. Changing this creates a new VPC resource.
-        :param pulumi.Input[str] secondary_cidr: Specifies the secondary CIDR block of the VPC.
+        :param pulumi.Input[str] secondary_cidr: schema: Deprecated; use secondary_cidrs instead
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] secondary_cidrs: Specifies the secondary CIDR blocks of the VPC.
+               Each VPC can have 5 secondary CIDR blocks.
         :param pulumi.Input[str] status: The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the VPC.
         """
@@ -174,6 +213,8 @@ class _VpcState:
             pulumi.set(__self__, "cidr", cidr)
         if description is not None:
             pulumi.set(__self__, "description", description)
+        if enhanced_local_route is not None:
+            pulumi.set(__self__, "enhanced_local_route", enhanced_local_route)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
@@ -187,6 +228,8 @@ class _VpcState:
             pulumi.set(__self__, "routes", routes)
         if secondary_cidr is not None:
             pulumi.set(__self__, "secondary_cidr", secondary_cidr)
+        if secondary_cidrs is not None:
+            pulumi.set(__self__, "secondary_cidrs", secondary_cidrs)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if tags is not None:
@@ -219,11 +262,23 @@ class _VpcState:
         pulumi.set(self, "description", value)
 
     @property
+    @pulumi.getter(name="enhancedLocalRoute")
+    def enhanced_local_route(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable local route enhancement function. It can not be
+        closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        """
+        return pulumi.get(self, "enhanced_local_route")
+
+    @enhanced_local_route.setter
+    def enhanced_local_route(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enhanced_local_route", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the enterprise project id of the VPC. Changing this
-        creates a new VPC resource.
+        Specifies the enterprise project ID of the VPC.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -270,13 +325,26 @@ class _VpcState:
     @pulumi.getter(name="secondaryCidr")
     def secondary_cidr(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secondary CIDR block of the VPC.
+        schema: Deprecated; use secondary_cidrs instead
         """
         return pulumi.get(self, "secondary_cidr")
 
     @secondary_cidr.setter
     def secondary_cidr(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "secondary_cidr", value)
+
+    @property
+    @pulumi.getter(name="secondaryCidrs")
+    def secondary_cidrs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the secondary CIDR blocks of the VPC.
+        Each VPC can have 5 secondary CIDR blocks.
+        """
+        return pulumi.get(self, "secondary_cidrs")
+
+    @secondary_cidrs.setter
+    def secondary_cidrs(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "secondary_cidrs", value)
 
     @property
     @pulumi.getter
@@ -310,10 +378,12 @@ class Vpc(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enhanced_local_route: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_cidr: Optional[pulumi.Input[str]] = None,
+                 secondary_cidrs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         """
@@ -343,13 +413,13 @@ class Vpc(pulumi.CustomResource):
 
         ## Import
 
-        VPCs can be imported using the `id`, e.g.
+        VPCs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/vpc:Vpc vpc_v1 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
 
-         Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You you can ignore changes as below. resource "huaweicloud_vpc" "vpc_v1" {
+         Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You can ignore changes as below. hcl resource "huaweicloud_vpc" "vpc_v1" {
 
          ...
 
@@ -365,13 +435,16 @@ class Vpc(pulumi.CustomResource):
                10.255.255.0/24, 172.16.0.0/12 to 172.31.255.0/24, or 192.168.0.0/16 to 192.168.255.0/24.
         :param pulumi.Input[str] description: Specifies supplementary information about the VPC. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the VPC. Changing this
-               creates a new VPC resource.
+        :param pulumi.Input[str] enhanced_local_route: Specifies whether to enable local route enhancement function. It can not be
+               closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the VPC.
         :param pulumi.Input[str] name: Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
                of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region in which to create the VPC. If omitted, the
                provider-level region will be used. Changing this creates a new VPC resource.
-        :param pulumi.Input[str] secondary_cidr: Specifies the secondary CIDR block of the VPC.
+        :param pulumi.Input[str] secondary_cidr: schema: Deprecated; use secondary_cidrs instead
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] secondary_cidrs: Specifies the secondary CIDR blocks of the VPC.
+               Each VPC can have 5 secondary CIDR blocks.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the VPC.
         """
         ...
@@ -407,13 +480,13 @@ class Vpc(pulumi.CustomResource):
 
         ## Import
 
-        VPCs can be imported using the `id`, e.g.
+        VPCs can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/vpc:Vpc vpc_v1 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
 
-         Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You you can ignore changes as below. resource "huaweicloud_vpc" "vpc_v1" {
+         Note that the imported state may not be identical to your resource definition when `secondary_cidr` was set. You can ignore changes as below. hcl resource "huaweicloud_vpc" "vpc_v1" {
 
          ...
 
@@ -440,10 +513,12 @@ class Vpc(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  cidr: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
+                 enhanced_local_route: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  secondary_cidr: Optional[pulumi.Input[str]] = None,
+                 secondary_cidrs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -458,10 +533,12 @@ class Vpc(pulumi.CustomResource):
                 raise TypeError("Missing required property 'cidr'")
             __props__.__dict__["cidr"] = cidr
             __props__.__dict__["description"] = description
+            __props__.__dict__["enhanced_local_route"] = enhanced_local_route
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
             __props__.__dict__["secondary_cidr"] = secondary_cidr
+            __props__.__dict__["secondary_cidrs"] = secondary_cidrs
             __props__.__dict__["tags"] = tags
             __props__.__dict__["routes"] = None
             __props__.__dict__["status"] = None
@@ -477,11 +554,13 @@ class Vpc(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             cidr: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
+            enhanced_local_route: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             routes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VpcRouteArgs']]]]] = None,
             secondary_cidr: Optional[pulumi.Input[str]] = None,
+            secondary_cidrs: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             status: Optional[pulumi.Input[str]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None) -> 'Vpc':
         """
@@ -495,13 +574,16 @@ class Vpc(pulumi.CustomResource):
                10.255.255.0/24, 172.16.0.0/12 to 172.31.255.0/24, or 192.168.0.0/16 to 192.168.255.0/24.
         :param pulumi.Input[str] description: Specifies supplementary information about the VPC. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
-        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the VPC. Changing this
-               creates a new VPC resource.
+        :param pulumi.Input[str] enhanced_local_route: Specifies whether to enable local route enhancement function. It can not be
+               closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of the VPC.
         :param pulumi.Input[str] name: Specifies the name of the VPC. The name must be unique for a tenant. The value is a string
                of no more than 64 characters and can contain digits, letters, underscores (_), and hyphens (-).
         :param pulumi.Input[str] region: Specifies the region in which to create the VPC. If omitted, the
                provider-level region will be used. Changing this creates a new VPC resource.
-        :param pulumi.Input[str] secondary_cidr: Specifies the secondary CIDR block of the VPC.
+        :param pulumi.Input[str] secondary_cidr: schema: Deprecated; use secondary_cidrs instead
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] secondary_cidrs: Specifies the secondary CIDR blocks of the VPC.
+               Each VPC can have 5 secondary CIDR blocks.
         :param pulumi.Input[str] status: The current status of the VPC. Possible values are as follows: CREATING, OK or ERROR.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the VPC.
         """
@@ -511,11 +593,13 @@ class Vpc(pulumi.CustomResource):
 
         __props__.__dict__["cidr"] = cidr
         __props__.__dict__["description"] = description
+        __props__.__dict__["enhanced_local_route"] = enhanced_local_route
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         __props__.__dict__["routes"] = routes
         __props__.__dict__["secondary_cidr"] = secondary_cidr
+        __props__.__dict__["secondary_cidrs"] = secondary_cidrs
         __props__.__dict__["status"] = status
         __props__.__dict__["tags"] = tags
         return Vpc(resource_name, opts=opts, __props__=__props__)
@@ -539,11 +623,19 @@ class Vpc(pulumi.CustomResource):
         return pulumi.get(self, "description")
 
     @property
+    @pulumi.getter(name="enhancedLocalRoute")
+    def enhanced_local_route(self) -> pulumi.Output[str]:
+        """
+        Specifies whether to enable local route enhancement function. It can not be
+        closed if it has been open. Value options: **true** or **false**. Defaults to **true**.
+        """
+        return pulumi.get(self, "enhanced_local_route")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the enterprise project id of the VPC. Changing this
-        creates a new VPC resource.
+        Specifies the enterprise project ID of the VPC.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -574,9 +666,18 @@ class Vpc(pulumi.CustomResource):
     @pulumi.getter(name="secondaryCidr")
     def secondary_cidr(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the secondary CIDR block of the VPC.
+        schema: Deprecated; use secondary_cidrs instead
         """
         return pulumi.get(self, "secondary_cidr")
+
+    @property
+    @pulumi.getter(name="secondaryCidrs")
+    def secondary_cidrs(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the secondary CIDR blocks of the VPC.
+        Each VPC can have 5 secondary CIDR blocks.
+        """
+        return pulumi.get(self, "secondary_cidrs")
 
     @property
     @pulumi.getter

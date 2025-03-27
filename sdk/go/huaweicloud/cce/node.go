@@ -387,7 +387,7 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `fixed_ip`, `eip_id`, `preinstall`, `postinstall`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `max_pods`, `extend_param`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password`, `private_key`, `storage`, `fixed_ip`, `extension_nics`, `eip_id`, `iptype`, `bandwidth_charge_mode`, `bandwidth_size`, `share_type`, `extend_params`, `dedicated_host_id`, `initialized_conditions`, `labels`, `taints` and arguments for pre-paid. It is generally recommended running `terraform plan` after importing a node. You can then decide if changes should be applied to the node, or the resource definition should be updated to align with the node. Also you can ignore changes as below. hcl resource "huaweicloud_cce_node" "my_node" {
 //
 //	...
 //
@@ -395,7 +395,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	extend_param, labels,
+//	extend_params, labels,
 //
 //	]
 //
@@ -429,32 +429,48 @@ type Node struct {
 	// Specifies the configurations of the data disk.
 	// Changing this parameter will create a new resource.
 	DataVolumes NodeDataVolumeArrayOutput `pulumi:"dataVolumes"`
+	// Specifies the ID of the DeH to which the node is scheduled.
+	// Changing this parameter will create a new resource.
+	DedicatedHostId pulumi.StringPtrOutput `pulumi:"dedicatedHostId"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
 	EcsGroupId pulumi.StringPtrOutput `pulumi:"ecsGroupId"`
-	// schema: Internal
+	// schema: Deprecated
 	EcsPerformanceType pulumi.StringPtrOutput `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
 	EipId pulumi.StringPtrOutput `pulumi:"eipId"`
 	// Deprecated: use eip_id instead
 	EipIds pulumi.StringArrayOutput `pulumi:"eipIds"`
-	// Specifies the extended parameter.
+	// Specifies the enterprise project ID of the CCE node.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
 	ExtendParam pulumi.StringMapOutput `pulumi:"extendParam"`
 	// Deprecated: use charging_mode instead
 	ExtendParamChargingMode pulumi.IntPtrOutput `pulumi:"extendParamChargingMode"`
+	// Specifies the extended parameters.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtendParams NodeExtendParamsPtrOutput `pulumi:"extendParams"`
+	// Specifies extension NICs of the node.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtensionNics NodeExtensionNicArrayOutput `pulumi:"extensionNics"`
 	// Specifies the fixed IP of the NIC.
 	// Changing this parameter will create a new resource.
 	FixedIp pulumi.StringPtrOutput `pulumi:"fixedIp"`
 	// Specifies the flavor ID. Changing this parameter will create a new
 	// resource.
 	FlavorId pulumi.StringOutput `pulumi:"flavorId"`
+	// Specifies the hostname config of the kubernetes node,
+	// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	HostnameConfig NodeHostnameConfigOutput `pulumi:"hostnameConfig"`
+	// Specifies the custom initialization flags.
+	// Changing this parameter will create a new resource.
+	InitializedConditions pulumi.StringArrayOutput `pulumi:"initializedConditions"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
 	Iptype pulumi.StringPtrOutput `pulumi:"iptype"`
@@ -475,13 +491,16 @@ type Node struct {
 	// Deprecated: will be removed after v1.26.0
 	OrderId pulumi.StringPtrOutput `pulumi:"orderId"`
 	// Specifies the operating system of the node.
+	// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+	// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+	// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 	// Changing this parameter will create a new resource.
-	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringOutput `pulumi:"os"`
 	// schema: Internal
 	Partition pulumi.StringPtrOutput `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
+	// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+	// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	Password pulumi.StringPtrOutput `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
@@ -503,11 +522,11 @@ type Node struct {
 	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
 	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
 	PrivateKey pulumi.StringPtrOutput `pulumi:"privateKey"`
-	// schema: Internal
+	// schema: Deprecated
 	ProductId pulumi.StringPtrOutput `pulumi:"productId"`
 	// Public IP of the CCE node.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
-	// schema: Internal
+	// schema: Deprecated
 	PublicKey pulumi.StringPtrOutput `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -527,7 +546,14 @@ type Node struct {
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	// This parameter is supported for clusters of v1.15.11 and later.
+	// If the node has both local and EVS disks attached,
+	// this parameter must be specified, or it may result in unexpected disk partitions.
+	// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+	// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+	// this parameter must be specified.
+	// If you want to store system components in the system disk, this parameter must be specified.
+	// Changing this parameter will create a new resource.
 	Storage NodeStoragePtrOutput `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
@@ -551,9 +577,6 @@ func NewNode(ctx *pulumi.Context,
 	}
 	if args.ClusterId == nil {
 		return nil, errors.New("invalid value for required argument 'ClusterId'")
-	}
-	if args.DataVolumes == nil {
-		return nil, errors.New("invalid value for required argument 'DataVolumes'")
 	}
 	if args.FlavorId == nil {
 		return nil, errors.New("invalid value for required argument 'FlavorId'")
@@ -610,32 +633,48 @@ type nodeState struct {
 	// Specifies the configurations of the data disk.
 	// Changing this parameter will create a new resource.
 	DataVolumes []NodeDataVolume `pulumi:"dataVolumes"`
+	// Specifies the ID of the DeH to which the node is scheduled.
+	// Changing this parameter will create a new resource.
+	DedicatedHostId *string `pulumi:"dedicatedHostId"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
 	EcsGroupId *string `pulumi:"ecsGroupId"`
-	// schema: Internal
+	// schema: Deprecated
 	EcsPerformanceType *string `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
 	EipId *string `pulumi:"eipId"`
 	// Deprecated: use eip_id instead
 	EipIds []string `pulumi:"eipIds"`
-	// Specifies the extended parameter.
+	// Specifies the enterprise project ID of the CCE node.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
 	ExtendParam map[string]string `pulumi:"extendParam"`
 	// Deprecated: use charging_mode instead
 	ExtendParamChargingMode *int `pulumi:"extendParamChargingMode"`
+	// Specifies the extended parameters.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtendParams *NodeExtendParams `pulumi:"extendParams"`
+	// Specifies extension NICs of the node.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtensionNics []NodeExtensionNic `pulumi:"extensionNics"`
 	// Specifies the fixed IP of the NIC.
 	// Changing this parameter will create a new resource.
 	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the flavor ID. Changing this parameter will create a new
 	// resource.
 	FlavorId *string `pulumi:"flavorId"`
+	// Specifies the hostname config of the kubernetes node,
+	// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	HostnameConfig *NodeHostnameConfig `pulumi:"hostnameConfig"`
+	// Specifies the custom initialization flags.
+	// Changing this parameter will create a new resource.
+	InitializedConditions []string `pulumi:"initializedConditions"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
 	Iptype *string `pulumi:"iptype"`
@@ -656,13 +695,16 @@ type nodeState struct {
 	// Deprecated: will be removed after v1.26.0
 	OrderId *string `pulumi:"orderId"`
 	// Specifies the operating system of the node.
+	// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+	// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+	// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 	// Changing this parameter will create a new resource.
-	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os *string `pulumi:"os"`
 	// schema: Internal
 	Partition *string `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
+	// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+	// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
@@ -684,11 +726,11 @@ type nodeState struct {
 	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
 	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
 	PrivateKey *string `pulumi:"privateKey"`
-	// schema: Internal
+	// schema: Deprecated
 	ProductId *string `pulumi:"productId"`
 	// Public IP of the CCE node.
 	PublicIp *string `pulumi:"publicIp"`
-	// schema: Internal
+	// schema: Deprecated
 	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -708,7 +750,14 @@ type nodeState struct {
 	Status *string `pulumi:"status"`
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	// This parameter is supported for clusters of v1.15.11 and later.
+	// If the node has both local and EVS disks attached,
+	// this parameter must be specified, or it may result in unexpected disk partitions.
+	// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+	// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+	// this parameter must be specified.
+	// If you want to store system components in the system disk, this parameter must be specified.
+	// Changing this parameter will create a new resource.
 	Storage *NodeStorage `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
@@ -747,32 +796,48 @@ type NodeState struct {
 	// Specifies the configurations of the data disk.
 	// Changing this parameter will create a new resource.
 	DataVolumes NodeDataVolumeArrayInput
+	// Specifies the ID of the DeH to which the node is scheduled.
+	// Changing this parameter will create a new resource.
+	DedicatedHostId pulumi.StringPtrInput
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
 	EcsGroupId pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	EcsPerformanceType pulumi.StringPtrInput
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
 	EipId pulumi.StringPtrInput
 	// Deprecated: use eip_id instead
 	EipIds pulumi.StringArrayInput
-	// Specifies the extended parameter.
+	// Specifies the enterprise project ID of the CCE node.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// schema: Deprecated
 	ExtendParam pulumi.StringMapInput
 	// Deprecated: use charging_mode instead
 	ExtendParamChargingMode pulumi.IntPtrInput
+	// Specifies the extended parameters.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtendParams NodeExtendParamsPtrInput
+	// Specifies extension NICs of the node.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtensionNics NodeExtensionNicArrayInput
 	// Specifies the fixed IP of the NIC.
 	// Changing this parameter will create a new resource.
 	FixedIp pulumi.StringPtrInput
 	// Specifies the flavor ID. Changing this parameter will create a new
 	// resource.
 	FlavorId pulumi.StringPtrInput
+	// Specifies the hostname config of the kubernetes node,
+	// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	HostnameConfig NodeHostnameConfigPtrInput
+	// Specifies the custom initialization flags.
+	// Changing this parameter will create a new resource.
+	InitializedConditions pulumi.StringArrayInput
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
 	Iptype pulumi.StringPtrInput
@@ -793,13 +858,16 @@ type NodeState struct {
 	// Deprecated: will be removed after v1.26.0
 	OrderId pulumi.StringPtrInput
 	// Specifies the operating system of the node.
+	// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+	// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+	// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 	// Changing this parameter will create a new resource.
-	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringPtrInput
 	// schema: Internal
 	Partition pulumi.StringPtrInput
 	// Specifies the root password when logging in to select the password mode.
+	// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+	// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
@@ -821,11 +889,11 @@ type NodeState struct {
 	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
 	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
 	PrivateKey pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	ProductId pulumi.StringPtrInput
 	// Public IP of the CCE node.
 	PublicIp pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -845,7 +913,14 @@ type NodeState struct {
 	Status pulumi.StringPtrInput
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	// This parameter is supported for clusters of v1.15.11 and later.
+	// If the node has both local and EVS disks attached,
+	// this parameter must be specified, or it may result in unexpected disk partitions.
+	// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+	// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+	// this parameter must be specified.
+	// If you want to store system components in the system disk, this parameter must be specified.
+	// Changing this parameter will create a new resource.
 	Storage NodeStoragePtrInput
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
@@ -888,32 +963,48 @@ type nodeArgs struct {
 	// Specifies the configurations of the data disk.
 	// Changing this parameter will create a new resource.
 	DataVolumes []NodeDataVolume `pulumi:"dataVolumes"`
+	// Specifies the ID of the DeH to which the node is scheduled.
+	// Changing this parameter will create a new resource.
+	DedicatedHostId *string `pulumi:"dedicatedHostId"`
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
 	EcsGroupId *string `pulumi:"ecsGroupId"`
-	// schema: Internal
+	// schema: Deprecated
 	EcsPerformanceType *string `pulumi:"ecsPerformanceType"`
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
 	EipId *string `pulumi:"eipId"`
 	// Deprecated: use eip_id instead
 	EipIds []string `pulumi:"eipIds"`
-	// Specifies the extended parameter.
+	// Specifies the enterprise project ID of the CCE node.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// schema: Deprecated
 	ExtendParam map[string]string `pulumi:"extendParam"`
 	// Deprecated: use charging_mode instead
 	ExtendParamChargingMode *int `pulumi:"extendParamChargingMode"`
+	// Specifies the extended parameters.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtendParams *NodeExtendParams `pulumi:"extendParams"`
+	// Specifies extension NICs of the node.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtensionNics []NodeExtensionNic `pulumi:"extensionNics"`
 	// Specifies the fixed IP of the NIC.
 	// Changing this parameter will create a new resource.
 	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the flavor ID. Changing this parameter will create a new
 	// resource.
 	FlavorId string `pulumi:"flavorId"`
+	// Specifies the hostname config of the kubernetes node,
+	// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	HostnameConfig *NodeHostnameConfig `pulumi:"hostnameConfig"`
+	// Specifies the custom initialization flags.
+	// Changing this parameter will create a new resource.
+	InitializedConditions []string `pulumi:"initializedConditions"`
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
 	Iptype *string `pulumi:"iptype"`
@@ -934,13 +1025,16 @@ type nodeArgs struct {
 	// Deprecated: will be removed after v1.26.0
 	OrderId *string `pulumi:"orderId"`
 	// Specifies the operating system of the node.
+	// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+	// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+	// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 	// Changing this parameter will create a new resource.
-	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os *string `pulumi:"os"`
 	// schema: Internal
 	Partition *string `pulumi:"partition"`
 	// Specifies the root password when logging in to select the password mode.
+	// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+	// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	Password *string `pulumi:"password"`
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
@@ -960,9 +1054,9 @@ type nodeArgs struct {
 	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
 	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
 	PrivateKey *string `pulumi:"privateKey"`
-	// schema: Internal
+	// schema: Deprecated
 	ProductId *string `pulumi:"productId"`
-	// schema: Internal
+	// schema: Deprecated
 	PublicKey *string `pulumi:"publicKey"`
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -978,7 +1072,14 @@ type nodeArgs struct {
 	Sharetype *string `pulumi:"sharetype"`
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	// This parameter is supported for clusters of v1.15.11 and later.
+	// If the node has both local and EVS disks attached,
+	// this parameter must be specified, or it may result in unexpected disk partitions.
+	// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+	// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+	// this parameter must be specified.
+	// If you want to store system components in the system disk, this parameter must be specified.
+	// Changing this parameter will create a new resource.
 	Storage *NodeStorage `pulumi:"storage"`
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
@@ -1018,32 +1119,48 @@ type NodeArgs struct {
 	// Specifies the configurations of the data disk.
 	// Changing this parameter will create a new resource.
 	DataVolumes NodeDataVolumeArrayInput
+	// Specifies the ID of the DeH to which the node is scheduled.
+	// Changing this parameter will create a new resource.
+	DedicatedHostId pulumi.StringPtrInput
 	// Specifies the ECS group ID. If specified, the node will be created under
 	// the cloud server group. Changing this parameter will create a new resource.
 	EcsGroupId pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	EcsPerformanceType pulumi.StringPtrInput
 	// Specifies the ID of the EIP.
 	// Changing this parameter will create a new resource.
 	EipId pulumi.StringPtrInput
 	// Deprecated: use eip_id instead
 	EipIds pulumi.StringArrayInput
-	// Specifies the extended parameter.
+	// Specifies the enterprise project ID of the CCE node.
 	// Changing this parameter will create a new resource.
-	// The available keys are as follows:
-	// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-	// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-	// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-	// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+	EnterpriseProjectId pulumi.StringPtrInput
+	// schema: Deprecated
 	ExtendParam pulumi.StringMapInput
 	// Deprecated: use charging_mode instead
 	ExtendParamChargingMode pulumi.IntPtrInput
+	// Specifies the extended parameters.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtendParams NodeExtendParamsPtrInput
+	// Specifies extension NICs of the node.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	ExtensionNics NodeExtensionNicArrayInput
 	// Specifies the fixed IP of the NIC.
 	// Changing this parameter will create a new resource.
 	FixedIp pulumi.StringPtrInput
 	// Specifies the flavor ID. Changing this parameter will create a new
 	// resource.
 	FlavorId pulumi.StringInput
+	// Specifies the hostname config of the kubernetes node,
+	// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+	// The object structure is documented below.
+	// Changing this parameter will create a new resource.
+	HostnameConfig NodeHostnameConfigPtrInput
+	// Specifies the custom initialization flags.
+	// Changing this parameter will create a new resource.
+	InitializedConditions pulumi.StringArrayInput
 	// Specifies the elastic IP type.
 	// Changing this parameter will create a new resource.
 	Iptype pulumi.StringPtrInput
@@ -1064,13 +1181,16 @@ type NodeArgs struct {
 	// Deprecated: will be removed after v1.26.0
 	OrderId pulumi.StringPtrInput
 	// Specifies the operating system of the node.
+	// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+	// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+	// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 	// Changing this parameter will create a new resource.
-	// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-	// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 	Os pulumi.StringPtrInput
 	// schema: Internal
 	Partition pulumi.StringPtrInput
 	// Specifies the root password when logging in to select the password mode.
+	// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+	// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 	// This parameter can be plain or salted and is alternative to `keyPair`.
 	Password pulumi.StringPtrInput
 	// Specifies the charging period of the CCE node. If `periodUnit` is set to *month*
@@ -1090,9 +1210,9 @@ type NodeArgs struct {
 	// Specifies the private key of the in used `keyPair`. This parameter is mandatory
 	// when replacing or unbinding a keypair if the CCE node is in **Active** state.
 	PrivateKey pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	ProductId pulumi.StringPtrInput
-	// schema: Internal
+	// schema: Deprecated
 	PublicKey pulumi.StringPtrInput
 	// Specifies the region in which to create the CCE node resource.
 	// If omitted, the provider-level region will be used. Changing this creates a new CCE node resource.
@@ -1108,7 +1228,14 @@ type NodeArgs struct {
 	Sharetype pulumi.StringPtrInput
 	// Specifies the disk initialization management parameter.
 	// If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-	// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+	// This parameter is supported for clusters of v1.15.11 and later.
+	// If the node has both local and EVS disks attached,
+	// this parameter must be specified, or it may result in unexpected disk partitions.
+	// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+	// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+	// this parameter must be specified.
+	// If you want to store system components in the system disk, this parameter must be specified.
+	// Changing this parameter will create a new resource.
 	Storage NodeStoragePtrInput
 	// Specifies the ID of the subnet to which the NIC belongs.
 	// Changing this parameter will create a new resource.
@@ -1263,13 +1390,19 @@ func (o NodeOutput) DataVolumes() NodeDataVolumeArrayOutput {
 	return o.ApplyT(func(v *Node) NodeDataVolumeArrayOutput { return v.DataVolumes }).(NodeDataVolumeArrayOutput)
 }
 
+// Specifies the ID of the DeH to which the node is scheduled.
+// Changing this parameter will create a new resource.
+func (o NodeOutput) DedicatedHostId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.DedicatedHostId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the ECS group ID. If specified, the node will be created under
 // the cloud server group. Changing this parameter will create a new resource.
 func (o NodeOutput) EcsGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.EcsGroupId }).(pulumi.StringPtrOutput)
 }
 
-// schema: Internal
+// schema: Deprecated
 func (o NodeOutput) EcsPerformanceType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.EcsPerformanceType }).(pulumi.StringPtrOutput)
 }
@@ -1285,13 +1418,13 @@ func (o NodeOutput) EipIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringArrayOutput { return v.EipIds }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the extended parameter.
+// Specifies the enterprise project ID of the CCE node.
 // Changing this parameter will create a new resource.
-// The available keys are as follows:
-// + **agency_name**: The agency name to provide temporary credentials for CCE node to access other cloud services.
-// + **alpha.cce/NodeImageID**: The custom image ID used to create the BMS nodes.
-// + **dockerBaseSize**: The available disk space of a single docker container on the node in device mapper mode.
-// + **DockerLVMConfigOverride**: Specifies the data disk configurations of Docker.
+func (o NodeOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// schema: Deprecated
 func (o NodeOutput) ExtendParam() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringMapOutput { return v.ExtendParam }).(pulumi.StringMapOutput)
 }
@@ -1299,6 +1432,20 @@ func (o NodeOutput) ExtendParam() pulumi.StringMapOutput {
 // Deprecated: use charging_mode instead
 func (o NodeOutput) ExtendParamChargingMode() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.IntPtrOutput { return v.ExtendParamChargingMode }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the extended parameters.
+// The object structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodeOutput) ExtendParams() NodeExtendParamsPtrOutput {
+	return o.ApplyT(func(v *Node) NodeExtendParamsPtrOutput { return v.ExtendParams }).(NodeExtendParamsPtrOutput)
+}
+
+// Specifies extension NICs of the node.
+// The object structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodeOutput) ExtensionNics() NodeExtensionNicArrayOutput {
+	return o.ApplyT(func(v *Node) NodeExtensionNicArrayOutput { return v.ExtensionNics }).(NodeExtensionNicArrayOutput)
 }
 
 // Specifies the fixed IP of the NIC.
@@ -1311,6 +1458,20 @@ func (o NodeOutput) FixedIp() pulumi.StringPtrOutput {
 // resource.
 func (o NodeOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.FlavorId }).(pulumi.StringOutput)
+}
+
+// Specifies the hostname config of the kubernetes node,
+// which is supported by clusters of v1.23.6-r0 to v1.25 or clusters of v1.25.2-r0 or later versions.
+// The object structure is documented below.
+// Changing this parameter will create a new resource.
+func (o NodeOutput) HostnameConfig() NodeHostnameConfigOutput {
+	return o.ApplyT(func(v *Node) NodeHostnameConfigOutput { return v.HostnameConfig }).(NodeHostnameConfigOutput)
+}
+
+// Specifies the custom initialization flags.
+// Changing this parameter will create a new resource.
+func (o NodeOutput) InitializedConditions() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Node) pulumi.StringArrayOutput { return v.InitializedConditions }).(pulumi.StringArrayOutput)
 }
 
 // Specifies the elastic IP type.
@@ -1354,9 +1515,10 @@ func (o NodeOutput) OrderId() pulumi.StringPtrOutput {
 }
 
 // Specifies the operating system of the node.
+// The value can be **EulerOS 2.9** and **CentOS 7.6** e.g. For more details,
+// please see [documentation](https://support.huaweicloud.com/intl/en-us/api-cce/node-os.html).
+// This parameter is required when the `nodeImageId` in `extendParams` is not specified.
 // Changing this parameter will create a new resource.
-// + For VM nodes, clusters of v1.13 and later support *EulerOS 2.5* and *CentOS 7.6*.
-// + For BMS nodes purchased in the yearly/monthly billing mode, only *EulerOS 2.3* is supported.
 func (o NodeOutput) Os() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.Os }).(pulumi.StringOutput)
 }
@@ -1367,6 +1529,8 @@ func (o NodeOutput) Partition() pulumi.StringPtrOutput {
 }
 
 // Specifies the root password when logging in to select the password mode.
+// The password consists of 8 to 26 characters and must contain at least three of following: uppercase letters,
+// lowercase letters, digits, special characters(!@$%^-_=+[{}]:,./?~#*).
 // This parameter can be plain or salted and is alternative to `keyPair`.
 func (o NodeOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
@@ -1409,7 +1573,7 @@ func (o NodeOutput) PrivateKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.PrivateKey }).(pulumi.StringPtrOutput)
 }
 
-// schema: Internal
+// schema: Deprecated
 func (o NodeOutput) ProductId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.ProductId }).(pulumi.StringPtrOutput)
 }
@@ -1419,7 +1583,7 @@ func (o NodeOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
 }
 
-// schema: Internal
+// schema: Deprecated
 func (o NodeOutput) PublicKey() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Node) pulumi.StringPtrOutput { return v.PublicKey }).(pulumi.StringPtrOutput)
 }
@@ -1460,7 +1624,14 @@ func (o NodeOutput) Status() pulumi.StringOutput {
 
 // Specifies the disk initialization management parameter.
 // If omitted, disks are managed based on the DockerLVMConfigOverride parameter in extendParam.
-// This parameter is supported for clusters of v1.15.11 and later. Changing this parameter will create a new resource.
+// This parameter is supported for clusters of v1.15.11 and later.
+// If the node has both local and EVS disks attached,
+// this parameter must be specified, or it may result in unexpected disk partitions.
+// If you want to change the value range of a data disk to **20** to **32768**, this parameter must be specified.
+// If you want to use the shared disk space (with the runtime and Kubernetes partitions cancelled),
+// this parameter must be specified.
+// If you want to store system components in the system disk, this parameter must be specified.
+// Changing this parameter will create a new resource.
 func (o NodeOutput) Storage() NodeStoragePtrOutput {
 	return o.ApplyT(func(v *Node) NodeStoragePtrOutput { return v.Storage }).(NodeStoragePtrOutput)
 }

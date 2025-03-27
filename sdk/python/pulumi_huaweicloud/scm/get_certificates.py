@@ -136,6 +136,8 @@ def get_certificates(deploy_support: Optional[bool] = None,
                      status: Optional[str] = None,
                      opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCertificatesResult:
     """
+    !> **WARNING:** It has been deprecated, use `huaweicloud_ccm_certificates` to get the CCM SSL certificates.
+
     Use this data source to get the list of SCM certificates.
 
     ## Example Usage
@@ -196,6 +198,8 @@ def get_certificates_output(deploy_support: Optional[pulumi.Input[Optional[bool]
                             status: Optional[pulumi.Input[Optional[str]]] = None,
                             opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCertificatesResult]:
     """
+    !> **WARNING:** It has been deprecated, use `huaweicloud_ccm_certificates` to get the CCM SSL certificates.
+
     Use this data source to get the list of SCM certificates.
 
     ## Example Usage

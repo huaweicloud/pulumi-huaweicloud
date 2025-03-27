@@ -52,7 +52,7 @@ class InstanceArgs:
         :param pulumi.Input[int] edition: Specifies Service edition of the BCS instance. Valid values are `1`, `2` and `4`
                . Changing this will create a new instance.
         :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project that the BCS
-               instance belong to. Changing this will create a new instance.
+               instance belong to.
         :param pulumi.Input[str] fabric_version: Specifies version of fabric for the BCS instance. Valid values
                are `1.4` and `2.0`
                Changing this will create a new instance.
@@ -61,7 +61,7 @@ class InstanceArgs:
         :param pulumi.Input[int] org_disk_size: Specifies the storage capacity of peer organization. Changing this will
                create a new instance.
                + The minimum storage capacity of `efs` volume type is 500GB.
-        :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
+        :param pulumi.Input[str] password: Specifies the password of the couch database. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
                characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[str] volume_type: Specifies the storage volume type to attach to each organization of the
@@ -84,7 +84,7 @@ class InstanceArgs:
         :param pulumi.Input[bool] delete_storage: Specified whether to delete the associated SFS resources when deleting BCS
                instance. Default is false.
         :param pulumi.Input[bool] eip_enable: Specifies whether to use the EIP of the CCE to bind the BCS instance.
-               Changing this will create a new instance. Defalut is true.
+               Changing this will create a new instance. Default is true.
         :param pulumi.Input['InstanceKafkaArgs'] kafka: Specifies the kafka configuration for the BCS instance. Changing this will create
                a new instance. The kafka object structure is documented below.
         :param pulumi.Input[str] name: Specifies the name of the channel. Changing this creates a new instance.
@@ -95,7 +95,7 @@ class InstanceArgs:
                provider-level region will be used. Changing this will create a new instance.
         :param pulumi.Input[bool] restful_api_support: Specified whether to add RESTful API support. Changing this will
                create a new instance.
-        :param pulumi.Input[str] security_mechanism: Specifies the secutity mechanism used by the BCS instance. Valid
+        :param pulumi.Input[str] security_mechanism: Specifies the security mechanism used by the BCS instance. Valid
                values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
                algorithm). Default is `ECDSA`. Changing this will create a new instance.
         :param pulumi.Input['InstanceSfsTurboArgs'] sfs_turbo: Specifies the information about the SFS Turbo file system. Changing this will
@@ -191,7 +191,7 @@ class InstanceArgs:
     def enterprise_project_id(self) -> pulumi.Input[str]:
         """
         Specifies the ID of the enterprise project that the BCS
-        instance belong to. Changing this will create a new instance.
+        instance belong to.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -244,7 +244,7 @@ class InstanceArgs:
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
         """
-        Specifies the password of the couch datebase. The password consists of 8 to
+        Specifies the password of the couch database. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
         characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
@@ -366,7 +366,7 @@ class InstanceArgs:
     def eip_enable(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to use the EIP of the CCE to bind the BCS instance.
-        Changing this will create a new instance. Defalut is true.
+        Changing this will create a new instance. Default is true.
         """
         return pulumi.get(self, "eip_enable")
 
@@ -443,7 +443,7 @@ class InstanceArgs:
     @pulumi.getter(name="securityMechanism")
     def security_mechanism(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secutity mechanism used by the BCS instance. Valid
+        Specifies the security mechanism used by the BCS instance. Valid
         values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
         algorithm). Default is `ECDSA`. Changing this will create a new instance.
         """
@@ -519,7 +519,7 @@ class _InstanceState:
         """
         Input properties used for looking up and filtering Instance resources.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] agent_portal_addresses: The agent addresses and port numbers on the user data plane of the BCS service.
-               * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+               * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
                * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
                `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
                * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -556,9 +556,9 @@ class _InstanceState:
         :param pulumi.Input[int] edition: Specifies Service edition of the BCS instance. Valid values are `1`, `2` and `4`
                . Changing this will create a new instance.
         :param pulumi.Input[bool] eip_enable: Specifies whether to use the EIP of the CCE to bind the BCS instance.
-               Changing this will create a new instance. Defalut is true.
+               Changing this will create a new instance. Default is true.
         :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project that the BCS
-               instance belong to. Changing this will create a new instance.
+               instance belong to.
         :param pulumi.Input[str] fabric_version: Specifies version of fabric for the BCS instance. Valid values
                are `1.4` and `2.0`
                Changing this will create a new instance.
@@ -571,7 +571,7 @@ class _InstanceState:
         :param pulumi.Input[int] org_disk_size: Specifies the storage capacity of peer organization. Changing this will
                create a new instance.
                + The minimum storage capacity of `efs` volume type is 500GB.
-        :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
+        :param pulumi.Input[str] password: Specifies the password of the couch database. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
                characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input['InstancePeerOrgArgs']]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
@@ -583,7 +583,7 @@ class _InstanceState:
         :param pulumi.Input[bool] restful_api_support: Specified whether to add RESTful API support. Changing this will
                create a new instance.
         :param pulumi.Input[bool] rollback_support: Whether rollback is supported when the BCS service fails to br upgraded.
-        :param pulumi.Input[str] security_mechanism: Specifies the secutity mechanism used by the BCS instance. Valid
+        :param pulumi.Input[str] security_mechanism: Specifies the security mechanism used by the BCS instance. Valid
                values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
                algorithm). Default is `ECDSA`. Changing this will create a new instance.
         :param pulumi.Input['InstanceSfsTurboArgs'] sfs_turbo: Specifies the information about the SFS Turbo file system. Changing this will
@@ -667,7 +667,7 @@ class _InstanceState:
     def agent_portal_addresses(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
         """
         The agent addresses and port numbers on the user data plane of the BCS service.
-        * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+        * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
         * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
         `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
         * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -847,7 +847,7 @@ class _InstanceState:
     def eip_enable(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to use the EIP of the CCE to bind the BCS instance.
-        Changing this will create a new instance. Defalut is true.
+        Changing this will create a new instance. Default is true.
         """
         return pulumi.get(self, "eip_enable")
 
@@ -860,7 +860,7 @@ class _InstanceState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the enterprise project that the BCS
-        instance belong to. Changing this will create a new instance.
+        instance belong to.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -950,7 +950,7 @@ class _InstanceState:
     @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the password of the couch datebase. The password consists of 8 to
+        Specifies the password of the couch database. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
         characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
@@ -1028,7 +1028,7 @@ class _InstanceState:
     @pulumi.getter(name="securityMechanism")
     def security_mechanism(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the secutity mechanism used by the BCS instance. Valid
+        Specifies the security mechanism used by the BCS instance. Valid
         values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
         algorithm). Default is `ECDSA`. Changing this will create a new instance.
         """
@@ -1136,6 +1136,28 @@ class Instance(pulumi.CustomResource):
         """
         ## Example Usage
 
+        ## Import
+
+        The BCS instance can be imported using `id`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Bcs/instance:Instance test <id>
+        ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_storage`, `eip_enable`, `enterprise_project_id`, `fabric_version`, `orderer_node_num`, `org_disk_size`, `password` and `volume_type`. It is generally recommended running `terraform plan` after importing a instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_bcs_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         delete_storage, eip_enable, enterprise_project_id, fabric_version, orderer_node_num, org_disk_size, password, volume_type,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[pulumi.InputType['InstanceBlockInfoArgs']] block_info: Specifies the configuration of block generation. The block_info object
@@ -1164,9 +1186,9 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[int] edition: Specifies Service edition of the BCS instance. Valid values are `1`, `2` and `4`
                . Changing this will create a new instance.
         :param pulumi.Input[bool] eip_enable: Specifies whether to use the EIP of the CCE to bind the BCS instance.
-               Changing this will create a new instance. Defalut is true.
+               Changing this will create a new instance. Default is true.
         :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project that the BCS
-               instance belong to. Changing this will create a new instance.
+               instance belong to.
         :param pulumi.Input[str] fabric_version: Specifies version of fabric for the BCS instance. Valid values
                are `1.4` and `2.0`
                Changing this will create a new instance.
@@ -1178,7 +1200,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[int] org_disk_size: Specifies the storage capacity of peer organization. Changing this will
                create a new instance.
                + The minimum storage capacity of `efs` volume type is 500GB.
-        :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
+        :param pulumi.Input[str] password: Specifies the password of the couch database. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
                characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstancePeerOrgArgs']]]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
@@ -1188,7 +1210,7 @@ class Instance(pulumi.CustomResource):
                provider-level region will be used. Changing this will create a new instance.
         :param pulumi.Input[bool] restful_api_support: Specified whether to add RESTful API support. Changing this will
                create a new instance.
-        :param pulumi.Input[str] security_mechanism: Specifies the secutity mechanism used by the BCS instance. Valid
+        :param pulumi.Input[str] security_mechanism: Specifies the security mechanism used by the BCS instance. Valid
                values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
                algorithm). Default is `ECDSA`. Changing this will create a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceSfsTurboArgs']] sfs_turbo: Specifies the information about the SFS Turbo file system. Changing this will
@@ -1206,6 +1228,28 @@ class Instance(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         ## Example Usage
+
+        ## Import
+
+        The BCS instance can be imported using `id`, e.g. bash
+
+        ```sh
+         $ pulumi import huaweicloud:Bcs/instance:Instance test <id>
+        ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`delete_storage`, `eip_enable`, `enterprise_project_id`, `fabric_version`, `orderer_node_num`, `org_disk_size`, `password` and `volume_type`. It is generally recommended running `terraform plan` after importing a instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_bcs_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         delete_storage, eip_enable, enterprise_project_id, fabric_version, orderer_node_num, org_disk_size, password, volume_type,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param InstanceArgs args: The arguments to use to populate this resource's properties.
@@ -1358,7 +1402,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] agent_portal_addresses: The agent addresses and port numbers on the user data plane of the BCS service.
-               * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+               * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
                * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
                `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
                * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -1395,9 +1439,9 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[int] edition: Specifies Service edition of the BCS instance. Valid values are `1`, `2` and `4`
                . Changing this will create a new instance.
         :param pulumi.Input[bool] eip_enable: Specifies whether to use the EIP of the CCE to bind the BCS instance.
-               Changing this will create a new instance. Defalut is true.
+               Changing this will create a new instance. Default is true.
         :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project that the BCS
-               instance belong to. Changing this will create a new instance.
+               instance belong to.
         :param pulumi.Input[str] fabric_version: Specifies version of fabric for the BCS instance. Valid values
                are `1.4` and `2.0`
                Changing this will create a new instance.
@@ -1410,7 +1454,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[int] org_disk_size: Specifies the storage capacity of peer organization. Changing this will
                create a new instance.
                + The minimum storage capacity of `efs` volume type is 500GB.
-        :param pulumi.Input[str] password: Specifies the password of the couch datebase. The password consists of 8 to
+        :param pulumi.Input[str] password: Specifies the password of the couch database. The password consists of 8 to
                26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
                characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['InstancePeerOrgArgs']]]] peer_orgs: Specifies an array of one or more Peer organizations to attach to the BCS
@@ -1422,7 +1466,7 @@ class Instance(pulumi.CustomResource):
         :param pulumi.Input[bool] restful_api_support: Specified whether to add RESTful API support. Changing this will
                create a new instance.
         :param pulumi.Input[bool] rollback_support: Whether rollback is supported when the BCS service fails to br upgraded.
-        :param pulumi.Input[str] security_mechanism: Specifies the secutity mechanism used by the BCS instance. Valid
+        :param pulumi.Input[str] security_mechanism: Specifies the security mechanism used by the BCS instance. Valid
                values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
                algorithm). Default is `ECDSA`. Changing this will create a new instance.
         :param pulumi.Input[pulumi.InputType['InstanceSfsTurboArgs']] sfs_turbo: Specifies the information about the SFS Turbo file system. Changing this will
@@ -1478,7 +1522,7 @@ class Instance(pulumi.CustomResource):
     def agent_portal_addresses(self) -> pulumi.Output[Sequence[str]]:
         """
         The agent addresses and port numbers on the user data plane of the BCS service.
-        * `peer_orgs/pvc_name` - The name of the PersistenetVolumeClaim (PVC) used by the peer.
+        * `peer_orgs/pvc_name` - The name of the PersistentVolumeClaim (PVC) used by the peer.
         * `peer_orgs/status` - The peer status. The value contains `IsCreating`, `IsUpgrading`, `Adding/IsScaling`,
         `Isdeleting`, `Normal`, `AbNormal` and `Unknown`.
         * `peer_orgs/status_detail` - The peer status in the format like `1/1`. The denominator is the total number of peers in
@@ -1606,7 +1650,7 @@ class Instance(pulumi.CustomResource):
     def eip_enable(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to use the EIP of the CCE to bind the BCS instance.
-        Changing this will create a new instance. Defalut is true.
+        Changing this will create a new instance. Default is true.
         """
         return pulumi.get(self, "eip_enable")
 
@@ -1615,7 +1659,7 @@ class Instance(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
         Specifies the ID of the enterprise project that the BCS
-        instance belong to. Changing this will create a new instance.
+        instance belong to.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1677,7 +1721,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter
     def password(self) -> pulumi.Output[str]:
         """
-        Specifies the password of the couch datebase. The password consists of 8 to
+        Specifies the password of the couch database. The password consists of 8 to
         26 characters and must consist at least three of following: uppercase letters, lowercase letters, digits, special
         characters(!@$%^-_=+[{}]:,./?). Changing this creates a new instance.
         """
@@ -1731,7 +1775,7 @@ class Instance(pulumi.CustomResource):
     @pulumi.getter(name="securityMechanism")
     def security_mechanism(self) -> pulumi.Output[str]:
         """
-        Specifies the secutity mechanism used by the BCS instance. Valid
+        Specifies the security mechanism used by the BCS instance. Valid
         values are `ECDSA` and `SM2`(Chinese cryptographic algorithms, The basic and professional don't support this
         algorithm). Default is `ECDSA`. Changing this will create a new instance.
         """

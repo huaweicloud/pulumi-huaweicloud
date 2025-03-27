@@ -12,7 +12,7 @@ import (
 
 // Use this data source to get details of the specified IAM user group.
 //
-// > You *must* have IAM read privileges to use this data source.
+// > **NOTE:** You *must* have IAM read privileges to use this data source.
 //
 // ## Example Usage
 //
@@ -66,7 +66,7 @@ type LookupGroupResult struct {
 	Description string `pulumi:"description"`
 	// Indicates the domain the group belongs to.
 	DomainId string `pulumi:"domainId"`
-	// Indicates the ID of the User.
+	// Indicates the ID of the IAM user.
 	Id string `pulumi:"id"`
 	// Indicates the IAM user name.
 	Name string `pulumi:"name"`
@@ -126,7 +126,7 @@ func (o LookupGroupResultOutput) DomainId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupGroupResult) string { return v.DomainId }).(pulumi.StringOutput)
 }
 
-// Indicates the ID of the User.
+// Indicates the ID of the IAM user.
 func (o LookupGroupResultOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupGroupResult) string { return v.Id }).(pulumi.StringOutput)
 }

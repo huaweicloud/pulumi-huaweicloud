@@ -29,9 +29,9 @@ class DatabaseUserArgs:
         :param pulumi.Input[str] instance_id: Specifies the DDS instance ID to which the user belongs.
                Changing this parameter will create a new user.
         :param pulumi.Input[str] password: Specifies the user password.
-               The assword content must meet the following conditions:
+               The password content must meet the following conditions:
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserRoleArgs']]] roles: Specifies the list of roles owned by the current user.
-               The object structure is documented below. Changing this parameter will create a new user.
+               The roles structure is documented below. Changing this parameter will create a new user.
         :param pulumi.Input[str] name: Specifies the name of role owned by the current user.
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new user.
@@ -78,7 +78,7 @@ class DatabaseUserArgs:
     def password(self) -> pulumi.Input[str]:
         """
         Specifies the user password.
-        The assword content must meet the following conditions:
+        The password content must meet the following conditions:
         """
         return pulumi.get(self, "password")
 
@@ -91,7 +91,7 @@ class DatabaseUserArgs:
     def roles(self) -> pulumi.Input[Sequence[pulumi.Input['DatabaseUserRoleArgs']]]:
         """
         Specifies the list of roles owned by the current user.
-        The object structure is documented below. Changing this parameter will create a new user.
+        The roles structure is documented below. Changing this parameter will create a new user.
         """
         return pulumi.get(self, "roles")
 
@@ -143,20 +143,20 @@ class _DatabaseUserState:
         :param pulumi.Input[str] db_name: Specifies the database name to which this owned role belongs.
                Changing this parameter will create a new user.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserInheritedPrivilegeArgs']]] inherited_privileges: The list of database privileges owned by the current user, includes all privileges
-               inherited by owned roles. The object structure is documented below.
+               inherited by owned roles. The inherited_privileges structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies the DDS instance ID to which the user belongs.
                Changing this parameter will create a new user.
         :param pulumi.Input[str] name: Specifies the name of role owned by the current user.
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new user.
         :param pulumi.Input[str] password: Specifies the user password.
-               The assword content must meet the following conditions:
+               The password content must meet the following conditions:
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserPrivilegeArgs']]] privileges: The list of database privileges owned by the current user.
-               The object structure is documented below.
+               The privileges structure is documented below.
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new user.
         :param pulumi.Input[Sequence[pulumi.Input['DatabaseUserRoleArgs']]] roles: Specifies the list of roles owned by the current user.
-               The object structure is documented below. Changing this parameter will create a new user.
+               The roles structure is documented below. Changing this parameter will create a new user.
         """
         if db_name is not None:
             pulumi.set(__self__, "db_name", db_name)
@@ -193,7 +193,7 @@ class _DatabaseUserState:
     def inherited_privileges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseUserInheritedPrivilegeArgs']]]]:
         """
         The list of database privileges owned by the current user, includes all privileges
-        inherited by owned roles. The object structure is documented below.
+        inherited by owned roles. The inherited_privileges structure is documented below.
         """
         return pulumi.get(self, "inherited_privileges")
 
@@ -233,7 +233,7 @@ class _DatabaseUserState:
     def password(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the user password.
-        The assword content must meet the following conditions:
+        The password content must meet the following conditions:
         """
         return pulumi.get(self, "password")
 
@@ -246,7 +246,7 @@ class _DatabaseUserState:
     def privileges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseUserPrivilegeArgs']]]]:
         """
         The list of database privileges owned by the current user.
-        The object structure is documented below.
+        The privileges structure is documented below.
         """
         return pulumi.get(self, "privileges")
 
@@ -272,7 +272,7 @@ class _DatabaseUserState:
     def roles(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['DatabaseUserRoleArgs']]]]:
         """
         Specifies the list of roles owned by the current user.
-        The object structure is documented below. Changing this parameter will create a new user.
+        The roles structure is documented below. Changing this parameter will create a new user.
         """
         return pulumi.get(self, "roles")
 
@@ -294,7 +294,7 @@ class DatabaseUser(pulumi.CustomResource):
                  roles: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseUserRoleArgs']]]]] = None,
                  __props__=None):
         """
-        Manages a database user resource within HuaweiCloud.
+        Manages a DDS database user resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -320,13 +320,13 @@ class DatabaseUser(pulumi.CustomResource):
 
         ## Import
 
-        Database users can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+        DDS database user can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+         $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test <instance_id>/<db_name>/<name>
         ```
 
-         Due to security reason, the imported state may not be identical to your resource definition (`password` parameter). It is generally recommended running `terraform plan` after importing a user resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. resource "huaweicloud_dds_database_user" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DDS database user. You can then decide if changes should be applied to the DDS database user, or the resource definition should be updated to align with the DDS database user. Also you can ignore changes as below. hcl resource "huaweicloud_dds_database_user" "test" {
 
          ...
 
@@ -350,11 +350,11 @@ class DatabaseUser(pulumi.CustomResource):
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new user.
         :param pulumi.Input[str] password: Specifies the user password.
-               The assword content must meet the following conditions:
+               The password content must meet the following conditions:
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new user.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseUserRoleArgs']]]] roles: Specifies the list of roles owned by the current user.
-               The object structure is documented below. Changing this parameter will create a new user.
+               The roles structure is documented below. Changing this parameter will create a new user.
         """
         ...
     @overload
@@ -363,7 +363,7 @@ class DatabaseUser(pulumi.CustomResource):
                  args: DatabaseUserArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a database user resource within HuaweiCloud.
+        Manages a DDS database user resource within HuaweiCloud.
 
         ## Example Usage
 
@@ -389,13 +389,13 @@ class DatabaseUser(pulumi.CustomResource):
 
         ## Import
 
-        Database users can be imported using their `id` (combination of `instance_id`, `db_name` and `name`), separated by a slash (/), e.g.
+        DDS database user can be imported using the `instance_id`, `db_name` and `name` separated by slashes (/), e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test &ltinstance_id&gt/&ltdb_name&gt/&ltname&gt
+         $ pulumi import huaweicloud:Dds/databaseUser:DatabaseUser test <instance_id>/<db_name>/<name>
         ```
 
-         Due to security reason, the imported state may not be identical to your resource definition (`password` parameter). It is generally recommended running `terraform plan` after importing a user resource. You can then decide if changes should be applied to the user, or the resource definition should be updated to align with the user. Also you can ignore changes as below. resource "huaweicloud_dds_database_user" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response. The missing attributes include`password`. It is generally recommended running `terraform plan` after importing a DDS database user. You can then decide if changes should be applied to the DDS database user, or the resource definition should be updated to align with the DDS database user. Also you can ignore changes as below. hcl resource "huaweicloud_dds_database_user" "test" {
 
          ...
 
@@ -483,20 +483,20 @@ class DatabaseUser(pulumi.CustomResource):
         :param pulumi.Input[str] db_name: Specifies the database name to which this owned role belongs.
                Changing this parameter will create a new user.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseUserInheritedPrivilegeArgs']]]] inherited_privileges: The list of database privileges owned by the current user, includes all privileges
-               inherited by owned roles. The object structure is documented below.
+               inherited by owned roles. The inherited_privileges structure is documented below.
         :param pulumi.Input[str] instance_id: Specifies the DDS instance ID to which the user belongs.
                Changing this parameter will create a new user.
         :param pulumi.Input[str] name: Specifies the name of role owned by the current user.
                The name can contain `1` to `64` characters, only letters, digits, underscores (_), hyphens (-) and dots (.) are
                allowed. Changing this parameter will create a new user.
         :param pulumi.Input[str] password: Specifies the user password.
-               The assword content must meet the following conditions:
+               The password content must meet the following conditions:
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseUserPrivilegeArgs']]]] privileges: The list of database privileges owned by the current user.
-               The object structure is documented below.
+               The privileges structure is documented below.
         :param pulumi.Input[str] region: Specifies the region where the DDS instance is located.
                Changing this parameter will create a new user.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DatabaseUserRoleArgs']]]] roles: Specifies the list of roles owned by the current user.
-               The object structure is documented below. Changing this parameter will create a new user.
+               The roles structure is documented below. Changing this parameter will create a new user.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -526,7 +526,7 @@ class DatabaseUser(pulumi.CustomResource):
     def inherited_privileges(self) -> pulumi.Output[Sequence['outputs.DatabaseUserInheritedPrivilege']]:
         """
         The list of database privileges owned by the current user, includes all privileges
-        inherited by owned roles. The object structure is documented below.
+        inherited by owned roles. The inherited_privileges structure is documented below.
         """
         return pulumi.get(self, "inherited_privileges")
 
@@ -554,7 +554,7 @@ class DatabaseUser(pulumi.CustomResource):
     def password(self) -> pulumi.Output[str]:
         """
         Specifies the user password.
-        The assword content must meet the following conditions:
+        The password content must meet the following conditions:
         """
         return pulumi.get(self, "password")
 
@@ -563,7 +563,7 @@ class DatabaseUser(pulumi.CustomResource):
     def privileges(self) -> pulumi.Output[Sequence['outputs.DatabaseUserPrivilege']]:
         """
         The list of database privileges owned by the current user.
-        The object structure is documented below.
+        The privileges structure is documented below.
         """
         return pulumi.get(self, "privileges")
 
@@ -581,7 +581,7 @@ class DatabaseUser(pulumi.CustomResource):
     def roles(self) -> pulumi.Output[Sequence['outputs.DatabaseUserRole']]:
         """
         Specifies the list of roles owned by the current user.
-        The object structure is documented below. Changing this parameter will create a new user.
+        The roles structure is documented below. Changing this parameter will create a new user.
         """
         return pulumi.get(self, "roles")
 

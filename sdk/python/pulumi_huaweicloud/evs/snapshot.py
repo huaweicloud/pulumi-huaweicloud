@@ -17,6 +17,7 @@ class SnapshotArgs:
                  volume_id: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  force: Optional[pulumi.Input[bool]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
@@ -25,6 +26,8 @@ class SnapshotArgs:
                snapshot.
         :param pulumi.Input[str] description: The description of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[bool] force: Specifies the flag for forcibly creating a snapshot. Default to false.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair. Changing the parameter
+               creates a new snapshot.
         :param pulumi.Input[str] name: The name of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] region: The region in which to create the evs snapshot resource. If omitted, the
                provider-level region will be used. Changing this creates a new EVS snapshot resource.
@@ -34,6 +37,8 @@ class SnapshotArgs:
             pulumi.set(__self__, "description", description)
         if force is not None:
             pulumi.set(__self__, "force", force)
+        if metadata is not None:
+            pulumi.set(__self__, "metadata", metadata)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -78,6 +83,19 @@ class SnapshotArgs:
 
     @property
     @pulumi.getter
+    def metadata(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the user-defined metadata key-value pair. Changing the parameter
+        creates a new snapshot.
+        """
+        return pulumi.get(self, "metadata")
+
+    @metadata.setter
+    def metadata(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "metadata", value)
+
+    @property
+    @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
         The name of the snapshot. The value can contain a maximum of 255 bytes.
@@ -107,6 +125,7 @@ class _SnapshotState:
     def __init__(__self__, *,
                  description: Optional[pulumi.Input[str]] = None,
                  force: Optional[pulumi.Input[bool]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
@@ -116,6 +135,8 @@ class _SnapshotState:
         Input properties used for looking up and filtering Snapshot resources.
         :param pulumi.Input[str] description: The description of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[bool] force: Specifies the flag for forcibly creating a snapshot. Default to false.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair. Changing the parameter
+               creates a new snapshot.
         :param pulumi.Input[str] name: The name of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] region: The region in which to create the evs snapshot resource. If omitted, the
                provider-level region will be used. Changing this creates a new EVS snapshot resource.
@@ -128,6 +149,8 @@ class _SnapshotState:
             pulumi.set(__self__, "description", description)
         if force is not None:
             pulumi.set(__self__, "force", force)
+        if metadata is not None:
+            pulumi.set(__self__, "metadata", metadata)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -162,6 +185,19 @@ class _SnapshotState:
     @force.setter
     def force(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "force", value)
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]:
+        """
+        Specifies the user-defined metadata key-value pair. Changing the parameter
+        creates a new snapshot.
+        """
+        return pulumi.get(self, "metadata")
+
+    @metadata.setter
+    def metadata(self, value: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]]):
+        pulumi.set(self, "metadata", value)
 
     @property
     @pulumi.getter
@@ -233,6 +269,7 @@ class Snapshot(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  force: Optional[pulumi.Input[bool]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  volume_id: Optional[pulumi.Input[str]] = None,
@@ -246,7 +283,7 @@ class Snapshot(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        myvolume = huaweicloud.evs.Volume("myvolume",
+        test_volume = huaweicloud.evs.Volume("testVolume",
             description="my volume",
             volume_type="SATA",
             size=20,
@@ -255,23 +292,39 @@ class Snapshot(pulumi.CustomResource):
                 "foo": "bar",
                 "key": "value",
             })
-        snapshot1 = huaweicloud.evs.Snapshot("snapshot1",
+        test_snapshot = huaweicloud.evs.Snapshot("testSnapshot",
             description="Daily backup",
-            volume_id=myvolume.id)
+            volume_id=test_volume.id)
         ```
 
         ## Import
 
-        EVS snapshot can be imported using the `snapshot id`, e.g.
+        EVS snapshot can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Evs/snapshot:Snapshot huaweicloud_evs_snapshot.snapshot_1 3a11b255-3bb6-46f3-91e4-3338baa92dd6
+         $ pulumi import huaweicloud:Evs/snapshot:Snapshot test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`metadata`, `force`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the snapshot. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_snapshot" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         metadata, force,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: The description of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[bool] force: Specifies the flag for forcibly creating a snapshot. Default to false.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair. Changing the parameter
+               creates a new snapshot.
         :param pulumi.Input[str] name: The name of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] region: The region in which to create the evs snapshot resource. If omitted, the
                provider-level region will be used. Changing this creates a new EVS snapshot resource.
@@ -293,7 +346,7 @@ class Snapshot(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
-        myvolume = huaweicloud.evs.Volume("myvolume",
+        test_volume = huaweicloud.evs.Volume("testVolume",
             description="my volume",
             volume_type="SATA",
             size=20,
@@ -302,18 +355,32 @@ class Snapshot(pulumi.CustomResource):
                 "foo": "bar",
                 "key": "value",
             })
-        snapshot1 = huaweicloud.evs.Snapshot("snapshot1",
+        test_snapshot = huaweicloud.evs.Snapshot("testSnapshot",
             description="Daily backup",
-            volume_id=myvolume.id)
+            volume_id=test_volume.id)
         ```
 
         ## Import
 
-        EVS snapshot can be imported using the `snapshot id`, e.g.
+        EVS snapshot can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Evs/snapshot:Snapshot huaweicloud_evs_snapshot.snapshot_1 3a11b255-3bb6-46f3-91e4-3338baa92dd6
+         $ pulumi import huaweicloud:Evs/snapshot:Snapshot test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`metadata`, `force`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the snapshot. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_snapshot" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         metadata, force,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param SnapshotArgs args: The arguments to use to populate this resource's properties.
@@ -332,6 +399,7 @@ class Snapshot(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  force: Optional[pulumi.Input[bool]] = None,
+                 metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  volume_id: Optional[pulumi.Input[str]] = None,
@@ -346,6 +414,7 @@ class Snapshot(pulumi.CustomResource):
 
             __props__.__dict__["description"] = description
             __props__.__dict__["force"] = force
+            __props__.__dict__["metadata"] = metadata
             __props__.__dict__["name"] = name
             __props__.__dict__["region"] = region
             if volume_id is None and not opts.urn:
@@ -365,6 +434,7 @@ class Snapshot(pulumi.CustomResource):
             opts: Optional[pulumi.ResourceOptions] = None,
             description: Optional[pulumi.Input[str]] = None,
             force: Optional[pulumi.Input[bool]] = None,
+            metadata: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             size: Optional[pulumi.Input[int]] = None,
@@ -379,6 +449,8 @@ class Snapshot(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: The description of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[bool] force: Specifies the flag for forcibly creating a snapshot. Default to false.
+        :param pulumi.Input[Mapping[str, pulumi.Input[str]]] metadata: Specifies the user-defined metadata key-value pair. Changing the parameter
+               creates a new snapshot.
         :param pulumi.Input[str] name: The name of the snapshot. The value can contain a maximum of 255 bytes.
         :param pulumi.Input[str] region: The region in which to create the evs snapshot resource. If omitted, the
                provider-level region will be used. Changing this creates a new EVS snapshot resource.
@@ -393,6 +465,7 @@ class Snapshot(pulumi.CustomResource):
 
         __props__.__dict__["description"] = description
         __props__.__dict__["force"] = force
+        __props__.__dict__["metadata"] = metadata
         __props__.__dict__["name"] = name
         __props__.__dict__["region"] = region
         __props__.__dict__["size"] = size
@@ -415,6 +488,15 @@ class Snapshot(pulumi.CustomResource):
         Specifies the flag for forcibly creating a snapshot. Default to false.
         """
         return pulumi.get(self, "force")
+
+    @property
+    @pulumi.getter
+    def metadata(self) -> pulumi.Output[Optional[Mapping[str, str]]]:
+        """
+        Specifies the user-defined metadata key-value pair. Changing the parameter
+        creates a new snapshot.
+        """
+        return pulumi.get(self, "metadata")
 
     @property
     @pulumi.getter

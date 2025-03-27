@@ -477,7 +477,8 @@ class Trigger(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a trigger resource within HuaweiCloud FunctionGraph.
+        Manages a trigger resource within HuaweiCloud FunctionGraph.\\
+        It's recommend to use `huaweicloud_fgs_function_trigger`, which makes a great improvement of managing function triggers.
 
         ## Example Usage
         ### Create a Timing Trigger with rate schedule type
@@ -585,11 +586,14 @@ class Trigger(pulumi.CustomResource):
         function_urn = config.require_object("functionUrn")
         kafka_instance_id = config.require_object("kafkaInstanceId")
         kafka_topic_id = config.require_object("kafkaTopicId")
+        user_password = config.require_object("userPassword")
         test = huaweicloud.function_graph.Trigger("test",
             function_urn=function_urn,
             type="KAFKA",
             kafka=huaweicloud.function_graph.TriggerKafkaArgs(
                 instance_id=kafka_instance_id,
+                user_name="user",
+                password=user_password,
                 batch_size=100,
                 topic_ids=[kafka_topic_id],
             ))
@@ -696,7 +700,8 @@ class Trigger(pulumi.CustomResource):
                  args: TriggerArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a trigger resource within HuaweiCloud FunctionGraph.
+        Manages a trigger resource within HuaweiCloud FunctionGraph.\\
+        It's recommend to use `huaweicloud_fgs_function_trigger`, which makes a great improvement of managing function triggers.
 
         ## Example Usage
         ### Create a Timing Trigger with rate schedule type
@@ -804,11 +809,14 @@ class Trigger(pulumi.CustomResource):
         function_urn = config.require_object("functionUrn")
         kafka_instance_id = config.require_object("kafkaInstanceId")
         kafka_topic_id = config.require_object("kafkaTopicId")
+        user_password = config.require_object("userPassword")
         test = huaweicloud.function_graph.Trigger("test",
             function_urn=function_urn,
             type="KAFKA",
             kafka=huaweicloud.function_graph.TriggerKafkaArgs(
                 instance_id=kafka_instance_id,
+                user_name="user",
+                password=user_password,
                 batch_size=100,
                 topic_ids=[kafka_topic_id],
             ))

@@ -10,6 +10,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// !> **WARNING:** It has been deprecated, use `Vpc.NetworkAcl` instead.
+//
 // Manages a network ACL resource within HuaweiCloud.
 //
 // ## Example Usage

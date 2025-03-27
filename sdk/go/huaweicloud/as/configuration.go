@@ -176,6 +176,53 @@ import (
 //	}
 //
 // ```
+// ### AS Configuration uses password authentication for Windows ECS
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/As"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/As"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			flavorId := cfg.RequireObject("flavorId")
+//			windowsImageId := cfg.RequireObject("windowsImageId")
+//			securityGroupId := cfg.RequireObject("securityGroupId")
+//			adminPass := cfg.RequireObject("adminPass")
+//			_, err := As.NewConfiguration(ctx, "myAsConfig", &As.ConfigurationArgs{
+//				ScalingConfigurationName: pulumi.String("my_as_config"),
+//				InstanceConfig: &as.ConfigurationInstanceConfigArgs{
+//					Flavor: pulumi.Any(flavorId),
+//					Image:  pulumi.Any(windowsImageId),
+//					SecurityGroupIds: pulumi.StringArray{
+//						pulumi.Any(securityGroupId),
+//					},
+//					AdminPass: pulumi.Any(adminPass),
+//					Disks: as.ConfigurationInstanceConfigDiskArray{
+//						&as.ConfigurationInstanceConfigDiskArgs{
+//							Size:       pulumi.Int(40),
+//							VolumeType: pulumi.String("SSD"),
+//							DiskType:   pulumi.String("SYS"),
+//						},
+//					},
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
 // ### AS Configuration uses the existing instance specifications as the template
 //
 // ```go
@@ -217,7 +264,7 @@ import (
 //
 // ## Import
 //
-// AS configurations can be imported by their `id`, e.g.
+// AS configurations can be imported by their `id`, e.g. bash
 //
 // ```sh
 //
@@ -225,26 +272,27 @@ import (
 //
 // ```
 //
-//	Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id` is missing from the API response. You can ignore changes after importing an AS configuration as below. resource "huaweicloud_as_configuration" "test" {
+//	Note that the imported state may not be identical to your resource definition, due to `instance_config.0.instance_id`, `instance_config.0.admin_pass`, and `instance_config.0.metadata` are missing from the API response. You can ignore changes after importing an AS configuration as below. hcl resource "huaweicloud_as_configuration" "test" {
 //
 //	...
 //
 //	lifecycle {
 //
-//	ignore_changes = [ instance_config.0.instance_id ]
+//	ignore_changes = [ instance_config.0.instance_id, instance_config.0.admin_pass, instance_config.0.metadata ]
 //
 //	} }
 type Configuration struct {
 	pulumi.CustomResourceState
 
 	// Specifies the information about instance configuration.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The instanceConfig structure is documented below.
+	// Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigOutput `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the AS configuration name.
-	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName pulumi.StringOutput `pulumi:"scalingConfigurationName"`
 	// The AS configuration status, the value can be **Bound** or **Unbound**.
@@ -288,13 +336,14 @@ func GetConfiguration(ctx *pulumi.Context,
 // Input properties used for looking up and filtering Configuration resources.
 type configurationState struct {
 	// Specifies the information about instance configuration.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The instanceConfig structure is documented below.
+	// Changing this will create a new resource.
 	InstanceConfig *ConfigurationInstanceConfig `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the AS configuration name.
-	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName *string `pulumi:"scalingConfigurationName"`
 	// The AS configuration status, the value can be **Bound** or **Unbound**.
@@ -303,13 +352,14 @@ type configurationState struct {
 
 type ConfigurationState struct {
 	// Specifies the information about instance configuration.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The instanceConfig structure is documented below.
+	// Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigPtrInput
 	// Specifies the region in which to create the AS configuration.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the AS configuration name.
-	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName pulumi.StringPtrInput
 	// The AS configuration status, the value can be **Bound** or **Unbound**.
@@ -322,13 +372,14 @@ func (ConfigurationState) ElementType() reflect.Type {
 
 type configurationArgs struct {
 	// Specifies the information about instance configuration.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The instanceConfig structure is documented below.
+	// Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfig `pulumi:"instanceConfig"`
 	// Specifies the region in which to create the AS configuration.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the AS configuration name.
-	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName string `pulumi:"scalingConfigurationName"`
 }
@@ -336,13 +387,14 @@ type configurationArgs struct {
 // The set of arguments for constructing a Configuration resource.
 type ConfigurationArgs struct {
 	// Specifies the information about instance configuration.
-	// The object structure is documented below. Changing this will create a new resource.
+	// The instanceConfig structure is documented below.
+	// Changing this will create a new resource.
 	InstanceConfig ConfigurationInstanceConfigInput
 	// Specifies the region in which to create the AS configuration.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the AS configuration name.
-	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+	// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 	// Changing this will create a new resource.
 	ScalingConfigurationName pulumi.StringInput
 }
@@ -435,7 +487,8 @@ func (o ConfigurationOutput) ToConfigurationOutputWithContext(ctx context.Contex
 }
 
 // Specifies the information about instance configuration.
-// The object structure is documented below. Changing this will create a new resource.
+// The instanceConfig structure is documented below.
+// Changing this will create a new resource.
 func (o ConfigurationOutput) InstanceConfig() ConfigurationInstanceConfigOutput {
 	return o.ApplyT(func(v *Configuration) ConfigurationInstanceConfigOutput { return v.InstanceConfig }).(ConfigurationInstanceConfigOutput)
 }
@@ -447,7 +500,7 @@ func (o ConfigurationOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the AS configuration name.
-// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed 64 characters.
+// The name contains only letters, digits, underscores (_), and hyphens (-), and cannot exceed `64` characters.
 // Changing this will create a new resource.
 func (o ConfigurationOutput) ScalingConfigurationName() pulumi.StringOutput {
 	return o.ApplyT(func(v *Configuration) pulumi.StringOutput { return v.ScalingConfigurationName }).(pulumi.StringOutput)

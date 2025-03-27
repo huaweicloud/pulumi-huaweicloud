@@ -105,6 +105,7 @@ type ServerTemplate struct {
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the bandwidth size in Mbit/s about the public IP address
 	// that will be used for migration.
+	// The valid value is range from `1` to `2,000`.
 	BandwidthSize pulumi.IntPtrOutput `pulumi:"bandwidthSize"`
 	// Specifies the flavor ID for the target server.
 	Flavor pulumi.StringPtrOutput `pulumi:"flavor"`
@@ -117,15 +118,16 @@ type ServerTemplate struct {
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies an array of one or more security group IDs to associate with
-	// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+	// the target server.
+	// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 	SecurityGroupIds pulumi.StringArrayOutput `pulumi:"securityGroupIds"`
 	// Specifies an array of one or more subnet IDs to attach to the target server.
 	// If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
 	SubnetIds pulumi.StringArrayOutput `pulumi:"subnetIds"`
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringOutput `pulumi:"targetServerName"`
-	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// defaults to **SAS**.
+	// Specifies the disk type of the target server.
+	// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 	VolumeType pulumi.StringPtrOutput `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -171,6 +173,7 @@ type serverTemplateState struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the bandwidth size in Mbit/s about the public IP address
 	// that will be used for migration.
+	// The valid value is range from `1` to `2,000`.
 	BandwidthSize *int `pulumi:"bandwidthSize"`
 	// Specifies the flavor ID for the target server.
 	Flavor *string `pulumi:"flavor"`
@@ -183,15 +186,16 @@ type serverTemplateState struct {
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// Specifies an array of one or more security group IDs to associate with
-	// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+	// the target server.
+	// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies an array of one or more subnet IDs to attach to the target server.
 	// If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
 	SubnetIds []string `pulumi:"subnetIds"`
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName *string `pulumi:"targetServerName"`
-	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// defaults to **SAS**.
+	// Specifies the disk type of the target server.
+	// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 	VolumeType *string `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -205,6 +209,7 @@ type ServerTemplateState struct {
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the bandwidth size in Mbit/s about the public IP address
 	// that will be used for migration.
+	// The valid value is range from `1` to `2,000`.
 	BandwidthSize pulumi.IntPtrInput
 	// Specifies the flavor ID for the target server.
 	Flavor pulumi.StringPtrInput
@@ -217,15 +222,16 @@ type ServerTemplateState struct {
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput
 	// Specifies an array of one or more security group IDs to associate with
-	// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+	// the target server.
+	// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 	SecurityGroupIds pulumi.StringArrayInput
 	// Specifies an array of one or more subnet IDs to attach to the target server.
 	// If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
 	SubnetIds pulumi.StringArrayInput
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringPtrInput
-	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// defaults to **SAS**.
+	// Specifies the disk type of the target server.
+	// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 	VolumeType pulumi.StringPtrInput
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -243,6 +249,7 @@ type serverTemplateArgs struct {
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the bandwidth size in Mbit/s about the public IP address
 	// that will be used for migration.
+	// The valid value is range from `1` to `2,000`.
 	BandwidthSize *int `pulumi:"bandwidthSize"`
 	// Specifies the flavor ID for the target server.
 	Flavor *string `pulumi:"flavor"`
@@ -255,15 +262,16 @@ type serverTemplateArgs struct {
 	// If omitted, the provider-level region will be used.
 	Region *string `pulumi:"region"`
 	// Specifies an array of one or more security group IDs to associate with
-	// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+	// the target server.
+	// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
 	// Specifies an array of one or more subnet IDs to attach to the target server.
 	// If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
 	SubnetIds []string `pulumi:"subnetIds"`
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName *string `pulumi:"targetServerName"`
-	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// defaults to **SAS**.
+	// Specifies the disk type of the target server.
+	// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 	VolumeType *string `pulumi:"volumeType"`
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -276,6 +284,7 @@ type ServerTemplateArgs struct {
 	AvailabilityZone pulumi.StringInput
 	// Specifies the bandwidth size in Mbit/s about the public IP address
 	// that will be used for migration.
+	// The valid value is range from `1` to `2,000`.
 	BandwidthSize pulumi.IntPtrInput
 	// Specifies the flavor ID for the target server.
 	Flavor pulumi.StringPtrInput
@@ -288,15 +297,16 @@ type ServerTemplateArgs struct {
 	// If omitted, the provider-level region will be used.
 	Region pulumi.StringPtrInput
 	// Specifies an array of one or more security group IDs to associate with
-	// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+	// the target server.
+	// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 	SecurityGroupIds pulumi.StringArrayInput
 	// Specifies an array of one or more subnet IDs to attach to the target server.
 	// If omitted or set to ["autoCreate"], a new subnet will be created automatically during migration.
 	SubnetIds pulumi.StringArrayInput
 	// Specifies the name of the target server. Defaults to the template name.
 	TargetServerName pulumi.StringPtrInput
-	// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-	// defaults to **SAS**.
+	// Specifies the disk type of the target server.
+	// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 	VolumeType pulumi.StringPtrInput
 	// Specifies the ID of the VPC which the target server belongs to.
 	// If omitted or set to "autoCreate", a new VPC will be created automatically during migration.
@@ -397,6 +407,7 @@ func (o ServerTemplateOutput) AvailabilityZone() pulumi.StringOutput {
 
 // Specifies the bandwidth size in Mbit/s about the public IP address
 // that will be used for migration.
+// The valid value is range from `1` to `2,000`.
 func (o ServerTemplateOutput) BandwidthSize() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ServerTemplate) pulumi.IntPtrOutput { return v.BandwidthSize }).(pulumi.IntPtrOutput)
 }
@@ -424,7 +435,8 @@ func (o ServerTemplateOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies an array of one or more security group IDs to associate with
-// the target server. If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
+// the target server.
+// If omitted or set to ["autoCreate"], a new security group will be created automatically during migration.
 func (o ServerTemplateOutput) SecurityGroupIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *ServerTemplate) pulumi.StringArrayOutput { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
 }
@@ -440,8 +452,8 @@ func (o ServerTemplateOutput) TargetServerName() pulumi.StringOutput {
 	return o.ApplyT(func(v *ServerTemplate) pulumi.StringOutput { return v.TargetServerName }).(pulumi.StringOutput)
 }
 
-// Specifies the disk type of the target server. Available values are: **SAS**, **SSD**,
-// defaults to **SAS**.
+// Specifies the disk type of the target server.
+// Available values are: **SAS**, **SSD**, defaults to **SAS**.
 func (o ServerTemplateOutput) VolumeType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ServerTemplate) pulumi.StringPtrOutput { return v.VolumeType }).(pulumi.StringPtrOutput)
 }

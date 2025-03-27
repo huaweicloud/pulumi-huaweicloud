@@ -46,8 +46,8 @@ class JobArgs:
         :param pulumi.Input[str] source_link_name: Specifies the source link name.
                Changing this parameter will create a new resource.
         :param pulumi.Input['JobConfigArgs'] config: Specifies the job configuration. Structure is documented below.
-        :param pulumi.Input[str] name: Specifies job name, which can contains of 1 to 240 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param pulumi.Input[str] name: Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed.
         :param pulumi.Input[str] region: The region in which to create the job resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         """
@@ -186,8 +186,8 @@ class JobArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies job name, which can contains of 1 to 240 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -237,8 +237,8 @@ class _JobState:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] job_type: Specifies type of job. Changing this parameter will create a new resource.
                The options are as follows:
-        :param pulumi.Input[str] name: Specifies job name, which can contains of 1 to 240 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param pulumi.Input[str] name: Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed.
         :param pulumi.Input[str] region: The region in which to create the job resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] source_connector: Specifies the connector name of source link.
@@ -355,8 +355,8 @@ class _JobState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies job name, which can contains of 1 to 240 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 
@@ -555,8 +555,8 @@ class Job(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] job_type: Specifies type of job. Changing this parameter will create a new resource.
                The options are as follows:
-        :param pulumi.Input[str] name: Specifies job name, which can contains of 1 to 240 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param pulumi.Input[str] name: Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed.
         :param pulumi.Input[str] region: The region in which to create the job resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] source_connector: Specifies the connector name of source link.
@@ -771,8 +771,8 @@ class Job(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] job_type: Specifies type of job. Changing this parameter will create a new resource.
                The options are as follows:
-        :param pulumi.Input[str] name: Specifies job name, which can contains of 1 to 240 characters, starting with a
-               letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        :param pulumi.Input[str] name: Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+               Only letters, digits, hyphens (-), and underscores (_) are allowed.
         :param pulumi.Input[str] region: The region in which to create the job resource. If omitted, the
                provider-level region will be used. Changing this parameter will create a new resource.
         :param pulumi.Input[str] source_connector: Specifies the connector name of source link.
@@ -858,8 +858,8 @@ class Job(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies job name, which can contains of 1 to 240 characters, starting with a
-        letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+        Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+        Only letters, digits, hyphens (-), and underscores (_) are allowed.
         """
         return pulumi.get(self, "name")
 

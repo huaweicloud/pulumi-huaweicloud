@@ -21,14 +21,31 @@ class DependencyArgs:
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Dependency resource.
+        :param pulumi.Input[str] link: The OBS storage URL of the dependency package.
         :param pulumi.Input[str] runtime: Specifies the dependency package runtime.
-               The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-               **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-               **PHP7.3**.
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.8**
+               + **Go1.x**
+               + **C#(.NET Core 2.0)**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **PHP7.3**
+               + **Custom**
+               + **http**
         :param pulumi.Input[str] description: Specifies the dependency description.
-               The description can contain a maximum of 512 characters.
-        :param pulumi.Input[str] name: Specifies the dependeny name.
-               The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+               The description can contain a maximum of `512` characters.
+        :param pulumi.Input[str] name: Specifies the dependency name.
+               The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
                Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         :param pulumi.Input[str] region: Specifies the region in which to create a custom dependency package.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -45,6 +62,9 @@ class DependencyArgs:
     @property
     @pulumi.getter
     def link(self) -> pulumi.Input[str]:
+        """
+        The OBS storage URL of the dependency package.
+        """
         return pulumi.get(self, "link")
 
     @link.setter
@@ -56,9 +76,25 @@ class DependencyArgs:
     def runtime(self) -> pulumi.Input[str]:
         """
         Specifies the dependency package runtime.
-        The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-        **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-        **PHP7.3**.
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.8**
+        + **Go1.x**
+        + **C#(.NET Core 2.0)**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **PHP7.3**
+        + **Custom**
+        + **http**
         """
         return pulumi.get(self, "runtime")
 
@@ -71,7 +107,7 @@ class DependencyArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the dependency description.
-        The description can contain a maximum of 512 characters.
+        The description can contain a maximum of `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -83,8 +119,8 @@ class DependencyArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the dependeny name.
-        The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+        Specifies the dependency name.
+        The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
         Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
@@ -117,23 +153,42 @@ class _DependencyState:
                  owner: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  runtime: Optional[pulumi.Input[str]] = None,
-                 size: Optional[pulumi.Input[int]] = None):
+                 size: Optional[pulumi.Input[int]] = None,
+                 version: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering Dependency resources.
         :param pulumi.Input[str] description: Specifies the dependency description.
-               The description can contain a maximum of 512 characters.
+               The description can contain a maximum of `512` characters.
         :param pulumi.Input[str] etag: The unique ID of the dependency package.
-        :param pulumi.Input[str] name: Specifies the dependeny name.
-               The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+        :param pulumi.Input[str] link: The OBS storage URL of the dependency package.
+        :param pulumi.Input[str] name: Specifies the dependency name.
+               The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
                Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         :param pulumi.Input[str] owner: The base64 encoded digest of the dependency after encryption by MD5.
         :param pulumi.Input[str] region: Specifies the region in which to create a custom dependency package.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the dependency package runtime.
-               The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-               **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-               **PHP7.3**.
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.8**
+               + **Go1.x**
+               + **C#(.NET Core 2.0)**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **PHP7.3**
+               + **Custom**
+               + **http**
         :param pulumi.Input[int] size: The dependency package size in bytes.
+        :param pulumi.Input[int] version: The dependency package version.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -151,13 +206,15 @@ class _DependencyState:
             pulumi.set(__self__, "runtime", runtime)
         if size is not None:
             pulumi.set(__self__, "size", size)
+        if version is not None:
+            pulumi.set(__self__, "version", version)
 
     @property
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the dependency description.
-        The description can contain a maximum of 512 characters.
+        The description can contain a maximum of `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -180,6 +237,9 @@ class _DependencyState:
     @property
     @pulumi.getter
     def link(self) -> Optional[pulumi.Input[str]]:
+        """
+        The OBS storage URL of the dependency package.
+        """
         return pulumi.get(self, "link")
 
     @link.setter
@@ -190,8 +250,8 @@ class _DependencyState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the dependeny name.
-        The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+        Specifies the dependency name.
+        The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
         Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
@@ -230,9 +290,25 @@ class _DependencyState:
     def runtime(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the dependency package runtime.
-        The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-        **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-        **PHP7.3**.
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.8**
+        + **Go1.x**
+        + **C#(.NET Core 2.0)**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **PHP7.3**
+        + **Custom**
+        + **http**
         """
         return pulumi.get(self, "runtime")
 
@@ -252,6 +328,18 @@ class _DependencyState:
     def size(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "size", value)
 
+    @property
+    @pulumi.getter
+    def version(self) -> Optional[pulumi.Input[int]]:
+        """
+        The dependency package version.
+        """
+        return pulumi.get(self, "version")
+
+    @version.setter
+    def version(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "version", value)
+
 
 class Dependency(pulumi.CustomResource):
     @overload
@@ -267,11 +355,14 @@ class Dependency(pulumi.CustomResource):
         """
         Manages a custom dependency package within HuaweiCloud FunctionGraph.
 
+        > This resource will be deprecated in a future version. Please use `huaweicloud_fgs_dependency_version` resource to
+        replace it. For specific usage instructions, please refer to the corresponding document.
+
         ## Example Usage
 
         ## Import
 
-        Dependencies can be imported using the `id`, e.g.
+        Dependencies can be imported using the `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:FunctionGraph/dependency:Dependency test 795e722f-0c23-41b6-a189-dcd56f889cf6
@@ -280,16 +371,33 @@ class Dependency(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the dependency description.
-               The description can contain a maximum of 512 characters.
-        :param pulumi.Input[str] name: Specifies the dependeny name.
-               The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+               The description can contain a maximum of `512` characters.
+        :param pulumi.Input[str] link: The OBS storage URL of the dependency package.
+        :param pulumi.Input[str] name: Specifies the dependency name.
+               The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
                Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         :param pulumi.Input[str] region: Specifies the region in which to create a custom dependency package.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the dependency package runtime.
-               The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-               **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-               **PHP7.3**.
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.8**
+               + **Go1.x**
+               + **C#(.NET Core 2.0)**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **PHP7.3**
+               + **Custom**
+               + **http**
         """
         ...
     @overload
@@ -300,11 +408,14 @@ class Dependency(pulumi.CustomResource):
         """
         Manages a custom dependency package within HuaweiCloud FunctionGraph.
 
+        > This resource will be deprecated in a future version. Please use `huaweicloud_fgs_dependency_version` resource to
+        replace it. For specific usage instructions, please refer to the corresponding document.
+
         ## Example Usage
 
         ## Import
 
-        Dependencies can be imported using the `id`, e.g.
+        Dependencies can be imported using the `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:FunctionGraph/dependency:Dependency test 795e722f-0c23-41b6-a189-dcd56f889cf6
@@ -351,6 +462,7 @@ class Dependency(pulumi.CustomResource):
             __props__.__dict__["etag"] = None
             __props__.__dict__["owner"] = None
             __props__.__dict__["size"] = None
+            __props__.__dict__["version"] = None
         super(Dependency, __self__).__init__(
             'huaweicloud:FunctionGraph/dependency:Dependency',
             resource_name,
@@ -368,7 +480,8 @@ class Dependency(pulumi.CustomResource):
             owner: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             runtime: Optional[pulumi.Input[str]] = None,
-            size: Optional[pulumi.Input[int]] = None) -> 'Dependency':
+            size: Optional[pulumi.Input[int]] = None,
+            version: Optional[pulumi.Input[int]] = None) -> 'Dependency':
         """
         Get an existing Dependency resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -377,19 +490,37 @@ class Dependency(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the dependency description.
-               The description can contain a maximum of 512 characters.
+               The description can contain a maximum of `512` characters.
         :param pulumi.Input[str] etag: The unique ID of the dependency package.
-        :param pulumi.Input[str] name: Specifies the dependeny name.
-               The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+        :param pulumi.Input[str] link: The OBS storage URL of the dependency package.
+        :param pulumi.Input[str] name: Specifies the dependency name.
+               The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
                Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         :param pulumi.Input[str] owner: The base64 encoded digest of the dependency after encryption by MD5.
         :param pulumi.Input[str] region: Specifies the region in which to create a custom dependency package.
                If omitted, the provider-level region will be used. Changing this will create a new resource.
         :param pulumi.Input[str] runtime: Specifies the dependency package runtime.
-               The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-               **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-               **PHP7.3**.
+               The valid values are as follows:
+               + **Java8**
+               + **Java11**
+               + **Node.js6.10**
+               + **Node.js8.10**
+               + **Node.js10.16**
+               + **Node.js12.13**
+               + **Node.js14.18**
+               + **Python2.7**
+               + **Python3.6**
+               + **Python3.9**
+               + **Go1.8**
+               + **Go1.x**
+               + **C#(.NET Core 2.0)**
+               + **C#(.NET Core 2.1)**
+               + **C#(.NET Core 3.1)**
+               + **PHP7.3**
+               + **Custom**
+               + **http**
         :param pulumi.Input[int] size: The dependency package size in bytes.
+        :param pulumi.Input[int] version: The dependency package version.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -403,6 +534,7 @@ class Dependency(pulumi.CustomResource):
         __props__.__dict__["region"] = region
         __props__.__dict__["runtime"] = runtime
         __props__.__dict__["size"] = size
+        __props__.__dict__["version"] = version
         return Dependency(resource_name, opts=opts, __props__=__props__)
 
     @property
@@ -410,7 +542,7 @@ class Dependency(pulumi.CustomResource):
     def description(self) -> pulumi.Output[str]:
         """
         Specifies the dependency description.
-        The description can contain a maximum of 512 characters.
+        The description can contain a maximum of `512` characters.
         """
         return pulumi.get(self, "description")
 
@@ -425,14 +557,17 @@ class Dependency(pulumi.CustomResource):
     @property
     @pulumi.getter
     def link(self) -> pulumi.Output[str]:
+        """
+        The OBS storage URL of the dependency package.
+        """
         return pulumi.get(self, "link")
 
     @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the dependeny name.
-        The name can contain a maximum of 96 characters and must start with a letter and end with a letter or digit.
+        Specifies the dependency name.
+        The name can contain a maximum of `96` characters and must start with a letter and end with a letter or digit.
         Only letters, digits, underscores (_), periods (.), and hyphens (-) are allowed.
         """
         return pulumi.get(self, "name")
@@ -459,9 +594,25 @@ class Dependency(pulumi.CustomResource):
     def runtime(self) -> pulumi.Output[str]:
         """
         Specifies the dependency package runtime.
-        The valid values are **Java8**, **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**,
-        **Python3.6**, **Go1.8**, **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and
-        **PHP7.3**.
+        The valid values are as follows:
+        + **Java8**
+        + **Java11**
+        + **Node.js6.10**
+        + **Node.js8.10**
+        + **Node.js10.16**
+        + **Node.js12.13**
+        + **Node.js14.18**
+        + **Python2.7**
+        + **Python3.6**
+        + **Python3.9**
+        + **Go1.8**
+        + **Go1.x**
+        + **C#(.NET Core 2.0)**
+        + **C#(.NET Core 2.1)**
+        + **C#(.NET Core 3.1)**
+        + **PHP7.3**
+        + **Custom**
+        + **http**
         """
         return pulumi.get(self, "runtime")
 
@@ -472,4 +623,12 @@ class Dependency(pulumi.CustomResource):
         The dependency package size in bytes.
         """
         return pulumi.get(self, "size")
+
+    @property
+    @pulumi.getter
+    def version(self) -> pulumi.Output[int]:
+        """
+        The dependency package version.
+        """
+        return pulumi.get(self, "version")
 

@@ -14,6 +14,7 @@ __all__ = ['TopicArgs', 'Topic']
 @pulumi.input_type
 class TopicArgs:
     def __init__(__self__, *,
+                 access_policy: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  introduction: Optional[pulumi.Input[str]] = None,
@@ -24,6 +25,7 @@ class TopicArgs:
                  users_publish_allowed: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Topic resource.
+        :param pulumi.Input[str] access_policy: schema: Internal
         :param pulumi.Input[str] display_name: Specifies the topic display name, which is presented as the name of the email
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
@@ -43,6 +45,8 @@ class TopicArgs:
                user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
                If left empty, that means only the topic creator can publish messages.
         """
+        if access_policy is not None:
+            pulumi.set(__self__, "access_policy", access_policy)
         if display_name is not None:
             pulumi.set(__self__, "display_name", display_name)
         if enterprise_project_id is not None:
@@ -59,6 +63,18 @@ class TopicArgs:
             pulumi.set(__self__, "tags", tags)
         if users_publish_allowed is not None:
             pulumi.set(__self__, "users_publish_allowed", users_publish_allowed)
+
+    @property
+    @pulumi.getter(name="accessPolicy")
+    def access_policy(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "access_policy")
+
+    @access_policy.setter
+    def access_policy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "access_policy", value)
 
     @property
     @pulumi.getter(name="displayName")
@@ -170,6 +186,7 @@ class TopicArgs:
 @pulumi.input_type
 class _TopicState:
     def __init__(__self__, *,
+                 access_policy: Optional[pulumi.Input[str]] = None,
                  create_time: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -184,6 +201,7 @@ class _TopicState:
                  users_publish_allowed: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Topic resources.
+        :param pulumi.Input[str] access_policy: schema: Internal
         :param pulumi.Input[str] create_time: Time when the topic was created.
         :param pulumi.Input[str] display_name: Specifies the topic display name, which is presented as the name of the email
                sender in an email message. The name can contains of 0 to 192 characters.
@@ -209,6 +227,8 @@ class _TopicState:
                user account URN is **urn:csp:iam::domainId:root**. **domainId** indicates the account ID of another user.
                If left empty, that means only the topic creator can publish messages.
         """
+        if access_policy is not None:
+            pulumi.set(__self__, "access_policy", access_policy)
         if create_time is not None:
             pulumi.set(__self__, "create_time", create_time)
         if display_name is not None:
@@ -233,6 +253,18 @@ class _TopicState:
             pulumi.set(__self__, "update_time", update_time)
         if users_publish_allowed is not None:
             pulumi.set(__self__, "users_publish_allowed", users_publish_allowed)
+
+    @property
+    @pulumi.getter(name="accessPolicy")
+    def access_policy(self) -> Optional[pulumi.Input[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "access_policy")
+
+    @access_policy.setter
+    def access_policy(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "access_policy", value)
 
     @property
     @pulumi.getter(name="createTime")
@@ -396,6 +428,7 @@ class Topic(pulumi.CustomResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 access_policy: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  introduction: Optional[pulumi.Input[str]] = None,
@@ -432,7 +465,7 @@ class Topic(pulumi.CustomResource):
 
         ## Import
 
-        SMN topic can be imported using the `id` (topic urn), e.g.
+        SMN topic can be imported using the `id` (topic urn), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Smn/topic:Topic topic_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1
@@ -440,6 +473,7 @@ class Topic(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] access_policy: schema: Internal
         :param pulumi.Input[str] display_name: Specifies the topic display name, which is presented as the name of the email
                sender in an email message. The name can contains of 0 to 192 characters.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the SMN Topic, Value 0
@@ -492,7 +526,7 @@ class Topic(pulumi.CustomResource):
 
         ## Import
 
-        SMN topic can be imported using the `id` (topic urn), e.g.
+        SMN topic can be imported using the `id` (topic urn), e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Smn/topic:Topic topic_1 urn:smn:cn-north-4:0970dd7a1300f5672ff2c003c60ae115:topic_1
@@ -513,6 +547,7 @@ class Topic(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 access_policy: Optional[pulumi.Input[str]] = None,
                  display_name: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  introduction: Optional[pulumi.Input[str]] = None,
@@ -530,6 +565,7 @@ class Topic(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = TopicArgs.__new__(TopicArgs)
 
+            __props__.__dict__["access_policy"] = access_policy
             __props__.__dict__["display_name"] = display_name
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["introduction"] = introduction
@@ -552,6 +588,7 @@ class Topic(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            access_policy: Optional[pulumi.Input[str]] = None,
             create_time: Optional[pulumi.Input[str]] = None,
             display_name: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
@@ -571,6 +608,7 @@ class Topic(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] access_policy: schema: Internal
         :param pulumi.Input[str] create_time: Time when the topic was created.
         :param pulumi.Input[str] display_name: Specifies the topic display name, which is presented as the name of the email
                sender in an email message. The name can contains of 0 to 192 characters.
@@ -600,6 +638,7 @@ class Topic(pulumi.CustomResource):
 
         __props__ = _TopicState.__new__(_TopicState)
 
+        __props__.__dict__["access_policy"] = access_policy
         __props__.__dict__["create_time"] = create_time
         __props__.__dict__["display_name"] = display_name
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
@@ -613,6 +652,14 @@ class Topic(pulumi.CustomResource):
         __props__.__dict__["update_time"] = update_time
         __props__.__dict__["users_publish_allowed"] = users_publish_allowed
         return Topic(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="accessPolicy")
+    def access_policy(self) -> pulumi.Output[Optional[str]]:
+        """
+        schema: Internal
+        """
+        return pulumi.get(self, "access_policy")
 
     @property
     @pulumi.getter(name="createTime")

@@ -45,7 +45,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:DataArtsStudio/studioInstance:StudioInstance instance e60361de2cfd42d7a6b673f0ae58db82
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_dataarts_studio_instance" "instance" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`tags`, `period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_dataarts_studio_instance" "instance" {
  *
  *  ...
  *
@@ -102,7 +102,6 @@ export class StudioInstance extends pulumi.CustomResource {
     public /*out*/ readonly chargingMode!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project id of the instance.
-     * Changing this creates a new instance.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -119,14 +118,14 @@ export class StudioInstance extends pulumi.CustomResource {
     public /*out*/ readonly orderId!: pulumi.Output<string>;
     /**
      * Specifies the charging period of the DataArts Studio instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
      * Changing this creates a new instance.
      */
     public readonly period!: pulumi.Output<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
+     * Valid values are **month** and **year**.
      * Changing this creates a new instance.
      */
     public readonly periodUnit!: pulumi.Output<string>;
@@ -256,7 +255,6 @@ export interface StudioInstanceState {
     chargingMode?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id of the instance.
-     * Changing this creates a new instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -273,14 +271,14 @@ export interface StudioInstanceState {
     orderId?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the DataArts Studio instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
      * Changing this creates a new instance.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
+     * Valid values are **month** and **year**.
      * Changing this creates a new instance.
      */
     periodUnit?: pulumi.Input<string>;
@@ -333,7 +331,6 @@ export interface StudioInstanceArgs {
     availabilityZone: pulumi.Input<string>;
     /**
      * Specifies the enterprise project id of the instance.
-     * Changing this creates a new instance.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -342,14 +339,14 @@ export interface StudioInstanceArgs {
     name?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the DataArts Studio instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
      * Changing this creates a new instance.
      */
     period: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
+     * Valid values are **month** and **year**.
      * Changing this creates a new instance.
      */
     periodUnit: pulumi.Input<string>;

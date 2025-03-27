@@ -49,19 +49,19 @@ import (
 //
 // ## Import
 //
-// The assignment relationships can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import an administrator assignment and authenticated by account.
+// The assignment relationships can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import an administrator assignment and authenticated by account. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+//	$ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test <id>/<account_name>/<account_password>
 //
 // ```
 //
-//	Import an administrator assignment and authenticated by `APP ID`/`APP Key`.
+//	Import an administrator assignment and authenticated by `APP ID`/`APP Key`. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+//	$ pulumi import huaweicloud:Meeting/adminAssignment:AdminAssignment test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
 //
 // ```
 //
@@ -70,7 +70,7 @@ type AdminAssignment struct {
 	pulumi.CustomResourceState
 
 	// Specifies the user account to be assigned the administrator role.
-	// The value can contain **1** to **64** characters.
+	// The value can contain `1` to `64` characters.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringOutput `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -121,7 +121,7 @@ func GetAdminAssignment(ctx *pulumi.Context,
 // Input properties used for looking up and filtering AdminAssignment resources.
 type adminAssignmentState struct {
 	// Specifies the user account to be assigned the administrator role.
-	// The value can contain **1** to **64** characters.
+	// The value can contain `1` to `64` characters.
 	// Changing this parameter will create a new resource.
 	Account *string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -140,7 +140,7 @@ type adminAssignmentState struct {
 
 type AdminAssignmentState struct {
 	// Specifies the user account to be assigned the administrator role.
-	// The value can contain **1** to **64** characters.
+	// The value can contain `1` to `64` characters.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringPtrInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -163,7 +163,7 @@ func (AdminAssignmentState) ElementType() reflect.Type {
 
 type adminAssignmentArgs struct {
 	// Specifies the user account to be assigned the administrator role.
-	// The value can contain **1** to **64** characters.
+	// The value can contain `1` to `64` characters.
 	// Changing this parameter will create a new resource.
 	Account string `pulumi:"account"`
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -183,7 +183,7 @@ type adminAssignmentArgs struct {
 // The set of arguments for constructing a AdminAssignment resource.
 type AdminAssignmentArgs struct {
 	// Specifies the user account to be assigned the administrator role.
-	// The value can contain **1** to **64** characters.
+	// The value can contain `1` to `64` characters.
 	// Changing this parameter will create a new resource.
 	Account pulumi.StringInput
 	// Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -288,7 +288,7 @@ func (o AdminAssignmentOutput) ToAdminAssignmentOutputWithContext(ctx context.Co
 }
 
 // Specifies the user account to be assigned the administrator role.
-// The value can contain **1** to **64** characters.
+// The value can contain `1` to `64` characters.
 // Changing this parameter will create a new resource.
 func (o AdminAssignmentOutput) Account() pulumi.StringOutput {
 	return o.ApplyT(func(v *AdminAssignment) pulumi.StringOutput { return v.Account }).(pulumi.StringOutput)

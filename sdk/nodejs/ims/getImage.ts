@@ -5,7 +5,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
- * Use this data source to get the ID of an available HuaweiCloud image.
+ * Use this data source to get an available IMS image within HuaweiCloud.
  *
  * ## Example Usage
  *
@@ -13,30 +13,33 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as huaweicloud from "@pulumi/huaweicloud";
  *
- * const ubuntu = pulumi.output(huaweicloud.Ims.getImage({
- *     mostRecent: true,
+ * const config = new pulumi.Config();
+ * const imageId = config.requireObject("imageId");
+ * const test = huaweicloud.Ims.getImage({
+ *     imageId: imageId,
+ * });
+ * const ubuntu = huaweicloud.Ims.getImage({
  *     name: "Ubuntu 18.04 server 64bit",
  *     visibility: "public",
- * }));
- * const centos_1 = pulumi.output(huaweicloud.Ims.getImage({
- *     architecture: "x86",
  *     mostRecent: true,
- *     osVersion: "CentOS 7.4 64bit",
+ * });
+ * const centos-1 = huaweicloud.Ims.getImage({
+ *     architecture: "x86",
  *     visibility: "public",
- * }));
- * const centos_2 = pulumi.output(huaweicloud.Ims.getImage({
- *     architecture: "x86",
  *     mostRecent: true,
+ * });
+ * const centos-2 = huaweicloud.Ims.getImage({
+ *     architecture: "x86",
  *     nameRegex: "^CentOS 7.4",
  *     visibility: "public",
- * }));
- * const bmsImage = pulumi.output(huaweicloud.Ims.getImage({
+ *     mostRecent: true,
+ * });
+ * const bmsImage = huaweicloud.Ims.getImage({
  *     architecture: "x86",
  *     imageType: "Ironic",
- *     mostRecent: true,
- *     osVersion: "CentOS 7.4 64bit",
  *     visibility: "public",
- * }));
+ *     mostRecent: true,
+ * });
  * ```
  */
 export function getImage(args?: GetImageArgs, opts?: pulumi.InvokeOptions): Promise<GetImageResult> {
@@ -50,7 +53,9 @@ export function getImage(args?: GetImageArgs, opts?: pulumi.InvokeOptions): Prom
         "architecture": args.architecture,
         "enterpriseProjectId": args.enterpriseProjectId,
         "flavorId": args.flavorId,
+        "imageId": args.imageId,
         "imageType": args.imageType,
+        "isWholeImage": args.isWholeImage,
         "mostRecent": args.mostRecent,
         "name": args.name,
         "nameRegex": args.nameRegex,
@@ -72,11 +77,12 @@ export function getImage(args?: GetImageArgs, opts?: pulumi.InvokeOptions): Prom
  */
 export interface GetImageArgs {
     /**
-     * Specifies the image architecture type. The value can be **x86** and **arm**.
+     * Specifies the image architecture type. The value can be **x86** or **arm**.
      */
     architecture?: string;
     /**
      * Specifies the enterprise project ID of the image.
+     * For enterprise users, if omitted, will query the images under all enterprise projects.
      */
     enterpriseProjectId?: string;
     /**
@@ -85,39 +91,53 @@ export interface GetImageArgs {
      */
     flavorId?: string;
     /**
-     * Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
+     * Specifies the ID of the image.
+     */
+    imageId?: string;
+    /**
+     * Specifies the environment where the image is used.
+     * The valid values are as follows:
+     * + **FusionCompute**: Cloud server image, also known as system disk image.
+     * + **DataImage**: Data disk image.
+     * + **Ironic**: Bare metal server image.
+     * + **IsoImage**: ISO image.
      */
     imageType?: string;
     /**
-     * If more than one result is returned, use the latest updated image.
+     * Specifies whether it is a whole image. The valid value is **true** or **false**.
+     * Defaults to **false**.
+     */
+    isWholeImage?: boolean;
+    /**
+     * Specifies whether to return the latest updated image if the query returns more than
+     * results. The valid value is **true** or **false**. Defaults to **false**.
      */
     mostRecent?: boolean;
     /**
-     * The name of the image. Cannot be used simultaneously with `nameRegex`.
+     * Specifies the name of the image. Cannot be used simultaneously with `nameRegex`.
      */
     name?: string;
     /**
-     * The regular expressian of the name of the image.
+     * Specifies the regular expression of the name of the image.
      * Cannot be used simultaneously with `name`.
      */
     nameRegex?: string;
     /**
-     * Specifies the image OS type. The value can be **Windows**, **Ubuntu**,
-     * **RedHat**, **SUSE**, **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**,
-     * **CoreOS**, or **EulerOS**.
+     * Specifies the image OS type. The value can be **Windows**, **Ubuntu**, **RedHat**, **SUSE**,
+     * **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**, **CoreOS**, or **EulerOS**.
      */
     os?: string;
     /**
-     * Specifies the OS version. For example, *CentOS 7.4 64bit* or *Ubuntu 18.04 server 64bit*.
+     * The operating system version of the image.
      */
     osVersion?: string;
     /**
-     * The owner (UUID) of the image.
+     * Specifies the owner (UUID) of the image.
      */
     owner?: string;
     /**
-     * The region in which to obtain the images. If omitted, the provider-level region will be
-     * used.
+     * Specifies the region in which to obtain the images.
+     * If omitted, the provider-level region will be used.
      */
     region?: string;
     /**
@@ -129,21 +149,24 @@ export interface GetImageArgs {
      */
     sizeMin?: number;
     /**
-     * Order the results in either `asc` or `desc`.
+     * Specifies whether to sort the query results in ascending or descending order.
+     * The valid values are as follows:
+     * + **asc**: Ascending order.
+     * + **desc**: Descending order.
      */
     sortDirection?: string;
     /**
-     * Sort images based on a certain key. Must be one of
-     * "name", "containerFormat", "diskFormat", "status", "id" or "size". Defaults to `name`.
+     * Specifies which field to use for sorting. The valid values are **name**,
+     * **container_format**, **disk_format**, **status**, **id**, **size**, and **created_at**. Defaults to **name**.
      */
     sortKey?: string;
     /**
-     * Search for images with a specific tag in "Key=Value" format.
+     * Specifies the image tag in **Key=Value** format.
      */
     tag?: string;
     /**
-     * The visibility of the image. Must be one of
-     * **public**, **private**, **market** or **shared**.
+     * Specifies the visibility of the image. Must be one of **public**, **private**,
+     * **market** or **shared**.
      */
     visibility?: string;
 }
@@ -152,69 +175,86 @@ export interface GetImageArgs {
  * A collection of values returned by getImage.
  */
 export interface GetImageResult {
-    readonly architecture?: string;
+    /**
+     * The time when the image status changes to active, in RFC3339 format.
+     */
+    readonly activeAt: string;
+    readonly architecture: string;
     /**
      * The backup ID of the whole image in the CBR vault.
      */
     readonly backupId: string;
-    /**
-     * The checksum of the data associated with the image.
-     */
     readonly checksum: string;
     /**
      * The format of the image's container.
      */
     readonly containerFormat: string;
     /**
-     * The date when the image was created.
+     * The creation time of the image, in RFC3339 format.
      */
     readonly createdAt: string;
     /**
-     * The format of the image's disk.
+     * The image source. The format is **server_backup,backup_id**,  **instance,instance_id**,
+     * **server_backup,vault_id**,  **volume,volume_id**, **file,image_url**, or **image,region,image_id**.
+     */
+    readonly dataOrigin: string;
+    /**
+     * The description of the image.
+     */
+    readonly description: string;
+    /**
+     * The image format. The value can be **zvhd2**, **vhd**, **zvhd**, **raw**, **qcow2**, or **iso**.
      */
     readonly diskFormat: string;
     readonly enterpriseProjectId: string;
     /**
-     * the trailing path after the glance endpoint that represent the location of the image or the path to retrieve
-     * it.
+     * The image file download and upload links.
      */
     readonly file: string;
-    readonly flavorId: string;
+    readonly flavorId?: string;
     /**
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
+    readonly imageId: string;
     readonly imageType: string;
+    readonly isWholeImage?: boolean;
     /**
-     * The metadata associated with the image. Image metadata allow for meaningfully define the image properties
-     * and tags.
+     * The maximum memory supported by the image, in MB unit.
      */
+    readonly maxRamMb: number;
     readonly metadata: {[key: string]: string};
     /**
-     * The minimum amount of disk space required to use the image.
+     * The minimum disk space required to run an image, in GB unit.
+     * + When the operating system is Linux, the value ranges from `10` to `1,024`.
+     * + When the operating system is Windows, the value ranges from `20` to `1,024`.
      */
     readonly minDiskGb: number;
     /**
-     * The minimum amount of ram required to use the image.
+     * The minimum memory required to run an image, in MB unit.
      */
     readonly minRamMb: number;
     readonly mostRecent?: boolean;
     readonly name: string;
     readonly nameRegex?: string;
     readonly os: string;
+    /**
+     * The operating system version of the image.
+     */
     readonly osVersion: string;
     readonly owner: string;
     /**
-     * Whether or not the image is protected.
+     * Indicates whether the image is protected, protected images cannot be deleted.
+     * The valid value is **true** or **false**.
      */
     readonly protected: boolean;
     readonly region: string;
     /**
-     * The path to the JSON-schema that represent the image or image.
+     * The image view.
      */
     readonly schema: string;
     /**
-     * The size of the image (in bytes).
+     * The size of the image file, in bytes unit.
      */
     readonly sizeBytes: number;
     /**
@@ -228,12 +268,12 @@ export interface GetImageResult {
     readonly sortDirection?: string;
     readonly sortKey?: string;
     /**
-     * The status of the image.
+     * The status of the image. The valid value is **active**.
      */
     readonly status: string;
     readonly tag?: string;
     /**
-     * The date when the image was last updated.
+     * The last update time of the image, in RFC3339 format.
      */
     readonly updatedAt: string;
     readonly visibility: string;
@@ -248,11 +288,12 @@ export function getImageOutput(args?: GetImageOutputArgs, opts?: pulumi.InvokeOp
  */
 export interface GetImageOutputArgs {
     /**
-     * Specifies the image architecture type. The value can be **x86** and **arm**.
+     * Specifies the image architecture type. The value can be **x86** or **arm**.
      */
     architecture?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of the image.
+     * For enterprise users, if omitted, will query the images under all enterprise projects.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -261,39 +302,53 @@ export interface GetImageOutputArgs {
      */
     flavorId?: pulumi.Input<string>;
     /**
-     * Specifies the environment where the image is used. For a BMS image, the value is **Ironic**.
+     * Specifies the ID of the image.
+     */
+    imageId?: pulumi.Input<string>;
+    /**
+     * Specifies the environment where the image is used.
+     * The valid values are as follows:
+     * + **FusionCompute**: Cloud server image, also known as system disk image.
+     * + **DataImage**: Data disk image.
+     * + **Ironic**: Bare metal server image.
+     * + **IsoImage**: ISO image.
      */
     imageType?: pulumi.Input<string>;
     /**
-     * If more than one result is returned, use the latest updated image.
+     * Specifies whether it is a whole image. The valid value is **true** or **false**.
+     * Defaults to **false**.
+     */
+    isWholeImage?: pulumi.Input<boolean>;
+    /**
+     * Specifies whether to return the latest updated image if the query returns more than
+     * results. The valid value is **true** or **false**. Defaults to **false**.
      */
     mostRecent?: pulumi.Input<boolean>;
     /**
-     * The name of the image. Cannot be used simultaneously with `nameRegex`.
+     * Specifies the name of the image. Cannot be used simultaneously with `nameRegex`.
      */
     name?: pulumi.Input<string>;
     /**
-     * The regular expressian of the name of the image.
+     * Specifies the regular expression of the name of the image.
      * Cannot be used simultaneously with `name`.
      */
     nameRegex?: pulumi.Input<string>;
     /**
-     * Specifies the image OS type. The value can be **Windows**, **Ubuntu**,
-     * **RedHat**, **SUSE**, **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**,
-     * **CoreOS**, or **EulerOS**.
+     * Specifies the image OS type. The value can be **Windows**, **Ubuntu**, **RedHat**, **SUSE**,
+     * **CentOS**, **Debian**, **OpenSUSE**, **Oracle Linux**, **Fedora**, **Other**, **CoreOS**, or **EulerOS**.
      */
     os?: pulumi.Input<string>;
     /**
-     * Specifies the OS version. For example, *CentOS 7.4 64bit* or *Ubuntu 18.04 server 64bit*.
+     * The operating system version of the image.
      */
     osVersion?: pulumi.Input<string>;
     /**
-     * The owner (UUID) of the image.
+     * Specifies the owner (UUID) of the image.
      */
     owner?: pulumi.Input<string>;
     /**
-     * The region in which to obtain the images. If omitted, the provider-level region will be
-     * used.
+     * Specifies the region in which to obtain the images.
+     * If omitted, the provider-level region will be used.
      */
     region?: pulumi.Input<string>;
     /**
@@ -305,21 +360,24 @@ export interface GetImageOutputArgs {
      */
     sizeMin?: pulumi.Input<number>;
     /**
-     * Order the results in either `asc` or `desc`.
+     * Specifies whether to sort the query results in ascending or descending order.
+     * The valid values are as follows:
+     * + **asc**: Ascending order.
+     * + **desc**: Descending order.
      */
     sortDirection?: pulumi.Input<string>;
     /**
-     * Sort images based on a certain key. Must be one of
-     * "name", "containerFormat", "diskFormat", "status", "id" or "size". Defaults to `name`.
+     * Specifies which field to use for sorting. The valid values are **name**,
+     * **container_format**, **disk_format**, **status**, **id**, **size**, and **created_at**. Defaults to **name**.
      */
     sortKey?: pulumi.Input<string>;
     /**
-     * Search for images with a specific tag in "Key=Value" format.
+     * Specifies the image tag in **Key=Value** format.
      */
     tag?: pulumi.Input<string>;
     /**
-     * The visibility of the image. Must be one of
-     * **public**, **private**, **market** or **shared**.
+     * Specifies the visibility of the image. Must be one of **public**, **private**,
+     * **market** or **shared**.
      */
     visibility?: pulumi.Input<string>;
 }

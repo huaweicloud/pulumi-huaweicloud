@@ -16,11 +16,17 @@ class LoadbalancerArgs:
     def __init__(__self__, *,
                  vip_subnet_id: pulumi.Input[str],
                  admin_state_up: Optional[pulumi.Input[bool]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -30,12 +36,26 @@ class LoadbalancerArgs:
         The set of arguments for constructing a Loadbalancer resource.
         :param pulumi.Input[str] vip_subnet_id: The **IPv4 subnet ID** of the subnet where the load balancer works.
                Changing this creates a new loadbalancer.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the loadbalancer.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
-               creates a new loadbalancer.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer.
         :param pulumi.Input[str] flavor: schema: Deprecated
         :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[int] period: Specifies the charging period of the loadbalancer.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the loadbalancer.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] protection_reason: Specifies the reason to enable modification protection. Only valid when
+               `protection_status` is **consoleProtection**.
+        :param pulumi.Input[str] protection_status: Specifies whether modification protection is enabled. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
@@ -46,6 +66,10 @@ class LoadbalancerArgs:
         pulumi.set(__self__, "vip_subnet_id", vip_subnet_id)
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
@@ -56,6 +80,14 @@ class LoadbalancerArgs:
             pulumi.set(__self__, "loadbalancer_provider", loadbalancer_provider)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
         if region is not None:
             pulumi.set(__self__, "region", region)
         if security_group_ids is not None:
@@ -86,11 +118,40 @@ class LoadbalancerArgs:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
     def admin_state_up(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "admin_state_up", value)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the loadbalancer.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
 
     @property
     @pulumi.getter
@@ -108,8 +169,7 @@ class LoadbalancerArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the loadbalancer. Changing this
-        creates a new loadbalancer.
+        The enterprise project id of the loadbalancer.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -152,6 +212,60 @@ class LoadbalancerArgs:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the loadbalancer.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the loadbalancer.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the reason to enable modification protection. Only valid when
+        `protection_status` is **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether modification protection is enabled. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
 
     @property
     @pulumi.getter
@@ -217,32 +331,60 @@ class LoadbalancerArgs:
 class _LoadbalancerState:
     def __init__(__self__, *,
                  admin_state_up: Optional[pulumi.Input[bool]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charge_mode: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
+                 frozen_scene: Optional[pulumi.Input[str]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  vip_address: Optional[pulumi.Input[str]] = None,
                  vip_port_id: Optional[pulumi.Input[str]] = None,
                  vip_subnet_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Loadbalancer resources.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charge_mode: Indicates how the load balancer will be billed.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the loadbalancer.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: The create time of the load balancer.
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
-               creates a new loadbalancer.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer.
         :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] frozen_scene: Indicates the scenario where the load balancer is frozen.
         :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[int] period: Specifies the charging period of the loadbalancer.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the loadbalancer.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] protection_reason: Specifies the reason to enable modification protection. Only valid when
+               `protection_status` is **consoleProtection**.
+        :param pulumi.Input[str] protection_status: Specifies whether modification protection is enabled. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] public_ip: The EIP address that is associated to the Load Balancer instance.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
+        :param pulumi.Input[str] updated_at: The update time of the load balancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
         :param pulumi.Input[str] vip_port_id: The Port ID of the Load Balancer IP.
@@ -251,16 +393,34 @@ class _LoadbalancerState:
         """
         if admin_state_up is not None:
             pulumi.set(__self__, "admin_state_up", admin_state_up)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if charge_mode is not None:
+            pulumi.set(__self__, "charge_mode", charge_mode)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if description is not None:
             pulumi.set(__self__, "description", description)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
+        if frozen_scene is not None:
+            pulumi.set(__self__, "frozen_scene", frozen_scene)
         if loadbalancer_provider is not None:
             pulumi.set(__self__, "loadbalancer_provider", loadbalancer_provider)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if protection_reason is not None:
+            pulumi.set(__self__, "protection_reason", protection_reason)
+        if protection_status is not None:
+            pulumi.set(__self__, "protection_status", protection_status)
         if public_ip is not None:
             pulumi.set(__self__, "public_ip", public_ip)
         if region is not None:
@@ -274,6 +434,8 @@ class _LoadbalancerState:
             pulumi.log.warn("""tenant_id is deprecated: tenant_id is deprecated""")
         if tenant_id is not None:
             pulumi.set(__self__, "tenant_id", tenant_id)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if vip_address is not None:
             pulumi.set(__self__, "vip_address", vip_address)
         if vip_port_id is not None:
@@ -284,11 +446,64 @@ class _LoadbalancerState:
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> Optional[pulumi.Input[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
 
     @admin_state_up.setter
     def admin_state_up(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "admin_state_up", value)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="chargeMode")
+    def charge_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates how the load balancer will be billed.
+        """
+        return pulumi.get(self, "charge_mode")
+
+    @charge_mode.setter
+    def charge_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charge_mode", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the loadbalancer.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The create time of the load balancer.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter
@@ -306,8 +521,7 @@ class _LoadbalancerState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The enterprise project id of the loadbalancer. Changing this
-        creates a new loadbalancer.
+        The enterprise project id of the loadbalancer.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -326,6 +540,18 @@ class _LoadbalancerState:
     @flavor.setter
     def flavor(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "flavor", value)
+
+    @property
+    @pulumi.getter(name="frozenScene")
+    def frozen_scene(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the scenario where the load balancer is frozen.
+        """
+        return pulumi.get(self, "frozen_scene")
+
+    @frozen_scene.setter
+    def frozen_scene(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "frozen_scene", value)
 
     @property
     @pulumi.getter(name="loadbalancerProvider")
@@ -350,6 +576,60 @@ class _LoadbalancerState:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the loadbalancer.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the loadbalancer.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the reason to enable modification protection. Only valid when
+        `protection_status` is **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @protection_reason.setter
+    def protection_reason(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_reason", value)
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether modification protection is enabled. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @protection_status.setter
+    def protection_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "protection_status", value)
 
     @property
     @pulumi.getter(name="publicIp")
@@ -410,6 +690,18 @@ class _LoadbalancerState:
         pulumi.set(self, "tenant_id", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of the load balancer.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter(name="vipAddress")
     def vip_address(self) -> Optional[pulumi.Input[str]]:
         """
@@ -454,11 +746,17 @@ class Loadbalancer(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  admin_state_up: Optional[pulumi.Input[bool]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -500,20 +798,48 @@ class Loadbalancer(pulumi.CustomResource):
 
         ## Import
 
-        Load balancers can be imported using the `id`, e.g.
+        Load balancers can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/loadbalancer:Loadbalancer test 3e3632db-36c6-4b28-a92e-e72e6562daa6
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a loadbalancer. You can then decide if changes should be applied to the loadbalancer, or the resource definition should be updated to align with the loadbalancer. Also you can ignore changes as below. hcl resource "huaweicloud_lb_loadbalancer" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         period_unit, period, auto_renew,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the loadbalancer.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
-               creates a new loadbalancer.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer.
         :param pulumi.Input[str] flavor: schema: Deprecated
         :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[int] period: Specifies the charging period of the loadbalancer.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the loadbalancer.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] protection_reason: Specifies the reason to enable modification protection. Only valid when
+               `protection_status` is **consoleProtection**.
+        :param pulumi.Input[str] protection_status: Specifies whether modification protection is enabled. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
@@ -563,11 +889,25 @@ class Loadbalancer(pulumi.CustomResource):
 
         ## Import
 
-        Load balancers can be imported using the `id`, e.g.
+        Load balancers can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Elb/loadbalancer:Loadbalancer test 3e3632db-36c6-4b28-a92e-e72e6562daa6
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a loadbalancer. You can then decide if changes should be applied to the loadbalancer, or the resource definition should be updated to align with the loadbalancer. Also you can ignore changes as below. hcl resource "huaweicloud_lb_loadbalancer" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         period_unit, period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param LoadbalancerArgs args: The arguments to use to populate this resource's properties.
@@ -585,11 +925,17 @@ class Loadbalancer(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  admin_state_up: Optional[pulumi.Input[bool]] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  description: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  loadbalancer_provider: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 protection_reason: Optional[pulumi.Input[str]] = None,
+                 protection_status: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -606,11 +952,17 @@ class Loadbalancer(pulumi.CustomResource):
             __props__ = LoadbalancerArgs.__new__(LoadbalancerArgs)
 
             __props__.__dict__["admin_state_up"] = admin_state_up
+            __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["description"] = description
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["flavor"] = flavor
             __props__.__dict__["loadbalancer_provider"] = loadbalancer_provider
             __props__.__dict__["name"] = name
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["protection_reason"] = protection_reason
+            __props__.__dict__["protection_status"] = protection_status
             __props__.__dict__["region"] = region
             __props__.__dict__["security_group_ids"] = security_group_ids
             __props__.__dict__["tags"] = tags
@@ -622,7 +974,11 @@ class Loadbalancer(pulumi.CustomResource):
             if vip_subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vip_subnet_id'")
             __props__.__dict__["vip_subnet_id"] = vip_subnet_id
+            __props__.__dict__["charge_mode"] = None
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["frozen_scene"] = None
             __props__.__dict__["public_ip"] = None
+            __props__.__dict__["updated_at"] = None
             __props__.__dict__["vip_port_id"] = None
         super(Loadbalancer, __self__).__init__(
             'huaweicloud:Elb/loadbalancer:Loadbalancer',
@@ -635,16 +991,26 @@ class Loadbalancer(pulumi.CustomResource):
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
             admin_state_up: Optional[pulumi.Input[bool]] = None,
+            auto_renew: Optional[pulumi.Input[str]] = None,
+            charge_mode: Optional[pulumi.Input[str]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             description: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
+            frozen_scene: Optional[pulumi.Input[str]] = None,
             loadbalancer_provider: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
+            protection_reason: Optional[pulumi.Input[str]] = None,
+            protection_status: Optional[pulumi.Input[str]] = None,
             public_ip: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             security_group_ids: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             tenant_id: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             vip_address: Optional[pulumi.Input[str]] = None,
             vip_port_id: Optional[pulumi.Input[str]] = None,
             vip_subnet_id: Optional[pulumi.Input[str]] = None) -> 'Loadbalancer':
@@ -655,17 +1021,35 @@ class Loadbalancer(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[bool] admin_state_up: schema: Deprecated
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.  
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] charge_mode: Indicates how the load balancer will be billed.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the loadbalancer.  
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: The create time of the load balancer.
         :param pulumi.Input[str] description: Human-readable description for the loadbalancer.
-        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer. Changing this
-               creates a new loadbalancer.
+        :param pulumi.Input[str] enterprise_project_id: The enterprise project id of the loadbalancer.
         :param pulumi.Input[str] flavor: schema: Deprecated
+        :param pulumi.Input[str] frozen_scene: Indicates the scenario where the load balancer is frozen.
         :param pulumi.Input[str] loadbalancer_provider: schema: Deprecated
         :param pulumi.Input[str] name: Human-readable name for the loadbalancer. Does not have to be unique.
+        :param pulumi.Input[int] period: Specifies the charging period of the loadbalancer.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the loadbalancer.  
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] protection_reason: Specifies the reason to enable modification protection. Only valid when
+               `protection_status` is **consoleProtection**.
+        :param pulumi.Input[str] protection_status: Specifies whether modification protection is enabled. Value options:
+               + **nonProtection**: No protection.
+               + **consoleProtection**: Console modification protection.
         :param pulumi.Input[str] public_ip: The EIP address that is associated to the Load Balancer instance.
         :param pulumi.Input[str] region: The region in which to create the loadbalancer resource. If omitted, the
                provider-level region will be used. Changing this creates a new loadbalancer.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] security_group_ids: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the loadbalancer.
+        :param pulumi.Input[str] updated_at: The update time of the load balancer.
         :param pulumi.Input[str] vip_address: The ip address of the load balancer. Changing this creates a new
                loadbalancer.
         :param pulumi.Input[str] vip_port_id: The Port ID of the Load Balancer IP.
@@ -677,16 +1061,26 @@ class Loadbalancer(pulumi.CustomResource):
         __props__ = _LoadbalancerState.__new__(_LoadbalancerState)
 
         __props__.__dict__["admin_state_up"] = admin_state_up
+        __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["charge_mode"] = charge_mode
+        __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["description"] = description
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor"] = flavor
+        __props__.__dict__["frozen_scene"] = frozen_scene
         __props__.__dict__["loadbalancer_provider"] = loadbalancer_provider
         __props__.__dict__["name"] = name
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["protection_reason"] = protection_reason
+        __props__.__dict__["protection_status"] = protection_status
         __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["security_group_ids"] = security_group_ids
         __props__.__dict__["tags"] = tags
         __props__.__dict__["tenant_id"] = tenant_id
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["vip_address"] = vip_address
         __props__.__dict__["vip_port_id"] = vip_port_id
         __props__.__dict__["vip_subnet_id"] = vip_subnet_id
@@ -695,7 +1089,44 @@ class Loadbalancer(pulumi.CustomResource):
     @property
     @pulumi.getter(name="adminStateUp")
     def admin_state_up(self) -> pulumi.Output[Optional[bool]]:
+        """
+        schema: Deprecated
+        """
         return pulumi.get(self, "admin_state_up")
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether auto renew is enabled.  
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="chargeMode")
+    def charge_mode(self) -> pulumi.Output[str]:
+        """
+        Indicates how the load balancer will be billed.
+        """
+        return pulumi.get(self, "charge_mode")
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the charging mode of the loadbalancer.  
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        The create time of the load balancer.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter
@@ -709,8 +1140,7 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        The enterprise project id of the loadbalancer. Changing this
-        creates a new loadbalancer.
+        The enterprise project id of the loadbalancer.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -721,6 +1151,14 @@ class Loadbalancer(pulumi.CustomResource):
         schema: Deprecated
         """
         return pulumi.get(self, "flavor")
+
+    @property
+    @pulumi.getter(name="frozenScene")
+    def frozen_scene(self) -> pulumi.Output[str]:
+        """
+        Indicates the scenario where the load balancer is frozen.
+        """
+        return pulumi.get(self, "frozen_scene")
 
     @property
     @pulumi.getter(name="loadbalancerProvider")
@@ -737,6 +1175,44 @@ class Loadbalancer(pulumi.CustomResource):
         Human-readable name for the loadbalancer. Does not have to be unique.
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the charging period of the loadbalancer.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging period unit of the loadbalancer.  
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @property
+    @pulumi.getter(name="protectionReason")
+    def protection_reason(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the reason to enable modification protection. Only valid when
+        `protection_status` is **consoleProtection**.
+        """
+        return pulumi.get(self, "protection_reason")
+
+    @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> pulumi.Output[str]:
+        """
+        Specifies whether modification protection is enabled. Value options:
+        + **nonProtection**: No protection.
+        + **consoleProtection**: Console modification protection.
+        """
+        return pulumi.get(self, "protection_status")
 
     @property
     @pulumi.getter(name="publicIp")
@@ -775,6 +1251,14 @@ class Loadbalancer(pulumi.CustomResource):
     @pulumi.getter(name="tenantId")
     def tenant_id(self) -> pulumi.Output[str]:
         return pulumi.get(self, "tenant_id")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of the load balancer.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter(name="vipAddress")

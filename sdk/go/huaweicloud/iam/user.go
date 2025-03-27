@@ -10,9 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a User resource within HuaweiCloud IAM service.
+// Manages an IAM user resource within HuaweiCloud.
 //
-// Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+// > **NOTE:** You *must* have admin privileges to use this resource.
 //
 // ## Example Usage
 //
@@ -23,14 +23,17 @@ import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Iam"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
 // )
 //
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			user1Password := cfg.RequireObject("user1Password")
 //			_, err := Iam.NewUser(ctx, "user1", &Iam.UserArgs{
 //				Description: pulumi.String("A user"),
-//				Password:    pulumi.String("password123!"),
+//				Password:    pulumi.Any(user1Password),
 //			})
 //			if err != nil {
 //				return err
@@ -43,7 +46,7 @@ import (
 //
 // ## Import
 //
-// Users can be imported using the `id`, e.g.
+// Users can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -51,7 +54,7 @@ import (
 //
 // ```
 //
-//	But due to the security reason, `password` can not be imported, you can ignore it as below. resource "huaweicloud_identity_user" "user_1" {
+//	But due to the security reason, `password` can not be imported, you can ignore it as below. hcl resource "huaweicloud_identity_user" "user_1" {
 //
 //	...
 //
@@ -59,7 +62,7 @@ import (
 //
 //	ignore_changes = [
 //
-//	"password",
+//	password,
 //
 //	]
 //
@@ -68,9 +71,9 @@ type User struct {
 	pulumi.CustomResourceState
 
 	// Specifies the access type of the user. Available values are:
-	// + default: support both programmatic and management console access.
-	// + programmatic: only support programmatic access.
-	// + console: only support management console access.
+	// + **default**: support both programmatic and management console access.
+	// + **programmatic**: only support programmatic access.
+	// + **console**: only support management console access.
 	AccessType pulumi.StringOutput `pulumi:"accessType"`
 	// Specifies the country code. The country code of the Chinese mainland is 0086. This
 	// parameter must be used together with `phone`.
@@ -79,22 +82,32 @@ type User struct {
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
 	// Specifies the description of the user.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
-	// Specifies the email address with a maximum of 255 characters.
+	// Specifies the email address with a maximum of `255` characters.
 	Email pulumi.StringPtrOutput `pulumi:"email"`
-	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+	// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 	Enabled pulumi.BoolPtrOutput `pulumi:"enabled"`
+	// Specifies the ID of the IAM user in the external system.
+	// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+	// is the same as the `externalIdentityId` of the corresponding IAM user.
+	ExternalIdentityId pulumi.StringPtrOutput `pulumi:"externalIdentityId"`
+	// Specifies the type of the IAM user in the external system.
+	// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+	ExternalIdentityType pulumi.StringOutput `pulumi:"externalIdentityType"`
 	// The time when the IAM user last login.
 	LastLogin pulumi.StringOutput `pulumi:"lastLogin"`
-	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+	// Specifies the verification method of login protect. If it is
+	// empty, the login protection will be disabled.
+	LoginProtectVerificationMethod pulumi.StringPtrOutput `pulumi:"loginProtectVerificationMethod"`
+	// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 	// digit.
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the password for the user with 6 to 32 characters. It must contain at least
+	// Specifies the password for the user with `6` to `32` characters. It must contain at least
 	// two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 	Password pulumi.StringPtrOutput `pulumi:"password"`
 	// Indicates the password strength.
 	PasswordStrength pulumi.StringOutput `pulumi:"passwordStrength"`
-	// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+	// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 	// together with `countryCode`.
 	Phone pulumi.StringPtrOutput `pulumi:"phone"`
 	// Specifies whether or not the password should be reset. By default, the password is asked
@@ -133,9 +146,9 @@ func GetUser(ctx *pulumi.Context,
 // Input properties used for looking up and filtering User resources.
 type userState struct {
 	// Specifies the access type of the user. Available values are:
-	// + default: support both programmatic and management console access.
-	// + programmatic: only support programmatic access.
-	// + console: only support management console access.
+	// + **default**: support both programmatic and management console access.
+	// + **programmatic**: only support programmatic access.
+	// + **console**: only support management console access.
 	AccessType *string `pulumi:"accessType"`
 	// Specifies the country code. The country code of the Chinese mainland is 0086. This
 	// parameter must be used together with `phone`.
@@ -144,22 +157,32 @@ type userState struct {
 	CreateTime *string `pulumi:"createTime"`
 	// Specifies the description of the user.
 	Description *string `pulumi:"description"`
-	// Specifies the email address with a maximum of 255 characters.
+	// Specifies the email address with a maximum of `255` characters.
 	Email *string `pulumi:"email"`
-	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+	// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 	Enabled *bool `pulumi:"enabled"`
+	// Specifies the ID of the IAM user in the external system.
+	// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+	// is the same as the `externalIdentityId` of the corresponding IAM user.
+	ExternalIdentityId *string `pulumi:"externalIdentityId"`
+	// Specifies the type of the IAM user in the external system.
+	// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+	ExternalIdentityType *string `pulumi:"externalIdentityType"`
 	// The time when the IAM user last login.
 	LastLogin *string `pulumi:"lastLogin"`
-	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+	// Specifies the verification method of login protect. If it is
+	// empty, the login protection will be disabled.
+	LoginProtectVerificationMethod *string `pulumi:"loginProtectVerificationMethod"`
+	// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 	// digit.
 	Name *string `pulumi:"name"`
-	// Specifies the password for the user with 6 to 32 characters. It must contain at least
+	// Specifies the password for the user with `6` to `32` characters. It must contain at least
 	// two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 	Password *string `pulumi:"password"`
 	// Indicates the password strength.
 	PasswordStrength *string `pulumi:"passwordStrength"`
-	// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+	// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 	// together with `countryCode`.
 	Phone *string `pulumi:"phone"`
 	// Specifies whether or not the password should be reset. By default, the password is asked
@@ -169,9 +192,9 @@ type userState struct {
 
 type UserState struct {
 	// Specifies the access type of the user. Available values are:
-	// + default: support both programmatic and management console access.
-	// + programmatic: only support programmatic access.
-	// + console: only support management console access.
+	// + **default**: support both programmatic and management console access.
+	// + **programmatic**: only support programmatic access.
+	// + **console**: only support management console access.
 	AccessType pulumi.StringPtrInput
 	// Specifies the country code. The country code of the Chinese mainland is 0086. This
 	// parameter must be used together with `phone`.
@@ -180,22 +203,32 @@ type UserState struct {
 	CreateTime pulumi.StringPtrInput
 	// Specifies the description of the user.
 	Description pulumi.StringPtrInput
-	// Specifies the email address with a maximum of 255 characters.
+	// Specifies the email address with a maximum of `255` characters.
 	Email pulumi.StringPtrInput
-	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+	// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 	Enabled pulumi.BoolPtrInput
+	// Specifies the ID of the IAM user in the external system.
+	// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+	// is the same as the `externalIdentityId` of the corresponding IAM user.
+	ExternalIdentityId pulumi.StringPtrInput
+	// Specifies the type of the IAM user in the external system.
+	// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+	ExternalIdentityType pulumi.StringPtrInput
 	// The time when the IAM user last login.
 	LastLogin pulumi.StringPtrInput
-	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+	// Specifies the verification method of login protect. If it is
+	// empty, the login protection will be disabled.
+	LoginProtectVerificationMethod pulumi.StringPtrInput
+	// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 	// digit.
 	Name pulumi.StringPtrInput
-	// Specifies the password for the user with 6 to 32 characters. It must contain at least
+	// Specifies the password for the user with `6` to `32` characters. It must contain at least
 	// two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 	Password pulumi.StringPtrInput
 	// Indicates the password strength.
 	PasswordStrength pulumi.StringPtrInput
-	// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+	// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 	// together with `countryCode`.
 	Phone pulumi.StringPtrInput
 	// Specifies whether or not the password should be reset. By default, the password is asked
@@ -209,27 +242,37 @@ func (UserState) ElementType() reflect.Type {
 
 type userArgs struct {
 	// Specifies the access type of the user. Available values are:
-	// + default: support both programmatic and management console access.
-	// + programmatic: only support programmatic access.
-	// + console: only support management console access.
+	// + **default**: support both programmatic and management console access.
+	// + **programmatic**: only support programmatic access.
+	// + **console**: only support management console access.
 	AccessType *string `pulumi:"accessType"`
 	// Specifies the country code. The country code of the Chinese mainland is 0086. This
 	// parameter must be used together with `phone`.
 	CountryCode *string `pulumi:"countryCode"`
 	// Specifies the description of the user.
 	Description *string `pulumi:"description"`
-	// Specifies the email address with a maximum of 255 characters.
+	// Specifies the email address with a maximum of `255` characters.
 	Email *string `pulumi:"email"`
-	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+	// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 	Enabled *bool `pulumi:"enabled"`
-	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+	// Specifies the ID of the IAM user in the external system.
+	// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+	// is the same as the `externalIdentityId` of the corresponding IAM user.
+	ExternalIdentityId *string `pulumi:"externalIdentityId"`
+	// Specifies the type of the IAM user in the external system.
+	// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+	ExternalIdentityType *string `pulumi:"externalIdentityType"`
+	// Specifies the verification method of login protect. If it is
+	// empty, the login protection will be disabled.
+	LoginProtectVerificationMethod *string `pulumi:"loginProtectVerificationMethod"`
+	// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 	// digit.
 	Name *string `pulumi:"name"`
-	// Specifies the password for the user with 6 to 32 characters. It must contain at least
+	// Specifies the password for the user with `6` to `32` characters. It must contain at least
 	// two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 	Password *string `pulumi:"password"`
-	// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+	// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 	// together with `countryCode`.
 	Phone *string `pulumi:"phone"`
 	// Specifies whether or not the password should be reset. By default, the password is asked
@@ -240,27 +283,37 @@ type userArgs struct {
 // The set of arguments for constructing a User resource.
 type UserArgs struct {
 	// Specifies the access type of the user. Available values are:
-	// + default: support both programmatic and management console access.
-	// + programmatic: only support programmatic access.
-	// + console: only support management console access.
+	// + **default**: support both programmatic and management console access.
+	// + **programmatic**: only support programmatic access.
+	// + **console**: only support management console access.
 	AccessType pulumi.StringPtrInput
 	// Specifies the country code. The country code of the Chinese mainland is 0086. This
 	// parameter must be used together with `phone`.
 	CountryCode pulumi.StringPtrInput
 	// Specifies the description of the user.
 	Description pulumi.StringPtrInput
-	// Specifies the email address with a maximum of 255 characters.
+	// Specifies the email address with a maximum of `255` characters.
 	Email pulumi.StringPtrInput
-	// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+	// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 	Enabled pulumi.BoolPtrInput
-	// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+	// Specifies the ID of the IAM user in the external system.
+	// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+	// is the same as the `externalIdentityId` of the corresponding IAM user.
+	ExternalIdentityId pulumi.StringPtrInput
+	// Specifies the type of the IAM user in the external system.
+	// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+	ExternalIdentityType pulumi.StringPtrInput
+	// Specifies the verification method of login protect. If it is
+	// empty, the login protection will be disabled.
+	LoginProtectVerificationMethod pulumi.StringPtrInput
+	// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 	// contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 	// digit.
 	Name pulumi.StringPtrInput
-	// Specifies the password for the user with 6 to 32 characters. It must contain at least
+	// Specifies the password for the user with `6` to `32` characters. It must contain at least
 	// two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 	Password pulumi.StringPtrInput
-	// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+	// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 	// together with `countryCode`.
 	Phone pulumi.StringPtrInput
 	// Specifies whether or not the password should be reset. By default, the password is asked
@@ -356,9 +409,9 @@ func (o UserOutput) ToUserOutputWithContext(ctx context.Context) UserOutput {
 }
 
 // Specifies the access type of the user. Available values are:
-// + default: support both programmatic and management console access.
-// + programmatic: only support programmatic access.
-// + console: only support management console access.
+// + **default**: support both programmatic and management console access.
+// + **programmatic**: only support programmatic access.
+// + **console**: only support management console access.
 func (o UserOutput) AccessType() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.AccessType }).(pulumi.StringOutput)
 }
@@ -379,14 +432,27 @@ func (o UserOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the email address with a maximum of 255 characters.
+// Specifies the email address with a maximum of `255` characters.
 func (o UserOutput) Email() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Email }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether the user is enabled or disabled. Valid values are `true` and `false`.
+// Specifies whether the user is enabled or disabled. Valid values are **true** and **false**.
 func (o UserOutput) Enabled() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.BoolPtrOutput { return v.Enabled }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the ID of the IAM user in the external system.
+// This parameter is used for IAM user SSO type, make sure that the **IAM_SAML_Attributes_xUserId** of the federated user
+// is the same as the `externalIdentityId` of the corresponding IAM user.
+func (o UserOutput) ExternalIdentityId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.ExternalIdentityId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the type of the IAM user in the external system.
+// Only **TenantIdp** is supported now. This parameter must be used together with `externalIdentityId`.
+func (o UserOutput) ExternalIdentityType() pulumi.StringOutput {
+	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.ExternalIdentityType }).(pulumi.StringOutput)
 }
 
 // The time when the IAM user last login.
@@ -394,14 +460,20 @@ func (o UserOutput) LastLogin() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.LastLogin }).(pulumi.StringOutput)
 }
 
-// Specifies the name of the user. The user name consists of 5 to 32 characters. It can
+// Specifies the verification method of login protect. If it is
+// empty, the login protection will be disabled.
+func (o UserOutput) LoginProtectVerificationMethod() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.LoginProtectVerificationMethod }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of the user. The user name consists of `1` to `32` characters. It can
 // contain only uppercase letters, lowercase letters, digits, spaces, and special characters (-_) and cannot start with a
 // digit.
 func (o UserOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the password for the user with 6 to 32 characters. It must contain at least
+// Specifies the password for the user with `6` to `32` characters. It must contain at least
 // two of the following character types: uppercase letters, lowercase letters, digits, and special characters.
 func (o UserOutput) Password() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Password }).(pulumi.StringPtrOutput)
@@ -412,7 +484,7 @@ func (o UserOutput) PasswordStrength() pulumi.StringOutput {
 	return o.ApplyT(func(v *User) pulumi.StringOutput { return v.PasswordStrength }).(pulumi.StringOutput)
 }
 
-// Specifies the mobile number with a maximum of 32 digits. This parameter must be used
+// Specifies the mobile number with a maximum of `32` digits. This parameter must be used
 // together with `countryCode`.
 func (o UserOutput) Phone() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *User) pulumi.StringPtrOutput { return v.Phone }).(pulumi.StringPtrOutput)

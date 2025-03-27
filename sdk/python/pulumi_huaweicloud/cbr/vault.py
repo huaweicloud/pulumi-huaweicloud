@@ -26,8 +26,10 @@ class VaultArgs:
                  backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 cloud_type: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 is_multi_az: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -43,10 +45,13 @@ class VaultArgs:
                Changing this will create a new vault.
         :param pulumi.Input[int] size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         :param pulumi.Input[str] type: Specifies the object type of the CBR vault.
-               Changing this will create a new vault. Vaild values are as follows:
-               + **server** (Cloud Servers)
-               + **disk** (EVS Disks)
-               + **turbo** (SFS Turbo file systems)
+               Changing this will create a new vault. Valid values are as follows:
+               + **server** (Elastic Cloud Server)
+               + **disk** (EVS Disk)
+               + **turbo** (SFS Turbo file system)
+               + **workspace** (Workspace Desktop)
+               + **vmware** (VMware)
+               + **file** (File System)
         :param pulumi.Input[bool] auto_bind: Specifies whether automatic association is enabled. Defaults to **false**.
         :param pulumi.Input[bool] auto_expand: Specifies to enable auto capacity expansion for the backup protection type vault.
                Defaults to **false**.
@@ -59,12 +64,15 @@ class VaultArgs:
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] cloud_type: Specifies the cloud type of the vault.  
+               Changing this will create a new vault.
         :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
-               belongs. Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+        :param pulumi.Input[bool] is_multi_az: Specifies whether multiple availability zones are used for backing up.
+               Defaults to **false**.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -80,7 +88,8 @@ class VaultArgs:
         :param pulumi.Input[str] policy_id: schema:Deprecated; Using parameter 'policy' instead.
         :param pulumi.Input[str] region: Specifies the region in which to create the CBR vault. If omitted, the
                provider-level region will be used. Changing this will create a new vault.
-        :param pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]] resources: Specifies an array of one or more resources to attach to the CBR vault.
+        :param pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]] resources: Specifies an array of one or more resources to attach to the CBR vault.  
+               This feature is not supported for the **vmware** type and the **file** type.
                The object structure is documented below.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CBR vault.
         """
@@ -104,10 +113,14 @@ class VaultArgs:
             pulumi.set(__self__, "bind_rules", bind_rules)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if cloud_type is not None:
+            pulumi.set(__self__, "cloud_type", cloud_type)
         if consistent_level is not None:
             pulumi.set(__self__, "consistent_level", consistent_level)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if is_multi_az is not None:
+            pulumi.set(__self__, "is_multi_az", is_multi_az)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -156,10 +169,13 @@ class VaultArgs:
     def type(self) -> pulumi.Input[str]:
         """
         Specifies the object type of the CBR vault.
-        Changing this will create a new vault. Vaild values are as follows:
-        + **server** (Cloud Servers)
-        + **disk** (EVS Disks)
-        + **turbo** (SFS Turbo file systems)
+        Changing this will create a new vault. Valid values are as follows:
+        + **server** (Elastic Cloud Server)
+        + **disk** (EVS Disk)
+        + **turbo** (SFS Turbo file system)
+        + **workspace** (Workspace Desktop)
+        + **vmware** (VMware)
+        + **file** (File System)
         """
         return pulumi.get(self, "type")
 
@@ -255,6 +271,19 @@ class VaultArgs:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="cloudType")
+    def cloud_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cloud type of the vault.  
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "cloud_type")
+
+    @cloud_type.setter
+    def cloud_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cloud_type", value)
+
+    @property
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> Optional[pulumi.Input[str]]:
         """
@@ -273,14 +302,26 @@ class VaultArgs:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the enterprise project to which the vault
-        belongs. Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="isMultiAz")
+    def is_multi_az(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether multiple availability zones are used for backing up.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_multi_az")
+
+    @is_multi_az.setter
+    def is_multi_az(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_multi_az", value)
 
     @property
     @pulumi.getter
@@ -367,7 +408,8 @@ class VaultArgs:
     @pulumi.getter
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]]]:
         """
-        Specifies an array of one or more resources to attach to the CBR vault.
+        Specifies an array of one or more resources to attach to the CBR vault.  
+        This feature is not supported for the **vmware** type and the **file** type.
         The object structure is documented below.
         """
         return pulumi.get(self, "resources")
@@ -400,8 +442,10 @@ class _VaultState:
                  backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 cloud_type: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 is_multi_az: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -432,12 +476,15 @@ class _VaultState:
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] cloud_type: Specifies the cloud type of the vault.  
+               Changing this will create a new vault.
         :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
-               belongs. Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+        :param pulumi.Input[bool] is_multi_az: Specifies whether multiple availability zones are used for backing up.
+               Defaults to **false**.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -456,7 +503,8 @@ class _VaultState:
                Changing this will create a new vault.
         :param pulumi.Input[str] region: Specifies the region in which to create the CBR vault. If omitted, the
                provider-level region will be used. Changing this will create a new vault.
-        :param pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]] resources: Specifies an array of one or more resources to attach to the CBR vault.
+        :param pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]] resources: Specifies an array of one or more resources to attach to the CBR vault.  
+               This feature is not supported for the **vmware** type and the **file** type.
                The object structure is documented below.
         :param pulumi.Input[int] size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         :param pulumi.Input[str] spec_code: The specification code.
@@ -464,10 +512,13 @@ class _VaultState:
         :param pulumi.Input[str] storage: The name of the bucket for the vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CBR vault.
         :param pulumi.Input[str] type: Specifies the object type of the CBR vault.
-               Changing this will create a new vault. Vaild values are as follows:
-               + **server** (Cloud Servers)
-               + **disk** (EVS Disks)
-               + **turbo** (SFS Turbo file systems)
+               Changing this will create a new vault. Valid values are as follows:
+               + **server** (Elastic Cloud Server)
+               + **disk** (EVS Disk)
+               + **turbo** (SFS Turbo file system)
+               + **workspace** (Workspace Desktop)
+               + **vmware** (VMware)
+               + **file** (File System)
         :param pulumi.Input[float] used: The used capacity, in GB.
         """
         if allocated is not None:
@@ -489,10 +540,14 @@ class _VaultState:
             pulumi.set(__self__, "bind_rules", bind_rules)
         if charging_mode is not None:
             pulumi.set(__self__, "charging_mode", charging_mode)
+        if cloud_type is not None:
+            pulumi.set(__self__, "cloud_type", cloud_type)
         if consistent_level is not None:
             pulumi.set(__self__, "consistent_level", consistent_level)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
+        if is_multi_az is not None:
+            pulumi.set(__self__, "is_multi_az", is_multi_az)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if period is not None:
@@ -624,6 +679,19 @@ class _VaultState:
         pulumi.set(self, "charging_mode", value)
 
     @property
+    @pulumi.getter(name="cloudType")
+    def cloud_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the cloud type of the vault.  
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "cloud_type")
+
+    @cloud_type.setter
+    def cloud_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "cloud_type", value)
+
+    @property
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> Optional[pulumi.Input[str]]:
         """
@@ -642,14 +710,26 @@ class _VaultState:
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ID of the enterprise project to which the vault
-        belongs. Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
 
     @enterprise_project_id.setter
     def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "enterprise_project_id", value)
+
+    @property
+    @pulumi.getter(name="isMultiAz")
+    def is_multi_az(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether multiple availability zones are used for backing up.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_multi_az")
+
+    @is_multi_az.setter
+    def is_multi_az(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "is_multi_az", value)
 
     @property
     @pulumi.getter
@@ -750,7 +830,8 @@ class _VaultState:
     @pulumi.getter
     def resources(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['VaultResourceArgs']]]]:
         """
-        Specifies an array of one or more resources to attach to the CBR vault.
+        Specifies an array of one or more resources to attach to the CBR vault.  
+        This feature is not supported for the **vmware** type and the **file** type.
         The object structure is documented below.
         """
         return pulumi.get(self, "resources")
@@ -824,10 +905,13 @@ class _VaultState:
     def type(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the object type of the CBR vault.
-        Changing this will create a new vault. Vaild values are as follows:
-        + **server** (Cloud Servers)
-        + **disk** (EVS Disks)
-        + **turbo** (SFS Turbo file systems)
+        Changing this will create a new vault. Valid values are as follows:
+        + **server** (Elastic Cloud Server)
+        + **disk** (EVS Disk)
+        + **turbo** (SFS Turbo file system)
+        + **workspace** (Workspace Desktop)
+        + **vmware** (VMware)
+        + **file** (File System)
         """
         return pulumi.get(self, "type")
 
@@ -860,8 +944,10 @@ class Vault(pulumi.CustomResource):
                  backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 cloud_type: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 is_multi_az: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -875,7 +961,7 @@ class Vault(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a CBR Vault resource within Huaweicloud.
+        Manages a CBR vault resource within HuaweiCloud.
 
         ## Example Usage
         ### Create a server type vault
@@ -900,6 +986,42 @@ class Vault(pulumi.CustomResource):
             tags={
                 "foo": "bar",
             })
+        ```
+        ### Create a server type vault and associate backup and reprecation policies
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        destination_region = config.require_object("destinationRegion")
+        destination_vault_name = config.require_object("destinationVaultName")
+        vault_name = config.require_object("vaultName")
+        backup_policy_id = config.require_object("backupPolicyId")
+        replication_policy_id = config.require_object("replicationPolicyId")
+        destination = huaweicloud.cbr.Vault("destination",
+            region=destination_region,
+            type="server",
+            protection_type="replication",
+            size=500)
+        test = huaweicloud.cbr.Vault("test",
+            type="server",
+            protection_type="backup",
+            consistent_level="crash_consistent",
+            size=500,
+            auto_bind=True,
+            bind_rules={
+                "service_name": "xxx",
+            },
+            policies=[
+                huaweicloud.cbr.VaultPolicyArgs(
+                    id=backup_policy_id,
+                ),
+                huaweicloud.cbr.VaultPolicyArgs(
+                    id=replication_policy_id,
+                    destination_vault_id=destination.id,
+                ),
+            ])
         ```
         ### Create a disk type vault
 
@@ -955,16 +1077,58 @@ class Vault(pulumi.CustomResource):
             protection_type="replication",
             size=1000)
         ```
+        ### Create a Workspace type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="workspace",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
+        ### Create a VMware type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="vmware",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
+        ### Create a file type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="file",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
 
         ## Import
 
-        Vaults can be imported by their `id`. For example,
+        Vaults can be imported by their `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Cbr/vault:Vault test 01c33779-7c83-4182-8b6b-24a671fcedf8
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. resource "huaweicloud_cbr_vault" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. hcl resource "huaweicloud_cbr_vault" "test" {
 
          ...
 
@@ -992,12 +1156,15 @@ class Vault(pulumi.CustomResource):
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] cloud_type: Specifies the cloud type of the vault.  
+               Changing this will create a new vault.
         :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
-               belongs. Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+        :param pulumi.Input[bool] is_multi_az: Specifies whether multiple availability zones are used for backing up.
+               Defaults to **false**.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -1016,15 +1183,19 @@ class Vault(pulumi.CustomResource):
                Changing this will create a new vault.
         :param pulumi.Input[str] region: Specifies the region in which to create the CBR vault. If omitted, the
                provider-level region will be used. Changing this will create a new vault.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultResourceArgs']]]] resources: Specifies an array of one or more resources to attach to the CBR vault.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultResourceArgs']]]] resources: Specifies an array of one or more resources to attach to the CBR vault.  
+               This feature is not supported for the **vmware** type and the **file** type.
                The object structure is documented below.
         :param pulumi.Input[int] size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CBR vault.
         :param pulumi.Input[str] type: Specifies the object type of the CBR vault.
-               Changing this will create a new vault. Vaild values are as follows:
-               + **server** (Cloud Servers)
-               + **disk** (EVS Disks)
-               + **turbo** (SFS Turbo file systems)
+               Changing this will create a new vault. Valid values are as follows:
+               + **server** (Elastic Cloud Server)
+               + **disk** (EVS Disk)
+               + **turbo** (SFS Turbo file system)
+               + **workspace** (Workspace Desktop)
+               + **vmware** (VMware)
+               + **file** (File System)
         """
         ...
     @overload
@@ -1033,7 +1204,7 @@ class Vault(pulumi.CustomResource):
                  args: VaultArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a CBR Vault resource within Huaweicloud.
+        Manages a CBR vault resource within HuaweiCloud.
 
         ## Example Usage
         ### Create a server type vault
@@ -1058,6 +1229,42 @@ class Vault(pulumi.CustomResource):
             tags={
                 "foo": "bar",
             })
+        ```
+        ### Create a server type vault and associate backup and reprecation policies
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        destination_region = config.require_object("destinationRegion")
+        destination_vault_name = config.require_object("destinationVaultName")
+        vault_name = config.require_object("vaultName")
+        backup_policy_id = config.require_object("backupPolicyId")
+        replication_policy_id = config.require_object("replicationPolicyId")
+        destination = huaweicloud.cbr.Vault("destination",
+            region=destination_region,
+            type="server",
+            protection_type="replication",
+            size=500)
+        test = huaweicloud.cbr.Vault("test",
+            type="server",
+            protection_type="backup",
+            consistent_level="crash_consistent",
+            size=500,
+            auto_bind=True,
+            bind_rules={
+                "service_name": "xxx",
+            },
+            policies=[
+                huaweicloud.cbr.VaultPolicyArgs(
+                    id=backup_policy_id,
+                ),
+                huaweicloud.cbr.VaultPolicyArgs(
+                    id=replication_policy_id,
+                    destination_vault_id=destination.id,
+                ),
+            ])
         ```
         ### Create a disk type vault
 
@@ -1113,16 +1320,58 @@ class Vault(pulumi.CustomResource):
             protection_type="replication",
             size=1000)
         ```
+        ### Create a Workspace type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="workspace",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
+        ### Create a VMware type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="vmware",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
+        ### Create a file type vault
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        vault_name = config.require_object("vaultName")
+        test = huaweicloud.cbr.Vault("test",
+            type="file",
+            protection_type="backup",
+            size=100,
+            consistent_level="crash_consistent")
+        ```
 
         ## Import
 
-        Vaults can be imported by their `id`. For example,
+        Vaults can be imported by their `id`. For example, bash
 
         ```sh
          $ pulumi import huaweicloud:Cbr/vault:Vault test 01c33779-7c83-4182-8b6b-24a671fcedf8
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. resource "huaweicloud_cbr_vault" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a vault. You can then decide if changes should be applied to the vault, or the resource definition should be updated to align with the vault. Also you can ignore changes as below. hcl resource "huaweicloud_cbr_vault" "test" {
 
          ...
 
@@ -1158,8 +1407,10 @@ class Vault(pulumi.CustomResource):
                  backup_name_prefix: Optional[pulumi.Input[str]] = None,
                  bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
+                 cloud_type: Optional[pulumi.Input[str]] = None,
                  consistent_level: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
+                 is_multi_az: Optional[pulumi.Input[bool]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
@@ -1190,8 +1441,10 @@ class Vault(pulumi.CustomResource):
             __props__.__dict__["backup_name_prefix"] = backup_name_prefix
             __props__.__dict__["bind_rules"] = bind_rules
             __props__.__dict__["charging_mode"] = charging_mode
+            __props__.__dict__["cloud_type"] = cloud_type
             __props__.__dict__["consistent_level"] = consistent_level
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+            __props__.__dict__["is_multi_az"] = is_multi_az
             __props__.__dict__["name"] = name
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
@@ -1232,8 +1485,10 @@ class Vault(pulumi.CustomResource):
             backup_name_prefix: Optional[pulumi.Input[str]] = None,
             bind_rules: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
+            cloud_type: Optional[pulumi.Input[str]] = None,
             consistent_level: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
+            is_multi_az: Optional[pulumi.Input[bool]] = None,
             name: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
@@ -1269,12 +1524,15 @@ class Vault(pulumi.CustomResource):
                The valid values are as follows:
                + **prePaid**: the yearly/monthly billing mode.
                + **postPaid**: the pay-per-use billing mode.
+        :param pulumi.Input[str] cloud_type: Specifies the cloud type of the vault.  
+               Changing this will create a new vault.
         :param pulumi.Input[str] consistent_level: Specifies the consistent level (specification) of the vault.
                The valid values are as follows:
                + **[crash_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
                + **[app_consistent](https://support.huaweicloud.com/intl/en-us/usermanual-cbr/cbr_03_0109.html)**
-        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault
-               belongs. Changing this will create a new vault.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the ID of the enterprise project to which the vault belongs.
+        :param pulumi.Input[bool] is_multi_az: Specifies whether multiple availability zones are used for backing up.
+               Defaults to **false**.
         :param pulumi.Input[str] name: Specifies a unique name of the CBR vault. This parameter can contain a maximum of 64
                characters, which may consist of letters, digits, underscores(_) and hyphens (-).
         :param pulumi.Input[int] period: Specifies the charging period of the vault.
@@ -1293,7 +1551,8 @@ class Vault(pulumi.CustomResource):
                Changing this will create a new vault.
         :param pulumi.Input[str] region: Specifies the region in which to create the CBR vault. If omitted, the
                provider-level region will be used. Changing this will create a new vault.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultResourceArgs']]]] resources: Specifies an array of one or more resources to attach to the CBR vault.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['VaultResourceArgs']]]] resources: Specifies an array of one or more resources to attach to the CBR vault.  
+               This feature is not supported for the **vmware** type and the **file** type.
                The object structure is documented below.
         :param pulumi.Input[int] size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
         :param pulumi.Input[str] spec_code: The specification code.
@@ -1301,10 +1560,13 @@ class Vault(pulumi.CustomResource):
         :param pulumi.Input[str] storage: The name of the bucket for the vault.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the CBR vault.
         :param pulumi.Input[str] type: Specifies the object type of the CBR vault.
-               Changing this will create a new vault. Vaild values are as follows:
-               + **server** (Cloud Servers)
-               + **disk** (EVS Disks)
-               + **turbo** (SFS Turbo file systems)
+               Changing this will create a new vault. Valid values are as follows:
+               + **server** (Elastic Cloud Server)
+               + **disk** (EVS Disk)
+               + **turbo** (SFS Turbo file system)
+               + **workspace** (Workspace Desktop)
+               + **vmware** (VMware)
+               + **file** (File System)
         :param pulumi.Input[float] used: The used capacity, in GB.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1319,8 +1581,10 @@ class Vault(pulumi.CustomResource):
         __props__.__dict__["backup_name_prefix"] = backup_name_prefix
         __props__.__dict__["bind_rules"] = bind_rules
         __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["cloud_type"] = cloud_type
         __props__.__dict__["consistent_level"] = consistent_level
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
+        __props__.__dict__["is_multi_az"] = is_multi_az
         __props__.__dict__["name"] = name
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
@@ -1406,6 +1670,15 @@ class Vault(pulumi.CustomResource):
         return pulumi.get(self, "charging_mode")
 
     @property
+    @pulumi.getter(name="cloudType")
+    def cloud_type(self) -> pulumi.Output[str]:
+        """
+        Specifies the cloud type of the vault.  
+        Changing this will create a new vault.
+        """
+        return pulumi.get(self, "cloud_type")
+
+    @property
     @pulumi.getter(name="consistentLevel")
     def consistent_level(self) -> pulumi.Output[Optional[str]]:
         """
@@ -1420,10 +1693,18 @@ class Vault(pulumi.CustomResource):
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[str]:
         """
-        Specifies the ID of the enterprise project to which the vault
-        belongs. Changing this will create a new vault.
+        Specifies the ID of the enterprise project to which the vault belongs.
         """
         return pulumi.get(self, "enterprise_project_id")
+
+    @property
+    @pulumi.getter(name="isMultiAz")
+    def is_multi_az(self) -> pulumi.Output[bool]:
+        """
+        Specifies whether multiple availability zones are used for backing up.
+        Defaults to **false**.
+        """
+        return pulumi.get(self, "is_multi_az")
 
     @property
     @pulumi.getter
@@ -1496,7 +1777,8 @@ class Vault(pulumi.CustomResource):
     @pulumi.getter
     def resources(self) -> pulumi.Output[Sequence['outputs.VaultResource']]:
         """
-        Specifies an array of one or more resources to attach to the CBR vault.
+        Specifies an array of one or more resources to attach to the CBR vault.  
+        This feature is not supported for the **vmware** type and the **file** type.
         The object structure is documented below.
         """
         return pulumi.get(self, "resources")
@@ -1546,10 +1828,13 @@ class Vault(pulumi.CustomResource):
     def type(self) -> pulumi.Output[str]:
         """
         Specifies the object type of the CBR vault.
-        Changing this will create a new vault. Vaild values are as follows:
-        + **server** (Cloud Servers)
-        + **disk** (EVS Disks)
-        + **turbo** (SFS Turbo file systems)
+        Changing this will create a new vault. Valid values are as follows:
+        + **server** (Elastic Cloud Server)
+        + **disk** (EVS Disk)
+        + **turbo** (SFS Turbo file system)
+        + **workspace** (Workspace Desktop)
+        + **vmware** (VMware)
+        + **file** (File System)
         """
         return pulumi.get(self, "type")
 

@@ -11,10 +11,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// GaussDB for Cassandra instance management within HuaweiCoud.
+// GeminiDB Cassandra instance management within HuaweiCould.
 //
 // ## Example Usage
-// ### create a gaussdb for cassandra instance with tags
+// ### create a geminidb cassandra instance with tags
 //
 // ```go
 // package main
@@ -49,7 +49,7 @@ import (
 //	}
 //
 // ```
-// ### create a gaussdb cassandra instance with backup strategy
+// ### create a geminidb cassandra instance with backup strategy
 //
 // ```go
 // package main
@@ -88,7 +88,7 @@ import (
 //
 // ## Import
 //
-// GaussDB Cassandra instance can be imported using the `id`, e.g.
+// GaussDB Cassandra instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -99,7 +99,7 @@ type CassandraInstance struct {
 	pulumi.CustomResourceState
 
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the AZ name. For a three-AZ deployment instance,
 	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
@@ -107,8 +107,8 @@ type CassandraInstance struct {
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyOutput `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrOutput `pulumi:"chargingMode"`
 	// Specifies the Parameter Template ID.
 	ConfigurationId pulumi.StringOutput `pulumi:"configurationId"`
@@ -120,11 +120,11 @@ type CassandraInstance struct {
 	// Specifies the dedicated resource ID. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceId pulumi.StringOutput `pulumi:"dedicatedResourceId"`
-	// Specifies the dedicated resource name. Changing this parameter
-	// will create a new resource.
+	// Specifies the dedicated resource name.
+	// Changing this parameter will create a new resource.
 	DedicatedResourceName pulumi.StringOutput `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-geminidb/geminidb_01_0006.html)
@@ -139,24 +139,25 @@ type CassandraInstance struct {
 	// Indicates the instance type.
 	Mode pulumi.StringOutput `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name pulumi.StringOutput `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 	NodeNum pulumi.IntPtrOutput `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes CassandraInstanceNodeArrayOutput `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringOutput `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Indicates the database port.
@@ -169,7 +170,7 @@ type CassandraInstance struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrOutput `pulumi:"securityGroupId"`
-	// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+	// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 	// parameter will create a new resource.
 	Ssl pulumi.BoolPtrOutput `pulumi:"ssl"`
 	// Indicates the node status.
@@ -237,7 +238,7 @@ func GetCassandraInstance(ctx *pulumi.Context,
 // Input properties used for looking up and filtering CassandraInstance resources.
 type cassandraInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. For a three-AZ deployment instance,
 	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
@@ -245,8 +246,8 @@ type cassandraInstanceState struct {
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *CassandraInstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the Parameter Template ID.
 	ConfigurationId *string `pulumi:"configurationId"`
@@ -258,11 +259,11 @@ type cassandraInstanceState struct {
 	// Specifies the dedicated resource ID. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceId *string `pulumi:"dedicatedResourceId"`
-	// Specifies the dedicated resource name. Changing this parameter
-	// will create a new resource.
+	// Specifies the dedicated resource name.
+	// Changing this parameter will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-geminidb/geminidb_01_0006.html)
@@ -277,24 +278,25 @@ type cassandraInstanceState struct {
 	// Indicates the instance type.
 	Mode *string `pulumi:"mode"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes []CassandraInstanceNode `pulumi:"nodes"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password *string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Indicates the database port.
@@ -307,7 +309,7 @@ type cassandraInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
-	// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+	// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 	// parameter will create a new resource.
 	Ssl *bool `pulumi:"ssl"`
 	// Indicates the node status.
@@ -328,7 +330,7 @@ type cassandraInstanceState struct {
 
 type CassandraInstanceState struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. For a three-AZ deployment instance,
 	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
@@ -336,8 +338,8 @@ type CassandraInstanceState struct {
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the Parameter Template ID.
 	ConfigurationId pulumi.StringPtrInput
@@ -349,11 +351,11 @@ type CassandraInstanceState struct {
 	// Specifies the dedicated resource ID. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceId pulumi.StringPtrInput
-	// Specifies the dedicated resource name. Changing this parameter
-	// will create a new resource.
+	// Specifies the dedicated resource name.
+	// Changing this parameter will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-geminidb/geminidb_01_0006.html)
@@ -368,24 +370,25 @@ type CassandraInstanceState struct {
 	// Indicates the instance type.
 	Mode pulumi.StringPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
 	// Indicates the instance nodes information. Structure is documented below.
 	Nodes CassandraInstanceNodeArrayInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringPtrInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrInput
 	// Indicates the database port.
@@ -398,7 +401,7 @@ type CassandraInstanceState struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
-	// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+	// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 	// parameter will create a new resource.
 	Ssl pulumi.BoolPtrInput
 	// Indicates the node status.
@@ -423,7 +426,7 @@ func (CassandraInstanceState) ElementType() reflect.Type {
 
 type cassandraInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. For a three-AZ deployment instance,
 	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
@@ -431,8 +434,8 @@ type cassandraInstanceArgs struct {
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy *CassandraInstanceBackupStrategy `pulumi:"backupStrategy"`
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode *string `pulumi:"chargingMode"`
 	// Specifies the Parameter Template ID.
 	ConfigurationId *string `pulumi:"configurationId"`
@@ -442,11 +445,11 @@ type cassandraInstanceArgs struct {
 	// Specifies the dedicated resource ID. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceId *string `pulumi:"dedicatedResourceId"`
-	// Specifies the dedicated resource name. Changing this parameter
-	// will create a new resource.
+	// Specifies the dedicated resource name.
+	// Changing this parameter will create a new resource.
 	DedicatedResourceName *string `pulumi:"dedicatedResourceName"`
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-geminidb/geminidb_01_0006.html)
@@ -455,22 +458,23 @@ type cassandraInstanceArgs struct {
 	// existed.
 	ForceImport *bool `pulumi:"forceImport"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
-	// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 	NodeNum *int `pulumi:"nodeNum"`
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password string `pulumi:"password"`
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// The region in which to create the Cassandra instance resource. If omitted, the
@@ -479,7 +483,7 @@ type cassandraInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
-	// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+	// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 	// parameter will create a new resource.
 	Ssl *bool `pulumi:"ssl"`
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -499,7 +503,7 @@ type cassandraInstanceArgs struct {
 // The set of arguments for constructing a CassandraInstance resource.
 type CassandraInstanceArgs struct {
 	// Specifies whether auto renew is enabled.
-	// Valid values are "true" and "false".
+	// Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. For a three-AZ deployment instance,
 	// use commas (,) to separate the AZs, for example, `cn-north-4a,cn-north-4b,cn-north-4c`.
@@ -507,8 +511,8 @@ type CassandraInstanceArgs struct {
 	AvailabilityZone pulumi.StringInput
 	// Specifies the advanced backup policy. Structure is documented below.
 	BackupStrategy CassandraInstanceBackupStrategyPtrInput
-	// Specifies the charging mode of the instance. Valid values are *prePaid*
-	// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+	// Specifies the charging mode of the instance. Valid values are **prePaid**
+	// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 	ChargingMode pulumi.StringPtrInput
 	// Specifies the Parameter Template ID.
 	ConfigurationId pulumi.StringPtrInput
@@ -518,11 +522,11 @@ type CassandraInstanceArgs struct {
 	// Specifies the dedicated resource ID. Changing this parameter
 	// will create a new resource.
 	DedicatedResourceId pulumi.StringPtrInput
-	// Specifies the dedicated resource name. Changing this parameter
-	// will create a new resource.
+	// Specifies the dedicated resource name.
+	// Changing this parameter will create a new resource.
 	DedicatedResourceName pulumi.StringPtrInput
 	// Specifies the enterprise project id, Only valid for users who
-	// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+	// have enabled the enterprise multi-project service.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the instance specifications. For details,
 	// see [DB Instance Specifications](https://support.huaweicloud.com/intl/en-us/productdesc-geminidb/geminidb_01_0006.html)
@@ -531,22 +535,23 @@ type CassandraInstanceArgs struct {
 	// existed.
 	ForceImport pulumi.BoolPtrInput
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput
-	// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+	// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 	NodeNum pulumi.IntPtrInput
-	// Specifies the database password. The value must be 8 to 32 characters in length,
+	// Specifies the database password. The value must be `8` to `32` characters in length,
 	// including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 	// enter a strong password to improve security, preventing security risks such as brute force cracking.
 	Password pulumi.StringInput
-	// Specifies the charging period of the instance.
-	// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-	// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-	// do nothing.
+	// Specifies the charging period of the instance.\
+	// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+	// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+	// Changing this will do nothing.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the instance.
-	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+	// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 	// Changing this will do nothing.
 	PeriodUnit pulumi.StringPtrInput
 	// The region in which to create the Cassandra instance resource. If omitted, the
@@ -555,7 +560,7 @@ type CassandraInstanceArgs struct {
 	// Specifies the security group ID. Required if the selected subnet doesn't
 	// enable network ACL.
 	SecurityGroupId pulumi.StringPtrInput
-	// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+	// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 	// parameter will create a new resource.
 	Ssl pulumi.BoolPtrInput
 	// Specifies the network ID of a subnet. Changing this parameter will create a
@@ -660,7 +665,7 @@ func (o CassandraInstanceOutput) ToCassandraInstanceOutputWithContext(ctx contex
 }
 
 // Specifies whether auto renew is enabled.
-// Valid values are "true" and "false".
+// Valid values are **true** and **false**.
 func (o CassandraInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -677,8 +682,8 @@ func (o CassandraInstanceOutput) BackupStrategy() CassandraInstanceBackupStrateg
 	return o.ApplyT(func(v *CassandraInstance) CassandraInstanceBackupStrategyOutput { return v.BackupStrategy }).(CassandraInstanceBackupStrategyOutput)
 }
 
-// Specifies the charging mode of the instance. Valid values are *prePaid*
-// and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+// Specifies the charging mode of the instance. Valid values are **prePaid**
+// and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
 func (o CassandraInstanceOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.ChargingMode }).(pulumi.StringPtrOutput)
 }
@@ -705,14 +710,14 @@ func (o CassandraInstanceOutput) DedicatedResourceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.DedicatedResourceId }).(pulumi.StringOutput)
 }
 
-// Specifies the dedicated resource name. Changing this parameter
-// will create a new resource.
+// Specifies the dedicated resource name.
+// Changing this parameter will create a new resource.
 func (o CassandraInstanceOutput) DedicatedResourceName() pulumi.StringOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.DedicatedResourceName }).(pulumi.StringOutput)
 }
 
 // Specifies the enterprise project id, Only valid for users who
-// have enabled the enterprise multi-project service. Changing this parameter will create a new resource.
+// have enabled the enterprise multi-project service.
 func (o CassandraInstanceOutput) EnterpriseProjectId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.EnterpriseProjectId }).(pulumi.StringPtrOutput)
 }
@@ -745,13 +750,13 @@ func (o CassandraInstanceOutput) Mode() pulumi.StringOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 // digits, hyphens (-), and underscores (_).
 func (o CassandraInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies the number of nodes, ranges from 3 to 12. Defaults to 3.
+// Specifies the number of nodes, ranges from `3` to `200`. Defaults to `3`.
 func (o CassandraInstanceOutput) NodeNum() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.IntPtrOutput { return v.NodeNum }).(pulumi.IntPtrOutput)
 }
@@ -761,23 +766,24 @@ func (o CassandraInstanceOutput) Nodes() CassandraInstanceNodeArrayOutput {
 	return o.ApplyT(func(v *CassandraInstance) CassandraInstanceNodeArrayOutput { return v.Nodes }).(CassandraInstanceNodeArrayOutput)
 }
 
-// Specifies the database password. The value must be 8 to 32 characters in length,
+// Specifies the database password. The value must be `8` to `32` characters in length,
 // including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
 // enter a strong password to improve security, preventing security risks such as brute force cracking.
 func (o CassandraInstanceOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }
 
-// Specifies the charging period of the instance.
-// If `periodUnit` is set to *month* , the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value
-// ranges from 1 to 3. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this will
-// do nothing.
+// Specifies the charging period of the instance.\
+// If `periodUnit` is set to **month** , the value ranges from `1` to `9`.
+// If `periodUnit` is set to **year**, the value ranges from `1` to `3`.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**.
+// Changing this will do nothing.
 func (o CassandraInstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the charging period unit of the instance.
-// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*.
+// Valid values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to **prePaid**.
 // Changing this will do nothing.
 func (o CassandraInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
@@ -805,7 +811,7 @@ func (o CassandraInstanceOutput) SecurityGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.StringPtrOutput { return v.SecurityGroupId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to enable or disable SSL. Defaults to false. Changing this
+// Specifies whether to enable or disable SSL. Defaults to **false**. Changing this
 // parameter will create a new resource.
 func (o CassandraInstanceOutput) Ssl() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *CassandraInstance) pulumi.BoolPtrOutput { return v.Ssl }).(pulumi.BoolPtrOutput)

@@ -377,7 +377,7 @@ type CassandraInstanceNode struct {
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -403,7 +403,7 @@ type CassandraInstanceNodeArgs struct {
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -471,7 +471,7 @@ func (o CassandraInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 // digits, hyphens (-), and underscores (_).
 func (o CassandraInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v CassandraInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
@@ -514,7 +514,7 @@ func (o CassandraInstanceNodeArrayOutput) Index(i pulumi.IntInput) CassandraInst
 
 type InfluxInstanceBackupStrategy struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+	// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 	// transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays *int `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
@@ -537,7 +537,7 @@ type InfluxInstanceBackupStrategyInput interface {
 
 type InfluxInstanceBackupStrategyArgs struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+	// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 	// transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
@@ -625,7 +625,7 @@ func (o InfluxInstanceBackupStrategyOutput) ToInfluxInstanceBackupStrategyPtrOut
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 // transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o InfluxInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v InfluxInstanceBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
@@ -664,7 +664,7 @@ func (o InfluxInstanceBackupStrategyPtrOutput) Elem() InfluxInstanceBackupStrate
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 // transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o InfluxInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *InfluxInstanceBackupStrategy) *int {
@@ -879,7 +879,7 @@ type InfluxInstanceNode struct {
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -905,7 +905,7 @@ type InfluxInstanceNodeArgs struct {
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -973,7 +973,7 @@ func (o InfluxInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The
-// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 // letters, digits, hyphens (-), and underscores (_).
 func (o InfluxInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v InfluxInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
@@ -1016,7 +1016,7 @@ func (o InfluxInstanceNodeArrayOutput) Index(i pulumi.IntInput) InfluxInstanceNo
 
 type MongoInstanceBackupStrategy struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+	// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 	// transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays *int `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
@@ -1039,7 +1039,7 @@ type MongoInstanceBackupStrategyInput interface {
 
 type MongoInstanceBackupStrategyArgs struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+	// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 	// transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
@@ -1127,7 +1127,7 @@ func (o MongoInstanceBackupStrategyOutput) ToMongoInstanceBackupStrategyPtrOutpu
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 // transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o MongoInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v MongoInstanceBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
@@ -1166,7 +1166,7 @@ func (o MongoInstanceBackupStrategyPtrOutput) Elem() MongoInstanceBackupStrategy
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// **0** to **35**. If this parameter is set to **0**, the automated backup policy is not set. If this parameter is not
+// `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not
 // transferred, the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o MongoInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *MongoInstanceBackupStrategy) *int {
@@ -1369,7 +1369,7 @@ type MongoInstanceNode struct {
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -1395,7 +1395,7 @@ type MongoInstanceNodeArgs struct {
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The
-	// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+	// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 	// letters, digits, hyphens (-), and underscores (_).
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -1463,7 +1463,7 @@ func (o MongoInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The
-// value must be **4** to **64** characters in length and start with a letter. It is case-sensitive and can contain only
+// value must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only
 // letters, digits, hyphens (-), and underscores (_).
 func (o MongoInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v MongoInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
@@ -1504,15 +1504,179 @@ func (o MongoInstanceNodeArrayOutput) Index(i pulumi.IntInput) MongoInstanceNode
 	}).(MongoInstanceNodeOutput)
 }
 
+type RedisInstanceAvailabilityZoneDetail struct {
+	// Specifies the primary AZ, it must be a single AZ and be
+	// different from the standby AZ. Changing this parameter will create a new resource.
+	PrimaryAvailabilityZone string `pulumi:"primaryAvailabilityZone"`
+	// Specifies the standby AZ, it must be a single AZ and be
+	// different from the primary AZ. Changing this parameter will create a new resource.
+	SecondaryAvailabilityZone string `pulumi:"secondaryAvailabilityZone"`
+}
+
+// RedisInstanceAvailabilityZoneDetailInput is an input type that accepts RedisInstanceAvailabilityZoneDetailArgs and RedisInstanceAvailabilityZoneDetailOutput values.
+// You can construct a concrete instance of `RedisInstanceAvailabilityZoneDetailInput` via:
+//
+//	RedisInstanceAvailabilityZoneDetailArgs{...}
+type RedisInstanceAvailabilityZoneDetailInput interface {
+	pulumi.Input
+
+	ToRedisInstanceAvailabilityZoneDetailOutput() RedisInstanceAvailabilityZoneDetailOutput
+	ToRedisInstanceAvailabilityZoneDetailOutputWithContext(context.Context) RedisInstanceAvailabilityZoneDetailOutput
+}
+
+type RedisInstanceAvailabilityZoneDetailArgs struct {
+	// Specifies the primary AZ, it must be a single AZ and be
+	// different from the standby AZ. Changing this parameter will create a new resource.
+	PrimaryAvailabilityZone pulumi.StringInput `pulumi:"primaryAvailabilityZone"`
+	// Specifies the standby AZ, it must be a single AZ and be
+	// different from the primary AZ. Changing this parameter will create a new resource.
+	SecondaryAvailabilityZone pulumi.StringInput `pulumi:"secondaryAvailabilityZone"`
+}
+
+func (RedisInstanceAvailabilityZoneDetailArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*RedisInstanceAvailabilityZoneDetail)(nil)).Elem()
+}
+
+func (i RedisInstanceAvailabilityZoneDetailArgs) ToRedisInstanceAvailabilityZoneDetailOutput() RedisInstanceAvailabilityZoneDetailOutput {
+	return i.ToRedisInstanceAvailabilityZoneDetailOutputWithContext(context.Background())
+}
+
+func (i RedisInstanceAvailabilityZoneDetailArgs) ToRedisInstanceAvailabilityZoneDetailOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(RedisInstanceAvailabilityZoneDetailOutput)
+}
+
+func (i RedisInstanceAvailabilityZoneDetailArgs) ToRedisInstanceAvailabilityZoneDetailPtrOutput() RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return i.ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(context.Background())
+}
+
+func (i RedisInstanceAvailabilityZoneDetailArgs) ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(RedisInstanceAvailabilityZoneDetailOutput).ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(ctx)
+}
+
+// RedisInstanceAvailabilityZoneDetailPtrInput is an input type that accepts RedisInstanceAvailabilityZoneDetailArgs, RedisInstanceAvailabilityZoneDetailPtr and RedisInstanceAvailabilityZoneDetailPtrOutput values.
+// You can construct a concrete instance of `RedisInstanceAvailabilityZoneDetailPtrInput` via:
+//
+//	        RedisInstanceAvailabilityZoneDetailArgs{...}
+//
+//	or:
+//
+//	        nil
+type RedisInstanceAvailabilityZoneDetailPtrInput interface {
+	pulumi.Input
+
+	ToRedisInstanceAvailabilityZoneDetailPtrOutput() RedisInstanceAvailabilityZoneDetailPtrOutput
+	ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(context.Context) RedisInstanceAvailabilityZoneDetailPtrOutput
+}
+
+type redisInstanceAvailabilityZoneDetailPtrType RedisInstanceAvailabilityZoneDetailArgs
+
+func RedisInstanceAvailabilityZoneDetailPtr(v *RedisInstanceAvailabilityZoneDetailArgs) RedisInstanceAvailabilityZoneDetailPtrInput {
+	return (*redisInstanceAvailabilityZoneDetailPtrType)(v)
+}
+
+func (*redisInstanceAvailabilityZoneDetailPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**RedisInstanceAvailabilityZoneDetail)(nil)).Elem()
+}
+
+func (i *redisInstanceAvailabilityZoneDetailPtrType) ToRedisInstanceAvailabilityZoneDetailPtrOutput() RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return i.ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(context.Background())
+}
+
+func (i *redisInstanceAvailabilityZoneDetailPtrType) ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(RedisInstanceAvailabilityZoneDetailPtrOutput)
+}
+
+type RedisInstanceAvailabilityZoneDetailOutput struct{ *pulumi.OutputState }
+
+func (RedisInstanceAvailabilityZoneDetailOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*RedisInstanceAvailabilityZoneDetail)(nil)).Elem()
+}
+
+func (o RedisInstanceAvailabilityZoneDetailOutput) ToRedisInstanceAvailabilityZoneDetailOutput() RedisInstanceAvailabilityZoneDetailOutput {
+	return o
+}
+
+func (o RedisInstanceAvailabilityZoneDetailOutput) ToRedisInstanceAvailabilityZoneDetailOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailOutput {
+	return o
+}
+
+func (o RedisInstanceAvailabilityZoneDetailOutput) ToRedisInstanceAvailabilityZoneDetailPtrOutput() RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return o.ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(context.Background())
+}
+
+func (o RedisInstanceAvailabilityZoneDetailOutput) ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v RedisInstanceAvailabilityZoneDetail) *RedisInstanceAvailabilityZoneDetail {
+		return &v
+	}).(RedisInstanceAvailabilityZoneDetailPtrOutput)
+}
+
+// Specifies the primary AZ, it must be a single AZ and be
+// different from the standby AZ. Changing this parameter will create a new resource.
+func (o RedisInstanceAvailabilityZoneDetailOutput) PrimaryAvailabilityZone() pulumi.StringOutput {
+	return o.ApplyT(func(v RedisInstanceAvailabilityZoneDetail) string { return v.PrimaryAvailabilityZone }).(pulumi.StringOutput)
+}
+
+// Specifies the standby AZ, it must be a single AZ and be
+// different from the primary AZ. Changing this parameter will create a new resource.
+func (o RedisInstanceAvailabilityZoneDetailOutput) SecondaryAvailabilityZone() pulumi.StringOutput {
+	return o.ApplyT(func(v RedisInstanceAvailabilityZoneDetail) string { return v.SecondaryAvailabilityZone }).(pulumi.StringOutput)
+}
+
+type RedisInstanceAvailabilityZoneDetailPtrOutput struct{ *pulumi.OutputState }
+
+func (RedisInstanceAvailabilityZoneDetailPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**RedisInstanceAvailabilityZoneDetail)(nil)).Elem()
+}
+
+func (o RedisInstanceAvailabilityZoneDetailPtrOutput) ToRedisInstanceAvailabilityZoneDetailPtrOutput() RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return o
+}
+
+func (o RedisInstanceAvailabilityZoneDetailPtrOutput) ToRedisInstanceAvailabilityZoneDetailPtrOutputWithContext(ctx context.Context) RedisInstanceAvailabilityZoneDetailPtrOutput {
+	return o
+}
+
+func (o RedisInstanceAvailabilityZoneDetailPtrOutput) Elem() RedisInstanceAvailabilityZoneDetailOutput {
+	return o.ApplyT(func(v *RedisInstanceAvailabilityZoneDetail) RedisInstanceAvailabilityZoneDetail {
+		if v != nil {
+			return *v
+		}
+		var ret RedisInstanceAvailabilityZoneDetail
+		return ret
+	}).(RedisInstanceAvailabilityZoneDetailOutput)
+}
+
+// Specifies the primary AZ, it must be a single AZ and be
+// different from the standby AZ. Changing this parameter will create a new resource.
+func (o RedisInstanceAvailabilityZoneDetailPtrOutput) PrimaryAvailabilityZone() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RedisInstanceAvailabilityZoneDetail) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.PrimaryAvailabilityZone
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the standby AZ, it must be a single AZ and be
+// different from the primary AZ. Changing this parameter will create a new resource.
+func (o RedisInstanceAvailabilityZoneDetailPtrOutput) SecondaryAvailabilityZone() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *RedisInstanceAvailabilityZoneDetail) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.SecondaryAvailabilityZone
+	}).(pulumi.StringPtrOutput)
+}
+
 type RedisInstanceBackupStrategy struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+	// 0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
 	// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays *int `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-	// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-	// value: 08:00-09:00, 03:00-04:00.
+	// HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+	// value: **08:00-09:00**, **03:00-04:00**.
 	StartTime string `pulumi:"startTime"`
 }
 
@@ -1529,13 +1693,13 @@ type RedisInstanceBackupStrategyInput interface {
 
 type RedisInstanceBackupStrategyArgs struct {
 	// Specifies the number of days to retain the generated backup files. The value ranges from
-	// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+	// 0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
 	// the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 	KeepDays pulumi.IntPtrInput `pulumi:"keepDays"`
 	// Specifies the backup time window. Automated backups will be triggered during the
 	// backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-	// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-	// value: 08:00-09:00, 03:00-04:00.
+	// HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+	// value: **08:00-09:00**, **03:00-04:00**.
 	StartTime pulumi.StringInput `pulumi:"startTime"`
 }
 
@@ -1617,7 +1781,7 @@ func (o RedisInstanceBackupStrategyOutput) ToRedisInstanceBackupStrategyPtrOutpu
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+// 0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
 // the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o RedisInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v RedisInstanceBackupStrategy) *int { return v.KeepDays }).(pulumi.IntPtrOutput)
@@ -1625,8 +1789,8 @@ func (o RedisInstanceBackupStrategyOutput) KeepDays() pulumi.IntPtrOutput {
 
 // Specifies the backup time window. Automated backups will be triggered during the
 // backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-// value: 08:00-09:00, 03:00-04:00.
+// HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+// value: **08:00-09:00**, **03:00-04:00**.
 func (o RedisInstanceBackupStrategyOutput) StartTime() pulumi.StringOutput {
 	return o.ApplyT(func(v RedisInstanceBackupStrategy) string { return v.StartTime }).(pulumi.StringOutput)
 }
@@ -1656,7 +1820,7 @@ func (o RedisInstanceBackupStrategyPtrOutput) Elem() RedisInstanceBackupStrategy
 }
 
 // Specifies the number of days to retain the generated backup files. The value ranges from
-// 0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
+// 0 to 35. If this parameter is set to `0`, the automated backup policy is not set. If this parameter is not transferred,
 // the automated backup policy is enabled by default. Backup files are stored for seven days by default.
 func (o RedisInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *RedisInstanceBackupStrategy) *int {
@@ -1669,8 +1833,8 @@ func (o RedisInstanceBackupStrategyPtrOutput) KeepDays() pulumi.IntPtrOutput {
 
 // Specifies the backup time window. Automated backups will be triggered during the
 // backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
-// HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-// value: 08:00-09:00, 03:00-04:00.
+// HH value must be `1` greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
+// value: **08:00-09:00**, **03:00-04:00**.
 func (o RedisInstanceBackupStrategyPtrOutput) StartTime() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *RedisInstanceBackupStrategy) *string {
 		if v == nil {
@@ -1871,7 +2035,7 @@ type RedisInstanceNode struct {
 	// Indicates the node ID.
 	Id *string `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name *string `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -1899,7 +2063,7 @@ type RedisInstanceNodeArgs struct {
 	// Indicates the node ID.
 	Id pulumi.StringPtrInput `pulumi:"id"`
 	// Specifies the instance name, which can be the same as an existing instance name. The value
-	// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+	// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 	// digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 	Name pulumi.StringPtrInput `pulumi:"name"`
 	// Indicates the private IP address of a node.
@@ -1969,7 +2133,7 @@ func (o RedisInstanceNodeOutput) Id() pulumi.StringPtrOutput {
 }
 
 // Specifies the instance name, which can be the same as an existing instance name. The value
-// must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
+// must be `4` to `64` characters in length and start with a letter. It is case-sensitive and can contain only letters,
 // digits, hyphens (-), and underscores (_). Chinese characters must be in UTF-8 or Unicode format.
 func (o RedisInstanceNodeOutput) Name() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v RedisInstanceNode) *string { return v.Name }).(pulumi.StringPtrOutput)
@@ -3683,6 +3847,8 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*MongoInstanceDatastorePtrInput)(nil)).Elem(), MongoInstanceDatastoreArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MongoInstanceNodeInput)(nil)).Elem(), MongoInstanceNodeArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*MongoInstanceNodeArrayInput)(nil)).Elem(), MongoInstanceNodeArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*RedisInstanceAvailabilityZoneDetailInput)(nil)).Elem(), RedisInstanceAvailabilityZoneDetailArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*RedisInstanceAvailabilityZoneDetailPtrInput)(nil)).Elem(), RedisInstanceAvailabilityZoneDetailArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RedisInstanceBackupStrategyInput)(nil)).Elem(), RedisInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RedisInstanceBackupStrategyPtrInput)(nil)).Elem(), RedisInstanceBackupStrategyArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*RedisInstanceDatastoreInput)(nil)).Elem(), RedisInstanceDatastoreArgs{})
@@ -3731,6 +3897,8 @@ func init() {
 	pulumi.RegisterOutputType(MongoInstanceDatastorePtrOutput{})
 	pulumi.RegisterOutputType(MongoInstanceNodeOutput{})
 	pulumi.RegisterOutputType(MongoInstanceNodeArrayOutput{})
+	pulumi.RegisterOutputType(RedisInstanceAvailabilityZoneDetailOutput{})
+	pulumi.RegisterOutputType(RedisInstanceAvailabilityZoneDetailPtrOutput{})
 	pulumi.RegisterOutputType(RedisInstanceBackupStrategyOutput{})
 	pulumi.RegisterOutputType(RedisInstanceBackupStrategyPtrOutput{})
 	pulumi.RegisterOutputType(RedisInstanceDatastoreOutput{})

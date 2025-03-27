@@ -21,12 +21,12 @@ class AclArgs:
                  ip_ranges: Optional[pulumi.Input[Sequence[pulumi.Input['AclIpRangeArgs']]]] = None):
         """
         The set of arguments for constructing a Acl resource.
-        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API. valid value are '
-               console' and 'api'. Changing this parameter will create a new ACL.
+        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API.
+               Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         :param pulumi.Input[Sequence[pulumi.Input['AclIpCidrArgs']]] ip_cidrs: Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-               The `ip_cidrs` cannot repeat. The structure is documented below.
+               The `ip_cidrs` cannot repeat. The object structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['AclIpRangeArgs']]] ip_ranges: Specifies the IP address ranges from which console access or api access is allowed.
-               The `ip_ranges` cannot repeat. The structure is documented below.
+               The `ip_ranges` cannot repeat. The object structure is documented below.
         """
         pulumi.set(__self__, "type", type)
         if ip_cidrs is not None:
@@ -38,8 +38,8 @@ class AclArgs:
     @pulumi.getter
     def type(self) -> pulumi.Input[str]:
         """
-        Specifies the ACL is created through the Console or API. valid value are '
-        console' and 'api'. Changing this parameter will create a new ACL.
+        Specifies the ACL is created through the Console or API.
+        Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         return pulumi.get(self, "type")
 
@@ -52,7 +52,7 @@ class AclArgs:
     def ip_cidrs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AclIpCidrArgs']]]]:
         """
         Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-        The `ip_cidrs` cannot repeat. The structure is documented below.
+        The `ip_cidrs` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_cidrs")
 
@@ -65,7 +65,7 @@ class AclArgs:
     def ip_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AclIpRangeArgs']]]]:
         """
         Specifies the IP address ranges from which console access or api access is allowed.
-        The `ip_ranges` cannot repeat. The structure is documented below.
+        The `ip_ranges` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_ranges")
 
@@ -83,11 +83,11 @@ class _AclState:
         """
         Input properties used for looking up and filtering Acl resources.
         :param pulumi.Input[Sequence[pulumi.Input['AclIpCidrArgs']]] ip_cidrs: Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-               The `ip_cidrs` cannot repeat. The structure is documented below.
+               The `ip_cidrs` cannot repeat. The object structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input['AclIpRangeArgs']]] ip_ranges: Specifies the IP address ranges from which console access or api access is allowed.
-               The `ip_ranges` cannot repeat. The structure is documented below.
-        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API. valid value are '
-               console' and 'api'. Changing this parameter will create a new ACL.
+               The `ip_ranges` cannot repeat. The object structure is documented below.
+        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API.
+               Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         if ip_cidrs is not None:
             pulumi.set(__self__, "ip_cidrs", ip_cidrs)
@@ -101,7 +101,7 @@ class _AclState:
     def ip_cidrs(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AclIpCidrArgs']]]]:
         """
         Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-        The `ip_cidrs` cannot repeat. The structure is documented below.
+        The `ip_cidrs` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_cidrs")
 
@@ -114,7 +114,7 @@ class _AclState:
     def ip_ranges(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['AclIpRangeArgs']]]]:
         """
         Specifies the IP address ranges from which console access or api access is allowed.
-        The `ip_ranges` cannot repeat. The structure is documented below.
+        The `ip_ranges` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_ranges")
 
@@ -126,8 +126,8 @@ class _AclState:
     @pulumi.getter
     def type(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the ACL is created through the Console or API. valid value are '
-        console' and 'api'. Changing this parameter will create a new ACL.
+        Specifies the ACL is created through the Console or API.
+        Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         return pulumi.get(self, "type")
 
@@ -146,10 +146,10 @@ class Acl(pulumi.CustomResource):
                  type: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        Manages a ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
+        Manages an ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
         ranges and IPv4 CIDR blocks. The ACL take effect for IAM users under the Domain account rather than the account itself.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -172,11 +172,11 @@ class Acl(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AclIpCidrArgs']]]] ip_cidrs: Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-               The `ip_cidrs` cannot repeat. The structure is documented below.
+               The `ip_cidrs` cannot repeat. The object structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AclIpRangeArgs']]]] ip_ranges: Specifies the IP address ranges from which console access or api access is allowed.
-               The `ip_ranges` cannot repeat. The structure is documented below.
-        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API. valid value are '
-               console' and 'api'. Changing this parameter will create a new ACL.
+               The `ip_ranges` cannot repeat. The object structure is documented below.
+        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API.
+               Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         ...
     @overload
@@ -185,10 +185,10 @@ class Acl(pulumi.CustomResource):
                  args: AclArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Manages a ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
+        Manages an ACL resource within HuaweiCloud IAM service. The ACL allowing user access only from specified IP address
         ranges and IPv4 CIDR blocks. The ACL take effect for IAM users under the Domain account rather than the account itself.
 
-        Note: You *must* have admin privileges in your HuaweiCloud cloud to use this resource.
+        > **NOTE:** You *must* have admin privileges to use this resource.
 
         ## Example Usage
 
@@ -261,11 +261,11 @@ class Acl(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AclIpCidrArgs']]]] ip_cidrs: Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-               The `ip_cidrs` cannot repeat. The structure is documented below.
+               The `ip_cidrs` cannot repeat. The object structure is documented below.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['AclIpRangeArgs']]]] ip_ranges: Specifies the IP address ranges from which console access or api access is allowed.
-               The `ip_ranges` cannot repeat. The structure is documented below.
-        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API. valid value are '
-               console' and 'api'. Changing this parameter will create a new ACL.
+               The `ip_ranges` cannot repeat. The object structure is documented below.
+        :param pulumi.Input[str] type: Specifies the ACL is created through the Console or API.
+               Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -281,7 +281,7 @@ class Acl(pulumi.CustomResource):
     def ip_cidrs(self) -> pulumi.Output[Optional[Sequence['outputs.AclIpCidr']]]:
         """
         Specifies the IPv4 CIDR blocks from which console access or api access is allowed.
-        The `ip_cidrs` cannot repeat. The structure is documented below.
+        The `ip_cidrs` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_cidrs")
 
@@ -290,7 +290,7 @@ class Acl(pulumi.CustomResource):
     def ip_ranges(self) -> pulumi.Output[Optional[Sequence['outputs.AclIpRange']]]:
         """
         Specifies the IP address ranges from which console access or api access is allowed.
-        The `ip_ranges` cannot repeat. The structure is documented below.
+        The `ip_ranges` cannot repeat. The object structure is documented below.
         """
         return pulumi.get(self, "ip_ranges")
 
@@ -298,8 +298,8 @@ class Acl(pulumi.CustomResource):
     @pulumi.getter
     def type(self) -> pulumi.Output[str]:
         """
-        Specifies the ACL is created through the Console or API. valid value are '
-        console' and 'api'. Changing this parameter will create a new ACL.
+        Specifies the ACL is created through the Console or API.
+        Valid values are **console** and **api**. Changing this parameter will create a new ACL.
         """
         return pulumi.get(self, "type")
 

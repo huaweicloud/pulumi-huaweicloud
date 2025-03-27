@@ -23,13 +23,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g.
+ * The dataset versions can be imported by dataset ID and version ID, separated by a slash, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ModelArts/datasetVersion:DatasetVersion test yiROKoTTjtwjvP71yLG/wieeeoTrtrtjvn67yLm
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset_version" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`hard_example`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset_version" "test" {
  *
  *  ...
  *
@@ -82,7 +82,7 @@ export class DatasetVersion extends pulumi.CustomResource {
     public readonly datasetId!: pulumi.Output<string>;
     /**
      * Specifies the description of dataset version. It contains a maximum of
-     * 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+     * `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -108,7 +108,7 @@ export class DatasetVersion extends pulumi.CustomResource {
      */
     public /*out*/ readonly labelingType!: pulumi.Output<string>;
     /**
-     * Specifies the name of the dataset version. The name consists of 1 to 32
+     * Specifies the name of the dataset version. The name consists of `1` to `32`
      * characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
      * Changing this parameter will create a new resource.
      */
@@ -218,7 +218,7 @@ export interface DatasetVersionState {
     datasetId?: pulumi.Input<string>;
     /**
      * Specifies the description of dataset version. It contains a maximum of
-     * 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+     * `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
      */
     description?: pulumi.Input<string>;
     /**
@@ -244,7 +244,7 @@ export interface DatasetVersionState {
      */
     labelingType?: pulumi.Input<string>;
     /**
-     * Specifies the name of the dataset version. The name consists of 1 to 32
+     * Specifies the name of the dataset version. The name consists of `1` to `32`
      * characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
      * Changing this parameter will create a new resource.
      */
@@ -297,7 +297,7 @@ export interface DatasetVersionArgs {
     datasetId: pulumi.Input<string>;
     /**
      * Specifies the description of dataset version. It contains a maximum of
-     * 256 characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
+     * `256` characters and cannot contain special characters `!<>=&"'`. Changing this parameter will create a new resource.
      */
     description?: pulumi.Input<string>;
     /**
@@ -308,7 +308,7 @@ export interface DatasetVersionArgs {
      */
     hardExample?: pulumi.Input<boolean>;
     /**
-     * Specifies the name of the dataset version. The name consists of 1 to 32
+     * Specifies the name of the dataset version. The name consists of `1` to `32`
      * characters. Only letters, Chinese characters, digits underscores (_) and hyphens (-) are allowed.
      * Changing this parameter will create a new resource.
      */

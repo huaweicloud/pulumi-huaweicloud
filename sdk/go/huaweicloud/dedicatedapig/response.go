@@ -13,48 +13,6 @@ import (
 
 // Manages an APIG (API) custom response resource within HuaweiCloud.
 //
-// ## Example Usage
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"fmt"
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/DedicatedApig"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/DedicatedApig"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			instanceId := cfg.RequireObject("instanceId")
-//			groupId := cfg.RequireObject("groupId")
-//			responseName := cfg.RequireObject("responseName")
-//			_, err := DedicatedApig.NewResponse(ctx, "test", &DedicatedApig.ResponseArgs{
-//				InstanceId: pulumi.Any(instanceId),
-//				GroupId:    pulumi.Any(groupId),
-//				Rules: dedicatedapig.ResponseRuleArray{
-//					&dedicatedapig.ResponseRuleArgs{
-//						ErrorType:  pulumi.String("AUTHORIZER_FAILURE"),
-//						Body:       pulumi.String(fmt.Sprintf("{\"code\":\"$context.authorizer.frontend.code\",\"message\":\"$context.authorizer.frontend.message\"}")),
-//						StatusCode: pulumi.Int(401),
-//					},
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
-//
 // ## Import
 //
 // API Responses can be imported using their `name` and IDs of the APIG dedicated instances and API groups to which the API response belongs, separated by slashes, e.g.
@@ -84,7 +42,7 @@ type Response struct {
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
 	// Specifies the API custom response rules definition.\
-	// The object structure is documented below.
+	// The rule structure is documented below.
 	Rules ResponseRuleArrayOutput `pulumi:"rules"`
 	// The latest update time of the API custom response.
 	UpdatedAt pulumi.StringOutput `pulumi:"updatedAt"`
@@ -143,7 +101,7 @@ type responseState struct {
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the API custom response rules definition.\
-	// The object structure is documented below.
+	// The rule structure is documented below.
 	Rules []ResponseRule `pulumi:"rules"`
 	// The latest update time of the API custom response.
 	UpdatedAt *string `pulumi:"updatedAt"`
@@ -167,7 +125,7 @@ type ResponseState struct {
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the API custom response rules definition.\
-	// The object structure is documented below.
+	// The rule structure is documented below.
 	Rules ResponseRuleArrayInput
 	// The latest update time of the API custom response.
 	UpdatedAt pulumi.StringPtrInput
@@ -193,7 +151,7 @@ type responseArgs struct {
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
 	// Specifies the API custom response rules definition.\
-	// The object structure is documented below.
+	// The rule structure is documented below.
 	Rules []ResponseRule `pulumi:"rules"`
 }
 
@@ -214,7 +172,7 @@ type ResponseArgs struct {
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
 	// Specifies the API custom response rules definition.\
-	// The object structure is documented below.
+	// The rule structure is documented below.
 	Rules ResponseRuleArrayInput
 }
 
@@ -337,7 +295,7 @@ func (o ResponseOutput) Region() pulumi.StringOutput {
 }
 
 // Specifies the API custom response rules definition.\
-// The object structure is documented below.
+// The rule structure is documented below.
 func (o ResponseOutput) Rules() ResponseRuleArrayOutput {
 	return o.ApplyT(func(v *Response) ResponseRuleArrayOutput { return v.Rules }).(ResponseRuleArrayOutput)
 }

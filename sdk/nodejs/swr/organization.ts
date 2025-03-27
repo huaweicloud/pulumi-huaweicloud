@@ -18,7 +18,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Organizations can be imported using the `name`, e.g.
+ * Organizations can be imported using the `name`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Swr/organization:Organization test org-name

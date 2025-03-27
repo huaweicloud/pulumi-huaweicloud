@@ -18,9 +18,49 @@ import (
 //
 // Each network instance can be loaded onto only one cloud connection.
 //
+// ## Example Usage
+//
+// ```go
+// package main
+//
+// import (
+//
+//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Cc"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
+//
+// )
+//
+//	func main() {
+//		pulumi.Run(func(ctx *pulumi.Context) error {
+//			cfg := config.New(ctx, "")
+//			cloudConnectionId := cfg.RequireObject("cloudConnectionId")
+//			vpcInstanceId := cfg.RequireObject("vpcInstanceId")
+//			vpcProjectId := cfg.RequireObject("vpcProjectId")
+//			vpcRegionId := cfg.RequireObject("vpcRegionId")
+//			cidr := cfg.RequireObject("cidr")
+//			_, err := Cc.NewNetworkInstance(ctx, "test", &Cc.NetworkInstanceArgs{
+//				Type:              pulumi.String("vpc"),
+//				CloudConnectionId: pulumi.Any(cloudConnectionId),
+//				InstanceId:        pulumi.Any(vpcInstanceId),
+//				ProjectId:         pulumi.Any(vpcProjectId),
+//				RegionId:          pulumi.Any(vpcRegionId),
+//				Cidrs: pulumi.StringArray{
+//					pulumi.Any(cidr),
+//				},
+//			})
+//			if err != nil {
+//				return err
+//			}
+//			return nil
+//		})
+//	}
+//
+// ```
+//
 // ## Import
 //
-// The network instance can be imported using the `id`, e.g.
+// The network instance can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
@@ -35,7 +75,7 @@ type NetworkInstance struct {
 	// Cloud connection ID.
 	CloudConnectionId pulumi.StringOutput `pulumi:"cloudConnectionId"`
 	// The description about the network instance.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
 	// Account ID.
 	DomainId pulumi.StringOutput `pulumi:"domainId"`
@@ -44,7 +84,7 @@ type NetworkInstance struct {
 	// ID of the VPC or virtual gateway to be loaded to the cloud connection.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
 	// The network instance name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 	// underscores (_) and dots (.).
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Project ID of the VPC or virtual gateway.
@@ -118,7 +158,7 @@ type networkInstanceState struct {
 	// Cloud connection ID.
 	CloudConnectionId *string `pulumi:"cloudConnectionId"`
 	// The description about the network instance.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// Account ID.
 	DomainId *string `pulumi:"domainId"`
@@ -127,7 +167,7 @@ type networkInstanceState struct {
 	// ID of the VPC or virtual gateway to be loaded to the cloud connection.
 	InstanceId *string `pulumi:"instanceId"`
 	// The network instance name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 	// underscores (_) and dots (.).
 	Name *string `pulumi:"name"`
 	// Project ID of the VPC or virtual gateway.
@@ -154,7 +194,7 @@ type NetworkInstanceState struct {
 	// Cloud connection ID.
 	CloudConnectionId pulumi.StringPtrInput
 	// The description about the network instance.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// Account ID.
 	DomainId pulumi.StringPtrInput
@@ -163,7 +203,7 @@ type NetworkInstanceState struct {
 	// ID of the VPC or virtual gateway to be loaded to the cloud connection.
 	InstanceId pulumi.StringPtrInput
 	// The network instance name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 	// underscores (_) and dots (.).
 	Name pulumi.StringPtrInput
 	// Project ID of the VPC or virtual gateway.
@@ -194,14 +234,14 @@ type networkInstanceArgs struct {
 	// Cloud connection ID.
 	CloudConnectionId string `pulumi:"cloudConnectionId"`
 	// The description about the network instance.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// Account ID of the VPC or virtual gateway.
 	InstanceDomainId *string `pulumi:"instanceDomainId"`
 	// ID of the VPC or virtual gateway to be loaded to the cloud connection.
 	InstanceId string `pulumi:"instanceId"`
 	// The network instance name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 	// underscores (_) and dots (.).
 	Name *string `pulumi:"name"`
 	// Project ID of the VPC or virtual gateway.
@@ -225,14 +265,14 @@ type NetworkInstanceArgs struct {
 	// Cloud connection ID.
 	CloudConnectionId pulumi.StringInput
 	// The description about the network instance.\
-	// The description can contain a maximum of 255 characters.
+	// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// Account ID of the VPC or virtual gateway.
 	InstanceDomainId pulumi.StringPtrInput
 	// ID of the VPC or virtual gateway to be loaded to the cloud connection.
 	InstanceId pulumi.StringInput
 	// The network instance name.\
-	// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+	// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 	// underscores (_) and dots (.).
 	Name pulumi.StringPtrInput
 	// Project ID of the VPC or virtual gateway.
@@ -347,7 +387,7 @@ func (o NetworkInstanceOutput) CloudConnectionId() pulumi.StringOutput {
 }
 
 // The description about the network instance.\
-// The description can contain a maximum of 255 characters.
+// The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
 func (o NetworkInstanceOutput) Description() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *NetworkInstance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
 }
@@ -368,7 +408,7 @@ func (o NetworkInstanceOutput) InstanceId() pulumi.StringOutput {
 }
 
 // The network instance name.\
-// The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
+// The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
 // underscores (_) and dots (.).
 func (o NetworkInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *NetworkInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)

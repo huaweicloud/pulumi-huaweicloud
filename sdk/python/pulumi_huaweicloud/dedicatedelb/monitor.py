@@ -20,25 +20,60 @@ class MonitorArgs:
                  protocol: pulumi.Input[str],
                  timeout: pulumi.Input[int],
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enabled: Optional[pulumi.Input[bool]] = None,
+                 http_method: Optional[pulumi.Input[str]] = None,
+                 max_retries_down: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[str]] = None,
                  url_path: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Monitor resource.
-        :param pulumi.Input[int] interval: The time, in seconds, between sending probes to members.
-        :param pulumi.Input[int] max_retries: Number of permissible ping failures before changing the member's status to INACTIVE.
-               Must be a number between 1 and 10.
-        :param pulumi.Input[str] pool_id: The id of the pool that this monitor will be assigned to.
-        :param pulumi.Input[str] protocol: The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-               balancer to verify the member state. Changing this creates a new monitor.
-        :param pulumi.Input[int] timeout: Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-               value must be less than the delay value.
-        :param pulumi.Input[str] domain_name: The Domain Name of the Monitor.
-        :param pulumi.Input[int] port: Specifies the health check port. The value ranges from 1 to 65535.
+        :param pulumi.Input[int] interval: Specifies the interval between health checks, in seconds.
+               Value ranges from `1` to `50`.
+        :param pulumi.Input[int] max_retries: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
+        :param pulumi.Input[str] pool_id: Specifies the ID of the backend server group for which the health check is
+               configured. Changing this creates a new monitor.
+        :param pulumi.Input[str] protocol: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        :param pulumi.Input[int] timeout: Specifies the maximum time required for waiting for a response from the health check,
+               in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+               parameter `interval`.
+        :param pulumi.Input[str] domain_name: Specifies the domain name that HTTP requests are sent to during the health check.
+               The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+               must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+               load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] enabled: Specifies whether the health check is enabled.
+               + **true(default)**: Health check is enabled.
+               + **false**: Health check is disabled.
+        :param pulumi.Input[str] http_method: Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        :param pulumi.Input[int] max_retries_down: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        :param pulumi.Input[str] name: Specifies the health check name.
+        :param pulumi.Input[int] port: Specifies the port used for the health check. If this parameter is left blank, a port of
+               the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+               Value ranges from `1` to `65,535`.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
-        :param pulumi.Input[str] url_path: Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-               HTTPS.
+        :param pulumi.Input[str] status_code: Specifies the expected HTTP status code. This parameter will take effect only when
+               `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+               + A specific value, for example: **200**.
+               + A list of values that are separated with commas (,), for example: **200,202**.
+               + A value range, for example: **200-204**.
+        :param pulumi.Input[str] url_path: Specifies the HTTP request path for the health check. The value must start with a
+               slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+               and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+               `protocol` is set to **HTTP** or **HTTPS**.
         """
         pulumi.set(__self__, "interval", interval)
         pulumi.set(__self__, "max_retries", max_retries)
@@ -47,10 +82,20 @@ class MonitorArgs:
         pulumi.set(__self__, "timeout", timeout)
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
+        if enabled is not None:
+            pulumi.set(__self__, "enabled", enabled)
+        if http_method is not None:
+            pulumi.set(__self__, "http_method", http_method)
+        if max_retries_down is not None:
+            pulumi.set(__self__, "max_retries_down", max_retries_down)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
         if port is not None:
             pulumi.set(__self__, "port", port)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status_code is not None:
+            pulumi.set(__self__, "status_code", status_code)
         if url_path is not None:
             pulumi.set(__self__, "url_path", url_path)
 
@@ -58,7 +103,8 @@ class MonitorArgs:
     @pulumi.getter
     def interval(self) -> pulumi.Input[int]:
         """
-        The time, in seconds, between sending probes to members.
+        Specifies the interval between health checks, in seconds.
+        Value ranges from `1` to `50`.
         """
         return pulumi.get(self, "interval")
 
@@ -70,8 +116,8 @@ class MonitorArgs:
     @pulumi.getter(name="maxRetries")
     def max_retries(self) -> pulumi.Input[int]:
         """
-        Number of permissible ping failures before changing the member's status to INACTIVE.
-        Must be a number between 1 and 10.
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
         """
         return pulumi.get(self, "max_retries")
 
@@ -83,7 +129,8 @@ class MonitorArgs:
     @pulumi.getter(name="poolId")
     def pool_id(self) -> pulumi.Input[str]:
         """
-        The id of the pool that this monitor will be assigned to.
+        Specifies the ID of the backend server group for which the health check is
+        configured. Changing this creates a new monitor.
         """
         return pulumi.get(self, "pool_id")
 
@@ -95,8 +142,15 @@ class MonitorArgs:
     @pulumi.getter
     def protocol(self) -> pulumi.Input[str]:
         """
-        The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-        balancer to verify the member state. Changing this creates a new monitor.
+        Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+        **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+        + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+        + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         """
         return pulumi.get(self, "protocol")
 
@@ -108,8 +162,9 @@ class MonitorArgs:
     @pulumi.getter
     def timeout(self) -> pulumi.Input[int]:
         """
-        Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-        value must be less than the delay value.
+        Specifies the maximum time required for waiting for a response from the health check,
+        in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+        parameter `interval`.
         """
         return pulumi.get(self, "timeout")
 
@@ -121,7 +176,11 @@ class MonitorArgs:
     @pulumi.getter(name="domainName")
     def domain_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The Domain Name of the Monitor.
+        Specifies the domain name that HTTP requests are sent to during the health check.
+        The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+        must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+        load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+        is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "domain_name")
 
@@ -131,9 +190,62 @@ class MonitorArgs:
 
     @property
     @pulumi.getter
+    def enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the health check is enabled.
+        + **true(default)**: Health check is enabled.
+        + **false**: Health check is disabled.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        """
+        return pulumi.get(self, "http_method")
+
+    @http_method.setter
+    def http_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "http_method", value)
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @max_retries_down.setter
+    def max_retries_down(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_retries_down", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the health check name.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the health check port. The value ranges from 1 to 65535.
+        Specifies the port used for the health check. If this parameter is left blank, a port of
+        the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+        Value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -155,11 +267,29 @@ class MonitorArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the expected HTTP status code. This parameter will take effect only when
+        `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+        + A specific value, for example: **200**.
+        + A list of values that are separated with commas (,), for example: **200,202**.
+        + A value range, for example: **200-204**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status_code", value)
+
+    @property
     @pulumi.getter(name="urlPath")
     def url_path(self) -> Optional[pulumi.Input[str]]:
         """
-        Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-        HTTPS.
+        Specifies the HTTP request path for the health check. The value must start with a
+        slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+        and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+        `protocol` is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "url_path")
 
@@ -171,38 +301,87 @@ class MonitorArgs:
 @pulumi.input_type
 class _MonitorState:
     def __init__(__self__, *,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enabled: Optional[pulumi.Input[bool]] = None,
+                 http_method: Optional[pulumi.Input[str]] = None,
                  interval: Optional[pulumi.Input[int]] = None,
                  max_retries: Optional[pulumi.Input[int]] = None,
+                 max_retries_down: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
                  pool_id: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
                  url_path: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Monitor resources.
-        :param pulumi.Input[str] domain_name: The Domain Name of the Monitor.
-        :param pulumi.Input[int] interval: The time, in seconds, between sending probes to members.
-        :param pulumi.Input[int] max_retries: Number of permissible ping failures before changing the member's status to INACTIVE.
-               Must be a number between 1 and 10.
-        :param pulumi.Input[str] pool_id: The id of the pool that this monitor will be assigned to.
-        :param pulumi.Input[int] port: Specifies the health check port. The value ranges from 1 to 65535.
-        :param pulumi.Input[str] protocol: The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-               balancer to verify the member state. Changing this creates a new monitor.
+        :param pulumi.Input[str] created_at: The creation time of the monitor.
+        :param pulumi.Input[str] domain_name: Specifies the domain name that HTTP requests are sent to during the health check.
+               The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+               must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+               load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] enabled: Specifies whether the health check is enabled.
+               + **true(default)**: Health check is enabled.
+               + **false**: Health check is disabled.
+        :param pulumi.Input[str] http_method: Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        :param pulumi.Input[int] interval: Specifies the interval between health checks, in seconds.
+               Value ranges from `1` to `50`.
+        :param pulumi.Input[int] max_retries: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
+        :param pulumi.Input[int] max_retries_down: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        :param pulumi.Input[str] name: Specifies the health check name.
+        :param pulumi.Input[str] pool_id: Specifies the ID of the backend server group for which the health check is
+               configured. Changing this creates a new monitor.
+        :param pulumi.Input[int] port: Specifies the port used for the health check. If this parameter is left blank, a port of
+               the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+               Value ranges from `1` to `65,535`.
+        :param pulumi.Input[str] protocol: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
-        :param pulumi.Input[int] timeout: Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-               value must be less than the delay value.
-        :param pulumi.Input[str] url_path: Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-               HTTPS.
+        :param pulumi.Input[str] status_code: Specifies the expected HTTP status code. This parameter will take effect only when
+               `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+               + A specific value, for example: **200**.
+               + A list of values that are separated with commas (,), for example: **200,202**.
+               + A value range, for example: **200-204**.
+        :param pulumi.Input[int] timeout: Specifies the maximum time required for waiting for a response from the health check,
+               in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+               parameter `interval`.
+        :param pulumi.Input[str] updated_at: The update time of the monitor.
+        :param pulumi.Input[str] url_path: Specifies the HTTP request path for the health check. The value must start with a
+               slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+               and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+               `protocol` is set to **HTTP** or **HTTPS**.
         """
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
+        if enabled is not None:
+            pulumi.set(__self__, "enabled", enabled)
+        if http_method is not None:
+            pulumi.set(__self__, "http_method", http_method)
         if interval is not None:
             pulumi.set(__self__, "interval", interval)
         if max_retries is not None:
             pulumi.set(__self__, "max_retries", max_retries)
+        if max_retries_down is not None:
+            pulumi.set(__self__, "max_retries_down", max_retries_down)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
         if pool_id is not None:
             pulumi.set(__self__, "pool_id", pool_id)
         if port is not None:
@@ -211,16 +390,36 @@ class _MonitorState:
             pulumi.set(__self__, "protocol", protocol)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status_code is not None:
+            pulumi.set(__self__, "status_code", status_code)
         if timeout is not None:
             pulumi.set(__self__, "timeout", timeout)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
         if url_path is not None:
             pulumi.set(__self__, "url_path", url_path)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The creation time of the monitor.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="domainName")
     def domain_name(self) -> Optional[pulumi.Input[str]]:
         """
-        The Domain Name of the Monitor.
+        Specifies the domain name that HTTP requests are sent to during the health check.
+        The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+        must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+        load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+        is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "domain_name")
 
@@ -230,9 +429,36 @@ class _MonitorState:
 
     @property
     @pulumi.getter
+    def enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether the health check is enabled.
+        + **true(default)**: Health check is enabled.
+        + **false**: Health check is disabled.
+        """
+        return pulumi.get(self, "enabled")
+
+    @enabled.setter
+    def enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enabled", value)
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        """
+        return pulumi.get(self, "http_method")
+
+    @http_method.setter
+    def http_method(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "http_method", value)
+
+    @property
+    @pulumi.getter
     def interval(self) -> Optional[pulumi.Input[int]]:
         """
-        The time, in seconds, between sending probes to members.
+        Specifies the interval between health checks, in seconds.
+        Value ranges from `1` to `50`.
         """
         return pulumi.get(self, "interval")
 
@@ -244,8 +470,8 @@ class _MonitorState:
     @pulumi.getter(name="maxRetries")
     def max_retries(self) -> Optional[pulumi.Input[int]]:
         """
-        Number of permissible ping failures before changing the member's status to INACTIVE.
-        Must be a number between 1 and 10.
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
         """
         return pulumi.get(self, "max_retries")
 
@@ -254,10 +480,36 @@ class _MonitorState:
         pulumi.set(self, "max_retries", value)
 
     @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @max_retries_down.setter
+    def max_retries_down(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_retries_down", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the health check name.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
     @pulumi.getter(name="poolId")
     def pool_id(self) -> Optional[pulumi.Input[str]]:
         """
-        The id of the pool that this monitor will be assigned to.
+        Specifies the ID of the backend server group for which the health check is
+        configured. Changing this creates a new monitor.
         """
         return pulumi.get(self, "pool_id")
 
@@ -269,7 +521,9 @@ class _MonitorState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the health check port. The value ranges from 1 to 65535.
+        Specifies the port used for the health check. If this parameter is left blank, a port of
+        the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+        Value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -281,8 +535,15 @@ class _MonitorState:
     @pulumi.getter
     def protocol(self) -> Optional[pulumi.Input[str]]:
         """
-        The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-        balancer to verify the member state. Changing this creates a new monitor.
+        Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+        **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+        + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+        + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         """
         return pulumi.get(self, "protocol")
 
@@ -304,11 +565,28 @@ class _MonitorState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the expected HTTP status code. This parameter will take effect only when
+        `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+        + A specific value, for example: **200**.
+        + A list of values that are separated with commas (,), for example: **200,202**.
+        + A value range, for example: **200-204**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @status_code.setter
+    def status_code(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status_code", value)
+
+    @property
     @pulumi.getter
     def timeout(self) -> Optional[pulumi.Input[int]]:
         """
-        Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-        value must be less than the delay value.
+        Specifies the maximum time required for waiting for a response from the health check,
+        in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+        parameter `interval`.
         """
         return pulumi.get(self, "timeout")
 
@@ -317,11 +595,25 @@ class _MonitorState:
         pulumi.set(self, "timeout", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        The update time of the monitor.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
     @pulumi.getter(name="urlPath")
     def url_path(self) -> Optional[pulumi.Input[str]]:
         """
-        Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-        HTTPS.
+        Specifies the HTTP request path for the health check. The value must start with a
+        slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+        and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+        `protocol` is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "url_path")
 
@@ -336,12 +628,17 @@ class Monitor(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enabled: Optional[pulumi.Input[bool]] = None,
+                 http_method: Optional[pulumi.Input[str]] = None,
                  interval: Optional[pulumi.Input[int]] = None,
                  max_retries: Optional[pulumi.Input[int]] = None,
+                 max_retries_down: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
                  pool_id: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  url_path: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -354,40 +651,74 @@ class Monitor(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        pool_id = config.require_object("poolId")
         monitor1 = huaweicloud.dedicated_elb.Monitor("monitor1",
-            protocol="HTTP",
+            pool_id=pool_id,
+            protocol="HTTPS",
             interval=30,
-            timeout=15,
-            max_retries=10,
-            url_path="/api",
+            timeout=20,
+            max_retries=8,
+            url_path="/bb",
+            domain_name="www.bb.com",
             port=8888,
-            pool_id=huaweicloud_elb_pool["test"]["id"])
+            status_code="200,301,404-500,504")
         ```
 
         ## Import
 
-        ELB monitor can be imported using the monitor ID, e.g.
+        ELB monitor can be imported using the monitor `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
+         $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor test <id>
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] domain_name: The Domain Name of the Monitor.
-        :param pulumi.Input[int] interval: The time, in seconds, between sending probes to members.
-        :param pulumi.Input[int] max_retries: Number of permissible ping failures before changing the member's status to INACTIVE.
-               Must be a number between 1 and 10.
-        :param pulumi.Input[str] pool_id: The id of the pool that this monitor will be assigned to.
-        :param pulumi.Input[int] port: Specifies the health check port. The value ranges from 1 to 65535.
-        :param pulumi.Input[str] protocol: The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-               balancer to verify the member state. Changing this creates a new monitor.
+        :param pulumi.Input[str] domain_name: Specifies the domain name that HTTP requests are sent to during the health check.
+               The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+               must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+               load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] enabled: Specifies whether the health check is enabled.
+               + **true(default)**: Health check is enabled.
+               + **false**: Health check is disabled.
+        :param pulumi.Input[str] http_method: Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        :param pulumi.Input[int] interval: Specifies the interval between health checks, in seconds.
+               Value ranges from `1` to `50`.
+        :param pulumi.Input[int] max_retries: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
+        :param pulumi.Input[int] max_retries_down: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        :param pulumi.Input[str] name: Specifies the health check name.
+        :param pulumi.Input[str] pool_id: Specifies the ID of the backend server group for which the health check is
+               configured. Changing this creates a new monitor.
+        :param pulumi.Input[int] port: Specifies the port used for the health check. If this parameter is left blank, a port of
+               the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+               Value ranges from `1` to `65,535`.
+        :param pulumi.Input[str] protocol: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
-        :param pulumi.Input[int] timeout: Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-               value must be less than the delay value.
-        :param pulumi.Input[str] url_path: Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-               HTTPS.
+        :param pulumi.Input[str] status_code: Specifies the expected HTTP status code. This parameter will take effect only when
+               `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+               + A specific value, for example: **200**.
+               + A list of values that are separated with commas (,), for example: **200,202**.
+               + A value range, for example: **200-204**.
+        :param pulumi.Input[int] timeout: Specifies the maximum time required for waiting for a response from the health check,
+               in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+               parameter `interval`.
+        :param pulumi.Input[str] url_path: Specifies the HTTP request path for the health check. The value must start with a
+               slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+               and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+               `protocol` is set to **HTTP** or **HTTPS**.
         """
         ...
     @overload
@@ -404,22 +735,26 @@ class Monitor(pulumi.CustomResource):
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
+        config = pulumi.Config()
+        pool_id = config.require_object("poolId")
         monitor1 = huaweicloud.dedicated_elb.Monitor("monitor1",
-            protocol="HTTP",
+            pool_id=pool_id,
+            protocol="HTTPS",
             interval=30,
-            timeout=15,
-            max_retries=10,
-            url_path="/api",
+            timeout=20,
+            max_retries=8,
+            url_path="/bb",
+            domain_name="www.bb.com",
             port=8888,
-            pool_id=huaweicloud_elb_pool["test"]["id"])
+            status_code="200,301,404-500,504")
         ```
 
         ## Import
 
-        ELB monitor can be imported using the monitor ID, e.g.
+        ELB monitor can be imported using the monitor `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor monitor_1 5c20fdad-7288-11eb-b817-0255ac10158b
+         $ pulumi import huaweicloud:DedicatedElb/monitor:Monitor test <id>
         ```
 
         :param str resource_name: The name of the resource.
@@ -438,12 +773,17 @@ class Monitor(pulumi.CustomResource):
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enabled: Optional[pulumi.Input[bool]] = None,
+                 http_method: Optional[pulumi.Input[str]] = None,
                  interval: Optional[pulumi.Input[int]] = None,
                  max_retries: Optional[pulumi.Input[int]] = None,
+                 max_retries_down: Optional[pulumi.Input[int]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
                  pool_id: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
                  protocol: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status_code: Optional[pulumi.Input[str]] = None,
                  timeout: Optional[pulumi.Input[int]] = None,
                  url_path: Optional[pulumi.Input[str]] = None,
                  __props__=None):
@@ -456,12 +796,16 @@ class Monitor(pulumi.CustomResource):
             __props__ = MonitorArgs.__new__(MonitorArgs)
 
             __props__.__dict__["domain_name"] = domain_name
+            __props__.__dict__["enabled"] = enabled
+            __props__.__dict__["http_method"] = http_method
             if interval is None and not opts.urn:
                 raise TypeError("Missing required property 'interval'")
             __props__.__dict__["interval"] = interval
             if max_retries is None and not opts.urn:
                 raise TypeError("Missing required property 'max_retries'")
             __props__.__dict__["max_retries"] = max_retries
+            __props__.__dict__["max_retries_down"] = max_retries_down
+            __props__.__dict__["name"] = name
             if pool_id is None and not opts.urn:
                 raise TypeError("Missing required property 'pool_id'")
             __props__.__dict__["pool_id"] = pool_id
@@ -470,10 +814,13 @@ class Monitor(pulumi.CustomResource):
                 raise TypeError("Missing required property 'protocol'")
             __props__.__dict__["protocol"] = protocol
             __props__.__dict__["region"] = region
+            __props__.__dict__["status_code"] = status_code
             if timeout is None and not opts.urn:
                 raise TypeError("Missing required property 'timeout'")
             __props__.__dict__["timeout"] = timeout
             __props__.__dict__["url_path"] = url_path
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["updated_at"] = None
         super(Monitor, __self__).__init__(
             'huaweicloud:DedicatedElb/monitor:Monitor',
             resource_name,
@@ -484,14 +831,21 @@ class Monitor(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             domain_name: Optional[pulumi.Input[str]] = None,
+            enabled: Optional[pulumi.Input[bool]] = None,
+            http_method: Optional[pulumi.Input[str]] = None,
             interval: Optional[pulumi.Input[int]] = None,
             max_retries: Optional[pulumi.Input[int]] = None,
+            max_retries_down: Optional[pulumi.Input[int]] = None,
+            name: Optional[pulumi.Input[str]] = None,
             pool_id: Optional[pulumi.Input[str]] = None,
             port: Optional[pulumi.Input[int]] = None,
             protocol: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            status_code: Optional[pulumi.Input[str]] = None,
             timeout: Optional[pulumi.Input[int]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
             url_path: Optional[pulumi.Input[str]] = None) -> 'Monitor':
         """
         Get an existing Monitor resource's state with the given name, id, and optional extra
@@ -500,49 +854,119 @@ class Monitor(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] domain_name: The Domain Name of the Monitor.
-        :param pulumi.Input[int] interval: The time, in seconds, between sending probes to members.
-        :param pulumi.Input[int] max_retries: Number of permissible ping failures before changing the member's status to INACTIVE.
-               Must be a number between 1 and 10.
-        :param pulumi.Input[str] pool_id: The id of the pool that this monitor will be assigned to.
-        :param pulumi.Input[int] port: Specifies the health check port. The value ranges from 1 to 65535.
-        :param pulumi.Input[str] protocol: The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-               balancer to verify the member state. Changing this creates a new monitor.
+        :param pulumi.Input[str] created_at: The creation time of the monitor.
+        :param pulumi.Input[str] domain_name: Specifies the domain name that HTTP requests are sent to during the health check.
+               The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+               must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+               load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+               is set to **HTTP** or **HTTPS**.
+        :param pulumi.Input[bool] enabled: Specifies whether the health check is enabled.
+               + **true(default)**: Health check is enabled.
+               + **false**: Health check is disabled.
+        :param pulumi.Input[str] http_method: Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        :param pulumi.Input[int] interval: Specifies the interval between health checks, in seconds.
+               Value ranges from `1` to `50`.
+        :param pulumi.Input[int] max_retries: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
+        :param pulumi.Input[int] max_retries_down: Specifies the number of consecutive health checks when the health check result of
+               a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        :param pulumi.Input[str] name: Specifies the health check name.
+        :param pulumi.Input[str] pool_id: Specifies the ID of the backend server group for which the health check is
+               configured. Changing this creates a new monitor.
+        :param pulumi.Input[int] port: Specifies the port used for the health check. If this parameter is left blank, a port of
+               the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+               Value ranges from `1` to `65,535`.
+        :param pulumi.Input[str] protocol: Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+               **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+               + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+               + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+               + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+               + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         :param pulumi.Input[str] region: The region in which to create the ELB monitor resource. If omitted, the
                provider-level region will be used. Changing this creates a new monitor.
-        :param pulumi.Input[int] timeout: Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-               value must be less than the delay value.
-        :param pulumi.Input[str] url_path: Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-               HTTPS.
+        :param pulumi.Input[str] status_code: Specifies the expected HTTP status code. This parameter will take effect only when
+               `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+               + A specific value, for example: **200**.
+               + A list of values that are separated with commas (,), for example: **200,202**.
+               + A value range, for example: **200-204**.
+        :param pulumi.Input[int] timeout: Specifies the maximum time required for waiting for a response from the health check,
+               in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+               parameter `interval`.
+        :param pulumi.Input[str] updated_at: The update time of the monitor.
+        :param pulumi.Input[str] url_path: Specifies the HTTP request path for the health check. The value must start with a
+               slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+               and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+               `protocol` is set to **HTTP** or **HTTPS**.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _MonitorState.__new__(_MonitorState)
 
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["domain_name"] = domain_name
+        __props__.__dict__["enabled"] = enabled
+        __props__.__dict__["http_method"] = http_method
         __props__.__dict__["interval"] = interval
         __props__.__dict__["max_retries"] = max_retries
+        __props__.__dict__["max_retries_down"] = max_retries_down
+        __props__.__dict__["name"] = name
         __props__.__dict__["pool_id"] = pool_id
         __props__.__dict__["port"] = port
         __props__.__dict__["protocol"] = protocol
         __props__.__dict__["region"] = region
+        __props__.__dict__["status_code"] = status_code
         __props__.__dict__["timeout"] = timeout
+        __props__.__dict__["updated_at"] = updated_at
         __props__.__dict__["url_path"] = url_path
         return Monitor(resource_name, opts=opts, __props__=__props__)
 
     @property
-    @pulumi.getter(name="domainName")
-    def domain_name(self) -> pulumi.Output[Optional[str]]:
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
         """
-        The Domain Name of the Monitor.
+        The creation time of the monitor.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="domainName")
+    def domain_name(self) -> pulumi.Output[str]:
+        """
+        Specifies the domain name that HTTP requests are sent to during the health check.
+        The domain name consists of 1 to 100 characters, can contain only digits, letters, hyphens (-), and periods (.) and
+        must start with a digit or letter. The value is left blank by default, indicating that the virtual IP address of the
+        load balancer is used as the destination address of HTTP requests. This parameter is available only when `protocol`
+        is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "domain_name")
 
     @property
     @pulumi.getter
+    def enabled(self) -> pulumi.Output[Optional[bool]]:
+        """
+        Specifies whether the health check is enabled.
+        + **true(default)**: Health check is enabled.
+        + **false**: Health check is disabled.
+        """
+        return pulumi.get(self, "enabled")
+
+    @property
+    @pulumi.getter(name="httpMethod")
+    def http_method(self) -> pulumi.Output[str]:
+        """
+        Specifies the HTTP method. Value options: **GET**, **HEAD**, **POST**. Defaults to **GET**.
+        """
+        return pulumi.get(self, "http_method")
+
+    @property
+    @pulumi.getter
     def interval(self) -> pulumi.Output[int]:
         """
-        The time, in seconds, between sending probes to members.
+        Specifies the interval between health checks, in seconds.
+        Value ranges from `1` to `50`.
         """
         return pulumi.get(self, "interval")
 
@@ -550,24 +974,44 @@ class Monitor(pulumi.CustomResource):
     @pulumi.getter(name="maxRetries")
     def max_retries(self) -> pulumi.Output[int]:
         """
-        Number of permissible ping failures before changing the member's status to INACTIVE.
-        Must be a number between 1 and 10.
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from OFFLINE to ONLINE. Value ranges from `1` to `10`.
         """
         return pulumi.get(self, "max_retries")
+
+    @property
+    @pulumi.getter(name="maxRetriesDown")
+    def max_retries_down(self) -> pulumi.Output[int]:
+        """
+        Specifies the number of consecutive health checks when the health check result of
+        a backend server changes from ONLINE to OFFLINE. The value ranges from `1` to `10`, and the default value is `3`.
+        """
+        return pulumi.get(self, "max_retries_down")
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Output[str]:
+        """
+        Specifies the health check name.
+        """
+        return pulumi.get(self, "name")
 
     @property
     @pulumi.getter(name="poolId")
     def pool_id(self) -> pulumi.Output[str]:
         """
-        The id of the pool that this monitor will be assigned to.
+        Specifies the ID of the backend server group for which the health check is
+        configured. Changing this creates a new monitor.
         """
         return pulumi.get(self, "pool_id")
 
     @property
     @pulumi.getter
-    def port(self) -> pulumi.Output[Optional[int]]:
+    def port(self) -> pulumi.Output[int]:
         """
-        Specifies the health check port. The value ranges from 1 to 65535.
+        Specifies the port used for the health check. If this parameter is left blank, a port of
+        the backend server will be used by default. It is mandatory when the `protocol` of the backend server group is **IP**.
+        Value ranges from `1` to `65,535`.
         """
         return pulumi.get(self, "port")
 
@@ -575,8 +1019,15 @@ class Monitor(pulumi.CustomResource):
     @pulumi.getter
     def protocol(self) -> pulumi.Output[str]:
         """
-        The type of probe, which is TCP, HTTP, or HTTPS, that is sent by the load
-        balancer to verify the member state. Changing this creates a new monitor.
+        Specifies the health check protocol. Value options: **TCP**, **UDP_CONNECT**,
+        **HTTP**, **HTTPS**, **GRPC** or **TLS**.
+        + If the protocol of the backend server is **QUIC**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **UDP**, the value can only be **UDP_CONNECT**.
+        + If the protocol of the backend server is **TCP**, the value can only be **TCP**, **HTTP** or **HTTPS**.
+        + If the protocol of the backend server is **HTTP**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **HTTPS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **GRPC**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
+        + If the protocol of the backend server is **TLS**, the value can only be **TCP**, **HTTP**, **HTTPS**, **TLS** or **GRPC**.
         """
         return pulumi.get(self, "protocol")
 
@@ -590,20 +1041,43 @@ class Monitor(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter(name="statusCode")
+    def status_code(self) -> pulumi.Output[str]:
+        """
+        Specifies the expected HTTP status code. This parameter will take effect only when
+        `protocol` is set to **HTTP** or **HTTPS**. Value options are as follows:
+        + A specific value, for example: **200**.
+        + A list of values that are separated with commas (,), for example: **200,202**.
+        + A value range, for example: **200-204**.
+        """
+        return pulumi.get(self, "status_code")
+
+    @property
     @pulumi.getter
     def timeout(self) -> pulumi.Output[int]:
         """
-        Maximum number of seconds for a monitor to wait for a ping reply before it times out. The
-        value must be less than the delay value.
+        Specifies the maximum time required for waiting for a response from the health check,
+        in seconds. Value ranges from `1` to `50`. It is recommended that you set the value less than that of
+        parameter `interval`.
         """
         return pulumi.get(self, "timeout")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        The update time of the monitor.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter(name="urlPath")
     def url_path(self) -> pulumi.Output[str]:
         """
-        Required for HTTP(S) types. URI path that will be accessed if monitor type is HTTP or
-        HTTPS.
+        Specifies the HTTP request path for the health check. The value must start with a
+        slash (/), can contain letters, digits, hyphens (-), slash (/), periods (.), percent signs (%), hashes(#), and(&)
+        and the special characters: `~!()*[]@$^:',+`, and the default value is **/**. This parameter is available only when
+        `protocol` is set to **HTTP** or **HTTPS**.
         """
         return pulumi.get(self, "url_path")
 

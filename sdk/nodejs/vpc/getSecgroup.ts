@@ -52,7 +52,7 @@ export interface GetSecgroupArgs {
      */
     region?: string;
     /**
-     * Specifiest he ID of the security group.
+     * Specifies the ID of the security group.
      */
     secgroupId?: string;
 }
@@ -110,7 +110,7 @@ export interface GetSecgroupOutputArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifiest he ID of the security group.
+     * Specifies the ID of the security group.
      */
     secgroupId?: pulumi.Input<string>;
 }

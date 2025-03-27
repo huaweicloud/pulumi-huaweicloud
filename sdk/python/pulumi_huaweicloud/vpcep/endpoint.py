@@ -14,38 +14,69 @@ __all__ = ['EndpointArgs', 'Endpoint']
 @pulumi.input_type
 class EndpointArgs:
     def __init__(__self__, *,
-                 network_id: pulumi.Input[str],
                  service_id: pulumi.Input[str],
                  vpc_id: pulumi.Input[str],
                  description: Optional[pulumi.Input[str]] = None,
                  enable_dns: Optional[pulumi.Input[bool]] = None,
                  enable_whitelist: Optional[pulumi.Input[bool]] = None,
                  ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
+                 ipv6_address: Optional[pulumi.Input[str]] = None,
+                 network_id: Optional[pulumi.Input[str]] = None,
+                 policy_document: Optional[pulumi.Input[str]] = None,
+                 policy_statement: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 routetables: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  whitelists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         The set of arguments for constructing a Endpoint resource.
-        :param pulumi.Input[str] network_id: Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-               Changing this creates a new VPC endpoint.
         :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service.
-               The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+               The VPC endpoint service could be private interface service, public interface service or gateway service.
+               + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+               or datasource `huaweicloud_vpcep_services`.
+               + For public interface service, the value of `service_id` can be obtained through datasource
+               `_vpcep.get_public_services`.
+               + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+               VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+               look for VPCEP operation and maintenance help to find the gateway service ID.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
                this creates a new VPC endpoint.
-        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint. The value can contain
+               characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         :param pulumi.Input[bool] enable_dns: Specifies whether to create a private domain name. The default value is
-               true. Changing this creates a new VPC endpoint.
-        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is
-               false.
+               **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is **false**.
         :param pulumi.Input[str] ip_address: Specifies the IP address for accessing the associated VPC endpoint
-               service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+               service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+               interface VPC endpoint service.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint.
+               Changing this will create a new resource.
+               The valid values are as follows:
+               + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+               + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        :param pulumi.Input[str] ipv6_address: Specifies the IPv6 address for accessing the connected VPC
+               endpoint service.
+               Changing this will create a new resource.
+        :param pulumi.Input[str] network_id: Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
+               This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+               The use of this field has the following restrictions:
+               + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+               + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
+        :param pulumi.Input[str] policy_document: Specifies the endpoint policy information
+        :param pulumi.Input[str] policy_statement: Specifies the policy of the gateway VPC endpoint. The value is a string in
+               JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+               Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint. If omitted, the provider-level
                region will be used. Changing this creates a new VPC endpoint.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] routetables: Specifies the IDs of the route tables associated with the VPC endpoint.
+               This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+               The default route table will be used when this field is not specified.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] whitelists: Specifies the list of IP address or CIDR block which can be accessed to the
                VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+               This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
-        pulumi.set(__self__, "network_id", network_id)
         pulumi.set(__self__, "service_id", service_id)
         pulumi.set(__self__, "vpc_id", vpc_id)
         if description is not None:
@@ -56,32 +87,38 @@ class EndpointArgs:
             pulumi.set(__self__, "enable_whitelist", enable_whitelist)
         if ip_address is not None:
             pulumi.set(__self__, "ip_address", ip_address)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
+        if ipv6_address is not None:
+            pulumi.set(__self__, "ipv6_address", ipv6_address)
+        if network_id is not None:
+            pulumi.set(__self__, "network_id", network_id)
+        if policy_document is not None:
+            pulumi.set(__self__, "policy_document", policy_document)
+        if policy_statement is not None:
+            pulumi.set(__self__, "policy_statement", policy_statement)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if routetables is not None:
+            pulumi.set(__self__, "routetables", routetables)
         if tags is not None:
             pulumi.set(__self__, "tags", tags)
         if whitelists is not None:
             pulumi.set(__self__, "whitelists", whitelists)
 
     @property
-    @pulumi.getter(name="networkId")
-    def network_id(self) -> pulumi.Input[str]:
-        """
-        Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-        Changing this creates a new VPC endpoint.
-        """
-        return pulumi.get(self, "network_id")
-
-    @network_id.setter
-    def network_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "network_id", value)
-
-    @property
     @pulumi.getter(name="serviceId")
     def service_id(self) -> pulumi.Input[str]:
         """
         Specifies the ID of the VPC endpoint service.
-        The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+        The VPC endpoint service could be private interface service, public interface service or gateway service.
+        + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+        or datasource `huaweicloud_vpcep_services`.
+        + For public interface service, the value of `service_id` can be obtained through datasource
+        `_vpcep.get_public_services`.
+        + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+        VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+        look for VPCEP operation and maintenance help to find the gateway service ID.
         """
         return pulumi.get(self, "service_id")
 
@@ -106,7 +143,8 @@ class EndpointArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the VPC endpoint.
+        Specifies the description of the VPC endpoint. The value can contain
+        characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         """
         return pulumi.get(self, "description")
 
@@ -119,7 +157,7 @@ class EndpointArgs:
     def enable_dns(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to create a private domain name. The default value is
-        true. Changing this creates a new VPC endpoint.
+        **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "enable_dns")
 
@@ -131,8 +169,7 @@ class EndpointArgs:
     @pulumi.getter(name="enableWhitelist")
     def enable_whitelist(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable access control. The default value is
-        false.
+        Specifies whether to enable access control. The default value is **false**.
         """
         return pulumi.get(self, "enable_whitelist")
 
@@ -145,13 +182,86 @@ class EndpointArgs:
     def ip_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IP address for accessing the associated VPC endpoint
-        service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+        service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+        interface VPC endpoint service.
         """
         return pulumi.get(self, "ip_address")
 
     @ip_address.setter
     def ip_address(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "ip_address", value)
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP version of the VPC endpoint.
+        Changing this will create a new resource.
+        The valid values are as follows:
+        + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+        + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter(name="ipv6Address")
+    def ipv6_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IPv6 address for accessing the connected VPC
+        endpoint service.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "ipv6_address")
+
+    @ipv6_address.setter
+    def ipv6_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ipv6_address", value)
+
+    @property
+    @pulumi.getter(name="networkId")
+    def network_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
+        This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        The use of this field has the following restrictions:
+        + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+        + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
+        """
+        return pulumi.get(self, "network_id")
+
+    @network_id.setter
+    def network_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "network_id", value)
+
+    @property
+    @pulumi.getter(name="policyDocument")
+    def policy_document(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the endpoint policy information
+        """
+        return pulumi.get(self, "policy_document")
+
+    @policy_document.setter
+    def policy_document(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "policy_document", value)
+
+    @property
+    @pulumi.getter(name="policyStatement")
+    def policy_statement(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the policy of the gateway VPC endpoint. The value is a string in
+        JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+        Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+        """
+        return pulumi.get(self, "policy_statement")
+
+    @policy_statement.setter
+    def policy_statement(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "policy_statement", value)
 
     @property
     @pulumi.getter
@@ -165,6 +275,20 @@ class EndpointArgs:
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def routetables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IDs of the route tables associated with the VPC endpoint.
+        This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+        The default route table will be used when this field is not specified.
+        """
+        return pulumi.get(self, "routetables")
+
+    @routetables.setter
+    def routetables(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "routetables", value)
 
     @property
     @pulumi.getter
@@ -184,6 +308,7 @@ class EndpointArgs:
         """
         Specifies the list of IP address or CIDR block which can be accessed to the
         VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+        This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "whitelists")
 
@@ -199,10 +324,15 @@ class _EndpointState:
                  enable_dns: Optional[pulumi.Input[bool]] = None,
                  enable_whitelist: Optional[pulumi.Input[bool]] = None,
                  ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
+                 ipv6_address: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
                  packet_id: Optional[pulumi.Input[int]] = None,
+                 policy_document: Optional[pulumi.Input[str]] = None,
+                 policy_statement: Optional[pulumi.Input[str]] = None,
                  private_domain_name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 routetables: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  service_id: Optional[pulumi.Input[str]] = None,
                  service_name: Optional[pulumi.Input[str]] = None,
                  service_type: Optional[pulumi.Input[str]] = None,
@@ -212,30 +342,58 @@ class _EndpointState:
                  whitelists: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None):
         """
         Input properties used for looking up and filtering Endpoint resources.
-        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint. The value can contain
+               characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         :param pulumi.Input[bool] enable_dns: Specifies whether to create a private domain name. The default value is
-               true. Changing this creates a new VPC endpoint.
-        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is
-               false.
+               **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is **false**.
         :param pulumi.Input[str] ip_address: Specifies the IP address for accessing the associated VPC endpoint
-               service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+               service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+               interface VPC endpoint service.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint.
+               Changing this will create a new resource.
+               The valid values are as follows:
+               + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+               + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        :param pulumi.Input[str] ipv6_address: Specifies the IPv6 address for accessing the connected VPC
+               endpoint service.
+               Changing this will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-               Changing this creates a new VPC endpoint.
+               This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+               The use of this field has the following restrictions:
+               + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+               + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
         :param pulumi.Input[int] packet_id: The packet ID of the VPC endpoint.
+        :param pulumi.Input[str] policy_document: Specifies the endpoint policy information
+        :param pulumi.Input[str] policy_statement: Specifies the policy of the gateway VPC endpoint. The value is a string in
+               JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+               Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
         :param pulumi.Input[str] private_domain_name: The domain name for accessing the associated VPC endpoint service. This parameter is only
                available when enable_dns is set to true.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint. If omitted, the provider-level
                region will be used. Changing this creates a new VPC endpoint.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] routetables: Specifies the IDs of the route tables associated with the VPC endpoint.
+               This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+               The default route table will be used when this field is not specified.
         :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service.
-               The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+               The VPC endpoint service could be private interface service, public interface service or gateway service.
+               + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+               or datasource `huaweicloud_vpcep_services`.
+               + For public interface service, the value of `service_id` can be obtained through datasource
+               `_vpcep.get_public_services`.
+               + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+               VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+               look for VPCEP operation and maintenance help to find the gateway service ID.
         :param pulumi.Input[str] service_name: The name of the VPC endpoint service.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
-        :param pulumi.Input[str] status: The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+        :param pulumi.Input[str] status: The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+               **rejected**, **failed**, **deleting**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
                this creates a new VPC endpoint.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] whitelists: Specifies the list of IP address or CIDR block which can be accessed to the
                VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+               This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -245,14 +403,24 @@ class _EndpointState:
             pulumi.set(__self__, "enable_whitelist", enable_whitelist)
         if ip_address is not None:
             pulumi.set(__self__, "ip_address", ip_address)
+        if ip_version is not None:
+            pulumi.set(__self__, "ip_version", ip_version)
+        if ipv6_address is not None:
+            pulumi.set(__self__, "ipv6_address", ipv6_address)
         if network_id is not None:
             pulumi.set(__self__, "network_id", network_id)
         if packet_id is not None:
             pulumi.set(__self__, "packet_id", packet_id)
+        if policy_document is not None:
+            pulumi.set(__self__, "policy_document", policy_document)
+        if policy_statement is not None:
+            pulumi.set(__self__, "policy_statement", policy_statement)
         if private_domain_name is not None:
             pulumi.set(__self__, "private_domain_name", private_domain_name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if routetables is not None:
+            pulumi.set(__self__, "routetables", routetables)
         if service_id is not None:
             pulumi.set(__self__, "service_id", service_id)
         if service_name is not None:
@@ -272,7 +440,8 @@ class _EndpointState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the VPC endpoint.
+        Specifies the description of the VPC endpoint. The value can contain
+        characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         """
         return pulumi.get(self, "description")
 
@@ -285,7 +454,7 @@ class _EndpointState:
     def enable_dns(self) -> Optional[pulumi.Input[bool]]:
         """
         Specifies whether to create a private domain name. The default value is
-        true. Changing this creates a new VPC endpoint.
+        **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "enable_dns")
 
@@ -297,8 +466,7 @@ class _EndpointState:
     @pulumi.getter(name="enableWhitelist")
     def enable_whitelist(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable access control. The default value is
-        false.
+        Specifies whether to enable access control. The default value is **false**.
         """
         return pulumi.get(self, "enable_whitelist")
 
@@ -311,7 +479,8 @@ class _EndpointState:
     def ip_address(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the IP address for accessing the associated VPC endpoint
-        service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+        service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+        interface VPC endpoint service.
         """
         return pulumi.get(self, "ip_address")
 
@@ -320,11 +489,44 @@ class _EndpointState:
         pulumi.set(self, "ip_address", value)
 
     @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IP version of the VPC endpoint.
+        Changing this will create a new resource.
+        The valid values are as follows:
+        + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+        + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @ip_version.setter
+    def ip_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ip_version", value)
+
+    @property
+    @pulumi.getter(name="ipv6Address")
+    def ipv6_address(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the IPv6 address for accessing the connected VPC
+        endpoint service.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "ipv6_address")
+
+    @ipv6_address.setter
+    def ipv6_address(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ipv6_address", value)
+
+    @property
     @pulumi.getter(name="networkId")
     def network_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-        Changing this creates a new VPC endpoint.
+        This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        The use of this field has the following restrictions:
+        + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+        + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
         """
         return pulumi.get(self, "network_id")
 
@@ -343,6 +545,32 @@ class _EndpointState:
     @packet_id.setter
     def packet_id(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "packet_id", value)
+
+    @property
+    @pulumi.getter(name="policyDocument")
+    def policy_document(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the endpoint policy information
+        """
+        return pulumi.get(self, "policy_document")
+
+    @policy_document.setter
+    def policy_document(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "policy_document", value)
+
+    @property
+    @pulumi.getter(name="policyStatement")
+    def policy_statement(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the policy of the gateway VPC endpoint. The value is a string in
+        JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+        Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+        """
+        return pulumi.get(self, "policy_statement")
+
+    @policy_statement.setter
+    def policy_statement(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "policy_statement", value)
 
     @property
     @pulumi.getter(name="privateDomainName")
@@ -371,11 +599,32 @@ class _EndpointState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter
+    def routetables(self) -> Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]:
+        """
+        Specifies the IDs of the route tables associated with the VPC endpoint.
+        This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+        The default route table will be used when this field is not specified.
+        """
+        return pulumi.get(self, "routetables")
+
+    @routetables.setter
+    def routetables(self, value: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]]):
+        pulumi.set(self, "routetables", value)
+
+    @property
     @pulumi.getter(name="serviceId")
     def service_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the VPC endpoint service.
-        The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+        The VPC endpoint service could be private interface service, public interface service or gateway service.
+        + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+        or datasource `huaweicloud_vpcep_services`.
+        + For public interface service, the value of `service_id` can be obtained through datasource
+        `_vpcep.get_public_services`.
+        + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+        VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+        look for VPCEP operation and maintenance help to find the gateway service ID.
         """
         return pulumi.get(self, "service_id")
 
@@ -411,7 +660,8 @@ class _EndpointState:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+        The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+        **rejected**, **failed**, **deleting**.
         """
         return pulumi.get(self, "status")
 
@@ -450,6 +700,7 @@ class _EndpointState:
         """
         Specifies the list of IP address or CIDR block which can be accessed to the
         VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+        This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "whitelists")
 
@@ -467,8 +718,13 @@ class Endpoint(pulumi.CustomResource):
                  enable_dns: Optional[pulumi.Input[bool]] = None,
                  enable_whitelist: Optional[pulumi.Input[bool]] = None,
                  ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
+                 ipv6_address: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
+                 policy_document: Optional[pulumi.Input[str]] = None,
+                 policy_statement: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 routetables: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  service_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -478,25 +734,25 @@ class Endpoint(pulumi.CustomResource):
         Provides a resource to manage a VPC endpoint resource.
 
         ## Example Usage
-        ### Access to the public service
+        ### Access to the public interface service
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        public_interface_service_id = config.require_object("publicInterfaceServiceId")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
-        cloud_service = huaweicloud.Vpcep.get_public_services(service_name="dis")
-        myendpoint = huaweicloud.vpcep.Endpoint("myendpoint",
-            service_id=cloud_service.services[0].id,
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=public_interface_service_id,
             vpc_id=vpc_id,
             network_id=network_id,
             enable_dns=True,
             enable_whitelist=True,
             whitelists=["192.168.0.0/24"])
         ```
-        ### Access to the private service
+        ### Access to the private interface service
 
         ```python
         import pulumi
@@ -507,7 +763,7 @@ class Endpoint(pulumi.CustomResource):
         vm_port = config.require_object("vmPort")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
-        demo_service = huaweicloud.vpcep.Service("demoService",
+        test_service = huaweicloud.vpcep.Service("testService",
             server_type="VM",
             vpc_id=service_vpc_id,
             port_id=vm_port,
@@ -515,12 +771,63 @@ class Endpoint(pulumi.CustomResource):
                 service_port=8080,
                 terminal_port=80,
             )])
-        demo_endpoint = huaweicloud.vpcep.Endpoint("demoEndpoint",
-            service_id=demo_service.id,
+        test_endpoint = huaweicloud.vpcep.Endpoint("testEndpoint",
+            service_id=test_service.id,
             vpc_id=vpc_id,
             network_id=network_id,
             enable_dns=True,
             description="test description")
+        ```
+        ### Access to the gateway service without policy statement
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_service_id = config.require_object("gatewayServiceId")
+        vpc_id = config.require_object("vpcId")
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=gateway_service_id,
+            vpc_id=vpc_id,
+            description="test description")
+        ```
+        ### Access to the gateway service with policy statement
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_service_id = config.require_object("gatewayServiceId")
+        vpc_id = config.require_object("vpcId")
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=gateway_service_id,
+            vpc_id=vpc_id,
+            description="test description",
+            policy_statement=\"\"\"  [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "obs:bucket:ListBucket"
+              ],
+              "Resource": [
+                "obs:*:*:*:*/*",
+                "obs:*:*:*:*"
+              ]
+            },
+            {
+              "Effect": "Deny",
+              "Action": [
+                "obs:object:DeleteObject"
+              ],
+              "Resource": [
+                "obs:*:*:*:*/*",
+                "obs:*:*:*:*"
+              ]
+            }
+          ]
+        \"\"\")
         ```
 
         ## Import
@@ -531,26 +838,67 @@ class Endpoint(pulumi.CustomResource):
          $ pulumi import huaweicloud:Vpcep/endpoint:Endpoint test <id>
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enable_dns`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_vpcep_endpoint" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         enable_dns,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint. The value can contain
+               characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         :param pulumi.Input[bool] enable_dns: Specifies whether to create a private domain name. The default value is
-               true. Changing this creates a new VPC endpoint.
-        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is
-               false.
+               **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is **false**.
         :param pulumi.Input[str] ip_address: Specifies the IP address for accessing the associated VPC endpoint
-               service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+               service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+               interface VPC endpoint service.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint.
+               Changing this will create a new resource.
+               The valid values are as follows:
+               + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+               + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        :param pulumi.Input[str] ipv6_address: Specifies the IPv6 address for accessing the connected VPC
+               endpoint service.
+               Changing this will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-               Changing this creates a new VPC endpoint.
+               This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+               The use of this field has the following restrictions:
+               + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+               + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
+        :param pulumi.Input[str] policy_document: Specifies the endpoint policy information
+        :param pulumi.Input[str] policy_statement: Specifies the policy of the gateway VPC endpoint. The value is a string in
+               JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+               Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint. If omitted, the provider-level
                region will be used. Changing this creates a new VPC endpoint.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] routetables: Specifies the IDs of the route tables associated with the VPC endpoint.
+               This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+               The default route table will be used when this field is not specified.
         :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service.
-               The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+               The VPC endpoint service could be private interface service, public interface service or gateway service.
+               + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+               or datasource `huaweicloud_vpcep_services`.
+               + For public interface service, the value of `service_id` can be obtained through datasource
+               `_vpcep.get_public_services`.
+               + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+               VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+               look for VPCEP operation and maintenance help to find the gateway service ID.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
                this creates a new VPC endpoint.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] whitelists: Specifies the list of IP address or CIDR block which can be accessed to the
                VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+               This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         ...
     @overload
@@ -562,25 +910,25 @@ class Endpoint(pulumi.CustomResource):
         Provides a resource to manage a VPC endpoint resource.
 
         ## Example Usage
-        ### Access to the public service
+        ### Access to the public interface service
 
         ```python
         import pulumi
         import pulumi_huaweicloud as huaweicloud
 
         config = pulumi.Config()
+        public_interface_service_id = config.require_object("publicInterfaceServiceId")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
-        cloud_service = huaweicloud.Vpcep.get_public_services(service_name="dis")
-        myendpoint = huaweicloud.vpcep.Endpoint("myendpoint",
-            service_id=cloud_service.services[0].id,
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=public_interface_service_id,
             vpc_id=vpc_id,
             network_id=network_id,
             enable_dns=True,
             enable_whitelist=True,
             whitelists=["192.168.0.0/24"])
         ```
-        ### Access to the private service
+        ### Access to the private interface service
 
         ```python
         import pulumi
@@ -591,7 +939,7 @@ class Endpoint(pulumi.CustomResource):
         vm_port = config.require_object("vmPort")
         vpc_id = config.require_object("vpcId")
         network_id = config.require_object("networkId")
-        demo_service = huaweicloud.vpcep.Service("demoService",
+        test_service = huaweicloud.vpcep.Service("testService",
             server_type="VM",
             vpc_id=service_vpc_id,
             port_id=vm_port,
@@ -599,12 +947,63 @@ class Endpoint(pulumi.CustomResource):
                 service_port=8080,
                 terminal_port=80,
             )])
-        demo_endpoint = huaweicloud.vpcep.Endpoint("demoEndpoint",
-            service_id=demo_service.id,
+        test_endpoint = huaweicloud.vpcep.Endpoint("testEndpoint",
+            service_id=test_service.id,
             vpc_id=vpc_id,
             network_id=network_id,
             enable_dns=True,
             description="test description")
+        ```
+        ### Access to the gateway service without policy statement
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_service_id = config.require_object("gatewayServiceId")
+        vpc_id = config.require_object("vpcId")
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=gateway_service_id,
+            vpc_id=vpc_id,
+            description="test description")
+        ```
+        ### Access to the gateway service with policy statement
+
+        ```python
+        import pulumi
+        import pulumi_huaweicloud as huaweicloud
+
+        config = pulumi.Config()
+        gateway_service_id = config.require_object("gatewayServiceId")
+        vpc_id = config.require_object("vpcId")
+        test = huaweicloud.vpcep.Endpoint("test",
+            service_id=gateway_service_id,
+            vpc_id=vpc_id,
+            description="test description",
+            policy_statement=\"\"\"  [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "obs:bucket:ListBucket"
+              ],
+              "Resource": [
+                "obs:*:*:*:*/*",
+                "obs:*:*:*:*"
+              ]
+            },
+            {
+              "Effect": "Deny",
+              "Action": [
+                "obs:object:DeleteObject"
+              ],
+              "Resource": [
+                "obs:*:*:*:*/*",
+                "obs:*:*:*:*"
+              ]
+            }
+          ]
+        \"\"\")
         ```
 
         ## Import
@@ -614,6 +1013,20 @@ class Endpoint(pulumi.CustomResource):
         ```sh
          $ pulumi import huaweicloud:Vpcep/endpoint:Endpoint test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`enable_dns`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_vpcep_endpoint" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         enable_dns,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param EndpointArgs args: The arguments to use to populate this resource's properties.
@@ -634,8 +1047,13 @@ class Endpoint(pulumi.CustomResource):
                  enable_dns: Optional[pulumi.Input[bool]] = None,
                  enable_whitelist: Optional[pulumi.Input[bool]] = None,
                  ip_address: Optional[pulumi.Input[str]] = None,
+                 ip_version: Optional[pulumi.Input[str]] = None,
+                 ipv6_address: Optional[pulumi.Input[str]] = None,
                  network_id: Optional[pulumi.Input[str]] = None,
+                 policy_document: Optional[pulumi.Input[str]] = None,
+                 policy_statement: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 routetables: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
                  service_id: Optional[pulumi.Input[str]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None,
@@ -653,10 +1071,13 @@ class Endpoint(pulumi.CustomResource):
             __props__.__dict__["enable_dns"] = enable_dns
             __props__.__dict__["enable_whitelist"] = enable_whitelist
             __props__.__dict__["ip_address"] = ip_address
-            if network_id is None and not opts.urn:
-                raise TypeError("Missing required property 'network_id'")
+            __props__.__dict__["ip_version"] = ip_version
+            __props__.__dict__["ipv6_address"] = ipv6_address
             __props__.__dict__["network_id"] = network_id
+            __props__.__dict__["policy_document"] = policy_document
+            __props__.__dict__["policy_statement"] = policy_statement
             __props__.__dict__["region"] = region
+            __props__.__dict__["routetables"] = routetables
             if service_id is None and not opts.urn:
                 raise TypeError("Missing required property 'service_id'")
             __props__.__dict__["service_id"] = service_id
@@ -684,10 +1105,15 @@ class Endpoint(pulumi.CustomResource):
             enable_dns: Optional[pulumi.Input[bool]] = None,
             enable_whitelist: Optional[pulumi.Input[bool]] = None,
             ip_address: Optional[pulumi.Input[str]] = None,
+            ip_version: Optional[pulumi.Input[str]] = None,
+            ipv6_address: Optional[pulumi.Input[str]] = None,
             network_id: Optional[pulumi.Input[str]] = None,
             packet_id: Optional[pulumi.Input[int]] = None,
+            policy_document: Optional[pulumi.Input[str]] = None,
+            policy_statement: Optional[pulumi.Input[str]] = None,
             private_domain_name: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            routetables: Optional[pulumi.Input[Sequence[pulumi.Input[str]]]] = None,
             service_id: Optional[pulumi.Input[str]] = None,
             service_name: Optional[pulumi.Input[str]] = None,
             service_type: Optional[pulumi.Input[str]] = None,
@@ -702,30 +1128,58 @@ class Endpoint(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint.
+        :param pulumi.Input[str] description: Specifies the description of the VPC endpoint. The value can contain
+               characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         :param pulumi.Input[bool] enable_dns: Specifies whether to create a private domain name. The default value is
-               true. Changing this creates a new VPC endpoint.
-        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is
-               false.
+               **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        :param pulumi.Input[bool] enable_whitelist: Specifies whether to enable access control. The default value is **false**.
         :param pulumi.Input[str] ip_address: Specifies the IP address for accessing the associated VPC endpoint
-               service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+               service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+               interface VPC endpoint service.
+        :param pulumi.Input[str] ip_version: Specifies the IP version of the VPC endpoint.
+               Changing this will create a new resource.
+               The valid values are as follows:
+               + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+               + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        :param pulumi.Input[str] ipv6_address: Specifies the IPv6 address for accessing the connected VPC
+               endpoint service.
+               Changing this will create a new resource.
         :param pulumi.Input[str] network_id: Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-               Changing this creates a new VPC endpoint.
+               This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+               The use of this field has the following restrictions:
+               + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+               + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
         :param pulumi.Input[int] packet_id: The packet ID of the VPC endpoint.
+        :param pulumi.Input[str] policy_document: Specifies the endpoint policy information
+        :param pulumi.Input[str] policy_statement: Specifies the policy of the gateway VPC endpoint. The value is a string in
+               JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+               Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
         :param pulumi.Input[str] private_domain_name: The domain name for accessing the associated VPC endpoint service. This parameter is only
                available when enable_dns is set to true.
         :param pulumi.Input[str] region: The region in which to create the VPC endpoint. If omitted, the provider-level
                region will be used. Changing this creates a new VPC endpoint.
+        :param pulumi.Input[Sequence[pulumi.Input[str]]] routetables: Specifies the IDs of the route tables associated with the VPC endpoint.
+               This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+               The default route table will be used when this field is not specified.
         :param pulumi.Input[str] service_id: Specifies the ID of the VPC endpoint service.
-               The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+               The VPC endpoint service could be private interface service, public interface service or gateway service.
+               + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+               or datasource `huaweicloud_vpcep_services`.
+               + For public interface service, the value of `service_id` can be obtained through datasource
+               `_vpcep.get_public_services`.
+               + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+               VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+               look for VPCEP operation and maintenance help to find the gateway service ID.
         :param pulumi.Input[str] service_name: The name of the VPC endpoint service.
         :param pulumi.Input[str] service_type: The type of the VPC endpoint service.
-        :param pulumi.Input[str] status: The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+        :param pulumi.Input[str] status: The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+               **rejected**, **failed**, **deleting**.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the VPC endpoint.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC where the VPC endpoint is to be created. Changing
                this creates a new VPC endpoint.
         :param pulumi.Input[Sequence[pulumi.Input[str]]] whitelists: Specifies the list of IP address or CIDR block which can be accessed to the
                VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+               This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -735,10 +1189,15 @@ class Endpoint(pulumi.CustomResource):
         __props__.__dict__["enable_dns"] = enable_dns
         __props__.__dict__["enable_whitelist"] = enable_whitelist
         __props__.__dict__["ip_address"] = ip_address
+        __props__.__dict__["ip_version"] = ip_version
+        __props__.__dict__["ipv6_address"] = ipv6_address
         __props__.__dict__["network_id"] = network_id
         __props__.__dict__["packet_id"] = packet_id
+        __props__.__dict__["policy_document"] = policy_document
+        __props__.__dict__["policy_statement"] = policy_statement
         __props__.__dict__["private_domain_name"] = private_domain_name
         __props__.__dict__["region"] = region
+        __props__.__dict__["routetables"] = routetables
         __props__.__dict__["service_id"] = service_id
         __props__.__dict__["service_name"] = service_name
         __props__.__dict__["service_type"] = service_type
@@ -752,7 +1211,8 @@ class Endpoint(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[str]:
         """
-        Specifies the description of the VPC endpoint.
+        Specifies the description of the VPC endpoint. The value can contain
+        characters such as letters and digits, but cannot contain less than signs (<) and great than signs (>).
         """
         return pulumi.get(self, "description")
 
@@ -761,7 +1221,7 @@ class Endpoint(pulumi.CustomResource):
     def enable_dns(self) -> pulumi.Output[Optional[bool]]:
         """
         Specifies whether to create a private domain name. The default value is
-        true. Changing this creates a new VPC endpoint.
+        **true**. This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "enable_dns")
 
@@ -769,8 +1229,7 @@ class Endpoint(pulumi.CustomResource):
     @pulumi.getter(name="enableWhitelist")
     def enable_whitelist(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether to enable access control. The default value is
-        false.
+        Specifies whether to enable access control. The default value is **false**.
         """
         return pulumi.get(self, "enable_whitelist")
 
@@ -779,16 +1238,42 @@ class Endpoint(pulumi.CustomResource):
     def ip_address(self) -> pulumi.Output[str]:
         """
         Specifies the IP address for accessing the associated VPC endpoint
-        service. Only IPv4 addresses are supported. Changing this creates a new VPC endpoint.
+        service. Only IPv4 addresses are supported. This field is required when creating a VPC endpoint for connecting an
+        interface VPC endpoint service.
         """
         return pulumi.get(self, "ip_address")
+
+    @property
+    @pulumi.getter(name="ipVersion")
+    def ip_version(self) -> pulumi.Output[str]:
+        """
+        Specifies the IP version of the VPC endpoint.
+        Changing this will create a new resource.
+        The valid values are as follows:
+        + **ipv4**: The VPC endpoint IP address can only be an IPv4 address.
+        + **dualstack**: The VPC endpoint IP address can be an IPv4 address or IPv6 address.
+        """
+        return pulumi.get(self, "ip_version")
+
+    @property
+    @pulumi.getter(name="ipv6Address")
+    def ipv6_address(self) -> pulumi.Output[str]:
+        """
+        Specifies the IPv6 address for accessing the connected VPC
+        endpoint service.
+        Changing this will create a new resource.
+        """
+        return pulumi.get(self, "ipv6_address")
 
     @property
     @pulumi.getter(name="networkId")
     def network_id(self) -> pulumi.Output[str]:
         """
         Specifies the network ID of the subnet in the VPC specified by `vpc_id`.
-        Changing this creates a new VPC endpoint.
+        This field is required when creating a VPC endpoint for connecting an interface VPC endpoint service.
+        The use of this field has the following restrictions:
+        + The subnet CIDR block of the VPC cannot overlap with **198.19.128.0/17**.
+        + The destination address of the custom route in the VPC route table cannot overlap with **198.19.128.0/17**.
         """
         return pulumi.get(self, "network_id")
 
@@ -799,6 +1284,24 @@ class Endpoint(pulumi.CustomResource):
         The packet ID of the VPC endpoint.
         """
         return pulumi.get(self, "packet_id")
+
+    @property
+    @pulumi.getter(name="policyDocument")
+    def policy_document(self) -> pulumi.Output[str]:
+        """
+        Specifies the endpoint policy information
+        """
+        return pulumi.get(self, "policy_document")
+
+    @property
+    @pulumi.getter(name="policyStatement")
+    def policy_statement(self) -> pulumi.Output[str]:
+        """
+        Specifies the policy of the gateway VPC endpoint. The value is a string in
+        JSON array format. This parameter is only available when `enable_policy` of the VPC endpoint services for
+        Object Storage Service (OBS) and Scalable File Service (SFS) is set to **true**.
+        """
+        return pulumi.get(self, "policy_statement")
 
     @property
     @pulumi.getter(name="privateDomainName")
@@ -819,11 +1322,28 @@ class Endpoint(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
+    @pulumi.getter
+    def routetables(self) -> pulumi.Output[Sequence[str]]:
+        """
+        Specifies the IDs of the route tables associated with the VPC endpoint.
+        This field is valid only when creating a VPC endpoint for connecting a gateway VPC endpoint service.
+        The default route table will be used when this field is not specified.
+        """
+        return pulumi.get(self, "routetables")
+
+    @property
     @pulumi.getter(name="serviceId")
     def service_id(self) -> pulumi.Output[str]:
         """
         Specifies the ID of the VPC endpoint service.
-        The VPC endpoint service could be private or public. Changing this creates a new VPC endpoint.
+        The VPC endpoint service could be private interface service, public interface service or gateway service.
+        + For private interface service, the value of `service_id` can be obtained through resource `Vpcep.Service`
+        or datasource `huaweicloud_vpcep_services`.
+        + For public interface service, the value of `service_id` can be obtained through datasource
+        `_vpcep.get_public_services`.
+        + For gateway service, due to API reasons, the current provider's capabilities do not support the creation of gateway
+        VPC endpoint services. Please try to obtain `service_id` through datasource `_vpcep.get_public_services` or
+        look for VPCEP operation and maintenance help to find the gateway service ID.
         """
         return pulumi.get(self, "service_id")
 
@@ -847,7 +1367,8 @@ class Endpoint(pulumi.CustomResource):
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        The status of the VPC endpoint. The value can be **accepted**, **pendingAcceptance** or **rejected**.
+        The status of the VPC endpoint. The value can be **pendingAcceptance**, **creating**, **accepted**,
+        **rejected**, **failed**, **deleting**.
         """
         return pulumi.get(self, "status")
 
@@ -874,6 +1395,7 @@ class Endpoint(pulumi.CustomResource):
         """
         Specifies the list of IP address or CIDR block which can be accessed to the
         VPC endpoint. This field is valid when `enable_whitelist` is set to **true**. The max length of whitelist is 20.
+        This field is valid only when creating a VPC endpoint for connecting an interface VPC endpoint service.
         """
         return pulumi.get(self, "whitelists")
 

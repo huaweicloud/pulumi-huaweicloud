@@ -20,13 +20,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Tasks can be imported using the `id`, e.g.
+ * Tasks can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cpts/task:Task test 1090
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cpts_task" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`operation`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cpts_task" "test" {
  *
  *  ...
  *
@@ -69,8 +69,8 @@ export class Task extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies benchmark concurrency of the task, the value range is 0 to
-     * 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+     * Specifies benchmark concurrency of the task, the value range is `0` to
+     * `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
      * `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
      */
     public readonly benchmarkConcurrency!: pulumi.Output<number | undefined>;
@@ -80,7 +80,7 @@ export class Task extends pulumi.CustomResource {
      */
     public readonly clusterId!: pulumi.Output<number | undefined>;
     /**
-     * Specifies the name of the task, which can contain a maximum of 42 characters.
+     * Specifies the name of the task, which can contain a maximum of `42` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -149,8 +149,8 @@ export class Task extends pulumi.CustomResource {
  */
 export interface TaskState {
     /**
-     * Specifies benchmark concurrency of the task, the value range is 0 to
-     * 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+     * Specifies benchmark concurrency of the task, the value range is `0` to
+     * `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
      * `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
      */
     benchmarkConcurrency?: pulumi.Input<number>;
@@ -160,7 +160,7 @@ export interface TaskState {
      */
     clusterId?: pulumi.Input<number>;
     /**
-     * Specifies the name of the task, which can contain a maximum of 42 characters.
+     * Specifies the name of the task, which can contain a maximum of `42` characters.
      */
     name?: pulumi.Input<string>;
     /**
@@ -192,8 +192,8 @@ export interface TaskState {
  */
 export interface TaskArgs {
     /**
-     * Specifies benchmark concurrency of the task, the value range is 0 to
-     * 2000000. The default value is `100`. Reference for the calculation of the number of concurrent users.
+     * Specifies benchmark concurrency of the task, the value range is `0` to
+     * `2,000,000`. The default value is `100`. Reference for the calculation of the number of concurrent users.
      * `Number of concurrent users` = `benchmark concurrency` * `concurrency ratio`.
      */
     benchmarkConcurrency?: pulumi.Input<number>;
@@ -203,7 +203,7 @@ export interface TaskArgs {
      */
     clusterId?: pulumi.Input<number>;
     /**
-     * Specifies the name of the task, which can contain a maximum of 42 characters.
+     * Specifies the name of the task, which can contain a maximum of `42` characters.
      */
     name?: pulumi.Input<string>;
     /**

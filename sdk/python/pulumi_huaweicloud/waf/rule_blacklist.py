@@ -21,28 +21,33 @@ class RuleBlacklistArgs:
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  ip_address: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None):
         """
         The set of arguments for constructing a RuleBlacklist resource.
-        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule. Please make
-               sure that the region which the policy belongs to be consistent with the `region`.
-        :param pulumi.Input[int] action: Specifies the protective action. Defaults is `0`. The value can be:
+        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] action: Specifies the protective action. Defaults to `0`. The value can be:
                + `0`: block the request.
                + `1`: allow the request.
                + `2`: log the request only.
-        :param pulumi.Input[str] address_group_id: Specifies the WAF address group id.
+        :param pulumi.Input[str] address_group_id: Specifies the WAF address group ID.
                This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
         :param pulumi.Input[str] description: Specifies the rule description of the WAF address group.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF rule blacklist
-               and whitelist. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+               and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
                This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
-        :param pulumi.Input[str] name: Specifies the Rule name. The value can contain a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the rule name. The value can contain a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
-        :param pulumi.Input[str] region: The region in which to create the WAF blacklist and whitelist rule resource.
-               If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Specifies the status of WAF blacklist and whitelist rule.
+               Valid values are as follows:
+               + **0**: Disabled.
+               + **1**: Enabled.
         """
         pulumi.set(__self__, "policy_id", policy_id)
         if action is not None:
@@ -59,13 +64,14 @@ class RuleBlacklistArgs:
             pulumi.set(__self__, "name", name)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Input[str]:
         """
-        Specifies the WAF policy ID. Changing this creates a new rule. Please make
-        sure that the region which the policy belongs to be consistent with the `region`.
+        Specifies the WAF policy ID. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "policy_id")
 
@@ -77,7 +83,7 @@ class RuleBlacklistArgs:
     @pulumi.getter
     def action(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the protective action. Defaults is `0`. The value can be:
+        Specifies the protective action. Defaults to `0`. The value can be:
         + `0`: block the request.
         + `1`: allow the request.
         + `2`: log the request only.
@@ -92,7 +98,7 @@ class RuleBlacklistArgs:
     @pulumi.getter(name="addressGroupId")
     def address_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the WAF address group id.
+        Specifies the WAF address group ID.
         This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -119,7 +125,8 @@ class RuleBlacklistArgs:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF rule blacklist
-        and whitelist. Changing this parameter will create a new resource.
+        and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -131,7 +138,7 @@ class RuleBlacklistArgs:
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+        Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
         This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -145,7 +152,7 @@ class RuleBlacklistArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Rule name. The value can contain a maximum of 64 characters.
+        Specifies the rule name. The value can contain a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -158,14 +165,29 @@ class RuleBlacklistArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF blacklist and whitelist rule resource.
-        If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the status of WAF blacklist and whitelist rule.
+        Valid values are as follows:
+        + **0**: Disabled.
+        + **1**: Enabled.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status", value)
 
 
 @pulumi.input_type
@@ -180,30 +202,35 @@ class _RuleBlacklistState:
                  ip_address: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering RuleBlacklist resources.
-        :param pulumi.Input[int] action: Specifies the protective action. Defaults is `0`. The value can be:
+        :param pulumi.Input[int] action: Specifies the protective action. Defaults to `0`. The value can be:
                + `0`: block the request.
                + `1`: allow the request.
                + `2`: log the request only.
-        :param pulumi.Input[str] address_group_id: Specifies the WAF address group id.
+        :param pulumi.Input[str] address_group_id: Specifies the WAF address group ID.
                This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
         :param pulumi.Input[str] address_group_name: The name of the IP address group.
         :param pulumi.Input[int] address_group_size: The number of IP addresses or IP address ranges in the IP address group.
         :param pulumi.Input[str] description: Specifies the rule description of the WAF address group.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF rule blacklist
-               and whitelist. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+               and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
                This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
-        :param pulumi.Input[str] name: Specifies the Rule name. The value can contain a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the rule name. The value can contain a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
-        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule. Please make
-               sure that the region which the policy belongs to be consistent with the `region`.
-        :param pulumi.Input[str] region: The region in which to create the WAF blacklist and whitelist rule resource.
-               If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Specifies the status of WAF blacklist and whitelist rule.
+               Valid values are as follows:
+               + **0**: Disabled.
+               + **1**: Enabled.
         """
         if action is not None:
             pulumi.set(__self__, "action", action)
@@ -225,12 +252,14 @@ class _RuleBlacklistState:
             pulumi.set(__self__, "policy_id", policy_id)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
 
     @property
     @pulumi.getter
     def action(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the protective action. Defaults is `0`. The value can be:
+        Specifies the protective action. Defaults to `0`. The value can be:
         + `0`: block the request.
         + `1`: allow the request.
         + `2`: log the request only.
@@ -245,7 +274,7 @@ class _RuleBlacklistState:
     @pulumi.getter(name="addressGroupId")
     def address_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the WAF address group id.
+        Specifies the WAF address group ID.
         This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -296,7 +325,8 @@ class _RuleBlacklistState:
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project ID of WAF rule blacklist
-        and whitelist. Changing this parameter will create a new resource.
+        and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -308,7 +338,7 @@ class _RuleBlacklistState:
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+        Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
         This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -322,7 +352,7 @@ class _RuleBlacklistState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the Rule name. The value can contain a maximum of 64 characters.
+        Specifies the rule name. The value can contain a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -335,8 +365,7 @@ class _RuleBlacklistState:
     @pulumi.getter(name="policyId")
     def policy_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the WAF policy ID. Changing this creates a new rule. Please make
-        sure that the region which the policy belongs to be consistent with the `region`.
+        Specifies the WAF policy ID. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "policy_id")
 
@@ -348,14 +377,29 @@ class _RuleBlacklistState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the WAF blacklist and whitelist rule resource.
-        If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
 
     @region.setter
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the status of WAF blacklist and whitelist rule.
+        Valid values are as follows:
+        + **0**: Disabled.
+        + **1**: Enabled.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "status", value)
 
 
 class RuleBlacklist(pulumi.CustomResource):
@@ -371,15 +415,16 @@ class RuleBlacklist(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
         Manages a WAF blacklist and whitelist rule resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The blacklist and whitelist rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+        used. The blacklist and whitelist rule resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
-        ### WAF rule blacklist and whitelist with ip address
+        ### WAF rule blacklist and whitelist with IP address
 
         ```python
         import pulumi
@@ -427,25 +472,29 @@ class RuleBlacklist(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] action: Specifies the protective action. Defaults is `0`. The value can be:
+        :param pulumi.Input[int] action: Specifies the protective action. Defaults to `0`. The value can be:
                + `0`: block the request.
                + `1`: allow the request.
                + `2`: log the request only.
-        :param pulumi.Input[str] address_group_id: Specifies the WAF address group id.
+        :param pulumi.Input[str] address_group_id: Specifies the WAF address group ID.
                This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
         :param pulumi.Input[str] description: Specifies the rule description of the WAF address group.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF rule blacklist
-               and whitelist. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+               and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
                This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
-        :param pulumi.Input[str] name: Specifies the Rule name. The value can contain a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the rule name. The value can contain a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
-        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule. Please make
-               sure that the region which the policy belongs to be consistent with the `region`.
-        :param pulumi.Input[str] region: The region in which to create the WAF blacklist and whitelist rule resource.
-               If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Specifies the status of WAF blacklist and whitelist rule.
+               Valid values are as follows:
+               + **0**: Disabled.
+               + **1**: Enabled.
         """
         ...
     @overload
@@ -457,10 +506,10 @@ class RuleBlacklist(pulumi.CustomResource):
         Manages a WAF blacklist and whitelist rule resource within HuaweiCloud.
 
         > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
-        used. The blacklist and whitelist rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+        used. The blacklist and whitelist rule resource can be used in Cloud Mode and Dedicated Mode.
 
         ## Example Usage
-        ### WAF rule blacklist and whitelist with ip address
+        ### WAF rule blacklist and whitelist with IP address
 
         ```python
         import pulumi
@@ -529,6 +578,7 @@ class RuleBlacklist(pulumi.CustomResource):
                  name: Optional[pulumi.Input[str]] = None,
                  policy_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -548,6 +598,7 @@ class RuleBlacklist(pulumi.CustomResource):
                 raise TypeError("Missing required property 'policy_id'")
             __props__.__dict__["policy_id"] = policy_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["status"] = status
             __props__.__dict__["address_group_name"] = None
             __props__.__dict__["address_group_size"] = None
         super(RuleBlacklist, __self__).__init__(
@@ -569,7 +620,8 @@ class RuleBlacklist(pulumi.CustomResource):
             ip_address: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             policy_id: Optional[pulumi.Input[str]] = None,
-            region: Optional[pulumi.Input[str]] = None) -> 'RuleBlacklist':
+            region: Optional[pulumi.Input[str]] = None,
+            status: Optional[pulumi.Input[int]] = None) -> 'RuleBlacklist':
         """
         Get an existing RuleBlacklist resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -577,27 +629,31 @@ class RuleBlacklist(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[int] action: Specifies the protective action. Defaults is `0`. The value can be:
+        :param pulumi.Input[int] action: Specifies the protective action. Defaults to `0`. The value can be:
                + `0`: block the request.
                + `1`: allow the request.
                + `2`: log the request only.
-        :param pulumi.Input[str] address_group_id: Specifies the WAF address group id.
+        :param pulumi.Input[str] address_group_id: Specifies the WAF address group ID.
                This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
         :param pulumi.Input[str] address_group_name: The name of the IP address group.
         :param pulumi.Input[int] address_group_size: The number of IP addresses or IP address ranges in the IP address group.
         :param pulumi.Input[str] description: Specifies the rule description of the WAF address group.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID of WAF rule blacklist
-               and whitelist. Changing this parameter will create a new resource.
-        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+               and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] ip_address: Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
                This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
                can not be configured together.
-        :param pulumi.Input[str] name: Specifies the Rule name. The value can contain a maximum of 64 characters.
+        :param pulumi.Input[str] name: Specifies the rule name. The value can contain a maximum of `64` characters.
                Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
-        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this creates a new rule. Please make
-               sure that the region which the policy belongs to be consistent with the `region`.
-        :param pulumi.Input[str] region: The region in which to create the WAF blacklist and whitelist rule resource.
-               If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        :param pulumi.Input[str] policy_id: Specifies the WAF policy ID. Changing this parameter will create a new resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+               If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
+        :param pulumi.Input[int] status: Specifies the status of WAF blacklist and whitelist rule.
+               Valid values are as follows:
+               + **0**: Disabled.
+               + **1**: Enabled.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -613,13 +669,14 @@ class RuleBlacklist(pulumi.CustomResource):
         __props__.__dict__["name"] = name
         __props__.__dict__["policy_id"] = policy_id
         __props__.__dict__["region"] = region
+        __props__.__dict__["status"] = status
         return RuleBlacklist(resource_name, opts=opts, __props__=__props__)
 
     @property
     @pulumi.getter
     def action(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the protective action. Defaults is `0`. The value can be:
+        Specifies the protective action. Defaults to `0`. The value can be:
         + `0`: block the request.
         + `1`: allow the request.
         + `2`: log the request only.
@@ -630,7 +687,7 @@ class RuleBlacklist(pulumi.CustomResource):
     @pulumi.getter(name="addressGroupId")
     def address_group_id(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the WAF address group id.
+        Specifies the WAF address group ID.
         This parameter is required when `ip_address` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -665,7 +722,8 @@ class RuleBlacklist(pulumi.CustomResource):
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project ID of WAF rule blacklist
-        and whitelist. Changing this parameter will create a new resource.
+        and whitelist. For enterprise users, if omitted, default enterprise project will be used.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -673,7 +731,7 @@ class RuleBlacklist(pulumi.CustomResource):
     @pulumi.getter(name="ipAddress")
     def ip_address(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the IP address or range. For example, 192.168.0.125 or 192.168.0.0/24.
+        Specifies the IP address or range. For example, **192.168.0.125** or **192.168.0.0/24**.
         This parameter is required when `address_group_id` is not specified. The parameter `address_group_id` and `ip_address`
         can not be configured together.
         """
@@ -683,7 +741,7 @@ class RuleBlacklist(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the Rule name. The value can contain a maximum of 64 characters.
+        Specifies the rule name. The value can contain a maximum of `64` characters.
         Only letters, digits, hyphens (-), underscores (_) and periods (.) are allowed.
         """
         return pulumi.get(self, "name")
@@ -692,8 +750,7 @@ class RuleBlacklist(pulumi.CustomResource):
     @pulumi.getter(name="policyId")
     def policy_id(self) -> pulumi.Output[str]:
         """
-        Specifies the WAF policy ID. Changing this creates a new rule. Please make
-        sure that the region which the policy belongs to be consistent with the `region`.
+        Specifies the WAF policy ID. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "policy_id")
 
@@ -701,8 +758,19 @@ class RuleBlacklist(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the WAF blacklist and whitelist rule resource.
-        If omitted, the provider-level region will be used. Changing this setting will push a new certificate.
+        Specifies the region in which to create the WAF blacklist and whitelist rule resource.
+        If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the status of WAF blacklist and whitelist rule.
+        Valid values are as follows:
+        + **0**: Disabled.
+        + **1**: Enabled.
+        """
+        return pulumi.get(self, "status")
 

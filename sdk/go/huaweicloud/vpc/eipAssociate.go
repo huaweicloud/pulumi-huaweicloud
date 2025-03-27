@@ -99,7 +99,7 @@ import (
 //
 // ## Import
 //
-// EIP associations can be imported using the `id` of the EIP, e.g.
+// EIP associations can be imported using the `id` of the EIP, e.g. bash
 //
 // ```sh
 //
@@ -122,6 +122,8 @@ type EipAssociate struct {
 	PortId pulumi.StringOutput `pulumi:"portId"`
 	// Specifies the EIP address to associate. Changing this creates a new resource.
 	PublicIp pulumi.StringOutput `pulumi:"publicIp"`
+	// The IPv6 address of the private IP.
+	PublicIpv6 pulumi.StringOutput `pulumi:"publicIpv6"`
 	// Specifies the region in which to associate the EIP. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -175,6 +177,8 @@ type eipAssociateState struct {
 	PortId *string `pulumi:"portId"`
 	// Specifies the EIP address to associate. Changing this creates a new resource.
 	PublicIp *string `pulumi:"publicIp"`
+	// The IPv6 address of the private IP.
+	PublicIpv6 *string `pulumi:"publicIpv6"`
 	// Specifies the region in which to associate the EIP. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
 	Region *string `pulumi:"region"`
@@ -196,6 +200,8 @@ type EipAssociateState struct {
 	PortId pulumi.StringPtrInput
 	// Specifies the EIP address to associate. Changing this creates a new resource.
 	PublicIp pulumi.StringPtrInput
+	// The IPv6 address of the private IP.
+	PublicIpv6 pulumi.StringPtrInput
 	// Specifies the region in which to associate the EIP. If omitted, the provider-level
 	// region will be used. Changing this creates a new resource.
 	Region pulumi.StringPtrInput
@@ -355,6 +361,11 @@ func (o EipAssociateOutput) PortId() pulumi.StringOutput {
 // Specifies the EIP address to associate. Changing this creates a new resource.
 func (o EipAssociateOutput) PublicIp() pulumi.StringOutput {
 	return o.ApplyT(func(v *EipAssociate) pulumi.StringOutput { return v.PublicIp }).(pulumi.StringOutput)
+}
+
+// The IPv6 address of the private IP.
+func (o EipAssociateOutput) PublicIpv6() pulumi.StringOutput {
+	return o.ApplyT(func(v *EipAssociate) pulumi.StringOutput { return v.PublicIpv6 }).(pulumi.StringOutput)
 }
 
 // Specifies the region in which to associate the EIP. If omitted, the provider-level

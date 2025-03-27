@@ -11,13 +11,11 @@ import (
 )
 
 type TagsTag struct {
-	// Specifies the tag key. The value can contain up to 36 characters.
-	// Only letters, digits, hyphens (-), underscores (_), and Unicode characters from \u4e00 to \u9fff are allowed.
-	// Changing this will create a new resource.
+	// Specifies the tag key. The value can contain up to `36` characters. Only English letters,
+	// Chinese characters, digits, hyphens (-) and underscores (_) are allowed.
 	Key string `pulumi:"key"`
-	// Specifies the tag value. The value can contain up to 43 characters.
-	// Only letters, digits, periods (.), hyphens (-), and underscores (_), and Unicode characters from \u4e00 to \u9fff
-	// are allowed. Changing this will create a new resource.
+	// Specifies the tag value. The value can contain up to `43` characters. Only English letters,
+	// Chinese characters, digits, periods (.), hyphens (-) and underscores (_) are allowed.
 	Value string `pulumi:"value"`
 }
 
@@ -33,13 +31,11 @@ type TagsTagInput interface {
 }
 
 type TagsTagArgs struct {
-	// Specifies the tag key. The value can contain up to 36 characters.
-	// Only letters, digits, hyphens (-), underscores (_), and Unicode characters from \u4e00 to \u9fff are allowed.
-	// Changing this will create a new resource.
+	// Specifies the tag key. The value can contain up to `36` characters. Only English letters,
+	// Chinese characters, digits, hyphens (-) and underscores (_) are allowed.
 	Key pulumi.StringInput `pulumi:"key"`
-	// Specifies the tag value. The value can contain up to 43 characters.
-	// Only letters, digits, periods (.), hyphens (-), and underscores (_), and Unicode characters from \u4e00 to \u9fff
-	// are allowed. Changing this will create a new resource.
+	// Specifies the tag value. The value can contain up to `43` characters. Only English letters,
+	// Chinese characters, digits, periods (.), hyphens (-) and underscores (_) are allowed.
 	Value pulumi.StringInput `pulumi:"value"`
 }
 
@@ -94,16 +90,14 @@ func (o TagsTagOutput) ToTagsTagOutputWithContext(ctx context.Context) TagsTagOu
 	return o
 }
 
-// Specifies the tag key. The value can contain up to 36 characters.
-// Only letters, digits, hyphens (-), underscores (_), and Unicode characters from \u4e00 to \u9fff are allowed.
-// Changing this will create a new resource.
+// Specifies the tag key. The value can contain up to `36` characters. Only English letters,
+// Chinese characters, digits, hyphens (-) and underscores (_) are allowed.
 func (o TagsTagOutput) Key() pulumi.StringOutput {
 	return o.ApplyT(func(v TagsTag) string { return v.Key }).(pulumi.StringOutput)
 }
 
-// Specifies the tag value. The value can contain up to 43 characters.
-// Only letters, digits, periods (.), hyphens (-), and underscores (_), and Unicode characters from \u4e00 to \u9fff
-// are allowed. Changing this will create a new resource.
+// Specifies the tag value. The value can contain up to `43` characters. Only English letters,
+// Chinese characters, digits, periods (.), hyphens (-) and underscores (_) are allowed.
 func (o TagsTagOutput) Value() pulumi.StringOutput {
 	return o.ApplyT(func(v TagsTag) string { return v.Value }).(pulumi.StringOutput)
 }

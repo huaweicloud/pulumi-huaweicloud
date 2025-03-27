@@ -16,7 +16,8 @@ class BasicArgs:
     def __init__(__self__, *,
                  eip_id: pulumi.Input[str],
                  traffic_threshold: pulumi.Input[int],
-                 region: Optional[pulumi.Input[str]] = None):
+                 region: Optional[pulumi.Input[str]] = None,
+                 topic_urn: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Basic resource.
         :param pulumi.Input[str] eip_id: Specifies the ID of an EIP. Changing this creates a new resource.
@@ -24,11 +25,15 @@ class BasicArgs:
                The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
         :param pulumi.Input[str] region: Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] topic_urn: Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+               notification. When the value is empty, it means turning off the alarm notification.
         """
         pulumi.set(__self__, "eip_id", eip_id)
         pulumi.set(__self__, "traffic_threshold", traffic_threshold)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if topic_urn is not None:
+            pulumi.set(__self__, "topic_urn", topic_urn)
 
     @property
     @pulumi.getter(name="eipId")
@@ -68,6 +73,19 @@ class BasicArgs:
     def region(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "region", value)
 
+    @property
+    @pulumi.getter(name="topicUrn")
+    def topic_urn(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+        notification. When the value is empty, it means turning off the alarm notification.
+        """
+        return pulumi.get(self, "topic_urn")
+
+    @topic_urn.setter
+    def topic_urn(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "topic_urn", value)
+
 
 @pulumi.input_type
 class _BasicState:
@@ -76,6 +94,7 @@ class _BasicState:
                  public_ip: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
+                 topic_urn: Optional[pulumi.Input[str]] = None,
                  traffic_threshold: Optional[pulumi.Input[int]] = None):
         """
         Input properties used for looking up and filtering Basic resources.
@@ -84,6 +103,8 @@ class _BasicState:
         :param pulumi.Input[str] region: Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The Anti-DDos status.
+        :param pulumi.Input[str] topic_urn: Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+               notification. When the value is empty, it means turning off the alarm notification.
         :param pulumi.Input[int] traffic_threshold: Specifies the traffic cleaning threshold in Mbps.
                The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
         """
@@ -95,6 +116,8 @@ class _BasicState:
             pulumi.set(__self__, "region", region)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if topic_urn is not None:
+            pulumi.set(__self__, "topic_urn", topic_urn)
         if traffic_threshold is not None:
             pulumi.set(__self__, "traffic_threshold", traffic_threshold)
 
@@ -148,6 +171,19 @@ class _BasicState:
         pulumi.set(self, "status", value)
 
     @property
+    @pulumi.getter(name="topicUrn")
+    def topic_urn(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+        notification. When the value is empty, it means turning off the alarm notification.
+        """
+        return pulumi.get(self, "topic_urn")
+
+    @topic_urn.setter
+    def topic_urn(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "topic_urn", value)
+
+    @property
     @pulumi.getter(name="trafficThreshold")
     def traffic_threshold(self) -> Optional[pulumi.Input[int]]:
         """
@@ -168,6 +204,7 @@ class Basic(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 topic_urn: Optional[pulumi.Input[str]] = None,
                  traffic_threshold: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         """
@@ -191,7 +228,7 @@ class Basic(pulumi.CustomResource):
 
         ## Import
 
-        Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g.
+        Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:AntiDDos/basic:Basic antiddos_1 c5256d47-8f9e-4ae7-9943-6e77e3d8bd2d
@@ -202,6 +239,8 @@ class Basic(pulumi.CustomResource):
         :param pulumi.Input[str] eip_id: Specifies the ID of an EIP. Changing this creates a new resource.
         :param pulumi.Input[str] region: Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
+        :param pulumi.Input[str] topic_urn: Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+               notification. When the value is empty, it means turning off the alarm notification.
         :param pulumi.Input[int] traffic_threshold: Specifies the traffic cleaning threshold in Mbps.
                The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
         """
@@ -232,7 +271,7 @@ class Basic(pulumi.CustomResource):
 
         ## Import
 
-        Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g.
+        Cloud Native Anti-DDos Basic resources can be imported using `eip_id`. e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:AntiDDos/basic:Basic antiddos_1 c5256d47-8f9e-4ae7-9943-6e77e3d8bd2d
@@ -255,6 +294,7 @@ class Basic(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  eip_id: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 topic_urn: Optional[pulumi.Input[str]] = None,
                  traffic_threshold: Optional[pulumi.Input[int]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
@@ -269,6 +309,7 @@ class Basic(pulumi.CustomResource):
                 raise TypeError("Missing required property 'eip_id'")
             __props__.__dict__["eip_id"] = eip_id
             __props__.__dict__["region"] = region
+            __props__.__dict__["topic_urn"] = topic_urn
             if traffic_threshold is None and not opts.urn:
                 raise TypeError("Missing required property 'traffic_threshold'")
             __props__.__dict__["traffic_threshold"] = traffic_threshold
@@ -288,6 +329,7 @@ class Basic(pulumi.CustomResource):
             public_ip: Optional[pulumi.Input[str]] = None,
             region: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
+            topic_urn: Optional[pulumi.Input[str]] = None,
             traffic_threshold: Optional[pulumi.Input[int]] = None) -> 'Basic':
         """
         Get an existing Basic resource's state with the given name, id, and optional extra
@@ -301,6 +343,8 @@ class Basic(pulumi.CustomResource):
         :param pulumi.Input[str] region: Specifies the region in which to manage the Cloud Native Anti-DDos Basic resource.
                If omitted, the provider-level region will be used. Changing this creates a new resource.
         :param pulumi.Input[str] status: The Anti-DDos status.
+        :param pulumi.Input[str] topic_urn: Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+               notification. When the value is empty, it means turning off the alarm notification.
         :param pulumi.Input[int] traffic_threshold: Specifies the traffic cleaning threshold in Mbps.
                The value can be 10, 30, 50, 70, 100, 120, 150, 200, 250, 300, 1000 Mbps.
         """
@@ -312,6 +356,7 @@ class Basic(pulumi.CustomResource):
         __props__.__dict__["public_ip"] = public_ip
         __props__.__dict__["region"] = region
         __props__.__dict__["status"] = status
+        __props__.__dict__["topic_urn"] = topic_urn
         __props__.__dict__["traffic_threshold"] = traffic_threshold
         return Basic(resource_name, opts=opts, __props__=__props__)
 
@@ -347,6 +392,15 @@ class Basic(pulumi.CustomResource):
         The Anti-DDos status.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="topicUrn")
+    def topic_urn(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the SMN topic URN. When the value is not empty, it means turning on the alarm
+        notification. When the value is empty, it means turning off the alarm notification.
+        """
+        return pulumi.get(self, "topic_urn")
 
     @property
     @pulumi.getter(name="trafficThreshold")

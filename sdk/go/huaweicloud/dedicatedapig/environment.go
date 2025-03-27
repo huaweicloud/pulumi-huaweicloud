@@ -47,11 +47,11 @@ import (
 //
 // ## Import
 //
-// Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g.
+// Environments can be imported using their `name` and the ID of the related dedicated instance, separated by a slash, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:DedicatedApig/environment:Environment test &ltinstance_id&gt/&ltname&gt
+//	$ pulumi import huaweicloud:DedicatedApig/environment:Environment test <instance_id>/<name>
 //
 // ```
 type Environment struct {

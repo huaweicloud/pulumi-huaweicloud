@@ -23,6 +23,7 @@ class MysqlInstanceArgs:
                  audit_log_enabled: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 auto_scaling: Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']] = None,
                  availability_zone_mode: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['MysqlInstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
@@ -31,18 +32,32 @@ class MysqlInstanceArgs:
                  datastore: Optional[pulumi.Input['MysqlInstanceDatastoreArgs']] = None,
                  dedicated_resource_id: Optional[pulumi.Input[str]] = None,
                  dedicated_resource_name: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 encryption_status: Optional[pulumi.Input[str]] = None,
+                 encryption_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  master_availability_zone: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 private_write_ip: Optional[pulumi.Input[str]] = None,
                  proxy_flavor: Optional[pulumi.Input[str]] = None,
                  proxy_node_num: Optional[pulumi.Input[int]] = None,
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_period: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_switch: Optional[pulumi.Input[bool]] = None,
                  sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
+                 ssl_option: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
@@ -51,7 +66,7 @@ class MysqlInstanceArgs:
         The set of arguments for constructing a MysqlInstance resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. Please use
                `gaussdb_mysql_flavors` data source to fetch the available flavors.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
@@ -59,45 +74,68 @@ class MysqlInstanceArgs:
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false".
+               Valid values are **true** and **false**.
+        :param pulumi.Input['MysqlInstanceAutoScalingArgs'] auto_scaling: Specifies the auto-scaling policies.
+               The auto_scaling structure is documented below.
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input['MysqlInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
-               and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
-        :param pulumi.Input[str] configuration_id: Specifies the configuration ID. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] configuration_name: Specifies the configuration name. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
+        :param pulumi.Input[str] configuration_id: Specifies the configuration ID.
         :param pulumi.Input['MysqlInstanceDatastoreArgs'] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] dedicated_resource_id: Specifies the dedicated resource ID. Changing this parameter
                will create a new resource.
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance.
+        :param pulumi.Input[str] encryption_status: Specifies whether to enable or disable encrypted backup. Value options:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] encryption_type: Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+               supported. It is mandatory when `encryption_status` is set to **ON**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id. Required if EPS enabled.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] kms_key_id: Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        :param pulumi.Input[str] maintain_begin: Specifies the start time for a maintenance window, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the end time for a maintenance window, for example, **01:00**.
         :param pulumi.Input[str] master_availability_zone: Specifies the availability zone where the master node
                resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
                resource.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-               ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-               do nothing.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
-        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
+        :param pulumi.Input[int] port: Specifies the database port.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] private_write_ip: Specifies the private IP address of the DB instance.
+        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to `1`.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
-               doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_period: Specifies the seconds level collection period.
+               + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+               + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+               + Value options:
+               - **1**: The collection period is 1s.
+               - **5** (default value): The collection period is 5s.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
+               enable network ACL.
+        :param pulumi.Input[bool] slow_log_show_original_switch: Specifies the slow log show original switch of the instance.
         :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
+        :param pulumi.Input[str] ssl_option: Specifies whether to enable SSL. Value options:
+               + **true**: SSL is enabled.
+               + **false**: SSL is disabled.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
                be `true` (case sensitive) and `false` (case insensitive). Defaults to `false`. This parameter only works during
                creation.
@@ -105,7 +143,7 @@ class MysqlInstanceArgs:
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
-               the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+               the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         """
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "password", password)
@@ -117,6 +155,8 @@ class MysqlInstanceArgs:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if auto_scaling is not None:
+            pulumi.set(__self__, "auto_scaling", auto_scaling)
         if availability_zone_mode is not None:
             pulumi.set(__self__, "availability_zone_mode", availability_zone_mode)
         if backup_strategy is not None:
@@ -126,6 +166,9 @@ class MysqlInstanceArgs:
         if configuration_id is not None:
             pulumi.set(__self__, "configuration_id", configuration_id)
         if configuration_name is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""configuration_name is deprecated: Deprecated""")
+        if configuration_name is not None:
             pulumi.set(__self__, "configuration_name", configuration_name)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
@@ -133,18 +176,38 @@ class MysqlInstanceArgs:
             pulumi.set(__self__, "dedicated_resource_id", dedicated_resource_id)
         if dedicated_resource_name is not None:
             pulumi.set(__self__, "dedicated_resource_name", dedicated_resource_name)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if encryption_status is not None:
+            pulumi.set(__self__, "encryption_status", encryption_status)
+        if encryption_type is not None:
+            pulumi.set(__self__, "encryption_type", encryption_type)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if kms_key_id is not None:
+            pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if master_availability_zone is not None:
             pulumi.set(__self__, "master_availability_zone", master_availability_zone)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if period is not None:
             pulumi.set(__self__, "period", period)
         if period_unit is not None:
             pulumi.set(__self__, "period_unit", period_unit)
+        if port is not None:
+            pulumi.set(__self__, "port", port)
+        if private_dns_name_prefix is not None:
+            pulumi.set(__self__, "private_dns_name_prefix", private_dns_name_prefix)
+        if private_write_ip is not None:
+            pulumi.set(__self__, "private_write_ip", private_write_ip)
         if proxy_flavor is not None:
             warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
             pulumi.log.warn("""proxy_flavor is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
@@ -159,10 +222,18 @@ class MysqlInstanceArgs:
             pulumi.set(__self__, "read_replicas", read_replicas)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if seconds_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_enabled", seconds_level_monitoring_enabled)
+        if seconds_level_monitoring_period is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_period", seconds_level_monitoring_period)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if slow_log_show_original_switch is not None:
+            pulumi.set(__self__, "slow_log_show_original_switch", slow_log_show_original_switch)
         if sql_filter_enabled is not None:
             pulumi.set(__self__, "sql_filter_enabled", sql_filter_enabled)
+        if ssl_option is not None:
+            pulumi.set(__self__, "ssl_option", ssl_option)
         if table_name_case_sensitivity is not None:
             pulumi.set(__self__, "table_name_case_sensitivity", table_name_case_sensitivity)
         if tags is not None:
@@ -189,7 +260,7 @@ class MysqlInstanceArgs:
     @pulumi.getter
     def password(self) -> pulumi.Input[str]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -250,13 +321,26 @@ class MysqlInstanceArgs:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false".
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="autoScaling")
+    def auto_scaling(self) -> Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']]:
+        """
+        Specifies the auto-scaling policies.
+        The auto_scaling structure is documented below.
+        """
+        return pulumi.get(self, "auto_scaling")
+
+    @auto_scaling.setter
+    def auto_scaling(self, value: Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']]):
+        pulumi.set(self, "auto_scaling", value)
 
     @property
     @pulumi.getter(name="availabilityZoneMode")
@@ -287,8 +371,8 @@ class MysqlInstanceArgs:
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the instance. Valid values are *prePaid*
-        and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+        Specifies the charging mode of the instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -300,8 +384,7 @@ class MysqlInstanceArgs:
     @pulumi.getter(name="configurationId")
     def configuration_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the configuration ID. Changing this parameter will create
-        a new resource.
+        Specifies the configuration ID.
         """
         return pulumi.get(self, "configuration_id")
 
@@ -312,10 +395,6 @@ class MysqlInstanceArgs:
     @property
     @pulumi.getter(name="configurationName")
     def configuration_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the configuration name. Changing this parameter will create
-        a new resource.
-        """
         return pulumi.get(self, "configuration_name")
 
     @configuration_name.setter
@@ -362,11 +441,49 @@ class MysqlInstanceArgs:
         pulumi.set(self, "dedicated_resource_name", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="encryptionStatus")
+    def encryption_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable or disable encrypted backup. Value options:
+        + **ON**: enabled
+        + **OFF**: disabled
+        """
+        return pulumi.get(self, "encryption_status")
+
+    @encryption_status.setter
+    def encryption_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "encryption_status", value)
+
+    @property
+    @pulumi.getter(name="encryptionType")
+    def encryption_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+        supported. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "encryption_type")
+
+    @encryption_type.setter
+    def encryption_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "encryption_type", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id. Required if EPS enabled.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -388,6 +505,42 @@ class MysqlInstanceArgs:
         pulumi.set(self, "force_import", value)
 
     @property
+    @pulumi.getter(name="kmsKeyId")
+    def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "kms_key_id")
+
+    @kms_key_id.setter
+    def kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kms_key_id", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the start time for a maintenance window, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the end time for a maintenance window, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
     @pulumi.getter(name="masterAvailabilityZone")
     def master_availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
@@ -405,9 +558,7 @@ class MysqlInstanceArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-        digits, hyphens (-), and underscores (_).
+        Specifies the name of the parameter.
         """
         return pulumi.get(self, "name")
 
@@ -417,12 +568,26 @@ class MysqlInstanceArgs:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-        ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-        do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -435,7 +600,7 @@ class MysqlInstanceArgs:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         Changing this will do nothing.
         """
         return pulumi.get(self, "period_unit")
@@ -443,6 +608,43 @@ class MysqlInstanceArgs:
     @period_unit.setter
     def period_unit(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter
+    def port(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the database port.
+        """
+        return pulumi.get(self, "port")
+
+    @port.setter
+    def port(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "port", value)
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
+
+    @private_dns_name_prefix.setter
+    def private_dns_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_dns_name_prefix", value)
+
+    @property
+    @pulumi.getter(name="privateWriteIp")
+    def private_write_ip(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the private IP address of the DB instance.
+        """
+        return pulumi.get(self, "private_write_ip")
+
+    @private_write_ip.setter
+    def private_write_ip(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_write_ip", value)
 
     @property
     @pulumi.getter(name="proxyFlavor")
@@ -466,7 +668,7 @@ class MysqlInstanceArgs:
     @pulumi.getter(name="readReplicas")
     def read_replicas(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the count of read replicas. Defaults to 1.
+        Specifies the count of read replicas. Defaults to `1`.
         """
         return pulumi.get(self, "read_replicas")
 
@@ -488,17 +690,58 @@ class MysqlInstanceArgs:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @seconds_level_monitoring_enabled.setter
+    def seconds_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "seconds_level_monitoring_enabled", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringPeriod")
+    def seconds_level_monitoring_period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the seconds level collection period.
+        + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+        + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+        + Value options:
+        - **1**: The collection period is 1s.
+        - **5** (default value): The collection period is 5s.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_period")
+
+    @seconds_level_monitoring_period.setter
+    def seconds_level_monitoring_period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "seconds_level_monitoring_period", value)
+
+    @property
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the security group ID. Required if the selected subnet
-        doesn't enable network ACL. Changing this parameter will create a new resource.
+        Specifies the security group ID. Required if the selected subnet doesn't
+        enable network ACL.
         """
         return pulumi.get(self, "security_group_id")
 
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="slowLogShowOriginalSwitch")
+    def slow_log_show_original_switch(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the slow log show original switch of the instance.
+        """
+        return pulumi.get(self, "slow_log_show_original_switch")
+
+    @slow_log_show_original_switch.setter
+    def slow_log_show_original_switch(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "slow_log_show_original_switch", value)
 
     @property
     @pulumi.getter(name="sqlFilterEnabled")
@@ -511,6 +754,20 @@ class MysqlInstanceArgs:
     @sql_filter_enabled.setter
     def sql_filter_enabled(self, value: Optional[pulumi.Input[bool]]):
         pulumi.set(self, "sql_filter_enabled", value)
+
+    @property
+    @pulumi.getter(name="sslOption")
+    def ssl_option(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable SSL. Value options:
+        + **true**: SSL is enabled.
+        + **false**: SSL is disabled.
+        """
+        return pulumi.get(self, "ssl_option")
+
+    @ssl_option.setter
+    def ssl_option(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ssl_option", value)
 
     @property
     @pulumi.getter(name="tableNameCaseSensitivity")
@@ -556,7 +813,7 @@ class MysqlInstanceArgs:
     def volume_size(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the volume size of the instance. The new storage space must be greater than
-        the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+        the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         """
         return pulumi.get(self, "volume_size")
 
@@ -571,26 +828,39 @@ class _MysqlInstanceState:
                  audit_log_enabled: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 auto_scaling: Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']] = None,
                  availability_zone_mode: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input['MysqlInstanceBackupStrategyArgs']] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
                  configuration_id: Optional[pulumi.Input[str]] = None,
                  configuration_name: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
+                 current_kernel_version: Optional[pulumi.Input[str]] = None,
+                 current_version: Optional[pulumi.Input[str]] = None,
                  datastore: Optional[pulumi.Input['MysqlInstanceDatastoreArgs']] = None,
                  db_user_name: Optional[pulumi.Input[str]] = None,
                  dedicated_resource_id: Optional[pulumi.Input[str]] = None,
                  dedicated_resource_name: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 encryption_status: Optional[pulumi.Input[str]] = None,
+                 encryption_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  master_availability_zone: Optional[pulumi.Input[str]] = None,
                  mode: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  nodes: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceNodeArgs']]]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
                  port: Optional[pulumi.Input[int]] = None,
+                 private_dns_name: Optional[pulumi.Input[str]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
                  private_write_ip: Optional[pulumi.Input[str]] = None,
                  proxy_address: Optional[pulumi.Input[str]] = None,
                  proxy_flavor: Optional[pulumi.Input[str]] = None,
@@ -598,29 +868,37 @@ class _MysqlInstanceState:
                  proxy_port: Optional[pulumi.Input[int]] = None,
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_period: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_switch: Optional[pulumi.Input[bool]] = None,
                  sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
+                 ssl_option: Optional[pulumi.Input[str]] = None,
                  status: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  time_zone: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None,
+                 upgrade_flag: Optional[pulumi.Input[bool]] = None,
                  volume_size: Optional[pulumi.Input[int]] = None,
                  vpc_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering MysqlInstance resources.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false".
+               Valid values are **true** and **false**.
+        :param pulumi.Input['MysqlInstanceAutoScalingArgs'] auto_scaling: Specifies the auto-scaling policies.
+               The auto_scaling structure is documented below.
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input['MysqlInstanceBackupStrategyArgs'] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
-               and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
-        :param pulumi.Input[str] configuration_id: Specifies the configuration ID. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] configuration_name: Specifies the configuration name. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
+        :param pulumi.Input[str] configuration_id: Specifies the configuration ID.
+        :param pulumi.Input[str] created_at: Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        :param pulumi.Input[str] current_kernel_version: Indicates the current database kernel version.
+        :param pulumi.Input[str] current_version: Indicates the current database version.
         :param pulumi.Input['MysqlInstanceDatastoreArgs'] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
@@ -628,39 +906,65 @@ class _MysqlInstanceState:
                will create a new resource.
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance.
+        :param pulumi.Input[str] encryption_status: Specifies whether to enable or disable encrypted backup. Value options:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] encryption_type: Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+               supported. It is mandatory when `encryption_status` is set to **ON**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id. Required if EPS enabled.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. Please use
                `gaussdb_mysql_flavors` data source to fetch the available flavors.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] kms_key_id: Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        :param pulumi.Input[str] maintain_begin: Specifies the start time for a maintenance window, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the end time for a maintenance window, for example, **01:00**.
         :param pulumi.Input[str] master_availability_zone: Specifies the availability zone where the master node
                resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] mode: Indicates the instance mode.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[Sequence[pulumi.Input['MysqlInstanceNodeArgs']]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlInstanceNodeArgs']]] nodes: Indicates the instance nodes information.
+               The nodes structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-               ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-               do nothing.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
-        :param pulumi.Input[int] port: Indicates the database port.
-        :param pulumi.Input[str] private_write_ip: Indicates the private IP address of the DB instance.
-        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
+        :param pulumi.Input[int] port: Specifies the database port.
+        :param pulumi.Input[str] private_dns_name: Indicates the private domain name.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] private_write_ip: Specifies the private IP address of the DB instance.
+        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to `1`.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
-               doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_period: Specifies the seconds level collection period.
+               + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+               + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+               + Value options:
+               - **1**: The collection period is 1s.
+               - **5** (default value): The collection period is 5s.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
+               enable network ACL.
+        :param pulumi.Input[bool] slow_log_show_original_switch: Specifies the slow log show original switch of the instance.
         :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
-        :param pulumi.Input[str] status: Indicates the node status.
+        :param pulumi.Input[str] ssl_option: Specifies whether to enable SSL. Value options:
+               + **true**: SSL is enabled.
+               + **false**: SSL is disabled.
+        :param pulumi.Input[str] status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
@@ -669,8 +973,10 @@ class _MysqlInstanceState:
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] updated_at: Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        :param pulumi.Input[bool] upgrade_flag: Indicates whether the version can be upgraded.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
-               the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+               the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
         if audit_log_enabled is not None:
@@ -679,6 +985,8 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "auto_pay", auto_pay)
         if auto_renew is not None:
             pulumi.set(__self__, "auto_renew", auto_renew)
+        if auto_scaling is not None:
+            pulumi.set(__self__, "auto_scaling", auto_scaling)
         if availability_zone_mode is not None:
             pulumi.set(__self__, "availability_zone_mode", availability_zone_mode)
         if backup_strategy is not None:
@@ -688,7 +996,16 @@ class _MysqlInstanceState:
         if configuration_id is not None:
             pulumi.set(__self__, "configuration_id", configuration_id)
         if configuration_name is not None:
+            warnings.warn("""Deprecated""", DeprecationWarning)
+            pulumi.log.warn("""configuration_name is deprecated: Deprecated""")
+        if configuration_name is not None:
             pulumi.set(__self__, "configuration_name", configuration_name)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
+        if current_kernel_version is not None:
+            pulumi.set(__self__, "current_kernel_version", current_kernel_version)
+        if current_version is not None:
+            pulumi.set(__self__, "current_version", current_version)
         if datastore is not None:
             pulumi.set(__self__, "datastore", datastore)
         if db_user_name is not None:
@@ -697,12 +1014,24 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "dedicated_resource_id", dedicated_resource_id)
         if dedicated_resource_name is not None:
             pulumi.set(__self__, "dedicated_resource_name", dedicated_resource_name)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+        if encryption_status is not None:
+            pulumi.set(__self__, "encryption_status", encryption_status)
+        if encryption_type is not None:
+            pulumi.set(__self__, "encryption_type", encryption_type)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if flavor is not None:
             pulumi.set(__self__, "flavor", flavor)
         if force_import is not None:
             pulumi.set(__self__, "force_import", force_import)
+        if kms_key_id is not None:
+            pulumi.set(__self__, "kms_key_id", kms_key_id)
+        if maintain_begin is not None:
+            pulumi.set(__self__, "maintain_begin", maintain_begin)
+        if maintain_end is not None:
+            pulumi.set(__self__, "maintain_end", maintain_end)
         if master_availability_zone is not None:
             pulumi.set(__self__, "master_availability_zone", master_availability_zone)
         if mode is not None:
@@ -711,6 +1040,8 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "name", name)
         if nodes is not None:
             pulumi.set(__self__, "nodes", nodes)
+        if parameters is not None:
+            pulumi.set(__self__, "parameters", parameters)
         if password is not None:
             pulumi.set(__self__, "password", password)
         if period is not None:
@@ -719,6 +1050,10 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "period_unit", period_unit)
         if port is not None:
             pulumi.set(__self__, "port", port)
+        if private_dns_name is not None:
+            pulumi.set(__self__, "private_dns_name", private_dns_name)
+        if private_dns_name_prefix is not None:
+            pulumi.set(__self__, "private_dns_name_prefix", private_dns_name_prefix)
         if private_write_ip is not None:
             pulumi.set(__self__, "private_write_ip", private_write_ip)
         if proxy_address is not None:
@@ -745,10 +1080,18 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "read_replicas", read_replicas)
         if region is not None:
             pulumi.set(__self__, "region", region)
+        if seconds_level_monitoring_enabled is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_enabled", seconds_level_monitoring_enabled)
+        if seconds_level_monitoring_period is not None:
+            pulumi.set(__self__, "seconds_level_monitoring_period", seconds_level_monitoring_period)
         if security_group_id is not None:
             pulumi.set(__self__, "security_group_id", security_group_id)
+        if slow_log_show_original_switch is not None:
+            pulumi.set(__self__, "slow_log_show_original_switch", slow_log_show_original_switch)
         if sql_filter_enabled is not None:
             pulumi.set(__self__, "sql_filter_enabled", sql_filter_enabled)
+        if ssl_option is not None:
+            pulumi.set(__self__, "ssl_option", ssl_option)
         if status is not None:
             pulumi.set(__self__, "status", status)
         if subnet_id is not None:
@@ -759,6 +1102,10 @@ class _MysqlInstanceState:
             pulumi.set(__self__, "tags", tags)
         if time_zone is not None:
             pulumi.set(__self__, "time_zone", time_zone)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
+        if upgrade_flag is not None:
+            pulumi.set(__self__, "upgrade_flag", upgrade_flag)
         if volume_size is not None:
             pulumi.set(__self__, "volume_size", volume_size)
         if vpc_id is not None:
@@ -790,13 +1137,26 @@ class _MysqlInstanceState:
     def auto_renew(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false".
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
 
     @auto_renew.setter
     def auto_renew(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="autoScaling")
+    def auto_scaling(self) -> Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']]:
+        """
+        Specifies the auto-scaling policies.
+        The auto_scaling structure is documented below.
+        """
+        return pulumi.get(self, "auto_scaling")
+
+    @auto_scaling.setter
+    def auto_scaling(self, value: Optional[pulumi.Input['MysqlInstanceAutoScalingArgs']]):
+        pulumi.set(self, "auto_scaling", value)
 
     @property
     @pulumi.getter(name="availabilityZoneMode")
@@ -827,8 +1187,8 @@ class _MysqlInstanceState:
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the charging mode of the instance. Valid values are *prePaid*
-        and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+        Specifies the charging mode of the instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -840,8 +1200,7 @@ class _MysqlInstanceState:
     @pulumi.getter(name="configurationId")
     def configuration_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the configuration ID. Changing this parameter will create
-        a new resource.
+        Specifies the configuration ID.
         """
         return pulumi.get(self, "configuration_id")
 
@@ -852,15 +1211,47 @@ class _MysqlInstanceState:
     @property
     @pulumi.getter(name="configurationName")
     def configuration_name(self) -> Optional[pulumi.Input[str]]:
-        """
-        Specifies the configuration name. Changing this parameter will create
-        a new resource.
-        """
         return pulumi.get(self, "configuration_name")
 
     @configuration_name.setter
     def configuration_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "configuration_name", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
+
+    @property
+    @pulumi.getter(name="currentKernelVersion")
+    def current_kernel_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the current database kernel version.
+        """
+        return pulumi.get(self, "current_kernel_version")
+
+    @current_kernel_version.setter
+    def current_kernel_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "current_kernel_version", value)
+
+    @property
+    @pulumi.getter(name="currentVersion")
+    def current_version(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the current database version.
+        """
+        return pulumi.get(self, "current_version")
+
+    @current_version.setter
+    def current_version(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "current_version", value)
 
     @property
     @pulumi.getter
@@ -914,11 +1305,49 @@ class _MysqlInstanceState:
         pulumi.set(self, "dedicated_resource_name", value)
 
     @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description of the instance.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+    @property
+    @pulumi.getter(name="encryptionStatus")
+    def encryption_status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable or disable encrypted backup. Value options:
+        + **ON**: enabled
+        + **OFF**: disabled
+        """
+        return pulumi.get(self, "encryption_status")
+
+    @encryption_status.setter
+    def encryption_status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "encryption_status", value)
+
+    @property
+    @pulumi.getter(name="encryptionType")
+    def encryption_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+        supported. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "encryption_type")
+
+    @encryption_type.setter
+    def encryption_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "encryption_type", value)
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the enterprise project id. Required if EPS enabled.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -953,6 +1382,42 @@ class _MysqlInstanceState:
         pulumi.set(self, "force_import", value)
 
     @property
+    @pulumi.getter(name="kmsKeyId")
+    def kms_key_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "kms_key_id")
+
+    @kms_key_id.setter
+    def kms_key_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "kms_key_id", value)
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the start time for a maintenance window, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @maintain_begin.setter
+    def maintain_begin(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_begin", value)
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the end time for a maintenance window, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
+
+    @maintain_end.setter
+    def maintain_end(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "maintain_end", value)
+
+    @property
     @pulumi.getter(name="masterAvailabilityZone")
     def master_availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
@@ -982,9 +1447,7 @@ class _MysqlInstanceState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-        digits, hyphens (-), and underscores (_).
+        Specifies the name of the parameter.
         """
         return pulumi.get(self, "name")
 
@@ -996,7 +1459,8 @@ class _MysqlInstanceState:
     @pulumi.getter
     def nodes(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceNodeArgs']]]]:
         """
-        Indicates the instance nodes information. Structure is documented below.
+        Indicates the instance nodes information.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
@@ -1006,9 +1470,22 @@ class _MysqlInstanceState:
 
     @property
     @pulumi.getter
+    def parameters(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @parameters.setter
+    def parameters(self, value: Optional[pulumi.Input[Sequence[pulumi.Input['MysqlInstanceParameterArgs']]]]):
+        pulumi.set(self, "parameters", value)
+
+    @property
+    @pulumi.getter
     def password(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -1022,10 +1499,11 @@ class _MysqlInstanceState:
     @pulumi.getter
     def period(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-        ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-        do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -1038,7 +1516,7 @@ class _MysqlInstanceState:
     def period_unit(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         Changing this will do nothing.
         """
         return pulumi.get(self, "period_unit")
@@ -1051,7 +1529,7 @@ class _MysqlInstanceState:
     @pulumi.getter
     def port(self) -> Optional[pulumi.Input[int]]:
         """
-        Indicates the database port.
+        Specifies the database port.
         """
         return pulumi.get(self, "port")
 
@@ -1060,10 +1538,35 @@ class _MysqlInstanceState:
         pulumi.set(self, "port", value)
 
     @property
+    @pulumi.getter(name="privateDnsName")
+    def private_dns_name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the private domain name.
+        """
+        return pulumi.get(self, "private_dns_name")
+
+    @private_dns_name.setter
+    def private_dns_name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_dns_name", value)
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
+
+    @private_dns_name_prefix.setter
+    def private_dns_name_prefix(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "private_dns_name_prefix", value)
+
+    @property
     @pulumi.getter(name="privateWriteIp")
     def private_write_ip(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the private IP address of the DB instance.
+        Specifies the private IP address of the DB instance.
         """
         return pulumi.get(self, "private_write_ip")
 
@@ -1111,7 +1614,7 @@ class _MysqlInstanceState:
     @pulumi.getter(name="readReplicas")
     def read_replicas(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the count of read replicas. Defaults to 1.
+        Specifies the count of read replicas. Defaults to `1`.
         """
         return pulumi.get(self, "read_replicas")
 
@@ -1133,17 +1636,58 @@ class _MysqlInstanceState:
         pulumi.set(self, "region", value)
 
     @property
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @seconds_level_monitoring_enabled.setter
+    def seconds_level_monitoring_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "seconds_level_monitoring_enabled", value)
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringPeriod")
+    def seconds_level_monitoring_period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the seconds level collection period.
+        + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+        + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+        + Value options:
+        - **1**: The collection period is 1s.
+        - **5** (default value): The collection period is 5s.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_period")
+
+    @seconds_level_monitoring_period.setter
+    def seconds_level_monitoring_period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "seconds_level_monitoring_period", value)
+
+    @property
     @pulumi.getter(name="securityGroupId")
     def security_group_id(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the security group ID. Required if the selected subnet
-        doesn't enable network ACL. Changing this parameter will create a new resource.
+        Specifies the security group ID. Required if the selected subnet doesn't
+        enable network ACL.
         """
         return pulumi.get(self, "security_group_id")
 
     @security_group_id.setter
     def security_group_id(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "security_group_id", value)
+
+    @property
+    @pulumi.getter(name="slowLogShowOriginalSwitch")
+    def slow_log_show_original_switch(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies the slow log show original switch of the instance.
+        """
+        return pulumi.get(self, "slow_log_show_original_switch")
+
+    @slow_log_show_original_switch.setter
+    def slow_log_show_original_switch(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "slow_log_show_original_switch", value)
 
     @property
     @pulumi.getter(name="sqlFilterEnabled")
@@ -1158,10 +1702,26 @@ class _MysqlInstanceState:
         pulumi.set(self, "sql_filter_enabled", value)
 
     @property
+    @pulumi.getter(name="sslOption")
+    def ssl_option(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether to enable SSL. Value options:
+        + **true**: SSL is enabled.
+        + **false**: SSL is disabled.
+        """
+        return pulumi.get(self, "ssl_option")
+
+    @ssl_option.setter
+    def ssl_option(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "ssl_option", value)
+
+    @property
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the node status.
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
         """
         return pulumi.get(self, "status")
 
@@ -1222,11 +1782,35 @@ class _MysqlInstanceState:
         pulumi.set(self, "time_zone", value)
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
+    @property
+    @pulumi.getter(name="upgradeFlag")
+    def upgrade_flag(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Indicates whether the version can be upgraded.
+        """
+        return pulumi.get(self, "upgrade_flag")
+
+    @upgrade_flag.setter
+    def upgrade_flag(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "upgrade_flag", value)
+
+    @property
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> Optional[pulumi.Input[int]]:
         """
         Specifies the volume size of the instance. The new storage space must be greater than
-        the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+        the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         """
         return pulumi.get(self, "volume_size")
 
@@ -1255,6 +1839,7 @@ class MysqlInstance(pulumi.CustomResource):
                  audit_log_enabled: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 auto_scaling: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceAutoScalingArgs']]] = None,
                  availability_zone_mode: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
@@ -1263,20 +1848,34 @@ class MysqlInstance(pulumi.CustomResource):
                  datastore: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceDatastoreArgs']]] = None,
                  dedicated_resource_id: Optional[pulumi.Input[str]] = None,
                  dedicated_resource_name: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 encryption_status: Optional[pulumi.Input[str]] = None,
+                 encryption_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  master_availability_zone: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 private_write_ip: Optional[pulumi.Input[str]] = None,
                  proxy_flavor: Optional[pulumi.Input[str]] = None,
                  proxy_node_num: Optional[pulumi.Input[int]] = None,
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_period: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_switch: Optional[pulumi.Input[bool]] = None,
                  sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
+                 ssl_option: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1285,7 +1884,7 @@ class MysqlInstance(pulumi.CustomResource):
                  vpc_id: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
-        GaussDB mysql instance management within HuaweiCoud.
+        GaussDB mysql instance management within HuaweiCould.
 
         ## Example Usage
         ### create a basic instance
@@ -1321,60 +1920,97 @@ class MysqlInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB instance can be imported using the `id`, e.g.
+        GaussDB instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
+         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`table_name_case_sensitivity`, `enterprise_project_id`, `password`, `ssl_option`, `encryption_type`, `kms_key_id` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL instance. You can then decide if changes should be applied to the GaussDB MySQL instance, or the resource definition should be updated to align with the GaussDB MySQL instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         new_node_weight, proxy_mode, readonly_nodes_weight, parameters, ssl_option, encryption_type, kms_key_id
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false".
+               Valid values are **true** and **false**.
+        :param pulumi.Input[pulumi.InputType['MysqlInstanceAutoScalingArgs']] auto_scaling: Specifies the auto-scaling policies.
+               The auto_scaling structure is documented below.
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
-               and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
-        :param pulumi.Input[str] configuration_id: Specifies the configuration ID. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] configuration_name: Specifies the configuration name. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
+        :param pulumi.Input[str] configuration_id: Specifies the configuration ID.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceDatastoreArgs']] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] dedicated_resource_id: Specifies the dedicated resource ID. Changing this parameter
                will create a new resource.
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance.
+        :param pulumi.Input[str] encryption_status: Specifies whether to enable or disable encrypted backup. Value options:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] encryption_type: Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+               supported. It is mandatory when `encryption_status` is set to **ON**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id. Required if EPS enabled.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. Please use
                `gaussdb_mysql_flavors` data source to fetch the available flavors.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] kms_key_id: Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        :param pulumi.Input[str] maintain_begin: Specifies the start time for a maintenance window, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the end time for a maintenance window, for example, **01:00**.
         :param pulumi.Input[str] master_availability_zone: Specifies the availability zone where the master node
                resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
                resource.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceParameterArgs']]]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-               ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-               do nothing.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
-        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
+        :param pulumi.Input[int] port: Specifies the database port.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] private_write_ip: Specifies the private IP address of the DB instance.
+        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to `1`.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
-               doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_period: Specifies the seconds level collection period.
+               + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+               + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+               + Value options:
+               - **1**: The collection period is 1s.
+               - **5** (default value): The collection period is 5s.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
+               enable network ACL.
+        :param pulumi.Input[bool] slow_log_show_original_switch: Specifies the slow log show original switch of the instance.
         :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
+        :param pulumi.Input[str] ssl_option: Specifies whether to enable SSL. Value options:
+               + **true**: SSL is enabled.
+               + **false**: SSL is disabled.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
@@ -1384,7 +2020,7 @@ class MysqlInstance(pulumi.CustomResource):
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
-               the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+               the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
         ...
@@ -1394,7 +2030,7 @@ class MysqlInstance(pulumi.CustomResource):
                  args: MysqlInstanceArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        GaussDB mysql instance management within HuaweiCoud.
+        GaussDB mysql instance management within HuaweiCould.
 
         ## Example Usage
         ### create a basic instance
@@ -1430,11 +2066,25 @@ class MysqlInstance(pulumi.CustomResource):
 
         ## Import
 
-        GaussDB instance can be imported using the `id`, e.g.
+        GaussDB instance can be imported using the `id`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance instance_1 1a801c1e01e6458d8eed810912e29d0cin07
+         $ pulumi import huaweicloud:GaussDB/mysqlInstance:MysqlInstance test <id>
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to the attribute missing from the API response. The missing attribute is`table_name_case_sensitivity`, `enterprise_project_id`, `password`, `ssl_option`, `encryption_type`, `kms_key_id` and `parameters`. It is generally recommended running `terraform plan` after importing a GaussDB MySQL instance. You can then decide if changes should be applied to the GaussDB MySQL instance, or the resource definition should be updated to align with the GaussDB MySQL instance. Also you can ignore changes as below. hcl resource "huaweicloud_gaussdb_mysql_instance" "test" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         new_node_weight, proxy_mode, readonly_nodes_weight, parameters, ssl_option, encryption_type, kms_key_id
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param MysqlInstanceArgs args: The arguments to use to populate this resource's properties.
@@ -1454,6 +2104,7 @@ class MysqlInstance(pulumi.CustomResource):
                  audit_log_enabled: Optional[pulumi.Input[bool]] = None,
                  auto_pay: Optional[pulumi.Input[str]] = None,
                  auto_renew: Optional[pulumi.Input[str]] = None,
+                 auto_scaling: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceAutoScalingArgs']]] = None,
                  availability_zone_mode: Optional[pulumi.Input[str]] = None,
                  backup_strategy: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']]] = None,
                  charging_mode: Optional[pulumi.Input[str]] = None,
@@ -1462,20 +2113,34 @@ class MysqlInstance(pulumi.CustomResource):
                  datastore: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceDatastoreArgs']]] = None,
                  dedicated_resource_id: Optional[pulumi.Input[str]] = None,
                  dedicated_resource_name: Optional[pulumi.Input[str]] = None,
+                 description: Optional[pulumi.Input[str]] = None,
+                 encryption_status: Optional[pulumi.Input[str]] = None,
+                 encryption_type: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  flavor: Optional[pulumi.Input[str]] = None,
                  force_import: Optional[pulumi.Input[bool]] = None,
+                 kms_key_id: Optional[pulumi.Input[str]] = None,
+                 maintain_begin: Optional[pulumi.Input[str]] = None,
+                 maintain_end: Optional[pulumi.Input[str]] = None,
                  master_availability_zone: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceParameterArgs']]]]] = None,
                  password: Optional[pulumi.Input[str]] = None,
                  period: Optional[pulumi.Input[int]] = None,
                  period_unit: Optional[pulumi.Input[str]] = None,
+                 port: Optional[pulumi.Input[int]] = None,
+                 private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
+                 private_write_ip: Optional[pulumi.Input[str]] = None,
                  proxy_flavor: Optional[pulumi.Input[str]] = None,
                  proxy_node_num: Optional[pulumi.Input[int]] = None,
                  read_replicas: Optional[pulumi.Input[int]] = None,
                  region: Optional[pulumi.Input[str]] = None,
+                 seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+                 seconds_level_monitoring_period: Optional[pulumi.Input[int]] = None,
                  security_group_id: Optional[pulumi.Input[str]] = None,
+                 slow_log_show_original_switch: Optional[pulumi.Input[bool]] = None,
                  sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
+                 ssl_option: Optional[pulumi.Input[str]] = None,
                  subnet_id: Optional[pulumi.Input[str]] = None,
                  table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
                  tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
@@ -1494,26 +2159,40 @@ class MysqlInstance(pulumi.CustomResource):
             __props__.__dict__["audit_log_enabled"] = audit_log_enabled
             __props__.__dict__["auto_pay"] = auto_pay
             __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["auto_scaling"] = auto_scaling
             __props__.__dict__["availability_zone_mode"] = availability_zone_mode
             __props__.__dict__["backup_strategy"] = backup_strategy
             __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["configuration_id"] = configuration_id
+            if configuration_name is not None and not opts.urn:
+                warnings.warn("""Deprecated""", DeprecationWarning)
+                pulumi.log.warn("""configuration_name is deprecated: Deprecated""")
             __props__.__dict__["configuration_name"] = configuration_name
             __props__.__dict__["datastore"] = datastore
             __props__.__dict__["dedicated_resource_id"] = dedicated_resource_id
             __props__.__dict__["dedicated_resource_name"] = dedicated_resource_name
+            __props__.__dict__["description"] = description
+            __props__.__dict__["encryption_status"] = encryption_status
+            __props__.__dict__["encryption_type"] = encryption_type
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             if flavor is None and not opts.urn:
                 raise TypeError("Missing required property 'flavor'")
             __props__.__dict__["flavor"] = flavor
             __props__.__dict__["force_import"] = force_import
+            __props__.__dict__["kms_key_id"] = kms_key_id
+            __props__.__dict__["maintain_begin"] = maintain_begin
+            __props__.__dict__["maintain_end"] = maintain_end
             __props__.__dict__["master_availability_zone"] = master_availability_zone
             __props__.__dict__["name"] = name
+            __props__.__dict__["parameters"] = parameters
             if password is None and not opts.urn:
                 raise TypeError("Missing required property 'password'")
             __props__.__dict__["password"] = password
             __props__.__dict__["period"] = period
             __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["port"] = port
+            __props__.__dict__["private_dns_name_prefix"] = private_dns_name_prefix
+            __props__.__dict__["private_write_ip"] = private_write_ip
             if proxy_flavor is not None and not opts.urn:
                 warnings.warn("""use huaweicloud_gaussdb_mysql_proxy instead""", DeprecationWarning)
                 pulumi.log.warn("""proxy_flavor is deprecated: use huaweicloud_gaussdb_mysql_proxy instead""")
@@ -1524,8 +2203,12 @@ class MysqlInstance(pulumi.CustomResource):
             __props__.__dict__["proxy_node_num"] = proxy_node_num
             __props__.__dict__["read_replicas"] = read_replicas
             __props__.__dict__["region"] = region
+            __props__.__dict__["seconds_level_monitoring_enabled"] = seconds_level_monitoring_enabled
+            __props__.__dict__["seconds_level_monitoring_period"] = seconds_level_monitoring_period
             __props__.__dict__["security_group_id"] = security_group_id
+            __props__.__dict__["slow_log_show_original_switch"] = slow_log_show_original_switch
             __props__.__dict__["sql_filter_enabled"] = sql_filter_enabled
+            __props__.__dict__["ssl_option"] = ssl_option
             if subnet_id is None and not opts.urn:
                 raise TypeError("Missing required property 'subnet_id'")
             __props__.__dict__["subnet_id"] = subnet_id
@@ -1536,14 +2219,18 @@ class MysqlInstance(pulumi.CustomResource):
             if vpc_id is None and not opts.urn:
                 raise TypeError("Missing required property 'vpc_id'")
             __props__.__dict__["vpc_id"] = vpc_id
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["current_kernel_version"] = None
+            __props__.__dict__["current_version"] = None
             __props__.__dict__["db_user_name"] = None
             __props__.__dict__["mode"] = None
             __props__.__dict__["nodes"] = None
-            __props__.__dict__["port"] = None
-            __props__.__dict__["private_write_ip"] = None
+            __props__.__dict__["private_dns_name"] = None
             __props__.__dict__["proxy_address"] = None
             __props__.__dict__["proxy_port"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["updated_at"] = None
+            __props__.__dict__["upgrade_flag"] = None
         super(MysqlInstance, __self__).__init__(
             'huaweicloud:GaussDB/mysqlInstance:MysqlInstance',
             resource_name,
@@ -1557,26 +2244,39 @@ class MysqlInstance(pulumi.CustomResource):
             audit_log_enabled: Optional[pulumi.Input[bool]] = None,
             auto_pay: Optional[pulumi.Input[str]] = None,
             auto_renew: Optional[pulumi.Input[str]] = None,
+            auto_scaling: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceAutoScalingArgs']]] = None,
             availability_zone_mode: Optional[pulumi.Input[str]] = None,
             backup_strategy: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']]] = None,
             charging_mode: Optional[pulumi.Input[str]] = None,
             configuration_id: Optional[pulumi.Input[str]] = None,
             configuration_name: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
+            current_kernel_version: Optional[pulumi.Input[str]] = None,
+            current_version: Optional[pulumi.Input[str]] = None,
             datastore: Optional[pulumi.Input[pulumi.InputType['MysqlInstanceDatastoreArgs']]] = None,
             db_user_name: Optional[pulumi.Input[str]] = None,
             dedicated_resource_id: Optional[pulumi.Input[str]] = None,
             dedicated_resource_name: Optional[pulumi.Input[str]] = None,
+            description: Optional[pulumi.Input[str]] = None,
+            encryption_status: Optional[pulumi.Input[str]] = None,
+            encryption_type: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             flavor: Optional[pulumi.Input[str]] = None,
             force_import: Optional[pulumi.Input[bool]] = None,
+            kms_key_id: Optional[pulumi.Input[str]] = None,
+            maintain_begin: Optional[pulumi.Input[str]] = None,
+            maintain_end: Optional[pulumi.Input[str]] = None,
             master_availability_zone: Optional[pulumi.Input[str]] = None,
             mode: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             nodes: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceNodeArgs']]]]] = None,
+            parameters: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceParameterArgs']]]]] = None,
             password: Optional[pulumi.Input[str]] = None,
             period: Optional[pulumi.Input[int]] = None,
             period_unit: Optional[pulumi.Input[str]] = None,
             port: Optional[pulumi.Input[int]] = None,
+            private_dns_name: Optional[pulumi.Input[str]] = None,
+            private_dns_name_prefix: Optional[pulumi.Input[str]] = None,
             private_write_ip: Optional[pulumi.Input[str]] = None,
             proxy_address: Optional[pulumi.Input[str]] = None,
             proxy_flavor: Optional[pulumi.Input[str]] = None,
@@ -1584,13 +2284,19 @@ class MysqlInstance(pulumi.CustomResource):
             proxy_port: Optional[pulumi.Input[int]] = None,
             read_replicas: Optional[pulumi.Input[int]] = None,
             region: Optional[pulumi.Input[str]] = None,
+            seconds_level_monitoring_enabled: Optional[pulumi.Input[bool]] = None,
+            seconds_level_monitoring_period: Optional[pulumi.Input[int]] = None,
             security_group_id: Optional[pulumi.Input[str]] = None,
+            slow_log_show_original_switch: Optional[pulumi.Input[bool]] = None,
             sql_filter_enabled: Optional[pulumi.Input[bool]] = None,
+            ssl_option: Optional[pulumi.Input[str]] = None,
             status: Optional[pulumi.Input[str]] = None,
             subnet_id: Optional[pulumi.Input[str]] = None,
             table_name_case_sensitivity: Optional[pulumi.Input[bool]] = None,
             tags: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
             time_zone: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None,
+            upgrade_flag: Optional[pulumi.Input[bool]] = None,
             volume_size: Optional[pulumi.Input[int]] = None,
             vpc_id: Optional[pulumi.Input[str]] = None) -> 'MysqlInstance':
         """
@@ -1602,16 +2308,18 @@ class MysqlInstance(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[bool] audit_log_enabled: Specifies whether audit log is enabled. The default value is `false`.
         :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
-               Valid values are "true" and "false".
+               Valid values are **true** and **false**.
+        :param pulumi.Input[pulumi.InputType['MysqlInstanceAutoScalingArgs']] auto_scaling: Specifies the auto-scaling policies.
+               The auto_scaling structure is documented below.
         :param pulumi.Input[str] availability_zone_mode: Specifies the availability zone mode: "single" or "multi".
                Defaults to "single". Changing this parameter will create a new resource.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceBackupStrategyArgs']] backup_strategy: Specifies the advanced backup policy. Structure is documented below.
-        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are *prePaid*
-               and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
-        :param pulumi.Input[str] configuration_id: Specifies the configuration ID. Changing this parameter will create
-               a new resource.
-        :param pulumi.Input[str] configuration_name: Specifies the configuration name. Changing this parameter will create
-               a new resource.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the instance. Valid values are **prePaid**
+               and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
+        :param pulumi.Input[str] configuration_id: Specifies the configuration ID.
+        :param pulumi.Input[str] created_at: Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        :param pulumi.Input[str] current_kernel_version: Indicates the current database kernel version.
+        :param pulumi.Input[str] current_version: Indicates the current database version.
         :param pulumi.Input[pulumi.InputType['MysqlInstanceDatastoreArgs']] datastore: Specifies the database information. Structure is documented below. Changing
                this parameter will create a new resource.
         :param pulumi.Input[str] db_user_name: Indicates the default username.
@@ -1619,39 +2327,65 @@ class MysqlInstance(pulumi.CustomResource):
                will create a new resource.
         :param pulumi.Input[str] dedicated_resource_name: Specifies the dedicated resource name. Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] description: Specifies the description of the instance.
+        :param pulumi.Input[str] encryption_status: Specifies whether to enable or disable encrypted backup. Value options:
+               + **ON**: enabled
+               + **OFF**: disabled
+        :param pulumi.Input[str] encryption_type: Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+               supported. It is mandatory when `encryption_status` is set to **ON**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id. Required if EPS enabled.
-               Changing this parameter will create a new resource.
         :param pulumi.Input[str] flavor: Specifies the instance specifications. Please use
                `gaussdb_mysql_flavors` data source to fetch the available flavors.
         :param pulumi.Input[bool] force_import: If specified, try to import the instance instead of creating if the name already
                existed.
+        :param pulumi.Input[str] kms_key_id: Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        :param pulumi.Input[str] maintain_begin: Specifies the start time for a maintenance window, for example, **22:00**.
+        :param pulumi.Input[str] maintain_end: Specifies the end time for a maintenance window, for example, **01:00**.
         :param pulumi.Input[str] master_availability_zone: Specifies the availability zone where the master node
                resides. The parameter is required in multi availability zone mode. Changing this parameter will create a new
                resource.
         :param pulumi.Input[str] mode: Indicates the instance mode.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceNodeArgs']]]] nodes: Indicates the instance nodes information. Structure is documented below.
-        :param pulumi.Input[str] password: Specifies the database password. The value must be 8 to 32 characters in length,
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceNodeArgs']]]] nodes: Indicates the instance nodes information.
+               The nodes structure is documented below.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['MysqlInstanceParameterArgs']]]] parameters: Specifies an array of one or more parameters to be set to the instance after launched.
+               The parameters structure is documented below.
+        :param pulumi.Input[str] password: Specifies the database password. The value must be `8` to `32` characters in length,
                including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
                enter a strong password to improve security, preventing security risks such as brute force cracking.
-        :param pulumi.Input[int] period: Specifies the charging period of the instance.
-               If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-               ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-               do nothing.
-        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
-               Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        :param pulumi.Input[int] period: Specifies the charging period of the instance.  
+               If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+               If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+               This parameter is mandatory if `charging_mode` is set to **prePaid**.
                Changing this will do nothing.
-        :param pulumi.Input[int] port: Indicates the database port.
-        :param pulumi.Input[str] private_write_ip: Indicates the private IP address of the DB instance.
-        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to 1.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the instance.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+               Changing this will do nothing.
+        :param pulumi.Input[int] port: Specifies the database port.
+        :param pulumi.Input[str] private_dns_name: Indicates the private domain name.
+        :param pulumi.Input[str] private_dns_name_prefix: Specifies the prefix of the private domain name. The value contains
+               `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        :param pulumi.Input[str] private_write_ip: Specifies the private IP address of the DB instance.
+        :param pulumi.Input[int] read_replicas: Specifies the count of read replicas. Defaults to `1`.
         :param pulumi.Input[str] region: The region in which to create the GaussDB mysql instance resource. If omitted,
                the provider-level region will be used. Changing this creates a new instance resource.
-        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet
-               doesn't enable network ACL. Changing this parameter will create a new resource.
+        :param pulumi.Input[bool] seconds_level_monitoring_enabled: Specifies whether to enable seconds level monitoring.
+        :param pulumi.Input[int] seconds_level_monitoring_period: Specifies the seconds level collection period.
+               + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+               + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+               + Value options:
+               - **1**: The collection period is 1s.
+               - **5** (default value): The collection period is 5s.
+        :param pulumi.Input[str] security_group_id: Specifies the security group ID. Required if the selected subnet doesn't
+               enable network ACL.
+        :param pulumi.Input[bool] slow_log_show_original_switch: Specifies the slow log show original switch of the instance.
         :param pulumi.Input[bool] sql_filter_enabled: Specifies whether sql filter is enabled. The default value is `false`.
-        :param pulumi.Input[str] status: Indicates the node status.
+        :param pulumi.Input[str] ssl_option: Specifies whether to enable SSL. Value options:
+               + **true**: SSL is enabled.
+               + **false**: SSL is disabled.
+        :param pulumi.Input[str] status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
         :param pulumi.Input[str] subnet_id: Specifies the network ID of a subnet. Changing this parameter will create a
                new resource.
         :param pulumi.Input[bool] table_name_case_sensitivity: Whether the kernel table name is case sensitive. The value can
@@ -1660,8 +2394,10 @@ class MysqlInstance(pulumi.CustomResource):
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: Specifies the key/value pairs to associate with the GaussDB Mysql instance.
         :param pulumi.Input[str] time_zone: Specifies the time zone. Defaults to "UTC+08:00". Changing this parameter
                will create a new resource.
+        :param pulumi.Input[str] updated_at: Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        :param pulumi.Input[bool] upgrade_flag: Indicates whether the version can be upgraded.
         :param pulumi.Input[int] volume_size: Specifies the volume size of the instance. The new storage space must be greater than
-               the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+               the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         :param pulumi.Input[str] vpc_id: Specifies the VPC ID. Changing this parameter will create a new resource.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
@@ -1671,26 +2407,39 @@ class MysqlInstance(pulumi.CustomResource):
         __props__.__dict__["audit_log_enabled"] = audit_log_enabled
         __props__.__dict__["auto_pay"] = auto_pay
         __props__.__dict__["auto_renew"] = auto_renew
+        __props__.__dict__["auto_scaling"] = auto_scaling
         __props__.__dict__["availability_zone_mode"] = availability_zone_mode
         __props__.__dict__["backup_strategy"] = backup_strategy
         __props__.__dict__["charging_mode"] = charging_mode
         __props__.__dict__["configuration_id"] = configuration_id
         __props__.__dict__["configuration_name"] = configuration_name
+        __props__.__dict__["created_at"] = created_at
+        __props__.__dict__["current_kernel_version"] = current_kernel_version
+        __props__.__dict__["current_version"] = current_version
         __props__.__dict__["datastore"] = datastore
         __props__.__dict__["db_user_name"] = db_user_name
         __props__.__dict__["dedicated_resource_id"] = dedicated_resource_id
         __props__.__dict__["dedicated_resource_name"] = dedicated_resource_name
+        __props__.__dict__["description"] = description
+        __props__.__dict__["encryption_status"] = encryption_status
+        __props__.__dict__["encryption_type"] = encryption_type
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["flavor"] = flavor
         __props__.__dict__["force_import"] = force_import
+        __props__.__dict__["kms_key_id"] = kms_key_id
+        __props__.__dict__["maintain_begin"] = maintain_begin
+        __props__.__dict__["maintain_end"] = maintain_end
         __props__.__dict__["master_availability_zone"] = master_availability_zone
         __props__.__dict__["mode"] = mode
         __props__.__dict__["name"] = name
         __props__.__dict__["nodes"] = nodes
+        __props__.__dict__["parameters"] = parameters
         __props__.__dict__["password"] = password
         __props__.__dict__["period"] = period
         __props__.__dict__["period_unit"] = period_unit
         __props__.__dict__["port"] = port
+        __props__.__dict__["private_dns_name"] = private_dns_name
+        __props__.__dict__["private_dns_name_prefix"] = private_dns_name_prefix
         __props__.__dict__["private_write_ip"] = private_write_ip
         __props__.__dict__["proxy_address"] = proxy_address
         __props__.__dict__["proxy_flavor"] = proxy_flavor
@@ -1698,13 +2447,19 @@ class MysqlInstance(pulumi.CustomResource):
         __props__.__dict__["proxy_port"] = proxy_port
         __props__.__dict__["read_replicas"] = read_replicas
         __props__.__dict__["region"] = region
+        __props__.__dict__["seconds_level_monitoring_enabled"] = seconds_level_monitoring_enabled
+        __props__.__dict__["seconds_level_monitoring_period"] = seconds_level_monitoring_period
         __props__.__dict__["security_group_id"] = security_group_id
+        __props__.__dict__["slow_log_show_original_switch"] = slow_log_show_original_switch
         __props__.__dict__["sql_filter_enabled"] = sql_filter_enabled
+        __props__.__dict__["ssl_option"] = ssl_option
         __props__.__dict__["status"] = status
         __props__.__dict__["subnet_id"] = subnet_id
         __props__.__dict__["table_name_case_sensitivity"] = table_name_case_sensitivity
         __props__.__dict__["tags"] = tags
         __props__.__dict__["time_zone"] = time_zone
+        __props__.__dict__["updated_at"] = updated_at
+        __props__.__dict__["upgrade_flag"] = upgrade_flag
         __props__.__dict__["volume_size"] = volume_size
         __props__.__dict__["vpc_id"] = vpc_id
         return MysqlInstance(resource_name, opts=opts, __props__=__props__)
@@ -1727,9 +2482,18 @@ class MysqlInstance(pulumi.CustomResource):
     def auto_renew(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies whether auto renew is enabled.
-        Valid values are "true" and "false".
+        Valid values are **true** and **false**.
         """
         return pulumi.get(self, "auto_renew")
+
+    @property
+    @pulumi.getter(name="autoScaling")
+    def auto_scaling(self) -> pulumi.Output['outputs.MysqlInstanceAutoScaling']:
+        """
+        Specifies the auto-scaling policies.
+        The auto_scaling structure is documented below.
+        """
+        return pulumi.get(self, "auto_scaling")
 
     @property
     @pulumi.getter(name="availabilityZoneMode")
@@ -1752,8 +2516,8 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter(name="chargingMode")
     def charging_mode(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the charging mode of the instance. Valid values are *prePaid*
-        and *postPaid*, defaults to *postPaid*. Changing this will do nothing.
+        Specifies the charging mode of the instance. Valid values are **prePaid**
+        and **postPaid**, defaults to **postPaid**. Changing this will do nothing.
         """
         return pulumi.get(self, "charging_mode")
 
@@ -1761,19 +2525,38 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter(name="configurationId")
     def configuration_id(self) -> pulumi.Output[str]:
         """
-        Specifies the configuration ID. Changing this parameter will create
-        a new resource.
+        Specifies the configuration ID.
         """
         return pulumi.get(self, "configuration_id")
 
     @property
     @pulumi.getter(name="configurationName")
     def configuration_name(self) -> pulumi.Output[str]:
-        """
-        Specifies the configuration name. Changing this parameter will create
-        a new resource.
-        """
         return pulumi.get(self, "configuration_name")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
+    @pulumi.getter(name="currentKernelVersion")
+    def current_kernel_version(self) -> pulumi.Output[str]:
+        """
+        Indicates the current database kernel version.
+        """
+        return pulumi.get(self, "current_kernel_version")
+
+    @property
+    @pulumi.getter(name="currentVersion")
+    def current_version(self) -> pulumi.Output[str]:
+        """
+        Indicates the current database version.
+        """
+        return pulumi.get(self, "current_version")
 
     @property
     @pulumi.getter
@@ -1811,11 +2594,37 @@ class MysqlInstance(pulumi.CustomResource):
         return pulumi.get(self, "dedicated_resource_name")
 
     @property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the description of the instance.
+        """
+        return pulumi.get(self, "description")
+
+    @property
+    @pulumi.getter(name="encryptionStatus")
+    def encryption_status(self) -> pulumi.Output[str]:
+        """
+        Specifies whether to enable or disable encrypted backup. Value options:
+        + **ON**: enabled
+        + **OFF**: disabled
+        """
+        return pulumi.get(self, "encryption_status")
+
+    @property
+    @pulumi.getter(name="encryptionType")
+    def encryption_type(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the encryption type. Currently, only **kms (case-insensitive)** is
+        supported. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "encryption_type")
+
+    @property
     @pulumi.getter(name="enterpriseProjectId")
     def enterprise_project_id(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the enterprise project id. Required if EPS enabled.
-        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "enterprise_project_id")
 
@@ -1836,6 +2645,30 @@ class MysqlInstance(pulumi.CustomResource):
         existed.
         """
         return pulumi.get(self, "force_import")
+
+    @property
+    @pulumi.getter(name="kmsKeyId")
+    def kms_key_id(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the KMS ID. It is mandatory when `encryption_status` is set to **ON**.
+        """
+        return pulumi.get(self, "kms_key_id")
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> pulumi.Output[str]:
+        """
+        Specifies the start time for a maintenance window, for example, **22:00**.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> pulumi.Output[str]:
+        """
+        Specifies the end time for a maintenance window, for example, **01:00**.
+        """
+        return pulumi.get(self, "maintain_end")
 
     @property
     @pulumi.getter(name="masterAvailabilityZone")
@@ -1859,9 +2692,7 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-        digits, hyphens (-), and underscores (_).
+        Specifies the name of the parameter.
         """
         return pulumi.get(self, "name")
 
@@ -1869,15 +2700,25 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter
     def nodes(self) -> pulumi.Output[Sequence['outputs.MysqlInstanceNode']]:
         """
-        Indicates the instance nodes information. Structure is documented below.
+        Indicates the instance nodes information.
+        The nodes structure is documented below.
         """
         return pulumi.get(self, "nodes")
 
     @property
     @pulumi.getter
+    def parameters(self) -> pulumi.Output[Sequence['outputs.MysqlInstanceParameter']]:
+        """
+        Specifies an array of one or more parameters to be set to the instance after launched.
+        The parameters structure is documented below.
+        """
+        return pulumi.get(self, "parameters")
+
+    @property
+    @pulumi.getter
     def password(self) -> pulumi.Output[str]:
         """
-        Specifies the database password. The value must be 8 to 32 characters in length,
+        Specifies the database password. The value must be `8` to `32` characters in length,
         including uppercase and lowercase letters, digits, and special characters, such as ~!@#%^*-_=+? You are advised to
         enter a strong password to improve security, preventing security risks such as brute force cracking.
         """
@@ -1887,10 +2728,11 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter
     def period(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the charging period of the instance.
-        If `period_unit` is set to *month* , the value ranges from 1 to 9. If `period_unit` is set to *year*, the value
-        ranges from 1 to 3. This parameter is mandatory if `charging_mode` is set to *prePaid*. Changing this will
-        do nothing.
+        Specifies the charging period of the instance.  
+        If `period_unit` is set to **month** , the value ranges from `1` to `9`.
+        If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        Changing this will do nothing.
         """
         return pulumi.get(self, "period")
 
@@ -1899,7 +2741,7 @@ class MysqlInstance(pulumi.CustomResource):
     def period_unit(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the charging period unit of the instance.
-        Valid values are *month* and *year*. This parameter is mandatory if `charging_mode` is set to *prePaid*.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
         Changing this will do nothing.
         """
         return pulumi.get(self, "period_unit")
@@ -1908,15 +2750,32 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter
     def port(self) -> pulumi.Output[int]:
         """
-        Indicates the database port.
+        Specifies the database port.
         """
         return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter(name="privateDnsName")
+    def private_dns_name(self) -> pulumi.Output[str]:
+        """
+        Indicates the private domain name.
+        """
+        return pulumi.get(self, "private_dns_name")
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> pulumi.Output[str]:
+        """
+        Specifies the prefix of the private domain name. The value contains
+        `8` to `63` characters. Only uppercase letters, lowercase letters, and digits are allowed.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
 
     @property
     @pulumi.getter(name="privateWriteIp")
     def private_write_ip(self) -> pulumi.Output[str]:
         """
-        Indicates the private IP address of the DB instance.
+        Specifies the private IP address of the DB instance.
         """
         return pulumi.get(self, "private_write_ip")
 
@@ -1944,7 +2803,7 @@ class MysqlInstance(pulumi.CustomResource):
     @pulumi.getter(name="readReplicas")
     def read_replicas(self) -> pulumi.Output[Optional[int]]:
         """
-        Specifies the count of read replicas. Defaults to 1.
+        Specifies the count of read replicas. Defaults to `1`.
         """
         return pulumi.get(self, "read_replicas")
 
@@ -1958,13 +2817,42 @@ class MysqlInstance(pulumi.CustomResource):
         return pulumi.get(self, "region")
 
     @property
-    @pulumi.getter(name="securityGroupId")
-    def security_group_id(self) -> pulumi.Output[Optional[str]]:
+    @pulumi.getter(name="secondsLevelMonitoringEnabled")
+    def seconds_level_monitoring_enabled(self) -> pulumi.Output[bool]:
         """
-        Specifies the security group ID. Required if the selected subnet
-        doesn't enable network ACL. Changing this parameter will create a new resource.
+        Specifies whether to enable seconds level monitoring.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_enabled")
+
+    @property
+    @pulumi.getter(name="secondsLevelMonitoringPeriod")
+    def seconds_level_monitoring_period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the seconds level collection period.
+        + This parameter is valid only when `seconds_level_monitoring_enabled` is set to **true**.
+        + This parameter can not be specified when `seconds_level_monitoring_enabled` is set to **false**.
+        + Value options:
+        - **1**: The collection period is 1s.
+        - **5** (default value): The collection period is 5s.
+        """
+        return pulumi.get(self, "seconds_level_monitoring_period")
+
+    @property
+    @pulumi.getter(name="securityGroupId")
+    def security_group_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the security group ID. Required if the selected subnet doesn't
+        enable network ACL.
         """
         return pulumi.get(self, "security_group_id")
+
+    @property
+    @pulumi.getter(name="slowLogShowOriginalSwitch")
+    def slow_log_show_original_switch(self) -> pulumi.Output[bool]:
+        """
+        Specifies the slow log show original switch of the instance.
+        """
+        return pulumi.get(self, "slow_log_show_original_switch")
 
     @property
     @pulumi.getter(name="sqlFilterEnabled")
@@ -1975,10 +2863,22 @@ class MysqlInstance(pulumi.CustomResource):
         return pulumi.get(self, "sql_filter_enabled")
 
     @property
+    @pulumi.getter(name="sslOption")
+    def ssl_option(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether to enable SSL. Value options:
+        + **true**: SSL is enabled.
+        + **false**: SSL is disabled.
+        """
+        return pulumi.get(self, "ssl_option")
+
+    @property
     @pulumi.getter
     def status(self) -> pulumi.Output[str]:
         """
-        Indicates the node status.
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
         """
         return pulumi.get(self, "status")
 
@@ -2019,11 +2919,27 @@ class MysqlInstance(pulumi.CustomResource):
         return pulumi.get(self, "time_zone")
 
     @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @property
+    @pulumi.getter(name="upgradeFlag")
+    def upgrade_flag(self) -> pulumi.Output[bool]:
+        """
+        Indicates whether the version can be upgraded.
+        """
+        return pulumi.get(self, "upgrade_flag")
+
+    @property
     @pulumi.getter(name="volumeSize")
     def volume_size(self) -> pulumi.Output[int]:
         """
         Specifies the volume size of the instance. The new storage space must be greater than
-        the current storage and must be a multiple of 10 GB. Only valid when in prePaid mode.
+        the current storage and must be a multiple of `10` GB. Only valid when in prePaid mode.
         """
         return pulumi.get(self, "volume_size")
 

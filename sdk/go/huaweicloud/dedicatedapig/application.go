@@ -71,16 +71,16 @@ type Application struct {
 	// App secret.
 	AppSecret pulumi.StringOutput `pulumi:"appSecret"`
 	// Specifies the application description.\
-	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringOutput `pulumi:"description"`
 	// Specifies the ID of the dedicated instance to which the application
 	// belongs.
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
 	// Specifies the application name.\
-	// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+	// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 	// are allowed.
-	// The name must start with a Chinese or English letter.
+	// The name must start with a Chinese character or English letter.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region where the application is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -138,16 +138,16 @@ type applicationState struct {
 	// App secret.
 	AppSecret *string `pulumi:"appSecret"`
 	// Specifies the application description.\
-	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// Specifies the ID of the dedicated instance to which the application
 	// belongs.
 	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the application name.\
-	// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+	// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 	// are allowed.
-	// The name must start with a Chinese or English letter.
+	// The name must start with a Chinese character or English letter.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the application is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -173,16 +173,16 @@ type ApplicationState struct {
 	// App secret.
 	AppSecret pulumi.StringPtrInput
 	// Specifies the application description.\
-	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// Specifies the ID of the dedicated instance to which the application
 	// belongs.
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput
 	// Specifies the application name.\
-	// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+	// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 	// are allowed.
-	// The name must start with a Chinese or English letter.
+	// The name must start with a Chinese character or English letter.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the application is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -208,16 +208,16 @@ type applicationArgs struct {
 	// Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
 	AppCodes []string `pulumi:"appCodes"`
 	// Specifies the application description.\
-	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
 	// Specifies the ID of the dedicated instance to which the application
 	// belongs.
 	// Changing this will create a new resource.
 	InstanceId string `pulumi:"instanceId"`
 	// Specifies the application name.\
-	// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+	// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 	// are allowed.
-	// The name must start with a Chinese or English letter.
+	// The name must start with a Chinese character or English letter.
 	Name *string `pulumi:"name"`
 	// Specifies the region where the application is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -236,16 +236,16 @@ type ApplicationArgs struct {
 	// Only letters, digits and following special special characters are allowed: `!@#$%+-_/=`.
 	AppCodes pulumi.StringArrayInput
 	// Specifies the application description.\
-	// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
 	// Specifies the ID of the dedicated instance to which the application
 	// belongs.
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringInput
 	// Specifies the application name.\
-	// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+	// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 	// are allowed.
-	// The name must start with a Chinese or English letter.
+	// The name must start with a Chinese character or English letter.
 	Name pulumi.StringPtrInput
 	// Specifies the region where the application is located.\
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
@@ -362,7 +362,7 @@ func (o ApplicationOutput) AppSecret() pulumi.StringOutput {
 }
 
 // Specifies the application description.\
-// The description contain a maximum of 255 characters and the angle brackets (< and >) are not allowed.
+// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o ApplicationOutput) Description() pulumi.StringOutput {
 	return o.ApplyT(func(v *Application) pulumi.StringOutput { return v.Description }).(pulumi.StringOutput)
 }
@@ -375,9 +375,9 @@ func (o ApplicationOutput) InstanceId() pulumi.StringOutput {
 }
 
 // Specifies the application name.\
-// The valid length is limited from can contain `3` to `64`, only Chinese and English letters, digits and hyphens (-)
+// The valid length is limited from `3` to `64`, only Chinese characters, English letters, digits and hyphens (-)
 // are allowed.
-// The name must start with a Chinese or English letter.
+// The name must start with a Chinese character or English letter.
 func (o ApplicationOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Application) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }

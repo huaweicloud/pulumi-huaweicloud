@@ -21,7 +21,7 @@ type TaskTargetServerDisk struct {
 	// and in Linux, it indicates the device ID, e.g. "/dev/sda1".
 	// Changing this parameter will create a new resource.
 	Name string `pulumi:"name"`
-	// Specifies an array of physical volume informations.
+	// Specifies an array of physical volume information.
 	// The object is documented below. Changing this parameter will create a new resource.
 	PhysicalVolumes []TaskTargetServerDiskPhysicalVolume `pulumi:"physicalVolumes"`
 	// Specifies the volume size in MB. Changing this parameter will create a new resource.
@@ -53,7 +53,7 @@ type TaskTargetServerDiskArgs struct {
 	// and in Linux, it indicates the device ID, e.g. "/dev/sda1".
 	// Changing this parameter will create a new resource.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Specifies an array of physical volume informations.
+	// Specifies an array of physical volume information.
 	// The object is documented below. Changing this parameter will create a new resource.
 	PhysicalVolumes TaskTargetServerDiskPhysicalVolumeArrayInput `pulumi:"physicalVolumes"`
 	// Specifies the volume size in MB. Changing this parameter will create a new resource.
@@ -133,7 +133,7 @@ func (o TaskTargetServerDiskOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v TaskTargetServerDisk) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Specifies an array of physical volume informations.
+// Specifies an array of physical volume information.
 // The object is documented below. Changing this parameter will create a new resource.
 func (o TaskTargetServerDiskOutput) PhysicalVolumes() TaskTargetServerDiskPhysicalVolumeArrayOutput {
 	return o.ApplyT(func(v TaskTargetServerDisk) []TaskTargetServerDiskPhysicalVolume { return v.PhysicalVolumes }).(TaskTargetServerDiskPhysicalVolumeArrayOutput)

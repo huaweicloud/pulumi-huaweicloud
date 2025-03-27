@@ -17,31 +17,63 @@ __all__ = ['BandwidthArgs', 'Bandwidth']
 class BandwidthArgs:
     def __init__(__self__, *,
                  size: pulumi.Input[int],
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 bandwidth_type: Optional[pulumi.Input[str]] = None,
                  charge_mode: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 public_border_group: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None):
         """
         The set of arguments for constructing a Bandwidth resource.
-        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth.
+               If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+               If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] bandwidth_type: Specifies the bandwidth type.
+               Valid values are **share** and **edgeshare**. Default is **share**.
         :param pulumi.Input[str] charge_mode: Specifies whether the billing is based on bandwidth or
                95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
                The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-               Changing this creates a new bandwidth.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the Shared Bandwidth.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the Shared Bandwidth.
                Changing this creates a new bandwidth.
         :param pulumi.Input[str] name: Specifies the bandwidth name. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[int] period: Specifies the charging period of the Shared Bandwidth.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the Shared Bandwidth.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] public_border_group: Specifies the site is center of border.
+               Valid values are **center** and the name of the border site. Default is **center**.
         :param pulumi.Input[str] region: Specifies the region in which to create the Shared Bandwidth.
                If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
         """
         pulumi.set(__self__, "size", size)
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
+        if bandwidth_type is not None:
+            pulumi.set(__self__, "bandwidth_type", bandwidth_type)
         if charge_mode is not None:
             pulumi.set(__self__, "charge_mode", charge_mode)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if public_border_group is not None:
+            pulumi.set(__self__, "public_border_group", public_border_group)
         if region is not None:
             pulumi.set(__self__, "region", region)
 
@@ -49,7 +81,9 @@ class BandwidthArgs:
     @pulumi.getter
     def size(self) -> pulumi.Input[int]:
         """
-        Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        Specifies the size of the Shared Bandwidth.
+        If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+        If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         """
         return pulumi.get(self, "size")
 
@@ -58,19 +92,57 @@ class BandwidthArgs:
         pulumi.set(self, "size", value)
 
     @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
+
+    @property
+    @pulumi.getter(name="bandwidthType")
+    def bandwidth_type(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the bandwidth type.
+        Valid values are **share** and **edgeshare**. Default is **share**.
+        """
+        return pulumi.get(self, "bandwidth_type")
+
+    @bandwidth_type.setter
+    def bandwidth_type(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "bandwidth_type", value)
+
+    @property
     @pulumi.getter(name="chargeMode")
     def charge_mode(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies whether the billing is based on bandwidth or
         95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
         The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-        Changing this creates a new bandwidth.
         """
         return pulumi.get(self, "charge_mode")
 
     @charge_mode.setter
     def charge_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charge_mode", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the Shared Bandwidth.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -97,6 +169,46 @@ class BandwidthArgs:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the Shared Bandwidth.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the Shared Bandwidth.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="publicBorderGroup")
+    def public_border_group(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the site is center of border.
+        Valid values are **center** and the name of the border site. Default is **center**.
+        """
+        return pulumi.get(self, "public_border_group")
+
+    @public_border_group.setter
+    def public_border_group(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_border_group", value)
 
     @property
     @pulumi.getter
@@ -115,41 +227,75 @@ class BandwidthArgs:
 @pulumi.input_type
 class _BandwidthState:
     def __init__(__self__, *,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
                  bandwidth_type: Optional[pulumi.Input[str]] = None,
                  charge_mode: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
+                 created_at: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 public_border_group: Optional[pulumi.Input[str]] = None,
                  publicips: Optional[pulumi.Input[Sequence[pulumi.Input['BandwidthPublicipArgs']]]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  share_type: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
-                 status: Optional[pulumi.Input[str]] = None):
+                 status: Optional[pulumi.Input[str]] = None,
+                 updated_at: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering Bandwidth resources.
-        :param pulumi.Input[str] bandwidth_type: Indicates the bandwidth type.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] bandwidth_type: Specifies the bandwidth type.
+               Valid values are **share** and **edgeshare**. Default is **share**.
         :param pulumi.Input[str] charge_mode: Specifies whether the billing is based on bandwidth or
                95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
                The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-               Changing this creates a new bandwidth.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the Shared Bandwidth.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: Indicates the bandwidth create time.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the Shared Bandwidth.
                Changing this creates a new bandwidth.
         :param pulumi.Input[str] name: Specifies the bandwidth name. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[int] period: Specifies the charging period of the Shared Bandwidth.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the Shared Bandwidth.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] public_border_group: Specifies the site is center of border.
+               Valid values are **center** and the name of the border site. Default is **center**.
         :param pulumi.Input[Sequence[pulumi.Input['BandwidthPublicipArgs']]] publicips: An array of EIPs that use the bandwidth. The object includes the following:
         :param pulumi.Input[str] region: Specifies the region in which to create the Shared Bandwidth.
                If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
         :param pulumi.Input[str] share_type: Indicates whether the bandwidth is shared or dedicated.
-        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth.
+               If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+               If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         :param pulumi.Input[str] status: Indicates the bandwidth status.
+        :param pulumi.Input[str] updated_at: Indicates the bandwidth update time.
         """
+        if auto_renew is not None:
+            pulumi.set(__self__, "auto_renew", auto_renew)
         if bandwidth_type is not None:
             pulumi.set(__self__, "bandwidth_type", bandwidth_type)
         if charge_mode is not None:
             pulumi.set(__self__, "charge_mode", charge_mode)
+        if charging_mode is not None:
+            pulumi.set(__self__, "charging_mode", charging_mode)
+        if created_at is not None:
+            pulumi.set(__self__, "created_at", created_at)
         if enterprise_project_id is not None:
             pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
+        if period is not None:
+            pulumi.set(__self__, "period", period)
+        if period_unit is not None:
+            pulumi.set(__self__, "period_unit", period_unit)
+        if public_border_group is not None:
+            pulumi.set(__self__, "public_border_group", public_border_group)
         if publicips is not None:
             pulumi.set(__self__, "publicips", publicips)
         if region is not None:
@@ -160,12 +306,28 @@ class _BandwidthState:
             pulumi.set(__self__, "size", size)
         if status is not None:
             pulumi.set(__self__, "status", status)
+        if updated_at is not None:
+            pulumi.set(__self__, "updated_at", updated_at)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies whether auto renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
+
+    @auto_renew.setter
+    def auto_renew(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "auto_renew", value)
 
     @property
     @pulumi.getter(name="bandwidthType")
     def bandwidth_type(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the bandwidth type.
+        Specifies the bandwidth type.
+        Valid values are **share** and **edgeshare**. Default is **share**.
         """
         return pulumi.get(self, "bandwidth_type")
 
@@ -180,13 +342,37 @@ class _BandwidthState:
         Specifies whether the billing is based on bandwidth or
         95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
         The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-        Changing this creates a new bandwidth.
         """
         return pulumi.get(self, "charge_mode")
 
     @charge_mode.setter
     def charge_mode(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "charge_mode", value)
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging mode of the Shared Bandwidth.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @charging_mode.setter
+    def charging_mode(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "charging_mode", value)
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the bandwidth create time.
+        """
+        return pulumi.get(self, "created_at")
+
+    @created_at.setter
+    def created_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "created_at", value)
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -213,6 +399,46 @@ class _BandwidthState:
     @name.setter
     def name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def period(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the charging period of the Shared Bandwidth.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @period.setter
+    def period(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "period", value)
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the charging period unit of the Shared Bandwidth.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @period_unit.setter
+    def period_unit(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "period_unit", value)
+
+    @property
+    @pulumi.getter(name="publicBorderGroup")
+    def public_border_group(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the site is center of border.
+        Valid values are **center** and the name of the border site. Default is **center**.
+        """
+        return pulumi.get(self, "public_border_group")
+
+    @public_border_group.setter
+    def public_border_group(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "public_border_group", value)
 
     @property
     @pulumi.getter
@@ -255,7 +481,9 @@ class _BandwidthState:
     @pulumi.getter
     def size(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        Specifies the size of the Shared Bandwidth.
+        If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+        If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         """
         return pulumi.get(self, "size")
 
@@ -275,15 +503,33 @@ class _BandwidthState:
     def status(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "status", value)
 
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the bandwidth update time.
+        """
+        return pulumi.get(self, "updated_at")
+
+    @updated_at.setter
+    def updated_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "updated_at", value)
+
 
 class Bandwidth(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 bandwidth_type: Optional[pulumi.Input[str]] = None,
                  charge_mode: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 public_border_group: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  __props__=None):
@@ -301,25 +547,53 @@ class Bandwidth(pulumi.CustomResource):
 
         ## Import
 
-        Shared Bandwidths can be imported using the `id`, e.g.
+        Shared Bandwidths can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/bandwidth:Bandwidth bandwidth_1 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
 
+         Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a Shared Bandwidth. You can ignore changes as below. hcl resource "huaweicloud_vpc_bandwidth" "bandwidth_1" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         period_unit, period, auto_renew,
+
+         ]
+
+         } }
+
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] bandwidth_type: Specifies the bandwidth type.
+               Valid values are **share** and **edgeshare**. Default is **share**.
         :param pulumi.Input[str] charge_mode: Specifies whether the billing is based on bandwidth or
                95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
                The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-               Changing this creates a new bandwidth.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the Shared Bandwidth.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the Shared Bandwidth.
                Changing this creates a new bandwidth.
         :param pulumi.Input[str] name: Specifies the bandwidth name. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[int] period: Specifies the charging period of the Shared Bandwidth.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the Shared Bandwidth.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] public_border_group: Specifies the site is center of border.
+               Valid values are **center** and the name of the border site. Default is **center**.
         :param pulumi.Input[str] region: Specifies the region in which to create the Shared Bandwidth.
                If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
-        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth.
+               If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+               If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         """
         ...
     @overload
@@ -341,11 +615,25 @@ class Bandwidth(pulumi.CustomResource):
 
         ## Import
 
-        Shared Bandwidths can be imported using the `id`, e.g.
+        Shared Bandwidths can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/bandwidth:Bandwidth bandwidth_1 7117d38e-4c8f-4624-a505-bd96b97d024c
         ```
+
+         Note that the imported state may not be identical to your resource definition, due to payment attributes missing from the API response. The missing attributes include`period_unit`, `period`, `auto_renew`. It is generally recommended running `terraform plan` after importing a Shared Bandwidth. You can ignore changes as below. hcl resource "huaweicloud_vpc_bandwidth" "bandwidth_1" {
+
+         ...
+
+         lifecycle {
+
+         ignore_changes = [
+
+         period_unit, period, auto_renew,
+
+         ]
+
+         } }
 
         :param str resource_name: The name of the resource.
         :param BandwidthArgs args: The arguments to use to populate this resource's properties.
@@ -362,9 +650,15 @@ class Bandwidth(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 auto_renew: Optional[pulumi.Input[str]] = None,
+                 bandwidth_type: Optional[pulumi.Input[str]] = None,
                  charge_mode: Optional[pulumi.Input[str]] = None,
+                 charging_mode: Optional[pulumi.Input[str]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
+                 period: Optional[pulumi.Input[int]] = None,
+                 period_unit: Optional[pulumi.Input[str]] = None,
+                 public_border_group: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  size: Optional[pulumi.Input[int]] = None,
                  __props__=None):
@@ -376,17 +670,24 @@ class Bandwidth(pulumi.CustomResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = BandwidthArgs.__new__(BandwidthArgs)
 
+            __props__.__dict__["auto_renew"] = auto_renew
+            __props__.__dict__["bandwidth_type"] = bandwidth_type
             __props__.__dict__["charge_mode"] = charge_mode
+            __props__.__dict__["charging_mode"] = charging_mode
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
+            __props__.__dict__["period"] = period
+            __props__.__dict__["period_unit"] = period_unit
+            __props__.__dict__["public_border_group"] = public_border_group
             __props__.__dict__["region"] = region
             if size is None and not opts.urn:
                 raise TypeError("Missing required property 'size'")
             __props__.__dict__["size"] = size
-            __props__.__dict__["bandwidth_type"] = None
+            __props__.__dict__["created_at"] = None
             __props__.__dict__["publicips"] = None
             __props__.__dict__["share_type"] = None
             __props__.__dict__["status"] = None
+            __props__.__dict__["updated_at"] = None
         super(Bandwidth, __self__).__init__(
             'huaweicloud:Vpc/bandwidth:Bandwidth',
             resource_name,
@@ -397,15 +698,22 @@ class Bandwidth(pulumi.CustomResource):
     def get(resource_name: str,
             id: pulumi.Input[str],
             opts: Optional[pulumi.ResourceOptions] = None,
+            auto_renew: Optional[pulumi.Input[str]] = None,
             bandwidth_type: Optional[pulumi.Input[str]] = None,
             charge_mode: Optional[pulumi.Input[str]] = None,
+            charging_mode: Optional[pulumi.Input[str]] = None,
+            created_at: Optional[pulumi.Input[str]] = None,
             enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
+            period: Optional[pulumi.Input[int]] = None,
+            period_unit: Optional[pulumi.Input[str]] = None,
+            public_border_group: Optional[pulumi.Input[str]] = None,
             publicips: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BandwidthPublicipArgs']]]]] = None,
             region: Optional[pulumi.Input[str]] = None,
             share_type: Optional[pulumi.Input[str]] = None,
             size: Optional[pulumi.Input[int]] = None,
-            status: Optional[pulumi.Input[str]] = None) -> 'Bandwidth':
+            status: Optional[pulumi.Input[str]] = None,
+            updated_at: Optional[pulumi.Input[str]] = None) -> 'Bandwidth':
         """
         Get an existing Bandwidth resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
@@ -413,42 +721,74 @@ class Bandwidth(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] bandwidth_type: Indicates the bandwidth type.
+        :param pulumi.Input[str] auto_renew: Specifies whether auto renew is enabled.
+               Valid values are **true** and **false**. Defaults to **false**.
+        :param pulumi.Input[str] bandwidth_type: Specifies the bandwidth type.
+               Valid values are **share** and **edgeshare**. Default is **share**.
         :param pulumi.Input[str] charge_mode: Specifies whether the billing is based on bandwidth or
                95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
                The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-               Changing this creates a new bandwidth.
+        :param pulumi.Input[str] charging_mode: Specifies the charging mode of the Shared Bandwidth.
+               The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        :param pulumi.Input[str] created_at: Indicates the bandwidth create time.
         :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project id of the Shared Bandwidth.
                Changing this creates a new bandwidth.
         :param pulumi.Input[str] name: Specifies the bandwidth name. The value is a string of 1 to 64 characters that
                can contain letters, digits, underscores (_), hyphens (-), and periods (.).
+        :param pulumi.Input[int] period: Specifies the charging period of the Shared Bandwidth.
+               + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+               + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        :param pulumi.Input[str] period_unit: Specifies the charging period unit of the Shared Bandwidth.
+               Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        :param pulumi.Input[str] public_border_group: Specifies the site is center of border.
+               Valid values are **center** and the name of the border site. Default is **center**.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['BandwidthPublicipArgs']]]] publicips: An array of EIPs that use the bandwidth. The object includes the following:
         :param pulumi.Input[str] region: Specifies the region in which to create the Shared Bandwidth.
                If omitted, the provider-level region will be used. Changing this creates a new bandwidth.
         :param pulumi.Input[str] share_type: Indicates whether the bandwidth is shared or dedicated.
-        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        :param pulumi.Input[int] size: Specifies the size of the Shared Bandwidth.
+               If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+               If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         :param pulumi.Input[str] status: Indicates the bandwidth status.
+        :param pulumi.Input[str] updated_at: Indicates the bandwidth update time.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
         __props__ = _BandwidthState.__new__(_BandwidthState)
 
+        __props__.__dict__["auto_renew"] = auto_renew
         __props__.__dict__["bandwidth_type"] = bandwidth_type
         __props__.__dict__["charge_mode"] = charge_mode
+        __props__.__dict__["charging_mode"] = charging_mode
+        __props__.__dict__["created_at"] = created_at
         __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
+        __props__.__dict__["period"] = period
+        __props__.__dict__["period_unit"] = period_unit
+        __props__.__dict__["public_border_group"] = public_border_group
         __props__.__dict__["publicips"] = publicips
         __props__.__dict__["region"] = region
         __props__.__dict__["share_type"] = share_type
         __props__.__dict__["size"] = size
         __props__.__dict__["status"] = status
+        __props__.__dict__["updated_at"] = updated_at
         return Bandwidth(resource_name, opts=opts, __props__=__props__)
+
+    @property
+    @pulumi.getter(name="autoRenew")
+    def auto_renew(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies whether auto renew is enabled.
+        Valid values are **true** and **false**. Defaults to **false**.
+        """
+        return pulumi.get(self, "auto_renew")
 
     @property
     @pulumi.getter(name="bandwidthType")
     def bandwidth_type(self) -> pulumi.Output[str]:
         """
-        Indicates the bandwidth type.
+        Specifies the bandwidth type.
+        Valid values are **share** and **edgeshare**. Default is **share**.
         """
         return pulumi.get(self, "bandwidth_type")
 
@@ -459,9 +799,25 @@ class Bandwidth(pulumi.CustomResource):
         Specifies whether the billing is based on bandwidth or
         95th percentile bandwidth (enhanced). Possible values can be **bandwidth** and **95peak_plus**.
         The default value is **bandwidth**, and **95peak_plus** is only valid for v4 and v5 Customer.
-        Changing this creates a new bandwidth.
         """
         return pulumi.get(self, "charge_mode")
+
+    @property
+    @pulumi.getter(name="chargingMode")
+    def charging_mode(self) -> pulumi.Output[str]:
+        """
+        Specifies the charging mode of the Shared Bandwidth.
+        The valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
+        """
+        return pulumi.get(self, "charging_mode")
+
+    @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the bandwidth create time.
+        """
+        return pulumi.get(self, "created_at")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -480,6 +836,34 @@ class Bandwidth(pulumi.CustomResource):
         can contain letters, digits, underscores (_), hyphens (-), and periods (.).
         """
         return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def period(self) -> pulumi.Output[Optional[int]]:
+        """
+        Specifies the charging period of the Shared Bandwidth.
+        + If `period_unit` is set to **month**, the value ranges from `1` to `9`.
+        + If `period_unit` is set to **year**, the value ranges from `1` to `3`.
+        """
+        return pulumi.get(self, "period")
+
+    @property
+    @pulumi.getter(name="periodUnit")
+    def period_unit(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the charging period unit of the Shared Bandwidth.
+        Valid values are **month** and **year**. This parameter is mandatory if `charging_mode` is set to **prePaid**.
+        """
+        return pulumi.get(self, "period_unit")
+
+    @property
+    @pulumi.getter(name="publicBorderGroup")
+    def public_border_group(self) -> pulumi.Output[str]:
+        """
+        Specifies the site is center of border.
+        Valid values are **center** and the name of the border site. Default is **center**.
+        """
+        return pulumi.get(self, "public_border_group")
 
     @property
     @pulumi.getter
@@ -510,7 +894,9 @@ class Bandwidth(pulumi.CustomResource):
     @pulumi.getter
     def size(self) -> pulumi.Output[int]:
         """
-        Specifies the size of the Shared Bandwidth. The value ranges from 5 Mbit/s to 2000 Mbit/s.
+        Specifies the size of the Shared Bandwidth.
+        If `charge_mode` is **bandwidth**, the value ranges from 5 Mbit/s to 2000 Mbit/s.
+        If `charge_mode` is **95peak_plus**, the value ranges from 300 Mbit/s to 2000 Mbit/s.
         """
         return pulumi.get(self, "size")
 
@@ -521,4 +907,12 @@ class Bandwidth(pulumi.CustomResource):
         Indicates the bandwidth status.
         """
         return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[str]:
+        """
+        Indicates the bandwidth update time.
+        """
+        return pulumi.get(self, "updated_at")
 

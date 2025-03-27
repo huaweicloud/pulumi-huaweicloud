@@ -21,7 +21,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The cloud connection can be imported using the `id`, e.g.
+ * The cloud connection can be imported using the `id`, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cc/connection:Connection test 0ce123456a00f2591fabc00385ff1234
@@ -61,7 +61,7 @@ export class Connection extends pulumi.CustomResource {
     public /*out*/ readonly bandwidthPackageNumber!: pulumi.Output<number>;
     /**
      * The Description about the cloud connection.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     public readonly description!: pulumi.Output<string>;
     /**
@@ -79,8 +79,8 @@ export class Connection extends pulumi.CustomResource {
     public /*out*/ readonly interRegionBandwidthNumber!: pulumi.Output<number>;
     /**
      * The cloud connection name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-     * underscores (_) and dots (.).
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and dots (.) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -98,6 +98,10 @@ export class Connection extends pulumi.CustomResource {
      * + **ACTIVE**: Device deleted.
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
+    /**
+     * Specifies the key/value pairs to associate with the cloud connection.
+     */
+    public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
      * The Scenario.  
      * The options are as follows:
@@ -127,6 +131,7 @@ export class Connection extends pulumi.CustomResource {
             resourceInputs["networkInstanceNumber"] = state ? state.networkInstanceNumber : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["status"] = state ? state.status : undefined;
+            resourceInputs["tags"] = state ? state.tags : undefined;
             resourceInputs["usedScene"] = state ? state.usedScene : undefined;
         } else {
             const args = argsOrState as ConnectionArgs | undefined;
@@ -134,6 +139,7 @@ export class Connection extends pulumi.CustomResource {
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["bandwidthPackageNumber"] = undefined /*out*/;
             resourceInputs["domainId"] = undefined /*out*/;
             resourceInputs["interRegionBandwidthNumber"] = undefined /*out*/;
@@ -156,7 +162,7 @@ export interface ConnectionState {
     bandwidthPackageNumber?: pulumi.Input<number>;
     /**
      * The Description about the cloud connection.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -174,8 +180,8 @@ export interface ConnectionState {
     interRegionBandwidthNumber?: pulumi.Input<number>;
     /**
      * The cloud connection name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-     * underscores (_) and dots (.).
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and dots (.) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -194,6 +200,10 @@ export interface ConnectionState {
      */
     status?: pulumi.Input<string>;
     /**
+     * Specifies the key/value pairs to associate with the cloud connection.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
      * The Scenario.  
      * The options are as follows:
      * + **vpc**: VPCs or virtual gateways can use this cloud connection.
@@ -207,7 +217,7 @@ export interface ConnectionState {
 export interface ConnectionArgs {
     /**
      * The Description about the cloud connection.  
-     * The description can contain a maximum of 255 characters.
+     * The description contain a maximum of `255` characters, and the angle brackets (< and >) are not allowed.
      */
     description?: pulumi.Input<string>;
     /**
@@ -217,8 +227,8 @@ export interface ConnectionArgs {
     enterpriseProjectId?: pulumi.Input<string>;
     /**
      * The cloud connection name.  
-     * The name can contain 1 to 64 characters, only letters, Chinese characters, digits, hyphens (-),
-     * underscores (_) and dots (.).
+     * The name can contain `1` to `64` characters, only English letters, Chinese characters, digits, hyphens (-),
+     * underscores (_) and dots (.) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -226,4 +236,8 @@ export interface ConnectionArgs {
      * If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the key/value pairs to associate with the cloud connection.
+     */
+    tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
 }

@@ -9,17 +9,32 @@ export * from "./addressGroup";
 export * from "./bandwidth";
 export * from "./eip";
 export * from "./eipAssociate";
+export * from "./flowLog";
+export * from "./getAddressGroups";
+export * from "./getFlowLogs";
 export * from "./getIds";
+export * from "./getNetworkAcls";
 export * from "./getPeeringConnection";
 export * from "./getPort";
+export * from "./getQuotas";
 export * from "./getRouteTable";
+export * from "./getRoutes";
 export * from "./getSecgroup";
+export * from "./getSecgroupRules";
 export * from "./getSecgroups";
+export * from "./getSubNetworkInterfaces";
 export * from "./getSubnet";
 export * from "./getSubnetIds";
+export * from "./getSubnetIpAvailabilities";
+export * from "./getSubnetPrivateIps";
 export * from "./getSubnets";
+export * from "./getTrafficMirrorFilterRules";
+export * from "./getTrafficMirrorFilters";
+export * from "./getTrafficMirrorSessions";
 export * from "./getVpc";
 export * from "./getVpcs";
+export * from "./networkAcl";
+export * from "./networkInterface";
 export * from "./peeringConnection";
 export * from "./peeringConnectionAccepter";
 export * from "./port";
@@ -27,7 +42,12 @@ export * from "./route";
 export * from "./routeTable";
 export * from "./secgroup";
 export * from "./secgroupRule";
+export * from "./subNetworkInterface";
 export * from "./subnet";
+export * from "./subnetPrivateIp";
+export * from "./trafficMirrorFilter";
+export * from "./trafficMirrorFilterRule";
+export * from "./trafficMirrorSession";
 export * from "./vip";
 export * from "./vipAssociate";
 export * from "./vpc";
@@ -37,6 +57,9 @@ import { AddressGroup } from "./addressGroup";
 import { Bandwidth } from "./bandwidth";
 import { Eip } from "./eip";
 import { EipAssociate } from "./eipAssociate";
+import { FlowLog } from "./flowLog";
+import { NetworkAcl } from "./networkAcl";
+import { NetworkInterface } from "./networkInterface";
 import { PeeringConnection } from "./peeringConnection";
 import { PeeringConnectionAccepter } from "./peeringConnectionAccepter";
 import { Port } from "./port";
@@ -44,7 +67,12 @@ import { Route } from "./route";
 import { RouteTable } from "./routeTable";
 import { Secgroup } from "./secgroup";
 import { SecgroupRule } from "./secgroupRule";
+import { SubNetworkInterface } from "./subNetworkInterface";
 import { Subnet } from "./subnet";
+import { SubnetPrivateIp } from "./subnetPrivateIp";
+import { TrafficMirrorFilter } from "./trafficMirrorFilter";
+import { TrafficMirrorFilterRule } from "./trafficMirrorFilterRule";
+import { TrafficMirrorSession } from "./trafficMirrorSession";
 import { Vip } from "./vip";
 import { VipAssociate } from "./vipAssociate";
 import { Vpc } from "./vpc";
@@ -61,6 +89,12 @@ const _module = {
                 return new Eip(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/eipAssociate:EipAssociate":
                 return new EipAssociate(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/flowLog:FlowLog":
+                return new FlowLog(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/networkAcl:NetworkAcl":
+                return new NetworkAcl(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/networkInterface:NetworkInterface":
+                return new NetworkInterface(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/peeringConnection:PeeringConnection":
                 return new PeeringConnection(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/peeringConnectionAccepter:PeeringConnectionAccepter":
@@ -75,8 +109,18 @@ const _module = {
                 return new Secgroup(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/secgroupRule:SecgroupRule":
                 return new SecgroupRule(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/subNetworkInterface:SubNetworkInterface":
+                return new SubNetworkInterface(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/subnet:Subnet":
                 return new Subnet(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/subnetPrivateIp:SubnetPrivateIp":
+                return new SubnetPrivateIp(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/trafficMirrorFilter:TrafficMirrorFilter":
+                return new TrafficMirrorFilter(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/trafficMirrorFilterRule:TrafficMirrorFilterRule":
+                return new TrafficMirrorFilterRule(name, <any>undefined, { urn })
+            case "huaweicloud:Vpc/trafficMirrorSession:TrafficMirrorSession":
+                return new TrafficMirrorSession(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/vip:Vip":
                 return new Vip(name, <any>undefined, { urn })
             case "huaweicloud:Vpc/vipAssociate:VipAssociate":
@@ -92,6 +136,9 @@ pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/addressGroup", _module
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/bandwidth", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/eip", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/eipAssociate", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/flowLog", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/networkAcl", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/networkInterface", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/peeringConnection", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/peeringConnectionAccepter", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/port", _module)
@@ -99,7 +146,12 @@ pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/route", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/routeTable", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/secgroup", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/secgroupRule", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/subNetworkInterface", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/subnet", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/subnetPrivateIp", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/trafficMirrorFilter", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/trafficMirrorFilterRule", _module)
+pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/trafficMirrorSession", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/vip", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/vipAssociate", _module)
 pulumi.runtime.registerResourceModule("huaweicloud", "Vpc/vpc", _module)

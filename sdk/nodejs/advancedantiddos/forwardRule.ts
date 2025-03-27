@@ -9,10 +9,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g.
+ * Rule can be imported using the `id` (combination of `instance_id`, `ip`, `forward_protocol` and `forward_port`), separated by slashes (/), e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test &ltinstance_id&gt/&ltip&gt/&ltforward_protocol&gt/&ltforward_port&gt
+ *  $ pulumi import huaweicloud:AdvancedAntiDDos/forwardRule:ForwardRule test <instance_id>/<ip>/<forward_protocol>/<forward_port>
  * ```
  */
 export class ForwardRule extends pulumi.CustomResource {
@@ -45,7 +45,7 @@ export class ForwardRule extends pulumi.CustomResource {
 
     /**
      * Specifies the forward port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     public readonly forwardPort!: pulumi.Output<number>;
     /**
@@ -59,7 +59,7 @@ export class ForwardRule extends pulumi.CustomResource {
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the public IP addresss to which Advanced Anti-DDoS instance
+     * Specifies the public IP address to which Advanced Anti-DDoS instance
      * belongs. Changing this will create a new rule resource.
      */
     public readonly ip!: pulumi.Output<string>;
@@ -77,7 +77,7 @@ export class ForwardRule extends pulumi.CustomResource {
     public readonly sourceIp!: pulumi.Output<string>;
     /**
      * Specifies the source port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     public readonly sourcePort!: pulumi.Output<number>;
     /**
@@ -148,7 +148,7 @@ export class ForwardRule extends pulumi.CustomResource {
 export interface ForwardRuleState {
     /**
      * Specifies the forward port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     forwardPort?: pulumi.Input<number>;
     /**
@@ -162,7 +162,7 @@ export interface ForwardRuleState {
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the public IP addresss to which Advanced Anti-DDoS instance
+     * Specifies the public IP address to which Advanced Anti-DDoS instance
      * belongs. Changing this will create a new rule resource.
      */
     ip?: pulumi.Input<string>;
@@ -180,7 +180,7 @@ export interface ForwardRuleState {
     sourceIp?: pulumi.Input<string>;
     /**
      * Specifies the source port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     sourcePort?: pulumi.Input<number>;
     /**
@@ -195,7 +195,7 @@ export interface ForwardRuleState {
 export interface ForwardRuleArgs {
     /**
      * Specifies the forward port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     forwardPort: pulumi.Input<number>;
     /**
@@ -209,7 +209,7 @@ export interface ForwardRuleArgs {
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the public IP addresss to which Advanced Anti-DDoS instance
+     * Specifies the public IP address to which Advanced Anti-DDoS instance
      * belongs. Changing this will create a new rule resource.
      */
     ip: pulumi.Input<string>;
@@ -219,7 +219,7 @@ export interface ForwardRuleArgs {
     sourceIp: pulumi.Input<string>;
     /**
      * Specifies the source port.
-     * The valid value is range from **1** to **65535**.
+     * The valid value is range from `1` to `65,535`.
      */
     sourcePort: pulumi.Input<number>;
 }

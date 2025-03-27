@@ -11,9 +11,9 @@ import (
 )
 
 type TranscodingTemplateAudio struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate *int `pulumi:"bitrate"`
 	// Specifies the number of audio channels. Possible values are:
 	// + **1**: AUDIO_CHANNELS_1
@@ -49,9 +49,9 @@ type TranscodingTemplateAudioInput interface {
 }
 
 type TranscodingTemplateAudioArgs struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
 	// Specifies the number of audio channels. Possible values are:
 	// + **1**: AUDIO_CHANNELS_1
@@ -152,9 +152,9 @@ func (o TranscodingTemplateAudioOutput) ToTranscodingTemplateAudioPtrOutputWithC
 	}).(TranscodingTemplateAudioPtrOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateAudioOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateAudio) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
@@ -215,9 +215,9 @@ func (o TranscodingTemplateAudioPtrOutput) Elem() TranscodingTemplateAudioOutput
 	}).(TranscodingTemplateAudioOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateAudioPtrOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateAudio) *int {
 		if v == nil {
@@ -280,9 +280,9 @@ func (o TranscodingTemplateAudioPtrOutput) SampleRate() pulumi.IntPtrOutput {
 }
 
 type TranscodingTemplateGroupAudio struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate *int `pulumi:"bitrate"`
 	// Specifies the number of audio channels. Possible values are:
 	// + **1**: AUDIO_CHANNELS_1
@@ -318,9 +318,9 @@ type TranscodingTemplateGroupAudioInput interface {
 }
 
 type TranscodingTemplateGroupAudioArgs struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
 	// Specifies the number of audio channels. Possible values are:
 	// + **1**: AUDIO_CHANNELS_1
@@ -421,9 +421,9 @@ func (o TranscodingTemplateGroupAudioOutput) ToTranscodingTemplateGroupAudioPtrO
 	}).(TranscodingTemplateGroupAudioPtrOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateGroupAudioOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupAudio) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
@@ -484,9 +484,9 @@ func (o TranscodingTemplateGroupAudioPtrOutput) Elem() TranscodingTemplateGroupA
 	}).(TranscodingTemplateGroupAudioOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateGroupAudioPtrOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupAudio) *int {
 		if v == nil {
@@ -549,17 +549,19 @@ func (o TranscodingTemplateGroupAudioPtrOutput) SampleRate() pulumi.IntPtrOutput
 }
 
 type TranscodingTemplateGroupVideo struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate *int `pulumi:"bitrate"`
-	// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-	// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-	// is an adaptive value. The default value is 0.
+	// Specifies the video height.\
+	// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+	// `2,880` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 	Height *int `pulumi:"height"`
-	// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-	// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-	// is an adaptive value. The default value is 0.
+	// Specifies the video width.\
+	// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+	// `4,096` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 	Width *int `pulumi:"width"`
 }
 
@@ -575,17 +577,19 @@ type TranscodingTemplateGroupVideoInput interface {
 }
 
 type TranscodingTemplateGroupVideoArgs struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
-	// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-	// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-	// is an adaptive value. The default value is 0.
+	// Specifies the video height.\
+	// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+	// `2,880` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 	Height pulumi.IntPtrInput `pulumi:"height"`
-	// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-	// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-	// is an adaptive value. The default value is 0.
+	// Specifies the video width.\
+	// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+	// `4,096` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 	Width pulumi.IntPtrInput `pulumi:"width"`
 }
 
@@ -640,23 +644,25 @@ func (o TranscodingTemplateGroupVideoOutput) ToTranscodingTemplateGroupVideoOutp
 	return o
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is `0` or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateGroupVideoOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideo) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-// is an adaptive value. The default value is 0.
+// Specifies the video height.\
+// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+// `2,880` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateGroupVideoOutput) Height() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideo) *int { return v.Height }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-// is an adaptive value. The default value is 0.
+// Specifies the video width.\
+// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+// `4,096` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateGroupVideoOutput) Width() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideo) *int { return v.Width }).(pulumi.IntPtrOutput)
 }
@@ -691,8 +697,8 @@ type TranscodingTemplateGroupVideoCommon struct {
 	// + **1**: H.264
 	// + **2**: H.265
 	Codec *int `pulumi:"codec"`
-	// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-	// The default value is 0. The unit is FPS.
+	// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+	// The default value is `0`. The unit is FPS.
 	Fps *int `pulumi:"fps"`
 	// Specifies the encoding level. Possible values are:
 	// + **1**: VIDEO_LEVEL_1_0
@@ -712,16 +718,17 @@ type TranscodingTemplateGroupVideoCommon struct {
 	// + **15**: VIDEO_LEVEL_5_1
 	Level *int `pulumi:"level"`
 	// Specifies the maximum number of B-frames.
-	// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+	// The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
 	MaxConsecutiveBframes *int `pulumi:"maxConsecutiveBframes"`
-	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-	// The default value is 5. The unit is second.
+	// Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+	// The default value is `5`. The unit is second.
 	MaxIframesInterval *int `pulumi:"maxIframesInterval"`
 	MaxReferenceFrames *int `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
 	OutputPolicy *string `pulumi:"outputPolicy"`
-	// Specifies the encoding profile. The recommended value is 3. Possible values are:
+	// Specifies the encoding profile.\
+	// Possible values are:
 	// + **1**: VIDEO_PROFILE_H264_BASE
 	// + **2**: VIDEO_PROFILE_H264_MAIN
 	// + **3**: VIDEO_PROFILE_H264_HIGH
@@ -756,8 +763,8 @@ type TranscodingTemplateGroupVideoCommonArgs struct {
 	// + **1**: H.264
 	// + **2**: H.265
 	Codec pulumi.IntPtrInput `pulumi:"codec"`
-	// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-	// The default value is 0. The unit is FPS.
+	// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+	// The default value is `0`. The unit is FPS.
 	Fps pulumi.IntPtrInput `pulumi:"fps"`
 	// Specifies the encoding level. Possible values are:
 	// + **1**: VIDEO_LEVEL_1_0
@@ -777,16 +784,17 @@ type TranscodingTemplateGroupVideoCommonArgs struct {
 	// + **15**: VIDEO_LEVEL_5_1
 	Level pulumi.IntPtrInput `pulumi:"level"`
 	// Specifies the maximum number of B-frames.
-	// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+	// The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
 	MaxConsecutiveBframes pulumi.IntPtrInput `pulumi:"maxConsecutiveBframes"`
-	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-	// The default value is 5. The unit is second.
+	// Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+	// The default value is `5`. The unit is second.
 	MaxIframesInterval pulumi.IntPtrInput `pulumi:"maxIframesInterval"`
 	MaxReferenceFrames pulumi.IntPtrInput `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
 	OutputPolicy pulumi.StringPtrInput `pulumi:"outputPolicy"`
-	// Specifies the encoding profile. The recommended value is 3. Possible values are:
+	// Specifies the encoding profile.\
+	// Possible values are:
 	// + **1**: VIDEO_PROFILE_H264_BASE
 	// + **2**: VIDEO_PROFILE_H264_MAIN
 	// + **3**: VIDEO_PROFILE_H264_HIGH
@@ -892,8 +900,8 @@ func (o TranscodingTemplateGroupVideoCommonOutput) Codec() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.Codec }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-// The default value is 0. The unit is FPS.
+// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+// The default value is `0`. The unit is FPS.
 func (o TranscodingTemplateGroupVideoCommonOutput) Fps() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.Fps }).(pulumi.IntPtrOutput)
 }
@@ -919,13 +927,13 @@ func (o TranscodingTemplateGroupVideoCommonOutput) Level() pulumi.IntPtrOutput {
 }
 
 // Specifies the maximum number of B-frames.
-// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+// The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
 func (o TranscodingTemplateGroupVideoCommonOutput) MaxConsecutiveBframes() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.MaxConsecutiveBframes }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-// The default value is 5. The unit is second.
+// Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+// The default value is `5`. The unit is second.
 func (o TranscodingTemplateGroupVideoCommonOutput) MaxIframesInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *int { return v.MaxIframesInterval }).(pulumi.IntPtrOutput)
 }
@@ -940,7 +948,8 @@ func (o TranscodingTemplateGroupVideoCommonOutput) OutputPolicy() pulumi.StringP
 	return o.ApplyT(func(v TranscodingTemplateGroupVideoCommon) *string { return v.OutputPolicy }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the encoding profile. The recommended value is 3. Possible values are:
+// Specifies the encoding profile.\
+// Possible values are:
 // + **1**: VIDEO_PROFILE_H264_BASE
 // + **2**: VIDEO_PROFILE_H264_MAIN
 // + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1007,8 +1016,8 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) Codec() pulumi.IntPtrOutpu
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-// The default value is 0. The unit is FPS.
+// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+// The default value is `0`. The unit is FPS.
 func (o TranscodingTemplateGroupVideoCommonPtrOutput) Fps() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupVideoCommon) *int {
 		if v == nil {
@@ -1044,7 +1053,7 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) Level() pulumi.IntPtrOutpu
 }
 
 // Specifies the maximum number of B-frames.
-// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+// The value range is  `0` to `7`, and the default value is `4`. The unit is frame.
 func (o TranscodingTemplateGroupVideoCommonPtrOutput) MaxConsecutiveBframes() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupVideoCommon) *int {
 		if v == nil {
@@ -1054,8 +1063,8 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) MaxConsecutiveBframes() pu
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-// The default value is 5. The unit is second.
+// Specifies the maximum I-frame interval. The value ranges from `2` to `10`.
+// The default value is `5`. The unit is second.
 func (o TranscodingTemplateGroupVideoCommonPtrOutput) MaxIframesInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateGroupVideoCommon) *int {
 		if v == nil {
@@ -1085,7 +1094,8 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) OutputPolicy() pulumi.Stri
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the encoding profile. The recommended value is 3. Possible values are:
+// Specifies the encoding profile.\
+// Possible values are:
 // + **1**: VIDEO_PROFILE_H264_BASE
 // + **2**: VIDEO_PROFILE_H264_MAIN
 // + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1114,9 +1124,9 @@ func (o TranscodingTemplateGroupVideoCommonPtrOutput) Quality() pulumi.IntPtrOut
 }
 
 type TranscodingTemplateVideo struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate *int `pulumi:"bitrate"`
 	// Specifies whether to enable black bar removal. Possible values are:
 	// + **0**: Disable black bar removal.
@@ -1127,14 +1137,16 @@ type TranscodingTemplateVideo struct {
 	// + **1**: H.264
 	// + **2**: H.265
 	Codec *int `pulumi:"codec"`
-	// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-	// The default value is 0. The unit is FPS.
+	// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+	// The default value is `0`. The unit is FPS.
 	Fps *int `pulumi:"fps"`
-	// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-	// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-	// is an adaptive value. The default value is 0.
+	// Specifies the video height.\
+	// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+	// `2,880` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 	Height *int `pulumi:"height"`
-	// Specifies the encoding level. Possible values are:
+	// Specifies the encoding level.\
+	// Possible values are:
 	// + **1**: VIDEO_LEVEL_1_0
 	// + **2**: VIDEO_LEVEL_1_1
 	// + **3**: VIDEO_LEVEL_1_2
@@ -1152,16 +1164,17 @@ type TranscodingTemplateVideo struct {
 	// + **15**: VIDEO_LEVEL_5_1
 	Level *int `pulumi:"level"`
 	// Specifies the maximum number of B-frames.
-	// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+	// The value range is `0` to `7`, and the default value is `4`. The unit is frame.
 	MaxConsecutiveBframes *int `pulumi:"maxConsecutiveBframes"`
-	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-	// The default value is 5. The unit is second.
+	// Specifies the maximum I-frame interval, in second.\
+	// The value ranges from `2` to `10`. The default value is `5`.
 	MaxIframesInterval *int `pulumi:"maxIframesInterval"`
 	MaxReferenceFrames *int `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
 	OutputPolicy *string `pulumi:"outputPolicy"`
-	// Specifies the encoding profile. The recommended value is 3. Possible values are:
+	// Specifies the encoding profile.\
+	// Possible values are:
 	// + **1**: VIDEO_PROFILE_H264_BASE
 	// + **2**: VIDEO_PROFILE_H264_MAIN
 	// + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1173,9 +1186,10 @@ type TranscodingTemplateVideo struct {
 	// + **2**: VIDEO_PRESET_HSPEED
 	// + **3**: VIDEO_PRESET_NORMAL
 	Quality *int `pulumi:"quality"`
-	// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-	// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-	// is an adaptive value. The default value is 0.
+	// Specifies the video width.\
+	// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+	// `4,096` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 	Width *int `pulumi:"width"`
 }
 
@@ -1191,9 +1205,9 @@ type TranscodingTemplateVideoInput interface {
 }
 
 type TranscodingTemplateVideoArgs struct {
-	// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-	// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-	// adaptive value.
+	// Specifies the average output bitrate.\
+	// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+	// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 	Bitrate pulumi.IntPtrInput `pulumi:"bitrate"`
 	// Specifies whether to enable black bar removal. Possible values are:
 	// + **0**: Disable black bar removal.
@@ -1204,14 +1218,16 @@ type TranscodingTemplateVideoArgs struct {
 	// + **1**: H.264
 	// + **2**: H.265
 	Codec pulumi.IntPtrInput `pulumi:"codec"`
-	// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-	// The default value is 0. The unit is FPS.
+	// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+	// The default value is `0`. The unit is FPS.
 	Fps pulumi.IntPtrInput `pulumi:"fps"`
-	// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-	// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-	// is an adaptive value. The default value is 0.
+	// Specifies the video height.\
+	// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+	// `2,880` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 	Height pulumi.IntPtrInput `pulumi:"height"`
-	// Specifies the encoding level. Possible values are:
+	// Specifies the encoding level.\
+	// Possible values are:
 	// + **1**: VIDEO_LEVEL_1_0
 	// + **2**: VIDEO_LEVEL_1_1
 	// + **3**: VIDEO_LEVEL_1_2
@@ -1229,16 +1245,17 @@ type TranscodingTemplateVideoArgs struct {
 	// + **15**: VIDEO_LEVEL_5_1
 	Level pulumi.IntPtrInput `pulumi:"level"`
 	// Specifies the maximum number of B-frames.
-	// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+	// The value range is `0` to `7`, and the default value is `4`. The unit is frame.
 	MaxConsecutiveBframes pulumi.IntPtrInput `pulumi:"maxConsecutiveBframes"`
-	// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-	// The default value is 5. The unit is second.
+	// Specifies the maximum I-frame interval, in second.\
+	// The value ranges from `2` to `10`. The default value is `5`.
 	MaxIframesInterval pulumi.IntPtrInput `pulumi:"maxIframesInterval"`
 	MaxReferenceFrames pulumi.IntPtrInput `pulumi:"maxReferenceFrames"`
 	// Specifies the output policy. Possible values are **discard** and **transcode**.
 	// The default value is transcode.
 	OutputPolicy pulumi.StringPtrInput `pulumi:"outputPolicy"`
-	// Specifies the encoding profile. The recommended value is 3. Possible values are:
+	// Specifies the encoding profile.\
+	// Possible values are:
 	// + **1**: VIDEO_PROFILE_H264_BASE
 	// + **2**: VIDEO_PROFILE_H264_MAIN
 	// + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1250,9 +1267,10 @@ type TranscodingTemplateVideoArgs struct {
 	// + **2**: VIDEO_PRESET_HSPEED
 	// + **3**: VIDEO_PRESET_NORMAL
 	Quality pulumi.IntPtrInput `pulumi:"quality"`
-	// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-	// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-	// is an adaptive value. The default value is 0.
+	// Specifies the video width.\
+	// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+	// `4,096` for H.265. The unit is pixel.
+	// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 	Width pulumi.IntPtrInput `pulumi:"width"`
 }
 
@@ -1333,9 +1351,9 @@ func (o TranscodingTemplateVideoOutput) ToTranscodingTemplateVideoPtrOutputWithC
 	}).(TranscodingTemplateVideoPtrOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateVideoOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Bitrate }).(pulumi.IntPtrOutput)
 }
@@ -1355,20 +1373,22 @@ func (o TranscodingTemplateVideoOutput) Codec() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Codec }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-// The default value is 0. The unit is FPS.
+// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+// The default value is `0`. The unit is FPS.
 func (o TranscodingTemplateVideoOutput) Fps() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Fps }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-// is an adaptive value. The default value is 0.
+// Specifies the video height.\
+// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+// `2,880` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateVideoOutput) Height() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Height }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the encoding level. Possible values are:
+// Specifies the encoding level.\
+// Possible values are:
 // + **1**: VIDEO_LEVEL_1_0
 // + **2**: VIDEO_LEVEL_1_1
 // + **3**: VIDEO_LEVEL_1_2
@@ -1389,13 +1409,13 @@ func (o TranscodingTemplateVideoOutput) Level() pulumi.IntPtrOutput {
 }
 
 // Specifies the maximum number of B-frames.
-// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+// The value range is `0` to `7`, and the default value is `4`. The unit is frame.
 func (o TranscodingTemplateVideoOutput) MaxConsecutiveBframes() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.MaxConsecutiveBframes }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-// The default value is 5. The unit is second.
+// Specifies the maximum I-frame interval, in second.\
+// The value ranges from `2` to `10`. The default value is `5`.
 func (o TranscodingTemplateVideoOutput) MaxIframesInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.MaxIframesInterval }).(pulumi.IntPtrOutput)
 }
@@ -1410,7 +1430,8 @@ func (o TranscodingTemplateVideoOutput) OutputPolicy() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *string { return v.OutputPolicy }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the encoding profile. The recommended value is 3. Possible values are:
+// Specifies the encoding profile.\
+// Possible values are:
 // + **1**: VIDEO_PROFILE_H264_BASE
 // + **2**: VIDEO_PROFILE_H264_MAIN
 // + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1428,9 +1449,10 @@ func (o TranscodingTemplateVideoOutput) Quality() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Quality }).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-// is an adaptive value. The default value is 0.
+// Specifies the video width.\
+// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+// `4,096` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateVideoOutput) Width() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v TranscodingTemplateVideo) *int { return v.Width }).(pulumi.IntPtrOutput)
 }
@@ -1459,9 +1481,9 @@ func (o TranscodingTemplateVideoPtrOutput) Elem() TranscodingTemplateVideoOutput
 	}).(TranscodingTemplateVideoOutput)
 }
 
-// Specifies the average output bitrate. The value is 0 or an integer ranging from 40 to
-// 30,000. The default value is 0. The unit is kbit/s. If this parameter is set to 0, the average output bitrate is an
-// adaptive value.
+// Specifies the average output bitrate.\
+// The value is 0 or an integer ranging from `40` to `30,000`. The default value is `0`. The unit is kbit/s.
+// If this parameter is set to `0`, the average output bitrate is an adaptive value.
 func (o TranscodingTemplateVideoPtrOutput) Bitrate() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {
@@ -1496,8 +1518,8 @@ func (o TranscodingTemplateVideoPtrOutput) Codec() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the frame rate. Its value is 0 or an integer ranging from 5 to 30.
-// The default value is 0. The unit is FPS.
+// Specifies the frame rate. Its value is `0` or an integer ranging from `5` to `30`.
+// The default value is `0`. The unit is FPS.
 func (o TranscodingTemplateVideoPtrOutput) Fps() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {
@@ -1507,9 +1529,10 @@ func (o TranscodingTemplateVideoPtrOutput) Fps() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video height. The value is 0 or a multiple of 2 from 32 to 2,880 for H.264,
-// and 0 or a multiple of 4 from 96 to 2,880 for H.265. The unit is pixel. If this parameter is set to 0, the video height
-// is an adaptive value. The default value is 0.
+// Specifies the video height.\
+// The value is `0` or a multiple of `2` from `32` to `2,880` for H.264, and `0` or a multiple of `4` from `96` to
+// `2,880` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video height is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateVideoPtrOutput) Height() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {
@@ -1519,7 +1542,8 @@ func (o TranscodingTemplateVideoPtrOutput) Height() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the encoding level. Possible values are:
+// Specifies the encoding level.\
+// Possible values are:
 // + **1**: VIDEO_LEVEL_1_0
 // + **2**: VIDEO_LEVEL_1_1
 // + **3**: VIDEO_LEVEL_1_2
@@ -1545,7 +1569,7 @@ func (o TranscodingTemplateVideoPtrOutput) Level() pulumi.IntPtrOutput {
 }
 
 // Specifies the maximum number of B-frames.
-// The vaule range is  0 to 7, and the default value is 4. The unit is frame.
+// The value range is `0` to `7`, and the default value is `4`. The unit is frame.
 func (o TranscodingTemplateVideoPtrOutput) MaxConsecutiveBframes() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {
@@ -1555,8 +1579,8 @@ func (o TranscodingTemplateVideoPtrOutput) MaxConsecutiveBframes() pulumi.IntPtr
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the mximum I-frame interval. The value ranges from 2 to 10.
-// The default value is 5. The unit is second.
+// Specifies the maximum I-frame interval, in second.\
+// The value ranges from `2` to `10`. The default value is `5`.
 func (o TranscodingTemplateVideoPtrOutput) MaxIframesInterval() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {
@@ -1586,7 +1610,8 @@ func (o TranscodingTemplateVideoPtrOutput) OutputPolicy() pulumi.StringPtrOutput
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the encoding profile. The recommended value is 3. Possible values are:
+// Specifies the encoding profile.\
+// Possible values are:
 // + **1**: VIDEO_PROFILE_H264_BASE
 // + **2**: VIDEO_PROFILE_H264_MAIN
 // + **3**: VIDEO_PROFILE_H264_HIGH
@@ -1614,9 +1639,10 @@ func (o TranscodingTemplateVideoPtrOutput) Quality() pulumi.IntPtrOutput {
 	}).(pulumi.IntPtrOutput)
 }
 
-// Specifies the video width. The value can be 0 or a multiple of 2 from 32 to 4,096 for H.264
-// and 0 or a multiple of 4 from 160 to 4,096 for H.265. The unit is pixel. If this parameter is set to 0, the video width
-// is an adaptive value. The default value is 0.
+// Specifies the video width.\
+// The value can be 0 or a multiple of `2` from `32` to `4,096` for H.264 and `0` or a multiple of `4` from `160` to
+// `4,096` for H.265. The unit is pixel.
+// If this parameter is set to `0`, the video width is an adaptive value. The default value is `0`.
 func (o TranscodingTemplateVideoPtrOutput) Width() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *TranscodingTemplateVideo) *int {
 		if v == nil {

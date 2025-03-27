@@ -41,19 +41,19 @@ class DataforwardingRuleArgs:
                + **product:update**: Product updated.
                + **device.command.status:update**: Update of the device asynchronous command status.
         :param pulumi.Input[str] description: Specifies the description of data forwarding rule. The description contains
-               a maximum of 256 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
+               a maximum of `256` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to **false**.
                Can not enable without `targets`.
-        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
-        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which uses the data forwarding rule.
                If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['DataforwardingRuleTargetArgs']]] targets: Specifies the list of the targets (HUAWEI CLOUD services or private servers) to which you
                want to forward the data. The targets structure is documented below.
-        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         pulumi.set(__self__, "trigger", trigger)
         if description is not None:
@@ -102,7 +102,7 @@ class DataforwardingRuleArgs:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of data forwarding rule. The description contains
-        a maximum of 256 characters.
+        a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -114,7 +114,7 @@ class DataforwardingRuleArgs:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the data forwarding rule. Defaults to `false`.
+        Specifies whether to enable the data forwarding rule. Defaults to **false**.
         Can not enable without `targets`.
         """
         return pulumi.get(self, "enabled")
@@ -127,7 +127,7 @@ class DataforwardingRuleArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -153,7 +153,7 @@ class DataforwardingRuleArgs:
     @pulumi.getter
     def select(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "select")
 
@@ -191,7 +191,7 @@ class DataforwardingRuleArgs:
     @pulumi.getter
     def where(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "where")
 
@@ -215,14 +215,14 @@ class _DataforwardingRuleState:
         """
         Input properties used for looking up and filtering DataforwardingRule resources.
         :param pulumi.Input[str] description: Specifies the description of data forwarding rule. The description contains
-               a maximum of 256 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
+               a maximum of `256` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to **false**.
                Can not enable without `targets`.
-        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
-        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which uses the data forwarding rule.
                If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['DataforwardingRuleTargetArgs']]] targets: Specifies the list of the targets (HUAWEI CLOUD services or private servers) to which you
@@ -240,7 +240,7 @@ class _DataforwardingRuleState:
                + **product:delete**: Product deleted.
                + **product:update**: Product updated.
                + **device.command.status:update**: Update of the device asynchronous command status.
-        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         if description is not None:
             pulumi.set(__self__, "description", description)
@@ -266,7 +266,7 @@ class _DataforwardingRuleState:
     def description(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the description of data forwarding rule. The description contains
-        a maximum of 256 characters.
+        a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -278,7 +278,7 @@ class _DataforwardingRuleState:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the data forwarding rule. Defaults to `false`.
+        Specifies whether to enable the data forwarding rule. Defaults to **false**.
         Can not enable without `targets`.
         """
         return pulumi.get(self, "enabled")
@@ -291,7 +291,7 @@ class _DataforwardingRuleState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -317,7 +317,7 @@ class _DataforwardingRuleState:
     @pulumi.getter
     def select(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "select")
 
@@ -379,7 +379,7 @@ class _DataforwardingRuleState:
     @pulumi.getter
     def where(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "where")
 
@@ -406,6 +406,13 @@ class DataforwardingRule(pulumi.CustomResource):
         """
         Manages an IoTDA data forwarding rule within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
 
         ```python
@@ -446,13 +453,13 @@ class DataforwardingRule(pulumi.CustomResource):
 
         ## Import
 
-        Data forwarding rules can be imported using the `id`, e.g.
+        Data forwarding rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/dataforwardingRule:DataforwardingRule test 10022532f4f94f26b01daa1e424853e1
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attrubutes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
 
          ...
 
@@ -469,14 +476,14 @@ class DataforwardingRule(pulumi.CustomResource):
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of data forwarding rule. The description contains
-               a maximum of 256 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
+               a maximum of `256` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to **false**.
                Can not enable without `targets`.
-        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
-        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which uses the data forwarding rule.
                If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DataforwardingRuleTargetArgs']]]] targets: Specifies the list of the targets (HUAWEI CLOUD services or private servers) to which you
@@ -494,7 +501,7 @@ class DataforwardingRule(pulumi.CustomResource):
                + **product:delete**: Product deleted.
                + **product:update**: Product updated.
                + **device.command.status:update**: Update of the device asynchronous command status.
-        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         ...
     @overload
@@ -504,6 +511,13 @@ class DataforwardingRule(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Manages an IoTDA data forwarding rule within HuaweiCloud.
+
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
 
         ## Example Usage
 
@@ -545,13 +559,13 @@ class DataforwardingRule(pulumi.CustomResource):
 
         ## Import
 
-        Data forwarding rules can be imported using the `id`, e.g.
+        Data forwarding rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/dataforwardingRule:DataforwardingRule test 10022532f4f94f26b01daa1e424853e1
         ```
 
-         Note that the imported state may not be identical to your resource definition, due to some attrubutes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. resource "huaweicloud_iotda_device_group" "test" {
+         Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`password` of `kafka_forwarding`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the group. Also you can ignore changes as below. hcl resource "huaweicloud_iotda_device_group" "test" {
 
          ...
 
@@ -636,14 +650,14 @@ class DataforwardingRule(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] description: Specifies the description of data forwarding rule. The description contains
-               a maximum of 256 characters.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to `false`.
+               a maximum of `256` characters.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the data forwarding rule. Defaults to **false**.
                Can not enable without `targets`.
-        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        :param pulumi.Input[str] name: Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
                Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
                allowed: `?'#().,&%@!`.
         :param pulumi.Input[str] region: Specifies the region to which the KAFKA belongs.
-        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] select: Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         :param pulumi.Input[str] space_id: Specifies the resource space ID which uses the data forwarding rule.
                If omitted, all resource space will use the data forwarding rule. Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DataforwardingRuleTargetArgs']]]] targets: Specifies the list of the targets (HUAWEI CLOUD services or private servers) to which you
@@ -661,7 +675,7 @@ class DataforwardingRule(pulumi.CustomResource):
                + **product:delete**: Product deleted.
                + **product:update**: Product updated.
                + **device.command.status:update**: Update of the device asynchronous command status.
-        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        :param pulumi.Input[str] where: Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -683,7 +697,7 @@ class DataforwardingRule(pulumi.CustomResource):
     def description(self) -> pulumi.Output[Optional[str]]:
         """
         Specifies the description of data forwarding rule. The description contains
-        a maximum of 256 characters.
+        a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -691,7 +705,7 @@ class DataforwardingRule(pulumi.CustomResource):
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether to enable the data forwarding rule. Defaults to `false`.
+        Specifies whether to enable the data forwarding rule. Defaults to **false**.
         Can not enable without `targets`.
         """
         return pulumi.get(self, "enabled")
@@ -700,7 +714,7 @@ class DataforwardingRule(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the name of data forwarding rule. The name contains a maximum of 256 characters.
+        Specifies the name of data forwarding rule. The name contains a maximum of `256` characters.
         Only letters, Chinese characters, digits, hyphens (-), underscores (_) and the following special characters are
         allowed: `?'#().,&%@!`.
         """
@@ -718,7 +732,7 @@ class DataforwardingRule(pulumi.CustomResource):
     @pulumi.getter
     def select(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the SQL SELECT statement which contains a maximum of 500 characters.
+        Specifies the SQL SELECT statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "select")
 
@@ -764,7 +778,7 @@ class DataforwardingRule(pulumi.CustomResource):
     @pulumi.getter
     def where(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the SQL WHERE statement which contains a maximum of 500 characters.
+        Specifies the SQL WHERE statement which contains a maximum of `500` characters.
         """
         return pulumi.get(self, "where")
 

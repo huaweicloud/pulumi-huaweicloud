@@ -17,32 +17,53 @@ __all__ = ['CertificateArgs', 'Certificate']
 class CertificateArgs:
     def __init__(__self__, *,
                  certificate: pulumi.Input[str],
-                 certificate_chain: pulumi.Input[str],
                  private_key: pulumi.Input[str],
+                 certificate_chain: Optional[pulumi.Input[str]] = None,
+                 enc_certificate: Optional[pulumi.Input[str]] = None,
+                 enc_private_key: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  targets: Optional[pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]]] = None):
         """
         The set of arguments for constructing a Certificate resource.
-        :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] certificate: Specifies the content of the Certificate, PEM format.
+               It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+               the certificate chain, then this field only takes the certificate itself.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] certificate_chain: The chain of the certificate.
-               It can be extracted from the *server.crt* file in the Nginx directory,
+        :param pulumi.Input[str] private_key: Specifies the private encrypted key of the Certificate, PEM format.
+               Changing this parameter will create a new resource.
+        :param pulumi.Input[str] certificate_chain: Specifies the chain of the certificate.
+               It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
-               Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Human-readable name for the Certificate.
+        :param pulumi.Input[str] enc_certificate: Specifies the encrypted content of the state secret certificate.
+               Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        :param pulumi.Input[str] enc_private_key: Specifies the encrypted private key of the state secret certificate.
+               Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+               return and line feed characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID. This parameter is only
+               valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+               if this parameter is not specified for enterprise users.
+        :param pulumi.Input[str] name: Specifies the human-readable name for the certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
-        :param pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]] targets: The service to which the certificate needs to be pushed.
+        :param pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]] targets: Specifies the service to which the certificate needs to be pushed.
+               The target structure is documented below.
         """
         pulumi.set(__self__, "certificate", certificate)
-        pulumi.set(__self__, "certificate_chain", certificate_chain)
         pulumi.set(__self__, "private_key", private_key)
+        if certificate_chain is not None:
+            pulumi.set(__self__, "certificate_chain", certificate_chain)
+        if enc_certificate is not None:
+            pulumi.set(__self__, "enc_certificate", enc_certificate)
+        if enc_private_key is not None:
+            pulumi.set(__self__, "enc_private_key", enc_private_key)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if region is not None:
@@ -54,7 +75,9 @@ class CertificateArgs:
     @pulumi.getter
     def certificate(self) -> pulumi.Input[str]:
         """
-        The public encrypted key of the Certificate, PEM format.
+        Specifies the content of the Certificate, PEM format.
+        It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+        the certificate chain, then this field only takes the certificate itself.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
@@ -64,25 +87,10 @@ class CertificateArgs:
         pulumi.set(self, "certificate", value)
 
     @property
-    @pulumi.getter(name="certificateChain")
-    def certificate_chain(self) -> pulumi.Input[str]:
-        """
-        The chain of the certificate.
-        It can be extracted from the *server.crt* file in the Nginx directory,
-        usually after the second paragraph is the certificate chain.
-        Changing this parameter will create a new resource.
-        """
-        return pulumi.get(self, "certificate_chain")
-
-    @certificate_chain.setter
-    def certificate_chain(self, value: pulumi.Input[str]):
-        pulumi.set(self, "certificate_chain", value)
-
-    @property
     @pulumi.getter(name="privateKey")
     def private_key(self) -> pulumi.Input[str]:
         """
-        The private encrypted key of the Certificate, PEM format.
+        Specifies the private encrypted key of the Certificate, PEM format.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
@@ -92,10 +100,66 @@ class CertificateArgs:
         pulumi.set(self, "private_key", value)
 
     @property
+    @pulumi.getter(name="certificateChain")
+    def certificate_chain(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the chain of the certificate.
+        It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
+        usually after the second paragraph is the certificate chain.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "certificate_chain")
+
+    @certificate_chain.setter
+    def certificate_chain(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "certificate_chain", value)
+
+    @property
+    @pulumi.getter(name="encCertificate")
+    def enc_certificate(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encrypted content of the state secret certificate.
+        Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        """
+        return pulumi.get(self, "enc_certificate")
+
+    @enc_certificate.setter
+    def enc_certificate(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enc_certificate", value)
+
+    @property
+    @pulumi.getter(name="encPrivateKey")
+    def enc_private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encrypted private key of the state secret certificate.
+        Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+        return and line feed characters.
+        """
+        return pulumi.get(self, "enc_private_key")
+
+    @enc_private_key.setter
+    def enc_private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enc_private_key", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID. This parameter is only
+        valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+        if this parameter is not specified for enterprise users.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Human-readable name for the Certificate.
+        Specifies the human-readable name for the certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
         Changing this parameter will create a new resource.
         """
@@ -109,7 +173,7 @@ class CertificateArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the SCM certificate resource.
+        Specifies the region in which to create the SCM certificate resource.
         If omitted, the provider-level region will be used.
         Changing this setting will push a new certificate.
         """
@@ -123,7 +187,8 @@ class CertificateArgs:
     @pulumi.getter
     def targets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]]]:
         """
-        The service to which the certificate needs to be pushed.
+        Specifies the service to which the certificate needs to be pushed.
+        The target structure is documented below.
         """
         return pulumi.get(self, "targets")
 
@@ -140,6 +205,9 @@ class _CertificateState:
                  certificate_chain: Optional[pulumi.Input[str]] = None,
                  domain: Optional[pulumi.Input[str]] = None,
                  domain_count: Optional[pulumi.Input[int]] = None,
+                 enc_certificate: Optional[pulumi.Input[str]] = None,
+                 enc_private_key: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  not_after: Optional[pulumi.Input[str]] = None,
                  not_before: Optional[pulumi.Input[str]] = None,
@@ -152,27 +220,38 @@ class _CertificateState:
         Input properties used for looking up and filtering Certificate resources.
         :param pulumi.Input[Sequence[pulumi.Input['CertificateAuthentificationArgs']]] authentifications: (List) Domain ownership verification information.
                This is a list, each item of data is as follows:
-        :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] certificate: Specifies the content of the Certificate, PEM format.
+               It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+               the certificate chain, then this field only takes the certificate itself.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] certificate_chain: The chain of the certificate.
-               It can be extracted from the *server.crt* file in the Nginx directory,
+        :param pulumi.Input[str] certificate_chain: Specifies the chain of the certificate.
+               It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] domain: Domain name mapping to the verification value
         :param pulumi.Input[int] domain_count: Number of domain names can be bound to a certificate.
-        :param pulumi.Input[str] name: Human-readable name for the Certificate.
+        :param pulumi.Input[str] enc_certificate: Specifies the encrypted content of the state secret certificate.
+               Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        :param pulumi.Input[str] enc_private_key: Specifies the encrypted private key of the state secret certificate.
+               Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+               return and line feed characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID. This parameter is only
+               valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+               if this parameter is not specified for enterprise users.
+        :param pulumi.Input[str] name: Specifies the human-readable name for the certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] not_after: Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] not_before: Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
-        :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] private_key: Specifies the private encrypted key of the Certificate, PEM format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] push_support: Whether a certificate can be pushed.
-        :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
         :param pulumi.Input[str] status: Certificate status. The value can be:
-        :param pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]] targets: The service to which the certificate needs to be pushed.
+        :param pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]] targets: Specifies the service to which the certificate needs to be pushed.
+               The target structure is documented below.
         """
         if authentifications is not None:
             pulumi.set(__self__, "authentifications", authentifications)
@@ -184,6 +263,12 @@ class _CertificateState:
             pulumi.set(__self__, "domain", domain)
         if domain_count is not None:
             pulumi.set(__self__, "domain_count", domain_count)
+        if enc_certificate is not None:
+            pulumi.set(__self__, "enc_certificate", enc_certificate)
+        if enc_private_key is not None:
+            pulumi.set(__self__, "enc_private_key", enc_private_key)
+        if enterprise_project_id is not None:
+            pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         if name is not None:
             pulumi.set(__self__, "name", name)
         if not_after is not None:
@@ -218,7 +303,9 @@ class _CertificateState:
     @pulumi.getter
     def certificate(self) -> Optional[pulumi.Input[str]]:
         """
-        The public encrypted key of the Certificate, PEM format.
+        Specifies the content of the Certificate, PEM format.
+        It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+        the certificate chain, then this field only takes the certificate itself.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
@@ -231,8 +318,8 @@ class _CertificateState:
     @pulumi.getter(name="certificateChain")
     def certificate_chain(self) -> Optional[pulumi.Input[str]]:
         """
-        The chain of the certificate.
-        It can be extracted from the *server.crt* file in the Nginx directory,
+        Specifies the chain of the certificate.
+        It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
         usually after the second paragraph is the certificate chain.
         Changing this parameter will create a new resource.
         """
@@ -267,10 +354,51 @@ class _CertificateState:
         pulumi.set(self, "domain_count", value)
 
     @property
+    @pulumi.getter(name="encCertificate")
+    def enc_certificate(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encrypted content of the state secret certificate.
+        Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        """
+        return pulumi.get(self, "enc_certificate")
+
+    @enc_certificate.setter
+    def enc_certificate(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enc_certificate", value)
+
+    @property
+    @pulumi.getter(name="encPrivateKey")
+    def enc_private_key(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the encrypted private key of the state secret certificate.
+        Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+        return and line feed characters.
+        """
+        return pulumi.get(self, "enc_private_key")
+
+    @enc_private_key.setter
+    def enc_private_key(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enc_private_key", value)
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the enterprise project ID. This parameter is only
+        valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+        if this parameter is not specified for enterprise users.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "enterprise_project_id", value)
+
+    @property
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Human-readable name for the Certificate.
+        Specifies the human-readable name for the certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
         Changing this parameter will create a new resource.
         """
@@ -308,7 +436,7 @@ class _CertificateState:
     @pulumi.getter(name="privateKey")
     def private_key(self) -> Optional[pulumi.Input[str]]:
         """
-        The private encrypted key of the Certificate, PEM format.
+        Specifies the private encrypted key of the Certificate, PEM format.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
@@ -333,7 +461,7 @@ class _CertificateState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        The region in which to create the SCM certificate resource.
+        Specifies the region in which to create the SCM certificate resource.
         If omitted, the provider-level region will be used.
         Changing this setting will push a new certificate.
         """
@@ -359,7 +487,8 @@ class _CertificateState:
     @pulumi.getter
     def targets(self) -> Optional[pulumi.Input[Sequence[pulumi.Input['CertificateTargetArgs']]]]:
         """
-        The service to which the certificate needs to be pushed.
+        Specifies the service to which the certificate needs to be pushed.
+        The target structure is documented below.
         """
         return pulumi.get(self, "targets")
 
@@ -375,79 +504,15 @@ class Certificate(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate: Optional[pulumi.Input[str]] = None,
                  certificate_chain: Optional[pulumi.Input[str]] = None,
+                 enc_certificate: Optional[pulumi.Input[str]] = None,
+                 enc_private_key: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
                  targets: Optional[pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateTargetArgs']]]]] = None,
                  __props__=None):
         """
-        SSL Certificate Manager (SCM) allows you to purchase Secure Sockets Layer (SSL) certificates from the world's leading
-        digital certificate authorities (CAs), upload existing SSL certificates, and centrally manage all your SSL certificates
-        in one place.
-
-        ## Example Usage
-        ### Load the certificate contents from the local files
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        certificate1 = huaweicloud.scm.Certificate("certificate1",
-            certificate=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-            certificate_chain=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-            private_key=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_server.key"))
-        ```
-        ### Write the contents of the certificate into the Terrafrom script
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        certificate2 = huaweicloud.scm.Certificate("certificate2",
-            certificate=\"\"\"-----BEGIN CERTIFICATE-----
-        MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-        ZWlqaW5nMQswC...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END CERTIFICATE----------
-
-        \"\"\",
-            certificate_chain=\"\"\"-----BEGIN CERTIFICATE-----
-        MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-        BQAwgYsxCzAJB...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END CERTIFICATE----------
-
-        \"\"\",
-            private_key=\"\"\"-----BEGIN PRIVATE KEY-----
-        QWH3GbHx5bGQyexHj2hre4yEahn4dAKKdjSAMUuSfLWygp2pEdNFOegYTdqk/snv
-        mhNmxp74oUcVfi1Msw6KY2...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END PRIVATE KEY-----
-
-        \"\"\")
-        ```
-        ### Push the SSL certificate to another HUAWEI CLOUD service
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        # Load the certificate contents from the local files.
-        certificate3 = huaweicloud.scm.Certificate("certificate3",
-            certificate=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-            certificate_chain=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-            private_key=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
-            targets=[
-                huaweicloud.scm.CertificateTargetArgs(
-                    projects=["la-south-2"],
-                    service="Enhance_ELB",
-                ),
-                huaweicloud.scm.CertificateTargetArgs(
-                    service="CDN",
-                ),
-            ])
-        ```
-
         ## Import
 
         Certificates can be imported using the `id`, e.g.
@@ -458,21 +523,32 @@ class Certificate(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] certificate: Specifies the content of the Certificate, PEM format.
+               It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+               the certificate chain, then this field only takes the certificate itself.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] certificate_chain: The chain of the certificate.
-               It can be extracted from the *server.crt* file in the Nginx directory,
+        :param pulumi.Input[str] certificate_chain: Specifies the chain of the certificate.
+               It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] name: Human-readable name for the Certificate.
+        :param pulumi.Input[str] enc_certificate: Specifies the encrypted content of the state secret certificate.
+               Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        :param pulumi.Input[str] enc_private_key: Specifies the encrypted private key of the state secret certificate.
+               Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+               return and line feed characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID. This parameter is only
+               valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+               if this parameter is not specified for enterprise users.
+        :param pulumi.Input[str] name: Specifies the human-readable name for the certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] private_key: Specifies the private encrypted key of the Certificate, PEM format.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateTargetArgs']]]] targets: The service to which the certificate needs to be pushed.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateTargetArgs']]]] targets: Specifies the service to which the certificate needs to be pushed.
+               The target structure is documented below.
         """
         ...
     @overload
@@ -481,73 +557,6 @@ class Certificate(pulumi.CustomResource):
                  args: CertificateArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        SSL Certificate Manager (SCM) allows you to purchase Secure Sockets Layer (SSL) certificates from the world's leading
-        digital certificate authorities (CAs), upload existing SSL certificates, and centrally manage all your SSL certificates
-        in one place.
-
-        ## Example Usage
-        ### Load the certificate contents from the local files
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        certificate1 = huaweicloud.scm.Certificate("certificate1",
-            certificate=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-            certificate_chain=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-            private_key=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_server.key"))
-        ```
-        ### Write the contents of the certificate into the Terrafrom script
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        certificate2 = huaweicloud.scm.Certificate("certificate2",
-            certificate=\"\"\"-----BEGIN CERTIFICATE-----
-        MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-        ZWlqaW5nMQswC...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END CERTIFICATE----------
-
-        \"\"\",
-            certificate_chain=\"\"\"-----BEGIN CERTIFICATE-----
-        MIIC9DCCAl2gAwIBAgIUUcJZn3ep4l8iHu6lL/jE2UV+G8gwDQYJKoZIhvcNAQEL
-        BQAwgYsxCzAJB...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END CERTIFICATE----------
-
-        \"\"\",
-            private_key=\"\"\"-----BEGIN PRIVATE KEY-----
-        QWH3GbHx5bGQyexHj2hre4yEahn4dAKKdjSAMUuSfLWygp2pEdNFOegYTdqk/snv
-        mhNmxp74oUcVfi1Msw6KY2...
-        (This is an example, please replace it with a encrypted key of valid SSL certificate.)
-        -----END PRIVATE KEY-----
-
-        \"\"\")
-        ```
-        ### Push the SSL certificate to another HUAWEI CLOUD service
-
-        ```python
-        import pulumi
-        import pulumi_huaweicloud as huaweicloud
-
-        # Load the certificate contents from the local files.
-        certificate3 = huaweicloud.scm.Certificate("certificate3",
-            certificate=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca.crt"),
-            certificate_chain=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_ca_chain.crt"),
-            private_key=(lambda path: open(path).read())("/usr/local/data/certificate/cert_xxx/xxx_server.key"),
-            targets=[
-                huaweicloud.scm.CertificateTargetArgs(
-                    projects=["la-south-2"],
-                    service="Enhance_ELB",
-                ),
-                huaweicloud.scm.CertificateTargetArgs(
-                    service="CDN",
-                ),
-            ])
-        ```
-
         ## Import
 
         Certificates can be imported using the `id`, e.g.
@@ -573,6 +582,9 @@ class Certificate(pulumi.CustomResource):
                  opts: Optional[pulumi.ResourceOptions] = None,
                  certificate: Optional[pulumi.Input[str]] = None,
                  certificate_chain: Optional[pulumi.Input[str]] = None,
+                 enc_certificate: Optional[pulumi.Input[str]] = None,
+                 enc_private_key: Optional[pulumi.Input[str]] = None,
+                 enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  name: Optional[pulumi.Input[str]] = None,
                  private_key: Optional[pulumi.Input[str]] = None,
                  region: Optional[pulumi.Input[str]] = None,
@@ -589,9 +601,10 @@ class Certificate(pulumi.CustomResource):
             if certificate is None and not opts.urn:
                 raise TypeError("Missing required property 'certificate'")
             __props__.__dict__["certificate"] = certificate
-            if certificate_chain is None and not opts.urn:
-                raise TypeError("Missing required property 'certificate_chain'")
             __props__.__dict__["certificate_chain"] = certificate_chain
+            __props__.__dict__["enc_certificate"] = enc_certificate
+            __props__.__dict__["enc_private_key"] = enc_private_key
+            __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["name"] = name
             if private_key is None and not opts.urn:
                 raise TypeError("Missing required property 'private_key'")
@@ -620,6 +633,9 @@ class Certificate(pulumi.CustomResource):
             certificate_chain: Optional[pulumi.Input[str]] = None,
             domain: Optional[pulumi.Input[str]] = None,
             domain_count: Optional[pulumi.Input[int]] = None,
+            enc_certificate: Optional[pulumi.Input[str]] = None,
+            enc_private_key: Optional[pulumi.Input[str]] = None,
+            enterprise_project_id: Optional[pulumi.Input[str]] = None,
             name: Optional[pulumi.Input[str]] = None,
             not_after: Optional[pulumi.Input[str]] = None,
             not_before: Optional[pulumi.Input[str]] = None,
@@ -637,27 +653,38 @@ class Certificate(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateAuthentificationArgs']]]] authentifications: (List) Domain ownership verification information.
                This is a list, each item of data is as follows:
-        :param pulumi.Input[str] certificate: The public encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] certificate: Specifies the content of the Certificate, PEM format.
+               It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+               the certificate chain, then this field only takes the certificate itself.
                Changing this parameter will create a new resource.
-        :param pulumi.Input[str] certificate_chain: The chain of the certificate.
-               It can be extracted from the *server.crt* file in the Nginx directory,
+        :param pulumi.Input[str] certificate_chain: Specifies the chain of the certificate.
+               It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
                usually after the second paragraph is the certificate chain.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] domain: Domain name mapping to the verification value
         :param pulumi.Input[int] domain_count: Number of domain names can be bound to a certificate.
-        :param pulumi.Input[str] name: Human-readable name for the Certificate.
+        :param pulumi.Input[str] enc_certificate: Specifies the encrypted content of the state secret certificate.
+               Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        :param pulumi.Input[str] enc_private_key: Specifies the encrypted private key of the state secret certificate.
+               Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+               return and line feed characters.
+        :param pulumi.Input[str] enterprise_project_id: Specifies the enterprise project ID. This parameter is only
+               valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+               if this parameter is not specified for enterprise users.
+        :param pulumi.Input[str] name: Specifies the human-readable name for the certificate.
                Does not have to be unique. The value contains a maximum of 63 characters.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] not_after: Time when the certificate becomes invalid. If no valid value is obtained, this parameter is left blank.
         :param pulumi.Input[str] not_before: Time when the certificate takes effect. If no valid value is obtained, this parameter is left blank.
-        :param pulumi.Input[str] private_key: The private encrypted key of the Certificate, PEM format.
+        :param pulumi.Input[str] private_key: Specifies the private encrypted key of the Certificate, PEM format.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] push_support: Whether a certificate can be pushed.
-        :param pulumi.Input[str] region: The region in which to create the SCM certificate resource.
+        :param pulumi.Input[str] region: Specifies the region in which to create the SCM certificate resource.
                If omitted, the provider-level region will be used.
                Changing this setting will push a new certificate.
         :param pulumi.Input[str] status: Certificate status. The value can be:
-        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateTargetArgs']]]] targets: The service to which the certificate needs to be pushed.
+        :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['CertificateTargetArgs']]]] targets: Specifies the service to which the certificate needs to be pushed.
+               The target structure is documented below.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -668,6 +695,9 @@ class Certificate(pulumi.CustomResource):
         __props__.__dict__["certificate_chain"] = certificate_chain
         __props__.__dict__["domain"] = domain
         __props__.__dict__["domain_count"] = domain_count
+        __props__.__dict__["enc_certificate"] = enc_certificate
+        __props__.__dict__["enc_private_key"] = enc_private_key
+        __props__.__dict__["enterprise_project_id"] = enterprise_project_id
         __props__.__dict__["name"] = name
         __props__.__dict__["not_after"] = not_after
         __props__.__dict__["not_before"] = not_before
@@ -691,17 +721,19 @@ class Certificate(pulumi.CustomResource):
     @pulumi.getter
     def certificate(self) -> pulumi.Output[str]:
         """
-        The public encrypted key of the Certificate, PEM format.
+        Specifies the content of the Certificate, PEM format.
+        It can include intermediate certificates and root certificates. If the `certificate_chain` is passed into
+        the certificate chain, then this field only takes the certificate itself.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "certificate")
 
     @property
     @pulumi.getter(name="certificateChain")
-    def certificate_chain(self) -> pulumi.Output[str]:
+    def certificate_chain(self) -> pulumi.Output[Optional[str]]:
         """
-        The chain of the certificate.
-        It can be extracted from the *server.crt* file in the Nginx directory,
+        Specifies the chain of the certificate.
+        It can passed by `certificate`. It can be extracted from the *server.crt* file in the Nginx directory,
         usually after the second paragraph is the certificate chain.
         Changing this parameter will create a new resource.
         """
@@ -724,10 +756,39 @@ class Certificate(pulumi.CustomResource):
         return pulumi.get(self, "domain_count")
 
     @property
+    @pulumi.getter(name="encCertificate")
+    def enc_certificate(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the encrypted content of the state secret certificate.
+        Using the escape character `\\n` or `\\r\\n` to replace carriage return and line feed characters.
+        """
+        return pulumi.get(self, "enc_certificate")
+
+    @property
+    @pulumi.getter(name="encPrivateKey")
+    def enc_private_key(self) -> pulumi.Output[Optional[str]]:
+        """
+        Specifies the encrypted private key of the state secret certificate.
+        Password-protected private keys cannot be uploaded, and using the escape character `\\n` or `\\r\\n` to replace carriage
+        return and line feed characters.
+        """
+        return pulumi.get(self, "enc_private_key")
+
+    @property
+    @pulumi.getter(name="enterpriseProjectId")
+    def enterprise_project_id(self) -> pulumi.Output[str]:
+        """
+        Specifies the enterprise project ID. This parameter is only
+        valid for enterprise users. Resources under all authorized enterprise projects of the tenant will be queried by default
+        if this parameter is not specified for enterprise users.
+        """
+        return pulumi.get(self, "enterprise_project_id")
+
+    @property
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Human-readable name for the Certificate.
+        Specifies the human-readable name for the certificate.
         Does not have to be unique. The value contains a maximum of 63 characters.
         Changing this parameter will create a new resource.
         """
@@ -753,7 +814,7 @@ class Certificate(pulumi.CustomResource):
     @pulumi.getter(name="privateKey")
     def private_key(self) -> pulumi.Output[str]:
         """
-        The private encrypted key of the Certificate, PEM format.
+        Specifies the private encrypted key of the Certificate, PEM format.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "private_key")
@@ -770,7 +831,7 @@ class Certificate(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        The region in which to create the SCM certificate resource.
+        Specifies the region in which to create the SCM certificate resource.
         If omitted, the provider-level region will be used.
         Changing this setting will push a new certificate.
         """
@@ -788,7 +849,8 @@ class Certificate(pulumi.CustomResource):
     @pulumi.getter
     def targets(self) -> pulumi.Output[Optional[Sequence['outputs.CertificateTarget']]]:
         """
-        The service to which the certificate needs to be pushed.
+        Specifies the service to which the certificate needs to be pushed.
+        The target structure is documented below.
         """
         return pulumi.get(self, "targets")
 

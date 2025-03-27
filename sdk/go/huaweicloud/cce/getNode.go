@@ -79,8 +79,13 @@ type LookupNodeResult struct {
 	DataVolumes []GetNodeDataVolume `pulumi:"dataVolumes"`
 	// The ID of ECS group to which the node belongs.
 	EcsGroupId string `pulumi:"ecsGroupId"`
+	// The enterprise project ID of the node.
+	EnterpriseProjectId string `pulumi:"enterpriseProjectId"`
 	// The flavor ID to be used.
 	FlavorId string `pulumi:"flavorId"`
+	// The hostname config of the kubernetes node.
+	// The object structure is documented below.
+	HostnameConfigs []GetNodeHostnameConfig `pulumi:"hostnameConfigs"`
 	// The provider-assigned unique ID for this managed resource.
 	Id string `pulumi:"id"`
 	// Key pair name when logging in to select the key pair mode.
@@ -176,9 +181,20 @@ func (o LookupNodeResultOutput) EcsGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupNodeResult) string { return v.EcsGroupId }).(pulumi.StringOutput)
 }
 
+// The enterprise project ID of the node.
+func (o LookupNodeResultOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v LookupNodeResult) string { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
 // The flavor ID to be used.
 func (o LookupNodeResultOutput) FlavorId() pulumi.StringOutput {
 	return o.ApplyT(func(v LookupNodeResult) string { return v.FlavorId }).(pulumi.StringOutput)
+}
+
+// The hostname config of the kubernetes node.
+// The object structure is documented below.
+func (o LookupNodeResultOutput) HostnameConfigs() GetNodeHostnameConfigArrayOutput {
+	return o.ApplyT(func(v LookupNodeResult) []GetNodeHostnameConfig { return v.HostnameConfigs }).(GetNodeHostnameConfigArrayOutput)
 }
 
 // The provider-assigned unique ID for this managed resource.

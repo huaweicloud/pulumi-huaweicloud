@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get available HuaweiCloud GaussDB (for NoSQL) flavors.
+// Use this data source to get available HuaweiCloud GeminiDB flavors.
 // This is an alternative to `GaussDBforNoSQL.getCassandraFlavors`
 //
 // ## Example Usage

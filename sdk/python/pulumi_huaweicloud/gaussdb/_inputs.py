@@ -10,10 +10,310 @@ from typing import Any, Mapping, Optional, Sequence, Union, overload
 from .. import _utilities
 
 __all__ = [
+    'MysqlInstanceAutoScalingArgs',
+    'MysqlInstanceAutoScalingScalingStrategyArgs',
     'MysqlInstanceBackupStrategyArgs',
     'MysqlInstanceDatastoreArgs',
     'MysqlInstanceNodeArgs',
+    'MysqlInstanceParameterArgs',
+    'MysqlProxyAccessControlIpListArgs',
+    'MysqlProxyMasterNodeWeightArgs',
+    'MysqlProxyNodeArgs',
+    'MysqlProxyParameterArgs',
+    'MysqlProxyReadonlyNodesWeightArgs',
 ]
+
+@pulumi.input_type
+class MysqlInstanceAutoScalingArgs:
+    def __init__(__self__, *,
+                 scaling_strategy: pulumi.Input['MysqlInstanceAutoScalingScalingStrategyArgs'],
+                 status: pulumi.Input[str],
+                 enlarge_threshold: Optional[pulumi.Input[int]] = None,
+                 id: Optional[pulumi.Input[str]] = None,
+                 max_flavor: Optional[pulumi.Input[str]] = None,
+                 max_read_only_count: Optional[pulumi.Input[int]] = None,
+                 min_flavor: Optional[pulumi.Input[str]] = None,
+                 min_read_only_count: Optional[pulumi.Input[int]] = None,
+                 monitor_cycle: Optional[pulumi.Input[int]] = None,
+                 read_only_weight: Optional[pulumi.Input[int]] = None,
+                 reduce_enabled: Optional[pulumi.Input[bool]] = None,
+                 silence_cycle: Optional[pulumi.Input[int]] = None,
+                 silence_start_at: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input['MysqlInstanceAutoScalingScalingStrategyArgs'] scaling_strategy: Specifies the auto-scaling policy.
+               The scaling_strategy structure is documented below.
+        :param pulumi.Input[str] status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
+        :param pulumi.Input[int] enlarge_threshold: Specifies the average CPU usage (%). It is mandatory when `status` is set to
+               **ON**. Value options: **50–100**.
+        :param pulumi.Input[str] id: Indicates the ID of an auto-scaling policy.
+        :param pulumi.Input[str] max_flavor: Specifies the maximum specifications. It is mandatory when the instance specifications
+               are automatically scaled up or down.
+        :param pulumi.Input[int] max_read_only_count: Specifies the maximum number of read replicas. It is mandatory when read
+               replicas are automatically added or deleted.
+        :param pulumi.Input[str] min_flavor: Indicates the minimum specifications.
+        :param pulumi.Input[int] min_read_only_count: Indicates the minimum number of read replicas.
+        :param pulumi.Input[int] monitor_cycle: Specifies the observation period, in seconds. During the entire observation period,
+               if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+               `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+        :param pulumi.Input[int] read_only_weight: Specifies the read weights of read replicas. It is mandatory when read replicas
+               are automatically added or deleted.
+        :param pulumi.Input[bool] reduce_enabled: Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+               **ON**. Value options:
+               + **true**: enabled.
+               + **false**: disabled.
+        :param pulumi.Input[int] silence_cycle: Specifies the silent period, in seconds. It indicates the minimum interval between
+               two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+               options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+        :param pulumi.Input[str] silence_start_at: Indicates the start time of the silent period.
+        """
+        pulumi.set(__self__, "scaling_strategy", scaling_strategy)
+        pulumi.set(__self__, "status", status)
+        if enlarge_threshold is not None:
+            pulumi.set(__self__, "enlarge_threshold", enlarge_threshold)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if max_flavor is not None:
+            pulumi.set(__self__, "max_flavor", max_flavor)
+        if max_read_only_count is not None:
+            pulumi.set(__self__, "max_read_only_count", max_read_only_count)
+        if min_flavor is not None:
+            pulumi.set(__self__, "min_flavor", min_flavor)
+        if min_read_only_count is not None:
+            pulumi.set(__self__, "min_read_only_count", min_read_only_count)
+        if monitor_cycle is not None:
+            pulumi.set(__self__, "monitor_cycle", monitor_cycle)
+        if read_only_weight is not None:
+            pulumi.set(__self__, "read_only_weight", read_only_weight)
+        if reduce_enabled is not None:
+            pulumi.set(__self__, "reduce_enabled", reduce_enabled)
+        if silence_cycle is not None:
+            pulumi.set(__self__, "silence_cycle", silence_cycle)
+        if silence_start_at is not None:
+            pulumi.set(__self__, "silence_start_at", silence_start_at)
+
+    @property
+    @pulumi.getter(name="scalingStrategy")
+    def scaling_strategy(self) -> pulumi.Input['MysqlInstanceAutoScalingScalingStrategyArgs']:
+        """
+        Specifies the auto-scaling policy.
+        The scaling_strategy structure is documented below.
+        """
+        return pulumi.get(self, "scaling_strategy")
+
+    @scaling_strategy.setter
+    def scaling_strategy(self, value: pulumi.Input['MysqlInstanceAutoScalingScalingStrategyArgs']):
+        pulumi.set(self, "scaling_strategy", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> pulumi.Input[str]:
+        """
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: pulumi.Input[str]):
+        pulumi.set(self, "status", value)
+
+    @property
+    @pulumi.getter(name="enlargeThreshold")
+    def enlarge_threshold(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the average CPU usage (%). It is mandatory when `status` is set to
+        **ON**. Value options: **50–100**.
+        """
+        return pulumi.get(self, "enlarge_threshold")
+
+    @enlarge_threshold.setter
+    def enlarge_threshold(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "enlarge_threshold", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the ID of an auto-scaling policy.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter(name="maxFlavor")
+    def max_flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the maximum specifications. It is mandatory when the instance specifications
+        are automatically scaled up or down.
+        """
+        return pulumi.get(self, "max_flavor")
+
+    @max_flavor.setter
+    def max_flavor(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "max_flavor", value)
+
+    @property
+    @pulumi.getter(name="maxReadOnlyCount")
+    def max_read_only_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the maximum number of read replicas. It is mandatory when read
+        replicas are automatically added or deleted.
+        """
+        return pulumi.get(self, "max_read_only_count")
+
+    @max_read_only_count.setter
+    def max_read_only_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "max_read_only_count", value)
+
+    @property
+    @pulumi.getter(name="minFlavor")
+    def min_flavor(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the minimum specifications.
+        """
+        return pulumi.get(self, "min_flavor")
+
+    @min_flavor.setter
+    def min_flavor(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "min_flavor", value)
+
+    @property
+    @pulumi.getter(name="minReadOnlyCount")
+    def min_read_only_count(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates the minimum number of read replicas.
+        """
+        return pulumi.get(self, "min_read_only_count")
+
+    @min_read_only_count.setter
+    def min_read_only_count(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "min_read_only_count", value)
+
+    @property
+    @pulumi.getter(name="monitorCycle")
+    def monitor_cycle(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the observation period, in seconds. During the entire observation period,
+        if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+        `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+        """
+        return pulumi.get(self, "monitor_cycle")
+
+    @monitor_cycle.setter
+    def monitor_cycle(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "monitor_cycle", value)
+
+    @property
+    @pulumi.getter(name="readOnlyWeight")
+    def read_only_weight(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the read weights of read replicas. It is mandatory when read replicas
+        are automatically added or deleted.
+        """
+        return pulumi.get(self, "read_only_weight")
+
+    @read_only_weight.setter
+    def read_only_weight(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "read_only_weight", value)
+
+    @property
+    @pulumi.getter(name="reduceEnabled")
+    def reduce_enabled(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+        **ON**. Value options:
+        + **true**: enabled.
+        + **false**: disabled.
+        """
+        return pulumi.get(self, "reduce_enabled")
+
+    @reduce_enabled.setter
+    def reduce_enabled(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "reduce_enabled", value)
+
+    @property
+    @pulumi.getter(name="silenceCycle")
+    def silence_cycle(self) -> Optional[pulumi.Input[int]]:
+        """
+        Specifies the silent period, in seconds. It indicates the minimum interval between
+        two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+        options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+        """
+        return pulumi.get(self, "silence_cycle")
+
+    @silence_cycle.setter
+    def silence_cycle(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "silence_cycle", value)
+
+    @property
+    @pulumi.getter(name="silenceStartAt")
+    def silence_start_at(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the start time of the silent period.
+        """
+        return pulumi.get(self, "silence_start_at")
+
+    @silence_start_at.setter
+    def silence_start_at(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "silence_start_at", value)
+
+
+@pulumi.input_type
+class MysqlInstanceAutoScalingScalingStrategyArgs:
+    def __init__(__self__, *,
+                 flavor_switch: pulumi.Input[str],
+                 read_only_switch: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] flavor_switch: Specifies whether instance specifications can be automatically scaled up or down.
+               Value options:
+               + **ON**: Yes
+               + **OFF**: No
+        :param pulumi.Input[str] read_only_switch: Specifies whether read replicas can be automatically added or deleted. To use
+               this function, ensure that there is only one proxy instance.
+               Value options:
+               + **ON**: Yes
+               + **OFF**: No
+        """
+        pulumi.set(__self__, "flavor_switch", flavor_switch)
+        pulumi.set(__self__, "read_only_switch", read_only_switch)
+
+    @property
+    @pulumi.getter(name="flavorSwitch")
+    def flavor_switch(self) -> pulumi.Input[str]:
+        """
+        Specifies whether instance specifications can be automatically scaled up or down.
+        Value options:
+        + **ON**: Yes
+        + **OFF**: No
+        """
+        return pulumi.get(self, "flavor_switch")
+
+    @flavor_switch.setter
+    def flavor_switch(self, value: pulumi.Input[str]):
+        pulumi.set(self, "flavor_switch", value)
+
+    @property
+    @pulumi.getter(name="readOnlySwitch")
+    def read_only_switch(self) -> pulumi.Input[str]:
+        """
+        Specifies whether read replicas can be automatically added or deleted. To use
+        this function, ensure that there is only one proxy instance.
+        Value options:
+        + **ON**: Yes
+        + **OFF**: No
+        """
+        return pulumi.get(self, "read_only_switch")
+
+    @read_only_switch.setter
+    def read_only_switch(self, value: pulumi.Input[str]):
+        pulumi.set(self, "read_only_switch", value)
+
 
 @pulumi.input_type
 class MysqlInstanceBackupStrategyArgs:
@@ -24,10 +324,11 @@ class MysqlInstanceBackupStrategyArgs:
         :param pulumi.Input[str] start_time: Specifies the backup time window. Automated backups will be triggered during the
                backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
                HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-               value: 08:00-09:00, 03:00-04:00.
-        :param pulumi.Input[int] keep_days: Specifies the number of days to retain the generated backup files. The value ranges from
-               0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-               the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+               value: **08:00-09:00**, **03:00-04:00**.
+        :param pulumi.Input[int] keep_days: Specifies the number of days to retain the generated backup files.  
+               The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+               If this parameter is not transferred, the automated backup policy is enabled by default.
+               Backup files are stored for seven days by default.
         """
         pulumi.set(__self__, "start_time", start_time)
         if keep_days is not None:
@@ -40,7 +341,7 @@ class MysqlInstanceBackupStrategyArgs:
         Specifies the backup time window. Automated backups will be triggered during the
         backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
         HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-        value: 08:00-09:00, 03:00-04:00.
+        value: **08:00-09:00**, **03:00-04:00**.
         """
         return pulumi.get(self, "start_time")
 
@@ -52,9 +353,10 @@ class MysqlInstanceBackupStrategyArgs:
     @pulumi.getter(name="keepDays")
     def keep_days(self) -> Optional[pulumi.Input[int]]:
         """
-        Specifies the number of days to retain the generated backup files. The value ranges from
-        0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-        the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+        Specifies the number of days to retain the generated backup files.  
+        The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+        If this parameter is not transferred, the automated backup policy is enabled by default.
+        Backup files are stored for seven days by default.
         """
         return pulumi.get(self, "keep_days")
 
@@ -115,12 +417,12 @@ class MysqlInstanceNodeArgs:
                  type: Optional[pulumi.Input[str]] = None):
         """
         :param pulumi.Input[str] availability_zone: Indicates the availability zone where the node resides.
-        :param pulumi.Input[str] id: Indicates the node ID.
-        :param pulumi.Input[str] name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
+        :param pulumi.Input[str] id: Indicates the ID of an auto-scaling policy.
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
         :param pulumi.Input[str] private_read_ip: Indicates the private IP address of a node.
-        :param pulumi.Input[str] status: Indicates the node status.
+        :param pulumi.Input[str] status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
         :param pulumi.Input[str] type: Indicates the node type: master or slave.
         """
         if availability_zone is not None:
@@ -152,7 +454,7 @@ class MysqlInstanceNodeArgs:
     @pulumi.getter
     def id(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the node ID.
+        Indicates the ID of an auto-scaling policy.
         """
         return pulumi.get(self, "id")
 
@@ -164,9 +466,7 @@ class MysqlInstanceNodeArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-        digits, hyphens (-), and underscores (_).
+        Specifies the name of the parameter.
         """
         return pulumi.get(self, "name")
 
@@ -190,7 +490,9 @@ class MysqlInstanceNodeArgs:
     @pulumi.getter
     def status(self) -> Optional[pulumi.Input[str]]:
         """
-        Indicates the node status.
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
         """
         return pulumi.get(self, "status")
 
@@ -209,5 +511,341 @@ class MysqlInstanceNodeArgs:
     @type.setter
     def type(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "type", value)
+
+
+@pulumi.input_type
+class MysqlInstanceParameterArgs:
+    def __init__(__self__, *,
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[str] value: Specifies the value of the parameter.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the parameter.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class MysqlProxyAccessControlIpListArgs:
+    def __init__(__self__, *,
+                 ip: pulumi.Input[str],
+                 description: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] ip: Specifies the IP address or CIDR block.
+        :param pulumi.Input[str] description: Specifies the description.
+               The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+        """
+        pulumi.set(__self__, "ip", ip)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> pulumi.Input[str]:
+        """
+        Specifies the IP address or CIDR block.
+        """
+        return pulumi.get(self, "ip")
+
+    @ip.setter
+    def ip(self, value: pulumi.Input[str]):
+        pulumi.set(self, "ip", value)
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the description.
+        The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+        """
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "description", value)
+
+
+@pulumi.input_type
+class MysqlProxyMasterNodeWeightArgs:
+    def __init__(__self__, *,
+                 id: pulumi.Input[str],
+                 weight: pulumi.Input[int]):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[int] weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> pulumi.Input[int]:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: pulumi.Input[int]):
+        pulumi.set(self, "weight", value)
+
+
+@pulumi.input_type
+class MysqlProxyNodeArgs:
+    def __init__(__self__, *,
+                 az_code: Optional[pulumi.Input[str]] = None,
+                 frozen_flag: Optional[pulumi.Input[int]] = None,
+                 id: Optional[pulumi.Input[str]] = None,
+                 name: Optional[pulumi.Input[str]] = None,
+                 role: Optional[pulumi.Input[str]] = None,
+                 status: Optional[pulumi.Input[str]] = None):
+        """
+        :param pulumi.Input[str] az_code: Indicates the proxy node AZ.
+        :param pulumi.Input[int] frozen_flag: Indicates whether the proxy node is frozen. The values can be:
+               + **0**: unfrozen.
+               + **1**: frozen.
+               + **2**: deleted after being frozen.
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[str] role: Indicates the proxy node role. The values can be:
+               + **master**: primary node.
+               + **slave**: read replica.
+        :param pulumi.Input[str] status: Indicates the proxy node status. The values can be:
+               + **ACTIVE**: The node is available.
+               + **ABNORMAL**: The node is abnormal.
+               + **FAILED**: The node fails.
+               + **DELETED**: The node has been deleted.
+        """
+        if az_code is not None:
+            pulumi.set(__self__, "az_code", az_code)
+        if frozen_flag is not None:
+            pulumi.set(__self__, "frozen_flag", frozen_flag)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter(name="azCode")
+    def az_code(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the proxy node AZ.
+        """
+        return pulumi.get(self, "az_code")
+
+    @az_code.setter
+    def az_code(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "az_code", value)
+
+    @property
+    @pulumi.getter(name="frozenFlag")
+    def frozen_flag(self) -> Optional[pulumi.Input[int]]:
+        """
+        Indicates whether the proxy node is frozen. The values can be:
+        + **0**: unfrozen.
+        + **1**: frozen.
+        + **2**: deleted after being frozen.
+        """
+        return pulumi.get(self, "frozen_flag")
+
+    @frozen_flag.setter
+    def frozen_flag(self, value: Optional[pulumi.Input[int]]):
+        pulumi.set(self, "frozen_flag", value)
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[pulumi.Input[str]]:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def role(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the proxy node role. The values can be:
+        + **master**: primary node.
+        + **slave**: read replica.
+        """
+        return pulumi.get(self, "role")
+
+    @role.setter
+    def role(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "role", value)
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[pulumi.Input[str]]:
+        """
+        Indicates the proxy node status. The values can be:
+        + **ACTIVE**: The node is available.
+        + **ABNORMAL**: The node is abnormal.
+        + **FAILED**: The node fails.
+        + **DELETED**: The node has been deleted.
+        """
+        return pulumi.get(self, "status")
+
+    @status.setter
+    def status(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "status", value)
+
+
+@pulumi.input_type
+class MysqlProxyParameterArgs:
+    def __init__(__self__, *,
+                 elem_type: pulumi.Input[str],
+                 name: pulumi.Input[str],
+                 value: pulumi.Input[str]):
+        """
+        :param pulumi.Input[str] elem_type: Specifies the parent tag type of the parameter.
+        :param pulumi.Input[str] name: Specifies the name of the parameter.
+        :param pulumi.Input[str] value: Specifies the value of the parameter.
+        """
+        pulumi.set(__self__, "elem_type", elem_type)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter(name="elemType")
+    def elem_type(self) -> pulumi.Input[str]:
+        """
+        Specifies the parent tag type of the parameter.
+        """
+        return pulumi.get(self, "elem_type")
+
+    @elem_type.setter
+    def elem_type(self, value: pulumi.Input[str]):
+        pulumi.set(self, "elem_type", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> pulumi.Input[str]:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @name.setter
+    def name(self, value: pulumi.Input[str]):
+        pulumi.set(self, "name", value)
+
+    @property
+    @pulumi.getter
+    def value(self) -> pulumi.Input[str]:
+        """
+        Specifies the value of the parameter.
+        """
+        return pulumi.get(self, "value")
+
+    @value.setter
+    def value(self, value: pulumi.Input[str]):
+        pulumi.set(self, "value", value)
+
+
+@pulumi.input_type
+class MysqlProxyReadonlyNodesWeightArgs:
+    def __init__(__self__, *,
+                 id: pulumi.Input[str],
+                 weight: pulumi.Input[int]):
+        """
+        :param pulumi.Input[str] id: Specifies the ID of the node.
+        :param pulumi.Input[int] weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> pulumi.Input[str]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @id.setter
+    def id(self, value: pulumi.Input[str]):
+        pulumi.set(self, "id", value)
+
+    @property
+    @pulumi.getter
+    def weight(self) -> pulumi.Input[int]:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
+
+    @weight.setter
+    def weight(self, value: pulumi.Input[int]):
+        pulumi.set(self, "weight", value)
 
 

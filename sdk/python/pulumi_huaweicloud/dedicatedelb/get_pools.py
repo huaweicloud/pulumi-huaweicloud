@@ -22,7 +22,7 @@ class GetPoolsResult:
     """
     A collection of values returned by getPools.
     """
-    def __init__(__self__, description=None, healthmonitor_id=None, id=None, lb_method=None, listener_id=None, loadbalancer_id=None, name=None, pool_id=None, pools=None, protocol=None, region=None):
+    def __init__(__self__, description=None, healthmonitor_id=None, id=None, lb_method=None, listener_id=None, loadbalancer_id=None, name=None, pool_id=None, pools=None, protection_status=None, protocol=None, region=None, type=None, vpc_id=None):
         if description and not isinstance(description, str):
             raise TypeError("Expected argument 'description' to be a str")
         pulumi.set(__self__, "description", description)
@@ -50,12 +50,21 @@ class GetPoolsResult:
         if pools and not isinstance(pools, list):
             raise TypeError("Expected argument 'pools' to be a list")
         pulumi.set(__self__, "pools", pools)
+        if protection_status and not isinstance(protection_status, str):
+            raise TypeError("Expected argument 'protection_status' to be a str")
+        pulumi.set(__self__, "protection_status", protection_status)
         if protocol and not isinstance(protocol, str):
             raise TypeError("Expected argument 'protocol' to be a str")
         pulumi.set(__self__, "protocol", protocol)
         if region and not isinstance(region, str):
             raise TypeError("Expected argument 'region' to be a str")
         pulumi.set(__self__, "region", region)
+        if type and not isinstance(type, str):
+            raise TypeError("Expected argument 'type' to be a str")
+        pulumi.set(__self__, "type", type)
+        if vpc_id and not isinstance(vpc_id, str):
+            raise TypeError("Expected argument 'vpc_id' to be a str")
+        pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
     @pulumi.getter
@@ -122,6 +131,14 @@ class GetPoolsResult:
         return pulumi.get(self, "pools")
 
     @property
+    @pulumi.getter(name="protectionStatus")
+    def protection_status(self) -> Optional[str]:
+        """
+        The protection status for update.
+        """
+        return pulumi.get(self, "protection_status")
+
+    @property
     @pulumi.getter
     def protocol(self) -> Optional[str]:
         """
@@ -133,6 +150,22 @@ class GetPoolsResult:
     @pulumi.getter
     def region(self) -> str:
         return pulumi.get(self, "region")
+
+    @property
+    @pulumi.getter
+    def type(self) -> Optional[str]:
+        """
+        The type of persistence mode.
+        """
+        return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter(name="vpcId")
+    def vpc_id(self) -> Optional[str]:
+        """
+        The ID of the VPC where the backend server group works.
+        """
+        return pulumi.get(self, "vpc_id")
 
 
 class AwaitableGetPoolsResult(GetPoolsResult):
@@ -150,8 +183,11 @@ class AwaitableGetPoolsResult(GetPoolsResult):
             name=self.name,
             pool_id=self.pool_id,
             pools=self.pools,
+            protection_status=self.protection_status,
             protocol=self.protocol,
-            region=self.region)
+            region=self.region,
+            type=self.type,
+            vpc_id=self.vpc_id)
 
 
 def get_pools(description: Optional[str] = None,
@@ -161,8 +197,11 @@ def get_pools(description: Optional[str] = None,
               loadbalancer_id: Optional[str] = None,
               name: Optional[str] = None,
               pool_id: Optional[str] = None,
+              protection_status: Optional[str] = None,
               protocol: Optional[str] = None,
               region: Optional[str] = None,
+              type: Optional[str] = None,
+              vpc_id: Optional[str] = None,
               opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetPoolsResult:
     """
     Use this data source to get the list of ELB pools.
@@ -181,15 +220,20 @@ def get_pools(description: Optional[str] = None,
 
     :param str description: Specifies the description of the ELB pool.
     :param str healthmonitor_id: Specifies the health monitor ID of the ELB pool.
-    :param str lb_method: Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-           or SOURCE_IP.
+    :param str lb_method: Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+           **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
     :param str listener_id: Specifies the listener ID of the ELB pool.
     :param str loadbalancer_id: Specifies the loadbalancer ID of the ELB pool.
     :param str name: Specifies the name of the ELB pool.
     :param str pool_id: Specifies the ID of the ELB pool.
-    :param str protocol: Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+    :param str protection_status: Specifies the protection status for update.
+           Value options: **nonProtection**, **consoleProtection**.
+    :param str protocol: Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+           **HTTPS**, **QUIC**, **GRPC** or **TLS**.
     :param str region: Specifies the region in which to query the data source.
            If omitted, the provider-level region will be used.
+    :param str type: Specifies the type of the backend server group. Value options: **instance**, **ip**.
+    :param str vpc_id: Specifies the ID of the VPC where the backend server group works.
     """
     __args__ = dict()
     __args__['description'] = description
@@ -199,8 +243,11 @@ def get_pools(description: Optional[str] = None,
     __args__['loadbalancerId'] = loadbalancer_id
     __args__['name'] = name
     __args__['poolId'] = pool_id
+    __args__['protectionStatus'] = protection_status
     __args__['protocol'] = protocol
     __args__['region'] = region
+    __args__['type'] = type
+    __args__['vpcId'] = vpc_id
     opts = pulumi.InvokeOptions.merge(_utilities.get_invoke_opts_defaults(), opts)
     __ret__ = pulumi.runtime.invoke('huaweicloud:DedicatedElb/getPools:getPools', __args__, opts=opts, typ=GetPoolsResult).value
 
@@ -214,8 +261,11 @@ def get_pools(description: Optional[str] = None,
         name=__ret__.name,
         pool_id=__ret__.pool_id,
         pools=__ret__.pools,
+        protection_status=__ret__.protection_status,
         protocol=__ret__.protocol,
-        region=__ret__.region)
+        region=__ret__.region,
+        type=__ret__.type,
+        vpc_id=__ret__.vpc_id)
 
 
 @_utilities.lift_output_func(get_pools)
@@ -226,8 +276,11 @@ def get_pools_output(description: Optional[pulumi.Input[Optional[str]]] = None,
                      loadbalancer_id: Optional[pulumi.Input[Optional[str]]] = None,
                      name: Optional[pulumi.Input[Optional[str]]] = None,
                      pool_id: Optional[pulumi.Input[Optional[str]]] = None,
+                     protection_status: Optional[pulumi.Input[Optional[str]]] = None,
                      protocol: Optional[pulumi.Input[Optional[str]]] = None,
                      region: Optional[pulumi.Input[Optional[str]]] = None,
+                     type: Optional[pulumi.Input[Optional[str]]] = None,
+                     vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                      opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetPoolsResult]:
     """
     Use this data source to get the list of ELB pools.
@@ -246,14 +299,19 @@ def get_pools_output(description: Optional[pulumi.Input[Optional[str]]] = None,
 
     :param str description: Specifies the description of the ELB pool.
     :param str healthmonitor_id: Specifies the health monitor ID of the ELB pool.
-    :param str lb_method: Specifies the method of the ELB pool. Must be one of ROUND_ROBIN, LEAST_CONNECTIONS,
-           or SOURCE_IP.
+    :param str lb_method: Specifies the method of the ELB pool. Value options: **ROUND_ROBIN**,
+           **LEAST_CONNECTIONS**, **SOURCE_IP** or **QUIC_CID**.
     :param str listener_id: Specifies the listener ID of the ELB pool.
     :param str loadbalancer_id: Specifies the loadbalancer ID of the ELB pool.
     :param str name: Specifies the name of the ELB pool.
     :param str pool_id: Specifies the ID of the ELB pool.
-    :param str protocol: Specifies the protocol of the ELB pool. This can either be TCP, UDP or HTTP.
+    :param str protection_status: Specifies the protection status for update.
+           Value options: **nonProtection**, **consoleProtection**.
+    :param str protocol: Specifies the protocol of the ELB pool. Value options: **TCP**, **UDP**, **HTTP**,
+           **HTTPS**, **QUIC**, **GRPC** or **TLS**.
     :param str region: Specifies the region in which to query the data source.
            If omitted, the provider-level region will be used.
+    :param str type: Specifies the type of the backend server group. Value options: **instance**, **ip**.
+    :param str vpc_id: Specifies the ID of the VPC where the backend server group works.
     """
     ...

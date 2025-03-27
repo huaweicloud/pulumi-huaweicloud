@@ -33,10 +33,11 @@ class DeviceLinkageRuleArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[Sequence[pulumi.Input['DeviceLinkageRuleTriggerArgs']]] triggers: Specifies the list of the triggers, at most 10 triggers.
                The triggers structure is documented below.
-        :param pulumi.Input[str] description: Specifies the description of the alarm.
+        :param pulumi.Input[str] description: Specifies the description of the alarm.  
+               The value can contain a maximum of `256` characters.
         :param pulumi.Input['DeviceLinkageRuleEffectivePeriodArgs'] effective_period: Specifies the effective period of the device linkage rule. Always effectives
                by default. The effective_period structure is documented below.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to `true`.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the alarm.
         :param pulumi.Input[str] region: Specifies the region to which the SMN belongs.
         :param pulumi.Input[str] trigger_logic: Specifies the logical relationship between multiple triggers.
@@ -103,7 +104,8 @@ class DeviceLinkageRuleArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the alarm.
+        Specifies the description of the alarm.  
+        The value can contain a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -128,7 +130,7 @@ class DeviceLinkageRuleArgs:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the device linkage rule. Defaults to `true`.
+        Specifies whether to enable the device linkage rule. Defaults to **true**.
         """
         return pulumi.get(self, "enabled")
 
@@ -192,10 +194,11 @@ class _DeviceLinkageRuleState:
         Input properties used for looking up and filtering DeviceLinkageRule resources.
         :param pulumi.Input[Sequence[pulumi.Input['DeviceLinkageRuleActionArgs']]] actions: Specifies the list of the actions, at most 10 actions.
                The actions structure is documented below.
-        :param pulumi.Input[str] description: Specifies the description of the alarm.
+        :param pulumi.Input[str] description: Specifies the description of the alarm.  
+               The value can contain a maximum of `256` characters.
         :param pulumi.Input['DeviceLinkageRuleEffectivePeriodArgs'] effective_period: Specifies the effective period of the device linkage rule. Always effectives
                by default. The effective_period structure is documented below.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to `true`.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the alarm.
         :param pulumi.Input[str] region: Specifies the region to which the SMN belongs.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device linkage rule belongs.
@@ -243,7 +246,8 @@ class _DeviceLinkageRuleState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description of the alarm.
+        Specifies the description of the alarm.  
+        The value can contain a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -268,7 +272,7 @@ class _DeviceLinkageRuleState:
     @pulumi.getter
     def enabled(self) -> Optional[pulumi.Input[bool]]:
         """
-        Specifies whether to enable the device linkage rule. Defaults to `true`.
+        Specifies whether to enable the device linkage rule. Defaults to **true**.
         """
         return pulumi.get(self, "enabled")
 
@@ -360,6 +364,13 @@ class DeviceLinkageRule(pulumi.CustomResource):
         """
         Manages an IoTDA device linkage rule within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
 
         ```python
@@ -430,7 +441,7 @@ class DeviceLinkageRule(pulumi.CustomResource):
 
         ## Import
 
-        Device linkage rules can be imported using the `id`, e.g.
+        Device linkage rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/deviceLinkageRule:DeviceLinkageRule test 62b6cc5aa367f403fea86127
@@ -440,10 +451,11 @@ class DeviceLinkageRule(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceLinkageRuleActionArgs']]]] actions: Specifies the list of the actions, at most 10 actions.
                The actions structure is documented below.
-        :param pulumi.Input[str] description: Specifies the description of the alarm.
+        :param pulumi.Input[str] description: Specifies the description of the alarm.  
+               The value can contain a maximum of `256` characters.
         :param pulumi.Input[pulumi.InputType['DeviceLinkageRuleEffectivePeriodArgs']] effective_period: Specifies the effective period of the device linkage rule. Always effectives
                by default. The effective_period structure is documented below.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to `true`.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the alarm.
         :param pulumi.Input[str] region: Specifies the region to which the SMN belongs.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device linkage rule belongs.
@@ -464,6 +476,13 @@ class DeviceLinkageRule(pulumi.CustomResource):
         """
         Manages an IoTDA device linkage rule within HuaweiCloud.
 
+        > When accessing an IoTDA **standard** or **enterprise** edition instance, you need to specify the IoTDA service
+        endpoint in `provider` block.
+        You can login to the IoTDA console, choose the instance **Overview** and click **Access Details**
+        to view the HTTPS application access address. An example of the access address might be
+        **9bc34xxxxx.st1.iotda-app.ap-southeast-1.myhuaweicloud.com**, then you need to configure the
+        `provider` block as follows:
+
         ## Example Usage
 
         ```python
@@ -534,7 +553,7 @@ class DeviceLinkageRule(pulumi.CustomResource):
 
         ## Import
 
-        Device linkage rules can be imported using the `id`, e.g.
+        Device linkage rules can be imported using the `id`, e.g. bash
 
         ```sh
          $ pulumi import huaweicloud:IoTDA/deviceLinkageRule:DeviceLinkageRule test 62b6cc5aa367f403fea86127
@@ -616,10 +635,11 @@ class DeviceLinkageRule(pulumi.CustomResource):
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[Sequence[pulumi.Input[pulumi.InputType['DeviceLinkageRuleActionArgs']]]] actions: Specifies the list of the actions, at most 10 actions.
                The actions structure is documented below.
-        :param pulumi.Input[str] description: Specifies the description of the alarm.
+        :param pulumi.Input[str] description: Specifies the description of the alarm.  
+               The value can contain a maximum of `256` characters.
         :param pulumi.Input[pulumi.InputType['DeviceLinkageRuleEffectivePeriodArgs']] effective_period: Specifies the effective period of the device linkage rule. Always effectives
                by default. The effective_period structure is documented below.
-        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to `true`.
+        :param pulumi.Input[bool] enabled: Specifies whether to enable the device linkage rule. Defaults to **true**.
         :param pulumi.Input[str] name: Specifies the name of the alarm.
         :param pulumi.Input[str] region: Specifies the region to which the SMN belongs.
         :param pulumi.Input[str] space_id: Specifies the resource space ID to which the device linkage rule belongs.
@@ -659,7 +679,8 @@ class DeviceLinkageRule(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description of the alarm.
+        Specifies the description of the alarm.  
+        The value can contain a maximum of `256` characters.
         """
         return pulumi.get(self, "description")
 
@@ -676,7 +697,7 @@ class DeviceLinkageRule(pulumi.CustomResource):
     @pulumi.getter
     def enabled(self) -> pulumi.Output[Optional[bool]]:
         """
-        Specifies whether to enable the device linkage rule. Defaults to `true`.
+        Specifies whether to enable the device linkage rule. Defaults to **true**.
         """
         return pulumi.get(self, "enabled")
 

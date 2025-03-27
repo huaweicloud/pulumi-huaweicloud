@@ -11,9 +11,17 @@ from .. import _utilities
 from . import outputs
 
 __all__ = [
+    'MysqlInstanceAutoScaling',
+    'MysqlInstanceAutoScalingScalingStrategy',
     'MysqlInstanceBackupStrategy',
     'MysqlInstanceDatastore',
     'MysqlInstanceNode',
+    'MysqlInstanceParameter',
+    'MysqlProxyAccessControlIpList',
+    'MysqlProxyMasterNodeWeight',
+    'MysqlProxyNode',
+    'MysqlProxyParameter',
+    'MysqlProxyReadonlyNodesWeight',
     'GetMysqlFlavorsFlavorResult',
     'GetMysqlInstanceBackupStrategyResult',
     'GetMysqlInstanceDatastoreResult',
@@ -23,6 +31,294 @@ __all__ = [
     'GetMysqlInstancesInstanceDatastoreResult',
     'GetMysqlInstancesInstanceNodeResult',
 ]
+
+@pulumi.output_type
+class MysqlInstanceAutoScaling(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "scalingStrategy":
+            suggest = "scaling_strategy"
+        elif key == "enlargeThreshold":
+            suggest = "enlarge_threshold"
+        elif key == "maxFlavor":
+            suggest = "max_flavor"
+        elif key == "maxReadOnlyCount":
+            suggest = "max_read_only_count"
+        elif key == "minFlavor":
+            suggest = "min_flavor"
+        elif key == "minReadOnlyCount":
+            suggest = "min_read_only_count"
+        elif key == "monitorCycle":
+            suggest = "monitor_cycle"
+        elif key == "readOnlyWeight":
+            suggest = "read_only_weight"
+        elif key == "reduceEnabled":
+            suggest = "reduce_enabled"
+        elif key == "silenceCycle":
+            suggest = "silence_cycle"
+        elif key == "silenceStartAt":
+            suggest = "silence_start_at"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MysqlInstanceAutoScaling. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MysqlInstanceAutoScaling.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MysqlInstanceAutoScaling.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 scaling_strategy: 'outputs.MysqlInstanceAutoScalingScalingStrategy',
+                 status: str,
+                 enlarge_threshold: Optional[int] = None,
+                 id: Optional[str] = None,
+                 max_flavor: Optional[str] = None,
+                 max_read_only_count: Optional[int] = None,
+                 min_flavor: Optional[str] = None,
+                 min_read_only_count: Optional[int] = None,
+                 monitor_cycle: Optional[int] = None,
+                 read_only_weight: Optional[int] = None,
+                 reduce_enabled: Optional[bool] = None,
+                 silence_cycle: Optional[int] = None,
+                 silence_start_at: Optional[str] = None):
+        """
+        :param 'MysqlInstanceAutoScalingScalingStrategyArgs' scaling_strategy: Specifies the auto-scaling policy.
+               The scaling_strategy structure is documented below.
+        :param str status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
+        :param int enlarge_threshold: Specifies the average CPU usage (%). It is mandatory when `status` is set to
+               **ON**. Value options: **50–100**.
+        :param str id: Indicates the ID of an auto-scaling policy.
+        :param str max_flavor: Specifies the maximum specifications. It is mandatory when the instance specifications
+               are automatically scaled up or down.
+        :param int max_read_only_count: Specifies the maximum number of read replicas. It is mandatory when read
+               replicas are automatically added or deleted.
+        :param str min_flavor: Indicates the minimum specifications.
+        :param int min_read_only_count: Indicates the minimum number of read replicas.
+        :param int monitor_cycle: Specifies the observation period, in seconds. During the entire observation period,
+               if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+               `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+        :param int read_only_weight: Specifies the read weights of read replicas. It is mandatory when read replicas
+               are automatically added or deleted.
+        :param bool reduce_enabled: Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+               **ON**. Value options:
+               + **true**: enabled.
+               + **false**: disabled.
+        :param int silence_cycle: Specifies the silent period, in seconds. It indicates the minimum interval between
+               two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+               options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+        :param str silence_start_at: Indicates the start time of the silent period.
+        """
+        pulumi.set(__self__, "scaling_strategy", scaling_strategy)
+        pulumi.set(__self__, "status", status)
+        if enlarge_threshold is not None:
+            pulumi.set(__self__, "enlarge_threshold", enlarge_threshold)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if max_flavor is not None:
+            pulumi.set(__self__, "max_flavor", max_flavor)
+        if max_read_only_count is not None:
+            pulumi.set(__self__, "max_read_only_count", max_read_only_count)
+        if min_flavor is not None:
+            pulumi.set(__self__, "min_flavor", min_flavor)
+        if min_read_only_count is not None:
+            pulumi.set(__self__, "min_read_only_count", min_read_only_count)
+        if monitor_cycle is not None:
+            pulumi.set(__self__, "monitor_cycle", monitor_cycle)
+        if read_only_weight is not None:
+            pulumi.set(__self__, "read_only_weight", read_only_weight)
+        if reduce_enabled is not None:
+            pulumi.set(__self__, "reduce_enabled", reduce_enabled)
+        if silence_cycle is not None:
+            pulumi.set(__self__, "silence_cycle", silence_cycle)
+        if silence_start_at is not None:
+            pulumi.set(__self__, "silence_start_at", silence_start_at)
+
+    @property
+    @pulumi.getter(name="scalingStrategy")
+    def scaling_strategy(self) -> 'outputs.MysqlInstanceAutoScalingScalingStrategy':
+        """
+        Specifies the auto-scaling policy.
+        The scaling_strategy structure is documented below.
+        """
+        return pulumi.get(self, "scaling_strategy")
+
+    @property
+    @pulumi.getter
+    def status(self) -> str:
+        """
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
+        """
+        return pulumi.get(self, "status")
+
+    @property
+    @pulumi.getter(name="enlargeThreshold")
+    def enlarge_threshold(self) -> Optional[int]:
+        """
+        Specifies the average CPU usage (%). It is mandatory when `status` is set to
+        **ON**. Value options: **50–100**.
+        """
+        return pulumi.get(self, "enlarge_threshold")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        Indicates the ID of an auto-scaling policy.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="maxFlavor")
+    def max_flavor(self) -> Optional[str]:
+        """
+        Specifies the maximum specifications. It is mandatory when the instance specifications
+        are automatically scaled up or down.
+        """
+        return pulumi.get(self, "max_flavor")
+
+    @property
+    @pulumi.getter(name="maxReadOnlyCount")
+    def max_read_only_count(self) -> Optional[int]:
+        """
+        Specifies the maximum number of read replicas. It is mandatory when read
+        replicas are automatically added or deleted.
+        """
+        return pulumi.get(self, "max_read_only_count")
+
+    @property
+    @pulumi.getter(name="minFlavor")
+    def min_flavor(self) -> Optional[str]:
+        """
+        Indicates the minimum specifications.
+        """
+        return pulumi.get(self, "min_flavor")
+
+    @property
+    @pulumi.getter(name="minReadOnlyCount")
+    def min_read_only_count(self) -> Optional[int]:
+        """
+        Indicates the minimum number of read replicas.
+        """
+        return pulumi.get(self, "min_read_only_count")
+
+    @property
+    @pulumi.getter(name="monitorCycle")
+    def monitor_cycle(self) -> Optional[int]:
+        """
+        Specifies the observation period, in seconds. During the entire observation period,
+        if the average CPU usage is greater than or equal to the preset value, a scale-up is triggered. It is mandatory when
+        `status` is set to **ON**. Value options: **300**, **600**, **900** or **1800**.
+        """
+        return pulumi.get(self, "monitor_cycle")
+
+    @property
+    @pulumi.getter(name="readOnlyWeight")
+    def read_only_weight(self) -> Optional[int]:
+        """
+        Specifies the read weights of read replicas. It is mandatory when read replicas
+        are automatically added or deleted.
+        """
+        return pulumi.get(self, "read_only_weight")
+
+    @property
+    @pulumi.getter(name="reduceEnabled")
+    def reduce_enabled(self) -> Optional[bool]:
+        """
+        Specifies whether auto-down is enabled. It is mandatory when `status` is set to
+        **ON**. Value options:
+        + **true**: enabled.
+        + **false**: disabled.
+        """
+        return pulumi.get(self, "reduce_enabled")
+
+    @property
+    @pulumi.getter(name="silenceCycle")
+    def silence_cycle(self) -> Optional[int]:
+        """
+        Specifies the silent period, in seconds. It indicates the minimum interval between
+        two auto scale-up operations or two scale-down operations. It is mandatory when `status` is set to **ON**. Value
+        options: **300**,  **600**, **1800**, **3600**, **7200**, **10800**, **86400** or **604800**.
+        """
+        return pulumi.get(self, "silence_cycle")
+
+    @property
+    @pulumi.getter(name="silenceStartAt")
+    def silence_start_at(self) -> Optional[str]:
+        """
+        Indicates the start time of the silent period.
+        """
+        return pulumi.get(self, "silence_start_at")
+
+
+@pulumi.output_type
+class MysqlInstanceAutoScalingScalingStrategy(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "flavorSwitch":
+            suggest = "flavor_switch"
+        elif key == "readOnlySwitch":
+            suggest = "read_only_switch"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MysqlInstanceAutoScalingScalingStrategy. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MysqlInstanceAutoScalingScalingStrategy.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MysqlInstanceAutoScalingScalingStrategy.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 flavor_switch: str,
+                 read_only_switch: str):
+        """
+        :param str flavor_switch: Specifies whether instance specifications can be automatically scaled up or down.
+               Value options:
+               + **ON**: Yes
+               + **OFF**: No
+        :param str read_only_switch: Specifies whether read replicas can be automatically added or deleted. To use
+               this function, ensure that there is only one proxy instance.
+               Value options:
+               + **ON**: Yes
+               + **OFF**: No
+        """
+        pulumi.set(__self__, "flavor_switch", flavor_switch)
+        pulumi.set(__self__, "read_only_switch", read_only_switch)
+
+    @property
+    @pulumi.getter(name="flavorSwitch")
+    def flavor_switch(self) -> str:
+        """
+        Specifies whether instance specifications can be automatically scaled up or down.
+        Value options:
+        + **ON**: Yes
+        + **OFF**: No
+        """
+        return pulumi.get(self, "flavor_switch")
+
+    @property
+    @pulumi.getter(name="readOnlySwitch")
+    def read_only_switch(self) -> str:
+        """
+        Specifies whether read replicas can be automatically added or deleted. To use
+        this function, ensure that there is only one proxy instance.
+        Value options:
+        + **ON**: Yes
+        + **OFF**: No
+        """
+        return pulumi.get(self, "read_only_switch")
+
 
 @pulumi.output_type
 class MysqlInstanceBackupStrategy(dict):
@@ -52,10 +348,11 @@ class MysqlInstanceBackupStrategy(dict):
         :param str start_time: Specifies the backup time window. Automated backups will be triggered during the
                backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
                HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-               value: 08:00-09:00, 03:00-04:00.
-        :param int keep_days: Specifies the number of days to retain the generated backup files. The value ranges from
-               0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-               the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+               value: **08:00-09:00**, **03:00-04:00**.
+        :param int keep_days: Specifies the number of days to retain the generated backup files.  
+               The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+               If this parameter is not transferred, the automated backup policy is enabled by default.
+               Backup files are stored for seven days by default.
         """
         pulumi.set(__self__, "start_time", start_time)
         if keep_days is not None:
@@ -68,7 +365,7 @@ class MysqlInstanceBackupStrategy(dict):
         Specifies the backup time window. Automated backups will be triggered during the
         backup time window. It must be a valid value in the "hh:mm-HH:MM" format. The current time is in the UTC format. The
         HH value must be 1 greater than the hh value. The values of mm and MM must be the same and must be set to 00. Example
-        value: 08:00-09:00, 03:00-04:00.
+        value: **08:00-09:00**, **03:00-04:00**.
         """
         return pulumi.get(self, "start_time")
 
@@ -76,9 +373,10 @@ class MysqlInstanceBackupStrategy(dict):
     @pulumi.getter(name="keepDays")
     def keep_days(self) -> Optional[int]:
         """
-        Specifies the number of days to retain the generated backup files. The value ranges from
-        0 to 35. If this parameter is set to 0, the automated backup policy is not set. If this parameter is not transferred,
-        the automated backup policy is enabled by default. Backup files are stored for seven days by default.
+        Specifies the number of days to retain the generated backup files.  
+        The value ranges from `0` to `35`. If this parameter is set to `0`, the automated backup policy is not set.
+        If this parameter is not transferred, the automated backup policy is enabled by default.
+        Backup files are stored for seven days by default.
         """
         return pulumi.get(self, "keep_days")
 
@@ -146,12 +444,12 @@ class MysqlInstanceNode(dict):
                  type: Optional[str] = None):
         """
         :param str availability_zone: Indicates the availability zone where the node resides.
-        :param str id: Indicates the node ID.
-        :param str name: Specifies the instance name, which can be the same as an existing instance name. The value
-               must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-               digits, hyphens (-), and underscores (_).
+        :param str id: Indicates the ID of an auto-scaling policy.
+        :param str name: Specifies the name of the parameter.
         :param str private_read_ip: Indicates the private IP address of a node.
-        :param str status: Indicates the node status.
+        :param str status: Specifies whether auto-scaling is enabled. Value options:
+               + **ON**: enabled.
+               + **OFF**: disabled.
         :param str type: Indicates the node type: master or slave.
         """
         if availability_zone is not None:
@@ -179,7 +477,7 @@ class MysqlInstanceNode(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        Indicates the node ID.
+        Indicates the ID of an auto-scaling policy.
         """
         return pulumi.get(self, "id")
 
@@ -187,9 +485,7 @@ class MysqlInstanceNode(dict):
     @pulumi.getter
     def name(self) -> Optional[str]:
         """
-        Specifies the instance name, which can be the same as an existing instance name. The value
-        must be 4 to 64 characters in length and start with a letter. It is case-sensitive and can contain only letters,
-        digits, hyphens (-), and underscores (_).
+        Specifies the name of the parameter.
         """
         return pulumi.get(self, "name")
 
@@ -205,7 +501,9 @@ class MysqlInstanceNode(dict):
     @pulumi.getter
     def status(self) -> Optional[str]:
         """
-        Indicates the node status.
+        Specifies whether auto-scaling is enabled. Value options:
+        + **ON**: enabled.
+        + **OFF**: disabled.
         """
         return pulumi.get(self, "status")
 
@@ -216,6 +514,310 @@ class MysqlInstanceNode(dict):
         Indicates the node type: master or slave.
         """
         return pulumi.get(self, "type")
+
+
+@pulumi.output_type
+class MysqlInstanceParameter(dict):
+    def __init__(__self__, *,
+                 name: str,
+                 value: str):
+        """
+        :param str name: Specifies the name of the parameter.
+        :param str value: Specifies the value of the parameter.
+        """
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the parameter.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class MysqlProxyAccessControlIpList(dict):
+    def __init__(__self__, *,
+                 ip: str,
+                 description: Optional[str] = None):
+        """
+        :param str ip: Specifies the IP address or CIDR block.
+        :param str description: Specifies the description.
+               The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+        """
+        pulumi.set(__self__, "ip", ip)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
+
+    @property
+    @pulumi.getter
+    def ip(self) -> str:
+        """
+        Specifies the IP address or CIDR block.
+        """
+        return pulumi.get(self, "ip")
+
+    @property
+    @pulumi.getter
+    def description(self) -> Optional[str]:
+        """
+        Specifies the description.
+        The description contains a maximum of `50` characters and the angle brackets (< and >) are not allowed.
+        """
+        return pulumi.get(self, "description")
+
+
+@pulumi.output_type
+class MysqlProxyMasterNodeWeight(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 weight: int):
+        """
+        :param str id: Specifies the ID of the node.
+        :param int weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def weight(self) -> int:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
+
+
+@pulumi.output_type
+class MysqlProxyNode(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "azCode":
+            suggest = "az_code"
+        elif key == "frozenFlag":
+            suggest = "frozen_flag"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MysqlProxyNode. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MysqlProxyNode.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MysqlProxyNode.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 az_code: Optional[str] = None,
+                 frozen_flag: Optional[int] = None,
+                 id: Optional[str] = None,
+                 name: Optional[str] = None,
+                 role: Optional[str] = None,
+                 status: Optional[str] = None):
+        """
+        :param str az_code: Indicates the proxy node AZ.
+        :param int frozen_flag: Indicates whether the proxy node is frozen. The values can be:
+               + **0**: unfrozen.
+               + **1**: frozen.
+               + **2**: deleted after being frozen.
+        :param str id: Specifies the ID of the node.
+        :param str name: Specifies the name of the parameter.
+        :param str role: Indicates the proxy node role. The values can be:
+               + **master**: primary node.
+               + **slave**: read replica.
+        :param str status: Indicates the proxy node status. The values can be:
+               + **ACTIVE**: The node is available.
+               + **ABNORMAL**: The node is abnormal.
+               + **FAILED**: The node fails.
+               + **DELETED**: The node has been deleted.
+        """
+        if az_code is not None:
+            pulumi.set(__self__, "az_code", az_code)
+        if frozen_flag is not None:
+            pulumi.set(__self__, "frozen_flag", frozen_flag)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
+        if name is not None:
+            pulumi.set(__self__, "name", name)
+        if role is not None:
+            pulumi.set(__self__, "role", role)
+        if status is not None:
+            pulumi.set(__self__, "status", status)
+
+    @property
+    @pulumi.getter(name="azCode")
+    def az_code(self) -> Optional[str]:
+        """
+        Indicates the proxy node AZ.
+        """
+        return pulumi.get(self, "az_code")
+
+    @property
+    @pulumi.getter(name="frozenFlag")
+    def frozen_flag(self) -> Optional[int]:
+        """
+        Indicates whether the proxy node is frozen. The values can be:
+        + **0**: unfrozen.
+        + **1**: frozen.
+        + **2**: deleted after being frozen.
+        """
+        return pulumi.get(self, "frozen_flag")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def name(self) -> Optional[str]:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def role(self) -> Optional[str]:
+        """
+        Indicates the proxy node role. The values can be:
+        + **master**: primary node.
+        + **slave**: read replica.
+        """
+        return pulumi.get(self, "role")
+
+    @property
+    @pulumi.getter
+    def status(self) -> Optional[str]:
+        """
+        Indicates the proxy node status. The values can be:
+        + **ACTIVE**: The node is available.
+        + **ABNORMAL**: The node is abnormal.
+        + **FAILED**: The node fails.
+        + **DELETED**: The node has been deleted.
+        """
+        return pulumi.get(self, "status")
+
+
+@pulumi.output_type
+class MysqlProxyParameter(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "elemType":
+            suggest = "elem_type"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in MysqlProxyParameter. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        MysqlProxyParameter.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        MysqlProxyParameter.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 elem_type: str,
+                 name: str,
+                 value: str):
+        """
+        :param str elem_type: Specifies the parent tag type of the parameter.
+        :param str name: Specifies the name of the parameter.
+        :param str value: Specifies the value of the parameter.
+        """
+        pulumi.set(__self__, "elem_type", elem_type)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "value", value)
+
+    @property
+    @pulumi.getter(name="elemType")
+    def elem_type(self) -> str:
+        """
+        Specifies the parent tag type of the parameter.
+        """
+        return pulumi.get(self, "elem_type")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        """
+        Specifies the name of the parameter.
+        """
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def value(self) -> str:
+        """
+        Specifies the value of the parameter.
+        """
+        return pulumi.get(self, "value")
+
+
+@pulumi.output_type
+class MysqlProxyReadonlyNodesWeight(dict):
+    def __init__(__self__, *,
+                 id: str,
+                 weight: int):
+        """
+        :param str id: Specifies the ID of the node.
+        :param int weight: Specifies the weight assigned to the node.
+               + If `route_mode` is `0`, the value is `0` to `1,000`.
+               + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+               + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "weight", weight)
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        """
+        Specifies the ID of the node.
+        """
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter
+    def weight(self) -> int:
+        """
+        Specifies the weight assigned to the node.
+        + If `route_mode` is `0`, the value is `0` to `1,000`.
+        + If `route_mode` is `1`, the value for the primary node is `0` and the value for read replicas is `0` or `1`.
+        + If `route_mode` is `2`, the value for the primary node is `1` and the value for read replicas is `0` or `1`.
+        """
+        return pulumi.get(self, "weight")
 
 
 @pulumi.output_type
@@ -439,16 +1041,22 @@ class GetMysqlInstancesInstanceResult(dict):
                  availability_zone_mode: str,
                  backup_strategies: Sequence['outputs.GetMysqlInstancesInstanceBackupStrategyResult'],
                  configuration_id: str,
+                 created_at: str,
                  datastores: Sequence['outputs.GetMysqlInstancesInstanceDatastoreResult'],
                  db_user_name: str,
+                 description: str,
                  enterprise_project_id: str,
                  flavor: str,
                  id: str,
+                 maintain_begin: str,
+                 maintain_end: str,
                  master_availability_zone: str,
                  mode: str,
                  name: str,
                  nodes: Sequence['outputs.GetMysqlInstancesInstanceNodeResult'],
                  port: int,
+                 private_dns_name: str,
+                 private_dns_name_prefix: str,
                  private_write_ip: str,
                  read_replicas: int,
                  region: str,
@@ -456,21 +1064,28 @@ class GetMysqlInstancesInstanceResult(dict):
                  status: str,
                  subnet_id: str,
                  time_zone: str,
+                 updated_at: str,
                  vpc_id: str):
         """
         :param str availability_zone_mode: Indicates the availability zone mode: "single" or "multi".
         :param Sequence['GetMysqlInstancesInstanceBackupStrategyArgs'] backup_strategies: Indicates the advanced backup policy. Structure is documented below.
         :param str configuration_id: Indicates the configuration ID.
+        :param str created_at: Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
         :param Sequence['GetMysqlInstancesInstanceDatastoreArgs'] datastores: Indicates the database information. Structure is documented below.
         :param str db_user_name: Indicates the default username.
+        :param str description: Indicates the description of the instance.
         :param str enterprise_project_id: Indicates the enterprise project id.
         :param str flavor: Indicates the instance specifications.
         :param str id: Indicates the node ID.
+        :param str maintain_begin: Indicates the start time for a maintenance window.
+        :param str maintain_end: Indicates the end time for a maintenance window.
         :param str master_availability_zone: Indicates the availability zone where the master node resides.
         :param str mode: Indicates the instance mode.
         :param str name: Specifies the name of the instance.
         :param Sequence['GetMysqlInstancesInstanceNodeArgs'] nodes: Indicates the instance nodes information. Structure is documented below.
         :param int port: Indicates the database port.
+        :param str private_dns_name: Indicates the private domain name.
+        :param str private_dns_name_prefix: Indicates the prefix of the private domain name.
         :param str private_write_ip: Indicates the private IP address of the DB instance.
         :param int read_replicas: Indicates the count of read replicas.
         :param str region: The region in which to obtain the instances. If omitted, the provider-level region will
@@ -479,21 +1094,28 @@ class GetMysqlInstancesInstanceResult(dict):
         :param str status: Indicates the node status.
         :param str subnet_id: Specifies the network ID of a subnet.
         :param str time_zone: Indicates the time zone.
+        :param str updated_at: Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
         :param str vpc_id: Specifies the VPC ID.
         """
         pulumi.set(__self__, "availability_zone_mode", availability_zone_mode)
         pulumi.set(__self__, "backup_strategies", backup_strategies)
         pulumi.set(__self__, "configuration_id", configuration_id)
+        pulumi.set(__self__, "created_at", created_at)
         pulumi.set(__self__, "datastores", datastores)
         pulumi.set(__self__, "db_user_name", db_user_name)
+        pulumi.set(__self__, "description", description)
         pulumi.set(__self__, "enterprise_project_id", enterprise_project_id)
         pulumi.set(__self__, "flavor", flavor)
         pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "maintain_begin", maintain_begin)
+        pulumi.set(__self__, "maintain_end", maintain_end)
         pulumi.set(__self__, "master_availability_zone", master_availability_zone)
         pulumi.set(__self__, "mode", mode)
         pulumi.set(__self__, "name", name)
         pulumi.set(__self__, "nodes", nodes)
         pulumi.set(__self__, "port", port)
+        pulumi.set(__self__, "private_dns_name", private_dns_name)
+        pulumi.set(__self__, "private_dns_name_prefix", private_dns_name_prefix)
         pulumi.set(__self__, "private_write_ip", private_write_ip)
         pulumi.set(__self__, "read_replicas", read_replicas)
         pulumi.set(__self__, "region", region)
@@ -501,6 +1123,7 @@ class GetMysqlInstancesInstanceResult(dict):
         pulumi.set(__self__, "status", status)
         pulumi.set(__self__, "subnet_id", subnet_id)
         pulumi.set(__self__, "time_zone", time_zone)
+        pulumi.set(__self__, "updated_at", updated_at)
         pulumi.set(__self__, "vpc_id", vpc_id)
 
     @property
@@ -528,6 +1151,14 @@ class GetMysqlInstancesInstanceResult(dict):
         return pulumi.get(self, "configuration_id")
 
     @property
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> str:
+        """
+        Indicates the creation time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "created_at")
+
+    @property
     @pulumi.getter
     def datastores(self) -> Sequence['outputs.GetMysqlInstancesInstanceDatastoreResult']:
         """
@@ -542,6 +1173,14 @@ class GetMysqlInstancesInstanceResult(dict):
         Indicates the default username.
         """
         return pulumi.get(self, "db_user_name")
+
+    @property
+    @pulumi.getter
+    def description(self) -> str:
+        """
+        Indicates the description of the instance.
+        """
+        return pulumi.get(self, "description")
 
     @property
     @pulumi.getter(name="enterpriseProjectId")
@@ -566,6 +1205,22 @@ class GetMysqlInstancesInstanceResult(dict):
         Indicates the node ID.
         """
         return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="maintainBegin")
+    def maintain_begin(self) -> str:
+        """
+        Indicates the start time for a maintenance window.
+        """
+        return pulumi.get(self, "maintain_begin")
+
+    @property
+    @pulumi.getter(name="maintainEnd")
+    def maintain_end(self) -> str:
+        """
+        Indicates the end time for a maintenance window.
+        """
+        return pulumi.get(self, "maintain_end")
 
     @property
     @pulumi.getter(name="masterAvailabilityZone")
@@ -606,6 +1261,22 @@ class GetMysqlInstancesInstanceResult(dict):
         Indicates the database port.
         """
         return pulumi.get(self, "port")
+
+    @property
+    @pulumi.getter(name="privateDnsName")
+    def private_dns_name(self) -> str:
+        """
+        Indicates the private domain name.
+        """
+        return pulumi.get(self, "private_dns_name")
+
+    @property
+    @pulumi.getter(name="privateDnsNamePrefix")
+    def private_dns_name_prefix(self) -> str:
+        """
+        Indicates the prefix of the private domain name.
+        """
+        return pulumi.get(self, "private_dns_name_prefix")
 
     @property
     @pulumi.getter(name="privateWriteIp")
@@ -663,6 +1334,14 @@ class GetMysqlInstancesInstanceResult(dict):
         Indicates the time zone.
         """
         return pulumi.get(self, "time_zone")
+
+    @property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> str:
+        """
+        Indicates the Update time in the **yyyy-mm-ddThh:mm:ssZ** format.
+        """
+        return pulumi.get(self, "updated_at")
 
     @property
     @pulumi.getter(name="vpcId")

@@ -35,7 +35,6 @@ import (
 //			vpcId := cfg.RequireObject("vpcId")
 //			subnetId := cfg.RequireObject("subnetId")
 //			securityGroupId := cfg.RequireObject("securityGroupId")
-//			eipId := cfg.RequireObject("eipId")
 //			enterpriseProjectId := cfg.RequireObject("enterpriseProjectId")
 //			testAvailabilityZones, err := huaweicloud.GetAvailabilityZones(ctx, nil, nil)
 //			if err != nil {
@@ -50,10 +49,12 @@ import (
 //				MaintainBegin:       pulumi.String("06:00:00"),
 //				Description:         pulumi.String("Created by script"),
 //				BandwidthSize:       pulumi.Int(3),
-//				EipId:               pulumi.Any(eipId),
 //				AvailableZones: pulumi.StringArray{
 //					pulumi.String(testAvailabilityZones.Names[0]),
 //					pulumi.String(testAvailabilityZones.Names[1]),
+//				},
+//				Tags: pulumi.StringMap{
+//					"foo": pulumi.String("bar"),
 //				},
 //			})
 //			if err != nil {
@@ -67,7 +68,7 @@ import (
 //
 // ## Import
 //
-// Dedicated instances can be imported by their `id`, e.g.
+// Dedicated instances can be imported by their `id`, e.g. bash
 //
 // ```sh
 //
@@ -93,6 +94,9 @@ type Instance struct {
 	CreateTime pulumi.StringOutput `pulumi:"createTime"`
 	// Time when the dedicated instance is created, in RFC-3339 format.
 	CreatedAt pulumi.StringOutput `pulumi:"createdAt"`
+	// Specified the list of the instance custom ingress ports.
+	// The customIngressPorts structure is documented below.
+	CustomIngressPorts InstanceCustomIngressPortArrayOutput `pulumi:"customIngressPorts"`
 	// Specifies the description of the dedicated instance.\
 	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrOutput `pulumi:"description"`
@@ -109,21 +113,26 @@ type Instance struct {
 	Edition pulumi.StringOutput `pulumi:"edition"`
 	// The egress (NAT) public IP address.
 	EgressAddress pulumi.StringOutput `pulumi:"egressAddress"`
-	// Specifies the EIP ID associated with the dedicated instance.
+	// The EIP ID associated with the dedicated instance.
 	EipId pulumi.StringOutput `pulumi:"eipId"`
 	// Specifies the enterprise project ID to which the dedicated
-	// instance belongs.
-	// This parameter is required for enterprise users. Changing this will create a new resource.
+	// instance belongs. This parameter is required for enterprise users.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// The ingress EIP address.
 	IngressAddress pulumi.StringOutput `pulumi:"ingressAddress"`
+	// Specifies the ingress bandwidth billing type of the dedicated instance.
+	// The valid values are as follows:
+	// + **bandwidth**: Billed by bandwidth.
+	// + **traffic**: Billed by traffic.
+	IngressBandwidthChargingMode pulumi.StringPtrOutput `pulumi:"ingressBandwidthChargingMode"`
+	// Specifies the ingress bandwidth size of the dedicated instance.\
+	// The minimum value is `5`
+	IngressBandwidthSize pulumi.IntPtrOutput `pulumi:"ingressBandwidthSize"`
 	// Specifies whether public access with an IPv6 address is supported.\
 	// Changing this will create a new resource.
 	Ipv6Enable pulumi.BoolOutput `pulumi:"ipv6Enable"`
-	// Specifies the provider type of load balancer used by the
-	// dedicated instance.
-	// The valid values are as follows:
-	// + **lvs**: Linux virtual server.
+	// The type of load balancer used by the dedicated instance.\
+	// The valid value is as follows:
 	// + **elb**: Elastic load balance.
 	LoadbalancerProvider pulumi.StringOutput `pulumi:"loadbalancerProvider"`
 	// Specifies the start time of the maintenance time window.\
@@ -142,18 +151,32 @@ type Instance struct {
 	// Specifies the ID of the security group to which the dedicated instance
 	// belongs to.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
-	// Status of the dedicated instance.
+	// The current status of the custom ingress port.
+	// + **normal**
+	// + **abnormal**
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Specifies the ID of the VPC subnet used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	SubnetId pulumi.StringOutput `pulumi:"subnetId"`
 	// The supported features of the APIG dedicated instance.
 	SupportedFeatures pulumi.StringArrayOutput `pulumi:"supportedFeatures"`
+	// Specifies the key/value pairs to associate with the dedicated instance.
+	Tags pulumi.StringMapOutput `pulumi:"tags"`
 	// Specifies the ID of the VPC used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
 	// The ingress private IP address of the VPC.
 	VpcIngressAddress pulumi.StringOutput `pulumi:"vpcIngressAddress"`
+	// The address (full name) of the VPC endpoint service, in the
+	// "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+	// generates a name in the "{region}.apig.{service_id}" format.
+	VpcepServiceAddress pulumi.StringOutput `pulumi:"vpcepServiceAddress"`
+	// Specifies the name of the VPC endpoint service.
+	// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+	// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+	// If this parameter is specified, the system automatically generates a name in the
+	// "{region}.{vpcep_service_name}.{service_id}" format.
+	VpcepServiceName pulumi.StringOutput `pulumi:"vpcepServiceName"`
 }
 
 // NewInstance registers a new resource with the given unique name, arguments, and options.
@@ -214,6 +237,9 @@ type instanceState struct {
 	CreateTime *string `pulumi:"createTime"`
 	// Time when the dedicated instance is created, in RFC-3339 format.
 	CreatedAt *string `pulumi:"createdAt"`
+	// Specified the list of the instance custom ingress ports.
+	// The customIngressPorts structure is documented below.
+	CustomIngressPorts []InstanceCustomIngressPort `pulumi:"customIngressPorts"`
 	// Specifies the description of the dedicated instance.\
 	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
@@ -230,21 +256,26 @@ type instanceState struct {
 	Edition *string `pulumi:"edition"`
 	// The egress (NAT) public IP address.
 	EgressAddress *string `pulumi:"egressAddress"`
-	// Specifies the EIP ID associated with the dedicated instance.
+	// The EIP ID associated with the dedicated instance.
 	EipId *string `pulumi:"eipId"`
 	// Specifies the enterprise project ID to which the dedicated
-	// instance belongs.
-	// This parameter is required for enterprise users. Changing this will create a new resource.
+	// instance belongs. This parameter is required for enterprise users.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// The ingress EIP address.
 	IngressAddress *string `pulumi:"ingressAddress"`
+	// Specifies the ingress bandwidth billing type of the dedicated instance.
+	// The valid values are as follows:
+	// + **bandwidth**: Billed by bandwidth.
+	// + **traffic**: Billed by traffic.
+	IngressBandwidthChargingMode *string `pulumi:"ingressBandwidthChargingMode"`
+	// Specifies the ingress bandwidth size of the dedicated instance.\
+	// The minimum value is `5`
+	IngressBandwidthSize *int `pulumi:"ingressBandwidthSize"`
 	// Specifies whether public access with an IPv6 address is supported.\
 	// Changing this will create a new resource.
 	Ipv6Enable *bool `pulumi:"ipv6Enable"`
-	// Specifies the provider type of load balancer used by the
-	// dedicated instance.
-	// The valid values are as follows:
-	// + **lvs**: Linux virtual server.
+	// The type of load balancer used by the dedicated instance.\
+	// The valid value is as follows:
 	// + **elb**: Elastic load balance.
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Specifies the start time of the maintenance time window.\
@@ -263,18 +294,32 @@ type instanceState struct {
 	// Specifies the ID of the security group to which the dedicated instance
 	// belongs to.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
-	// Status of the dedicated instance.
+	// The current status of the custom ingress port.
+	// + **normal**
+	// + **abnormal**
 	Status *string `pulumi:"status"`
 	// Specifies the ID of the VPC subnet used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	SubnetId *string `pulumi:"subnetId"`
 	// The supported features of the APIG dedicated instance.
 	SupportedFeatures []string `pulumi:"supportedFeatures"`
+	// Specifies the key/value pairs to associate with the dedicated instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the ID of the VPC used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	VpcId *string `pulumi:"vpcId"`
 	// The ingress private IP address of the VPC.
 	VpcIngressAddress *string `pulumi:"vpcIngressAddress"`
+	// The address (full name) of the VPC endpoint service, in the
+	// "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+	// generates a name in the "{region}.apig.{service_id}" format.
+	VpcepServiceAddress *string `pulumi:"vpcepServiceAddress"`
+	// Specifies the name of the VPC endpoint service.
+	// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+	// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+	// If this parameter is specified, the system automatically generates a name in the
+	// "{region}.{vpcep_service_name}.{service_id}" format.
+	VpcepServiceName *string `pulumi:"vpcepServiceName"`
 }
 
 type InstanceState struct {
@@ -294,6 +339,9 @@ type InstanceState struct {
 	CreateTime pulumi.StringPtrInput
 	// Time when the dedicated instance is created, in RFC-3339 format.
 	CreatedAt pulumi.StringPtrInput
+	// Specified the list of the instance custom ingress ports.
+	// The customIngressPorts structure is documented below.
+	CustomIngressPorts InstanceCustomIngressPortArrayInput
 	// Specifies the description of the dedicated instance.\
 	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
@@ -310,21 +358,26 @@ type InstanceState struct {
 	Edition pulumi.StringPtrInput
 	// The egress (NAT) public IP address.
 	EgressAddress pulumi.StringPtrInput
-	// Specifies the EIP ID associated with the dedicated instance.
+	// The EIP ID associated with the dedicated instance.
 	EipId pulumi.StringPtrInput
 	// Specifies the enterprise project ID to which the dedicated
-	// instance belongs.
-	// This parameter is required for enterprise users. Changing this will create a new resource.
+	// instance belongs. This parameter is required for enterprise users.
 	EnterpriseProjectId pulumi.StringPtrInput
 	// The ingress EIP address.
 	IngressAddress pulumi.StringPtrInput
+	// Specifies the ingress bandwidth billing type of the dedicated instance.
+	// The valid values are as follows:
+	// + **bandwidth**: Billed by bandwidth.
+	// + **traffic**: Billed by traffic.
+	IngressBandwidthChargingMode pulumi.StringPtrInput
+	// Specifies the ingress bandwidth size of the dedicated instance.\
+	// The minimum value is `5`
+	IngressBandwidthSize pulumi.IntPtrInput
 	// Specifies whether public access with an IPv6 address is supported.\
 	// Changing this will create a new resource.
 	Ipv6Enable pulumi.BoolPtrInput
-	// Specifies the provider type of load balancer used by the
-	// dedicated instance.
-	// The valid values are as follows:
-	// + **lvs**: Linux virtual server.
+	// The type of load balancer used by the dedicated instance.\
+	// The valid value is as follows:
 	// + **elb**: Elastic load balance.
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Specifies the start time of the maintenance time window.\
@@ -343,18 +396,32 @@ type InstanceState struct {
 	// Specifies the ID of the security group to which the dedicated instance
 	// belongs to.
 	SecurityGroupId pulumi.StringPtrInput
-	// Status of the dedicated instance.
+	// The current status of the custom ingress port.
+	// + **normal**
+	// + **abnormal**
 	Status pulumi.StringPtrInput
 	// Specifies the ID of the VPC subnet used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	SubnetId pulumi.StringPtrInput
 	// The supported features of the APIG dedicated instance.
 	SupportedFeatures pulumi.StringArrayInput
+	// Specifies the key/value pairs to associate with the dedicated instance.
+	Tags pulumi.StringMapInput
 	// Specifies the ID of the VPC used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	VpcId pulumi.StringPtrInput
 	// The ingress private IP address of the VPC.
 	VpcIngressAddress pulumi.StringPtrInput
+	// The address (full name) of the VPC endpoint service, in the
+	// "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+	// generates a name in the "{region}.apig.{service_id}" format.
+	VpcepServiceAddress pulumi.StringPtrInput
+	// Specifies the name of the VPC endpoint service.
+	// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+	// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+	// If this parameter is specified, the system automatically generates a name in the
+	// "{region}.{vpcep_service_name}.{service_id}" format.
+	VpcepServiceName pulumi.StringPtrInput
 }
 
 func (InstanceState) ElementType() reflect.Type {
@@ -372,6 +439,9 @@ type instanceArgs struct {
 	// Specifies the egress bandwidth size of the dedicated instance.\
 	// The valid value ranges from `0` to `2,000`.
 	BandwidthSize *int `pulumi:"bandwidthSize"`
+	// Specified the list of the instance custom ingress ports.
+	// The customIngressPorts structure is documented below.
+	CustomIngressPorts []InstanceCustomIngressPort `pulumi:"customIngressPorts"`
 	// Specifies the description of the dedicated instance.\
 	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description *string `pulumi:"description"`
@@ -386,19 +456,24 @@ type instanceArgs struct {
 	// + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
 	// + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
 	Edition string `pulumi:"edition"`
-	// Specifies the EIP ID associated with the dedicated instance.
+	// The EIP ID associated with the dedicated instance.
 	EipId *string `pulumi:"eipId"`
 	// Specifies the enterprise project ID to which the dedicated
-	// instance belongs.
-	// This parameter is required for enterprise users. Changing this will create a new resource.
+	// instance belongs. This parameter is required for enterprise users.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies the ingress bandwidth billing type of the dedicated instance.
+	// The valid values are as follows:
+	// + **bandwidth**: Billed by bandwidth.
+	// + **traffic**: Billed by traffic.
+	IngressBandwidthChargingMode *string `pulumi:"ingressBandwidthChargingMode"`
+	// Specifies the ingress bandwidth size of the dedicated instance.\
+	// The minimum value is `5`
+	IngressBandwidthSize *int `pulumi:"ingressBandwidthSize"`
 	// Specifies whether public access with an IPv6 address is supported.\
 	// Changing this will create a new resource.
 	Ipv6Enable *bool `pulumi:"ipv6Enable"`
-	// Specifies the provider type of load balancer used by the
-	// dedicated instance.
-	// The valid values are as follows:
-	// + **lvs**: Linux virtual server.
+	// The type of load balancer used by the dedicated instance.\
+	// The valid value is as follows:
 	// + **elb**: Elastic load balance.
 	LoadbalancerProvider *string `pulumi:"loadbalancerProvider"`
 	// Specifies the start time of the maintenance time window.\
@@ -418,9 +493,17 @@ type instanceArgs struct {
 	// Specifies the ID of the VPC subnet used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	SubnetId string `pulumi:"subnetId"`
+	// Specifies the key/value pairs to associate with the dedicated instance.
+	Tags map[string]string `pulumi:"tags"`
 	// Specifies the ID of the VPC used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	VpcId string `pulumi:"vpcId"`
+	// Specifies the name of the VPC endpoint service.
+	// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+	// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+	// If this parameter is specified, the system automatically generates a name in the
+	// "{region}.{vpcep_service_name}.{service_id}" format.
+	VpcepServiceName *string `pulumi:"vpcepServiceName"`
 }
 
 // The set of arguments for constructing a Instance resource.
@@ -435,6 +518,9 @@ type InstanceArgs struct {
 	// Specifies the egress bandwidth size of the dedicated instance.\
 	// The valid value ranges from `0` to `2,000`.
 	BandwidthSize pulumi.IntPtrInput
+	// Specified the list of the instance custom ingress ports.
+	// The customIngressPorts structure is documented below.
+	CustomIngressPorts InstanceCustomIngressPortArrayInput
 	// Specifies the description of the dedicated instance.\
 	// The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 	Description pulumi.StringPtrInput
@@ -449,19 +535,24 @@ type InstanceArgs struct {
 	// + **ENTERPRISE_IPV6**: IPv6 instance of the Enterprise Edition.
 	// + **PLATINUM_IPV6**: IPv6 instance of the Platinum Edition.
 	Edition pulumi.StringInput
-	// Specifies the EIP ID associated with the dedicated instance.
+	// The EIP ID associated with the dedicated instance.
 	EipId pulumi.StringPtrInput
 	// Specifies the enterprise project ID to which the dedicated
-	// instance belongs.
-	// This parameter is required for enterprise users. Changing this will create a new resource.
+	// instance belongs. This parameter is required for enterprise users.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies the ingress bandwidth billing type of the dedicated instance.
+	// The valid values are as follows:
+	// + **bandwidth**: Billed by bandwidth.
+	// + **traffic**: Billed by traffic.
+	IngressBandwidthChargingMode pulumi.StringPtrInput
+	// Specifies the ingress bandwidth size of the dedicated instance.\
+	// The minimum value is `5`
+	IngressBandwidthSize pulumi.IntPtrInput
 	// Specifies whether public access with an IPv6 address is supported.\
 	// Changing this will create a new resource.
 	Ipv6Enable pulumi.BoolPtrInput
-	// Specifies the provider type of load balancer used by the
-	// dedicated instance.
-	// The valid values are as follows:
-	// + **lvs**: Linux virtual server.
+	// The type of load balancer used by the dedicated instance.\
+	// The valid value is as follows:
 	// + **elb**: Elastic load balance.
 	LoadbalancerProvider pulumi.StringPtrInput
 	// Specifies the start time of the maintenance time window.\
@@ -481,9 +572,17 @@ type InstanceArgs struct {
 	// Specifies the ID of the VPC subnet used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	SubnetId pulumi.StringInput
+	// Specifies the key/value pairs to associate with the dedicated instance.
+	Tags pulumi.StringMapInput
 	// Specifies the ID of the VPC used to create the dedicated instance.\
 	// Changing this will create a new resource.
 	VpcId pulumi.StringInput
+	// Specifies the name of the VPC endpoint service.
+	// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+	// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+	// If this parameter is specified, the system automatically generates a name in the
+	// "{region}.{vpcep_service_name}.{service_id}" format.
+	VpcepServiceName pulumi.StringPtrInput
 }
 
 func (InstanceArgs) ElementType() reflect.Type {
@@ -604,6 +703,12 @@ func (o InstanceOutput) CreatedAt() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.CreatedAt }).(pulumi.StringOutput)
 }
 
+// Specified the list of the instance custom ingress ports.
+// The customIngressPorts structure is documented below.
+func (o InstanceOutput) CustomIngressPorts() InstanceCustomIngressPortArrayOutput {
+	return o.ApplyT(func(v *Instance) InstanceCustomIngressPortArrayOutput { return v.CustomIngressPorts }).(InstanceCustomIngressPortArrayOutput)
+}
+
 // Specifies the description of the dedicated instance.\
 // The description contain a maximum of `255` characters and the angle brackets (< and >) are not allowed.
 func (o InstanceOutput) Description() pulumi.StringPtrOutput {
@@ -629,14 +734,13 @@ func (o InstanceOutput) EgressAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EgressAddress }).(pulumi.StringOutput)
 }
 
-// Specifies the EIP ID associated with the dedicated instance.
+// The EIP ID associated with the dedicated instance.
 func (o InstanceOutput) EipId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EipId }).(pulumi.StringOutput)
 }
 
 // Specifies the enterprise project ID to which the dedicated
-// instance belongs.
-// This parameter is required for enterprise users. Changing this will create a new resource.
+// instance belongs. This parameter is required for enterprise users.
 func (o InstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
 }
@@ -646,16 +750,28 @@ func (o InstanceOutput) IngressAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.IngressAddress }).(pulumi.StringOutput)
 }
 
+// Specifies the ingress bandwidth billing type of the dedicated instance.
+// The valid values are as follows:
+// + **bandwidth**: Billed by bandwidth.
+// + **traffic**: Billed by traffic.
+func (o InstanceOutput) IngressBandwidthChargingMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringPtrOutput { return v.IngressBandwidthChargingMode }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the ingress bandwidth size of the dedicated instance.\
+// The minimum value is `5`
+func (o InstanceOutput) IngressBandwidthSize() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *Instance) pulumi.IntPtrOutput { return v.IngressBandwidthSize }).(pulumi.IntPtrOutput)
+}
+
 // Specifies whether public access with an IPv6 address is supported.\
 // Changing this will create a new resource.
 func (o InstanceOutput) Ipv6Enable() pulumi.BoolOutput {
 	return o.ApplyT(func(v *Instance) pulumi.BoolOutput { return v.Ipv6Enable }).(pulumi.BoolOutput)
 }
 
-// Specifies the provider type of load balancer used by the
-// dedicated instance.
-// The valid values are as follows:
-// + **lvs**: Linux virtual server.
+// The type of load balancer used by the dedicated instance.\
+// The valid value is as follows:
 // + **elb**: Elastic load balance.
 func (o InstanceOutput) LoadbalancerProvider() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.LoadbalancerProvider }).(pulumi.StringOutput)
@@ -692,7 +808,9 @@ func (o InstanceOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
 }
 
-// Status of the dedicated instance.
+// The current status of the custom ingress port.
+// + **normal**
+// + **abnormal**
 func (o InstanceOutput) Status() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.Status }).(pulumi.StringOutput)
 }
@@ -708,6 +826,11 @@ func (o InstanceOutput) SupportedFeatures() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringArrayOutput { return v.SupportedFeatures }).(pulumi.StringArrayOutput)
 }
 
+// Specifies the key/value pairs to associate with the dedicated instance.
+func (o InstanceOutput) Tags() pulumi.StringMapOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
+}
+
 // Specifies the ID of the VPC used to create the dedicated instance.\
 // Changing this will create a new resource.
 func (o InstanceOutput) VpcId() pulumi.StringOutput {
@@ -717,6 +840,22 @@ func (o InstanceOutput) VpcId() pulumi.StringOutput {
 // The ingress private IP address of the VPC.
 func (o InstanceOutput) VpcIngressAddress() pulumi.StringOutput {
 	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.VpcIngressAddress }).(pulumi.StringOutput)
+}
+
+// The address (full name) of the VPC endpoint service, in the
+// "{region}.{vpcep_service_name}.{service_id}" format. If this parameter is not specified, the system automatically
+// generates a name in the "{region}.apig.{service_id}" format.
+func (o InstanceOutput) VpcepServiceAddress() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.VpcepServiceAddress }).(pulumi.StringOutput)
+}
+
+// Specifies the name of the VPC endpoint service.
+// It can contain a maximum of 16 characters, including letters, digits, underscores (_), and hyphens (-).
+// If this parameter is not specified, the system automatically generates a name in the "{region}.apig.{service_id}" format.
+// If this parameter is specified, the system automatically generates a name in the
+// "{region}.{vpcep_service_name}.{service_id}" format.
+func (o InstanceOutput) VpcepServiceName() pulumi.StringOutput {
+	return o.ApplyT(func(v *Instance) pulumi.StringOutput { return v.VpcepServiceName }).(pulumi.StringOutput)
 }
 
 type InstanceArrayOutput struct{ *pulumi.OutputState }

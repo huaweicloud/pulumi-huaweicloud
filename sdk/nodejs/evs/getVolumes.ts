@@ -31,11 +31,14 @@ export function getVolumes(args?: GetVolumesArgs, opts?: pulumi.InvokeOptions): 
     return pulumi.runtime.invoke("huaweicloud:Evs/getVolumes:getVolumes", {
         "availabilityZone": args.availabilityZone,
         "enterpriseProjectId": args.enterpriseProjectId,
+        "name": args.name,
         "region": args.region,
         "serverId": args.serverId,
         "shareable": args.shareable,
         "status": args.status,
         "tags": args.tags,
+        "volumeId": args.volumeId,
+        "volumeTypeId": args.volumeTypeId,
     }, opts);
 }
 
@@ -51,6 +54,11 @@ export interface GetVolumesArgs {
      * Specifies the enterprise project ID for filtering.
      */
     enterpriseProjectId?: string;
+    /**
+     * Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+     * query result is for all disks whose names contain this value.
+     */
+    name?: string;
     /**
      * Specifies the region in which to query the disk list.
      * If omitted, the provider-level region will be used.
@@ -85,6 +93,14 @@ export interface GetVolumesArgs {
      * Specifies the included key/value pairs which associated with the desired disk.
      */
     tags?: {[key: string]: string};
+    /**
+     * Specifies the ID for the disk.
+     */
+    volumeId?: string;
+    /**
+     * Specifies the type ID for the disks.
+     */
+    volumeTypeId?: string;
 }
 
 /**
@@ -103,6 +119,10 @@ export interface GetVolumesResult {
      * The provider-assigned unique ID for this managed resource.
      */
     readonly id: string;
+    /**
+     * The disk name.
+     */
+    readonly name?: string;
     readonly region?: string;
     /**
      * The ID of the server to which the disk is attached.
@@ -120,6 +140,8 @@ export interface GetVolumesResult {
      * The disk tags.
      */
     readonly tags?: {[key: string]: string};
+    readonly volumeId?: string;
+    readonly volumeTypeId?: string;
     /**
      * The detailed information of the disks. Structure is documented below.
      */
@@ -142,6 +164,11 @@ export interface GetVolumesOutputArgs {
      * Specifies the enterprise project ID for filtering.
      */
     enterpriseProjectId?: pulumi.Input<string>;
+    /**
+     * Specifies the name for the disks. This field will undergo a fuzzy matching query, the
+     * query result is for all disks whose names contain this value.
+     */
+    name?: pulumi.Input<string>;
     /**
      * Specifies the region in which to query the disk list.
      * If omitted, the provider-level region will be used.
@@ -176,4 +203,12 @@ export interface GetVolumesOutputArgs {
      * Specifies the included key/value pairs which associated with the desired disk.
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    /**
+     * Specifies the ID for the disk.
+     */
+    volumeId?: pulumi.Input<string>;
+    /**
+     * Specifies the type ID for the disks.
+     */
+    volumeTypeId?: pulumi.Input<string>;
 }

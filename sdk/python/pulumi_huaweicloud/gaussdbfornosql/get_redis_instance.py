@@ -270,7 +270,7 @@ def get_redis_instance(name: Optional[str] = None,
                        vpc_id: Optional[str] = None,
                        opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetRedisInstanceResult:
     """
-    Use this data source to get available HuaweiCloud gaussdb redis instance.
+    Use this data source to get available HuaweiCloud GeminiDB Redis instance.
 
     ## Example Usage
 
@@ -326,7 +326,7 @@ def get_redis_instance_output(name: Optional[pulumi.Input[Optional[str]]] = None
                               vpc_id: Optional[pulumi.Input[Optional[str]]] = None,
                               opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetRedisInstanceResult]:
     """
-    Use this data source to get available HuaweiCloud gaussdb redis instance.
+    Use this data source to get available HuaweiCloud GeminiDB Redis instance.
 
     ## Example Usage
 

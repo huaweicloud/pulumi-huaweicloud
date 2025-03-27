@@ -41,11 +41,7 @@ class UserArgs:
         The set of arguments for constructing a User resource.
         :param pulumi.Input[str] password: Specifies the user password.
                The following conditions must be met:
-               + **8** to **32** characters
-               + It cannot be consistent with the positive and reverse order of the `account` parameter.
-               + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-               (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
-        :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] account: Specifies the user account. The value can contain `1` to `64` characters.
                If omitted, the service will automatically generate a value.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -61,26 +57,26 @@ class UserArgs:
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
-        :param pulumi.Input[str] description: Specifies the description. The value can contain **0** to **128** characters.
+        :param pulumi.Input[str] description: Specifies the description. The value can contain `0` to `128` characters.
         :param pulumi.Input[str] email: Specifies the email address.
-        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain **0** to **64** characters.
+        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain `0` to `64` characters.
         :param pulumi.Input[bool] hide_phone: Specifies whether to hide the phone number.
         :param pulumi.Input[bool] is_admin: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
         :param pulumi.Input[bool] is_send_notify: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
-        :param pulumi.Input[str] name: Specifies the user name. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] name: Specifies the user name. The value can contain `1` to `64` characters.
         :param pulumi.Input[str] phone: Specifies the phone number.
                The phone number must start with a country (region) code.
-        :param pulumi.Input[str] signature: Specifies the signature. The value can contain **0** to **512** characters.
+        :param pulumi.Input[str] signature: Specifies the signature. The value can contain `0` to `512` characters.
         :param pulumi.Input[int] sort_level: Specifies the address book sorting level.
                The lower the serial number, the higher the priority.
-               The valid value is range from **1** to **10000**. Defaults to **10000**.
+               The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         :param pulumi.Input[int] status: Specifies the status. The valid values are as follows:
                + **0**: Normal.
                + **1**: Disable.
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
-        :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
+        :param pulumi.Input[str] title: Specifies the title name. The value can contain `0` to `32` characters.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
                Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
@@ -137,10 +133,6 @@ class UserArgs:
         """
         Specifies the user password.
         The following conditions must be met:
-        + **8** to **32** characters
-        + It cannot be consistent with the positive and reverse order of the `account` parameter.
-        + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-        (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         """
         return pulumi.get(self, "password")
 
@@ -152,7 +144,7 @@ class UserArgs:
     @pulumi.getter
     def account(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user account. The value can contain **1** to **64** characters.
+        Specifies the user account. The value can contain `1` to `64` characters.
         If omitted, the service will automatically generate a value.
         Changing this parameter will create a new resource.
         """
@@ -256,7 +248,7 @@ class UserArgs:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description. The value can contain **0** to **128** characters.
+        Specifies the description. The value can contain `0` to `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -280,7 +272,7 @@ class UserArgs:
     @pulumi.getter(name="englishName")
     def english_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the english name. The value can contain **0** to **64** characters.
+        Specifies the english name. The value can contain `0` to `64` characters.
         """
         return pulumi.get(self, "english_name")
 
@@ -330,7 +322,7 @@ class UserArgs:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user name. The value can contain **1** to **64** characters.
+        Specifies the user name. The value can contain `1` to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -355,7 +347,7 @@ class UserArgs:
     @pulumi.getter
     def signature(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the signature. The value can contain **0** to **512** characters.
+        Specifies the signature. The value can contain `0` to `512` characters.
         """
         return pulumi.get(self, "signature")
 
@@ -369,7 +361,7 @@ class UserArgs:
         """
         Specifies the address book sorting level.
         The lower the serial number, the higher the priority.
-        The valid value is range from **1** to **10000**. Defaults to **10000**.
+        The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         """
         return pulumi.get(self, "sort_level")
 
@@ -407,7 +399,7 @@ class UserArgs:
     @pulumi.getter
     def title(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the title name. The value can contain **0** to **32** characters.
+        Specifies the title name. The value can contain `0` to `32` characters.
         """
         return pulumi.get(self, "title")
 
@@ -462,7 +454,7 @@ class _UserState:
                  user_id: Optional[pulumi.Input[str]] = None):
         """
         Input properties used for looking up and filtering User resources.
-        :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] account: Specifies the user account. The value can contain `1` to `64` characters.
                If omitted, the service will automatically generate a value.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -480,33 +472,29 @@ class _UserState:
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
         :param pulumi.Input[str] department_name: The department name.
         :param pulumi.Input[str] department_name_path: The department full name.
-        :param pulumi.Input[str] description: Specifies the description. The value can contain **0** to **128** characters.
+        :param pulumi.Input[str] description: Specifies the description. The value can contain `0` to `128` characters.
         :param pulumi.Input[str] email: Specifies the email address.
-        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain **0** to **64** characters.
+        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain `0` to `64` characters.
         :param pulumi.Input[bool] hide_phone: Specifies whether to hide the phone number.
         :param pulumi.Input[bool] is_admin: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
         :param pulumi.Input[bool] is_send_notify: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
-        :param pulumi.Input[str] name: Specifies the user name. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] name: Specifies the user name. The value can contain `1` to `64` characters.
         :param pulumi.Input[str] password: Specifies the user password.
                The following conditions must be met:
-               + **8** to **32** characters
-               + It cannot be consistent with the positive and reverse order of the `account` parameter.
-               + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-               (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         :param pulumi.Input[str] phone: Specifies the phone number.
                The phone number must start with a country (region) code.
-        :param pulumi.Input[str] signature: Specifies the signature. The value can contain **0** to **512** characters.
+        :param pulumi.Input[str] signature: Specifies the signature. The value can contain `0` to `512` characters.
         :param pulumi.Input[str] sip_number: The SIP number.
         :param pulumi.Input[int] sort_level: Specifies the address book sorting level.
                The lower the serial number, the higher the priority.
-               The valid value is range from **1** to **10000**. Defaults to **10000**.
+               The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         :param pulumi.Input[int] status: Specifies the status. The valid values are as follows:
                + **0**: Normal.
                + **1**: Disable.
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
-        :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
+        :param pulumi.Input[str] title: Specifies the title name. The value can contain `0` to `32` characters.
         :param pulumi.Input[int] type: The user type.
                + **2**: Enterprise member account.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
@@ -572,7 +560,7 @@ class _UserState:
     @pulumi.getter
     def account(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user account. The value can contain **1** to **64** characters.
+        Specifies the user account. The value can contain `1` to `64` characters.
         If omitted, the service will automatically generate a value.
         Changing this parameter will create a new resource.
         """
@@ -700,7 +688,7 @@ class _UserState:
     @pulumi.getter
     def description(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the description. The value can contain **0** to **128** characters.
+        Specifies the description. The value can contain `0` to `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -724,7 +712,7 @@ class _UserState:
     @pulumi.getter(name="englishName")
     def english_name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the english name. The value can contain **0** to **64** characters.
+        Specifies the english name. The value can contain `0` to `64` characters.
         """
         return pulumi.get(self, "english_name")
 
@@ -774,7 +762,7 @@ class _UserState:
     @pulumi.getter
     def name(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the user name. The value can contain **1** to **64** characters.
+        Specifies the user name. The value can contain `1` to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -788,10 +776,6 @@ class _UserState:
         """
         Specifies the user password.
         The following conditions must be met:
-        + **8** to **32** characters
-        + It cannot be consistent with the positive and reverse order of the `account` parameter.
-        + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-        (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         """
         return pulumi.get(self, "password")
 
@@ -816,7 +800,7 @@ class _UserState:
     @pulumi.getter
     def signature(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the signature. The value can contain **0** to **512** characters.
+        Specifies the signature. The value can contain `0` to `512` characters.
         """
         return pulumi.get(self, "signature")
 
@@ -842,7 +826,7 @@ class _UserState:
         """
         Specifies the address book sorting level.
         The lower the serial number, the higher the priority.
-        The valid value is range from **1** to **10000**. Defaults to **10000**.
+        The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         """
         return pulumi.get(self, "sort_level")
 
@@ -880,7 +864,7 @@ class _UserState:
     @pulumi.getter
     def title(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies the title name. The value can contain **0** to **32** characters.
+        Specifies the title name. The value can contain `0` to `32` characters.
         """
         return pulumi.get(self, "title")
 
@@ -1185,19 +1169,19 @@ class User(pulumi.CustomResource):
 
         ## Import
 
-        Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account.
+        Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+         $ pulumi import huaweicloud:Meeting/user:User test <id>/<account_name>/<account_password>
         ```
 
-         Import a user and authenticated by `APP ID`/`APP Key`.
+         Import a user and authenticated by `APP ID`/`APP Key`. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+         $ pulumi import huaweicloud:Meeting/user:User test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
         ```
 
-         The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. resource "huaweicloud_meeting_user" "test" {
+         The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. hcl resource "huaweicloud_meeting_user" "test" {
 
          ...
 
@@ -1213,7 +1197,7 @@ class User(pulumi.CustomResource):
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] account: Specifies the user account. The value can contain `1` to `64` characters.
                If omitted, the service will automatically generate a value.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -1229,32 +1213,28 @@ class User(pulumi.CustomResource):
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] country: Specifies the country to which the phone number belongs to.
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
-        :param pulumi.Input[str] description: Specifies the description. The value can contain **0** to **128** characters.
+        :param pulumi.Input[str] description: Specifies the description. The value can contain `0` to `128` characters.
         :param pulumi.Input[str] email: Specifies the email address.
-        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain **0** to **64** characters.
+        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain `0` to `64` characters.
         :param pulumi.Input[bool] hide_phone: Specifies whether to hide the phone number.
         :param pulumi.Input[bool] is_admin: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
         :param pulumi.Input[bool] is_send_notify: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
-        :param pulumi.Input[str] name: Specifies the user name. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] name: Specifies the user name. The value can contain `1` to `64` characters.
         :param pulumi.Input[str] password: Specifies the user password.
                The following conditions must be met:
-               + **8** to **32** characters
-               + It cannot be consistent with the positive and reverse order of the `account` parameter.
-               + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-               (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         :param pulumi.Input[str] phone: Specifies the phone number.
                The phone number must start with a country (region) code.
-        :param pulumi.Input[str] signature: Specifies the signature. The value can contain **0** to **512** characters.
+        :param pulumi.Input[str] signature: Specifies the signature. The value can contain `0` to `512` characters.
         :param pulumi.Input[int] sort_level: Specifies the address book sorting level.
                The lower the serial number, the higher the priority.
-               The valid value is range from **1** to **10000**. Defaults to **10000**.
+               The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         :param pulumi.Input[int] status: Specifies the status. The valid values are as follows:
                + **0**: Normal.
                + **1**: Disable.
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
-        :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
+        :param pulumi.Input[str] title: Specifies the title name. The value can contain `0` to `32` characters.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
                Only available if `app_id` is set. If omitted, the user ID of default administrator will be used.
                Changing this parameter will create a new resource.
@@ -1505,19 +1485,19 @@ class User(pulumi.CustomResource):
 
         ## Import
 
-        Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account.
+        Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+         $ pulumi import huaweicloud:Meeting/user:User test <id>/<account_name>/<account_password>
         ```
 
-         Import a user and authenticated by `APP ID`/`APP Key`.
+         Import a user and authenticated by `APP ID`/`APP Key`. bash
 
         ```sh
-         $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+         $ pulumi import huaweicloud:Meeting/user:User test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
         ```
 
-         The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. resource "huaweicloud_meeting_user" "test" {
+         The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. hcl resource "huaweicloud_meeting_user" "test" {
 
          ...
 
@@ -1651,7 +1631,7 @@ class User(pulumi.CustomResource):
         :param str resource_name: The unique name of the resulting resource.
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
-        :param pulumi.Input[str] account: Specifies the user account. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] account: Specifies the user account. The value can contain `1` to `64` characters.
                If omitted, the service will automatically generate a value.
                Changing this parameter will create a new resource.
         :param pulumi.Input[str] account_name: Specifies the (HUAWEI Cloud meeting) user account name to which the
@@ -1669,33 +1649,29 @@ class User(pulumi.CustomResource):
         :param pulumi.Input[str] department_code: Specifies the department code. Defaults to **1** (Root department).
         :param pulumi.Input[str] department_name: The department name.
         :param pulumi.Input[str] department_name_path: The department full name.
-        :param pulumi.Input[str] description: Specifies the description. The value can contain **0** to **128** characters.
+        :param pulumi.Input[str] description: Specifies the description. The value can contain `0` to `128` characters.
         :param pulumi.Input[str] email: Specifies the email address.
-        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain **0** to **64** characters.
+        :param pulumi.Input[str] english_name: Specifies the english name. The value can contain `0` to `64` characters.
         :param pulumi.Input[bool] hide_phone: Specifies whether to hide the phone number.
         :param pulumi.Input[bool] is_admin: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
         :param pulumi.Input[bool] is_send_notify: Specifies whether to send email and SMS notifications for account opening.
                Defaults to **true**.
-        :param pulumi.Input[str] name: Specifies the user name. The value can contain **1** to **64** characters.
+        :param pulumi.Input[str] name: Specifies the user name. The value can contain `1` to `64` characters.
         :param pulumi.Input[str] password: Specifies the user password.
                The following conditions must be met:
-               + **8** to **32** characters
-               + It cannot be consistent with the positive and reverse order of the `account` parameter.
-               + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-               (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         :param pulumi.Input[str] phone: Specifies the phone number.
                The phone number must start with a country (region) code.
-        :param pulumi.Input[str] signature: Specifies the signature. The value can contain **0** to **512** characters.
+        :param pulumi.Input[str] signature: Specifies the signature. The value can contain `0` to `512` characters.
         :param pulumi.Input[str] sip_number: The SIP number.
         :param pulumi.Input[int] sort_level: Specifies the address book sorting level.
                The lower the serial number, the higher the priority.
-               The valid value is range from **1** to **10000**. Defaults to **10000**.
+               The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         :param pulumi.Input[int] status: Specifies the status. The valid values are as follows:
                + **0**: Normal.
                + **1**: Disable.
         :param pulumi.Input[str] third_account: Specifies the third-party account name.
-        :param pulumi.Input[str] title: Specifies the title name. The value can contain **0** to **32** characters.
+        :param pulumi.Input[str] title: Specifies the title name. The value can contain `0` to `32` characters.
         :param pulumi.Input[int] type: The user type.
                + **2**: Enterprise member account.
         :param pulumi.Input[str] user_id: Specifies the user ID of the administrator.
@@ -1739,7 +1715,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def account(self) -> pulumi.Output[str]:
         """
-        Specifies the user account. The value can contain **1** to **64** characters.
+        Specifies the user account. The value can contain `1` to `64` characters.
         If omitted, the service will automatically generate a value.
         Changing this parameter will create a new resource.
         """
@@ -1827,7 +1803,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def description(self) -> pulumi.Output[Optional[str]]:
         """
-        Specifies the description. The value can contain **0** to **128** characters.
+        Specifies the description. The value can contain `0` to `128` characters.
         """
         return pulumi.get(self, "description")
 
@@ -1843,7 +1819,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter(name="englishName")
     def english_name(self) -> pulumi.Output[str]:
         """
-        Specifies the english name. The value can contain **0** to **64** characters.
+        Specifies the english name. The value can contain `0` to `64` characters.
         """
         return pulumi.get(self, "english_name")
 
@@ -1877,7 +1853,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def name(self) -> pulumi.Output[str]:
         """
-        Specifies the user name. The value can contain **1** to **64** characters.
+        Specifies the user name. The value can contain `1` to `64` characters.
         """
         return pulumi.get(self, "name")
 
@@ -1887,10 +1863,6 @@ class User(pulumi.CustomResource):
         """
         Specifies the user password.
         The following conditions must be met:
-        + **8** to **32** characters
-        + It cannot be consistent with the positive and reverse order of the `account` parameter.
-        + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-        (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
         """
         return pulumi.get(self, "password")
 
@@ -1907,7 +1879,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def signature(self) -> pulumi.Output[str]:
         """
-        Specifies the signature. The value can contain **0** to **512** characters.
+        Specifies the signature. The value can contain `0` to `512` characters.
         """
         return pulumi.get(self, "signature")
 
@@ -1925,7 +1897,7 @@ class User(pulumi.CustomResource):
         """
         Specifies the address book sorting level.
         The lower the serial number, the higher the priority.
-        The valid value is range from **1** to **10000**. Defaults to **10000**.
+        The valid value is range from `1` to `10,000`. Defaults to `10,000`.
         """
         return pulumi.get(self, "sort_level")
 
@@ -1951,7 +1923,7 @@ class User(pulumi.CustomResource):
     @pulumi.getter
     def title(self) -> pulumi.Output[str]:
         """
-        Specifies the title name. The value can contain **0** to **32** characters.
+        Specifies the title name. The value can contain `0` to `32` characters.
         """
         return pulumi.get(self, "title")
 

@@ -32,9 +32,21 @@ export class Database extends pulumi.CustomResource {
         return obj['__pulumiType'] === Database.__pulumiType;
     }
 
+    /**
+     * Specifies the character set used by the database.
+     */
     public readonly characterSet!: pulumi.Output<string>;
+    /**
+     * Specifies the database description.
+     */
     public readonly description!: pulumi.Output<string | undefined>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     public readonly instanceId!: pulumi.Output<string>;
+    /**
+     * Specifies the database name.
+     */
     public readonly name!: pulumi.Output<string>;
     public readonly region!: pulumi.Output<string>;
 
@@ -79,9 +91,21 @@ export class Database extends pulumi.CustomResource {
  * Input properties used for looking up and filtering Database resources.
  */
 export interface DatabaseState {
+    /**
+     * Specifies the character set used by the database.
+     */
     characterSet?: pulumi.Input<string>;
+    /**
+     * Specifies the database description.
+     */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId?: pulumi.Input<string>;
+    /**
+     * Specifies the database name.
+     */
     name?: pulumi.Input<string>;
     region?: pulumi.Input<string>;
 }
@@ -90,9 +114,21 @@ export interface DatabaseState {
  * The set of arguments for constructing a Database resource.
  */
 export interface DatabaseArgs {
+    /**
+     * Specifies the character set used by the database.
+     */
     characterSet: pulumi.Input<string>;
+    /**
+     * Specifies the database description.
+     */
     description?: pulumi.Input<string>;
+    /**
+     * Specifies the ID of the RDS Mysql instance.
+     */
     instanceId: pulumi.Input<string>;
+    /**
+     * Specifies the database name.
+     */
     name?: pulumi.Input<string>;
     region?: pulumi.Input<string>;
 }

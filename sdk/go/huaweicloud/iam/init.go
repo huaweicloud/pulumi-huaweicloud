@@ -31,16 +31,32 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &Group{}
 	case "huaweicloud:Iam/groupMembership:GroupMembership":
 		r = &GroupMembership{}
+	case "huaweicloud:Iam/groupRoleAssignment:GroupRoleAssignment":
+		r = &GroupRoleAssignment{}
+	case "huaweicloud:Iam/loginPolicy:LoginPolicy":
+		r = &LoginPolicy{}
+	case "huaweicloud:Iam/passwordPolicy:PasswordPolicy":
+		r = &PasswordPolicy{}
 	case "huaweicloud:Iam/project:Project":
 		r = &Project{}
+	case "huaweicloud:Iam/protectionPolicy:ProtectionPolicy":
+		r = &ProtectionPolicy{}
 	case "huaweicloud:Iam/provider:Provider":
 		r = &Provider{}
+	case "huaweicloud:Iam/providerConversion:ProviderConversion":
+		r = &ProviderConversion{}
 	case "huaweicloud:Iam/role:Role":
 		r = &Role{}
 	case "huaweicloud:Iam/roleAssignment:RoleAssignment":
 		r = &RoleAssignment{}
 	case "huaweicloud:Iam/user:User":
 		r = &User{}
+	case "huaweicloud:Iam/userRoleAssignment:UserRoleAssignment":
+		r = &UserRoleAssignment{}
+	case "huaweicloud:Iam/userToken:UserToken":
+		r = &UserToken{}
+	case "huaweicloud:Iam/virtualMfaDevice:VirtualMfaDevice":
+		r = &VirtualMfaDevice{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
 	}
@@ -81,12 +97,37 @@ func init() {
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Iam/groupRoleAssignment",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/loginPolicy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/passwordPolicy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Iam/project",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
+		"Iam/protectionPolicy",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
 		"Iam/provider",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/providerConversion",
 		&module{version},
 	)
 	pulumi.RegisterResourceModule(
@@ -102,6 +143,21 @@ func init() {
 	pulumi.RegisterResourceModule(
 		"huaweicloud",
 		"Iam/user",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/userRoleAssignment",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/userToken",
+		&module{version},
+	)
+	pulumi.RegisterResourceModule(
+		"huaweicloud",
+		"Iam/virtualMfaDevice",
 		&module{version},
 	)
 }

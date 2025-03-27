@@ -11,69 +11,55 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Manages a callback configuration within HuaweiCloud Live.
+// Manages a callback configuration resource within HuaweiCloud.
 //
 // > Only one callback configuration can be created for an ingestion domain name.
 //
 // ## Example Usage
-// ### Create a callback configuration for an ingest domain name
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Live"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			cfg := config.New(ctx, "")
-//			ingestDomainName := cfg.RequireObject("ingestDomainName")
-//			_, err := Live.NewDomain(ctx, "ingestDomain", &Live.DomainArgs{
-//				Type: pulumi.String("push"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Live.NewRecordCallback(ctx, "callback", &Live.RecordCallbackArgs{
-//				DomainName: pulumi.Any(ingestDomainName),
-//				Url:        pulumi.String("http://mycallback.com.cn/record_notify"),
-//				Types: pulumi.StringArray{
-//					pulumi.String("RECORD_NEW_FILE_START"),
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 //
 // ## Import
 //
-// Callback configurations can be imported using the `id`, e.g.
+// The record callback resource can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Live/recordCallback:RecordCallback test 55534eaa-533a-419d-9b40-ec427ea7195a
+//	$ pulumi import huaweicloud:Live/recordCallback:RecordCallback test <id>
 //
 // ```
+//
+//	Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`key`. It is generally recommended running `terraform plan` after importing a resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the resource. Also, you can ignore changes as below. hcl resource "huaweicloud_live_record_callback" "test" {
+//
+//	...
+//
+//	lifecycle {
+//
+//	ignore_changes = [
+//
+//	key,
+//
+//	]
+//
+//	} }
 type RecordCallback struct {
 	pulumi.CustomResourceState
 
 	// Specifies the ingest domain name.
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringOutput `pulumi:"domainName"`
+	// Specifies the callback key, which is used for authentication. This parameter is configured
+	// to protect user data security. The value can only contain letters and digits.
+	// The length cannot be less than `32` characters.
+	Key pulumi.StringOutput `pulumi:"key"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Specifies the types of recording notifications. The options are as follows:
+	// Specifies the sign type.
+	// The valid values are as follows:
+	// + **HMACSHA256**
+	// + **MD5**
+	SignType pulumi.StringOutput `pulumi:"signType"`
+	// Specifies the types of recording notifications.
+	// The valid values are as follows:
 	// + **RECORD_NEW_FILE_START**: Recording started.
 	// + **RECORD_FILE_COMPLETE**: Recording file generated.
 	// + **RECORD_OVER**: Recording completed.
@@ -126,10 +112,20 @@ type recordCallbackState struct {
 	// Specifies the ingest domain name.
 	// Changing this parameter will create a new resource.
 	DomainName *string `pulumi:"domainName"`
+	// Specifies the callback key, which is used for authentication. This parameter is configured
+	// to protect user data security. The value can only contain letters and digits.
+	// The length cannot be less than `32` characters.
+	Key *string `pulumi:"key"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the types of recording notifications. The options are as follows:
+	// Specifies the sign type.
+	// The valid values are as follows:
+	// + **HMACSHA256**
+	// + **MD5**
+	SignType *string `pulumi:"signType"`
+	// Specifies the types of recording notifications.
+	// The valid values are as follows:
 	// + **RECORD_NEW_FILE_START**: Recording started.
 	// + **RECORD_FILE_COMPLETE**: Recording file generated.
 	// + **RECORD_OVER**: Recording completed.
@@ -144,10 +140,20 @@ type RecordCallbackState struct {
 	// Specifies the ingest domain name.
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringPtrInput
+	// Specifies the callback key, which is used for authentication. This parameter is configured
+	// to protect user data security. The value can only contain letters and digits.
+	// The length cannot be less than `32` characters.
+	Key pulumi.StringPtrInput
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the types of recording notifications. The options are as follows:
+	// Specifies the sign type.
+	// The valid values are as follows:
+	// + **HMACSHA256**
+	// + **MD5**
+	SignType pulumi.StringPtrInput
+	// Specifies the types of recording notifications.
+	// The valid values are as follows:
 	// + **RECORD_NEW_FILE_START**: Recording started.
 	// + **RECORD_FILE_COMPLETE**: Recording file generated.
 	// + **RECORD_OVER**: Recording completed.
@@ -166,10 +172,20 @@ type recordCallbackArgs struct {
 	// Specifies the ingest domain name.
 	// Changing this parameter will create a new resource.
 	DomainName string `pulumi:"domainName"`
+	// Specifies the callback key, which is used for authentication. This parameter is configured
+	// to protect user data security. The value can only contain letters and digits.
+	// The length cannot be less than `32` characters.
+	Key *string `pulumi:"key"`
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
-	// Specifies the types of recording notifications. The options are as follows:
+	// Specifies the sign type.
+	// The valid values are as follows:
+	// + **HMACSHA256**
+	// + **MD5**
+	SignType *string `pulumi:"signType"`
+	// Specifies the types of recording notifications.
+	// The valid values are as follows:
 	// + **RECORD_NEW_FILE_START**: Recording started.
 	// + **RECORD_FILE_COMPLETE**: Recording file generated.
 	// + **RECORD_OVER**: Recording completed.
@@ -185,10 +201,20 @@ type RecordCallbackArgs struct {
 	// Specifies the ingest domain name.
 	// Changing this parameter will create a new resource.
 	DomainName pulumi.StringInput
+	// Specifies the callback key, which is used for authentication. This parameter is configured
+	// to protect user data security. The value can only contain letters and digits.
+	// The length cannot be less than `32` characters.
+	Key pulumi.StringPtrInput
 	// Specifies the region in which to create the resource.
 	// If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
-	// Specifies the types of recording notifications. The options are as follows:
+	// Specifies the sign type.
+	// The valid values are as follows:
+	// + **HMACSHA256**
+	// + **MD5**
+	SignType pulumi.StringPtrInput
+	// Specifies the types of recording notifications.
+	// The valid values are as follows:
 	// + **RECORD_NEW_FILE_START**: Recording started.
 	// + **RECORD_FILE_COMPLETE**: Recording file generated.
 	// + **RECORD_OVER**: Recording completed.
@@ -292,13 +318,29 @@ func (o RecordCallbackOutput) DomainName() pulumi.StringOutput {
 	return o.ApplyT(func(v *RecordCallback) pulumi.StringOutput { return v.DomainName }).(pulumi.StringOutput)
 }
 
+// Specifies the callback key, which is used for authentication. This parameter is configured
+// to protect user data security. The value can only contain letters and digits.
+// The length cannot be less than `32` characters.
+func (o RecordCallbackOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v *RecordCallback) pulumi.StringOutput { return v.Key }).(pulumi.StringOutput)
+}
+
 // Specifies the region in which to create the resource.
 // If omitted, the provider-level region will be used. Changing this parameter will create a new resource.
 func (o RecordCallbackOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *RecordCallback) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Specifies the types of recording notifications. The options are as follows:
+// Specifies the sign type.
+// The valid values are as follows:
+// + **HMACSHA256**
+// + **MD5**
+func (o RecordCallbackOutput) SignType() pulumi.StringOutput {
+	return o.ApplyT(func(v *RecordCallback) pulumi.StringOutput { return v.SignType }).(pulumi.StringOutput)
+}
+
+// Specifies the types of recording notifications.
+// The valid values are as follows:
 // + **RECORD_NEW_FILE_START**: Recording started.
 // + **RECORD_FILE_COMPLETE**: Recording file generated.
 // + **RECORD_OVER**: Recording completed.

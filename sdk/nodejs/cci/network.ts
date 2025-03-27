@@ -11,7 +11,6 @@ import * as utilities from "../utilities";
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
- * import * as huaweicloud from "@pulumi/huaweicloud";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
  * const config = new pulumi.Config();
@@ -19,9 +18,7 @@ import * as utilities from "../utilities";
  * const networkName = config.requireObject("networkName");
  * const vpcNetworkId = config.requireObject("vpcNetworkId");
  * const securityGroupId = config.requireObject("securityGroupId");
- * const testAvailabilityZones = huaweicloud.getAvailabilityZones({});
- * const testNetwork = new huaweicloud.cci.Network("testNetwork", {
- *     availabilityZone: testAvailabilityZones.then(testAvailabilityZones => testAvailabilityZones.names?[0]),
+ * const test = new huaweicloud.cci.Network("test", {
  *     namespace: namespaceName,
  *     networkId: vpcNetworkId,
  *     securityGroupId: securityGroupId,
@@ -30,7 +27,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.
+ * Networks can be imported using their `namespace` and `id`, separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cci/network:Network test <namespace>/<id>
@@ -68,14 +65,14 @@ export class Network extends pulumi.CustomResource {
      * Specifies the availability zone (AZ) to which the CCI network
      * belongs. Changing this will create a new CCI network resource.
      */
-    public readonly availabilityZone!: pulumi.Output<string>;
+    public readonly availabilityZone!: pulumi.Output<string | undefined>;
     /**
      * The network segment on which the subnet resides.
      */
     public /*out*/ readonly cidr!: pulumi.Output<string>;
     /**
      * Specifies an unique name of the CCI network resource.
-     * The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+     * The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
      * The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
      */
     public readonly name!: pulumi.Output<string>;
@@ -137,9 +134,6 @@ export class Network extends pulumi.CustomResource {
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
         } else {
             const args = argsOrState as NetworkArgs | undefined;
-            if ((!args || args.availabilityZone === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'availabilityZone'");
-            }
             if ((!args || args.namespace === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'namespace'");
             }
@@ -180,7 +174,7 @@ export interface NetworkState {
     cidr?: pulumi.Input<string>;
     /**
      * Specifies an unique name of the CCI network resource.
-     * The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+     * The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
      * The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
      */
     name?: pulumi.Input<string>;
@@ -226,10 +220,10 @@ export interface NetworkArgs {
      * Specifies the availability zone (AZ) to which the CCI network
      * belongs. Changing this will create a new CCI network resource.
      */
-    availabilityZone: pulumi.Input<string>;
+    availabilityZone?: pulumi.Input<string>;
     /**
      * Specifies an unique name of the CCI network resource.
-     * The name can contain a maximum of 200 characters, which may consist of lowercase letters, digits and hyphens (-).
+     * The name can contain a maximum of `200` characters, which may consist of lowercase letters, digits and hyphens (-).
      * The name must start and end with a lowercase letter or digit. Changing this will create a new CCI network resource.
      */
     name?: pulumi.Input<string>;

@@ -14,109 +14,56 @@ import (
 // Manage RDS Read Replica Instance resource.
 //
 // ## Example Usage
-// ### Create a Rds read replica instance
-//
-// ```go
-// package main
-//
-// import (
-//
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Vpc"
-//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Rds"
-//	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-//
-// )
-//
-//	func main() {
-//		pulumi.Run(func(ctx *pulumi.Context) error {
-//			secgroup, err := Vpc.NewSecgroup(ctx, "secgroup", &Vpc.SecgroupArgs{
-//				Description: pulumi.String("security group for rds read replica instance"),
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			instance, err := Rds.NewInstance(ctx, "instance", &Rds.InstanceArgs{
-//				Flavor:              pulumi.String("rds.pg.n1.large.2"),
-//				AvailabilityZones:   pulumi.StringArray("{{ availability_zone }}"),
-//				VpcId:               pulumi.String("{{ vpc_id }}"),
-//				SubnetId:            pulumi.String("{{ subnet_id }}"),
-//				SecurityGroupId:     secgroup.ID(),
-//				EnterpriseProjectId: pulumi.String("{{ enterprise_project_id }}"),
-//				Db: &rds.InstanceDbArgs{
-//					Type:     pulumi.String("PostgreSQL"),
-//					Version:  pulumi.String("12"),
-//					Password: pulumi.String("Huangwei!120521"),
-//					Port:     pulumi.Int(8635),
-//				},
-//				Volume: &rds.InstanceVolumeArgs{
-//					Type: pulumi.String("ULTRAHIGH"),
-//					Size: pulumi.Int(50),
-//				},
-//				BackupStrategy: &rds.InstanceBackupStrategyArgs{
-//					StartTime: pulumi.String("08:00-09:00"),
-//					KeepDays:  pulumi.Int(1),
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			_, err = Rds.NewReadReplicaInstance(ctx, "replicaInstance", &Rds.ReadReplicaInstanceArgs{
-//				Flavor:              pulumi.String("rds.pg.n1.large.2.rr"),
-//				PrimaryInstanceId:   instance.ID(),
-//				AvailabilityZone:    pulumi.String("{{ availability_zone }}"),
-//				EnterpriseProjectId: pulumi.String("{{ enterprise_project_id }}"),
-//				Volume: &rds.ReadReplicaInstanceVolumeArgs{
-//					Type: pulumi.String("ULTRAHIGH"),
-//				},
-//			})
-//			if err != nil {
-//				return err
-//			}
-//			return nil
-//		})
-//	}
-//
-// ```
 //
 // ## Import
 //
-// RDS read replica instance can be imported by `id`, e.g.
+// RDS read replica instance can be imported by `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance 92302c133d13424cbe357506ce057ea5in03
+//	$ pulumi import huaweicloud:Rds/readReplicaInstance:ReadReplicaInstance replica_instance <id>
 //
 // ```
 type ReadReplicaInstance struct {
 	pulumi.CustomResourceState
 
-	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrOutput `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringOutput `pulumi:"availabilityZone"`
 	// Specifies the charging mode of the read replica instance. Valid values
-	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 	ChargingMode pulumi.StringOutput `pulumi:"chargingMode"`
-	// Indicates the database information. Structure is documented below.
-	Dbs ReadReplicaInstanceDbArrayOutput `pulumi:"dbs"`
-	// The enterprise project id of the read replica instance.
+	// Specifies the database information. The db structure is documented below.
 	// Changing this parameter will create a new resource.
+	Db ReadReplicaInstanceDbOutput `pulumi:"db"`
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the enterprise project id of the read replica instance.
 	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
+	// Specifies an intranet floating IP address of read replica instance.
+	FixedIp pulumi.StringOutput `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor pulumi.StringOutput `pulumi:"flavor"`
-	// Specifies the DB instance name. The DB instance name of the same type must be
-	// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-	// create a new resource.
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringOutput `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringOutput `pulumi:"maintainEnd"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Specify an array of one or more parameters to be set to the read replica instance
+	// after launched. You can check on console to see which parameters supported. The parameters
+	// structure is documented below.
+	Parameters ReadReplicaInstanceParameterArrayOutput `pulumi:"parameters"`
 	// Specifies the charging period of the read replica instance. If `periodUnit` is
-	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 	Period pulumi.IntPtrOutput `pulumi:"period"`
 	// Specifies the charging period unit of the read replica instance. Valid
-	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 	// creates a new resource.
 	PeriodUnit pulumi.StringPtrOutput `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
@@ -129,10 +76,12 @@ type ReadReplicaInstance struct {
 	// The region in which to create the rds read replica instance resource. If
 	// omitted, the provider-level region will be used.
 	// Changing this parameter will create a new resource.
-	// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+	// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 	Region pulumi.StringOutput `pulumi:"region"`
-	// Indicates the security group which the RDS DB instance belongs to.
+	// Specifies the security group which the read replica instance belongs to.
 	SecurityGroupId pulumi.StringOutput `pulumi:"securityGroupId"`
+	// Specifies whether to enable the SSL for read replica instance.
+	SslEnable pulumi.BoolOutput `pulumi:"sslEnable"`
 	// Indicates the instance status.
 	Status pulumi.StringOutput `pulumi:"status"`
 	// Indicates the subnet id.
@@ -140,16 +89,16 @@ type ReadReplicaInstance struct {
 	// A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
 	// key-value pair.
 	Tags pulumi.StringMapOutput `pulumi:"tags"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type pulumi.StringOutput `pulumi:"type"`
-	// Specifies the volume information. Structure is documented below. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume information. The volume structure is
+	// documented below. Changing this parameter will create a new resource.
 	Volume ReadReplicaInstanceVolumeOutput `pulumi:"volume"`
 	// Indicates the VPC ID.
 	VpcId pulumi.StringOutput `pulumi:"vpcId"`
@@ -197,32 +146,43 @@ func GetReadReplicaInstance(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering ReadReplicaInstance resources.
 type readReplicaInstanceState struct {
-	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone *string `pulumi:"availabilityZone"`
 	// Specifies the charging mode of the read replica instance. Valid values
-	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// Indicates the database information. Structure is documented below.
-	Dbs []ReadReplicaInstanceDb `pulumi:"dbs"`
-	// The enterprise project id of the read replica instance.
+	// Specifies the database information. The db structure is documented below.
 	// Changing this parameter will create a new resource.
+	Db *ReadReplicaInstanceDb `pulumi:"db"`
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description *string `pulumi:"description"`
+	// Specifies the enterprise project id of the read replica instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies an intranet floating IP address of read replica instance.
+	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor *string `pulumi:"flavor"`
-	// Specifies the DB instance name. The DB instance name of the same type must be
-	// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-	// create a new resource.
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name *string `pulumi:"name"`
+	// Specify an array of one or more parameters to be set to the read replica instance
+	// after launched. You can check on console to see which parameters supported. The parameters
+	// structure is documented below.
+	Parameters []ReadReplicaInstanceParameter `pulumi:"parameters"`
 	// Specifies the charging period of the read replica instance. If `periodUnit` is
-	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the read replica instance. Valid
-	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 	// creates a new resource.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
@@ -235,10 +195,12 @@ type readReplicaInstanceState struct {
 	// The region in which to create the rds read replica instance resource. If
 	// omitted, the provider-level region will be used.
 	// Changing this parameter will create a new resource.
-	// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+	// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 	Region *string `pulumi:"region"`
-	// Indicates the security group which the RDS DB instance belongs to.
+	// Specifies the security group which the read replica instance belongs to.
 	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether to enable the SSL for read replica instance.
+	SslEnable *bool `pulumi:"sslEnable"`
 	// Indicates the instance status.
 	Status *string `pulumi:"status"`
 	// Indicates the subnet id.
@@ -246,48 +208,59 @@ type readReplicaInstanceState struct {
 	// A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
 	// key-value pair.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type *string `pulumi:"type"`
-	// Specifies the volume information. Structure is documented below. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume information. The volume structure is
+	// documented below. Changing this parameter will create a new resource.
 	Volume *ReadReplicaInstanceVolume `pulumi:"volume"`
 	// Indicates the VPC ID.
 	VpcId *string `pulumi:"vpcId"`
 }
 
 type ReadReplicaInstanceState struct {
-	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringPtrInput
 	// Specifies the charging mode of the read replica instance. Valid values
-	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 	ChargingMode pulumi.StringPtrInput
-	// Indicates the database information. Structure is documented below.
-	Dbs ReadReplicaInstanceDbArrayInput
-	// The enterprise project id of the read replica instance.
+	// Specifies the database information. The db structure is documented below.
 	// Changing this parameter will create a new resource.
+	Db ReadReplicaInstanceDbPtrInput
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrInput
+	// Specifies the enterprise project id of the read replica instance.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies an intranet floating IP address of read replica instance.
+	FixedIp pulumi.StringPtrInput
 	// Specifies the specification code.
 	Flavor pulumi.StringPtrInput
-	// Specifies the DB instance name. The DB instance name of the same type must be
-	// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-	// create a new resource.
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringPtrInput
+	// Specify an array of one or more parameters to be set to the read replica instance
+	// after launched. You can check on console to see which parameters supported. The parameters
+	// structure is documented below.
+	Parameters ReadReplicaInstanceParameterArrayInput
 	// Specifies the charging period of the read replica instance. If `periodUnit` is
-	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the read replica instance. Valid
-	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 	// creates a new resource.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the DB instance ID, which is used to create a read
@@ -300,10 +273,12 @@ type ReadReplicaInstanceState struct {
 	// The region in which to create the rds read replica instance resource. If
 	// omitted, the provider-level region will be used.
 	// Changing this parameter will create a new resource.
-	// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+	// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 	Region pulumi.StringPtrInput
-	// Indicates the security group which the RDS DB instance belongs to.
+	// Specifies the security group which the read replica instance belongs to.
 	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether to enable the SSL for read replica instance.
+	SslEnable pulumi.BoolPtrInput
 	// Indicates the instance status.
 	Status pulumi.StringPtrInput
 	// Indicates the subnet id.
@@ -311,16 +286,16 @@ type ReadReplicaInstanceState struct {
 	// A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
 	// key-value pair.
 	Tags pulumi.StringMapInput
-	// Specifies the volume type. Its value can be any of the following and is
-	// case-sensitive:
-	// + *ULTRAHIGH*: SSD storage.
-	// + *LOCALSSD*: local SSD storage.
-	// + *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+	// Specifies the volume type. It must same with the type of the primary instance.
+	// Its value can be any of the following and is case-sensitive:
+	// + **ULTRAHIGH**: SSD storage.
+	// + **LOCALSSD**: local SSD storage.
+	// + **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 	//   instances.
-	// + *ESSD*: extreme SSD storage.
+	// + **ESSD**: extreme SSD storage.
 	Type pulumi.StringPtrInput
-	// Specifies the volume information. Structure is documented below. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume information. The volume structure is
+	// documented below. Changing this parameter will create a new resource.
 	Volume ReadReplicaInstanceVolumePtrInput
 	// Indicates the VPC ID.
 	VpcId pulumi.StringPtrInput
@@ -331,30 +306,43 @@ func (ReadReplicaInstanceState) ElementType() reflect.Type {
 }
 
 type readReplicaInstanceArgs struct {
-	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 	AutoRenew *string `pulumi:"autoRenew"`
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone string `pulumi:"availabilityZone"`
 	// Specifies the charging mode of the read replica instance. Valid values
-	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 	ChargingMode *string `pulumi:"chargingMode"`
-	// The enterprise project id of the read replica instance.
+	// Specifies the database information. The db structure is documented below.
 	// Changing this parameter will create a new resource.
+	Db *ReadReplicaInstanceDb `pulumi:"db"`
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description *string `pulumi:"description"`
+	// Specifies the enterprise project id of the read replica instance.
 	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
+	// Specifies an intranet floating IP address of read replica instance.
+	FixedIp *string `pulumi:"fixedIp"`
 	// Specifies the specification code.
 	Flavor string `pulumi:"flavor"`
-	// Specifies the DB instance name. The DB instance name of the same type must be
-	// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-	// create a new resource.
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin *string `pulumi:"maintainBegin"`
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd *string `pulumi:"maintainEnd"`
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name *string `pulumi:"name"`
+	// Specify an array of one or more parameters to be set to the read replica instance
+	// after launched. You can check on console to see which parameters supported. The parameters
+	// structure is documented below.
+	Parameters []ReadReplicaInstanceParameter `pulumi:"parameters"`
 	// Specifies the charging period of the read replica instance. If `periodUnit` is
-	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 	Period *int `pulumi:"period"`
 	// Specifies the charging period unit of the read replica instance. Valid
-	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 	// creates a new resource.
 	PeriodUnit *string `pulumi:"periodUnit"`
 	// Specifies the DB instance ID, which is used to create a read
@@ -363,42 +351,59 @@ type readReplicaInstanceArgs struct {
 	// The region in which to create the rds read replica instance resource. If
 	// omitted, the provider-level region will be used.
 	// Changing this parameter will create a new resource.
-	// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+	// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 	Region *string `pulumi:"region"`
+	// Specifies the security group which the read replica instance belongs to.
+	SecurityGroupId *string `pulumi:"securityGroupId"`
+	// Specifies whether to enable the SSL for read replica instance.
+	SslEnable *bool `pulumi:"sslEnable"`
 	// A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
 	// key-value pair.
 	Tags map[string]string `pulumi:"tags"`
-	// Specifies the volume information. Structure is documented below. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume information. The volume structure is
+	// documented below. Changing this parameter will create a new resource.
 	Volume ReadReplicaInstanceVolume `pulumi:"volume"`
 }
 
 // The set of arguments for constructing a ReadReplicaInstance resource.
 type ReadReplicaInstanceArgs struct {
-	// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+	// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 	AutoRenew pulumi.StringPtrInput
 	// Specifies the AZ name. Changing this parameter will create a new
 	// resource.
 	AvailabilityZone pulumi.StringInput
 	// Specifies the charging mode of the read replica instance. Valid values
-	// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+	// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 	ChargingMode pulumi.StringPtrInput
-	// The enterprise project id of the read replica instance.
+	// Specifies the database information. The db structure is documented below.
 	// Changing this parameter will create a new resource.
+	Db ReadReplicaInstanceDbPtrInput
+	// Specifies the description of the instance. The value consists of 0 to 64
+	// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+	Description pulumi.StringPtrInput
+	// Specifies the enterprise project id of the read replica instance.
 	EnterpriseProjectId pulumi.StringPtrInput
+	// Specifies an intranet floating IP address of read replica instance.
+	FixedIp pulumi.StringPtrInput
 	// Specifies the specification code.
 	Flavor pulumi.StringInput
-	// Specifies the DB instance name. The DB instance name of the same type must be
-	// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-	// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-	// create a new resource.
+	// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+	MaintainBegin pulumi.StringPtrInput
+	// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+	MaintainEnd pulumi.StringPtrInput
+	// Specifies the parameter name. Some of them needs the instance to be restarted
+	// to take effect.
 	Name pulumi.StringPtrInput
+	// Specify an array of one or more parameters to be set to the read replica instance
+	// after launched. You can check on console to see which parameters supported. The parameters
+	// structure is documented below.
+	Parameters ReadReplicaInstanceParameterArrayInput
 	// Specifies the charging period of the read replica instance. If `periodUnit` is
-	// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-	// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+	// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+	// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 	Period pulumi.IntPtrInput
 	// Specifies the charging period unit of the read replica instance. Valid
-	// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+	// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 	// creates a new resource.
 	PeriodUnit pulumi.StringPtrInput
 	// Specifies the DB instance ID, which is used to create a read
@@ -407,13 +412,17 @@ type ReadReplicaInstanceArgs struct {
 	// The region in which to create the rds read replica instance resource. If
 	// omitted, the provider-level region will be used.
 	// Changing this parameter will create a new resource.
-	// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+	// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 	Region pulumi.StringPtrInput
+	// Specifies the security group which the read replica instance belongs to.
+	SecurityGroupId pulumi.StringPtrInput
+	// Specifies whether to enable the SSL for read replica instance.
+	SslEnable pulumi.BoolPtrInput
 	// A mapping of tags to assign to the RDS read replica instance. Each tag is represented by one
 	// key-value pair.
 	Tags pulumi.StringMapInput
-	// Specifies the volume information. Structure is documented below. Changing this
-	// parameter will create a new resource.
+	// Specifies the volume information. The volume structure is
+	// documented below. Changing this parameter will create a new resource.
 	Volume ReadReplicaInstanceVolumeInput
 }
 
@@ -504,7 +513,7 @@ func (o ReadReplicaInstanceOutput) ToReadReplicaInstanceOutputWithContext(ctx co
 	return o
 }
 
-// Specifies whether auto renew is enabled. Valid values are "true" and "false".
+// Specifies whether auto-renew is enabled. Valid values are **true** and **false**.
 func (o ReadReplicaInstanceOutput) AutoRenew() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringPtrOutput { return v.AutoRenew }).(pulumi.StringPtrOutput)
 }
@@ -516,20 +525,31 @@ func (o ReadReplicaInstanceOutput) AvailabilityZone() pulumi.StringOutput {
 }
 
 // Specifies the charging mode of the read replica instance. Valid values
-// are *prePaid* and *postPaid*, defaults to *postPaid*. Changing this creates a new resource.
+// are **prePaid** and **postPaid**, defaults to **postPaid**. Changing this creates a new resource.
 func (o ReadReplicaInstanceOutput) ChargingMode() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.ChargingMode }).(pulumi.StringOutput)
 }
 
-// Indicates the database information. Structure is documented below.
-func (o ReadReplicaInstanceOutput) Dbs() ReadReplicaInstanceDbArrayOutput {
-	return o.ApplyT(func(v *ReadReplicaInstance) ReadReplicaInstanceDbArrayOutput { return v.Dbs }).(ReadReplicaInstanceDbArrayOutput)
+// Specifies the database information. The db structure is documented below.
+// Changing this parameter will create a new resource.
+func (o ReadReplicaInstanceOutput) Db() ReadReplicaInstanceDbOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) ReadReplicaInstanceDbOutput { return v.Db }).(ReadReplicaInstanceDbOutput)
 }
 
-// The enterprise project id of the read replica instance.
-// Changing this parameter will create a new resource.
+// Specifies the description of the instance. The value consists of 0 to 64
+// characters, including letters, digits, periods (.), underscores (_), and hyphens (-).
+func (o ReadReplicaInstanceOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the enterprise project id of the read replica instance.
 func (o ReadReplicaInstanceOutput) EnterpriseProjectId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
+// Specifies an intranet floating IP address of read replica instance.
+func (o ReadReplicaInstanceOutput) FixedIp() pulumi.StringOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.FixedIp }).(pulumi.StringOutput)
 }
 
 // Specifies the specification code.
@@ -537,23 +557,38 @@ func (o ReadReplicaInstanceOutput) Flavor() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.Flavor }).(pulumi.StringOutput)
 }
 
-// Specifies the DB instance name. The DB instance name of the same type must be
-// unique for the same tenant. The value must be 4 to 64 characters in length and start with a letter. It is
-// case-sensitive and can contain only letters, digits, hyphens (-), and underscores (_). Changing this parameter will
-// create a new resource.
+// Specifies the time at which the maintenance time window starts, for example, **22:00**.
+func (o ReadReplicaInstanceOutput) MaintainBegin() pulumi.StringOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.MaintainBegin }).(pulumi.StringOutput)
+}
+
+// Specifies the time at which the maintenance time window ends, for example, **01:00**.
+func (o ReadReplicaInstanceOutput) MaintainEnd() pulumi.StringOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.MaintainEnd }).(pulumi.StringOutput)
+}
+
+// Specifies the parameter name. Some of them needs the instance to be restarted
+// to take effect.
 func (o ReadReplicaInstanceOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specify an array of one or more parameters to be set to the read replica instance
+// after launched. You can check on console to see which parameters supported. The parameters
+// structure is documented below.
+func (o ReadReplicaInstanceOutput) Parameters() ReadReplicaInstanceParameterArrayOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) ReadReplicaInstanceParameterArrayOutput { return v.Parameters }).(ReadReplicaInstanceParameterArrayOutput)
+}
+
 // Specifies the charging period of the read replica instance. If `periodUnit` is
-// set to *month*, the value ranges from 1 to 9. If `periodUnit` is set to *year*, the value ranges from 1 to 3. This
-// parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this creates a new resource.
+// set to **month**, the value ranges from 1 to 9. If `periodUnit` is set to **year**, the value ranges from 1 to 3.
+// This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this creates a new resource.
 func (o ReadReplicaInstanceOutput) Period() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.IntPtrOutput { return v.Period }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the charging period unit of the read replica instance. Valid
-// values are *month* and *year*. This parameter is mandatory if `chargingMode` is set to *prePaid*. Changing this
+// values are **month** and **year**. This parameter is mandatory if `chargingMode` is set to **prePaid**. Changing this
 // creates a new resource.
 func (o ReadReplicaInstanceOutput) PeriodUnit() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringPtrOutput { return v.PeriodUnit }).(pulumi.StringPtrOutput)
@@ -578,14 +613,19 @@ func (o ReadReplicaInstanceOutput) PublicIps() pulumi.StringArrayOutput {
 // The region in which to create the rds read replica instance resource. If
 // omitted, the provider-level region will be used.
 // Changing this parameter will create a new resource.
-// Currently, read replicas can be created *only* in the same region as that of the primary DB instance.
+// Currently, read replicas can be created **only** in the same region as that of the primary DB instance.
 func (o ReadReplicaInstanceOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
 }
 
-// Indicates the security group which the RDS DB instance belongs to.
+// Specifies the security group which the read replica instance belongs to.
 func (o ReadReplicaInstanceOutput) SecurityGroupId() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.SecurityGroupId }).(pulumi.StringOutput)
+}
+
+// Specifies whether to enable the SSL for read replica instance.
+func (o ReadReplicaInstanceOutput) SslEnable() pulumi.BoolOutput {
+	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.BoolOutput { return v.SslEnable }).(pulumi.BoolOutput)
 }
 
 // Indicates the instance status.
@@ -604,19 +644,19 @@ func (o ReadReplicaInstanceOutput) Tags() pulumi.StringMapOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringMapOutput { return v.Tags }).(pulumi.StringMapOutput)
 }
 
-// Specifies the volume type. Its value can be any of the following and is
-// case-sensitive:
-//   - *ULTRAHIGH*: SSD storage.
-//   - *LOCALSSD*: local SSD storage.
-//   - *CLOUDSSD*: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
+// Specifies the volume type. It must same with the type of the primary instance.
+// Its value can be any of the following and is case-sensitive:
+//   - **ULTRAHIGH**: SSD storage.
+//   - **LOCALSSD**: local SSD storage.
+//   - **CLOUDSSD**: cloud SSD storage. This storage type is supported only with general-purpose and dedicated DB
 //     instances.
-//   - *ESSD*: extreme SSD storage.
+//   - **ESSD**: extreme SSD storage.
 func (o ReadReplicaInstanceOutput) Type() pulumi.StringOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) pulumi.StringOutput { return v.Type }).(pulumi.StringOutput)
 }
 
-// Specifies the volume information. Structure is documented below. Changing this
-// parameter will create a new resource.
+// Specifies the volume information. The volume structure is
+// documented below. Changing this parameter will create a new resource.
 func (o ReadReplicaInstanceOutput) Volume() ReadReplicaInstanceVolumeOutput {
 	return o.ApplyT(func(v *ReadReplicaInstance) ReadReplicaInstanceVolumeOutput { return v.Volume }).(ReadReplicaInstanceVolumeOutput)
 }

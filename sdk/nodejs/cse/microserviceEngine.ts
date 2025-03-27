@@ -9,6 +9,7 @@ import * as utilities from "../utilities";
  * Manages a dedicated microservice engine (2.0+) resource within HuaweiCloud.
  *
  * ## Example Usage
+ * ### Create an engine for the default type CSE
  *
  * ```typescript
  * import * as pulumi from "@pulumi/pulumi";
@@ -17,12 +18,32 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const engineName = config.requireObject("engineName");
  * const networkId = config.requireObject("networkId");
- * const az1 = config.requireObject("az1");
+ * const floatingIpId = config.requireObject("floatingIpId");
+ * const availabilityZones = config.requireObject("availabilityZones");
+ * const managerPassword = config.requireObject("managerPassword");
  * const test = new huaweicloud.cse.MicroserviceEngine("test", {
  *     flavor: "cse.s1.small2",
  *     networkId: networkId,
+ *     eipId: floatingIpId,
+ *     availabilityZones: availabilityZones,
+ *     authType: "RBAC",
+ *     adminPass: managerPassword,
+ * });
+ * ```
+ * ### Create an engine for the type Nacos
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const engineName = config.requireObject("engineName");
+ * const networkId = config.requireObject("networkId");
+ * const test = new huaweicloud.cse.MicroserviceEngine("test", {
+ *     flavor: "cse.nacos2.c1.large.10",
+ *     networkId: networkId,
  *     authType: "NONE",
- *     availabilityZones: [az1],
+ *     version: "Nacos2",
  * });
  * ```
  *
@@ -34,7 +55,7 @@ import * as utilities from "../utilities";
  *  $ pulumi import huaweicloud:Cse/microserviceEngine:MicroserviceEngine test eddc5d42-f9d5-4f8e-984b-d6f3e088561c
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. resource "huaweicloud_cse_microservice_engine" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes are `admin_pass` and `extend_params`. It is generally recommended running `terraform plan` after importing an instance. You can then decide if changes should be applied to the instance, or the resource definition should be updated to align with the instance. Also you can ignore changes as below. hcl resource "huaweicloud_cse_microservice_engine" "test" {
  *
  *  ...
  *
@@ -106,7 +127,8 @@ export class MicroserviceEngine extends pulumi.CustomResource {
      */
     public readonly authType!: pulumi.Output<string>;
     /**
-     * Specifies the list of availability zone.
+     * Specifies the list of availability zones.  
+     * Required if the `version` is **CSE2**.
      * Changing this will create a new engine.
      */
     public readonly availabilityZones!: pulumi.Output<string[]>;
@@ -131,7 +153,7 @@ export class MicroserviceEngine extends pulumi.CustomResource {
      * microservice engine belongs.
      * Changing this will create a new engine.
      */
-    public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
+    public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
      * Specifies the additional parameters for the dedicated microservice engine.
      * Changing this will create a new engine.
@@ -173,8 +195,10 @@ export class MicroserviceEngine extends pulumi.CustomResource {
      */
     public /*out*/ readonly serviceRegistryAddresses!: pulumi.Output<outputs.Cse.MicroserviceEngineServiceRegistryAddress[]>;
     /**
-     * Specifies the version of the dedicated microservice engine. The value can be:
-     * **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+     * Specifies the version of the dedicated microservice engine.  
+     * The valid values are as follows:
+     * + **CSE2**
+     * + **Nacos2**
      */
     public readonly version!: pulumi.Output<string | undefined>;
 
@@ -211,9 +235,6 @@ export class MicroserviceEngine extends pulumi.CustomResource {
             const args = argsOrState as MicroserviceEngineArgs | undefined;
             if ((!args || args.authType === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'authType'");
-            }
-            if ((!args || args.availabilityZones === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'availabilityZones'");
             }
             if ((!args || args.flavor === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'flavor'");
@@ -271,7 +292,8 @@ export interface MicroserviceEngineState {
      */
     authType?: pulumi.Input<string>;
     /**
-     * Specifies the list of availability zone.
+     * Specifies the list of availability zones.  
+     * Required if the `version` is **CSE2**.
      * Changing this will create a new engine.
      */
     availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
@@ -338,8 +360,10 @@ export interface MicroserviceEngineState {
      */
     serviceRegistryAddresses?: pulumi.Input<pulumi.Input<inputs.Cse.MicroserviceEngineServiceRegistryAddress>[]>;
     /**
-     * Specifies the version of the dedicated microservice engine. The value can be:
-     * **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+     * Specifies the version of the dedicated microservice engine.  
+     * The valid values are as follows:
+     * + **CSE2**
+     * + **Nacos2**
      */
     version?: pulumi.Input<string>;
 }
@@ -372,10 +396,11 @@ export interface MicroserviceEngineArgs {
      */
     authType: pulumi.Input<string>;
     /**
-     * Specifies the list of availability zone.
+     * Specifies the list of availability zones.  
+     * Required if the `version` is **CSE2**.
      * Changing this will create a new engine.
      */
-    availabilityZones: pulumi.Input<pulumi.Input<string>[]>;
+    availabilityZones?: pulumi.Input<pulumi.Input<string>[]>;
     /**
      * Specifies the description of the dedicated microservice engine.
      * The description can contain a maximum of `255` characters.
@@ -421,8 +446,10 @@ export interface MicroserviceEngineArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the version of the dedicated microservice engine. The value can be:
-     * **CSE2**. Defaults to: **CSE2**. Changing this will create a new engine.
+     * Specifies the version of the dedicated microservice engine.  
+     * The valid values are as follows:
+     * + **CSE2**
+     * + **Nacos2**
      */
     version?: pulumi.Input<string>;
 }

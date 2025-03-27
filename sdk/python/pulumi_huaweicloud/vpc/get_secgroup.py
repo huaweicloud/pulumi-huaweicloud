@@ -152,7 +152,7 @@ def get_secgroup(enterprise_project_id: Optional[str] = None,
     :param str name: Specifies the name of the security group.
     :param str region: Specifies the region in which to obtain the security group. If omitted, the
            provider-level region will be used.
-    :param str secgroup_id: Specifiest he ID of the security group.
+    :param str secgroup_id: Specifies the ID of the security group.
     """
     __args__ = dict()
     __args__['enterpriseProjectId'] = enterprise_project_id
@@ -197,6 +197,6 @@ def get_secgroup_output(enterprise_project_id: Optional[pulumi.Input[Optional[st
     :param str name: Specifies the name of the security group.
     :param str region: Specifies the region in which to obtain the security group. If omitted, the
            provider-level region will be used.
-    :param str secgroup_id: Specifiest he ID of the security group.
+    :param str secgroup_id: Specifies the ID of the security group.
     """
     ...

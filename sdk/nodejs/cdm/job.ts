@@ -162,8 +162,8 @@ export class Job extends pulumi.CustomResource {
      */
     public readonly jobType!: pulumi.Output<string>;
     /**
-     * Specifies job name, which can contains of 1 to 240 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+     * Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -294,8 +294,8 @@ export interface JobState {
      */
     jobType?: pulumi.Input<string>;
     /**
-     * Specifies job name, which can contains of 1 to 240 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+     * Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**
@@ -358,8 +358,8 @@ export interface JobArgs {
      */
     jobType: pulumi.Input<string>;
     /**
-     * Specifies job name, which can contains of 1 to 240 characters, starting with a
-     * letter. Only letters, digits, hyphens (-), and underscores (_) are allowed.
+     * Specifies job name, which can contains of `1` to `240` characters, starting with a letter.
+     * Only letters, digits, hyphens (-), and underscores (_) are allowed.
      */
     name?: pulumi.Input<string>;
     /**

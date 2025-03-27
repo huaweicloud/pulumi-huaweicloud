@@ -297,7 +297,7 @@ class Vip(pulumi.CustomResource):
 
         ## Import
 
-        Network VIPs can be imported using their `id`, e.g.
+        Network VIPs can be imported using their `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/vip:Vip test ce595799-da26-4015-8db5-7733c6db292e
@@ -326,7 +326,7 @@ class Vip(pulumi.CustomResource):
 
         ## Import
 
-        Network VIPs can be imported using their `id`, e.g.
+        Network VIPs can be imported using their `id`, e.g.bash
 
         ```sh
          $ pulumi import huaweicloud:Vpc/vip:Vip test ce595799-da26-4015-8db5-7733c6db292e

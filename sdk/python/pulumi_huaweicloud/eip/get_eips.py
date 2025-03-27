@@ -22,7 +22,7 @@ class GetEipsResult:
     """
     A collection of values returned by getEips.
     """
-    def __init__(__self__, eips=None, enterprise_project_id=None, id=None, ids=None, ip_version=None, port_ids=None, public_ips=None, region=None, tags=None):
+    def __init__(__self__, eips=None, enterprise_project_id=None, id=None, ids=None, ip_version=None, port_ids=None, private_ips=None, public_ips=None, region=None, tags=None):
         if eips and not isinstance(eips, list):
             raise TypeError("Expected argument 'eips' to be a list")
         pulumi.set(__self__, "eips", eips)
@@ -41,6 +41,9 @@ class GetEipsResult:
         if port_ids and not isinstance(port_ids, list):
             raise TypeError("Expected argument 'port_ids' to be a list")
         pulumi.set(__self__, "port_ids", port_ids)
+        if private_ips and not isinstance(private_ips, list):
+            raise TypeError("Expected argument 'private_ips' to be a list")
+        pulumi.set(__self__, "private_ips", private_ips)
         if public_ips and not isinstance(public_ips, list):
             raise TypeError("Expected argument 'public_ips' to be a list")
         pulumi.set(__self__, "public_ips", public_ips)
@@ -94,6 +97,11 @@ class GetEipsResult:
         return pulumi.get(self, "port_ids")
 
     @property
+    @pulumi.getter(name="privateIps")
+    def private_ips(self) -> Optional[Sequence[str]]:
+        return pulumi.get(self, "private_ips")
+
+    @property
     @pulumi.getter(name="publicIps")
     def public_ips(self) -> Optional[Sequence[str]]:
         return pulumi.get(self, "public_ips")
@@ -124,6 +132,7 @@ class AwaitableGetEipsResult(GetEipsResult):
             ids=self.ids,
             ip_version=self.ip_version,
             port_ids=self.port_ids,
+            private_ips=self.private_ips,
             public_ips=self.public_ips,
             region=self.region,
             tags=self.tags)
@@ -133,6 +142,7 @@ def get_eips(enterprise_project_id: Optional[str] = None,
              ids: Optional[Sequence[str]] = None,
              ip_version: Optional[int] = None,
              port_ids: Optional[Sequence[str]] = None,
+             private_ips: Optional[Sequence[str]] = None,
              public_ips: Optional[Sequence[str]] = None,
              region: Optional[str] = None,
              tags: Optional[Mapping[str, str]] = None,
@@ -164,6 +174,7 @@ def get_eips(enterprise_project_id: Optional[str] = None,
            + `4`: IPv4.
            + `6`: IPv6.
     :param Sequence[str] port_ids: Specifies an array of one or more port ids which bound to the desired EIP.
+    :param Sequence[str] private_ips: Specifies an array of one or more private ip addresses of the desired EIP.
     :param Sequence[str] public_ips: Specifies an array of one or more public ip addresses of the desired EIP.
     :param str region: Specifies the region in which to obtain the EIP. If omitted, the provider-level region
            will be used.
@@ -174,6 +185,7 @@ def get_eips(enterprise_project_id: Optional[str] = None,
     __args__['ids'] = ids
     __args__['ipVersion'] = ip_version
     __args__['portIds'] = port_ids
+    __args__['privateIps'] = private_ips
     __args__['publicIps'] = public_ips
     __args__['region'] = region
     __args__['tags'] = tags
@@ -187,6 +199,7 @@ def get_eips(enterprise_project_id: Optional[str] = None,
         ids=__ret__.ids,
         ip_version=__ret__.ip_version,
         port_ids=__ret__.port_ids,
+        private_ips=__ret__.private_ips,
         public_ips=__ret__.public_ips,
         region=__ret__.region,
         tags=__ret__.tags)
@@ -197,6 +210,7 @@ def get_eips_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]]
                     ids: Optional[pulumi.Input[Optional[Sequence[str]]]] = None,
                     ip_version: Optional[pulumi.Input[Optional[int]]] = None,
                     port_ids: Optional[pulumi.Input[Optional[Sequence[str]]]] = None,
+                    private_ips: Optional[pulumi.Input[Optional[Sequence[str]]]] = None,
                     public_ips: Optional[pulumi.Input[Optional[Sequence[str]]]] = None,
                     region: Optional[pulumi.Input[Optional[str]]] = None,
                     tags: Optional[pulumi.Input[Optional[Mapping[str, str]]]] = None,
@@ -228,6 +242,7 @@ def get_eips_output(enterprise_project_id: Optional[pulumi.Input[Optional[str]]]
            + `4`: IPv4.
            + `6`: IPv6.
     :param Sequence[str] port_ids: Specifies an array of one or more port ids which bound to the desired EIP.
+    :param Sequence[str] private_ips: Specifies an array of one or more private ip addresses of the desired EIP.
     :param Sequence[str] public_ips: Specifies an array of one or more public ip addresses of the desired EIP.
     :param str region: Specifies the region in which to obtain the EIP. If omitted, the provider-level region
            will be used.

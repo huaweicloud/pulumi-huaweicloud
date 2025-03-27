@@ -53,11 +53,11 @@ import (
 //
 // ## Import
 //
-// Domains can be imported using the `name`, e.g.
+// Domains can be imported using the `name`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Live/domain:Domain test domainName
+//	$ pulumi import huaweicloud:Live/domain:Domain test <name>
 //
 // ```
 type Domain struct {
@@ -65,14 +65,25 @@ type Domain struct {
 
 	// CNAME record of the domain name.
 	Cname pulumi.StringOutput `pulumi:"cname"`
+	// Specifies the enterprise project ID.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringOutput `pulumi:"enterpriseProjectId"`
 	// Specifies the ingest domain name, which associates with the streaming
 	// domain name to push streams to nearby CDN nodes.
 	IngestDomainName pulumi.StringPtrOutput `pulumi:"ingestDomainName"`
+	// Specifies whether enable IPv6 switch. Defaults to **false**.
+	// This field can only be edited when `status` is **on**.
+	IsIpv6 pulumi.BoolOutput `pulumi:"isIpv6"`
 	// Specifies the domain name. Changing this parameter will create a new resource.
 	Name pulumi.StringOutput `pulumi:"name"`
 	// Specifies the region in which to create the Live domain resource. If omitted,
 	// the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
+	// Specifies the domain name acceleration service area. Valid values are:
+	// + **mainland_china**: Chinese mainland.
+	// + **outside_mainland_china**: Outside the Chinese mainland.
+	// + **global**: Global acceleration.
+	ServiceArea pulumi.StringOutput `pulumi:"serviceArea"`
 	// Specifies status of the domain name. The options are as follows:
 	// + **on**: enable the domain name.
 	// + **off**: disable the domain name.
@@ -118,14 +129,25 @@ func GetDomain(ctx *pulumi.Context,
 type domainState struct {
 	// CNAME record of the domain name.
 	Cname *string `pulumi:"cname"`
+	// Specifies the enterprise project ID.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the ingest domain name, which associates with the streaming
 	// domain name to push streams to nearby CDN nodes.
 	IngestDomainName *string `pulumi:"ingestDomainName"`
+	// Specifies whether enable IPv6 switch. Defaults to **false**.
+	// This field can only be edited when `status` is **on**.
+	IsIpv6 *bool `pulumi:"isIpv6"`
 	// Specifies the domain name. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the Live domain resource. If omitted,
 	// the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the domain name acceleration service area. Valid values are:
+	// + **mainland_china**: Chinese mainland.
+	// + **outside_mainland_china**: Outside the Chinese mainland.
+	// + **global**: Global acceleration.
+	ServiceArea *string `pulumi:"serviceArea"`
 	// Specifies status of the domain name. The options are as follows:
 	// + **on**: enable the domain name.
 	// + **off**: disable the domain name.
@@ -139,14 +161,25 @@ type domainState struct {
 type DomainState struct {
 	// CNAME record of the domain name.
 	Cname pulumi.StringPtrInput
+	// Specifies the enterprise project ID.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the ingest domain name, which associates with the streaming
 	// domain name to push streams to nearby CDN nodes.
 	IngestDomainName pulumi.StringPtrInput
+	// Specifies whether enable IPv6 switch. Defaults to **false**.
+	// This field can only be edited when `status` is **on**.
+	IsIpv6 pulumi.BoolPtrInput
 	// Specifies the domain name. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the Live domain resource. If omitted,
 	// the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the domain name acceleration service area. Valid values are:
+	// + **mainland_china**: Chinese mainland.
+	// + **outside_mainland_china**: Outside the Chinese mainland.
+	// + **global**: Global acceleration.
+	ServiceArea pulumi.StringPtrInput
 	// Specifies status of the domain name. The options are as follows:
 	// + **on**: enable the domain name.
 	// + **off**: disable the domain name.
@@ -162,14 +195,25 @@ func (DomainState) ElementType() reflect.Type {
 }
 
 type domainArgs struct {
+	// Specifies the enterprise project ID.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId *string `pulumi:"enterpriseProjectId"`
 	// Specifies the ingest domain name, which associates with the streaming
 	// domain name to push streams to nearby CDN nodes.
 	IngestDomainName *string `pulumi:"ingestDomainName"`
+	// Specifies whether enable IPv6 switch. Defaults to **false**.
+	// This field can only be edited when `status` is **on**.
+	IsIpv6 *bool `pulumi:"isIpv6"`
 	// Specifies the domain name. Changing this parameter will create a new resource.
 	Name *string `pulumi:"name"`
 	// Specifies the region in which to create the Live domain resource. If omitted,
 	// the provider-level region will be used. Changing this parameter will create a new resource.
 	Region *string `pulumi:"region"`
+	// Specifies the domain name acceleration service area. Valid values are:
+	// + **mainland_china**: Chinese mainland.
+	// + **outside_mainland_china**: Outside the Chinese mainland.
+	// + **global**: Global acceleration.
+	ServiceArea *string `pulumi:"serviceArea"`
 	// Specifies status of the domain name. The options are as follows:
 	// + **on**: enable the domain name.
 	// + **off**: disable the domain name.
@@ -182,14 +226,25 @@ type domainArgs struct {
 
 // The set of arguments for constructing a Domain resource.
 type DomainArgs struct {
+	// Specifies the enterprise project ID.
+	// Changing this parameter will create a new resource.
+	EnterpriseProjectId pulumi.StringPtrInput
 	// Specifies the ingest domain name, which associates with the streaming
 	// domain name to push streams to nearby CDN nodes.
 	IngestDomainName pulumi.StringPtrInput
+	// Specifies whether enable IPv6 switch. Defaults to **false**.
+	// This field can only be edited when `status` is **on**.
+	IsIpv6 pulumi.BoolPtrInput
 	// Specifies the domain name. Changing this parameter will create a new resource.
 	Name pulumi.StringPtrInput
 	// Specifies the region in which to create the Live domain resource. If omitted,
 	// the provider-level region will be used. Changing this parameter will create a new resource.
 	Region pulumi.StringPtrInput
+	// Specifies the domain name acceleration service area. Valid values are:
+	// + **mainland_china**: Chinese mainland.
+	// + **outside_mainland_china**: Outside the Chinese mainland.
+	// + **global**: Global acceleration.
+	ServiceArea pulumi.StringPtrInput
 	// Specifies status of the domain name. The options are as follows:
 	// + **on**: enable the domain name.
 	// + **off**: disable the domain name.
@@ -292,10 +347,22 @@ func (o DomainOutput) Cname() pulumi.StringOutput {
 	return o.ApplyT(func(v *Domain) pulumi.StringOutput { return v.Cname }).(pulumi.StringOutput)
 }
 
+// Specifies the enterprise project ID.
+// Changing this parameter will create a new resource.
+func (o DomainOutput) EnterpriseProjectId() pulumi.StringOutput {
+	return o.ApplyT(func(v *Domain) pulumi.StringOutput { return v.EnterpriseProjectId }).(pulumi.StringOutput)
+}
+
 // Specifies the ingest domain name, which associates with the streaming
 // domain name to push streams to nearby CDN nodes.
 func (o DomainOutput) IngestDomainName() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Domain) pulumi.StringPtrOutput { return v.IngestDomainName }).(pulumi.StringPtrOutput)
+}
+
+// Specifies whether enable IPv6 switch. Defaults to **false**.
+// This field can only be edited when `status` is **on**.
+func (o DomainOutput) IsIpv6() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Domain) pulumi.BoolOutput { return v.IsIpv6 }).(pulumi.BoolOutput)
 }
 
 // Specifies the domain name. Changing this parameter will create a new resource.
@@ -307,6 +374,14 @@ func (o DomainOutput) Name() pulumi.StringOutput {
 // the provider-level region will be used. Changing this parameter will create a new resource.
 func (o DomainOutput) Region() pulumi.StringOutput {
 	return o.ApplyT(func(v *Domain) pulumi.StringOutput { return v.Region }).(pulumi.StringOutput)
+}
+
+// Specifies the domain name acceleration service area. Valid values are:
+// + **mainland_china**: Chinese mainland.
+// + **outside_mainland_china**: Outside the Chinese mainland.
+// + **global**: Global acceleration.
+func (o DomainOutput) ServiceArea() pulumi.StringOutput {
+	return o.ApplyT(func(v *Domain) pulumi.StringOutput { return v.ServiceArea }).(pulumi.StringOutput)
 }
 
 // Specifies status of the domain name. The options are as follows:

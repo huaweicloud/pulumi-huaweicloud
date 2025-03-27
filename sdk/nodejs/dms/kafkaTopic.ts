@@ -2,6 +2,7 @@
 // *** Do not edit by hand unless you're certain you know what you are doing! ***
 
 import * as pulumi from "@pulumi/pulumi";
+import { input as inputs, output as outputs } from "../types";
 import * as utilities from "../utilities";
 
 /**
@@ -58,32 +59,51 @@ export class KafkaTopic extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+     * Specifies the aging time in hours.
+     * The value ranges from `1` to `720` and defaults to `72`.
      */
     public readonly agingTime!: pulumi.Output<number>;
+    /**
+     * Specifies the other topic configurations.
+     */
+    public readonly configs!: pulumi.Output<outputs.Dms.KafkaTopicConfig[]>;
+    /**
+     * Indicates the topic create time.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Specifies the description of topic.
+     */
+    public readonly description!: pulumi.Output<string | undefined>;
     /**
      * Specifies the ID of the DMS kafka instance to which the topic belongs.
      * Changing this creates a new resource.
      */
     public readonly instanceId!: pulumi.Output<string>;
     /**
-     * Specifies the name of the topic. The name starts with a letter, consists of 4 to
-     * 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-     * resource.
+     * Specifies the configuration name.
      */
     public readonly name!: pulumi.Output<string>;
     /**
-     * Specifies the partition number. The value ranges from 1 to 100.
+     * Specifies the integers list of brokers for new partitions.
+     */
+    public readonly newPartitionBrokers!: pulumi.Output<number[] | undefined>;
+    /**
+     * Specifies the partition number. The value ranges from `1` to `200`.
      */
     public readonly partitions!: pulumi.Output<number>;
+    /**
+     * Indicates whether this policy is the default policy.
+     */
+    public /*out*/ readonly policiesOnly!: pulumi.Output<boolean>;
     /**
      * The region in which to create the DMS kafka topic resource. If omitted, the
      * provider-level region will be used. Changing this creates a new resource.
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-     * Changing this creates a new resource.
+     * Specifies the replica number.
+     * The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
      */
     public readonly replicas!: pulumi.Output<number>;
     /**
@@ -94,6 +114,10 @@ export class KafkaTopic extends pulumi.CustomResource {
      * Whether or not to enable synchronous replication.
      */
     public readonly syncReplication!: pulumi.Output<boolean>;
+    /**
+     * Indicates the topic type.
+     */
+    public /*out*/ readonly type!: pulumi.Output<string>;
 
     /**
      * Create a KafkaTopic resource with the given unique name, arguments, and options.
@@ -109,13 +133,19 @@ export class KafkaTopic extends pulumi.CustomResource {
         if (opts.id) {
             const state = argsOrState as KafkaTopicState | undefined;
             resourceInputs["agingTime"] = state ? state.agingTime : undefined;
+            resourceInputs["configs"] = state ? state.configs : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["instanceId"] = state ? state.instanceId : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
+            resourceInputs["newPartitionBrokers"] = state ? state.newPartitionBrokers : undefined;
             resourceInputs["partitions"] = state ? state.partitions : undefined;
+            resourceInputs["policiesOnly"] = state ? state.policiesOnly : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["replicas"] = state ? state.replicas : undefined;
             resourceInputs["syncFlushing"] = state ? state.syncFlushing : undefined;
             resourceInputs["syncReplication"] = state ? state.syncReplication : undefined;
+            resourceInputs["type"] = state ? state.type : undefined;
         } else {
             const args = argsOrState as KafkaTopicArgs | undefined;
             if ((!args || args.instanceId === undefined) && !opts.urn) {
@@ -125,13 +155,19 @@ export class KafkaTopic extends pulumi.CustomResource {
                 throw new Error("Missing required property 'partitions'");
             }
             resourceInputs["agingTime"] = args ? args.agingTime : undefined;
+            resourceInputs["configs"] = args ? args.configs : undefined;
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["instanceId"] = args ? args.instanceId : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
+            resourceInputs["newPartitionBrokers"] = args ? args.newPartitionBrokers : undefined;
             resourceInputs["partitions"] = args ? args.partitions : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["replicas"] = args ? args.replicas : undefined;
             resourceInputs["syncFlushing"] = args ? args.syncFlushing : undefined;
             resourceInputs["syncReplication"] = args ? args.syncReplication : undefined;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["policiesOnly"] = undefined /*out*/;
+            resourceInputs["type"] = undefined /*out*/;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(KafkaTopic.__pulumiType, name, resourceInputs, opts);
@@ -143,32 +179,51 @@ export class KafkaTopic extends pulumi.CustomResource {
  */
 export interface KafkaTopicState {
     /**
-     * Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+     * Specifies the aging time in hours.
+     * The value ranges from `1` to `720` and defaults to `72`.
      */
     agingTime?: pulumi.Input<number>;
+    /**
+     * Specifies the other topic configurations.
+     */
+    configs?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaTopicConfig>[]>;
+    /**
+     * Indicates the topic create time.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Specifies the description of topic.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the ID of the DMS kafka instance to which the topic belongs.
      * Changing this creates a new resource.
      */
     instanceId?: pulumi.Input<string>;
     /**
-     * Specifies the name of the topic. The name starts with a letter, consists of 4 to
-     * 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-     * resource.
+     * Specifies the configuration name.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the partition number. The value ranges from 1 to 100.
+     * Specifies the integers list of brokers for new partitions.
+     */
+    newPartitionBrokers?: pulumi.Input<pulumi.Input<number>[]>;
+    /**
+     * Specifies the partition number. The value ranges from `1` to `200`.
      */
     partitions?: pulumi.Input<number>;
+    /**
+     * Indicates whether this policy is the default policy.
+     */
+    policiesOnly?: pulumi.Input<boolean>;
     /**
      * The region in which to create the DMS kafka topic resource. If omitted, the
      * provider-level region will be used. Changing this creates a new resource.
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-     * Changing this creates a new resource.
+     * Specifies the replica number.
+     * The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
      */
     replicas?: pulumi.Input<number>;
     /**
@@ -179,6 +234,10 @@ export interface KafkaTopicState {
      * Whether or not to enable synchronous replication.
      */
     syncReplication?: pulumi.Input<boolean>;
+    /**
+     * Indicates the topic type.
+     */
+    type?: pulumi.Input<string>;
 }
 
 /**
@@ -186,22 +245,33 @@ export interface KafkaTopicState {
  */
 export interface KafkaTopicArgs {
     /**
-     * Specifies the aging time in hours. The value ranges from 1 to 168 and defaults to 72.
+     * Specifies the aging time in hours.
+     * The value ranges from `1` to `720` and defaults to `72`.
      */
     agingTime?: pulumi.Input<number>;
+    /**
+     * Specifies the other topic configurations.
+     */
+    configs?: pulumi.Input<pulumi.Input<inputs.Dms.KafkaTopicConfig>[]>;
+    /**
+     * Specifies the description of topic.
+     */
+    description?: pulumi.Input<string>;
     /**
      * Specifies the ID of the DMS kafka instance to which the topic belongs.
      * Changing this creates a new resource.
      */
     instanceId: pulumi.Input<string>;
     /**
-     * Specifies the name of the topic. The name starts with a letter, consists of 4 to
-     * 64 characters, and supports only letters, digits, hyphens (-) and underscores (_). Changing this creates a new
-     * resource.
+     * Specifies the configuration name.
      */
     name?: pulumi.Input<string>;
     /**
-     * Specifies the partition number. The value ranges from 1 to 100.
+     * Specifies the integers list of brokers for new partitions.
+     */
+    newPartitionBrokers?: pulumi.Input<pulumi.Input<number>[]>;
+    /**
+     * Specifies the partition number. The value ranges from `1` to `200`.
      */
     partitions: pulumi.Input<number>;
     /**
@@ -210,8 +280,8 @@ export interface KafkaTopicArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies the replica number. The value ranges from 1 to 3 and defaults to 3.
-     * Changing this creates a new resource.
+     * Specifies the replica number.
+     * The value ranges from `1` to `3` and defaults to `3`. Changing this creates a new resource.
      */
     replicas?: pulumi.Input<number>;
     /**

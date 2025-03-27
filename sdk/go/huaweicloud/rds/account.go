@@ -14,10 +14,17 @@ import (
 type Account struct {
 	pulumi.CustomResourceState
 
+	// Specifies remarks of the DB account.
+	Description pulumi.StringPtrOutput `pulumi:"description"`
+	// Specifies the IP addresses that are allowed to access your DB instance.
+	Hosts pulumi.StringArrayOutput `pulumi:"hosts"`
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId pulumi.StringOutput `pulumi:"instanceId"`
-	Name       pulumi.StringOutput `pulumi:"name"`
-	Password   pulumi.StringOutput `pulumi:"password"`
-	Region     pulumi.StringOutput `pulumi:"region"`
+	// Specifies the username of the DB account.
+	Name pulumi.StringOutput `pulumi:"name"`
+	// Specifies the password of the DB account.
+	Password pulumi.StringOutput `pulumi:"password"`
+	Region   pulumi.StringOutput `pulumi:"region"`
 }
 
 // NewAccount registers a new resource with the given unique name, arguments, and options.
@@ -56,17 +63,31 @@ func GetAccount(ctx *pulumi.Context,
 
 // Input properties used for looking up and filtering Account resources.
 type accountState struct {
+	// Specifies remarks of the DB account.
+	Description *string `pulumi:"description"`
+	// Specifies the IP addresses that are allowed to access your DB instance.
+	Hosts []string `pulumi:"hosts"`
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId *string `pulumi:"instanceId"`
-	Name       *string `pulumi:"name"`
-	Password   *string `pulumi:"password"`
-	Region     *string `pulumi:"region"`
+	// Specifies the username of the DB account.
+	Name *string `pulumi:"name"`
+	// Specifies the password of the DB account.
+	Password *string `pulumi:"password"`
+	Region   *string `pulumi:"region"`
 }
 
 type AccountState struct {
+	// Specifies remarks of the DB account.
+	Description pulumi.StringPtrInput
+	// Specifies the IP addresses that are allowed to access your DB instance.
+	Hosts pulumi.StringArrayInput
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId pulumi.StringPtrInput
-	Name       pulumi.StringPtrInput
-	Password   pulumi.StringPtrInput
-	Region     pulumi.StringPtrInput
+	// Specifies the username of the DB account.
+	Name pulumi.StringPtrInput
+	// Specifies the password of the DB account.
+	Password pulumi.StringPtrInput
+	Region   pulumi.StringPtrInput
 }
 
 func (AccountState) ElementType() reflect.Type {
@@ -74,18 +95,32 @@ func (AccountState) ElementType() reflect.Type {
 }
 
 type accountArgs struct {
-	InstanceId string  `pulumi:"instanceId"`
-	Name       *string `pulumi:"name"`
-	Password   string  `pulumi:"password"`
-	Region     *string `pulumi:"region"`
+	// Specifies remarks of the DB account.
+	Description *string `pulumi:"description"`
+	// Specifies the IP addresses that are allowed to access your DB instance.
+	Hosts []string `pulumi:"hosts"`
+	// Specifies the ID of the RDS Mysql instance.
+	InstanceId string `pulumi:"instanceId"`
+	// Specifies the username of the DB account.
+	Name *string `pulumi:"name"`
+	// Specifies the password of the DB account.
+	Password string  `pulumi:"password"`
+	Region   *string `pulumi:"region"`
 }
 
 // The set of arguments for constructing a Account resource.
 type AccountArgs struct {
+	// Specifies remarks of the DB account.
+	Description pulumi.StringPtrInput
+	// Specifies the IP addresses that are allowed to access your DB instance.
+	Hosts pulumi.StringArrayInput
+	// Specifies the ID of the RDS Mysql instance.
 	InstanceId pulumi.StringInput
-	Name       pulumi.StringPtrInput
-	Password   pulumi.StringInput
-	Region     pulumi.StringPtrInput
+	// Specifies the username of the DB account.
+	Name pulumi.StringPtrInput
+	// Specifies the password of the DB account.
+	Password pulumi.StringInput
+	Region   pulumi.StringPtrInput
 }
 
 func (AccountArgs) ElementType() reflect.Type {
@@ -175,14 +210,27 @@ func (o AccountOutput) ToAccountOutputWithContext(ctx context.Context) AccountOu
 	return o
 }
 
+// Specifies remarks of the DB account.
+func (o AccountOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Account) pulumi.StringPtrOutput { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the IP addresses that are allowed to access your DB instance.
+func (o AccountOutput) Hosts() pulumi.StringArrayOutput {
+	return o.ApplyT(func(v *Account) pulumi.StringArrayOutput { return v.Hosts }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the ID of the RDS Mysql instance.
 func (o AccountOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.InstanceId }).(pulumi.StringOutput)
 }
 
+// Specifies the username of the DB account.
 func (o AccountOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
 }
 
+// Specifies the password of the DB account.
 func (o AccountOutput) Password() pulumi.StringOutput {
 	return o.ApplyT(func(v *Account) pulumi.StringOutput { return v.Password }).(pulumi.StringOutput)
 }

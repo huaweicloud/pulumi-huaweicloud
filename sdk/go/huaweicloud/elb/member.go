@@ -48,7 +48,7 @@ import (
 //
 // ## Import
 //
-// ELB member can be imported using the pool ID and member ID separated by a slash, e.g.
+// ELB member can be imported using the pool ID and member ID separated by a slash, e.g. bash
 //
 // ```sh
 //
@@ -60,10 +60,15 @@ type Member struct {
 
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address      pulumi.StringOutput  `pulumi:"address"`
+	Address pulumi.StringOutput `pulumi:"address"`
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrOutput `pulumi:"adminStateUp"`
+	// Indicates the administrative status of the backend server.
+	BackendServerStatus pulumi.BoolOutput `pulumi:"backendServerStatus"`
 	// Human-readable name for the member.
 	Name pulumi.StringOutput `pulumi:"name"`
+	// Indicates the health check result of the backend server.
+	OperatingStatus pulumi.StringOutput `pulumi:"operatingStatus"`
 	// The id of the pool that this member will be assigned to.
 	PoolId pulumi.StringOutput `pulumi:"poolId"`
 	// The port on which to listen for client traffic. Changing this creates a
@@ -126,10 +131,15 @@ func GetMember(ctx *pulumi.Context,
 type memberState struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address      *string `pulumi:"address"`
-	AdminStateUp *bool   `pulumi:"adminStateUp"`
+	Address *string `pulumi:"address"`
+	// schema: Deprecated
+	AdminStateUp *bool `pulumi:"adminStateUp"`
+	// Indicates the administrative status of the backend server.
+	BackendServerStatus *bool `pulumi:"backendServerStatus"`
 	// Human-readable name for the member.
 	Name *string `pulumi:"name"`
+	// Indicates the health check result of the backend server.
+	OperatingStatus *string `pulumi:"operatingStatus"`
 	// The id of the pool that this member will be assigned to.
 	PoolId *string `pulumi:"poolId"`
 	// The port on which to listen for client traffic. Changing this creates a
@@ -151,10 +161,15 @@ type memberState struct {
 type MemberState struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address      pulumi.StringPtrInput
+	Address pulumi.StringPtrInput
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrInput
+	// Indicates the administrative status of the backend server.
+	BackendServerStatus pulumi.BoolPtrInput
 	// Human-readable name for the member.
 	Name pulumi.StringPtrInput
+	// Indicates the health check result of the backend server.
+	OperatingStatus pulumi.StringPtrInput
 	// The id of the pool that this member will be assigned to.
 	PoolId pulumi.StringPtrInput
 	// The port on which to listen for client traffic. Changing this creates a
@@ -180,8 +195,9 @@ func (MemberState) ElementType() reflect.Type {
 type memberArgs struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address      string `pulumi:"address"`
-	AdminStateUp *bool  `pulumi:"adminStateUp"`
+	Address string `pulumi:"address"`
+	// schema: Deprecated
+	AdminStateUp *bool `pulumi:"adminStateUp"`
 	// Human-readable name for the member.
 	Name *string `pulumi:"name"`
 	// The id of the pool that this member will be assigned to.
@@ -206,7 +222,8 @@ type memberArgs struct {
 type MemberArgs struct {
 	// The IP address of the member to receive traffic from the load balancer.
 	// Changing this creates a new member.
-	Address      pulumi.StringInput
+	Address pulumi.StringInput
+	// schema: Deprecated
 	AdminStateUp pulumi.BoolPtrInput
 	// Human-readable name for the member.
 	Name pulumi.StringPtrInput
@@ -321,13 +338,24 @@ func (o MemberOutput) Address() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.Address }).(pulumi.StringOutput)
 }
 
+// schema: Deprecated
 func (o MemberOutput) AdminStateUp() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v *Member) pulumi.BoolPtrOutput { return v.AdminStateUp }).(pulumi.BoolPtrOutput)
+}
+
+// Indicates the administrative status of the backend server.
+func (o MemberOutput) BackendServerStatus() pulumi.BoolOutput {
+	return o.ApplyT(func(v *Member) pulumi.BoolOutput { return v.BackendServerStatus }).(pulumi.BoolOutput)
 }
 
 // Human-readable name for the member.
 func (o MemberOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.Name }).(pulumi.StringOutput)
+}
+
+// Indicates the health check result of the backend server.
+func (o MemberOutput) OperatingStatus() pulumi.StringOutput {
+	return o.ApplyT(func(v *Member) pulumi.StringOutput { return v.OperatingStatus }).(pulumi.StringOutput)
 }
 
 // The id of the pool that this member will be assigned to.

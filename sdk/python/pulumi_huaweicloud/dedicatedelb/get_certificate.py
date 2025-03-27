@@ -116,7 +116,7 @@ def get_certificate(name: Optional[str] = None,
                     region: Optional[str] = None,
                     opts: Optional[pulumi.InvokeOptions] = None) -> AwaitableGetCertificateResult:
     """
-    Use this data source to get the certificate in HuaweiCloud Dedicated Load Balance (Dedicated ELB).
+    Use this data source to get the certificate in Dedicated Load Balance (Dedicated ELB).
 
     ## Example Usage
 
@@ -155,7 +155,7 @@ def get_certificate_output(name: Optional[pulumi.Input[str]] = None,
                            region: Optional[pulumi.Input[Optional[str]]] = None,
                            opts: Optional[pulumi.InvokeOptions] = None) -> pulumi.Output[GetCertificateResult]:
     """
-    Use this data source to get the certificate in HuaweiCloud Dedicated Load Balance (Dedicated ELB).
+    Use this data source to get the certificate in Dedicated Load Balance (Dedicated ELB).
 
     ## Example Usage
 

@@ -5,6 +5,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "../utilities";
 
 /**
+ * !> **WARNING:** It has been deprecated, use `huaweicloud.Vpc.NetworkAcl` instead.
+ *
  * Manages a network ACL resource within HuaweiCloud.
  *
  * ## Example Usage

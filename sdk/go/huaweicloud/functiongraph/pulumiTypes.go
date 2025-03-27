@@ -11,8 +11,22 @@ import (
 )
 
 type FunctionCustomImage struct {
+	// Specifies the command line arguments used to start the SWR image.\
+	// If multiple arguments are separated by commas (,). e.g. `-args,value`.
+	// If this parameter is not specified, the CMD in the image configuration will be used by default.
+	Args *string `pulumi:"args"`
+	// Specifies the startup commands of the SWR image.\
+	// Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+	// If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+	Command *string `pulumi:"command"`
 	// Specifies the URL of SWR image, the URL must start with `swr.`.
-	Url string `pulumi:"url"`
+	Url         string  `pulumi:"url"`
+	UserGroupId *string `pulumi:"userGroupId"`
+	UserId      *string `pulumi:"userId"`
+	// Specifies the working directory of the SWR image.\
+	// If not specified, the default value is `/`.
+	// Currently, the folder path can only be set to `/` and it cannot be created or modified.
+	WorkingDir *string `pulumi:"workingDir"`
 }
 
 // FunctionCustomImageInput is an input type that accepts FunctionCustomImageArgs and FunctionCustomImageOutput values.
@@ -27,8 +41,22 @@ type FunctionCustomImageInput interface {
 }
 
 type FunctionCustomImageArgs struct {
+	// Specifies the command line arguments used to start the SWR image.\
+	// If multiple arguments are separated by commas (,). e.g. `-args,value`.
+	// If this parameter is not specified, the CMD in the image configuration will be used by default.
+	Args pulumi.StringPtrInput `pulumi:"args"`
+	// Specifies the startup commands of the SWR image.\
+	// Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+	// If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+	Command pulumi.StringPtrInput `pulumi:"command"`
 	// Specifies the URL of SWR image, the URL must start with `swr.`.
-	Url pulumi.StringInput `pulumi:"url"`
+	Url         pulumi.StringInput    `pulumi:"url"`
+	UserGroupId pulumi.StringPtrInput `pulumi:"userGroupId"`
+	UserId      pulumi.StringPtrInput `pulumi:"userId"`
+	// Specifies the working directory of the SWR image.\
+	// If not specified, the default value is `/`.
+	// Currently, the folder path can only be set to `/` and it cannot be created or modified.
+	WorkingDir pulumi.StringPtrInput `pulumi:"workingDir"`
 }
 
 func (FunctionCustomImageArgs) ElementType() reflect.Type {
@@ -108,9 +136,38 @@ func (o FunctionCustomImageOutput) ToFunctionCustomImagePtrOutputWithContext(ctx
 	}).(FunctionCustomImagePtrOutput)
 }
 
+// Specifies the command line arguments used to start the SWR image.\
+// If multiple arguments are separated by commas (,). e.g. `-args,value`.
+// If this parameter is not specified, the CMD in the image configuration will be used by default.
+func (o FunctionCustomImageOutput) Args() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionCustomImage) *string { return v.Args }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the startup commands of the SWR image.\
+// Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+// If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+func (o FunctionCustomImageOutput) Command() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionCustomImage) *string { return v.Command }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the URL of SWR image, the URL must start with `swr.`.
 func (o FunctionCustomImageOutput) Url() pulumi.StringOutput {
 	return o.ApplyT(func(v FunctionCustomImage) string { return v.Url }).(pulumi.StringOutput)
+}
+
+func (o FunctionCustomImageOutput) UserGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionCustomImage) *string { return v.UserGroupId }).(pulumi.StringPtrOutput)
+}
+
+func (o FunctionCustomImageOutput) UserId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionCustomImage) *string { return v.UserId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the working directory of the SWR image.\
+// If not specified, the default value is `/`.
+// Currently, the folder path can only be set to `/` and it cannot be created or modified.
+func (o FunctionCustomImageOutput) WorkingDir() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionCustomImage) *string { return v.WorkingDir }).(pulumi.StringPtrOutput)
 }
 
 type FunctionCustomImagePtrOutput struct{ *pulumi.OutputState }
@@ -137,6 +194,30 @@ func (o FunctionCustomImagePtrOutput) Elem() FunctionCustomImageOutput {
 	}).(FunctionCustomImageOutput)
 }
 
+// Specifies the command line arguments used to start the SWR image.\
+// If multiple arguments are separated by commas (,). e.g. `-args,value`.
+// If this parameter is not specified, the CMD in the image configuration will be used by default.
+func (o FunctionCustomImagePtrOutput) Args() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionCustomImage) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Args
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the startup commands of the SWR image.\
+// Multiple commands are separated by commas (,). e.g. `/bin/sh`.
+// If this parameter is not specified, the entrypoint or CMD in the image configuration will be used by default.
+func (o FunctionCustomImagePtrOutput) Command() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionCustomImage) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Command
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the URL of SWR image, the URL must start with `swr.`.
 func (o FunctionCustomImagePtrOutput) Url() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *FunctionCustomImage) *string {
@@ -147,16 +228,50 @@ func (o FunctionCustomImagePtrOutput) Url() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+func (o FunctionCustomImagePtrOutput) UserGroupId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionCustomImage) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserGroupId
+	}).(pulumi.StringPtrOutput)
+}
+
+func (o FunctionCustomImagePtrOutput) UserId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionCustomImage) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserId
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the working directory of the SWR image.\
+// If not specified, the default value is `/`.
+// Currently, the folder path can only be set to `/` and it cannot be created or modified.
+func (o FunctionCustomImagePtrOutput) WorkingDir() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionCustomImage) *string {
+		if v == nil {
+			return nil
+		}
+		return v.WorkingDir
+	}).(pulumi.StringPtrOutput)
+}
+
 type FunctionFuncMount struct {
 	// Specifies the function access path.
 	LocalMountPath string `pulumi:"localMountPath"`
 	// Specifies the ID of the mounted resource (corresponding cloud service).
 	MountResource string `pulumi:"mountResource"`
-	// Specifies the remote mount path. Example: 192.168.0.12:/data.
+	// Specifies the remote mount path, e.g. **192.168.0.12:/data**.
 	MountSharePath string `pulumi:"mountSharePath"`
-	// Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
-	MountType string  `pulumi:"mountType"`
-	Status    *string `pulumi:"status"`
+	// Specifies the mount type.
+	// + **sfs**
+	// + **sfsTurbo**
+	// + **ecs**
+	MountType string `pulumi:"mountType"`
+	// The mount status.
+	Status *string `pulumi:"status"`
 }
 
 // FunctionFuncMountInput is an input type that accepts FunctionFuncMountArgs and FunctionFuncMountOutput values.
@@ -175,11 +290,15 @@ type FunctionFuncMountArgs struct {
 	LocalMountPath pulumi.StringInput `pulumi:"localMountPath"`
 	// Specifies the ID of the mounted resource (corresponding cloud service).
 	MountResource pulumi.StringInput `pulumi:"mountResource"`
-	// Specifies the remote mount path. Example: 192.168.0.12:/data.
+	// Specifies the remote mount path, e.g. **192.168.0.12:/data**.
 	MountSharePath pulumi.StringInput `pulumi:"mountSharePath"`
-	// Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
-	MountType pulumi.StringInput    `pulumi:"mountType"`
-	Status    pulumi.StringPtrInput `pulumi:"status"`
+	// Specifies the mount type.
+	// + **sfs**
+	// + **sfsTurbo**
+	// + **ecs**
+	MountType pulumi.StringInput `pulumi:"mountType"`
+	// The mount status.
+	Status pulumi.StringPtrInput `pulumi:"status"`
 }
 
 func (FunctionFuncMountArgs) ElementType() reflect.Type {
@@ -243,16 +362,20 @@ func (o FunctionFuncMountOutput) MountResource() pulumi.StringOutput {
 	return o.ApplyT(func(v FunctionFuncMount) string { return v.MountResource }).(pulumi.StringOutput)
 }
 
-// Specifies the remote mount path. Example: 192.168.0.12:/data.
+// Specifies the remote mount path, e.g. **192.168.0.12:/data**.
 func (o FunctionFuncMountOutput) MountSharePath() pulumi.StringOutput {
 	return o.ApplyT(func(v FunctionFuncMount) string { return v.MountSharePath }).(pulumi.StringOutput)
 }
 
-// Specifies the mount type. Options: sfs, sfsTurbo, and ecs.
+// Specifies the mount type.
+// + **sfs**
+// + **sfsTurbo**
+// + **ecs**
 func (o FunctionFuncMountOutput) MountType() pulumi.StringOutput {
 	return o.ApplyT(func(v FunctionFuncMount) string { return v.MountType }).(pulumi.StringOutput)
 }
 
+// The mount status.
 func (o FunctionFuncMountOutput) Status() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v FunctionFuncMount) *string { return v.Status }).(pulumi.StringPtrOutput)
 }
@@ -275,6 +398,1211 @@ func (o FunctionFuncMountArrayOutput) Index(i pulumi.IntInput) FunctionFuncMount
 	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionFuncMount {
 		return vs[0].([]FunctionFuncMount)[vs[1].(int)]
 	}).(FunctionFuncMountOutput)
+}
+
+type FunctionNetworkController struct {
+	// Specifies whether to disable the public network access.
+	DisablePublicNetwork *bool `pulumi:"disablePublicNetwork"`
+	// Specifies the configuration of the VPCs that can trigger the function.\
+	// The triggerAccessVpcs structure is documented below.
+	TriggerAccessVpcs []FunctionNetworkControllerTriggerAccessVpc `pulumi:"triggerAccessVpcs"`
+}
+
+// FunctionNetworkControllerInput is an input type that accepts FunctionNetworkControllerArgs and FunctionNetworkControllerOutput values.
+// You can construct a concrete instance of `FunctionNetworkControllerInput` via:
+//
+//	FunctionNetworkControllerArgs{...}
+type FunctionNetworkControllerInput interface {
+	pulumi.Input
+
+	ToFunctionNetworkControllerOutput() FunctionNetworkControllerOutput
+	ToFunctionNetworkControllerOutputWithContext(context.Context) FunctionNetworkControllerOutput
+}
+
+type FunctionNetworkControllerArgs struct {
+	// Specifies whether to disable the public network access.
+	DisablePublicNetwork pulumi.BoolPtrInput `pulumi:"disablePublicNetwork"`
+	// Specifies the configuration of the VPCs that can trigger the function.\
+	// The triggerAccessVpcs structure is documented below.
+	TriggerAccessVpcs FunctionNetworkControllerTriggerAccessVpcArrayInput `pulumi:"triggerAccessVpcs"`
+}
+
+func (FunctionNetworkControllerArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionNetworkController)(nil)).Elem()
+}
+
+func (i FunctionNetworkControllerArgs) ToFunctionNetworkControllerOutput() FunctionNetworkControllerOutput {
+	return i.ToFunctionNetworkControllerOutputWithContext(context.Background())
+}
+
+func (i FunctionNetworkControllerArgs) ToFunctionNetworkControllerOutputWithContext(ctx context.Context) FunctionNetworkControllerOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionNetworkControllerOutput)
+}
+
+func (i FunctionNetworkControllerArgs) ToFunctionNetworkControllerPtrOutput() FunctionNetworkControllerPtrOutput {
+	return i.ToFunctionNetworkControllerPtrOutputWithContext(context.Background())
+}
+
+func (i FunctionNetworkControllerArgs) ToFunctionNetworkControllerPtrOutputWithContext(ctx context.Context) FunctionNetworkControllerPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionNetworkControllerOutput).ToFunctionNetworkControllerPtrOutputWithContext(ctx)
+}
+
+// FunctionNetworkControllerPtrInput is an input type that accepts FunctionNetworkControllerArgs, FunctionNetworkControllerPtr and FunctionNetworkControllerPtrOutput values.
+// You can construct a concrete instance of `FunctionNetworkControllerPtrInput` via:
+//
+//	        FunctionNetworkControllerArgs{...}
+//
+//	or:
+//
+//	        nil
+type FunctionNetworkControllerPtrInput interface {
+	pulumi.Input
+
+	ToFunctionNetworkControllerPtrOutput() FunctionNetworkControllerPtrOutput
+	ToFunctionNetworkControllerPtrOutputWithContext(context.Context) FunctionNetworkControllerPtrOutput
+}
+
+type functionNetworkControllerPtrType FunctionNetworkControllerArgs
+
+func FunctionNetworkControllerPtr(v *FunctionNetworkControllerArgs) FunctionNetworkControllerPtrInput {
+	return (*functionNetworkControllerPtrType)(v)
+}
+
+func (*functionNetworkControllerPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionNetworkController)(nil)).Elem()
+}
+
+func (i *functionNetworkControllerPtrType) ToFunctionNetworkControllerPtrOutput() FunctionNetworkControllerPtrOutput {
+	return i.ToFunctionNetworkControllerPtrOutputWithContext(context.Background())
+}
+
+func (i *functionNetworkControllerPtrType) ToFunctionNetworkControllerPtrOutputWithContext(ctx context.Context) FunctionNetworkControllerPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionNetworkControllerPtrOutput)
+}
+
+type FunctionNetworkControllerOutput struct{ *pulumi.OutputState }
+
+func (FunctionNetworkControllerOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionNetworkController)(nil)).Elem()
+}
+
+func (o FunctionNetworkControllerOutput) ToFunctionNetworkControllerOutput() FunctionNetworkControllerOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerOutput) ToFunctionNetworkControllerOutputWithContext(ctx context.Context) FunctionNetworkControllerOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerOutput) ToFunctionNetworkControllerPtrOutput() FunctionNetworkControllerPtrOutput {
+	return o.ToFunctionNetworkControllerPtrOutputWithContext(context.Background())
+}
+
+func (o FunctionNetworkControllerOutput) ToFunctionNetworkControllerPtrOutputWithContext(ctx context.Context) FunctionNetworkControllerPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v FunctionNetworkController) *FunctionNetworkController {
+		return &v
+	}).(FunctionNetworkControllerPtrOutput)
+}
+
+// Specifies whether to disable the public network access.
+func (o FunctionNetworkControllerOutput) DisablePublicNetwork() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v FunctionNetworkController) *bool { return v.DisablePublicNetwork }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the configuration of the VPCs that can trigger the function.\
+// The triggerAccessVpcs structure is documented below.
+func (o FunctionNetworkControllerOutput) TriggerAccessVpcs() FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return o.ApplyT(func(v FunctionNetworkController) []FunctionNetworkControllerTriggerAccessVpc {
+		return v.TriggerAccessVpcs
+	}).(FunctionNetworkControllerTriggerAccessVpcArrayOutput)
+}
+
+type FunctionNetworkControllerPtrOutput struct{ *pulumi.OutputState }
+
+func (FunctionNetworkControllerPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionNetworkController)(nil)).Elem()
+}
+
+func (o FunctionNetworkControllerPtrOutput) ToFunctionNetworkControllerPtrOutput() FunctionNetworkControllerPtrOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerPtrOutput) ToFunctionNetworkControllerPtrOutputWithContext(ctx context.Context) FunctionNetworkControllerPtrOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerPtrOutput) Elem() FunctionNetworkControllerOutput {
+	return o.ApplyT(func(v *FunctionNetworkController) FunctionNetworkController {
+		if v != nil {
+			return *v
+		}
+		var ret FunctionNetworkController
+		return ret
+	}).(FunctionNetworkControllerOutput)
+}
+
+// Specifies whether to disable the public network access.
+func (o FunctionNetworkControllerPtrOutput) DisablePublicNetwork() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *FunctionNetworkController) *bool {
+		if v == nil {
+			return nil
+		}
+		return v.DisablePublicNetwork
+	}).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the configuration of the VPCs that can trigger the function.\
+// The triggerAccessVpcs structure is documented below.
+func (o FunctionNetworkControllerPtrOutput) TriggerAccessVpcs() FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return o.ApplyT(func(v *FunctionNetworkController) []FunctionNetworkControllerTriggerAccessVpc {
+		if v == nil {
+			return nil
+		}
+		return v.TriggerAccessVpcs
+	}).(FunctionNetworkControllerTriggerAccessVpcArrayOutput)
+}
+
+type FunctionNetworkControllerTriggerAccessVpc struct {
+	// Specifies the ID of the VPC that can trigger the function.
+	VpcId string `pulumi:"vpcId"`
+}
+
+// FunctionNetworkControllerTriggerAccessVpcInput is an input type that accepts FunctionNetworkControllerTriggerAccessVpcArgs and FunctionNetworkControllerTriggerAccessVpcOutput values.
+// You can construct a concrete instance of `FunctionNetworkControllerTriggerAccessVpcInput` via:
+//
+//	FunctionNetworkControllerTriggerAccessVpcArgs{...}
+type FunctionNetworkControllerTriggerAccessVpcInput interface {
+	pulumi.Input
+
+	ToFunctionNetworkControllerTriggerAccessVpcOutput() FunctionNetworkControllerTriggerAccessVpcOutput
+	ToFunctionNetworkControllerTriggerAccessVpcOutputWithContext(context.Context) FunctionNetworkControllerTriggerAccessVpcOutput
+}
+
+type FunctionNetworkControllerTriggerAccessVpcArgs struct {
+	// Specifies the ID of the VPC that can trigger the function.
+	VpcId pulumi.StringInput `pulumi:"vpcId"`
+}
+
+func (FunctionNetworkControllerTriggerAccessVpcArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionNetworkControllerTriggerAccessVpc)(nil)).Elem()
+}
+
+func (i FunctionNetworkControllerTriggerAccessVpcArgs) ToFunctionNetworkControllerTriggerAccessVpcOutput() FunctionNetworkControllerTriggerAccessVpcOutput {
+	return i.ToFunctionNetworkControllerTriggerAccessVpcOutputWithContext(context.Background())
+}
+
+func (i FunctionNetworkControllerTriggerAccessVpcArgs) ToFunctionNetworkControllerTriggerAccessVpcOutputWithContext(ctx context.Context) FunctionNetworkControllerTriggerAccessVpcOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionNetworkControllerTriggerAccessVpcOutput)
+}
+
+// FunctionNetworkControllerTriggerAccessVpcArrayInput is an input type that accepts FunctionNetworkControllerTriggerAccessVpcArray and FunctionNetworkControllerTriggerAccessVpcArrayOutput values.
+// You can construct a concrete instance of `FunctionNetworkControllerTriggerAccessVpcArrayInput` via:
+//
+//	FunctionNetworkControllerTriggerAccessVpcArray{ FunctionNetworkControllerTriggerAccessVpcArgs{...} }
+type FunctionNetworkControllerTriggerAccessVpcArrayInput interface {
+	pulumi.Input
+
+	ToFunctionNetworkControllerTriggerAccessVpcArrayOutput() FunctionNetworkControllerTriggerAccessVpcArrayOutput
+	ToFunctionNetworkControllerTriggerAccessVpcArrayOutputWithContext(context.Context) FunctionNetworkControllerTriggerAccessVpcArrayOutput
+}
+
+type FunctionNetworkControllerTriggerAccessVpcArray []FunctionNetworkControllerTriggerAccessVpcInput
+
+func (FunctionNetworkControllerTriggerAccessVpcArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionNetworkControllerTriggerAccessVpc)(nil)).Elem()
+}
+
+func (i FunctionNetworkControllerTriggerAccessVpcArray) ToFunctionNetworkControllerTriggerAccessVpcArrayOutput() FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return i.ToFunctionNetworkControllerTriggerAccessVpcArrayOutputWithContext(context.Background())
+}
+
+func (i FunctionNetworkControllerTriggerAccessVpcArray) ToFunctionNetworkControllerTriggerAccessVpcArrayOutputWithContext(ctx context.Context) FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionNetworkControllerTriggerAccessVpcArrayOutput)
+}
+
+type FunctionNetworkControllerTriggerAccessVpcOutput struct{ *pulumi.OutputState }
+
+func (FunctionNetworkControllerTriggerAccessVpcOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionNetworkControllerTriggerAccessVpc)(nil)).Elem()
+}
+
+func (o FunctionNetworkControllerTriggerAccessVpcOutput) ToFunctionNetworkControllerTriggerAccessVpcOutput() FunctionNetworkControllerTriggerAccessVpcOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerTriggerAccessVpcOutput) ToFunctionNetworkControllerTriggerAccessVpcOutputWithContext(ctx context.Context) FunctionNetworkControllerTriggerAccessVpcOutput {
+	return o
+}
+
+// Specifies the ID of the VPC that can trigger the function.
+func (o FunctionNetworkControllerTriggerAccessVpcOutput) VpcId() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionNetworkControllerTriggerAccessVpc) string { return v.VpcId }).(pulumi.StringOutput)
+}
+
+type FunctionNetworkControllerTriggerAccessVpcArrayOutput struct{ *pulumi.OutputState }
+
+func (FunctionNetworkControllerTriggerAccessVpcArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionNetworkControllerTriggerAccessVpc)(nil)).Elem()
+}
+
+func (o FunctionNetworkControllerTriggerAccessVpcArrayOutput) ToFunctionNetworkControllerTriggerAccessVpcArrayOutput() FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerTriggerAccessVpcArrayOutput) ToFunctionNetworkControllerTriggerAccessVpcArrayOutputWithContext(ctx context.Context) FunctionNetworkControllerTriggerAccessVpcArrayOutput {
+	return o
+}
+
+func (o FunctionNetworkControllerTriggerAccessVpcArrayOutput) Index(i pulumi.IntInput) FunctionNetworkControllerTriggerAccessVpcOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionNetworkControllerTriggerAccessVpc {
+		return vs[0].([]FunctionNetworkControllerTriggerAccessVpc)[vs[1].(int)]
+	}).(FunctionNetworkControllerTriggerAccessVpcOutput)
+}
+
+type FunctionReservedInstance struct {
+	// Specifies the number of reserved instance to which the policy belongs.\
+	// The valid value is range from `0` to `1,000`.
+	Count int `pulumi:"count"`
+	// Specifies whether to enable the idle mode.\
+	// Defaults to **false**.
+	// If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+	// You will still be billed at the price of reserved instances for non-idle mode in this period.
+	IdleMode *bool `pulumi:"idleMode"`
+	// Specifies the version name or alias name.
+	QualifierName string `pulumi:"qualifierName"`
+	// Specifies the qualifier type of reserved instance.\
+	// The valid values are as follows:
+	// + **version**
+	// + **alias**
+	QualifierType string `pulumi:"qualifierType"`
+	// Specifies the auto scaling policies for reserved instance.\
+	// The tacticsConfig structure is documented below.
+	TacticsConfig *FunctionReservedInstanceTacticsConfig `pulumi:"tacticsConfig"`
+}
+
+// FunctionReservedInstanceInput is an input type that accepts FunctionReservedInstanceArgs and FunctionReservedInstanceOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceInput` via:
+//
+//	FunctionReservedInstanceArgs{...}
+type FunctionReservedInstanceInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceOutput() FunctionReservedInstanceOutput
+	ToFunctionReservedInstanceOutputWithContext(context.Context) FunctionReservedInstanceOutput
+}
+
+type FunctionReservedInstanceArgs struct {
+	// Specifies the number of reserved instance to which the policy belongs.\
+	// The valid value is range from `0` to `1,000`.
+	Count pulumi.IntInput `pulumi:"count"`
+	// Specifies whether to enable the idle mode.\
+	// Defaults to **false**.
+	// If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+	// You will still be billed at the price of reserved instances for non-idle mode in this period.
+	IdleMode pulumi.BoolPtrInput `pulumi:"idleMode"`
+	// Specifies the version name or alias name.
+	QualifierName pulumi.StringInput `pulumi:"qualifierName"`
+	// Specifies the qualifier type of reserved instance.\
+	// The valid values are as follows:
+	// + **version**
+	// + **alias**
+	QualifierType pulumi.StringInput `pulumi:"qualifierType"`
+	// Specifies the auto scaling policies for reserved instance.\
+	// The tacticsConfig structure is documented below.
+	TacticsConfig FunctionReservedInstanceTacticsConfigPtrInput `pulumi:"tacticsConfig"`
+}
+
+func (FunctionReservedInstanceArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstance)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceArgs) ToFunctionReservedInstanceOutput() FunctionReservedInstanceOutput {
+	return i.ToFunctionReservedInstanceOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceArgs) ToFunctionReservedInstanceOutputWithContext(ctx context.Context) FunctionReservedInstanceOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceOutput)
+}
+
+// FunctionReservedInstanceArrayInput is an input type that accepts FunctionReservedInstanceArray and FunctionReservedInstanceArrayOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceArrayInput` via:
+//
+//	FunctionReservedInstanceArray{ FunctionReservedInstanceArgs{...} }
+type FunctionReservedInstanceArrayInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceArrayOutput() FunctionReservedInstanceArrayOutput
+	ToFunctionReservedInstanceArrayOutputWithContext(context.Context) FunctionReservedInstanceArrayOutput
+}
+
+type FunctionReservedInstanceArray []FunctionReservedInstanceInput
+
+func (FunctionReservedInstanceArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstance)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceArray) ToFunctionReservedInstanceArrayOutput() FunctionReservedInstanceArrayOutput {
+	return i.ToFunctionReservedInstanceArrayOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceArray) ToFunctionReservedInstanceArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceArrayOutput)
+}
+
+type FunctionReservedInstanceOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstance)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceOutput) ToFunctionReservedInstanceOutput() FunctionReservedInstanceOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceOutput) ToFunctionReservedInstanceOutputWithContext(ctx context.Context) FunctionReservedInstanceOutput {
+	return o
+}
+
+// Specifies the number of reserved instance to which the policy belongs.\
+// The valid value is range from `0` to `1,000`.
+func (o FunctionReservedInstanceOutput) Count() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstance) int { return v.Count }).(pulumi.IntOutput)
+}
+
+// Specifies whether to enable the idle mode.\
+// Defaults to **false**.
+// If this parameter is enabled, reserved instances are initialized and the mode change needs some time to take effect.
+// You will still be billed at the price of reserved instances for non-idle mode in this period.
+func (o FunctionReservedInstanceOutput) IdleMode() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v FunctionReservedInstance) *bool { return v.IdleMode }).(pulumi.BoolPtrOutput)
+}
+
+// Specifies the version name or alias name.
+func (o FunctionReservedInstanceOutput) QualifierName() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstance) string { return v.QualifierName }).(pulumi.StringOutput)
+}
+
+// Specifies the qualifier type of reserved instance.\
+// The valid values are as follows:
+// + **version**
+// + **alias**
+func (o FunctionReservedInstanceOutput) QualifierType() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstance) string { return v.QualifierType }).(pulumi.StringOutput)
+}
+
+// Specifies the auto scaling policies for reserved instance.\
+// The tacticsConfig structure is documented below.
+func (o FunctionReservedInstanceOutput) TacticsConfig() FunctionReservedInstanceTacticsConfigPtrOutput {
+	return o.ApplyT(func(v FunctionReservedInstance) *FunctionReservedInstanceTacticsConfig { return v.TacticsConfig }).(FunctionReservedInstanceTacticsConfigPtrOutput)
+}
+
+type FunctionReservedInstanceArrayOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstance)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceArrayOutput) ToFunctionReservedInstanceArrayOutput() FunctionReservedInstanceArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceArrayOutput) ToFunctionReservedInstanceArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceArrayOutput) Index(i pulumi.IntInput) FunctionReservedInstanceOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionReservedInstance {
+		return vs[0].([]FunctionReservedInstance)[vs[1].(int)]
+	}).(FunctionReservedInstanceOutput)
+}
+
+type FunctionReservedInstanceTacticsConfig struct {
+	// Specifies the list of scheduled policy configurations.\
+	// The cronConfigs structure is documented below.
+	CronConfigs []FunctionReservedInstanceTacticsConfigCronConfig `pulumi:"cronConfigs"`
+	// Specifies the list of metric policy configurations.\
+	// The metricConfigs structure is documented below.
+	MetricConfigs []FunctionReservedInstanceTacticsConfigMetricConfig `pulumi:"metricConfigs"`
+}
+
+// FunctionReservedInstanceTacticsConfigInput is an input type that accepts FunctionReservedInstanceTacticsConfigArgs and FunctionReservedInstanceTacticsConfigOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigInput` via:
+//
+//	FunctionReservedInstanceTacticsConfigArgs{...}
+type FunctionReservedInstanceTacticsConfigInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigOutput() FunctionReservedInstanceTacticsConfigOutput
+	ToFunctionReservedInstanceTacticsConfigOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigOutput
+}
+
+type FunctionReservedInstanceTacticsConfigArgs struct {
+	// Specifies the list of scheduled policy configurations.\
+	// The cronConfigs structure is documented below.
+	CronConfigs FunctionReservedInstanceTacticsConfigCronConfigArrayInput `pulumi:"cronConfigs"`
+	// Specifies the list of metric policy configurations.\
+	// The metricConfigs structure is documented below.
+	MetricConfigs FunctionReservedInstanceTacticsConfigMetricConfigArrayInput `pulumi:"metricConfigs"`
+}
+
+func (FunctionReservedInstanceTacticsConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfig)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceTacticsConfigArgs) ToFunctionReservedInstanceTacticsConfigOutput() FunctionReservedInstanceTacticsConfigOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigArgs) ToFunctionReservedInstanceTacticsConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigOutput)
+}
+
+func (i FunctionReservedInstanceTacticsConfigArgs) ToFunctionReservedInstanceTacticsConfigPtrOutput() FunctionReservedInstanceTacticsConfigPtrOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigArgs) ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigOutput).ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(ctx)
+}
+
+// FunctionReservedInstanceTacticsConfigPtrInput is an input type that accepts FunctionReservedInstanceTacticsConfigArgs, FunctionReservedInstanceTacticsConfigPtr and FunctionReservedInstanceTacticsConfigPtrOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigPtrInput` via:
+//
+//	        FunctionReservedInstanceTacticsConfigArgs{...}
+//
+//	or:
+//
+//	        nil
+type FunctionReservedInstanceTacticsConfigPtrInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigPtrOutput() FunctionReservedInstanceTacticsConfigPtrOutput
+	ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigPtrOutput
+}
+
+type functionReservedInstanceTacticsConfigPtrType FunctionReservedInstanceTacticsConfigArgs
+
+func FunctionReservedInstanceTacticsConfigPtr(v *FunctionReservedInstanceTacticsConfigArgs) FunctionReservedInstanceTacticsConfigPtrInput {
+	return (*functionReservedInstanceTacticsConfigPtrType)(v)
+}
+
+func (*functionReservedInstanceTacticsConfigPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionReservedInstanceTacticsConfig)(nil)).Elem()
+}
+
+func (i *functionReservedInstanceTacticsConfigPtrType) ToFunctionReservedInstanceTacticsConfigPtrOutput() FunctionReservedInstanceTacticsConfigPtrOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(context.Background())
+}
+
+func (i *functionReservedInstanceTacticsConfigPtrType) ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigPtrOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigOutput) ToFunctionReservedInstanceTacticsConfigOutput() FunctionReservedInstanceTacticsConfigOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigOutput) ToFunctionReservedInstanceTacticsConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigOutput) ToFunctionReservedInstanceTacticsConfigPtrOutput() FunctionReservedInstanceTacticsConfigPtrOutput {
+	return o.ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(context.Background())
+}
+
+func (o FunctionReservedInstanceTacticsConfigOutput) ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v FunctionReservedInstanceTacticsConfig) *FunctionReservedInstanceTacticsConfig {
+		return &v
+	}).(FunctionReservedInstanceTacticsConfigPtrOutput)
+}
+
+// Specifies the list of scheduled policy configurations.\
+// The cronConfigs structure is documented below.
+func (o FunctionReservedInstanceTacticsConfigOutput) CronConfigs() FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfig) []FunctionReservedInstanceTacticsConfigCronConfig {
+		return v.CronConfigs
+	}).(FunctionReservedInstanceTacticsConfigCronConfigArrayOutput)
+}
+
+// Specifies the list of metric policy configurations.\
+// The metricConfigs structure is documented below.
+func (o FunctionReservedInstanceTacticsConfigOutput) MetricConfigs() FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfig) []FunctionReservedInstanceTacticsConfigMetricConfig {
+		return v.MetricConfigs
+	}).(FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigPtrOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionReservedInstanceTacticsConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigPtrOutput) ToFunctionReservedInstanceTacticsConfigPtrOutput() FunctionReservedInstanceTacticsConfigPtrOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigPtrOutput) ToFunctionReservedInstanceTacticsConfigPtrOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigPtrOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigPtrOutput) Elem() FunctionReservedInstanceTacticsConfigOutput {
+	return o.ApplyT(func(v *FunctionReservedInstanceTacticsConfig) FunctionReservedInstanceTacticsConfig {
+		if v != nil {
+			return *v
+		}
+		var ret FunctionReservedInstanceTacticsConfig
+		return ret
+	}).(FunctionReservedInstanceTacticsConfigOutput)
+}
+
+// Specifies the list of scheduled policy configurations.\
+// The cronConfigs structure is documented below.
+func (o FunctionReservedInstanceTacticsConfigPtrOutput) CronConfigs() FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return o.ApplyT(func(v *FunctionReservedInstanceTacticsConfig) []FunctionReservedInstanceTacticsConfigCronConfig {
+		if v == nil {
+			return nil
+		}
+		return v.CronConfigs
+	}).(FunctionReservedInstanceTacticsConfigCronConfigArrayOutput)
+}
+
+// Specifies the list of metric policy configurations.\
+// The metricConfigs structure is documented below.
+func (o FunctionReservedInstanceTacticsConfigPtrOutput) MetricConfigs() FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return o.ApplyT(func(v *FunctionReservedInstanceTacticsConfig) []FunctionReservedInstanceTacticsConfigMetricConfig {
+		if v == nil {
+			return nil
+		}
+		return v.MetricConfigs
+	}).(FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigCronConfig struct {
+	// Specifies the number of reserved instance to which the policy belongs.\
+	// The valid value is range from `0` to `1,000`.
+	Count int `pulumi:"count"`
+	// Specifies the cron expression.\
+	// For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+	Cron string `pulumi:"cron"`
+	// Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+	ExpiredTime int `pulumi:"expiredTime"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name string `pulumi:"name"`
+	// Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+	StartTime int `pulumi:"startTime"`
+}
+
+// FunctionReservedInstanceTacticsConfigCronConfigInput is an input type that accepts FunctionReservedInstanceTacticsConfigCronConfigArgs and FunctionReservedInstanceTacticsConfigCronConfigOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigCronConfigInput` via:
+//
+//	FunctionReservedInstanceTacticsConfigCronConfigArgs{...}
+type FunctionReservedInstanceTacticsConfigCronConfigInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigCronConfigOutput() FunctionReservedInstanceTacticsConfigCronConfigOutput
+	ToFunctionReservedInstanceTacticsConfigCronConfigOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigCronConfigOutput
+}
+
+type FunctionReservedInstanceTacticsConfigCronConfigArgs struct {
+	// Specifies the number of reserved instance to which the policy belongs.\
+	// The valid value is range from `0` to `1,000`.
+	Count pulumi.IntInput `pulumi:"count"`
+	// Specifies the cron expression.\
+	// For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+	Cron pulumi.StringInput `pulumi:"cron"`
+	// Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+	ExpiredTime pulumi.IntInput `pulumi:"expiredTime"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+	StartTime pulumi.IntInput `pulumi:"startTime"`
+}
+
+func (FunctionReservedInstanceTacticsConfigCronConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfigCronConfig)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceTacticsConfigCronConfigArgs) ToFunctionReservedInstanceTacticsConfigCronConfigOutput() FunctionReservedInstanceTacticsConfigCronConfigOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigCronConfigOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigCronConfigArgs) ToFunctionReservedInstanceTacticsConfigCronConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigCronConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigCronConfigOutput)
+}
+
+// FunctionReservedInstanceTacticsConfigCronConfigArrayInput is an input type that accepts FunctionReservedInstanceTacticsConfigCronConfigArray and FunctionReservedInstanceTacticsConfigCronConfigArrayOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigCronConfigArrayInput` via:
+//
+//	FunctionReservedInstanceTacticsConfigCronConfigArray{ FunctionReservedInstanceTacticsConfigCronConfigArgs{...} }
+type FunctionReservedInstanceTacticsConfigCronConfigArrayInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutput() FunctionReservedInstanceTacticsConfigCronConfigArrayOutput
+	ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigCronConfigArrayOutput
+}
+
+type FunctionReservedInstanceTacticsConfigCronConfigArray []FunctionReservedInstanceTacticsConfigCronConfigInput
+
+func (FunctionReservedInstanceTacticsConfigCronConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstanceTacticsConfigCronConfig)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceTacticsConfigCronConfigArray) ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutput() FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigCronConfigArray) ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigCronConfigArrayOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigCronConfigOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigCronConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfigCronConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) ToFunctionReservedInstanceTacticsConfigCronConfigOutput() FunctionReservedInstanceTacticsConfigCronConfigOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) ToFunctionReservedInstanceTacticsConfigCronConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigCronConfigOutput {
+	return o
+}
+
+// Specifies the number of reserved instance to which the policy belongs.\
+// The valid value is range from `0` to `1,000`.
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) Count() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigCronConfig) int { return v.Count }).(pulumi.IntOutput)
+}
+
+// Specifies the cron expression.\
+// For the syntax, please refer to the [documentation](https://support.huaweicloud.com/intl/en-us/usermanual-functiongraph/functiongraph_01_0908.html).
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) Cron() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigCronConfig) string { return v.Cron }).(pulumi.StringOutput)
+}
+
+// Specifies the expiration timestamp of the policy. The unit is `s`, e.g. **1740560074**.
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) ExpiredTime() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigCronConfig) int { return v.ExpiredTime }).(pulumi.IntOutput)
+}
+
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigCronConfig) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the effective timestamp of policy. The unit is `s`, e.g. **1740560074**.
+func (o FunctionReservedInstanceTacticsConfigCronConfigOutput) StartTime() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigCronConfig) int { return v.StartTime }).(pulumi.IntOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigCronConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigCronConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstanceTacticsConfigCronConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigCronConfigArrayOutput) ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutput() FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigCronConfigArrayOutput) ToFunctionReservedInstanceTacticsConfigCronConfigArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigCronConfigArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigCronConfigArrayOutput) Index(i pulumi.IntInput) FunctionReservedInstanceTacticsConfigCronConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionReservedInstanceTacticsConfigCronConfig {
+		return vs[0].([]FunctionReservedInstanceTacticsConfigCronConfig)[vs[1].(int)]
+	}).(FunctionReservedInstanceTacticsConfigCronConfigOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigMetricConfig struct {
+	// Specifies the minimun of traffic.\
+	// The valid value is range from `0` to `1,000`.
+	Min int `pulumi:"min"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name string `pulumi:"name"`
+	// Specifies the metric policy threshold.\
+	// The valid value is range from `1` to `99`.
+	Threshold int `pulumi:"threshold"`
+	// Specifies the type of metric policy.\
+	// The valid value is as follows:
+	// + **Concurrency**: Reserved instance usage.
+	Type string `pulumi:"type"`
+}
+
+// FunctionReservedInstanceTacticsConfigMetricConfigInput is an input type that accepts FunctionReservedInstanceTacticsConfigMetricConfigArgs and FunctionReservedInstanceTacticsConfigMetricConfigOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigMetricConfigInput` via:
+//
+//	FunctionReservedInstanceTacticsConfigMetricConfigArgs{...}
+type FunctionReservedInstanceTacticsConfigMetricConfigInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigMetricConfigOutput() FunctionReservedInstanceTacticsConfigMetricConfigOutput
+	ToFunctionReservedInstanceTacticsConfigMetricConfigOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigMetricConfigOutput
+}
+
+type FunctionReservedInstanceTacticsConfigMetricConfigArgs struct {
+	// Specifies the minimun of traffic.\
+	// The valid value is range from `0` to `1,000`.
+	Min pulumi.IntInput `pulumi:"min"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name pulumi.StringInput `pulumi:"name"`
+	// Specifies the metric policy threshold.\
+	// The valid value is range from `1` to `99`.
+	Threshold pulumi.IntInput `pulumi:"threshold"`
+	// Specifies the type of metric policy.\
+	// The valid value is as follows:
+	// + **Concurrency**: Reserved instance usage.
+	Type pulumi.StringInput `pulumi:"type"`
+}
+
+func (FunctionReservedInstanceTacticsConfigMetricConfigArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfigMetricConfig)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceTacticsConfigMetricConfigArgs) ToFunctionReservedInstanceTacticsConfigMetricConfigOutput() FunctionReservedInstanceTacticsConfigMetricConfigOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigMetricConfigOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigMetricConfigArgs) ToFunctionReservedInstanceTacticsConfigMetricConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigMetricConfigOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigMetricConfigOutput)
+}
+
+// FunctionReservedInstanceTacticsConfigMetricConfigArrayInput is an input type that accepts FunctionReservedInstanceTacticsConfigMetricConfigArray and FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput values.
+// You can construct a concrete instance of `FunctionReservedInstanceTacticsConfigMetricConfigArrayInput` via:
+//
+//	FunctionReservedInstanceTacticsConfigMetricConfigArray{ FunctionReservedInstanceTacticsConfigMetricConfigArgs{...} }
+type FunctionReservedInstanceTacticsConfigMetricConfigArrayInput interface {
+	pulumi.Input
+
+	ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutput() FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput
+	ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutputWithContext(context.Context) FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput
+}
+
+type FunctionReservedInstanceTacticsConfigMetricConfigArray []FunctionReservedInstanceTacticsConfigMetricConfigInput
+
+func (FunctionReservedInstanceTacticsConfigMetricConfigArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstanceTacticsConfigMetricConfig)(nil)).Elem()
+}
+
+func (i FunctionReservedInstanceTacticsConfigMetricConfigArray) ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutput() FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return i.ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutputWithContext(context.Background())
+}
+
+func (i FunctionReservedInstanceTacticsConfigMetricConfigArray) ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigMetricConfigOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigMetricConfigOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionReservedInstanceTacticsConfigMetricConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) ToFunctionReservedInstanceTacticsConfigMetricConfigOutput() FunctionReservedInstanceTacticsConfigMetricConfigOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) ToFunctionReservedInstanceTacticsConfigMetricConfigOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigMetricConfigOutput {
+	return o
+}
+
+// Specifies the minimun of traffic.\
+// The valid value is range from `0` to `1,000`.
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) Min() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigMetricConfig) int { return v.Min }).(pulumi.IntOutput)
+}
+
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigMetricConfig) string { return v.Name }).(pulumi.StringOutput)
+}
+
+// Specifies the metric policy threshold.\
+// The valid value is range from `1` to `99`.
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) Threshold() pulumi.IntOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigMetricConfig) int { return v.Threshold }).(pulumi.IntOutput)
+}
+
+// Specifies the type of metric policy.\
+// The valid value is as follows:
+// + **Concurrency**: Reserved instance usage.
+func (o FunctionReservedInstanceTacticsConfigMetricConfigOutput) Type() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionReservedInstanceTacticsConfigMetricConfig) string { return v.Type }).(pulumi.StringOutput)
+}
+
+type FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput struct{ *pulumi.OutputState }
+
+func (FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionReservedInstanceTacticsConfigMetricConfig)(nil)).Elem()
+}
+
+func (o FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput) ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutput() FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput) ToFunctionReservedInstanceTacticsConfigMetricConfigArrayOutputWithContext(ctx context.Context) FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput {
+	return o
+}
+
+func (o FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput) Index(i pulumi.IntInput) FunctionReservedInstanceTacticsConfigMetricConfigOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionReservedInstanceTacticsConfigMetricConfig {
+		return vs[0].([]FunctionReservedInstanceTacticsConfigMetricConfig)[vs[1].(int)]
+	}).(FunctionReservedInstanceTacticsConfigMetricConfigOutput)
+}
+
+type FunctionVersion struct {
+	// Specifies the aliases management for specified version.\
+	// The aliases structure is documented below.
+	Aliases *FunctionVersionAliases `pulumi:"aliases"`
+	// Specifies the description of the version alias.
+	Description *string `pulumi:"description"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name string `pulumi:"name"`
+}
+
+// FunctionVersionInput is an input type that accepts FunctionVersionArgs and FunctionVersionOutput values.
+// You can construct a concrete instance of `FunctionVersionInput` via:
+//
+//	FunctionVersionArgs{...}
+type FunctionVersionInput interface {
+	pulumi.Input
+
+	ToFunctionVersionOutput() FunctionVersionOutput
+	ToFunctionVersionOutputWithContext(context.Context) FunctionVersionOutput
+}
+
+type FunctionVersionArgs struct {
+	// Specifies the aliases management for specified version.\
+	// The aliases structure is documented below.
+	Aliases FunctionVersionAliasesPtrInput `pulumi:"aliases"`
+	// Specifies the description of the version alias.
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (FunctionVersionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionVersion)(nil)).Elem()
+}
+
+func (i FunctionVersionArgs) ToFunctionVersionOutput() FunctionVersionOutput {
+	return i.ToFunctionVersionOutputWithContext(context.Background())
+}
+
+func (i FunctionVersionArgs) ToFunctionVersionOutputWithContext(ctx context.Context) FunctionVersionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionVersionOutput)
+}
+
+// FunctionVersionArrayInput is an input type that accepts FunctionVersionArray and FunctionVersionArrayOutput values.
+// You can construct a concrete instance of `FunctionVersionArrayInput` via:
+//
+//	FunctionVersionArray{ FunctionVersionArgs{...} }
+type FunctionVersionArrayInput interface {
+	pulumi.Input
+
+	ToFunctionVersionArrayOutput() FunctionVersionArrayOutput
+	ToFunctionVersionArrayOutputWithContext(context.Context) FunctionVersionArrayOutput
+}
+
+type FunctionVersionArray []FunctionVersionInput
+
+func (FunctionVersionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionVersion)(nil)).Elem()
+}
+
+func (i FunctionVersionArray) ToFunctionVersionArrayOutput() FunctionVersionArrayOutput {
+	return i.ToFunctionVersionArrayOutputWithContext(context.Background())
+}
+
+func (i FunctionVersionArray) ToFunctionVersionArrayOutputWithContext(ctx context.Context) FunctionVersionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionVersionArrayOutput)
+}
+
+type FunctionVersionOutput struct{ *pulumi.OutputState }
+
+func (FunctionVersionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionVersion)(nil)).Elem()
+}
+
+func (o FunctionVersionOutput) ToFunctionVersionOutput() FunctionVersionOutput {
+	return o
+}
+
+func (o FunctionVersionOutput) ToFunctionVersionOutputWithContext(ctx context.Context) FunctionVersionOutput {
+	return o
+}
+
+// Specifies the aliases management for specified version.\
+// The aliases structure is documented below.
+func (o FunctionVersionOutput) Aliases() FunctionVersionAliasesPtrOutput {
+	return o.ApplyT(func(v FunctionVersion) *FunctionVersionAliases { return v.Aliases }).(FunctionVersionAliasesPtrOutput)
+}
+
+// Specifies the description of the version alias.
+func (o FunctionVersionOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionVersion) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
+func (o FunctionVersionOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionVersion) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type FunctionVersionArrayOutput struct{ *pulumi.OutputState }
+
+func (FunctionVersionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]FunctionVersion)(nil)).Elem()
+}
+
+func (o FunctionVersionArrayOutput) ToFunctionVersionArrayOutput() FunctionVersionArrayOutput {
+	return o
+}
+
+func (o FunctionVersionArrayOutput) ToFunctionVersionArrayOutputWithContext(ctx context.Context) FunctionVersionArrayOutput {
+	return o
+}
+
+func (o FunctionVersionArrayOutput) Index(i pulumi.IntInput) FunctionVersionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) FunctionVersion {
+		return vs[0].([]FunctionVersion)[vs[1].(int)]
+	}).(FunctionVersionOutput)
+}
+
+type FunctionVersionAliases struct {
+	// Specifies the rule grayscale configuration of the version
+	// alias, in JSON format.
+	AdditionalVersionStrategy *string `pulumi:"additionalVersionStrategy"`
+	// Specifies the percentage grayscale configuration of the version
+	// alias, in JSON format.
+	AdditionalVersionWeights *string `pulumi:"additionalVersionWeights"`
+	// Specifies the description of the version alias.
+	Description *string `pulumi:"description"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name string `pulumi:"name"`
+}
+
+// FunctionVersionAliasesInput is an input type that accepts FunctionVersionAliasesArgs and FunctionVersionAliasesOutput values.
+// You can construct a concrete instance of `FunctionVersionAliasesInput` via:
+//
+//	FunctionVersionAliasesArgs{...}
+type FunctionVersionAliasesInput interface {
+	pulumi.Input
+
+	ToFunctionVersionAliasesOutput() FunctionVersionAliasesOutput
+	ToFunctionVersionAliasesOutputWithContext(context.Context) FunctionVersionAliasesOutput
+}
+
+type FunctionVersionAliasesArgs struct {
+	// Specifies the rule grayscale configuration of the version
+	// alias, in JSON format.
+	AdditionalVersionStrategy pulumi.StringPtrInput `pulumi:"additionalVersionStrategy"`
+	// Specifies the percentage grayscale configuration of the version
+	// alias, in JSON format.
+	AdditionalVersionWeights pulumi.StringPtrInput `pulumi:"additionalVersionWeights"`
+	// Specifies the description of the version alias.
+	Description pulumi.StringPtrInput `pulumi:"description"`
+	// Specifies the name of metric policy.\
+	// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+	// allowed. The name must start with a letter and ending with a letter or digit.
+	Name pulumi.StringInput `pulumi:"name"`
+}
+
+func (FunctionVersionAliasesArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionVersionAliases)(nil)).Elem()
+}
+
+func (i FunctionVersionAliasesArgs) ToFunctionVersionAliasesOutput() FunctionVersionAliasesOutput {
+	return i.ToFunctionVersionAliasesOutputWithContext(context.Background())
+}
+
+func (i FunctionVersionAliasesArgs) ToFunctionVersionAliasesOutputWithContext(ctx context.Context) FunctionVersionAliasesOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionVersionAliasesOutput)
+}
+
+func (i FunctionVersionAliasesArgs) ToFunctionVersionAliasesPtrOutput() FunctionVersionAliasesPtrOutput {
+	return i.ToFunctionVersionAliasesPtrOutputWithContext(context.Background())
+}
+
+func (i FunctionVersionAliasesArgs) ToFunctionVersionAliasesPtrOutputWithContext(ctx context.Context) FunctionVersionAliasesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionVersionAliasesOutput).ToFunctionVersionAliasesPtrOutputWithContext(ctx)
+}
+
+// FunctionVersionAliasesPtrInput is an input type that accepts FunctionVersionAliasesArgs, FunctionVersionAliasesPtr and FunctionVersionAliasesPtrOutput values.
+// You can construct a concrete instance of `FunctionVersionAliasesPtrInput` via:
+//
+//	        FunctionVersionAliasesArgs{...}
+//
+//	or:
+//
+//	        nil
+type FunctionVersionAliasesPtrInput interface {
+	pulumi.Input
+
+	ToFunctionVersionAliasesPtrOutput() FunctionVersionAliasesPtrOutput
+	ToFunctionVersionAliasesPtrOutputWithContext(context.Context) FunctionVersionAliasesPtrOutput
+}
+
+type functionVersionAliasesPtrType FunctionVersionAliasesArgs
+
+func FunctionVersionAliasesPtr(v *FunctionVersionAliasesArgs) FunctionVersionAliasesPtrInput {
+	return (*functionVersionAliasesPtrType)(v)
+}
+
+func (*functionVersionAliasesPtrType) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionVersionAliases)(nil)).Elem()
+}
+
+func (i *functionVersionAliasesPtrType) ToFunctionVersionAliasesPtrOutput() FunctionVersionAliasesPtrOutput {
+	return i.ToFunctionVersionAliasesPtrOutputWithContext(context.Background())
+}
+
+func (i *functionVersionAliasesPtrType) ToFunctionVersionAliasesPtrOutputWithContext(ctx context.Context) FunctionVersionAliasesPtrOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(FunctionVersionAliasesPtrOutput)
+}
+
+type FunctionVersionAliasesOutput struct{ *pulumi.OutputState }
+
+func (FunctionVersionAliasesOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*FunctionVersionAliases)(nil)).Elem()
+}
+
+func (o FunctionVersionAliasesOutput) ToFunctionVersionAliasesOutput() FunctionVersionAliasesOutput {
+	return o
+}
+
+func (o FunctionVersionAliasesOutput) ToFunctionVersionAliasesOutputWithContext(ctx context.Context) FunctionVersionAliasesOutput {
+	return o
+}
+
+func (o FunctionVersionAliasesOutput) ToFunctionVersionAliasesPtrOutput() FunctionVersionAliasesPtrOutput {
+	return o.ToFunctionVersionAliasesPtrOutputWithContext(context.Background())
+}
+
+func (o FunctionVersionAliasesOutput) ToFunctionVersionAliasesPtrOutputWithContext(ctx context.Context) FunctionVersionAliasesPtrOutput {
+	return o.ApplyTWithContext(ctx, func(_ context.Context, v FunctionVersionAliases) *FunctionVersionAliases {
+		return &v
+	}).(FunctionVersionAliasesPtrOutput)
+}
+
+// Specifies the rule grayscale configuration of the version
+// alias, in JSON format.
+func (o FunctionVersionAliasesOutput) AdditionalVersionStrategy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionVersionAliases) *string { return v.AdditionalVersionStrategy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the percentage grayscale configuration of the version
+// alias, in JSON format.
+func (o FunctionVersionAliasesOutput) AdditionalVersionWeights() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionVersionAliases) *string { return v.AdditionalVersionWeights }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the description of the version alias.
+func (o FunctionVersionAliasesOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v FunctionVersionAliases) *string { return v.Description }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
+func (o FunctionVersionAliasesOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v FunctionVersionAliases) string { return v.Name }).(pulumi.StringOutput)
+}
+
+type FunctionVersionAliasesPtrOutput struct{ *pulumi.OutputState }
+
+func (FunctionVersionAliasesPtrOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((**FunctionVersionAliases)(nil)).Elem()
+}
+
+func (o FunctionVersionAliasesPtrOutput) ToFunctionVersionAliasesPtrOutput() FunctionVersionAliasesPtrOutput {
+	return o
+}
+
+func (o FunctionVersionAliasesPtrOutput) ToFunctionVersionAliasesPtrOutputWithContext(ctx context.Context) FunctionVersionAliasesPtrOutput {
+	return o
+}
+
+func (o FunctionVersionAliasesPtrOutput) Elem() FunctionVersionAliasesOutput {
+	return o.ApplyT(func(v *FunctionVersionAliases) FunctionVersionAliases {
+		if v != nil {
+			return *v
+		}
+		var ret FunctionVersionAliases
+		return ret
+	}).(FunctionVersionAliasesOutput)
+}
+
+// Specifies the rule grayscale configuration of the version
+// alias, in JSON format.
+func (o FunctionVersionAliasesPtrOutput) AdditionalVersionStrategy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionVersionAliases) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AdditionalVersionStrategy
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the percentage grayscale configuration of the version
+// alias, in JSON format.
+func (o FunctionVersionAliasesPtrOutput) AdditionalVersionWeights() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionVersionAliases) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AdditionalVersionWeights
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the description of the version alias.
+func (o FunctionVersionAliasesPtrOutput) Description() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionVersionAliases) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Description
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the name of metric policy.\
+// The valid length is limited from `1` to `60` characters, only letters, digits, hyphens (-), and underscores (_) are
+// allowed. The name must start with a letter and ending with a letter or digit.
+func (o FunctionVersionAliasesPtrOutput) Name() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *FunctionVersionAliases) *string {
+		if v == nil {
+			return nil
+		}
+		return &v.Name
+	}).(pulumi.StringPtrOutput)
 }
 
 type TriggerApig struct {
@@ -821,9 +2149,15 @@ type TriggerKafka struct {
 	// Specifies the ID of the APIG dedicated instance to which the API belongs.
 	// Required if the `type` is `DEDICATEDGATEWAY`. Changing this will create a new trigger resource.
 	InstanceId string `pulumi:"instanceId"`
+	// Specifies the password for logging in to the Kafka Manager.
+	// Changing this will create a new trigger resource.
+	Password *string `pulumi:"password"`
 	// Specifies one or more topic IDs of DMS kafka instance.
 	// Changing this will create a new trigger resource.
 	TopicIds []string `pulumi:"topicIds"`
+	// Specifies the username for logging in to the Kafka Manager.
+	// Changing this will create a new trigger resource.
+	UserName *string `pulumi:"userName"`
 }
 
 // TriggerKafkaInput is an input type that accepts TriggerKafkaArgs and TriggerKafkaOutput values.
@@ -845,9 +2179,15 @@ type TriggerKafkaArgs struct {
 	// Specifies the ID of the APIG dedicated instance to which the API belongs.
 	// Required if the `type` is `DEDICATEDGATEWAY`. Changing this will create a new trigger resource.
 	InstanceId pulumi.StringInput `pulumi:"instanceId"`
+	// Specifies the password for logging in to the Kafka Manager.
+	// Changing this will create a new trigger resource.
+	Password pulumi.StringPtrInput `pulumi:"password"`
 	// Specifies one or more topic IDs of DMS kafka instance.
 	// Changing this will create a new trigger resource.
 	TopicIds pulumi.StringArrayInput `pulumi:"topicIds"`
+	// Specifies the username for logging in to the Kafka Manager.
+	// Changing this will create a new trigger resource.
+	UserName pulumi.StringPtrInput `pulumi:"userName"`
 }
 
 func (TriggerKafkaArgs) ElementType() reflect.Type {
@@ -940,10 +2280,22 @@ func (o TriggerKafkaOutput) InstanceId() pulumi.StringOutput {
 	return o.ApplyT(func(v TriggerKafka) string { return v.InstanceId }).(pulumi.StringOutput)
 }
 
+// Specifies the password for logging in to the Kafka Manager.
+// Changing this will create a new trigger resource.
+func (o TriggerKafkaOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TriggerKafka) *string { return v.Password }).(pulumi.StringPtrOutput)
+}
+
 // Specifies one or more topic IDs of DMS kafka instance.
 // Changing this will create a new trigger resource.
 func (o TriggerKafkaOutput) TopicIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v TriggerKafka) []string { return v.TopicIds }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the username for logging in to the Kafka Manager.
+// Changing this will create a new trigger resource.
+func (o TriggerKafkaOutput) UserName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v TriggerKafka) *string { return v.UserName }).(pulumi.StringPtrOutput)
 }
 
 type TriggerKafkaPtrOutput struct{ *pulumi.OutputState }
@@ -993,6 +2345,17 @@ func (o TriggerKafkaPtrOutput) InstanceId() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the password for logging in to the Kafka Manager.
+// Changing this will create a new trigger resource.
+func (o TriggerKafkaPtrOutput) Password() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *TriggerKafka) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Password
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies one or more topic IDs of DMS kafka instance.
 // Changing this will create a new trigger resource.
 func (o TriggerKafkaPtrOutput) TopicIds() pulumi.StringArrayOutput {
@@ -1002,6 +2365,17 @@ func (o TriggerKafkaPtrOutput) TopicIds() pulumi.StringArrayOutput {
 		}
 		return v.TopicIds
 	}).(pulumi.StringArrayOutput)
+}
+
+// Specifies the username for logging in to the Kafka Manager.
+// Changing this will create a new trigger resource.
+func (o TriggerKafkaPtrOutput) UserName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *TriggerKafka) *string {
+		if v == nil {
+			return nil
+		}
+		return v.UserName
+	}).(pulumi.StringPtrOutput)
 }
 
 type TriggerLts struct {
@@ -1558,7 +2932,7 @@ type TriggerTimer struct {
 	// Specifies the event used by the timer to trigger the function.
 	// Changing this will create a new trigger resource.
 	AdditionalInformation *string `pulumi:"additionalInformation"`
-	// Specifies the trigger name, which can contains of 1 to 64 characters.
+	// Specifies the trigger name, which can contains of `1` to `64` characters.
 	// The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// Changing this will create a new trigger resource.
 	Name string `pulumi:"name"`
@@ -1590,7 +2964,7 @@ type TriggerTimerArgs struct {
 	// Specifies the event used by the timer to trigger the function.
 	// Changing this will create a new trigger resource.
 	AdditionalInformation pulumi.StringPtrInput `pulumi:"additionalInformation"`
-	// Specifies the trigger name, which can contains of 1 to 64 characters.
+	// Specifies the trigger name, which can contains of `1` to `64` characters.
 	// The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
 	// Changing this will create a new trigger resource.
 	Name pulumi.StringInput `pulumi:"name"`
@@ -1690,7 +3064,7 @@ func (o TriggerTimerOutput) AdditionalInformation() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v TriggerTimer) *string { return v.AdditionalInformation }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the trigger name, which can contains of 1 to 64 characters.
+// Specifies the trigger name, which can contains of `1` to `64` characters.
 // The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
 // Changing this will create a new trigger resource.
 func (o TriggerTimerOutput) Name() pulumi.StringOutput {
@@ -1749,7 +3123,7 @@ func (o TriggerTimerPtrOutput) AdditionalInformation() pulumi.StringPtrOutput {
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the trigger name, which can contains of 1 to 64 characters.
+// Specifies the trigger name, which can contains of `1` to `64` characters.
 // The name must start with a letter, only letters, digits, hyphens (-) and underscores (_) are allowed.
 // Changing this will create a new trigger resource.
 func (o TriggerTimerPtrOutput) Name() pulumi.StringPtrOutput {
@@ -1789,24 +3163,48 @@ func (o TriggerTimerPtrOutput) ScheduleType() pulumi.StringPtrOutput {
 }
 
 type GetDependenciesPackage struct {
-	// Unique ID of the dependent package.
+	// The unique ID of the dependency package.
 	Etag string `pulumi:"etag"`
-	// File name of the Dependent package.
+	// The file name of the stored dependency package.
 	FileName string `pulumi:"fileName"`
-	// Dependent package ID.
+	// The ID of the dependency package version.
 	Id string `pulumi:"id"`
-	// URL of the dependent package in the OBS console.
+	// The OBS bucket path where the dependency package is located (FunctionGraph serivce side).
 	Link string `pulumi:"link"`
-	// Specifies the dependent package runtime to match.
+	// Specifies the name of the dependency package.
 	Name string `pulumi:"name"`
-	// Dependent package owner.
+	// The owner of the dependency package.
 	Owner string `pulumi:"owner"`
-	// Specifies the dependent package runtime to match. Valid values: **Java8**,
-	// **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-	// **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+	// Specifies the runtime of the dependency package.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Python3.10**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.0)**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **Cangjie1.0**
+	// + **http**
+	// + **Custom Image**
 	Runtime string `pulumi:"runtime"`
-	// Dependent package size.
+	// The size of the dependency package.
 	Size int `pulumi:"size"`
+	// The list of the versions for the dependency package.
+	// The versions structure is documented below.
+	Versions []GetDependenciesPackageVersion `pulumi:"versions"`
 }
 
 // GetDependenciesPackageInput is an input type that accepts GetDependenciesPackageArgs and GetDependenciesPackageOutput values.
@@ -1821,24 +3219,48 @@ type GetDependenciesPackageInput interface {
 }
 
 type GetDependenciesPackageArgs struct {
-	// Unique ID of the dependent package.
+	// The unique ID of the dependency package.
 	Etag pulumi.StringInput `pulumi:"etag"`
-	// File name of the Dependent package.
+	// The file name of the stored dependency package.
 	FileName pulumi.StringInput `pulumi:"fileName"`
-	// Dependent package ID.
+	// The ID of the dependency package version.
 	Id pulumi.StringInput `pulumi:"id"`
-	// URL of the dependent package in the OBS console.
+	// The OBS bucket path where the dependency package is located (FunctionGraph serivce side).
 	Link pulumi.StringInput `pulumi:"link"`
-	// Specifies the dependent package runtime to match.
+	// Specifies the name of the dependency package.
 	Name pulumi.StringInput `pulumi:"name"`
-	// Dependent package owner.
+	// The owner of the dependency package.
 	Owner pulumi.StringInput `pulumi:"owner"`
-	// Specifies the dependent package runtime to match. Valid values: **Java8**,
-	// **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-	// **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+	// Specifies the runtime of the dependency package.\
+	// The valid values are as follows:
+	// + **Java8**
+	// + **Java11**
+	// + **Node.js6.10**
+	// + **Node.js8.10**
+	// + **Node.js10.16**
+	// + **Node.js12.13**
+	// + **Node.js14.18**
+	// + **Node.js16.17**
+	// + **Node.js18.15**
+	// + **Python2.7**
+	// + **Python3.6**
+	// + **Python3.9**
+	// + **Python3.10**
+	// + **Go1.x**
+	// + **C#(.NET Core 2.0)**
+	// + **C#(.NET Core 2.1)**
+	// + **C#(.NET Core 3.1)**
+	// + **Custom**
+	// + **PHP7.3**
+	// + **Cangjie1.0**
+	// + **http**
+	// + **Custom Image**
 	Runtime pulumi.StringInput `pulumi:"runtime"`
-	// Dependent package size.
+	// The size of the dependency package.
 	Size pulumi.IntInput `pulumi:"size"`
+	// The list of the versions for the dependency package.
+	// The versions structure is documented below.
+	Versions GetDependenciesPackageVersionArrayInput `pulumi:"versions"`
 }
 
 func (GetDependenciesPackageArgs) ElementType() reflect.Type {
@@ -1892,46 +3314,73 @@ func (o GetDependenciesPackageOutput) ToGetDependenciesPackageOutputWithContext(
 	return o
 }
 
-// Unique ID of the dependent package.
+// The unique ID of the dependency package.
 func (o GetDependenciesPackageOutput) Etag() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Etag }).(pulumi.StringOutput)
 }
 
-// File name of the Dependent package.
+// The file name of the stored dependency package.
 func (o GetDependenciesPackageOutput) FileName() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.FileName }).(pulumi.StringOutput)
 }
 
-// Dependent package ID.
+// The ID of the dependency package version.
 func (o GetDependenciesPackageOutput) Id() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Id }).(pulumi.StringOutput)
 }
 
-// URL of the dependent package in the OBS console.
+// The OBS bucket path where the dependency package is located (FunctionGraph serivce side).
 func (o GetDependenciesPackageOutput) Link() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Link }).(pulumi.StringOutput)
 }
 
-// Specifies the dependent package runtime to match.
+// Specifies the name of the dependency package.
 func (o GetDependenciesPackageOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Dependent package owner.
+// The owner of the dependency package.
 func (o GetDependenciesPackageOutput) Owner() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Owner }).(pulumi.StringOutput)
 }
 
-// Specifies the dependent package runtime to match. Valid values: **Java8**,
-// **Node.js6.10**, **Node.js8.10**, **Node.js10.16**, **Node.js12.13**, **Python2.7**, **Python3.6**, **Go1.8**,
-// **Go1.x**, **C#(.NET Core 2.0)**, **C#(.NET Core 2.1)**, **C#(.NET Core 3.1)** and **PHP7.3**.
+// Specifies the runtime of the dependency package.\
+// The valid values are as follows:
+// + **Java8**
+// + **Java11**
+// + **Node.js6.10**
+// + **Node.js8.10**
+// + **Node.js10.16**
+// + **Node.js12.13**
+// + **Node.js14.18**
+// + **Node.js16.17**
+// + **Node.js18.15**
+// + **Python2.7**
+// + **Python3.6**
+// + **Python3.9**
+// + **Python3.10**
+// + **Go1.x**
+// + **C#(.NET Core 2.0)**
+// + **C#(.NET Core 2.1)**
+// + **C#(.NET Core 3.1)**
+// + **Custom**
+// + **PHP7.3**
+// + **Cangjie1.0**
+// + **http**
+// + **Custom Image**
 func (o GetDependenciesPackageOutput) Runtime() pulumi.StringOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) string { return v.Runtime }).(pulumi.StringOutput)
 }
 
-// Dependent package size.
+// The size of the dependency package.
 func (o GetDependenciesPackageOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v GetDependenciesPackage) int { return v.Size }).(pulumi.IntOutput)
+}
+
+// The list of the versions for the dependency package.
+// The versions structure is documented below.
+func (o GetDependenciesPackageOutput) Versions() GetDependenciesPackageVersionArrayOutput {
+	return o.ApplyT(func(v GetDependenciesPackage) []GetDependenciesPackageVersion { return v.Versions }).(GetDependenciesPackageVersionArrayOutput)
 }
 
 type GetDependenciesPackageArrayOutput struct{ *pulumi.OutputState }
@@ -1954,11 +3403,133 @@ func (o GetDependenciesPackageArrayOutput) Index(i pulumi.IntInput) GetDependenc
 	}).(GetDependenciesPackageOutput)
 }
 
+type GetDependenciesPackageVersion struct {
+	// The ID of the dependency package version.
+	Id string `pulumi:"id"`
+	// The dependency package version.
+	Version int `pulumi:"version"`
+}
+
+// GetDependenciesPackageVersionInput is an input type that accepts GetDependenciesPackageVersionArgs and GetDependenciesPackageVersionOutput values.
+// You can construct a concrete instance of `GetDependenciesPackageVersionInput` via:
+//
+//	GetDependenciesPackageVersionArgs{...}
+type GetDependenciesPackageVersionInput interface {
+	pulumi.Input
+
+	ToGetDependenciesPackageVersionOutput() GetDependenciesPackageVersionOutput
+	ToGetDependenciesPackageVersionOutputWithContext(context.Context) GetDependenciesPackageVersionOutput
+}
+
+type GetDependenciesPackageVersionArgs struct {
+	// The ID of the dependency package version.
+	Id pulumi.StringInput `pulumi:"id"`
+	// The dependency package version.
+	Version pulumi.IntInput `pulumi:"version"`
+}
+
+func (GetDependenciesPackageVersionArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetDependenciesPackageVersion)(nil)).Elem()
+}
+
+func (i GetDependenciesPackageVersionArgs) ToGetDependenciesPackageVersionOutput() GetDependenciesPackageVersionOutput {
+	return i.ToGetDependenciesPackageVersionOutputWithContext(context.Background())
+}
+
+func (i GetDependenciesPackageVersionArgs) ToGetDependenciesPackageVersionOutputWithContext(ctx context.Context) GetDependenciesPackageVersionOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetDependenciesPackageVersionOutput)
+}
+
+// GetDependenciesPackageVersionArrayInput is an input type that accepts GetDependenciesPackageVersionArray and GetDependenciesPackageVersionArrayOutput values.
+// You can construct a concrete instance of `GetDependenciesPackageVersionArrayInput` via:
+//
+//	GetDependenciesPackageVersionArray{ GetDependenciesPackageVersionArgs{...} }
+type GetDependenciesPackageVersionArrayInput interface {
+	pulumi.Input
+
+	ToGetDependenciesPackageVersionArrayOutput() GetDependenciesPackageVersionArrayOutput
+	ToGetDependenciesPackageVersionArrayOutputWithContext(context.Context) GetDependenciesPackageVersionArrayOutput
+}
+
+type GetDependenciesPackageVersionArray []GetDependenciesPackageVersionInput
+
+func (GetDependenciesPackageVersionArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetDependenciesPackageVersion)(nil)).Elem()
+}
+
+func (i GetDependenciesPackageVersionArray) ToGetDependenciesPackageVersionArrayOutput() GetDependenciesPackageVersionArrayOutput {
+	return i.ToGetDependenciesPackageVersionArrayOutputWithContext(context.Background())
+}
+
+func (i GetDependenciesPackageVersionArray) ToGetDependenciesPackageVersionArrayOutputWithContext(ctx context.Context) GetDependenciesPackageVersionArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(GetDependenciesPackageVersionArrayOutput)
+}
+
+type GetDependenciesPackageVersionOutput struct{ *pulumi.OutputState }
+
+func (GetDependenciesPackageVersionOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*GetDependenciesPackageVersion)(nil)).Elem()
+}
+
+func (o GetDependenciesPackageVersionOutput) ToGetDependenciesPackageVersionOutput() GetDependenciesPackageVersionOutput {
+	return o
+}
+
+func (o GetDependenciesPackageVersionOutput) ToGetDependenciesPackageVersionOutputWithContext(ctx context.Context) GetDependenciesPackageVersionOutput {
+	return o
+}
+
+// The ID of the dependency package version.
+func (o GetDependenciesPackageVersionOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v GetDependenciesPackageVersion) string { return v.Id }).(pulumi.StringOutput)
+}
+
+// The dependency package version.
+func (o GetDependenciesPackageVersionOutput) Version() pulumi.IntOutput {
+	return o.ApplyT(func(v GetDependenciesPackageVersion) int { return v.Version }).(pulumi.IntOutput)
+}
+
+type GetDependenciesPackageVersionArrayOutput struct{ *pulumi.OutputState }
+
+func (GetDependenciesPackageVersionArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]GetDependenciesPackageVersion)(nil)).Elem()
+}
+
+func (o GetDependenciesPackageVersionArrayOutput) ToGetDependenciesPackageVersionArrayOutput() GetDependenciesPackageVersionArrayOutput {
+	return o
+}
+
+func (o GetDependenciesPackageVersionArrayOutput) ToGetDependenciesPackageVersionArrayOutputWithContext(ctx context.Context) GetDependenciesPackageVersionArrayOutput {
+	return o
+}
+
+func (o GetDependenciesPackageVersionArrayOutput) Index(i pulumi.IntInput) GetDependenciesPackageVersionOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) GetDependenciesPackageVersion {
+		return vs[0].([]GetDependenciesPackageVersion)[vs[1].(int)]
+	}).(GetDependenciesPackageVersionOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*FunctionCustomImageInput)(nil)).Elem(), FunctionCustomImageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*FunctionCustomImagePtrInput)(nil)).Elem(), FunctionCustomImageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*FunctionFuncMountInput)(nil)).Elem(), FunctionFuncMountArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*FunctionFuncMountArrayInput)(nil)).Elem(), FunctionFuncMountArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionNetworkControllerInput)(nil)).Elem(), FunctionNetworkControllerArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionNetworkControllerPtrInput)(nil)).Elem(), FunctionNetworkControllerArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionNetworkControllerTriggerAccessVpcInput)(nil)).Elem(), FunctionNetworkControllerTriggerAccessVpcArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionNetworkControllerTriggerAccessVpcArrayInput)(nil)).Elem(), FunctionNetworkControllerTriggerAccessVpcArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceInput)(nil)).Elem(), FunctionReservedInstanceArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceArrayInput)(nil)).Elem(), FunctionReservedInstanceArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigPtrInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigCronConfigInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigCronConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigCronConfigArrayInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigCronConfigArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigMetricConfigInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigMetricConfigArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionReservedInstanceTacticsConfigMetricConfigArrayInput)(nil)).Elem(), FunctionReservedInstanceTacticsConfigMetricConfigArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionVersionInput)(nil)).Elem(), FunctionVersionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionVersionArrayInput)(nil)).Elem(), FunctionVersionArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionVersionAliasesInput)(nil)).Elem(), FunctionVersionAliasesArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*FunctionVersionAliasesPtrInput)(nil)).Elem(), FunctionVersionAliasesArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*TriggerApigInput)(nil)).Elem(), TriggerApigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*TriggerApigPtrInput)(nil)).Elem(), TriggerApigArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*TriggerDisInput)(nil)).Elem(), TriggerDisArgs{})
@@ -1975,10 +3546,28 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*TriggerTimerPtrInput)(nil)).Elem(), TriggerTimerArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetDependenciesPackageInput)(nil)).Elem(), GetDependenciesPackageArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*GetDependenciesPackageArrayInput)(nil)).Elem(), GetDependenciesPackageArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetDependenciesPackageVersionInput)(nil)).Elem(), GetDependenciesPackageVersionArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*GetDependenciesPackageVersionArrayInput)(nil)).Elem(), GetDependenciesPackageVersionArray{})
 	pulumi.RegisterOutputType(FunctionCustomImageOutput{})
 	pulumi.RegisterOutputType(FunctionCustomImagePtrOutput{})
 	pulumi.RegisterOutputType(FunctionFuncMountOutput{})
 	pulumi.RegisterOutputType(FunctionFuncMountArrayOutput{})
+	pulumi.RegisterOutputType(FunctionNetworkControllerOutput{})
+	pulumi.RegisterOutputType(FunctionNetworkControllerPtrOutput{})
+	pulumi.RegisterOutputType(FunctionNetworkControllerTriggerAccessVpcOutput{})
+	pulumi.RegisterOutputType(FunctionNetworkControllerTriggerAccessVpcArrayOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceArrayOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigPtrOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigCronConfigOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigCronConfigArrayOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigMetricConfigOutput{})
+	pulumi.RegisterOutputType(FunctionReservedInstanceTacticsConfigMetricConfigArrayOutput{})
+	pulumi.RegisterOutputType(FunctionVersionOutput{})
+	pulumi.RegisterOutputType(FunctionVersionArrayOutput{})
+	pulumi.RegisterOutputType(FunctionVersionAliasesOutput{})
+	pulumi.RegisterOutputType(FunctionVersionAliasesPtrOutput{})
 	pulumi.RegisterOutputType(TriggerApigOutput{})
 	pulumi.RegisterOutputType(TriggerApigPtrOutput{})
 	pulumi.RegisterOutputType(TriggerDisOutput{})
@@ -1995,4 +3584,6 @@ func init() {
 	pulumi.RegisterOutputType(TriggerTimerPtrOutput{})
 	pulumi.RegisterOutputType(GetDependenciesPackageOutput{})
 	pulumi.RegisterOutputType(GetDependenciesPackageArrayOutput{})
+	pulumi.RegisterOutputType(GetDependenciesPackageVersionOutput{})
+	pulumi.RegisterOutputType(GetDependenciesPackageVersionArrayOutput{})
 }

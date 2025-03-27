@@ -33,13 +33,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * The datasets can be imported by `id`.
+ * The datasets can be imported by `id`. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:ModelArts/dataset:Dataset test yiROKoTTjtwjvP71yLG
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. resource "huaweicloud_modelarts_dataset" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`data_source.0.path`, `data_source.0.queue_name`, `data_source.0.database_name`, `data_source.0.table_name`, `data_source.0.cluster_id`, `data_source.0.user_name` and `data_source.0.password`. It is generally recommended running `terraform plan` after importing a dataset. You can then decide if changes should be applied to the dataset, or the resource definition should be updated to align with the dataset. Also you can ignore changes as below. hcl resource "huaweicloud_modelarts_dataset" "test" {
  *
  *  ...
  *
@@ -99,7 +99,7 @@ export class Dataset extends pulumi.CustomResource {
      */
     public readonly dataSource!: pulumi.Output<outputs.ModelArts.DatasetDataSource>;
     /**
-     * Specifies the description of dataset. It contains a maximum of 256 characters and
+     * Specifies the description of dataset. It contains a maximum of `256` characters and
      * cannot contain special characters `!<>=&"'`.
      */
     public readonly description!: pulumi.Output<string | undefined>;
@@ -233,7 +233,7 @@ export interface DatasetState {
      */
     dataSource?: pulumi.Input<inputs.ModelArts.DatasetDataSource>;
     /**
-     * Specifies the description of dataset. It contains a maximum of 256 characters and
+     * Specifies the description of dataset. It contains a maximum of `256` characters and
      * cannot contain special characters `!<>=&"'`.
      */
     description?: pulumi.Input<string>;
@@ -303,7 +303,7 @@ export interface DatasetArgs {
      */
     dataSource: pulumi.Input<inputs.ModelArts.DatasetDataSource>;
     /**
-     * Specifies the description of dataset. It contains a maximum of 256 characters and
+     * Specifies the description of dataset. It contains a maximum of `256` characters and
      * cannot contain special characters `!<>=&"'`.
      */
     description?: pulumi.Input<string>;

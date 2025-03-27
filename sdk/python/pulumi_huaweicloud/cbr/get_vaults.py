@@ -214,9 +214,9 @@ def get_vaults(auto_expand_enabled: Optional[bool] = None,
            The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
     :param str region: Specifies the region in which to query the vaults.
            If omitted, the provider-level region will be used.
-    :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+    :param int size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
     :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
-    :param str type: Specifies the object type of the vault. The vaild values are as follows:
+    :param str type: Specifies the object type of the vault. The valid values are as follows:
            + **server** (Cloud Servers)
            + **disk** (EVS Disks)
            + **turbo** (SFS Turbo file systems)
@@ -291,9 +291,9 @@ def get_vaults_output(auto_expand_enabled: Optional[pulumi.Input[Optional[bool]]
            The valid values are **backup** and **replication**. Vaults of type **disk** don't support **replication**.
     :param str region: Specifies the region in which to query the vaults.
            If omitted, the provider-level region will be used.
-    :param int size: Specifies the vault sapacity, in GB. The valid value range is `1` to `10,485,760`.
+    :param int size: Specifies the vault capacity, in GB. The valid value range is `1` to `10,485,760`.
     :param str status: Specifies the vault status, including **available**, **lock**, **frozen** and **error**.
-    :param str type: Specifies the object type of the vault. The vaild values are as follows:
+    :param str type: Specifies the object type of the vault. The valid values are as follows:
            + **server** (Cloud Servers)
            + **disk** (EVS Disks)
            + **turbo** (SFS Turbo file systems)

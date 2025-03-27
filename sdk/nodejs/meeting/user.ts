@@ -246,19 +246,19 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account.
+ * Users can be imported using their `id` and authorization parameters, separated by slashes, e.g. Import a user and authenticated by account. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltaccount_name&gt/&ltaccount_password&gt
+ *  $ pulumi import huaweicloud:Meeting/user:User test <id>/<account_name>/<account_password>
  * ```
  *
- *  Import a user and authenticated by `APP ID`/`APP Key`.
+ *  Import a user and authenticated by `APP ID`/`APP Key`. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Meeting/user:User test &ltid&gt/&ltapp_id&gt/&ltapp_key&gt/&ltcorp_id&gt/&ltuser_id&gt
+ *  $ pulumi import huaweicloud:Meeting/user:User test <id>/<app_id>/<app_key>/<corp_id>/<user_id>
  * ```
  *
- *  The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. resource "huaweicloud_meeting_user" "test" {
+ *  The slashes cannot be missing even corporation ID and user ID are empty. Note that some parameters do not support import due to missing API responses or privacy, such as `password`, `is_send_notify` and `is_admin`. You can ignore this change as below. hcl resource "huaweicloud_meeting_user" "test" {
  *
  *  ...
  *
@@ -301,7 +301,7 @@ export class User extends pulumi.CustomResource {
     }
 
     /**
-     * Specifies the user account. The value can contain **1** to **64** characters.
+     * Specifies the user account. The value can contain `1` to `64` characters.
      * If omitted, the service will automatically generate a value.
      * Changing this parameter will create a new resource.
      */
@@ -349,7 +349,7 @@ export class User extends pulumi.CustomResource {
      */
     public /*out*/ readonly departmentNamePath!: pulumi.Output<string>;
     /**
-     * Specifies the description. The value can contain **0** to **128** characters.
+     * Specifies the description. The value can contain `0` to `128` characters.
      */
     public readonly description!: pulumi.Output<string | undefined>;
     /**
@@ -357,7 +357,7 @@ export class User extends pulumi.CustomResource {
      */
     public readonly email!: pulumi.Output<string>;
     /**
-     * Specifies the english name. The value can contain **0** to **64** characters.
+     * Specifies the english name. The value can contain `0` to `64` characters.
      */
     public readonly englishName!: pulumi.Output<string>;
     /**
@@ -375,16 +375,12 @@ export class User extends pulumi.CustomResource {
      */
     public readonly isSendNotify!: pulumi.Output<boolean | undefined>;
     /**
-     * Specifies the user name. The value can contain **1** to **64** characters.
+     * Specifies the user name. The value can contain `1` to `64` characters.
      */
     public readonly name!: pulumi.Output<string>;
     /**
      * Specifies the user password.
      * The following conditions must be met:
-     * + **8** to **32** characters
-     * + It cannot be consistent with the positive and reverse order of the `account` parameter.
-     * + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-     * (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
      */
     public readonly password!: pulumi.Output<string>;
     /**
@@ -393,7 +389,7 @@ export class User extends pulumi.CustomResource {
      */
     public readonly phone!: pulumi.Output<string>;
     /**
-     * Specifies the signature. The value can contain **0** to **512** characters.
+     * Specifies the signature. The value can contain `0` to `512` characters.
      */
     public readonly signature!: pulumi.Output<string>;
     /**
@@ -403,7 +399,7 @@ export class User extends pulumi.CustomResource {
     /**
      * Specifies the address book sorting level.
      * The lower the serial number, the higher the priority.
-     * The valid value is range from **1** to **10000**. Defaults to **10000**.
+     * The valid value is range from `1` to `10,000`. Defaults to `10,000`.
      */
     public readonly sortLevel!: pulumi.Output<number>;
     /**
@@ -417,7 +413,7 @@ export class User extends pulumi.CustomResource {
      */
     public readonly thirdAccount!: pulumi.Output<string>;
     /**
-     * Specifies the title name. The value can contain **0** to **32** characters.
+     * Specifies the title name. The value can contain `0` to `32` characters.
      */
     public readonly title!: pulumi.Output<string>;
     /**
@@ -515,7 +511,7 @@ export class User extends pulumi.CustomResource {
  */
 export interface UserState {
     /**
-     * Specifies the user account. The value can contain **1** to **64** characters.
+     * Specifies the user account. The value can contain `1` to `64` characters.
      * If omitted, the service will automatically generate a value.
      * Changing this parameter will create a new resource.
      */
@@ -563,7 +559,7 @@ export interface UserState {
      */
     departmentNamePath?: pulumi.Input<string>;
     /**
-     * Specifies the description. The value can contain **0** to **128** characters.
+     * Specifies the description. The value can contain `0` to `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -571,7 +567,7 @@ export interface UserState {
      */
     email?: pulumi.Input<string>;
     /**
-     * Specifies the english name. The value can contain **0** to **64** characters.
+     * Specifies the english name. The value can contain `0` to `64` characters.
      */
     englishName?: pulumi.Input<string>;
     /**
@@ -589,16 +585,12 @@ export interface UserState {
      */
     isSendNotify?: pulumi.Input<boolean>;
     /**
-     * Specifies the user name. The value can contain **1** to **64** characters.
+     * Specifies the user name. The value can contain `1` to `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the user password.
      * The following conditions must be met:
-     * + **8** to **32** characters
-     * + It cannot be consistent with the positive and reverse order of the `account` parameter.
-     * + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-     * (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
      */
     password?: pulumi.Input<string>;
     /**
@@ -607,7 +599,7 @@ export interface UserState {
      */
     phone?: pulumi.Input<string>;
     /**
-     * Specifies the signature. The value can contain **0** to **512** characters.
+     * Specifies the signature. The value can contain `0` to `512` characters.
      */
     signature?: pulumi.Input<string>;
     /**
@@ -617,7 +609,7 @@ export interface UserState {
     /**
      * Specifies the address book sorting level.
      * The lower the serial number, the higher the priority.
-     * The valid value is range from **1** to **10000**. Defaults to **10000**.
+     * The valid value is range from `1` to `10,000`. Defaults to `10,000`.
      */
     sortLevel?: pulumi.Input<number>;
     /**
@@ -631,7 +623,7 @@ export interface UserState {
      */
     thirdAccount?: pulumi.Input<string>;
     /**
-     * Specifies the title name. The value can contain **0** to **32** characters.
+     * Specifies the title name. The value can contain `0` to `32` characters.
      */
     title?: pulumi.Input<string>;
     /**
@@ -652,7 +644,7 @@ export interface UserState {
  */
 export interface UserArgs {
     /**
-     * Specifies the user account. The value can contain **1** to **64** characters.
+     * Specifies the user account. The value can contain `1` to `64` characters.
      * If omitted, the service will automatically generate a value.
      * Changing this parameter will create a new resource.
      */
@@ -692,7 +684,7 @@ export interface UserArgs {
      */
     departmentCode?: pulumi.Input<string>;
     /**
-     * Specifies the description. The value can contain **0** to **128** characters.
+     * Specifies the description. The value can contain `0` to `128` characters.
      */
     description?: pulumi.Input<string>;
     /**
@@ -700,7 +692,7 @@ export interface UserArgs {
      */
     email?: pulumi.Input<string>;
     /**
-     * Specifies the english name. The value can contain **0** to **64** characters.
+     * Specifies the english name. The value can contain `0` to `64` characters.
      */
     englishName?: pulumi.Input<string>;
     /**
@@ -718,16 +710,12 @@ export interface UserArgs {
      */
     isSendNotify?: pulumi.Input<boolean>;
     /**
-     * Specifies the user name. The value can contain **1** to **64** characters.
+     * Specifies the user name. The value can contain `1` to `64` characters.
      */
     name?: pulumi.Input<string>;
     /**
      * Specifies the user password.
      * The following conditions must be met:
-     * + **8** to **32** characters
-     * + It cannot be consistent with the positive and reverse order of the `account` parameter.
-     * + Contains at least two character types: lowercase letters, uppercase letters, numbers, special characters
-     * (**`~!@#$%^&*()-_=+|[{}];:",'<.>/?**).
      */
     password: pulumi.Input<string>;
     /**
@@ -736,13 +724,13 @@ export interface UserArgs {
      */
     phone?: pulumi.Input<string>;
     /**
-     * Specifies the signature. The value can contain **0** to **512** characters.
+     * Specifies the signature. The value can contain `0` to `512` characters.
      */
     signature?: pulumi.Input<string>;
     /**
      * Specifies the address book sorting level.
      * The lower the serial number, the higher the priority.
-     * The valid value is range from **1** to **10000**. Defaults to **10000**.
+     * The valid value is range from `1` to `10,000`. Defaults to `10,000`.
      */
     sortLevel?: pulumi.Input<number>;
     /**
@@ -756,7 +744,7 @@ export interface UserArgs {
      */
     thirdAccount?: pulumi.Input<string>;
     /**
-     * Specifies the title name. The value can contain **0** to **32** characters.
+     * Specifies the title name. The value can contain `0` to `32` characters.
      */
     title?: pulumi.Input<string>;
     /**

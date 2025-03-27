@@ -10,9 +10,9 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Use this data source to get the ID of an IAM **custom policy**.
+// Use this data source to get details of the specified IAM **custom policy**.
 //
-// > You *must* have IAM read privileges to use this data source.
+// > **NOTE:** You *must* have IAM read privileges to use this data source.
 //
 // ## Example Usage
 //
@@ -30,7 +30,7 @@ import (
 //	func main() {
 //		pulumi.Run(func(ctx *pulumi.Context) error {
 //			_, err := Iam.GetCustomRole(ctx, &iam.GetCustomRoleArgs{
-//				Name: pulumi.StringRef("custom_role"),
+//				Name: pulumi.StringRef("custom_policy"),
 //			}, nil)
 //			if err != nil {
 //				return err
@@ -52,29 +52,31 @@ func GetCustomRole(ctx *pulumi.Context, args *GetCustomRoleArgs, opts ...pulumi.
 
 // A collection of arguments for invoking getCustomRole.
 type GetCustomRoleArgs struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description *string `pulumi:"description"`
-	// The domain the policy belongs to.
+	// Specifies the domain the policy belongs to.
 	DomainId *string `pulumi:"domainId"`
-	// ID of the custom policy.
+	// Specifies the ID of the custom policy. It's required if `name` is not specified.
 	Id *string `pulumi:"id"`
-	// Name of the custom policy.
+	// Specifies the name of the custom policy. It's required if `id` is not specified.
 	Name *string `pulumi:"name"`
-	// The number of citations for the custom policy.
+	// Specifies the number of citations for the custom policy.
 	References *int `pulumi:"references"`
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type *string `pulumi:"type"`
 }
 
 // A collection of values returned by getCustomRole.
 type GetCustomRoleResult struct {
-	// The catalog of the custom policy.
+	// The catalog of the custom policy. The value is **CUSTOMED**.
 	Catalog     string `pulumi:"catalog"`
 	Description string `pulumi:"description"`
 	DomainId    string `pulumi:"domainId"`
 	Id          string `pulumi:"id"`
 	Name        string `pulumi:"name"`
-	// Document of the custom policy.
+	// The content of the custom policy in JSON format.
 	Policy     string `pulumi:"policy"`
 	References int    `pulumi:"references"`
 	Type       string `pulumi:"type"`
@@ -95,17 +97,19 @@ func GetCustomRoleOutput(ctx *pulumi.Context, args GetCustomRoleOutputArgs, opts
 
 // A collection of arguments for invoking getCustomRole.
 type GetCustomRoleOutputArgs struct {
-	// Description of the custom policy.
+	// Specifies the description of the custom policy.
 	Description pulumi.StringPtrInput `pulumi:"description"`
-	// The domain the policy belongs to.
+	// Specifies the domain the policy belongs to.
 	DomainId pulumi.StringPtrInput `pulumi:"domainId"`
-	// ID of the custom policy.
+	// Specifies the ID of the custom policy. It's required if `name` is not specified.
 	Id pulumi.StringPtrInput `pulumi:"id"`
-	// Name of the custom policy.
+	// Specifies the name of the custom policy. It's required if `id` is not specified.
 	Name pulumi.StringPtrInput `pulumi:"name"`
-	// The number of citations for the custom policy.
+	// Specifies the number of citations for the custom policy.
 	References pulumi.IntPtrInput `pulumi:"references"`
-	// Display mode. Valid options are *AX*: Account level and *XA*: Project level.
+	// Specifies the display mode of the custom policy. Valid options are as follows:
+	// + **AX**: the global service project.
+	// + **XA**: region-specific projects.
 	Type pulumi.StringPtrInput `pulumi:"type"`
 }
 
@@ -128,7 +132,7 @@ func (o GetCustomRoleResultOutput) ToGetCustomRoleResultOutputWithContext(ctx co
 	return o
 }
 
-// The catalog of the custom policy.
+// The catalog of the custom policy. The value is **CUSTOMED**.
 func (o GetCustomRoleResultOutput) Catalog() pulumi.StringOutput {
 	return o.ApplyT(func(v GetCustomRoleResult) string { return v.Catalog }).(pulumi.StringOutput)
 }
@@ -149,7 +153,7 @@ func (o GetCustomRoleResultOutput) Name() pulumi.StringOutput {
 	return o.ApplyT(func(v GetCustomRoleResult) string { return v.Name }).(pulumi.StringOutput)
 }
 
-// Document of the custom policy.
+// The content of the custom policy in JSON format.
 func (o GetCustomRoleResultOutput) Policy() pulumi.StringOutput {
 	return o.ApplyT(func(v GetCustomRoleResult) string { return v.Policy }).(pulumi.StringOutput)
 }

@@ -33,13 +33,13 @@ class SubnetArgs:
         The set of arguments for constructing a Subnet resource.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-               new Subnet.
+               new subnet.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
-               in the subnet segment. Changing this creates a new Subnet.
+               in the subnet segment. Changing this creates a new subnet.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-               a new Subnet.
+               a new subnet.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
-               The value must be an existing AZ in the system. Changing this creates a new Subnet.
+               The value must be an existing AZ in the system. Changing this creates a new subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
         :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
@@ -57,8 +57,8 @@ class SubnetArgs:
                separated using commas(,). Removing this parameter indicates that no NTP server is configured.
         :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
-               provider-level region will be used. Changing this creates a new Subnet.
+        :param pulumi.Input[str] region: Specifies the region in which to create the vpc subnet. If omitted, the
+               provider-level region will be used. Changing this creates a new subnet.
         :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
@@ -97,7 +97,7 @@ class SubnetArgs:
         """
         Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-        new Subnet.
+        new subnet.
         """
         return pulumi.get(self, "cidr")
 
@@ -110,7 +110,7 @@ class SubnetArgs:
     def gateway_ip(self) -> pulumi.Input[str]:
         """
         Specifies the gateway of the subnet. The value must be a valid IP address
-        in the subnet segment. Changing this creates a new Subnet.
+        in the subnet segment. Changing this creates a new subnet.
         """
         return pulumi.get(self, "gateway_ip")
 
@@ -123,7 +123,7 @@ class SubnetArgs:
     def vpc_id(self) -> pulumi.Input[str]:
         """
         Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-        a new Subnet.
+        a new subnet.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -136,7 +136,7 @@ class SubnetArgs:
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the availability zone (AZ) to which the subnet belongs.
-        The value must be an existing AZ in the system. Changing this creates a new Subnet.
+        The value must be an existing AZ in the system. Changing this creates a new subnet.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -253,8 +253,8 @@ class SubnetArgs:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies tThe region in which to create the vpc subnet. If omitted, the
-        provider-level region will be used. Changing this creates a new Subnet.
+        Specifies the region in which to create the vpc subnet. If omitted, the
+        provider-level region will be used. Changing this creates a new subnet.
         """
         return pulumi.get(self, "region")
 
@@ -314,10 +314,10 @@ class _SubnetState:
         """
         Input properties used for looking up and filtering Subnet resources.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
-               The value must be an existing AZ in the system. Changing this creates a new Subnet.
+               The value must be an existing AZ in the system. Changing this creates a new subnet.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-               new Subnet.
+               new subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
         :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
@@ -328,7 +328,7 @@ class _SubnetState:
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
-               in the subnet segment. Changing this creates a new Subnet.
+               in the subnet segment. Changing this creates a new subnet.
         :param pulumi.Input[str] ipv4_subnet_id: The ID of the IPv4 subnet (Native OpenStack API).
         :param pulumi.Input[str] ipv6_cidr: The IPv6 subnet CIDR block.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
@@ -341,14 +341,14 @@ class _SubnetState:
                separated using commas(,). Removing this parameter indicates that no NTP server is configured.
         :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
-               provider-level region will be used. Changing this creates a new Subnet.
+        :param pulumi.Input[str] region: Specifies the region in which to create the vpc subnet. If omitted, the
+               provider-level region will be used. Changing this creates a new subnet.
         :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] subnet_id: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-               a new Subnet.
+               a new subnet.
         """
         if availability_zone is not None:
             pulumi.set(__self__, "availability_zone", availability_zone)
@@ -396,7 +396,7 @@ class _SubnetState:
     def availability_zone(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the availability zone (AZ) to which the subnet belongs.
-        The value must be an existing AZ in the system. Changing this creates a new Subnet.
+        The value must be an existing AZ in the system. Changing this creates a new subnet.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -410,7 +410,7 @@ class _SubnetState:
         """
         Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-        new Subnet.
+        new subnet.
         """
         return pulumi.get(self, "cidr")
 
@@ -476,7 +476,7 @@ class _SubnetState:
     def gateway_ip(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the gateway of the subnet. The value must be a valid IP address
-        in the subnet segment. Changing this creates a new Subnet.
+        in the subnet segment. Changing this creates a new subnet.
         """
         return pulumi.get(self, "gateway_ip")
 
@@ -588,8 +588,8 @@ class _SubnetState:
     @pulumi.getter
     def region(self) -> Optional[pulumi.Input[str]]:
         """
-        Specifies tThe region in which to create the vpc subnet. If omitted, the
-        provider-level region will be used. Changing this creates a new Subnet.
+        Specifies the region in which to create the vpc subnet. If omitted, the
+        provider-level region will be used. Changing this creates a new subnet.
         """
         return pulumi.get(self, "region")
 
@@ -639,7 +639,7 @@ class _SubnetState:
     def vpc_id(self) -> Optional[pulumi.Input[str]]:
         """
         Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-        a new Subnet.
+        a new subnet.
         """
         return pulumi.get(self, "vpc_id")
 
@@ -674,19 +674,19 @@ class Subnet(pulumi.CustomResource):
 
         ## Import
 
-        Subnets can be imported using the subnet `Network ID`, e.g.
+        Subnets can be imported using the subnet `Network ID`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Vpc/subnet:Subnet huaweicloud_vpc_subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
+         $ pulumi import huaweicloud:Vpc/subnet:Subnet subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
         ```
 
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
-               The value must be an existing AZ in the system. Changing this creates a new Subnet.
+               The value must be an existing AZ in the system. Changing this creates a new subnet.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-               new Subnet.
+               new subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
         :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
@@ -697,7 +697,7 @@ class Subnet(pulumi.CustomResource):
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
-               in the subnet segment. Changing this creates a new Subnet.
+               in the subnet segment. Changing this creates a new subnet.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
         :param pulumi.Input[str] name: Specifies the subnet name. The value is a string of 1 to 64 characters that can contain
                letters, digits, underscores (_), and hyphens (-).
@@ -706,13 +706,13 @@ class Subnet(pulumi.CustomResource):
                separated using commas(,). Removing this parameter indicates that no NTP server is configured.
         :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
-               provider-level region will be used. Changing this creates a new Subnet.
+        :param pulumi.Input[str] region: Specifies the region in which to create the vpc subnet. If omitted, the
+               provider-level region will be used. Changing this creates a new subnet.
         :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-               a new Subnet.
+               a new subnet.
         """
         ...
     @overload
@@ -725,10 +725,10 @@ class Subnet(pulumi.CustomResource):
 
         ## Import
 
-        Subnets can be imported using the subnet `Network ID`, e.g.
+        Subnets can be imported using the subnet `Network ID`, e.g. bash
 
         ```sh
-         $ pulumi import huaweicloud:Vpc/subnet:Subnet huaweicloud_vpc_subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
+         $ pulumi import huaweicloud:Vpc/subnet:Subnet subnet 4779ab1c-7c1a-44b1-a02e-93dfc361b32d
         ```
 
         :param str resource_name: The name of the resource.
@@ -834,10 +834,10 @@ class Subnet(pulumi.CustomResource):
         :param pulumi.Input[str] id: The unique provider ID of the resource to lookup.
         :param pulumi.ResourceOptions opts: Options for the resource.
         :param pulumi.Input[str] availability_zone: Specifies the availability zone (AZ) to which the subnet belongs.
-               The value must be an existing AZ in the system. Changing this creates a new Subnet.
+               The value must be an existing AZ in the system. Changing this creates a new subnet.
         :param pulumi.Input[str] cidr: Specifies the network segment on which the subnet resides. The value must be in
                CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-               new Subnet.
+               new subnet.
         :param pulumi.Input[str] description: Specifies supplementary information about the subnet. The value is a string of
                no more than 255 characters and cannot contain angle brackets (< or >).
         :param pulumi.Input[bool] dhcp_enable: Specifies whether the DHCP function is enabled for the subnet. Defaults to true.
@@ -848,7 +848,7 @@ class Subnet(pulumi.CustomResource):
                use more than two DNS servers. This parameter value is the superset of both DNS server address 1 and DNS server
                address 2.
         :param pulumi.Input[str] gateway_ip: Specifies the gateway of the subnet. The value must be a valid IP address
-               in the subnet segment. Changing this creates a new Subnet.
+               in the subnet segment. Changing this creates a new subnet.
         :param pulumi.Input[str] ipv4_subnet_id: The ID of the IPv4 subnet (Native OpenStack API).
         :param pulumi.Input[str] ipv6_cidr: The IPv6 subnet CIDR block.
         :param pulumi.Input[bool] ipv6_enable: Specifies whether the IPv6 function is enabled for the subnet. Defaults to false.
@@ -861,14 +861,14 @@ class Subnet(pulumi.CustomResource):
                separated using commas(,). Removing this parameter indicates that no NTP server is configured.
         :param pulumi.Input[str] primary_dns: Specifies the IP address of DNS server 1 on the subnet. The value must be a valid
                IP address.
-        :param pulumi.Input[str] region: Specifies tThe region in which to create the vpc subnet. If omitted, the
-               provider-level region will be used. Changing this creates a new Subnet.
+        :param pulumi.Input[str] region: Specifies the region in which to create the vpc subnet. If omitted, the
+               provider-level region will be used. Changing this creates a new subnet.
         :param pulumi.Input[str] secondary_dns: Specifies the IP address of DNS server 2 on the subnet. The value must be a valid
                IP address.
         :param pulumi.Input[str] subnet_id: schema: Deprecated
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] tags: The key/value pairs to associate with the subnet.
         :param pulumi.Input[str] vpc_id: Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-               a new Subnet.
+               a new subnet.
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
@@ -901,7 +901,7 @@ class Subnet(pulumi.CustomResource):
     def availability_zone(self) -> pulumi.Output[str]:
         """
         Specifies the availability zone (AZ) to which the subnet belongs.
-        The value must be an existing AZ in the system. Changing this creates a new Subnet.
+        The value must be an existing AZ in the system. Changing this creates a new subnet.
         """
         return pulumi.get(self, "availability_zone")
 
@@ -911,7 +911,7 @@ class Subnet(pulumi.CustomResource):
         """
         Specifies the network segment on which the subnet resides. The value must be in
         CIDR format and within the CIDR block of the VPC. The subnet mask cannot be greater than 28. Changing this creates a
-        new Subnet.
+        new subnet.
         """
         return pulumi.get(self, "cidr")
 
@@ -957,7 +957,7 @@ class Subnet(pulumi.CustomResource):
     def gateway_ip(self) -> pulumi.Output[str]:
         """
         Specifies the gateway of the subnet. The value must be a valid IP address
-        in the subnet segment. Changing this creates a new Subnet.
+        in the subnet segment. Changing this creates a new subnet.
         """
         return pulumi.get(self, "gateway_ip")
 
@@ -1033,8 +1033,8 @@ class Subnet(pulumi.CustomResource):
     @pulumi.getter
     def region(self) -> pulumi.Output[str]:
         """
-        Specifies tThe region in which to create the vpc subnet. If omitted, the
-        provider-level region will be used. Changing this creates a new Subnet.
+        Specifies the region in which to create the vpc subnet. If omitted, the
+        provider-level region will be used. Changing this creates a new subnet.
         """
         return pulumi.get(self, "region")
 
@@ -1068,7 +1068,7 @@ class Subnet(pulumi.CustomResource):
     def vpc_id(self) -> pulumi.Output[str]:
         """
         Specifies the ID of the VPC to which the subnet belongs. Changing this creates
-        a new Subnet.
+        a new subnet.
         """
         return pulumi.get(self, "vpc_id")
 

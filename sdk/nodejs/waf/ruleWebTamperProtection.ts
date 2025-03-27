@@ -8,7 +8,7 @@ import * as utilities from "../utilities";
  * Manages a WAF web tamper protection rule resource within HuaweiCloud.
  *
  * > **NOTE:** All WAF resources depend on WAF instances, and the WAF instances need to be purchased before they can be
- * used. The web tamper protection rule resource can be used in Cloud Mode, Dedicated Mode and ELB Mode.
+ * used. The web tamper protection rule resource can be used in Cloud Mode and Dedicated Mode.
  *
  * ## Example Usage
  *
@@ -19,11 +19,12 @@ import * as utilities from "../utilities";
  * const config = new pulumi.Config();
  * const enterpriseProjectId = config.requireObject("enterpriseProjectId");
  * const policyId = config.requireObject("policyId");
- * const rule1 = new huaweicloud.waf.RuleWebTamperProtection("rule1", {
+ * const test = new huaweicloud.waf.RuleWebTamperProtection("test", {
  *     policyId: policyId,
  *     enterpriseProjectId: enterpriseProjectId,
  *     domain: "www.your-domain.com",
  *     path: "/payment",
+ *     description: "test description",
  * });
  * ```
  *
@@ -70,12 +71,18 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
     }
 
     /**
+     * Specifies the description of WAF web tamper protection rule.
+     * Changing this creates a new rule.
+     */
+    public readonly description!: pulumi.Output<string>;
+    /**
      * Specifies the domain name. Changing this creates a new rule.
      */
     public readonly domain!: pulumi.Output<string>;
     /**
      * Specifies the enterprise project ID of WAF tamper protection
-     * rule. Changing this parameter will create a new resource.
+     * rule. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string | undefined>;
     /**
@@ -88,10 +95,17 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
      */
     public readonly policyId!: pulumi.Output<string>;
     /**
-     * The region in which to create the WAF web tamper protection rules resource. If
-     * omitted, the provider-level region will be used. Changing this creates a new rule.
+     * Specifies the region in which to create the WAF web tamper protection rules
+     * resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
      */
     public readonly region!: pulumi.Output<string>;
+    /**
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    public readonly status!: pulumi.Output<number | undefined>;
 
     /**
      * Create a RuleWebTamperProtection resource with the given unique name, arguments, and options.
@@ -106,11 +120,13 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
         opts = opts || {};
         if (opts.id) {
             const state = argsOrState as RuleWebTamperProtectionState | undefined;
+            resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["domain"] = state ? state.domain : undefined;
             resourceInputs["enterpriseProjectId"] = state ? state.enterpriseProjectId : undefined;
             resourceInputs["path"] = state ? state.path : undefined;
             resourceInputs["policyId"] = state ? state.policyId : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
+            resourceInputs["status"] = state ? state.status : undefined;
         } else {
             const args = argsOrState as RuleWebTamperProtectionArgs | undefined;
             if ((!args || args.domain === undefined) && !opts.urn) {
@@ -122,11 +138,13 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
             if ((!args || args.policyId === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'policyId'");
             }
+            resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["domain"] = args ? args.domain : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
             resourceInputs["path"] = args ? args.path : undefined;
             resourceInputs["policyId"] = args ? args.policyId : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
+            resourceInputs["status"] = args ? args.status : undefined;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         super(RuleWebTamperProtection.__pulumiType, name, resourceInputs, opts);
@@ -138,12 +156,18 @@ export class RuleWebTamperProtection extends pulumi.CustomResource {
  */
 export interface RuleWebTamperProtectionState {
     /**
+     * Specifies the description of WAF web tamper protection rule.
+     * Changing this creates a new rule.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Specifies the domain name. Changing this creates a new rule.
      */
     domain?: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of WAF tamper protection
-     * rule. Changing this parameter will create a new resource.
+     * rule. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -156,10 +180,17 @@ export interface RuleWebTamperProtectionState {
      */
     policyId?: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF web tamper protection rules resource. If
-     * omitted, the provider-level region will be used. Changing this creates a new rule.
+     * Specifies the region in which to create the WAF web tamper protection rules
+     * resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    status?: pulumi.Input<number>;
 }
 
 /**
@@ -167,12 +198,18 @@ export interface RuleWebTamperProtectionState {
  */
 export interface RuleWebTamperProtectionArgs {
     /**
+     * Specifies the description of WAF web tamper protection rule.
+     * Changing this creates a new rule.
+     */
+    description?: pulumi.Input<string>;
+    /**
      * Specifies the domain name. Changing this creates a new rule.
      */
     domain: pulumi.Input<string>;
     /**
      * Specifies the enterprise project ID of WAF tamper protection
-     * rule. Changing this parameter will create a new resource.
+     * rule. For enterprise users, if omitted, default enterprise project will be used.
+     * Changing this parameter will create a new resource.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -185,8 +222,15 @@ export interface RuleWebTamperProtectionArgs {
      */
     policyId: pulumi.Input<string>;
     /**
-     * The region in which to create the WAF web tamper protection rules resource. If
-     * omitted, the provider-level region will be used. Changing this creates a new rule.
+     * Specifies the region in which to create the WAF web tamper protection rules
+     * resource. If omitted, the provider-level region will be used. Changing this creates a new rule.
      */
     region?: pulumi.Input<string>;
+    /**
+     * Specifies the status of WAF web tamper protection rule.
+     * Valid values are as follows:
+     * + `0`: Disabled.
+     * + `1`: Enabled.
+     */
+    status?: pulumi.Input<number>;
 }

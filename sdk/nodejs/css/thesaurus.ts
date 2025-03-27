@@ -7,16 +7,32 @@ import * as utilities from "../utilities";
 /**
  * Manages CSS thesaurus resource within HuaweiCloud
  *
- * > Only one thesaurus resource can be created for the specified cluster
+ * > Only one thesaurus resource can be created for the specified cluster.
  *
  * ## Example Usage
+ * ### Create a thesaurus
+ *
+ * ```typescript
+ * import * as pulumi from "@pulumi/pulumi";
+ * import * as pulumi from "@huaweicloudos/pulumi";
+ *
+ * const config = new pulumi.Config();
+ * const clusterId = config.requireObject("clusterId");
+ * const bucketName = config.requireObject("bucketName");
+ * const bucketObjKey = config.requireObject("bucketObjKey");
+ * const test = new huaweicloud.css.Thesaurus("test", {
+ *     clusterId: clusterId,
+ *     bucketName: bucketName,
+ *     mainObject: bucketObjKey,
+ * });
+ * ```
  *
  * ## Import
  *
- * CSS thesaurus can be imported by `id`. For example,
+ * CSS thesaurus can be imported by `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Css/thesaurus:Thesaurus example e9ee3f48-f097-406a-aa74-cfece0af3e31
+ *  $ pulumi import huaweicloud:Css/thesaurus:Thesaurus test <id>
  * ```
  */
 export class Thesaurus extends pulumi.CustomResource {
@@ -60,7 +76,7 @@ export class Thesaurus extends pulumi.CustomResource {
     /**
      * Specifies the path of the main thesaurus file object.
      */
-    public readonly mainObject!: pulumi.Output<string | undefined>;
+    public readonly mainObject!: pulumi.Output<string>;
     /**
      * The region in which to create the thesaurus resource. If omitted, the
      * provider-level region will be used. Changing this creates a new thesaurus resource.
@@ -73,11 +89,11 @@ export class Thesaurus extends pulumi.CustomResource {
     /**
      * Specifies the path of the stop word library file object.
      */
-    public readonly stopObject!: pulumi.Output<string | undefined>;
+    public readonly stopObject!: pulumi.Output<string>;
     /**
      * Specifies the path of the synonyms thesaurus file object.
      */
-    public readonly synonymObject!: pulumi.Output<string | undefined>;
+    public readonly synonymObject!: pulumi.Output<string>;
     /**
      * Specifies the time (UTC) when the thesaurus was modified. The format is ISO8601:YYYY-MM-DDThh:mm:ssZ
      */

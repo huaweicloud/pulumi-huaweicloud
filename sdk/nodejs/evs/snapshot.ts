@@ -13,7 +13,7 @@ import * as utilities from "../utilities";
  * import * as pulumi from "@pulumi/pulumi";
  * import * as pulumi from "@huaweicloudos/pulumi";
  *
- * const myvolume = new huaweicloud.evs.Volume("myvolume", {
+ * const testVolume = new huaweicloud.evs.Volume("testVolume", {
  *     description: "my volume",
  *     volumeType: "SATA",
  *     size: 20,
@@ -23,19 +23,33 @@ import * as utilities from "../utilities";
  *         key: "value",
  *     },
  * });
- * const snapshot1 = new huaweicloud.evs.Snapshot("snapshot1", {
+ * const testSnapshot = new huaweicloud.evs.Snapshot("testSnapshot", {
  *     description: "Daily backup",
- *     volumeId: myvolume.id,
+ *     volumeId: testVolume.id,
  * });
  * ```
  *
  * ## Import
  *
- * EVS snapshot can be imported using the `snapshot id`, e.g.
+ * EVS snapshot can be imported using the `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Evs/snapshot:Snapshot huaweicloud_evs_snapshot.snapshot_1 3a11b255-3bb6-46f3-91e4-3338baa92dd6
+ *  $ pulumi import huaweicloud:Evs/snapshot:Snapshot test <id>
  * ```
+ *
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`metadata`, `force`. It is generally recommended running `terraform plan` after importing the resource. You can then decide if changes should be applied to the resource, or the resource definition should be updated to align with the snapshot. Also, you can ignore changes as below. hcl resource "huaweicloud_evs_snapshot" "test" {
+ *
+ *  ...
+ *
+ *  lifecycle {
+ *
+ *  ignore_changes = [
+ *
+ *  metadata, force,
+ *
+ *  ]
+ *
+ *  } }
  */
 export class Snapshot extends pulumi.CustomResource {
     /**
@@ -74,6 +88,11 @@ export class Snapshot extends pulumi.CustomResource {
      */
     public readonly force!: pulumi.Output<boolean | undefined>;
     /**
+     * Specifies the user-defined metadata key-value pair. Changing the parameter
+     * creates a new snapshot.
+     */
+    public readonly metadata!: pulumi.Output<{[key: string]: string} | undefined>;
+    /**
      * The name of the snapshot. The value can contain a maximum of 255 bytes.
      */
     public readonly name!: pulumi.Output<string>;
@@ -111,6 +130,7 @@ export class Snapshot extends pulumi.CustomResource {
             const state = argsOrState as SnapshotState | undefined;
             resourceInputs["description"] = state ? state.description : undefined;
             resourceInputs["force"] = state ? state.force : undefined;
+            resourceInputs["metadata"] = state ? state.metadata : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
             resourceInputs["region"] = state ? state.region : undefined;
             resourceInputs["size"] = state ? state.size : undefined;
@@ -123,6 +143,7 @@ export class Snapshot extends pulumi.CustomResource {
             }
             resourceInputs["description"] = args ? args.description : undefined;
             resourceInputs["force"] = args ? args.force : undefined;
+            resourceInputs["metadata"] = args ? args.metadata : undefined;
             resourceInputs["name"] = args ? args.name : undefined;
             resourceInputs["region"] = args ? args.region : undefined;
             resourceInputs["volumeId"] = args ? args.volumeId : undefined;
@@ -146,6 +167,11 @@ export interface SnapshotState {
      * Specifies the flag for forcibly creating a snapshot. Default to false.
      */
     force?: pulumi.Input<boolean>;
+    /**
+     * Specifies the user-defined metadata key-value pair. Changing the parameter
+     * creates a new snapshot.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * The name of the snapshot. The value can contain a maximum of 255 bytes.
      */
@@ -182,6 +208,11 @@ export interface SnapshotArgs {
      * Specifies the flag for forcibly creating a snapshot. Default to false.
      */
     force?: pulumi.Input<boolean>;
+    /**
+     * Specifies the user-defined metadata key-value pair. Changing the parameter
+     * creates a new snapshot.
+     */
+    metadata?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
      * The name of the snapshot. The value can contain a maximum of 255 bytes.
      */

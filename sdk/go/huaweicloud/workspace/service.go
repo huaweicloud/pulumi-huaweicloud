@@ -13,6 +13,8 @@ import (
 
 // Use this resource to register or unregister the Workspace service in HuaweiCloud.
 //
+// > **NOTE:** Only one resource can be created in a region.
+//
 // ## Example Usage
 // ### Register the Workspace service and use local authentication
 //
@@ -22,6 +24,7 @@ import (
 // import (
 //
 //	"github.com/huaweicloud/pulumi-huaweicloud/sdk/go/huaweicloud/Workspace"
+//	"github.com/pulumi/pulumi-huaweicloud/sdk/go/huaweicloud/Workspace"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 //	"github.com/pulumi/pulumi/sdk/v3/go/pulumi/config"
 //
@@ -36,6 +39,12 @@ import (
 //				AccessMode: pulumi.String("INTERNET"),
 //				VpcId:      pulumi.Any(vpcId),
 //				NetworkIds: networkIds,
+//				OtpConfigInfo: &workspace.ServiceOtpConfigInfoArgs{
+//					Enable:      pulumi.Bool(true),
+//					ReceiveMode: pulumi.String("VMFA"),
+//					RuleType:    pulumi.String("ACCESS_MODE"),
+//					Rule:        pulumi.String("PRIVATE"),
+//				},
 //			})
 //			if err != nil {
 //				return err
@@ -76,11 +85,19 @@ import (
 //
 // ## Import
 //
-// Service can be imported using the `id`, e.g.
+// Service can be imported using the `id`, e.g. bash
 //
 // ```sh
 //
-//	$ pulumi import huaweicloud:Workspace/service:Service test fd3f81cb-d95f-43ce-b342-81b6b5dcadda
+//	$ pulumi import huaweicloud:Workspace/service:Service test <id>
+//
+// ```
+//
+//	'NA' or other characters can be used to instead of the `id`. bash
+//
+// ```sh
+//
+//	$ pulumi import huaweicloud:Workspace/service:Service test NA
 //
 // ```
 type Service struct {
@@ -120,12 +137,26 @@ type Service struct {
 	// Specifies the internet access port.
 	// The valid value is range from `1,025` to `65,535`.
 	InternetAccessPort pulumi.IntOutput `pulumi:"internetAccessPort"`
+	// Whether the Workspace service is locked. The valid values are as follows:
+	// + **0**: Indicates not locked.
+	// + **1**: Indicates locked.
+	IsLocked pulumi.IntOutput `pulumi:"isLocked"`
+	// Specifies whether to allow the provider to automatically unlock locked service
+	// when it is running. The default value is **false**.
+	LockEnabled pulumi.BoolPtrOutput `pulumi:"lockEnabled"`
+	// The reason of the Workspace service is locked.
+	LockReason pulumi.StringOutput `pulumi:"lockReason"`
+	// The time of the Workspace service is locked.
+	LockTime pulumi.StringOutput `pulumi:"lockTime"`
 	// The subnet segment of the management component.
 	ManagementSubnetCidr pulumi.StringOutput `pulumi:"managementSubnetCidr"`
 	// The network ID list of subnets that the service have.
 	// The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpcId`.
 	// These subnet segments cannot conflict with `172.16.0.0/12`.
 	NetworkIds pulumi.StringArrayOutput `pulumi:"networkIds"`
+	// Specifies the configuration of auxiliary authentication.
+	// The object structure is documented below.
+	OtpConfigInfo ServiceOtpConfigInfoPtrOutput `pulumi:"otpConfigInfo"`
 	// The region in which to register the Workspace service.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringOutput `pulumi:"region"`
@@ -209,12 +240,26 @@ type serviceState struct {
 	// Specifies the internet access port.
 	// The valid value is range from `1,025` to `65,535`.
 	InternetAccessPort *int `pulumi:"internetAccessPort"`
+	// Whether the Workspace service is locked. The valid values are as follows:
+	// + **0**: Indicates not locked.
+	// + **1**: Indicates locked.
+	IsLocked *int `pulumi:"isLocked"`
+	// Specifies whether to allow the provider to automatically unlock locked service
+	// when it is running. The default value is **false**.
+	LockEnabled *bool `pulumi:"lockEnabled"`
+	// The reason of the Workspace service is locked.
+	LockReason *string `pulumi:"lockReason"`
+	// The time of the Workspace service is locked.
+	LockTime *string `pulumi:"lockTime"`
 	// The subnet segment of the management component.
 	ManagementSubnetCidr *string `pulumi:"managementSubnetCidr"`
 	// The network ID list of subnets that the service have.
 	// The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpcId`.
 	// These subnet segments cannot conflict with `172.16.0.0/12`.
 	NetworkIds []string `pulumi:"networkIds"`
+	// Specifies the configuration of auxiliary authentication.
+	// The object structure is documented below.
+	OtpConfigInfo *ServiceOtpConfigInfo `pulumi:"otpConfigInfo"`
 	// The region in which to register the Workspace service.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -260,12 +305,26 @@ type ServiceState struct {
 	// Specifies the internet access port.
 	// The valid value is range from `1,025` to `65,535`.
 	InternetAccessPort pulumi.IntPtrInput
+	// Whether the Workspace service is locked. The valid values are as follows:
+	// + **0**: Indicates not locked.
+	// + **1**: Indicates locked.
+	IsLocked pulumi.IntPtrInput
+	// Specifies whether to allow the provider to automatically unlock locked service
+	// when it is running. The default value is **false**.
+	LockEnabled pulumi.BoolPtrInput
+	// The reason of the Workspace service is locked.
+	LockReason pulumi.StringPtrInput
+	// The time of the Workspace service is locked.
+	LockTime pulumi.StringPtrInput
 	// The subnet segment of the management component.
 	ManagementSubnetCidr pulumi.StringPtrInput
 	// The network ID list of subnets that the service have.
 	// The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpcId`.
 	// These subnet segments cannot conflict with `172.16.0.0/12`.
 	NetworkIds pulumi.StringArrayInput
+	// Specifies the configuration of auxiliary authentication.
+	// The object structure is documented below.
+	OtpConfigInfo ServiceOtpConfigInfoPtrInput
 	// The region in which to register the Workspace service.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -306,12 +365,18 @@ type serviceArgs struct {
 	// Specifies the internet access port.
 	// The valid value is range from `1,025` to `65,535`.
 	InternetAccessPort *int `pulumi:"internetAccessPort"`
+	// Specifies whether to allow the provider to automatically unlock locked service
+	// when it is running. The default value is **false**.
+	LockEnabled *bool `pulumi:"lockEnabled"`
 	// The subnet segment of the management component.
 	ManagementSubnetCidr *string `pulumi:"managementSubnetCidr"`
 	// The network ID list of subnets that the service have.
 	// The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpcId`.
 	// These subnet segments cannot conflict with `172.16.0.0/12`.
 	NetworkIds []string `pulumi:"networkIds"`
+	// Specifies the configuration of auxiliary authentication.
+	// The object structure is documented below.
+	OtpConfigInfo *ServiceOtpConfigInfo `pulumi:"otpConfigInfo"`
 	// The region in which to register the Workspace service.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region *string `pulumi:"region"`
@@ -347,12 +412,18 @@ type ServiceArgs struct {
 	// Specifies the internet access port.
 	// The valid value is range from `1,025` to `65,535`.
 	InternetAccessPort pulumi.IntPtrInput
+	// Specifies whether to allow the provider to automatically unlock locked service
+	// when it is running. The default value is **false**.
+	LockEnabled pulumi.BoolPtrInput
 	// The subnet segment of the management component.
 	ManagementSubnetCidr pulumi.StringPtrInput
 	// The network ID list of subnets that the service have.
 	// The subnets corresponding to this parameter must be included in the VPC resource corresponding to `vpcId`.
 	// These subnet segments cannot conflict with `172.16.0.0/12`.
 	NetworkIds pulumi.StringArrayInput
+	// Specifies the configuration of auxiliary authentication.
+	// The object structure is documented below.
+	OtpConfigInfo ServiceOtpConfigInfoPtrInput
 	// The region in which to register the Workspace service.
 	// If omitted, the provider-level region will be used. Changing this will create a new resource.
 	Region pulumi.StringPtrInput
@@ -509,6 +580,29 @@ func (o ServiceOutput) InternetAccessPort() pulumi.IntOutput {
 	return o.ApplyT(func(v *Service) pulumi.IntOutput { return v.InternetAccessPort }).(pulumi.IntOutput)
 }
 
+// Whether the Workspace service is locked. The valid values are as follows:
+// + **0**: Indicates not locked.
+// + **1**: Indicates locked.
+func (o ServiceOutput) IsLocked() pulumi.IntOutput {
+	return o.ApplyT(func(v *Service) pulumi.IntOutput { return v.IsLocked }).(pulumi.IntOutput)
+}
+
+// Specifies whether to allow the provider to automatically unlock locked service
+// when it is running. The default value is **false**.
+func (o ServiceOutput) LockEnabled() pulumi.BoolPtrOutput {
+	return o.ApplyT(func(v *Service) pulumi.BoolPtrOutput { return v.LockEnabled }).(pulumi.BoolPtrOutput)
+}
+
+// The reason of the Workspace service is locked.
+func (o ServiceOutput) LockReason() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.LockReason }).(pulumi.StringOutput)
+}
+
+// The time of the Workspace service is locked.
+func (o ServiceOutput) LockTime() pulumi.StringOutput {
+	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.LockTime }).(pulumi.StringOutput)
+}
+
 // The subnet segment of the management component.
 func (o ServiceOutput) ManagementSubnetCidr() pulumi.StringOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringOutput { return v.ManagementSubnetCidr }).(pulumi.StringOutput)
@@ -519,6 +613,12 @@ func (o ServiceOutput) ManagementSubnetCidr() pulumi.StringOutput {
 // These subnet segments cannot conflict with `172.16.0.0/12`.
 func (o ServiceOutput) NetworkIds() pulumi.StringArrayOutput {
 	return o.ApplyT(func(v *Service) pulumi.StringArrayOutput { return v.NetworkIds }).(pulumi.StringArrayOutput)
+}
+
+// Specifies the configuration of auxiliary authentication.
+// The object structure is documented below.
+func (o ServiceOutput) OtpConfigInfo() ServiceOtpConfigInfoPtrOutput {
+	return o.ApplyT(func(v *Service) ServiceOtpConfigInfoPtrOutput { return v.OtpConfigInfo }).(ServiceOtpConfigInfoPtrOutput)
 }
 
 // The region in which to register the Workspace service.

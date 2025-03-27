@@ -101,10 +101,10 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CSS cluster can be imported by `id`. For example,
+ * The CSS cluster can be imported by `id`, e.g. bash
  *
  * ```sh
- *  $ pulumi import huaweicloud:Css/cluster:Cluster example 6d793124-3d5d-47be-bf09-f694fdf2d9ed
+ *  $ pulumi import huaweicloud:Css/cluster:Cluster test <id>
  * ```
  */
 export class Cluster extends pulumi.CustomResource {
@@ -137,7 +137,7 @@ export class Cluster extends pulumi.CustomResource {
 
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
+     * The valid values are **true** and **false**, defaults to **false**.
      */
     public readonly autoRenew!: pulumi.Output<string | undefined>;
     /**
@@ -145,18 +145,24 @@ export class Cluster extends pulumi.CustomResource {
      * Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
      * than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
      * distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-     * between node quantity in any two AZs is 1 at most.
-     * Changing this parameter will create a new resource.
+     * between node quantity in any two AZs is **1** at most.
      */
     public readonly availabilityZone!: pulumi.Output<string>;
+    /**
+     * Whether the snapshot function is enabled.
+     */
+    public /*out*/ readonly backupAvailable!: pulumi.Output<boolean>;
     /**
      * Specifies the advanced backup policy. Structure is documented below.
      */
     public readonly backupStrategy!: pulumi.Output<outputs.Css.ClusterBackupStrategy | undefined>;
     /**
+     * The resource ID of bandwidth.
+     */
+    public /*out*/ readonly bandwidthResourceId!: pulumi.Output<string>;
+    /**
      * Specifies the charging mode of the cluster.
      * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-     * Changing this parameter will create a new resource.
      */
     public readonly chargingMode!: pulumi.Output<string>;
     /**
@@ -170,28 +176,35 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly coldNodeConfig!: pulumi.Output<outputs.Css.ClusterColdNodeConfig | undefined>;
     /**
-     * Time when a cluster is created. The format is ISO8601:
-     * CCYY-MM-DDThh:mm:ss.
+     * schema: Deprecated; use created_at instead
      */
     public /*out*/ readonly created!: pulumi.Output<string>;
+    /**
+     * Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+     */
+    public /*out*/ readonly createdAt!: pulumi.Output<string>;
+    /**
+     * Whether disks are encrypted.
+     */
+    public /*out*/ readonly diskEncrypted!: pulumi.Output<boolean>;
+    public readonly enableForceNew!: pulumi.Output<string | undefined>;
     /**
      * The IP address and port number.
      */
     public /*out*/ readonly endpoint!: pulumi.Output<string>;
     /**
-     * Specifies the engine type. The valid value is `elasticsearch`.
-     * Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+     * Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+     * Defaults to **elasticsearch**. Changing this parameter will create a new resource.
      */
     public readonly engineType!: pulumi.Output<string | undefined>;
     /**
      * Specifies the engine version.
-     * [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-     * Changing this parameter will create a new resource.
+     * For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
      */
     public readonly engineVersion!: pulumi.Output<string>;
     /**
-     * Specifies the enterprise project id of the css cluster, Value 0
-     * indicates the default enterprise project. Changing this parameter will create a new resource.
+     * Specifies the enterprise project id of the css cluster, The value **0**
+     * indicates the default enterprise project.
      */
     public readonly enterpriseProjectId!: pulumi.Output<string>;
     /**
@@ -204,14 +217,18 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly expectNodeNum!: pulumi.Output<number>;
     /**
-     * Specifies whether to enable HTTPS. Defaults to `false`.
-     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Specifies whether to enable HTTPS. Defaults to **false**.
+     * When `httpsEnabled` is set to **true**, the `securityMode` needs to be set to **true**.
      * Changing this parameter will create a new resource.
      */
     public readonly httpsEnabled!: pulumi.Output<boolean>;
     /**
+     * Whether a cluster is billed on the yearly/monthly mode.
+     */
+    public /*out*/ readonly isPeriod!: pulumi.Output<boolean>;
+    /**
      * Specifies Kibana public network access information.
-     * This parameter is valid only when securityMode is set to true.
+     * This parameter is valid only when securityMode is set to **true**.
      * The kibanaPublicAccess structure is documented below.
      */
     public readonly kibanaPublicAccess!: pulumi.Output<outputs.Css.ClusterKibanaPublicAccess | undefined>;
@@ -221,7 +238,7 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly masterNodeConfig!: pulumi.Output<outputs.Css.ClusterMasterNodeConfig | undefined>;
     /**
-     * Specifies the cluster name. It contains 4 to 32 characters.
+     * Specifies the cluster name. It contains `4` to `32` characters.
      * Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
      * Changing this parameter will create a new resource.
      */
@@ -231,12 +248,13 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly nodeConfig!: pulumi.Output<outputs.Css.ClusterNodeConfig>;
     /**
-     * List of node objects. Structure is documented below.
+     * List of node objects.
+     * The nodes structure is documented below.
      */
     public /*out*/ readonly nodes!: pulumi.Output<outputs.Css.ClusterNode[]>;
     /**
      * Specifies the password of the cluster administrator in security mode.
-     * This parameter is mandatory only when securityMode is set to true. Changing this parameter will create a new resource.
+     * This parameter is mandatory only when `securityMode` is set to true.
      * The administrator password must meet the following requirements:
      * + The password can contain 8 to 32 characters.
      * + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -245,15 +263,13 @@ export class Cluster extends pulumi.CustomResource {
     public readonly password!: pulumi.Output<string | undefined>;
     /**
      * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * Changing this parameter will create a new resource.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `9`.
      */
     public readonly period!: pulumi.Output<number | undefined>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
-     * Changing this parameter will create a new resource.
+     * Valid values are **month** and **year**.
      */
     public readonly periodUnit!: pulumi.Output<string | undefined>;
     /**
@@ -267,14 +283,14 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly region!: pulumi.Output<string>;
     /**
-     * Specifies Security group ID.
-     * Changing this parameter will create a new resource.
+     * Specifies the security group ID.
      */
     public readonly securityGroupId!: pulumi.Output<string>;
     /**
-     * Specifies whether to enable communication encryption and security
-     * authentication. Available values include *true* and *false*. securityMode is disabled by default.
-     * Changing this parameter will create a new resource.
+     * Specifies whether to enable authentication.
+     * The value can be **true** or **false**. Authentication is disabled by default.
+     * + **true:** Authentication is enabled for the cluster.
+     * + **false:** Authentication is disabled for the cluster.
      */
     public readonly securityMode!: pulumi.Output<boolean | undefined>;
     /**
@@ -282,7 +298,8 @@ export class Cluster extends pulumi.CustomResource {
      */
     public /*out*/ readonly status!: pulumi.Output<string>;
     /**
-     * Specifies the Subnet ID. Changing this parameter will create a new resource.
+     * Specifies the Subnet ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly subnetId!: pulumi.Output<string>;
     /**
@@ -290,7 +307,12 @@ export class Cluster extends pulumi.CustomResource {
      */
     public readonly tags!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the VPC ID. Changing this parameter will create a new resource.
+     * Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+     */
+    public /*out*/ readonly updatedAt!: pulumi.Output<string>;
+    /**
+     * Specifies the VPC ID.
+     * Changing this parameter will create a new resource.
      */
     public readonly vpcId!: pulumi.Output<string>;
     /**
@@ -322,11 +344,16 @@ export class Cluster extends pulumi.CustomResource {
             const state = argsOrState as ClusterState | undefined;
             resourceInputs["autoRenew"] = state ? state.autoRenew : undefined;
             resourceInputs["availabilityZone"] = state ? state.availabilityZone : undefined;
+            resourceInputs["backupAvailable"] = state ? state.backupAvailable : undefined;
             resourceInputs["backupStrategy"] = state ? state.backupStrategy : undefined;
+            resourceInputs["bandwidthResourceId"] = state ? state.bandwidthResourceId : undefined;
             resourceInputs["chargingMode"] = state ? state.chargingMode : undefined;
             resourceInputs["clientNodeConfig"] = state ? state.clientNodeConfig : undefined;
             resourceInputs["coldNodeConfig"] = state ? state.coldNodeConfig : undefined;
             resourceInputs["created"] = state ? state.created : undefined;
+            resourceInputs["createdAt"] = state ? state.createdAt : undefined;
+            resourceInputs["diskEncrypted"] = state ? state.diskEncrypted : undefined;
+            resourceInputs["enableForceNew"] = state ? state.enableForceNew : undefined;
             resourceInputs["endpoint"] = state ? state.endpoint : undefined;
             resourceInputs["engineType"] = state ? state.engineType : undefined;
             resourceInputs["engineVersion"] = state ? state.engineVersion : undefined;
@@ -334,6 +361,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["essNodeConfig"] = state ? state.essNodeConfig : undefined;
             resourceInputs["expectNodeNum"] = state ? state.expectNodeNum : undefined;
             resourceInputs["httpsEnabled"] = state ? state.httpsEnabled : undefined;
+            resourceInputs["isPeriod"] = state ? state.isPeriod : undefined;
             resourceInputs["kibanaPublicAccess"] = state ? state.kibanaPublicAccess : undefined;
             resourceInputs["masterNodeConfig"] = state ? state.masterNodeConfig : undefined;
             resourceInputs["name"] = state ? state.name : undefined;
@@ -349,6 +377,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["status"] = state ? state.status : undefined;
             resourceInputs["subnetId"] = state ? state.subnetId : undefined;
             resourceInputs["tags"] = state ? state.tags : undefined;
+            resourceInputs["updatedAt"] = state ? state.updatedAt : undefined;
             resourceInputs["vpcId"] = state ? state.vpcId : undefined;
             resourceInputs["vpcepEndpoint"] = state ? state.vpcepEndpoint : undefined;
             resourceInputs["vpcepEndpointId"] = state ? state.vpcepEndpointId : undefined;
@@ -364,6 +393,7 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["chargingMode"] = args ? args.chargingMode : undefined;
             resourceInputs["clientNodeConfig"] = args ? args.clientNodeConfig : undefined;
             resourceInputs["coldNodeConfig"] = args ? args.coldNodeConfig : undefined;
+            resourceInputs["enableForceNew"] = args ? args.enableForceNew : undefined;
             resourceInputs["engineType"] = args ? args.engineType : undefined;
             resourceInputs["engineVersion"] = args ? args.engineVersion : undefined;
             resourceInputs["enterpriseProjectId"] = args ? args.enterpriseProjectId : undefined;
@@ -385,10 +415,16 @@ export class Cluster extends pulumi.CustomResource {
             resourceInputs["tags"] = args ? args.tags : undefined;
             resourceInputs["vpcId"] = args ? args.vpcId : undefined;
             resourceInputs["vpcepEndpoint"] = args ? args.vpcepEndpoint : undefined;
+            resourceInputs["backupAvailable"] = undefined /*out*/;
+            resourceInputs["bandwidthResourceId"] = undefined /*out*/;
             resourceInputs["created"] = undefined /*out*/;
+            resourceInputs["createdAt"] = undefined /*out*/;
+            resourceInputs["diskEncrypted"] = undefined /*out*/;
             resourceInputs["endpoint"] = undefined /*out*/;
+            resourceInputs["isPeriod"] = undefined /*out*/;
             resourceInputs["nodes"] = undefined /*out*/;
             resourceInputs["status"] = undefined /*out*/;
+            resourceInputs["updatedAt"] = undefined /*out*/;
             resourceInputs["vpcepEndpointId"] = undefined /*out*/;
             resourceInputs["vpcepIp"] = undefined /*out*/;
         }
@@ -403,7 +439,7 @@ export class Cluster extends pulumi.CustomResource {
 export interface ClusterState {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
+     * The valid values are **true** and **false**, defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -411,18 +447,24 @@ export interface ClusterState {
      * Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
      * than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
      * distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-     * between node quantity in any two AZs is 1 at most.
-     * Changing this parameter will create a new resource.
+     * between node quantity in any two AZs is **1** at most.
      */
     availabilityZone?: pulumi.Input<string>;
+    /**
+     * Whether the snapshot function is enabled.
+     */
+    backupAvailable?: pulumi.Input<boolean>;
     /**
      * Specifies the advanced backup policy. Structure is documented below.
      */
     backupStrategy?: pulumi.Input<inputs.Css.ClusterBackupStrategy>;
     /**
+     * The resource ID of bandwidth.
+     */
+    bandwidthResourceId?: pulumi.Input<string>;
+    /**
      * Specifies the charging mode of the cluster.
      * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-     * Changing this parameter will create a new resource.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -436,28 +478,35 @@ export interface ClusterState {
      */
     coldNodeConfig?: pulumi.Input<inputs.Css.ClusterColdNodeConfig>;
     /**
-     * Time when a cluster is created. The format is ISO8601:
-     * CCYY-MM-DDThh:mm:ss.
+     * schema: Deprecated; use created_at instead
      */
     created?: pulumi.Input<string>;
+    /**
+     * Time when a cluster is created. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+     */
+    createdAt?: pulumi.Input<string>;
+    /**
+     * Whether disks are encrypted.
+     */
+    diskEncrypted?: pulumi.Input<boolean>;
+    enableForceNew?: pulumi.Input<string>;
     /**
      * The IP address and port number.
      */
     endpoint?: pulumi.Input<string>;
     /**
-     * Specifies the engine type. The valid value is `elasticsearch`.
-     * Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+     * Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+     * Defaults to **elasticsearch**. Changing this parameter will create a new resource.
      */
     engineType?: pulumi.Input<string>;
     /**
      * Specifies the engine version.
-     * [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-     * Changing this parameter will create a new resource.
+     * For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
      */
     engineVersion?: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the css cluster, Value 0
-     * indicates the default enterprise project. Changing this parameter will create a new resource.
+     * Specifies the enterprise project id of the css cluster, The value **0**
+     * indicates the default enterprise project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -470,14 +519,18 @@ export interface ClusterState {
      */
     expectNodeNum?: pulumi.Input<number>;
     /**
-     * Specifies whether to enable HTTPS. Defaults to `false`.
-     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Specifies whether to enable HTTPS. Defaults to **false**.
+     * When `httpsEnabled` is set to **true**, the `securityMode` needs to be set to **true**.
      * Changing this parameter will create a new resource.
      */
     httpsEnabled?: pulumi.Input<boolean>;
     /**
+     * Whether a cluster is billed on the yearly/monthly mode.
+     */
+    isPeriod?: pulumi.Input<boolean>;
+    /**
      * Specifies Kibana public network access information.
-     * This parameter is valid only when securityMode is set to true.
+     * This parameter is valid only when securityMode is set to **true**.
      * The kibanaPublicAccess structure is documented below.
      */
     kibanaPublicAccess?: pulumi.Input<inputs.Css.ClusterKibanaPublicAccess>;
@@ -487,7 +540,7 @@ export interface ClusterState {
      */
     masterNodeConfig?: pulumi.Input<inputs.Css.ClusterMasterNodeConfig>;
     /**
-     * Specifies the cluster name. It contains 4 to 32 characters.
+     * Specifies the cluster name. It contains `4` to `32` characters.
      * Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
      * Changing this parameter will create a new resource.
      */
@@ -497,12 +550,13 @@ export interface ClusterState {
      */
     nodeConfig?: pulumi.Input<inputs.Css.ClusterNodeConfig>;
     /**
-     * List of node objects. Structure is documented below.
+     * List of node objects.
+     * The nodes structure is documented below.
      */
     nodes?: pulumi.Input<pulumi.Input<inputs.Css.ClusterNode>[]>;
     /**
      * Specifies the password of the cluster administrator in security mode.
-     * This parameter is mandatory only when securityMode is set to true. Changing this parameter will create a new resource.
+     * This parameter is mandatory only when `securityMode` is set to true.
      * The administrator password must meet the following requirements:
      * + The password can contain 8 to 32 characters.
      * + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -511,15 +565,13 @@ export interface ClusterState {
     password?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * Changing this parameter will create a new resource.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `9`.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
-     * Changing this parameter will create a new resource.
+     * Valid values are **month** and **year**.
      */
     periodUnit?: pulumi.Input<string>;
     /**
@@ -533,14 +585,14 @@ export interface ClusterState {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies Security group ID.
-     * Changing this parameter will create a new resource.
+     * Specifies the security group ID.
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable communication encryption and security
-     * authentication. Available values include *true* and *false*. securityMode is disabled by default.
-     * Changing this parameter will create a new resource.
+     * Specifies whether to enable authentication.
+     * The value can be **true** or **false**. Authentication is disabled by default.
+     * + **true:** Authentication is enabled for the cluster.
+     * + **false:** Authentication is disabled for the cluster.
      */
     securityMode?: pulumi.Input<boolean>;
     /**
@@ -548,7 +600,8 @@ export interface ClusterState {
      */
     status?: pulumi.Input<string>;
     /**
-     * Specifies the Subnet ID. Changing this parameter will create a new resource.
+     * Specifies the Subnet ID.
+     * Changing this parameter will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
     /**
@@ -556,7 +609,12 @@ export interface ClusterState {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the VPC ID. Changing this parameter will create a new resource.
+     * Time when a cluster is updated. The format is ISO8601: CCYY-MM-DDThh:mm:ss.
+     */
+    updatedAt?: pulumi.Input<string>;
+    /**
+     * Specifies the VPC ID.
+     * Changing this parameter will create a new resource.
      */
     vpcId?: pulumi.Input<string>;
     /**
@@ -580,7 +638,7 @@ export interface ClusterState {
 export interface ClusterArgs {
     /**
      * Specifies whether auto renew is enabled.
-     * Valid values are `true` and `false`, defaults to `false`.
+     * The valid values are **true** and **false**, defaults to **false**.
      */
     autoRenew?: pulumi.Input<string>;
     /**
@@ -588,8 +646,7 @@ export interface ClusterArgs {
      * Separate multiple AZs with commas (,), for example, az1,az2. AZs must be unique. The number of nodes must be greater
      * than or equal to the number of AZs. If the number of nodes is a multiple of the number of AZs, the nodes are evenly
      * distributed to each AZ. If the number of nodes is not a multiple of the number of AZs, the absolute difference
-     * between node quantity in any two AZs is 1 at most.
-     * Changing this parameter will create a new resource.
+     * between node quantity in any two AZs is **1** at most.
      */
     availabilityZone?: pulumi.Input<string>;
     /**
@@ -599,7 +656,6 @@ export interface ClusterArgs {
     /**
      * Specifies the charging mode of the cluster.
      * Valid values are **prePaid** and **postPaid**, defaults to **postPaid**.
-     * Changing this parameter will create a new resource.
      */
     chargingMode?: pulumi.Input<string>;
     /**
@@ -612,20 +668,20 @@ export interface ClusterArgs {
      * The coldNodeConfig structure is documented below.
      */
     coldNodeConfig?: pulumi.Input<inputs.Css.ClusterColdNodeConfig>;
+    enableForceNew?: pulumi.Input<string>;
     /**
-     * Specifies the engine type. The valid value is `elasticsearch`.
-     * Defaults to `elasticsearch`. Changing this parameter will create a new resource.
+     * Specifies the engine type. The valid value can be **elasticsearch** or **opensearch**.
+     * Defaults to **elasticsearch**. Changing this parameter will create a new resource.
      */
     engineType?: pulumi.Input<string>;
     /**
      * Specifies the engine version.
-     * [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html)
-     * Changing this parameter will create a new resource.
+     * For details, see [Supported Cluster Versions](https://support.huaweicloud.com/intl/en-us/api-css/css_03_0056.html).
      */
     engineVersion: pulumi.Input<string>;
     /**
-     * Specifies the enterprise project id of the css cluster, Value 0
-     * indicates the default enterprise project. Changing this parameter will create a new resource.
+     * Specifies the enterprise project id of the css cluster, The value **0**
+     * indicates the default enterprise project.
      */
     enterpriseProjectId?: pulumi.Input<string>;
     /**
@@ -638,14 +694,14 @@ export interface ClusterArgs {
      */
     expectNodeNum?: pulumi.Input<number>;
     /**
-     * Specifies whether to enable HTTPS. Defaults to `false`.
-     * When `httpsEnabled` is set to `true`, the `securityMode` needs to be set to `true`.
+     * Specifies whether to enable HTTPS. Defaults to **false**.
+     * When `httpsEnabled` is set to **true**, the `securityMode` needs to be set to **true**.
      * Changing this parameter will create a new resource.
      */
     httpsEnabled?: pulumi.Input<boolean>;
     /**
      * Specifies Kibana public network access information.
-     * This parameter is valid only when securityMode is set to true.
+     * This parameter is valid only when securityMode is set to **true**.
      * The kibanaPublicAccess structure is documented below.
      */
     kibanaPublicAccess?: pulumi.Input<inputs.Css.ClusterKibanaPublicAccess>;
@@ -655,7 +711,7 @@ export interface ClusterArgs {
      */
     masterNodeConfig?: pulumi.Input<inputs.Css.ClusterMasterNodeConfig>;
     /**
-     * Specifies the cluster name. It contains 4 to 32 characters.
+     * Specifies the cluster name. It contains `4` to `32` characters.
      * Only letters, digits, hyphens (-), and underscores (_) are allowed. The value must start with a letter.
      * Changing this parameter will create a new resource.
      */
@@ -666,7 +722,7 @@ export interface ClusterArgs {
     nodeConfig?: pulumi.Input<inputs.Css.ClusterNodeConfig>;
     /**
      * Specifies the password of the cluster administrator in security mode.
-     * This parameter is mandatory only when securityMode is set to true. Changing this parameter will create a new resource.
+     * This parameter is mandatory only when `securityMode` is set to true.
      * The administrator password must meet the following requirements:
      * + The password can contain 8 to 32 characters.
      * + The password must contain at least 3 of the following character types: uppercase letters, lowercase letters, digits,
@@ -675,15 +731,13 @@ export interface ClusterArgs {
     password?: pulumi.Input<string>;
     /**
      * Specifies the charging period of the instance.
-     * If `periodUnit` is set to *month*, the value ranges from 1 to 9.
-     * If `periodUnit` is set to *year*, the value ranges from 1 to 3.
-     * Changing this parameter will create a new resource.
+     * If `periodUnit` is set to **month**, the value ranges from `1` to `9`.
+     * If `periodUnit` is set to **year**, the value ranges from `1` to `9`.
      */
     period?: pulumi.Input<number>;
     /**
      * Specifies the charging period unit of the instance.
-     * Valid values are *month* and *year*.
-     * Changing this parameter will create a new resource.
+     * Valid values are **month** and **year**.
      */
     periodUnit?: pulumi.Input<string>;
     /**
@@ -697,18 +751,19 @@ export interface ClusterArgs {
      */
     region?: pulumi.Input<string>;
     /**
-     * Specifies Security group ID.
-     * Changing this parameter will create a new resource.
+     * Specifies the security group ID.
      */
     securityGroupId?: pulumi.Input<string>;
     /**
-     * Specifies whether to enable communication encryption and security
-     * authentication. Available values include *true* and *false*. securityMode is disabled by default.
-     * Changing this parameter will create a new resource.
+     * Specifies whether to enable authentication.
+     * The value can be **true** or **false**. Authentication is disabled by default.
+     * + **true:** Authentication is enabled for the cluster.
+     * + **false:** Authentication is disabled for the cluster.
      */
     securityMode?: pulumi.Input<boolean>;
     /**
-     * Specifies the Subnet ID. Changing this parameter will create a new resource.
+     * Specifies the Subnet ID.
+     * Changing this parameter will create a new resource.
      */
     subnetId?: pulumi.Input<string>;
     /**
@@ -716,7 +771,8 @@ export interface ClusterArgs {
      */
     tags?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the VPC ID. Changing this parameter will create a new resource.
+     * Specifies the VPC ID.
+     * Changing this parameter will create a new resource.
      */
     vpcId?: pulumi.Input<string>;
     /**

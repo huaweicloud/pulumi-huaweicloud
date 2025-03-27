@@ -85,7 +85,7 @@ class DatasetDataSource(dict):
                Changing this parameter will create a new resource.
         :param str table_name: Specifies the table name of DWS/DLI when `data_type` is `1` or `2`.
                Changing this parameter will create a new resource.
-        :param str user_name: Specifies the user name of databse when `data_type` is `1`.
+        :param str user_name: Specifies the user name of database when `data_type` is `1`.
                Changing this parameter will create a new resource.
         :param bool with_column_header: Specifies whether the data contains table header when the type
                of dataset is `400`(Table type). Default value is `true`. Changing this parameter will create a new resource.
@@ -180,7 +180,7 @@ class DatasetDataSource(dict):
     @pulumi.getter(name="userName")
     def user_name(self) -> Optional[str]:
         """
-        Specifies the user name of databse when `data_type` is `1`.
+        Specifies the user name of database when `data_type` is `1`.
         Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "user_name")
@@ -397,7 +397,9 @@ class NotebookMountStorage(dict):
                  status: Optional[str] = None,
                  type: Optional[str] = None):
         """
-        :param str id: The mount ID.
+        :param str id: Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+               is `EFS` and the `ownership` is `DEDICATED`.
+               Changing this parameter will create a new resource.
         :param str mount_path: The local mount path.
         :param str path: The path of storage which be mounted.
         :param str status: The status of mount.
@@ -420,7 +422,9 @@ class NotebookMountStorage(dict):
     @pulumi.getter
     def id(self) -> Optional[str]:
         """
-        The mount ID.
+        Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+        is `EFS` and the `ownership` is `DEDICATED`.
+        Changing this parameter will create a new resource.
         """
         return pulumi.get(self, "id")
 
@@ -480,6 +484,7 @@ class NotebookVolume(dict):
 
     def __init__(__self__, *,
                  type: str,
+                 id: Optional[str] = None,
                  mount_path: Optional[str] = None,
                  ownership: Optional[str] = None,
                  size: Optional[int] = None,
@@ -488,16 +493,21 @@ class NotebookVolume(dict):
         :param str type: Specifies the volume type. The options are as follows:
                - *EFS*: use Scalable File Service, default 50GB is **free**.
                - *EVS*: use Elastic Volume Service, default size is 5 GB.
+        :param str id: Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+               is `EFS` and the `ownership` is `DEDICATED`.
+               Changing this parameter will create a new resource.
         :param str mount_path: The local mount path.
         :param str ownership: Specifies the volume ownership. The options are as follows:
                - *MANAGED*: shared storage disk of the ModelArts service.
                - *DEDICATED*: dedicated storage disk, only supported when the category is `EFS`.
-        :param int size: Specifies the volume size. Its value range is from 5 GB to 4096 GB.
-        :param str uri: Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+        :param int size: Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
+        :param str uri: Specifies the URL of dedicated storage disk, which is mandatory when the `type`
                is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
                Changing this parameter will create a new resource.
         """
         pulumi.set(__self__, "type", type)
+        if id is not None:
+            pulumi.set(__self__, "id", id)
         if mount_path is not None:
             pulumi.set(__self__, "mount_path", mount_path)
         if ownership is not None:
@@ -516,6 +526,16 @@ class NotebookVolume(dict):
         - *EVS*: use Elastic Volume Service, default size is 5 GB.
         """
         return pulumi.get(self, "type")
+
+    @property
+    @pulumi.getter
+    def id(self) -> Optional[str]:
+        """
+        Specifies the ID of dedicated storage disk, which is mandatory when the `type`
+        is `EFS` and the `ownership` is `DEDICATED`.
+        Changing this parameter will create a new resource.
+        """
+        return pulumi.get(self, "id")
 
     @property
     @pulumi.getter(name="mountPath")
@@ -539,7 +559,7 @@ class NotebookVolume(dict):
     @pulumi.getter
     def size(self) -> Optional[int]:
         """
-        Specifies the volume size. Its value range is from 5 GB to 4096 GB.
+        Specifies the volume size. Its value range is from `5` GB to `4,096` GB.
         """
         return pulumi.get(self, "size")
 
@@ -547,7 +567,7 @@ class NotebookVolume(dict):
     @pulumi.getter
     def uri(self) -> Optional[str]:
         """
-        Specifies the uri of dedicated storage disk, which is mandatory when the `type`
+        Specifies the URL of dedicated storage disk, which is mandatory when the `type`
         is `EFS` and the `ownership` is `DEDICATED`. Example: `192.168.0.1:/user-9sfdsdgdfgh5ea4d56871e75d6966aa274/mount/`.
         Changing this parameter will create a new resource.
         """

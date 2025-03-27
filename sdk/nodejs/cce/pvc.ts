@@ -72,13 +72,13 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g.
+ * CCE PVC can be imported using the cluster ID, namespace and ID separated by slashes, e.g. bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Cce/pvc:Pvc test 5c20fdad-7288-11eb-b817-0255ac10158b/default/fa540f3b-12d9-40e5-8268-04bcfed95a46
  * ```
  *
- *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. resource "huaweicloud_cce_pvc" "test" {
+ *  Note that the imported state may not be identical to your resource definition, due to some attributes missing from the API response, security or some other reason. The missing attributes include`annotations`. It is generally recommended running `terraform plan` after importing a PVC. You can then decide if changes should be applied to the PVC, or the resource definition should be updated to align with the PVC. Also you can ignore changes as below. hcl resource "huaweicloud_cce_pvc" "test" {
  *
  *  ...
  *
@@ -147,9 +147,10 @@ export class Pvc extends pulumi.CustomResource {
      */
     public readonly labels!: pulumi.Output<{[key: string]: string} | undefined>;
     /**
-     * Specifies the unique name of the PVC resource. This parameter can contain a
-     * maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-     * lowercase letters and digits. Changing this will create a new PVC resource.
+     * Specifies the unique name of the PVC resource.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new PVC resource.
      */
     public readonly name!: pulumi.Output<string>;
     /**
@@ -271,9 +272,10 @@ export interface PvcState {
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the unique name of the PVC resource. This parameter can contain a
-     * maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-     * lowercase letters and digits. Changing this will create a new PVC resource.
+     * Specifies the unique name of the PVC resource.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new PVC resource.
      */
     name?: pulumi.Input<string>;
     /**
@@ -334,9 +336,10 @@ export interface PvcArgs {
      */
     labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     /**
-     * Specifies the unique name of the PVC resource. This parameter can contain a
-     * maximum of 63 characters, which may consist of lowercase letters, digits and hyphens (-), and must start and end with
-     * lowercase letters and digits. Changing this will create a new PVC resource.
+     * Specifies the unique name of the PVC resource.  
+     * This parameter can contain a maximum of `63` characters, which may consist of lowercase letters, digits and
+     * hyphens (-), and must start and end with lowercase letters and digits.
+     * Changing this will create a new PVC resource.
      */
     name?: pulumi.Input<string>;
     /**

@@ -222,7 +222,7 @@ class JobConfig(dict):
                + **NONE**: The job will not be deleted after it is executed.
                + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
                massive one-time jobs.
-               + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+               + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
         :param bool scheduler_enabled: Specifies whether to enable a scheduled task.  Default value is `false`.
         :param str scheduler_run_at: Specifies time when a scheduled task is triggered in a cycle. This parameter
                is valid only when `scheduler_cycle_type` is set to `hour`, `week`, or `month`.
@@ -330,7 +330,7 @@ class JobConfig(dict):
         + **NONE**: The job will not be deleted after it is executed.
         + **DELETE_AFTER_SUCCEED**: The job will be deleted only after it is successfully executed. It is applicable to
         massive one-time jobs.
-        + **DELETE**: Thejob will be deleted after it is executed, regardless of the execution result.
+        + **DELETE**: The job will be deleted after it is executed, regardless of the execution result.
         """
         return pulumi.get(self, "scheduler_disposable_type")
 
@@ -442,28 +442,50 @@ class JobConfig(dict):
 @pulumi.output_type
 class GetFlavorsFlavorResult(dict):
     def __init__(__self__, *,
+                 cpu: str,
                  id: str,
+                 memory: str,
                  name: str):
         """
-        :param str id: The id of the CDM flavor.
-        :param str name: The name of the CDM flavor.
+        :param str cpu: The numbers of CDM cluster vCPUs.
+        :param str id: The ID of the CDM flavor.
+        :param str memory: The memory size in GB.
+        :param str name: The name of the CDM flavor. Format is `cdm.<flavor_type>`.
         """
+        pulumi.set(__self__, "cpu", cpu)
         pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "memory", memory)
         pulumi.set(__self__, "name", name)
+
+    @property
+    @pulumi.getter
+    def cpu(self) -> str:
+        """
+        The numbers of CDM cluster vCPUs.
+        """
+        return pulumi.get(self, "cpu")
 
     @property
     @pulumi.getter
     def id(self) -> str:
         """
-        The id of the CDM flavor.
+        The ID of the CDM flavor.
         """
         return pulumi.get(self, "id")
 
     @property
     @pulumi.getter
+    def memory(self) -> str:
+        """
+        The memory size in GB.
+        """
+        return pulumi.get(self, "memory")
+
+    @property
+    @pulumi.getter
     def name(self) -> str:
         """
-        The name of the CDM flavor.
+        The name of the CDM flavor. Format is `cdm.<flavor_type>`.
         """
         return pulumi.get(self, "name")
 

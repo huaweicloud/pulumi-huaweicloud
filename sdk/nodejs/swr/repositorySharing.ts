@@ -28,7 +28,7 @@ import * as utilities from "../utilities";
  *
  * ## Import
  *
- * Repository sharing can be imported using the organization name, repository name and sharing account separated by a slash, e.g.
+ * Repository sharing can be imported using the organization name, repository name and sharing account separated by a slash, e.g.bash
  *
  * ```sh
  *  $ pulumi import huaweicloud:Swr/repositorySharing:RepositorySharing test org-name/repo-name/sharing-account

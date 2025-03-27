@@ -503,16 +503,24 @@ func (o BandwidthPolicyScheduledPolicyPtrOutput) StartTime() pulumi.StringPtrOut
 }
 
 type ConfigurationInstanceConfig struct {
-	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+	// Specifies the initial login password of the administrator account for
+	// logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
+	AdminPass *string `pulumi:"adminPass"`
+	// Specifies the bandwidth billing type.
+	// Changing this creates a new resource. The valid values are as follows:
+	// + **bandwidth**: Billing by bandwidth.
+	// + **traffic**: Billing by traffic.
 	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the DEH.
+	// Changing this will create a new resource.
+	DedicatedHostId *string `pulumi:"dedicatedHostId"`
 	// Specifies the disk group information. System disks are mandatory and
-	// data disks are optional. The object structure is documented below.
+	// data disks are optional. The disk structure is documented below.
 	// Changing this will create a new resource.
 	Disks []ConfigurationInstanceConfigDisk `pulumi:"disks"`
 	// Specifies the ECS group ID. Changing this will create a new resource.
 	EcsGroupId *string `pulumi:"ecsGroupId"`
-	// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+	// Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
 	// Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 	Flavor *string `pulumi:"flavor"`
 	// Specifies the priority policy used when there are multiple flavors
@@ -521,29 +529,34 @@ type ConfigurationInstanceConfig struct {
 	// Specifies the ECS image ID. Changing this will create a new resource.
 	Image *string `pulumi:"image"`
 	// Specifies the ECS instance ID when using its specification
-	// as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+	// as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `securityGroupIds`, `tenancy`
+	// and `dedicatedHostId` arguments do not take effect.
 	// If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
 	// Changing this will create a new resource.
 	InstanceId *string `pulumi:"instanceId"`
 	// Specifies the name of the SSH key pair used to log in to the instance.
 	// Changing this will create a new resource.
-	KeyName string `pulumi:"keyName"`
+	KeyName *string `pulumi:"keyName"`
 	// Specifies the key/value pairs to make available from within the instance.
 	// Changing this will create a new resource.
 	Metadata map[string]string `pulumi:"metadata"`
 	// Specifies the customize personality of an instance by defining one or
-	// more files and their contents. The object structure is documented below.
+	// more files and their contents. The personality structure is documented below.
 	// Changing this will create a new resource.
 	Personalities []ConfigurationInstanceConfigPersonality `pulumi:"personalities"`
 	// Specifies the EIP of the ECS instance.
-	// The object structure is documented below.
+	// The publicIp structure is documented below.
 	// Changing this will create a new resource.
 	PublicIp *ConfigurationInstanceConfigPublicIp `pulumi:"publicIp"`
 	// Specifies an array of one or more security group IDs.
 	// Changing this will create a new resource.
 	SecurityGroupIds []string `pulumi:"securityGroupIds"`
-	// Specifies the user data to provide when launching the instance.
-	// The file content must be encoded with Base64. Changing this will create a new resource.
+	// Configure this field to **dedicated** to create ECS instances on DeHs.
+	// Before configuring this field, prepare DeHs. Changing this will create a new resource.
+	Tenancy *string `pulumi:"tenancy"`
+	// Specifies the user data to be injected during the ECS creation process.
+	// Changing this will create a new resource. For more information, see
+	// [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
 	UserData *string `pulumi:"userData"`
 }
 
@@ -559,16 +572,24 @@ type ConfigurationInstanceConfigInput interface {
 }
 
 type ConfigurationInstanceConfigArgs struct {
-	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+	// Specifies the initial login password of the administrator account for
+	// logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
+	AdminPass pulumi.StringPtrInput `pulumi:"adminPass"`
+	// Specifies the bandwidth billing type.
+	// Changing this creates a new resource. The valid values are as follows:
+	// + **bandwidth**: Billing by bandwidth.
+	// + **traffic**: Billing by traffic.
 	ChargingMode pulumi.StringPtrInput `pulumi:"chargingMode"`
+	// Specifies the ID of the DEH.
+	// Changing this will create a new resource.
+	DedicatedHostId pulumi.StringPtrInput `pulumi:"dedicatedHostId"`
 	// Specifies the disk group information. System disks are mandatory and
-	// data disks are optional. The object structure is documented below.
+	// data disks are optional. The disk structure is documented below.
 	// Changing this will create a new resource.
 	Disks ConfigurationInstanceConfigDiskArrayInput `pulumi:"disks"`
 	// Specifies the ECS group ID. Changing this will create a new resource.
 	EcsGroupId pulumi.StringPtrInput `pulumi:"ecsGroupId"`
-	// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+	// Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
 	// Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 	Flavor pulumi.StringPtrInput `pulumi:"flavor"`
 	// Specifies the priority policy used when there are multiple flavors
@@ -577,29 +598,34 @@ type ConfigurationInstanceConfigArgs struct {
 	// Specifies the ECS image ID. Changing this will create a new resource.
 	Image pulumi.StringPtrInput `pulumi:"image"`
 	// Specifies the ECS instance ID when using its specification
-	// as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+	// as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `securityGroupIds`, `tenancy`
+	// and `dedicatedHostId` arguments do not take effect.
 	// If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
 	// Changing this will create a new resource.
 	InstanceId pulumi.StringPtrInput `pulumi:"instanceId"`
 	// Specifies the name of the SSH key pair used to log in to the instance.
 	// Changing this will create a new resource.
-	KeyName pulumi.StringInput `pulumi:"keyName"`
+	KeyName pulumi.StringPtrInput `pulumi:"keyName"`
 	// Specifies the key/value pairs to make available from within the instance.
 	// Changing this will create a new resource.
 	Metadata pulumi.StringMapInput `pulumi:"metadata"`
 	// Specifies the customize personality of an instance by defining one or
-	// more files and their contents. The object structure is documented below.
+	// more files and their contents. The personality structure is documented below.
 	// Changing this will create a new resource.
 	Personalities ConfigurationInstanceConfigPersonalityArrayInput `pulumi:"personalities"`
 	// Specifies the EIP of the ECS instance.
-	// The object structure is documented below.
+	// The publicIp structure is documented below.
 	// Changing this will create a new resource.
 	PublicIp ConfigurationInstanceConfigPublicIpPtrInput `pulumi:"publicIp"`
 	// Specifies an array of one or more security group IDs.
 	// Changing this will create a new resource.
 	SecurityGroupIds pulumi.StringArrayInput `pulumi:"securityGroupIds"`
-	// Specifies the user data to provide when launching the instance.
-	// The file content must be encoded with Base64. Changing this will create a new resource.
+	// Configure this field to **dedicated** to create ECS instances on DeHs.
+	// Before configuring this field, prepare DeHs. Changing this will create a new resource.
+	Tenancy pulumi.StringPtrInput `pulumi:"tenancy"`
+	// Specifies the user data to be injected during the ECS creation process.
+	// Changing this will create a new resource. For more information, see
+	// [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
 	UserData pulumi.StringPtrInput `pulumi:"userData"`
 }
 
@@ -680,14 +706,28 @@ func (o ConfigurationInstanceConfigOutput) ToConfigurationInstanceConfigPtrOutpu
 	}).(ConfigurationInstanceConfigPtrOutput)
 }
 
-// Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+// Specifies the initial login password of the administrator account for
+// logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
+func (o ConfigurationInstanceConfigOutput) AdminPass() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.AdminPass }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the bandwidth billing type.
+// Changing this creates a new resource. The valid values are as follows:
+// + **bandwidth**: Billing by bandwidth.
+// + **traffic**: Billing by traffic.
 func (o ConfigurationInstanceConfigOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.ChargingMode }).(pulumi.StringPtrOutput)
 }
 
+// Specifies the ID of the DEH.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigOutput) DedicatedHostId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.DedicatedHostId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the disk group information. System disks are mandatory and
-// data disks are optional. The object structure is documented below.
+// data disks are optional. The disk structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) Disks() ConfigurationInstanceConfigDiskArrayOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) []ConfigurationInstanceConfigDisk { return v.Disks }).(ConfigurationInstanceConfigDiskArrayOutput)
@@ -698,7 +738,7 @@ func (o ConfigurationInstanceConfigOutput) EcsGroupId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.EcsGroupId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+// Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
 // Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.Flavor }).(pulumi.StringPtrOutput)
@@ -716,7 +756,8 @@ func (o ConfigurationInstanceConfigOutput) Image() pulumi.StringPtrOutput {
 }
 
 // Specifies the ECS instance ID when using its specification
-// as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+// as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `securityGroupIds`, `tenancy`
+// and `dedicatedHostId` arguments do not take effect.
 // If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) InstanceId() pulumi.StringPtrOutput {
@@ -725,8 +766,8 @@ func (o ConfigurationInstanceConfigOutput) InstanceId() pulumi.StringPtrOutput {
 
 // Specifies the name of the SSH key pair used to log in to the instance.
 // Changing this will create a new resource.
-func (o ConfigurationInstanceConfigOutput) KeyName() pulumi.StringOutput {
-	return o.ApplyT(func(v ConfigurationInstanceConfig) string { return v.KeyName }).(pulumi.StringOutput)
+func (o ConfigurationInstanceConfigOutput) KeyName() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.KeyName }).(pulumi.StringPtrOutput)
 }
 
 // Specifies the key/value pairs to make available from within the instance.
@@ -736,14 +777,14 @@ func (o ConfigurationInstanceConfigOutput) Metadata() pulumi.StringMapOutput {
 }
 
 // Specifies the customize personality of an instance by defining one or
-// more files and their contents. The object structure is documented below.
+// more files and their contents. The personality structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) Personalities() ConfigurationInstanceConfigPersonalityArrayOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) []ConfigurationInstanceConfigPersonality { return v.Personalities }).(ConfigurationInstanceConfigPersonalityArrayOutput)
 }
 
 // Specifies the EIP of the ECS instance.
-// The object structure is documented below.
+// The publicIp structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigOutput) PublicIp() ConfigurationInstanceConfigPublicIpPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *ConfigurationInstanceConfigPublicIp { return v.PublicIp }).(ConfigurationInstanceConfigPublicIpPtrOutput)
@@ -755,8 +796,15 @@ func (o ConfigurationInstanceConfigOutput) SecurityGroupIds() pulumi.StringArray
 	return o.ApplyT(func(v ConfigurationInstanceConfig) []string { return v.SecurityGroupIds }).(pulumi.StringArrayOutput)
 }
 
-// Specifies the user data to provide when launching the instance.
-// The file content must be encoded with Base64. Changing this will create a new resource.
+// Configure this field to **dedicated** to create ECS instances on DeHs.
+// Before configuring this field, prepare DeHs. Changing this will create a new resource.
+func (o ConfigurationInstanceConfigOutput) Tenancy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.Tenancy }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user data to be injected during the ECS creation process.
+// Changing this will create a new resource. For more information, see
+// [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
 func (o ConfigurationInstanceConfigOutput) UserData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfig) *string { return v.UserData }).(pulumi.StringPtrOutput)
 }
@@ -785,8 +833,21 @@ func (o ConfigurationInstanceConfigPtrOutput) Elem() ConfigurationInstanceConfig
 	}).(ConfigurationInstanceConfigOutput)
 }
 
-// Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+// Specifies the initial login password of the administrator account for
+// logging in to an ECS using password authentication. The Windows administrator is `Administrator`.
+func (o ConfigurationInstanceConfigPtrOutput) AdminPass() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.AdminPass
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the bandwidth billing type.
+// Changing this creates a new resource. The valid values are as follows:
+// + **bandwidth**: Billing by bandwidth.
+// + **traffic**: Billing by traffic.
 func (o ConfigurationInstanceConfigPtrOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
 		if v == nil {
@@ -796,8 +857,19 @@ func (o ConfigurationInstanceConfigPtrOutput) ChargingMode() pulumi.StringPtrOut
 	}).(pulumi.StringPtrOutput)
 }
 
+// Specifies the ID of the DEH.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPtrOutput) DedicatedHostId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.DedicatedHostId
+	}).(pulumi.StringPtrOutput)
+}
+
 // Specifies the disk group information. System disks are mandatory and
-// data disks are optional. The object structure is documented below.
+// data disks are optional. The disk structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) Disks() ConfigurationInstanceConfigDiskArrayOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) []ConfigurationInstanceConfigDisk {
@@ -818,7 +890,7 @@ func (o ConfigurationInstanceConfigPtrOutput) EcsGroupId() pulumi.StringPtrOutpu
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the ECS flavor name. A maximum of 10 flavors can be selected.
+// Specifies the ECS flavor name. A maximum of `10` flavors can be selected.
 // Use a comma (,) to separate multiple flavor names. Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) Flavor() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
@@ -851,7 +923,8 @@ func (o ConfigurationInstanceConfigPtrOutput) Image() pulumi.StringPtrOutput {
 }
 
 // Specifies the ECS instance ID when using its specification
-// as the template to create AS configurations. In this case, `flavor`, `image`, and `disk` arguments do not take effect.
+// as the template to create AS configurations. In this case, `flavor`, `image`, `disk`, `securityGroupIds`, `tenancy`
+// and `dedicatedHostId` arguments do not take effect.
 // If this argument is not specified, `flavor`, `image`, and `disk` arguments are mandatory.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) InstanceId() pulumi.StringPtrOutput {
@@ -870,7 +943,7 @@ func (o ConfigurationInstanceConfigPtrOutput) KeyName() pulumi.StringPtrOutput {
 		if v == nil {
 			return nil
 		}
-		return &v.KeyName
+		return v.KeyName
 	}).(pulumi.StringPtrOutput)
 }
 
@@ -886,7 +959,7 @@ func (o ConfigurationInstanceConfigPtrOutput) Metadata() pulumi.StringMapOutput 
 }
 
 // Specifies the customize personality of an instance by defining one or
-// more files and their contents. The object structure is documented below.
+// more files and their contents. The personality structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) Personalities() ConfigurationInstanceConfigPersonalityArrayOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) []ConfigurationInstanceConfigPersonality {
@@ -898,7 +971,7 @@ func (o ConfigurationInstanceConfigPtrOutput) Personalities() ConfigurationInsta
 }
 
 // Specifies the EIP of the ECS instance.
-// The object structure is documented below.
+// The publicIp structure is documented below.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPtrOutput) PublicIp() ConfigurationInstanceConfigPublicIpPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) *ConfigurationInstanceConfigPublicIp {
@@ -920,8 +993,20 @@ func (o ConfigurationInstanceConfigPtrOutput) SecurityGroupIds() pulumi.StringAr
 	}).(pulumi.StringArrayOutput)
 }
 
-// Specifies the user data to provide when launching the instance.
-// The file content must be encoded with Base64. Changing this will create a new resource.
+// Configure this field to **dedicated** to create ECS instances on DeHs.
+// Before configuring this field, prepare DeHs. Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPtrOutput) Tenancy() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Tenancy
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the user data to be injected during the ECS creation process.
+// Changing this will create a new resource. For more information, see
+// [Passing User Data to ECSs](https://support.huaweicloud.com/intl/en-us/usermanual-ecs/en-us_topic_0032380449.html).
 func (o ConfigurationInstanceConfigPtrOutput) UserData() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfig) *string {
 		if v == nil {
@@ -932,22 +1017,40 @@ func (o ConfigurationInstanceConfigPtrOutput) UserData() pulumi.StringPtrOutput 
 }
 
 type ConfigurationInstanceConfigDisk struct {
+	// Specifies the ID of a data disk image used to export data disks of
+	// an ECS.
+	DataDiskImageId *string `pulumi:"dataDiskImageId"`
+	// Specifies a DSS device ID for creating an ECS disk.
+	DedicatedStorageId *string `pulumi:"dedicatedStorageId"`
 	// Specifies whether the disk is a system disk or a data disk.
 	// Option **DATA** indicates a data disk, option **SYS** indicates a system disk.
 	// Changing this will create a new resource.
 	DiskType string `pulumi:"diskType"`
+	// Specifies the IOPS configured for an EVS disk.
+	// Changing this will create a new resource.
+	Iops *int `pulumi:"iops"`
 	// Specifies the encryption KMS ID of the **DATA** disk.
 	// Changing this will create a new resource.
 	KmsId *string `pulumi:"kmsId"`
 	// Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-	// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+	// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 	// Changing this creates a new resource.
 	Size int `pulumi:"size"`
+	// Specifies the disk backup snapshot ID for restoring the system disk and
+	// data disks using a full-ECS backup when a full-ECS image is used.
+	SnapshotId *string `pulumi:"snapshotId"`
+	// Specifies the throughput of an EVS disk. The unit is MiB/s.
+	// Changing this will create a new resource.
+	Throughput *int `pulumi:"throughput"`
 	// Specifies the disk type. Changing this will create a new resource.
 	// Available options are:
-	// + `SAS`: high I/O disk type.
-	// + `SSD`: ultra-high I/O disk type.
-	// + `GPSSD`: general purpose SSD disk type.
+	// + **SSD**: The ultra-high I/O type.
+	// + **SAS**: The high I/O EVS type.
+	// + **SATA**: The common I/O type.
+	// + **GPSSD**: The general purpose SSD type.
+	// + **ESSD**: The extreme SSD type.
+	// + **GPSSD2**: The general purpose SSD V2 type.
+	// + **ESSD2**: The extreme SSD V2 type.
 	VolumeType string `pulumi:"volumeType"`
 }
 
@@ -963,22 +1066,40 @@ type ConfigurationInstanceConfigDiskInput interface {
 }
 
 type ConfigurationInstanceConfigDiskArgs struct {
+	// Specifies the ID of a data disk image used to export data disks of
+	// an ECS.
+	DataDiskImageId pulumi.StringPtrInput `pulumi:"dataDiskImageId"`
+	// Specifies a DSS device ID for creating an ECS disk.
+	DedicatedStorageId pulumi.StringPtrInput `pulumi:"dedicatedStorageId"`
 	// Specifies whether the disk is a system disk or a data disk.
 	// Option **DATA** indicates a data disk, option **SYS** indicates a system disk.
 	// Changing this will create a new resource.
 	DiskType pulumi.StringInput `pulumi:"diskType"`
+	// Specifies the IOPS configured for an EVS disk.
+	// Changing this will create a new resource.
+	Iops pulumi.IntPtrInput `pulumi:"iops"`
 	// Specifies the encryption KMS ID of the **DATA** disk.
 	// Changing this will create a new resource.
 	KmsId pulumi.StringPtrInput `pulumi:"kmsId"`
 	// Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-	// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+	// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 	// Changing this creates a new resource.
 	Size pulumi.IntInput `pulumi:"size"`
+	// Specifies the disk backup snapshot ID for restoring the system disk and
+	// data disks using a full-ECS backup when a full-ECS image is used.
+	SnapshotId pulumi.StringPtrInput `pulumi:"snapshotId"`
+	// Specifies the throughput of an EVS disk. The unit is MiB/s.
+	// Changing this will create a new resource.
+	Throughput pulumi.IntPtrInput `pulumi:"throughput"`
 	// Specifies the disk type. Changing this will create a new resource.
 	// Available options are:
-	// + `SAS`: high I/O disk type.
-	// + `SSD`: ultra-high I/O disk type.
-	// + `GPSSD`: general purpose SSD disk type.
+	// + **SSD**: The ultra-high I/O type.
+	// + **SAS**: The high I/O EVS type.
+	// + **SATA**: The common I/O type.
+	// + **GPSSD**: The general purpose SSD type.
+	// + **ESSD**: The extreme SSD type.
+	// + **GPSSD2**: The general purpose SSD V2 type.
+	// + **ESSD2**: The extreme SSD V2 type.
 	VolumeType pulumi.StringInput `pulumi:"volumeType"`
 }
 
@@ -1033,11 +1154,28 @@ func (o ConfigurationInstanceConfigDiskOutput) ToConfigurationInstanceConfigDisk
 	return o
 }
 
+// Specifies the ID of a data disk image used to export data disks of
+// an ECS.
+func (o ConfigurationInstanceConfigDiskOutput) DataDiskImageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) *string { return v.DataDiskImageId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies a DSS device ID for creating an ECS disk.
+func (o ConfigurationInstanceConfigDiskOutput) DedicatedStorageId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) *string { return v.DedicatedStorageId }).(pulumi.StringPtrOutput)
+}
+
 // Specifies whether the disk is a system disk or a data disk.
 // Option **DATA** indicates a data disk, option **SYS** indicates a system disk.
 // Changing this will create a new resource.
 func (o ConfigurationInstanceConfigDiskOutput) DiskType() pulumi.StringOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) string { return v.DiskType }).(pulumi.StringOutput)
+}
+
+// Specifies the IOPS configured for an EVS disk.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigDiskOutput) Iops() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) *int { return v.Iops }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the encryption KMS ID of the **DATA** disk.
@@ -1047,17 +1185,33 @@ func (o ConfigurationInstanceConfigDiskOutput) KmsId() pulumi.StringPtrOutput {
 }
 
 // Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 // Changing this creates a new resource.
 func (o ConfigurationInstanceConfigDiskOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) int { return v.Size }).(pulumi.IntOutput)
 }
 
+// Specifies the disk backup snapshot ID for restoring the system disk and
+// data disks using a full-ECS backup when a full-ECS image is used.
+func (o ConfigurationInstanceConfigDiskOutput) SnapshotId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) *string { return v.SnapshotId }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the throughput of an EVS disk. The unit is MiB/s.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigDiskOutput) Throughput() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) *int { return v.Throughput }).(pulumi.IntPtrOutput)
+}
+
 // Specifies the disk type. Changing this will create a new resource.
 // Available options are:
-// + `SAS`: high I/O disk type.
-// + `SSD`: ultra-high I/O disk type.
-// + `GPSSD`: general purpose SSD disk type.
+// + **SSD**: The ultra-high I/O type.
+// + **SAS**: The high I/O EVS type.
+// + **SATA**: The common I/O type.
+// + **GPSSD**: The general purpose SSD type.
+// + **ESSD**: The extreme SSD type.
+// + **GPSSD2**: The general purpose SSD V2 type.
+// + **ESSD2**: The extreme SSD V2 type.
 func (o ConfigurationInstanceConfigDiskOutput) VolumeType() pulumi.StringOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigDisk) string { return v.VolumeType }).(pulumi.StringOutput)
 }
@@ -1087,6 +1241,9 @@ type ConfigurationInstanceConfigPersonality struct {
 	// Changing this creates a new resource.
 	Content string `pulumi:"content"`
 	// Specifies the path of the injected file. Changing this creates a new resource.
+	// + For Linux OSs, specify the path, for example, **/etc/foo.txt**, for storing the injected file.
+	// + For Windows, the injected file is automatically stored in the root directory of drive `C`. You only need to specify
+	//   the file name, for example, **foo**. The file name contains only letters and digits.
 	Path string `pulumi:"path"`
 }
 
@@ -1106,6 +1263,9 @@ type ConfigurationInstanceConfigPersonalityArgs struct {
 	// Changing this creates a new resource.
 	Content pulumi.StringInput `pulumi:"content"`
 	// Specifies the path of the injected file. Changing this creates a new resource.
+	// + For Linux OSs, specify the path, for example, **/etc/foo.txt**, for storing the injected file.
+	// + For Windows, the injected file is automatically stored in the root directory of drive `C`. You only need to specify
+	//   the file name, for example, **foo**. The file name contains only letters and digits.
 	Path pulumi.StringInput `pulumi:"path"`
 }
 
@@ -1167,6 +1327,9 @@ func (o ConfigurationInstanceConfigPersonalityOutput) Content() pulumi.StringOut
 }
 
 // Specifies the path of the injected file. Changing this creates a new resource.
+//   - For Linux OSs, specify the path, for example, **/etc/foo.txt**, for storing the injected file.
+//   - For Windows, the injected file is automatically stored in the root directory of drive `C`. You only need to specify
+//     the file name, for example, **foo**. The file name contains only letters and digits.
 func (o ConfigurationInstanceConfigPersonalityOutput) Path() pulumi.StringOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigPersonality) string { return v.Path }).(pulumi.StringOutput)
 }
@@ -1499,16 +1662,22 @@ func (o ConfigurationInstanceConfigPublicIpEipPtrOutput) IpType() pulumi.StringP
 }
 
 type ConfigurationInstanceConfigPublicIpEipBandwidth struct {
-	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
-	ChargingMode string `pulumi:"chargingMode"`
-	// Specifies the bandwidth sharing type. The system only supports
-	// **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+	// Specifies the bandwidth billing type.
+	// Changing this creates a new resource. The valid values are as follows:
+	// + **bandwidth**: Billing by bandwidth.
+	// + **traffic**: Billing by traffic.
+	ChargingMode *string `pulumi:"chargingMode"`
+	// Specifies the ID of the shared bandwidth.
+	// Changing this will create a new resource.
+	Id *string `pulumi:"id"`
+	// Specifies the bandwidth sharing type.
+	// The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+	// Changing this will create a new resource.
 	ShareType string `pulumi:"shareType"`
 	// Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-	// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+	// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 	// Changing this creates a new resource.
-	Size int `pulumi:"size"`
+	Size *int `pulumi:"size"`
 }
 
 // ConfigurationInstanceConfigPublicIpEipBandwidthInput is an input type that accepts ConfigurationInstanceConfigPublicIpEipBandwidthArgs and ConfigurationInstanceConfigPublicIpEipBandwidthOutput values.
@@ -1523,16 +1692,22 @@ type ConfigurationInstanceConfigPublicIpEipBandwidthInput interface {
 }
 
 type ConfigurationInstanceConfigPublicIpEipBandwidthArgs struct {
-	// Specifies whether the bandwidth is billed by traffic or by bandwidth
-	// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
-	ChargingMode pulumi.StringInput `pulumi:"chargingMode"`
-	// Specifies the bandwidth sharing type. The system only supports
-	// **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+	// Specifies the bandwidth billing type.
+	// Changing this creates a new resource. The valid values are as follows:
+	// + **bandwidth**: Billing by bandwidth.
+	// + **traffic**: Billing by traffic.
+	ChargingMode pulumi.StringPtrInput `pulumi:"chargingMode"`
+	// Specifies the ID of the shared bandwidth.
+	// Changing this will create a new resource.
+	Id pulumi.StringPtrInput `pulumi:"id"`
+	// Specifies the bandwidth sharing type.
+	// The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+	// Changing this will create a new resource.
 	ShareType pulumi.StringInput `pulumi:"shareType"`
 	// Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-	// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+	// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 	// Changing this creates a new resource.
-	Size pulumi.IntInput `pulumi:"size"`
+	Size pulumi.IntPtrInput `pulumi:"size"`
 }
 
 func (ConfigurationInstanceConfigPublicIpEipBandwidthArgs) ElementType() reflect.Type {
@@ -1612,23 +1787,32 @@ func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) ToConfigurationIn
 	}).(ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput)
 }
 
-// Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
-func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) ChargingMode() pulumi.StringOutput {
-	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) string { return v.ChargingMode }).(pulumi.StringOutput)
+// Specifies the bandwidth billing type.
+// Changing this creates a new resource. The valid values are as follows:
+// + **bandwidth**: Billing by bandwidth.
+// + **traffic**: Billing by traffic.
+func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) ChargingMode() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) *string { return v.ChargingMode }).(pulumi.StringPtrOutput)
 }
 
-// Specifies the bandwidth sharing type. The system only supports
-// **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+// Specifies the ID of the shared bandwidth.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) *string { return v.Id }).(pulumi.StringPtrOutput)
+}
+
+// Specifies the bandwidth sharing type.
+// The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+// Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) ShareType() pulumi.StringOutput {
 	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) string { return v.ShareType }).(pulumi.StringOutput)
 }
 
 // Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 // Changing this creates a new resource.
-func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) Size() pulumi.IntOutput {
-	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) int { return v.Size }).(pulumi.IntOutput)
+func (o ConfigurationInstanceConfigPublicIpEipBandwidthOutput) Size() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v ConfigurationInstanceConfigPublicIpEipBandwidth) *int { return v.Size }).(pulumi.IntPtrOutput)
 }
 
 type ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput struct{ *pulumi.OutputState }
@@ -1655,19 +1839,33 @@ func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) Elem() Configu
 	}).(ConfigurationInstanceConfigPublicIpEipBandwidthOutput)
 }
 
-// Specifies whether the bandwidth is billed by traffic or by bandwidth
-// size. The value can be **traffic** or **bandwidth**. Changing this creates a new resource.
+// Specifies the bandwidth billing type.
+// Changing this creates a new resource. The valid values are as follows:
+// + **bandwidth**: Billing by bandwidth.
+// + **traffic**: Billing by traffic.
 func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) ChargingMode() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfigPublicIpEipBandwidth) *string {
 		if v == nil {
 			return nil
 		}
-		return &v.ChargingMode
+		return v.ChargingMode
 	}).(pulumi.StringPtrOutput)
 }
 
-// Specifies the bandwidth sharing type. The system only supports
-// **PER** (indicates exclusive bandwidth). Changing this will create a new resource.
+// Specifies the ID of the shared bandwidth.
+// Changing this will create a new resource.
+func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) Id() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *ConfigurationInstanceConfigPublicIpEipBandwidth) *string {
+		if v == nil {
+			return nil
+		}
+		return v.Id
+	}).(pulumi.StringPtrOutput)
+}
+
+// Specifies the bandwidth sharing type.
+// The value can be **PER** (exclusive bandwidth) or **WHOLE** (shared bandwidth).
+// Changing this will create a new resource.
 func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) ShareType() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfigPublicIpEipBandwidth) *string {
 		if v == nil {
@@ -1678,14 +1876,14 @@ func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) ShareType() pu
 }
 
 // Specifies the bandwidth (Mbit/s). The value range for bandwidth billed by bandwidth
-// is 1 to 2000 and that for bandwidth billed by traffic is 1 to 300.
+// is `1` to `2,000` and that for bandwidth billed by traffic is `1` to `300`.
 // Changing this creates a new resource.
 func (o ConfigurationInstanceConfigPublicIpEipBandwidthPtrOutput) Size() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *ConfigurationInstanceConfigPublicIpEipBandwidth) *int {
 		if v == nil {
 			return nil
 		}
-		return &v.Size
+		return v.Size
 	}).(pulumi.IntPtrOutput)
 }
 
@@ -1693,11 +1891,14 @@ type GroupLbaasListener struct {
 	// Specifies the backend ECS group ID.
 	PoolId string `pulumi:"poolId"`
 	// Specifies the backend protocol, which is the port on which a backend ECS listens for
-	// traffic. The number of the port ranges from 1 to 65535.
+	// traffic. The number of the port ranges from `1` to `65,535`.
 	ProtocolPort int `pulumi:"protocolPort"`
+	// Specifies the version of instance IP addresses to be associated with the
+	// load balancer. The value can be **ipv4** or **ipv6**. Defaults to **ipv4**.
+	ProtocolVersion *string `pulumi:"protocolVersion"`
 	// Specifies the weight, which determines the portion of requests a backend ECS processes
-	// compared to other backend ECSs added to the same listener. The value of this parameter ranges from 0 to 100. The
-	// default value is 1.
+	// compared to other backend ECSs added to the same listener. The value of this parameter ranges from `0` to `100`.
+	// Defaults to `1`.
 	Weight *int `pulumi:"weight"`
 }
 
@@ -1716,11 +1917,14 @@ type GroupLbaasListenerArgs struct {
 	// Specifies the backend ECS group ID.
 	PoolId pulumi.StringInput `pulumi:"poolId"`
 	// Specifies the backend protocol, which is the port on which a backend ECS listens for
-	// traffic. The number of the port ranges from 1 to 65535.
+	// traffic. The number of the port ranges from `1` to `65,535`.
 	ProtocolPort pulumi.IntInput `pulumi:"protocolPort"`
+	// Specifies the version of instance IP addresses to be associated with the
+	// load balancer. The value can be **ipv4** or **ipv6**. Defaults to **ipv4**.
+	ProtocolVersion pulumi.StringPtrInput `pulumi:"protocolVersion"`
 	// Specifies the weight, which determines the portion of requests a backend ECS processes
-	// compared to other backend ECSs added to the same listener. The value of this parameter ranges from 0 to 100. The
-	// default value is 1.
+	// compared to other backend ECSs added to the same listener. The value of this parameter ranges from `0` to `100`.
+	// Defaults to `1`.
 	Weight pulumi.IntPtrInput `pulumi:"weight"`
 }
 
@@ -1781,14 +1985,20 @@ func (o GroupLbaasListenerOutput) PoolId() pulumi.StringOutput {
 }
 
 // Specifies the backend protocol, which is the port on which a backend ECS listens for
-// traffic. The number of the port ranges from 1 to 65535.
+// traffic. The number of the port ranges from `1` to `65,535`.
 func (o GroupLbaasListenerOutput) ProtocolPort() pulumi.IntOutput {
 	return o.ApplyT(func(v GroupLbaasListener) int { return v.ProtocolPort }).(pulumi.IntOutput)
 }
 
+// Specifies the version of instance IP addresses to be associated with the
+// load balancer. The value can be **ipv4** or **ipv6**. Defaults to **ipv4**.
+func (o GroupLbaasListenerOutput) ProtocolVersion() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v GroupLbaasListener) *string { return v.ProtocolVersion }).(pulumi.StringPtrOutput)
+}
+
 // Specifies the weight, which determines the portion of requests a backend ECS processes
-// compared to other backend ECSs added to the same listener. The value of this parameter ranges from 0 to 100. The
-// default value is 1.
+// compared to other backend ECSs added to the same listener. The value of this parameter ranges from `0` to `100`.
+// Defaults to `1`.
 func (o GroupLbaasListenerOutput) Weight() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v GroupLbaasListener) *int { return v.Weight }).(pulumi.IntPtrOutput)
 }
@@ -1818,10 +2028,10 @@ type GroupNetwork struct {
 	Id string `pulumi:"id"`
 	// Specifies the ID of the shared bandwidth of an IPv6 address.
 	Ipv6BandwidthId *string `pulumi:"ipv6BandwidthId"`
-	// Specifies whether to support IPv6 addresses. The default value is `false`.
+	// Specifies whether to support IPv6 addresses. Defaults to **false**.
 	Ipv6Enable *bool `pulumi:"ipv6Enable"`
-	// Specifies whether processesing only traffic that is destined specifically
-	// for it. Defaults to true.
+	// Specifies whether process only traffic that is destined specifically
+	// for it. Defaults to **true**.
 	SourceDestCheck *bool `pulumi:"sourceDestCheck"`
 }
 
@@ -1841,10 +2051,10 @@ type GroupNetworkArgs struct {
 	Id pulumi.StringInput `pulumi:"id"`
 	// Specifies the ID of the shared bandwidth of an IPv6 address.
 	Ipv6BandwidthId pulumi.StringPtrInput `pulumi:"ipv6BandwidthId"`
-	// Specifies whether to support IPv6 addresses. The default value is `false`.
+	// Specifies whether to support IPv6 addresses. Defaults to **false**.
 	Ipv6Enable pulumi.BoolPtrInput `pulumi:"ipv6Enable"`
-	// Specifies whether processesing only traffic that is destined specifically
-	// for it. Defaults to true.
+	// Specifies whether process only traffic that is destined specifically
+	// for it. Defaults to **true**.
 	SourceDestCheck pulumi.BoolPtrInput `pulumi:"sourceDestCheck"`
 }
 
@@ -1909,13 +2119,13 @@ func (o GroupNetworkOutput) Ipv6BandwidthId() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v GroupNetwork) *string { return v.Ipv6BandwidthId }).(pulumi.StringPtrOutput)
 }
 
-// Specifies whether to support IPv6 addresses. The default value is `false`.
+// Specifies whether to support IPv6 addresses. Defaults to **false**.
 func (o GroupNetworkOutput) Ipv6Enable() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v GroupNetwork) *bool { return v.Ipv6Enable }).(pulumi.BoolPtrOutput)
 }
 
-// Specifies whether processesing only traffic that is destined specifically
-// for it. Defaults to true.
+// Specifies whether process only traffic that is destined specifically
+// for it. Defaults to **true**.
 func (o GroupNetworkOutput) SourceDestCheck() pulumi.BoolPtrOutput {
 	return o.ApplyT(func(v GroupNetwork) *bool { return v.SourceDestCheck }).(pulumi.BoolPtrOutput)
 }
@@ -2038,8 +2248,10 @@ func (o GroupSecurityGroupArrayOutput) Index(i pulumi.IntInput) GroupSecurityGro
 }
 
 type PolicyScalingPolicyAction struct {
-	// Specifies the number of instances to be operated. The default number is 1.
+	// Specifies the number of instances to be operated.
 	InstanceNumber *int `pulumi:"instanceNumber"`
+	// Specifies the percentage of instances to be operated.
+	InstancePercentage *int `pulumi:"instancePercentage"`
 	// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 	// and `SET`.
 	Operation *string `pulumi:"operation"`
@@ -2057,8 +2269,10 @@ type PolicyScalingPolicyActionInput interface {
 }
 
 type PolicyScalingPolicyActionArgs struct {
-	// Specifies the number of instances to be operated. The default number is 1.
+	// Specifies the number of instances to be operated.
 	InstanceNumber pulumi.IntPtrInput `pulumi:"instanceNumber"`
+	// Specifies the percentage of instances to be operated.
+	InstancePercentage pulumi.IntPtrInput `pulumi:"instancePercentage"`
 	// Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
 	// and `SET`.
 	Operation pulumi.StringPtrInput `pulumi:"operation"`
@@ -2141,9 +2355,14 @@ func (o PolicyScalingPolicyActionOutput) ToPolicyScalingPolicyActionPtrOutputWit
 	}).(PolicyScalingPolicyActionPtrOutput)
 }
 
-// Specifies the number of instances to be operated. The default number is 1.
+// Specifies the number of instances to be operated.
 func (o PolicyScalingPolicyActionOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v PolicyScalingPolicyAction) *int { return v.InstanceNumber }).(pulumi.IntPtrOutput)
+}
+
+// Specifies the percentage of instances to be operated.
+func (o PolicyScalingPolicyActionOutput) InstancePercentage() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v PolicyScalingPolicyAction) *int { return v.InstancePercentage }).(pulumi.IntPtrOutput)
 }
 
 // Specifies the operation to be performed. The options include `ADD` (default), `REMOVE`,
@@ -2176,13 +2395,23 @@ func (o PolicyScalingPolicyActionPtrOutput) Elem() PolicyScalingPolicyActionOutp
 	}).(PolicyScalingPolicyActionOutput)
 }
 
-// Specifies the number of instances to be operated. The default number is 1.
+// Specifies the number of instances to be operated.
 func (o PolicyScalingPolicyActionPtrOutput) InstanceNumber() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *PolicyScalingPolicyAction) *int {
 		if v == nil {
 			return nil
 		}
 		return v.InstanceNumber
+	}).(pulumi.IntPtrOutput)
+}
+
+// Specifies the percentage of instances to be operated.
+func (o PolicyScalingPolicyActionPtrOutput) InstancePercentage() pulumi.IntPtrOutput {
+	return o.ApplyT(func(v *PolicyScalingPolicyAction) *int {
+		if v == nil {
+			return nil
+		}
+		return v.InstancePercentage
 	}).(pulumi.IntPtrOutput)
 }
 

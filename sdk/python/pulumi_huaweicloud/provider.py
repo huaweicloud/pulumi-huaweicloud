@@ -26,6 +26,7 @@ class ProviderArgs:
                  delegated_project: Optional[pulumi.Input[str]] = None,
                  domain_id: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enable_force_new: Optional[pulumi.Input[bool]] = None,
                  endpoints: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insecure: Optional[pulumi.Input[bool]] = None,
@@ -40,6 +41,9 @@ class ProviderArgs:
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
+                 signing_algorithm: Optional[pulumi.Input[str]] = None,
+                 skip_check_upgrade: Optional[pulumi.Input[bool]] = None,
+                 skip_check_website_type: Optional[pulumi.Input[bool]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
                  tenant_name: Optional[pulumi.Input[str]] = None,
                  token: Optional[pulumi.Input[str]] = None,
@@ -57,6 +61,7 @@ class ProviderArgs:
         :param pulumi.Input[str] delegated_project: The name of delegated project (Identity v3).
         :param pulumi.Input[str] domain_id: The ID of the Domain to scope to.
         :param pulumi.Input[str] domain_name: The name of the Domain to scope to.
+        :param pulumi.Input[bool] enable_force_new: Whether to enable ForceNew
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] endpoints: The custom endpoints used to override the default endpoint URL.
         :param pulumi.Input[str] enterprise_project_id: enterprise project id
         :param pulumi.Input[bool] insecure: Trust self-signed certificates.
@@ -71,6 +76,9 @@ class ProviderArgs:
         :param pulumi.Input[str] secret_key: The secret key of the HuaweiCloud to use.
         :param pulumi.Input[str] security_token: The security token to authenticate with a temporary security credential.
         :param pulumi.Input[str] shared_config_file: The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
+        :param pulumi.Input[str] signing_algorithm: The signing algorithm for authentication
+        :param pulumi.Input[bool] skip_check_upgrade: Whether to skip upgrade check
+        :param pulumi.Input[bool] skip_check_website_type: Whether to skip website type check
         :param pulumi.Input[str] tenant_id: The ID of the Tenant (Identity v2) to login with.
         :param pulumi.Input[str] tenant_name: The name of the Tenant (Identity v2) to login with.
         :param pulumi.Input[str] token: Authentication token to use as an alternative to username/password.
@@ -99,6 +107,8 @@ class ProviderArgs:
             pulumi.set(__self__, "domain_id", domain_id)
         if domain_name is not None:
             pulumi.set(__self__, "domain_name", domain_name)
+        if enable_force_new is not None:
+            pulumi.set(__self__, "enable_force_new", enable_force_new)
         if endpoints is not None:
             pulumi.set(__self__, "endpoints", endpoints)
         if enterprise_project_id is not None:
@@ -127,6 +137,12 @@ class ProviderArgs:
             pulumi.set(__self__, "security_token", security_token)
         if shared_config_file is not None:
             pulumi.set(__self__, "shared_config_file", shared_config_file)
+        if signing_algorithm is not None:
+            pulumi.set(__self__, "signing_algorithm", signing_algorithm)
+        if skip_check_upgrade is not None:
+            pulumi.set(__self__, "skip_check_upgrade", skip_check_upgrade)
+        if skip_check_website_type is not None:
+            pulumi.set(__self__, "skip_check_website_type", skip_check_website_type)
         if tenant_id is not None:
             pulumi.set(__self__, "tenant_id", tenant_id)
         if tenant_name is not None:
@@ -266,6 +282,18 @@ class ProviderArgs:
     @domain_name.setter
     def domain_name(self, value: Optional[pulumi.Input[str]]):
         pulumi.set(self, "domain_name", value)
+
+    @property
+    @pulumi.getter(name="enableForceNew")
+    def enable_force_new(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether to enable ForceNew
+        """
+        return pulumi.get(self, "enable_force_new")
+
+    @enable_force_new.setter
+    def enable_force_new(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "enable_force_new", value)
 
     @property
     @pulumi.getter
@@ -436,6 +464,42 @@ class ProviderArgs:
         pulumi.set(self, "shared_config_file", value)
 
     @property
+    @pulumi.getter(name="signingAlgorithm")
+    def signing_algorithm(self) -> Optional[pulumi.Input[str]]:
+        """
+        The signing algorithm for authentication
+        """
+        return pulumi.get(self, "signing_algorithm")
+
+    @signing_algorithm.setter
+    def signing_algorithm(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "signing_algorithm", value)
+
+    @property
+    @pulumi.getter(name="skipCheckUpgrade")
+    def skip_check_upgrade(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether to skip upgrade check
+        """
+        return pulumi.get(self, "skip_check_upgrade")
+
+    @skip_check_upgrade.setter
+    def skip_check_upgrade(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "skip_check_upgrade", value)
+
+    @property
+    @pulumi.getter(name="skipCheckWebsiteType")
+    def skip_check_website_type(self) -> Optional[pulumi.Input[bool]]:
+        """
+        Whether to skip website type check
+        """
+        return pulumi.get(self, "skip_check_website_type")
+
+    @skip_check_website_type.setter
+    def skip_check_website_type(self, value: Optional[pulumi.Input[bool]]):
+        pulumi.set(self, "skip_check_website_type", value)
+
+    @property
     @pulumi.getter(name="tenantId")
     def tenant_id(self) -> Optional[pulumi.Input[str]]:
         """
@@ -512,6 +576,7 @@ class Provider(pulumi.ProviderResource):
                  delegated_project: Optional[pulumi.Input[str]] = None,
                  domain_id: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enable_force_new: Optional[pulumi.Input[bool]] = None,
                  endpoints: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insecure: Optional[pulumi.Input[bool]] = None,
@@ -526,6 +591,9 @@ class Provider(pulumi.ProviderResource):
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
+                 signing_algorithm: Optional[pulumi.Input[str]] = None,
+                 skip_check_upgrade: Optional[pulumi.Input[bool]] = None,
+                 skip_check_website_type: Optional[pulumi.Input[bool]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
                  tenant_name: Optional[pulumi.Input[str]] = None,
                  token: Optional[pulumi.Input[str]] = None,
@@ -550,6 +618,7 @@ class Provider(pulumi.ProviderResource):
         :param pulumi.Input[str] delegated_project: The name of delegated project (Identity v3).
         :param pulumi.Input[str] domain_id: The ID of the Domain to scope to.
         :param pulumi.Input[str] domain_name: The name of the Domain to scope to.
+        :param pulumi.Input[bool] enable_force_new: Whether to enable ForceNew
         :param pulumi.Input[Mapping[str, pulumi.Input[str]]] endpoints: The custom endpoints used to override the default endpoint URL.
         :param pulumi.Input[str] enterprise_project_id: enterprise project id
         :param pulumi.Input[bool] insecure: Trust self-signed certificates.
@@ -564,6 +633,9 @@ class Provider(pulumi.ProviderResource):
         :param pulumi.Input[str] secret_key: The secret key of the HuaweiCloud to use.
         :param pulumi.Input[str] security_token: The security token to authenticate with a temporary security credential.
         :param pulumi.Input[str] shared_config_file: The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
+        :param pulumi.Input[str] signing_algorithm: The signing algorithm for authentication
+        :param pulumi.Input[bool] skip_check_upgrade: Whether to skip upgrade check
+        :param pulumi.Input[bool] skip_check_website_type: Whether to skip website type check
         :param pulumi.Input[str] tenant_id: The ID of the Tenant (Identity v2) to login with.
         :param pulumi.Input[str] tenant_name: The name of the Tenant (Identity v2) to login with.
         :param pulumi.Input[str] token: Authentication token to use as an alternative to username/password.
@@ -608,6 +680,7 @@ class Provider(pulumi.ProviderResource):
                  delegated_project: Optional[pulumi.Input[str]] = None,
                  domain_id: Optional[pulumi.Input[str]] = None,
                  domain_name: Optional[pulumi.Input[str]] = None,
+                 enable_force_new: Optional[pulumi.Input[bool]] = None,
                  endpoints: Optional[pulumi.Input[Mapping[str, pulumi.Input[str]]]] = None,
                  enterprise_project_id: Optional[pulumi.Input[str]] = None,
                  insecure: Optional[pulumi.Input[bool]] = None,
@@ -622,6 +695,9 @@ class Provider(pulumi.ProviderResource):
                  secret_key: Optional[pulumi.Input[str]] = None,
                  security_token: Optional[pulumi.Input[str]] = None,
                  shared_config_file: Optional[pulumi.Input[str]] = None,
+                 signing_algorithm: Optional[pulumi.Input[str]] = None,
+                 skip_check_upgrade: Optional[pulumi.Input[bool]] = None,
+                 skip_check_website_type: Optional[pulumi.Input[bool]] = None,
                  tenant_id: Optional[pulumi.Input[str]] = None,
                  tenant_name: Optional[pulumi.Input[str]] = None,
                  token: Optional[pulumi.Input[str]] = None,
@@ -647,6 +723,7 @@ class Provider(pulumi.ProviderResource):
             __props__.__dict__["delegated_project"] = delegated_project
             __props__.__dict__["domain_id"] = domain_id
             __props__.__dict__["domain_name"] = domain_name
+            __props__.__dict__["enable_force_new"] = pulumi.Output.from_input(enable_force_new).apply(pulumi.runtime.to_json) if enable_force_new is not None else None
             __props__.__dict__["endpoints"] = pulumi.Output.from_input(endpoints).apply(pulumi.runtime.to_json) if endpoints is not None else None
             __props__.__dict__["enterprise_project_id"] = enterprise_project_id
             __props__.__dict__["insecure"] = pulumi.Output.from_input(insecure).apply(pulumi.runtime.to_json) if insecure is not None else None
@@ -661,6 +738,9 @@ class Provider(pulumi.ProviderResource):
             __props__.__dict__["secret_key"] = secret_key
             __props__.__dict__["security_token"] = security_token
             __props__.__dict__["shared_config_file"] = shared_config_file
+            __props__.__dict__["signing_algorithm"] = signing_algorithm
+            __props__.__dict__["skip_check_upgrade"] = pulumi.Output.from_input(skip_check_upgrade).apply(pulumi.runtime.to_json) if skip_check_upgrade is not None else None
+            __props__.__dict__["skip_check_website_type"] = pulumi.Output.from_input(skip_check_website_type).apply(pulumi.runtime.to_json) if skip_check_website_type is not None else None
             __props__.__dict__["tenant_id"] = tenant_id
             __props__.__dict__["tenant_name"] = tenant_name
             __props__.__dict__["token"] = token
@@ -831,6 +911,14 @@ class Provider(pulumi.ProviderResource):
         The path to the shared config file. If not set, the default is ~/.hcloud/config.json.
         """
         return pulumi.get(self, "shared_config_file")
+
+    @property
+    @pulumi.getter(name="signingAlgorithm")
+    def signing_algorithm(self) -> pulumi.Output[Optional[str]]:
+        """
+        The signing algorithm for authentication
+        """
+        return pulumi.get(self, "signing_algorithm")
 
     @property
     @pulumi.getter(name="tenantId")
