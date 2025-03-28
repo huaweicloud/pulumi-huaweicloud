@@ -115,6 +115,6 @@ jobs:
           - python
           - go
         nodeversion:
-          - 14.x
+          - 18.x
         pythonversion:
           - "3.9"
